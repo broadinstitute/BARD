@@ -3,8 +3,9 @@ package registration
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
-import bard.db.registration.*
-import org.grails.plugins.springsecurity.service.acl.AclUtilService
+import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.AssayDocument
 
 class AssayService {
 
@@ -29,12 +30,12 @@ class AssayService {
         Map<AssayContext, AssayContext> assayContextOldToNew = cloneContexts(assay, newAssay, false)
         cloneDocuments(assay, newAssay)
         // clone all measures
-        Map<Measure, Measure> measureOldToNew = cloneMeasures(assay, newAssay)
-        assignParentMeasures(assay, measureOldToNew)
+        //Map<Measure, Measure> measureOldToNew = cloneMeasures(assay, newAssay)
+        //assignParentMeasures(assay, measureOldToNew)
 
-        cloneContextsMeasures(assay, assayContextOldToNew, measureOldToNew)
+        //cloneContextsMeasures(assay, assayContextOldToNew, measureOldToNew)
 
-        return [assay: newAssay, measureOldToNew: measureOldToNew]
+        return [assay: newAssay, measureOldToNew: [:]]
     }
     /**
      * Copy an assay new a new object, including all objects owned by this assay (but excluding any experiments and documents)
@@ -48,10 +49,10 @@ class AssayService {
 
         Map<AssayContext, AssayContext> assayContextOldToNew = cloneContexts(assay, newAssay, false)
         // clone all measures
-        Map<Measure, Measure> measureOldToNew = cloneMeasures(assay, newAssay)
-        assignParentMeasures(assay, measureOldToNew)
+        //Map<Measure, Measure> measureOldToNew = cloneMeasures(assay, newAssay)
+        //assignParentMeasures(assay, measureOldToNew)
 
-        cloneContextsMeasures(assay, assayContextOldToNew, measureOldToNew)
+      //  cloneContextsMeasures(assay, assayContextOldToNew, measureOldToNew)
         newAssay.save(flush: true, failOnError: true, validate: false)
 
         //now call the manage names stored procedure
@@ -123,41 +124,48 @@ class AssayService {
             newDocument.save(failOnError: true)
         }
     }
-
-    Map<Measure, Measure> cloneMeasures(Assay assay, Assay clonedAssay) {
-        Map<Measure, Measure> measureOldToNew = [:]
-        for (measure in assay.measures) {
-            Measure newMeasure = measure.clone()
-
-            measureOldToNew[measure] = newMeasure
-
-            clonedAssay.addToMeasures(newMeasure)
-        }
-        return measureOldToNew
+    /**
+     *
+     * @param assay
+     * @param clonedAssay
+     * @return
+     */
+    @Deprecated
+    Map cloneMeasures(Assay assay, Assay clonedAssay) {
+//        Map<Measure, Measure> measureOldToNew = [:]
+//        for (measure in assay.measures) {
+//            Measure newMeasure = measure.clone()
+//
+//            measureOldToNew[measure] = newMeasure
+//
+//            clonedAssay.addToMeasures(newMeasure)
+//        }
+       // return measureOldToNew
+        return [:]
     }
-
-    void assignParentMeasures(Assay assay, Map<Measure, Measure> measureOldToNew) {
+    @Deprecated
+    void assignParentMeasures(Assay assay, Map measureOldToNew) {
         // assign parent measures now that all measures have been created
-        for (measure in assay.measures) {
+        /*for (measure in assay.measures) {
             measureOldToNew[measure].parentMeasure = measureOldToNew[measure.parentMeasure]
         }
         for (measure in measureOldToNew.values()) {
             measure.save(failOnError: true)
-        }
+        }*/
     }
-
-    void cloneContextsMeasures(Assay assay, Map<AssayContext, AssayContext> assayContextOldToNew, Map<Measure, Measure> measureOldToNew) {
-        Set<AssayContextMeasure> assayContextMeasures = assay.measures.collectMany { it.assayContextMeasures }
-
-        for (assayContextMeasure in assayContextMeasures) {
-            cloneContextsMeasure(assayContextMeasure, assayContextOldToNew, measureOldToNew)
-        }
+    @Deprecated
+    void cloneContextsMeasures(Assay assay, Map<AssayContext, AssayContext> assayContextOldToNew, Map measureOldToNew) {
+//        Set<AssayContextMeasure> assayContextMeasures = assay.measures.collectMany { it.assayContextMeasures }
+//
+//        for (assayContextMeasure in assayContextMeasures) {
+//            cloneContextsMeasure(assayContextMeasure, assayContextOldToNew, measureOldToNew)
+//        }
     }
+    @Deprecated
+    void cloneContextsMeasure(def assayContextMeasure, Map<AssayContext, AssayContext> assayContextOldToNew, Map measureOldToNew) {
 
-    void cloneContextsMeasure(AssayContextMeasure assayContextMeasure, Map<AssayContext, AssayContext> assayContextOldToNew, Map<Measure, Measure> measureOldToNew) {
 
-
-        AssayContext newAssayContext = assayContextOldToNew[assayContextMeasure.assayContext]
+       /* AssayContext newAssayContext = assayContextOldToNew[assayContextMeasure.assayContext]
         Measure newMeasure = measureOldToNew[assayContextMeasure.measure]
 
         AssayContextMeasure newAssayContextMeasure = new AssayContextMeasure()
@@ -165,7 +173,7 @@ class AssayService {
         newAssayContext.addToAssayContextMeasures(newAssayContextMeasure)
         newMeasure.addToAssayContextMeasures(newAssayContextMeasure)
 
-        newAssayContextMeasure.save(failOnError: true)
+        newAssayContextMeasure.save(failOnError: true)  */
 
     }
 

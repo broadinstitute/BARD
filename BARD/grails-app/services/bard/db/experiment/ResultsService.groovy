@@ -2,13 +2,9 @@ package bard.db.experiment
 
 import au.com.bytecode.opencsv.CSVReader
 import bard.db.dictionary.Element
-import bard.db.registration.AssayContext
-import bard.db.registration.AssayContextItem
-import bard.db.registration.AssayContextMeasure
-import bard.db.registration.AttributeType
-import bard.db.registration.ItemService
-import bard.db.registration.Measure
-import bard.db.registration.PugService
+import bard.db.enums.HierarchyType
+import bard.db.experiment.results.*
+import bard.db.registration.*
 import bard.hibernate.AuthenticatedUserRequired
 import grails.plugins.springsecurity.SpringSecurityService
 import org.apache.commons.io.IOUtils
@@ -18,10 +14,6 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
-
-import bard.db.experiment.results.*
-import bard.db.enums.HierarchyType
-import org.apache.commons.lang.StringUtils;
 
 class ResultsService {
 
@@ -232,10 +224,10 @@ class ResultsService {
         def assay = experiment.assay
 
         def assayItems = assay.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }
-        def measureItems = assayItems.findAll { it.assayContext.assayContextMeasures.size() > 0 }
+        def measureItems = assayItems.findAll { it.assayContext.assayContextExperimentMeasures.size() > 0 }
         assayItems.removeAll(measureItems)
 
-        return [itemService.getLogicalItems(assayItems), experiment.experimentMeasures.collect { it.measure } as List, itemService.getLogicalItems(measureItems)]
+        return [itemService.getLogicalItems(assayItems), experiment.experimentMeasures.collect { it } as List, itemService.getLogicalItems(measureItems)]
     }
 
     Template generateMaxSchema(Experiment experiment) {
@@ -246,7 +238,7 @@ class ResultsService {
     /**
      * Construct list of columns that a result upload could possibly contain
      */
-    Template generateSchema(Experiment experiment, List<ItemService.Item> constantItems, List<Measure> measures, List<ItemService.Item> measureItems) {
+    Template generateSchema(Experiment experiment, List<ItemService.Item> constantItems, List<ExperimentMeasure> experimentMeasures, List<ItemService.Item> measureItems) {
         Set<String> constants = [] as Set
         Set<String> columns = [] as Set
 
@@ -257,7 +249,7 @@ class ResultsService {
         }
 
         // add all of the measurements
-        for (measure in measures) {
+        for (measure in experimentMeasures) {
             String name = measure.displayLabel
             columns.add(name)
         }
@@ -352,7 +344,7 @@ class ResultsService {
             }
         }
 
-        if(!skipExperimentContextItems) {
+        if (!skipExperimentContextItems) {
             Set<String> unusedKeyNames = new HashSet(experimentAnnotations.keySet())
 
             // walk through all the context items on the assay
@@ -489,7 +481,7 @@ class ResultsService {
         return columns
     }
 
-    Collection<Result> createResults(List<Row> rows, Collection<ExperimentMeasure> experimentMeasures, ImportSummary errors, Map<Measure, Collection<ItemService.Item>> itemsByMeasure) {
+    Collection<Result> createResults(List<Row> rows, Collection<ExperimentMeasure> experimentMeasures, ImportSummary errors, Map<ExperimentMeasure, Collection<ItemService.Item>> itemsByMeasure) {
         validateParentRowsExist(rows, errors);
         if (errors.hasErrors())
             return []
@@ -536,10 +528,10 @@ class ResultsService {
         }
     }
 
-    Collection<Result> extractResultFromEachRow(ExperimentMeasure measure, Collection<Row> rows, Map<Integer, Collection<Row>> byParent, IdentityHashMap<RawCell, Row> unused, ImportSummary errors, Map<Measure, ItemService.Item> itemsByMeasure) {
+    Collection<Result> extractResultFromEachRow(ExperimentMeasure experimentMeasure, Collection<Row> rows, Map<Integer, Collection<Row>> byParent, IdentityHashMap<RawCell, Row> unused, ImportSummary errors, Map<ExperimentMeasure, ItemService.Item> itemsByMeasure) {
         List<Result> results = []
 
-        String label = measure.measure.displayLabel
+        String label = experimentMeasure.displayLabel
 
         for (row in rows) {
             // change this to a call to find
@@ -550,7 +542,7 @@ class ResultsService {
                 unused.remove(cell)
                 String cellValue = cell.value
 
-                Result result = createResult(row.replicate, measure.measure, cellValue, row.sid, errors)
+                Result result = createResult(row.replicate, experimentMeasure, cellValue, row.sid, errors)
                 if (result == null)
                     continue;
 
@@ -563,7 +555,7 @@ class ResultsService {
                 }
 
                 // for each child measure, create a result per row in each of the child rows
-                for (child in measure.childMeasures) {
+                for (child in experimentMeasure.childMeasures) {
                     Collection<Result> resultChildren = extractResultFromEachRow(child, possibleChildRows, byParent, unused, errors, itemsByMeasure)
 
                     for (childResult in resultChildren) {
@@ -573,7 +565,7 @@ class ResultsService {
 
                 // likewise create each of the context items associated with this measure
                 results.add(result);
-                for (item in itemsByMeasure[measure.measure]) {
+                for (item in itemsByMeasure[experimentMeasure]) {
                     RawCell itemCell = row.find(item.displayLabel)
                     if (itemCell != null) {
                         unused.remove(itemCell)
@@ -658,12 +650,12 @@ class ResultsService {
         return item
     }
 
-    Result createResult(Integer replicate, Measure measure, String valueString, Long substanceId, ImportSummary errors) {
+    Result createResult(Integer replicate, ExperimentMeasure experimentMeasure, String valueString, Long substanceId, ImportSummary errors) {
         def parsed = parseAnything(valueString)
 
         if (parsed instanceof Cell) {
             Cell cell = parsed
-            Element unit = measure.resultType.unit;
+            Element unit = experimentMeasure.resultType.unit;
 
             Result result = new Result()
             result.qualifier = cell.qualifier
@@ -671,13 +663,13 @@ class ResultsService {
             result.valueNum = cell.value
             result.valueMin = cell.minValue
             result.valueMax = cell.maxValue
-            result.statsModifier = measure.statsModifier
-            result.resultType = measure.resultType
+            result.statsModifier = experimentMeasure.statsModifier
+            result.resultType = experimentMeasure.resultType
             result.replicateNumber = replicate
             result.substanceId = substanceId
             result.dateCreated = new Date()
             result.resultStatus = "Pending"
-            result.measure = measure
+            result.experimentMeasure = experimentMeasure
             return result;
         } else {
             errors.addError(0, 0, parsed)
@@ -790,6 +782,7 @@ class ResultsService {
 
         return result
     }
+
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     ImportSummary importResults(Long id, InputStream input, ImportOptions options = null) {
         if (options == null) {
@@ -813,10 +806,9 @@ class ResultsService {
         return summary;
     }
 
-    Map<Measure, Collection<ItemService.Item>> constructItemsByMeasure(Experiment experiment) {
-        Map<Measure, Collection<ItemService.Item>> itemsByMeasure = experiment.experimentMeasures.collectEntries { ExperimentMeasure em ->
-            [em.measure,
-                    em.measure.assayContextMeasures.collectMany { AssayContextMeasure acm ->
+    Map<ExperimentMeasure, Collection<ItemService.Item>> constructItemsByMeasure(Experiment experiment) {
+        Map<ExperimentMeasure, Collection<ItemService.Item>> itemsByMeasure = experiment.experimentMeasures.collectEntries { ExperimentMeasure em ->
+            [em, em.assayContextExperimentMeasures.collectMany { AssayContextExperimentMeasure acm ->
                         itemService.getLogicalItems(acm.assayContext.contextItems)
                     }]
         }
@@ -828,7 +820,7 @@ class ResultsService {
         ImportSummary errors = new ImportSummary()
 
         Template template = generateMaxSchema(experiment)
-        Map<Measure, Collection<ItemService.Item>> itemsByMeasure = constructItemsByMeasure(experiment)
+        Map<ExperimentMeasure, Collection<ItemService.Item>> itemsByMeasure = constructItemsByMeasure(experiment)
 
         def parsed = initialParse(new InputStreamReader(input), errors, template, options.skipExperimentContexts)
         if (parsed != null && !errors.hasErrors()) {
@@ -881,7 +873,7 @@ class ResultsService {
         key.valueMin = result.valueMin
         key.valueMax = result.valueMax
         key.valueDisplay = result.valueDisplay
-        key.measureId = result.measure.id
+        key.measureId = result.experimentMeasure.id
 
         key.items = result.resultContextItems.collect(new HashSet(), {
             LogicalKeyItem item = new LogicalKeyItem()
@@ -930,7 +922,7 @@ class ResultsService {
             errors.resultAnnotations += it.resultContextItems.size()
         }
 
-        if(!options.skipExperimentContexts) {
+        if (!options.skipExperimentContexts) {
             contexts.each {
                 it.experiment = experiment
                 experiment.addToExperimentContexts(it)
@@ -969,7 +961,7 @@ class ResultsService {
         // this is probably ridiculously slow, but my preference would be allow DB constraints to cascade the deletes, but that isn't in place.  So
         // walk the tree and delete all the objects.
 
-        if(!skipExperimentContextItems) {
+        if (!skipExperimentContextItems) {
             new ArrayList(experiment.experimentContexts).each { ExperimentContext context ->
                 new ArrayList(context.experimentContextItems).each { item ->
                     context.removeFromExperimentContextItems(item)

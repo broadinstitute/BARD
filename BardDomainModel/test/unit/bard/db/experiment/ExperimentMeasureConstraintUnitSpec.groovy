@@ -1,7 +1,8 @@
 package bard.db.experiment
 
+import bard.db.dictionary.Element
+import bard.db.enums.HierarchyType
 import bard.db.registration.Assay
-import bard.db.registration.Measure
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import org.junit.Before
@@ -9,10 +10,8 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static bard.db.experiment.ExperimentMeasure.MODIFIED_BY_MAX_SIZE
-import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import bard.db.enums.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,8 +20,8 @@ import bard.db.enums.HierarchyType
  * Time: 12:35 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, Experiment, ExperimentMeasure, Measure])
-@Mock([Assay, Experiment, ExperimentMeasure, Measure])
+@Build([Assay, Experiment, Element,ExperimentMeasure])
+@Mock([Assay, Experiment, Element,ExperimentMeasure])
 @Unroll
 class ExperimentMeasureConstraintUnitSpec extends Specification {
 
@@ -30,7 +29,7 @@ class ExperimentMeasureConstraintUnitSpec extends Specification {
 
     @Before
     void doSetup() {
-        domainInstance = ExperimentMeasure.buildWithoutSave()
+        domainInstance = ExperimentMeasure.buildWithoutSave(resultType: Element.build())
     }
 
     void "test parent constraints #desc parent: '#valueUnderTest'"() {
@@ -92,9 +91,13 @@ class ExperimentMeasureConstraintUnitSpec extends Specification {
 
     }
 
-    void "test measure constraints #desc measure: '#valueUnderTest'"() {
 
-        final String field = 'measure'
+
+
+
+    void "test statsModifier constraints #desc statsModifier: '#valueUnderTest'"() {
+
+        final String field = 'statsModifier'
 
         when:
         domainInstance[(field)] = valueUnderTest.call()
@@ -104,12 +107,28 @@ class ExperimentMeasureConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest      | valid | errorCode
-        'null not valid' | { null }            | false | 'nullable'
-        'valid measure'  | { Measure.build() } | true  | null
+        desc                  | valueUnderTest      | valid | errorCode
+        'null valid'          | { null }            | true  | null
+        'valid statsModifier' | { Element.build() } | true  | null
 
     }
+    void "test resultType constraints #desc resultType: '#valueUnderTest'"() {
 
+        final String field = 'resultType'
+
+        when:
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc               | valueUnderTest      | valid | errorCode
+        'null not valid'   | { null }            | true  | null
+        'valid resultType' | { Element.build() } | true  | null
+
+    }
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {
 
         final String field = 'modifiedBy'

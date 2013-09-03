@@ -4,27 +4,29 @@ import bard.db.dictionary.Element
 import bard.db.experiment.ExperimentMeasure
 import bard.db.enums.HierarchyType
 
+//TODO: Mark for deletion
+//TODO:First remove all constraint
 class Measure {
 
     private static final int MODIFIED_BY_MAX_SIZE = 40
 
     Assay assay
     Element resultType
+    Element statsModifier
     Measure parentMeasure
     HierarchyType parentChildRelationship
     Element entryUnit
-    Element statsModifier
+
 
     Date dateCreated = new Date()
     Date lastUpdated
     String modifiedBy
 
     Set<Measure> childMeasures = [] as Set
-    Set<AssayContextMeasure> assayContextMeasures = [] as Set
     Set<ExperimentMeasure> experimentMeasures = [] as Set
 
     static belongsTo = [assay: Assay, parentMeasure: Measure]
-    static hasMany = [childMeasures: Measure, assayContextMeasures: AssayContextMeasure, experimentMeasures: ExperimentMeasure]
+    static hasMany = [childMeasures: Measure, experimentMeasures: ExperimentMeasure]
 
     static mapping = {
         id(column: 'MEASURE_ID', generator: 'sequence', params: [sequence: 'MEASURE_ID_SEQ'])

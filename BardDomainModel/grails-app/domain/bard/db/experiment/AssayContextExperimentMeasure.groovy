@@ -1,4 +1,6 @@
-package bard.db.registration
+package bard.db.experiment
+
+import bard.db.registration.AssayContext
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,15 +9,13 @@ package bard.db.registration
  * Time: 11:58 AM
  * To change this template use File | Settings | File Templates.
  */
-//TODO: Mark for deletion
-//TODO:First remove all constraint
-class AssayContextMeasure {
+class AssayContextExperimentMeasure {
 
 
     private static final int MODIFIED_BY_MAX_SIZE = 40
 
     AssayContext assayContext
-    //Measure measure
+    ExperimentMeasure experimentMeasure
 
     Date dateCreated = new Date()
     // grails auto-timestamp
@@ -25,11 +25,12 @@ class AssayContextMeasure {
     static belongsTo = [assayContext: AssayContext]
 
     static mapping = {
-        id(column: 'ASSAY_CONTEXT_MEASURE_ID', generator: 'sequence', params: [sequence: 'ASSAY_CONTEXT_MEASURE_ID_SEQ'])
+        table('ASSAY_CTXT_EXP_MEASURE')
+        id(column: 'ASSAY_CTXT_EXP_MEASURE_ID', generator: 'sequence', params: [sequence: 'ASSAY_CTXT_EXP_MEASURE_ID_SEQ'])
     }
     static constraints = {
         assayContext(nullable: false)
-      //  measure(nullable: false)
+        experimentMeasure(nullable: false)
 
         dateCreated(nullable: false)
         lastUpdated(nullable: true)

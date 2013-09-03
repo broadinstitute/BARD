@@ -10,6 +10,7 @@ import bard.db.model.AbstractContextOwner
 import bard.db.project.ProjectExperiment
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
+import bard.db.registration.MeasureCaseInsensitiveDisplayLabelComparator
 
 class Experiment extends AbstractContextOwner {
 
@@ -47,6 +48,8 @@ class Experiment extends AbstractContextOwner {
     boolean disableUpdateReadyForExtraction = false
 
     static transients = ['experimentContextItems','disableUpdateReadyForExtraction']
+//    static transients = ['fullyValidateContextItems','assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions', "disableUpdateReadyForExtraction"]
+
 
     List<ExperimentContextItem> getExperimentContextItems() {
         Set<ExperimentContextItem> experimentContextItems = new HashSet<ExperimentContextItem>()
@@ -151,5 +154,16 @@ class Experiment extends AbstractContextOwner {
     Set<ExperimentDocument> getDocuments() {
         this.experimentDocuments
     }
+
+    Collection<ExperimentMeasure> getRootMeasures() {
+        return experimentMeasures.findAll { it.parent == null }
+    }
+    /**
+     * @return a list of Measures without parents sorted by displayLabel case insensitive
+     */
+    List<ExperimentMeasure> getRootMeasuresSorted() {
+        return experimentMeasures.findAll { it.parent == null }.sort(new MeasureCaseInsensitiveDisplayLabelComparator())
+    }
+
 
 }

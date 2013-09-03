@@ -14,17 +14,13 @@ import spock.lang.Unroll
  * Time: 11:51 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, Measure])
-@Mock([Assay, Measure])
+@Build([Assay])
+@Mock([Assay])
 @Unroll
 class AssayUnitSpec extends Specification {
     def 'test allowsNewExperiments when #desc'() {
         when:
-        Set measures = new HashSet()
-        for (int i = 0; i < measureCount; i++) {
-            measures.add(Measure.build())
-        }
-        Assay assay = Assay.build(assayType: assayType, assayStatus: assayStatus, measures: measures)
+        Assay assay = Assay.build(assayType: assayType, assayStatus: assayStatus)
 
         then:
         assay.allowsNewExperiments() == expectedAllowsNewExperiments
@@ -33,7 +29,6 @@ class AssayUnitSpec extends Specification {
         desc              | assayType          | assayStatus         | measureCount | expectedAllowsNewExperiments
         'retired assay'   | AssayType.REGULAR  | AssayStatus.RETIRED | 1            | false
         'template assay'  | AssayType.TEMPLATE | AssayStatus.DRAFT   | 1            | false
-        'no measures'     | AssayType.REGULAR  | AssayStatus.DRAFT   | 0            | false
         'everything good' | AssayType.REGULAR  | AssayStatus.DRAFT   | 1            | true
     }
 }

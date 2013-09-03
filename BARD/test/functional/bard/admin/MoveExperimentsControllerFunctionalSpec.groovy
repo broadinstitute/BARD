@@ -3,10 +3,13 @@ package bard.admin
 import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
 import bard.db.experiment.Experiment
-import bard.db.registration.*
+import bard.db.experiment.ExperimentMeasure
+import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.BardControllerFunctionalSpec
+import bard.db.registration.ExternalReference
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 import wslite.rest.RESTClient
@@ -45,34 +48,35 @@ class MoveExperimentsControllerFunctionalSpec extends BardControllerFunctionalSp
             if (!childElement) {
                 childElement = Element.build(label: childLabel).save(flush: true)
             }
-            Measure childMeasure = Measure.findByResultType(childElement)
+            ExperimentMeasure childMeasure = ExperimentMeasure.findByResultType(childElement)
             if (!childMeasure) {
-                childMeasure = Measure.build(resultType: childElement).save(flush: true)
+                childMeasure = ExperimentMeasure.build(resultType: childElement).save(flush: true)
             }
 
             Element parentElement = Element.findByLabel(parentLabel)
             if (!parentElement) {
                 parentElement = Element.build(label: parentLabel).save(flush: true)
             }
-            Measure parentMeasure = Measure.findByResultType(parentElement)
+            ExperimentMeasure parentMeasure = ExperimentMeasure.findByResultType(parentElement)
             if (!parentMeasure) {
-                parentMeasure = Measure.build(resultType: parentElement, childMeasures: [childMeasure] as Set).save(flush: true)
+                parentMeasure = ExperimentMeasure.build(resultType: parentElement, childMeasures: [childMeasure] as Set).save(flush: true)
             }
-            childMeasure.parentMeasure = parentMeasure
+            childMeasure.parent = parentMeasure
             childMeasure.parentChildRelationship = HierarchyType.SUPPORTED_BY
             childMeasure.save(flush: true)
 
-            Assay assay1 = Assay.build(assayName: "Assay Name10", measures: [childMeasure, parentMeasure] as Set).save(flush: true)
+            Assay assay1 = Assay.build(assayName: "Assay Name10").save(flush: true)
+
             String experimentsAlias = "experiment1"
-            final Experiment experiment1 = Experiment.build(experimentName: experimentsAlias, assay: assay1, capPermissionService: null).save(flush: true)
+            final Experiment experiment1 = Experiment.build(experimentName: experimentsAlias, assay: assay1,experimentMeasures:[childMeasure, parentMeasure] as Set, capPermissionService: null).save(flush: true)
             ExternalReference.build(extAssayRef: "aid=2", experiment: experiment1).save(flush: true)
 
             AssayContext.build(assay: assay1, contextName: "alpha1").save(flush: true)
 
-            Assay assay2 = Assay.build(assayName: "Assay Name10", measures: [childMeasure, parentMeasure] as Set).save(flush: true)
+            Assay assay2 = Assay.build(assayName: "Assay Name10").save(flush: true)
 
             experimentsAlias = "experiment2"
-            final Experiment experiment2 = Experiment.build(experimentName: experimentsAlias, assay: assay2, capPermissionService: null).save(flush: true)
+            final Experiment experiment2 = Experiment.build(experimentName: experimentsAlias, assay: assay2, experimentMeasures:[childMeasure, parentMeasure] as Set,capPermissionService: null).save(flush: true)
             ExternalReference.build(extAssayRef: "aid=1", experiment: experiment2).save(flush: true)
             AssayContext.build(assay: assay2, contextName: "alpha2").save(flush: true)
             //create assay context

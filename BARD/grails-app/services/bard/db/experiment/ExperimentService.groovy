@@ -3,7 +3,6 @@ package bard.db.experiment
 import bard.db.enums.ExperimentStatus
 import bard.db.enums.HierarchyType
 import bard.db.registration.Assay
-import bard.db.registration.Measure
 import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -77,10 +76,10 @@ class ExperimentService {
         Set unused = new HashSet(experiment.experimentMeasures)
 
         // clear relationships between measures
-        unused.each { ExperimentMeasure measure ->
-            measure.childMeasures = new HashSet();
-            measure.parent = null;
-            measure.parentChildRelationship = null
+        unused.each { ExperimentMeasure experimentMeasure ->
+            experimentMeasure.childMeasures = new HashSet();
+            experimentMeasure.parent = null;
+            experimentMeasure.parentChildRelationship = null
         }
 
         // start over fresh and walk through the elements in tree
@@ -89,12 +88,14 @@ class ExperimentService {
         for (int i = 0; i < edges.length(); i++) {
             JSONObject record = edges.getJSONObject(i);
             String id = record.getString("id");
+
             Long measureId = record.getLong("measureId");
 
             ExperimentMeasure experimentMeasure;
             if (id.startsWith("new-")) {
-                Measure measure = Measure.get(measureId);
-                experimentMeasure = new ExperimentMeasure(experiment: experiment, measure: measure, dateCreated: new Date());
+                //Measure measure = Measure.get(measureId);
+                //experimentMeasure = new ExperimentMeasure(experiment: experiment, measure: measure, dateCreated: new Date());
+                experimentMeasure = new ExperimentMeasure(experiment: experiment, dateCreated: new Date());
                 experimentMeasure.save()
                 byId[id] = experimentMeasure;
             } else {
@@ -151,29 +152,31 @@ class ExperimentService {
         Experiment experiment = new Experiment(assay: assay, experimentName: experimentName, description: description, dateCreated: new Date())
 
         if (experiment.save(flush: true)) {
-            populateMeasures(experiment)
+           // populateMeasures(experiment)
         }
 
         return experiment
     }
 
     void populateMeasures(Experiment experiment) {
-        Map measureToExpMeasure = [:]
-
-        experiment.assay.measures.each { Measure measure ->
-            ExperimentMeasure expMeasure = new ExperimentMeasure(experiment: experiment, measure: measure, dateCreated: new Date())
-            measureToExpMeasure[measure] = expMeasure
-        }
-
-        measureToExpMeasure.values().each { ExperimentMeasure child ->
-            if (child.measure.parentMeasure) {
-                ExperimentMeasure parent = measureToExpMeasure[child.measure.parentMeasure]
-                child.parentChildRelationship = HierarchyType.SUPPORTED_BY
-                child.parent = parent
-            }
-        }
-
-        experiment.experimentMeasures = new HashSet(measureToExpMeasure.values())
+       // TODO: Rework
+//        Map measureToExpMeasure = [:]
+//
+//        experiment.experimentMeasures.each { ExperimentMeasure measure ->
+//            ExperimentMeasure expMeasure = new ExperimentMeasure(experiment: experiment, dateCreated: new Date())
+//           // ExperimentMeasure expMeasure = new ExperimentMeasure(experiment: experiment, measure: measure, dateCreated: new Date())
+//            measureToExpMeasure[measure] = expMeasure
+//        }
+//
+//        measureToExpMeasure.values().each { ExperimentMeasure child ->
+//            if (child.experimentMeasure.parentMeasure) {
+//                ExperimentMeasure parent = measureToExpMeasure[child.experimentMeasure.parentMeasure]
+//                child.parentChildRelationship = HierarchyType.SUPPORTED_BY
+//                child.parent = parent
+//            }
+//        }
+//
+//        experiment.experimentMeasures = new HashSet(measureToExpMeasure.values())
     }
 
 
@@ -206,7 +209,7 @@ class ExperimentService {
         Assay newAssay = mapping.assay
         newAssay.fullyValidateContextItems=false
 
-        Map<Measure, Measure> measureOldToNew = mapping.measureOldToNew
+        Map measureOldToNew = mapping.measureOldToNew
 
 
         for (Experiment experiment : experiments) {
@@ -214,14 +217,15 @@ class ExperimentService {
             newAssay.addToExperiments(experiment)
 
             // map measures over to new assay
-            for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
-                Measure oldMeasure = experimentMeasure.measure
-                Measure newMeasure = measureOldToNew[oldMeasure]
-                assert newMeasure != null
-
-                oldMeasure.removeFromExperimentMeasures(experimentMeasure)
-                newMeasure.addToExperimentMeasures(experimentMeasure)
-            }
+            //TODO: Rework
+//            for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
+//                Measure oldMeasure = experimentMeasure.measure
+//                Measure newMeasure = measureOldToNew[oldMeasure]
+//                assert newMeasure != null
+//
+//                oldMeasure.removeFromExperimentMeasures(experimentMeasure)
+//                newMeasure.addToExperimentMeasures(experimentMeasure)
+//            }
         }
         oldAssay.save(flush: true)
 

@@ -5,6 +5,7 @@ import bard.db.context.item.ContextItemDTO
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
+import bard.db.experiment.ExperimentMeasure
 import org.apache.commons.collections.CollectionUtils
 import org.springframework.security.access.prepost.PreAuthorize
 import registration.AssayService
@@ -54,9 +55,9 @@ class AssayDefinitionService {
      * @return
      */
     @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void moveMeasure(Long id, Measure measure, Measure parentMeasure) {
+    void moveMeasure(Long id, ExperimentMeasure measure, ExperimentMeasure parentMeasure) {
 
-        measure.parentMeasure = parentMeasure
+        measure.parent = parentMeasure
         if (!measure.parentChildRelationship) {
             if (parentMeasure) {
                 measure.parentChildRelationship = HierarchyType.SUPPORTED_BY

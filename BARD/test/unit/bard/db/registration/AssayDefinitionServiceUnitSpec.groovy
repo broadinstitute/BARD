@@ -3,6 +3,7 @@ package bard.db.registration
 import acl.CapPermissionService
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
+import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
 import grails.buildtestdata.mixin.Build
@@ -19,8 +20,8 @@ import spock.lang.Specification
  * Time: 2:07 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, Measure, Experiment, AssayContextMeasure, AssayContext, ExperimentMeasure, AssayContextItem, AssayDocument])
-@Mock([Assay, Measure, Experiment, ExperimentMeasure, AssayContext, AssayContextMeasure, AssayContextItem, AssayDocument])
+@Build([Assay, Experiment, AssayContext, AssayContextExperimentMeasure, ExperimentMeasure, AssayContextItem, AssayDocument])
+@Mock([Assay, Experiment, ExperimentMeasure, AssayContext, AssayContextExperimentMeasure, AssayContextItem, AssayDocument])
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(AssayDefinitionService)
 public class AssayDefinitionServiceUnitSpec extends Specification {
@@ -28,16 +29,18 @@ public class AssayDefinitionServiceUnitSpec extends Specification {
     void 'test generateAssayComparisonReport'() {
         setup:
         Assay assayOne = Assay.build()
+        Experiment experimentOne = Experiment.build(assay: assayOne)
         AssayContext contextOne = AssayContext.build(assay: assayOne, contextName: "alpha")
         AssayContextItem.build(assayContext: contextOne)
-        Measure measureOne = Measure.build(assay: assayOne)
-        AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
+        ExperimentMeasure measureOne = ExperimentMeasure.build(experiment: experimentOne)
+        AssayContextExperimentMeasure.build(assayContext: contextOne, experimentMeasure: measureOne)
 
         Assay assayTwo = Assay.build()
+        Experiment experimentTwo = Experiment.build(assay: assayTwo)
         AssayContext contextTwo = AssayContext.build(assay: assayTwo, contextName: "alpha2")
         AssayContextItem.build(assayContext: contextTwo)
-        Measure measureTwo = Measure.build(assay: assayTwo)
-        AssayContextMeasure.build(assayContext: contextTwo, measure: measureTwo)
+        ExperimentMeasure measureTwo = ExperimentMeasure.build(experiment: experimentTwo)
+        AssayContextExperimentMeasure.build(assayContext: contextTwo, experimentMeasure: measureTwo)
 
         when:
         Map m = service.generateAssayComparisonReport(assayOne, assayTwo)

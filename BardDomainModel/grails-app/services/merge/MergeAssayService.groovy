@@ -1,24 +1,18 @@
 package merge
 
 import bard.db.dictionary.Element
-import bard.db.registration.Assay
-import bard.db.registration.AssayContextItem
-import bard.db.registration.AttributeType
-import org.apache.commons.lang3.StringUtils
-import bard.db.registration.AssayDocument
-import bard.db.registration.Measure
+import bard.db.enums.AssayStatus
 import bard.db.experiment.Experiment
-import bard.db.registration.AssayContext
 import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
+import bard.db.experiment.ExperimentMeasure
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
+import bard.db.registration.*
 import groovy.sql.Sql
-import bard.db.experiment.ExperimentMeasure
-import bard.db.registration.AssayContextMeasure
+import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.builder.EqualsBuilder
 import org.apache.commons.math3.util.Precision
-import bard.db.enums.AssayStatus
 
 class MergeAssayService {
 
@@ -121,11 +115,11 @@ class MergeAssayService {
     }
 
     private void validateAssayConsistent(Assay assay) {
-        for (measure in assay.measures) {
-            for (expMeasure in measure.experimentMeasures) {
-                assert expMeasure.experiment.assay == assay
-            }
-        }
+//        for (measure in assay.measures) {
+//            for (expMeasure in measure.experimentMeasures) {
+//                assert expMeasure.experiment.assay == assay
+//            }
+//        }
 
         for (experiment in assay.experiments) {
             for (expMeasure in experiment.experimentMeasures) {
@@ -261,19 +255,20 @@ class MergeAssayService {
         return mapping
     }
 
-    def constructMeasureKey(Measure measure) {
+    def constructMeasureKey(ExperimentMeasure measure) {
         String key = "r=${measure.resultType.id} s=${measure.statsModifier?.id}"
-        if (measure.parentMeasure != null) {
-            key = "${constructMeasureKey(measure.parentMeasure)}, ${key}";
+        if (measure.parent != null) {
+            key = "${constructMeasureKey(measure.parent)}, ${key}";
         }
         return key
     }
 
-    List<Measure> collectMeasuresSortedByPath(List<Assay> assays) {
+    List<ExperimentMeasure> collectMeasuresSortedByPath(List<Assay> assays) {
         Map measuresByKey = [:]
         for (assay in assays) {
-            for (measure in assay.measures) {
-                measuresByKey[constructMeasureKey(measure)] = measure
+            for (experiment in assay.experiments) {
+                for (measure in experiment.experimentMeasures)
+                    measuresByKey[constructMeasureKey(measure)] = measure
             }
         }
 
@@ -285,40 +280,42 @@ class MergeAssayService {
 
     def validateMeasures(def measures) {
         for (found in measures) {
-            assert ((found.parentMeasure == null && found.parentChildRelationship == null) || (found.parentMeasure != null && found.parentChildRelationship != null));
+            assert ((found.parent == null && found.parentChildRelationship == null) || (found.parent != null && found.parentChildRelationship != null));
         }
     }
 
-    protected int addMissingMeasuresToTargetAssay(def session, String modifiedBy, Assay targetAssay, List<Measure> measures, Map<String, Measure> measureByKey) {
+    protected int addMissingMeasuresToTargetAssay(def session, String modifiedBy, Assay targetAssay, List<ExperimentMeasure> measures, Map<String, ExperimentMeasure> measureByKey) {
         int addMeasureToKeep = 0
         // iterate through measures sorted by path to ensure that the parents of the current measure
         // have been completed prior to doing the current measure
-        for (Measure measure : measures) {
+        for (ExperimentMeasure measure : measures) {
             session?.flush()
 
             String key = constructMeasureKey(measure)
-            Measure found = measureByKey[key]
+            ExperimentMeasure found = measureByKey[key]
 
             if (!found) {
                 // copy measure to destination
                 found = measure.clone()
                 found.modifiedBy = modifiedBy + "-movedFromA-${measure.assay.id}"
 
-                if (measure.parentMeasure != null) {
-                    found.parentMeasure = measureByKey[constructMeasureKey(measure.parentMeasure)]
-                    if (found.parentMeasure == null) {
-                        throw new RuntimeException("Could not find target parent measure for ${measure.parentMeasure}")
+                if (measure.parent != null) {
+                    found.parent = measureByKey[constructMeasureKey(measure.parent)]
+                    if (found.parent == null) {
+                        throw new RuntimeException("Could not find target parent measure for ${measure.parent}")
                     }
                 }
 
                 found.parentChildRelationship = measure.parentChildRelationship
                 addMeasureToKeep++
-                println("xCould not find measure for ${key}: ${measure} so created ${measure} (${found.parentMeasure}, ${found.parentChildRelationship})")
+                println("xCould not find measure for ${key}: ${measure} so created ${measure} (${found.parent}, ${found.parentChildRelationship})")
 
                 validateMeasures(measures)
-                validateMeasures(targetAssay.measures)
+                for (experiment in targetAssay.experiments) {
+                    validateMeasures(experiment.experimentMeasures)
+                }
 
-                targetAssay.addToMeasures(found)
+                //targetAssay.addToMeasures(found)
                 found.save(failOnError: true)
             }
 
@@ -328,53 +325,58 @@ class MergeAssayService {
         return addMeasureToKeep
     }
 
-    protected void copyOverContextMeasures( List<Assay> sourceAssays, Assay targetAssay, List<Measure> measures,Map<String, Measure> measureByKey) {
+    @Deprecated
+    protected void copyOverContextMeasures(List<Assay> sourceAssays, Assay targetAssay, List measures, Map measureByKey) {
+       throw new RuntimeException("Requires rework")
         // copy over assayContextMeasures
-        Map<AssayContext, AssayContext> contextMap = createContextMapping(sourceAssays, targetAssay)
-
-        for (Measure measure : measures) {
-            for (assayContextMeasure in measure.assayContextMeasures) {
-                Measure newMeasure = measureByKey[constructMeasureKey(measure)]
-                AssayContext newAssayContext = contextMap[assayContextMeasure.assayContext]
-                if (newAssayContext == null) {
-                    throw new RuntimeException(
-                            "Could not find assay context ${assayContextMeasure.assayContext.id} with name ${assayContextMeasure.assayContext.contextName} in assay with ADID: ${targetAssay.id}")
-                }
-                assert newMeasure != null
-
-                // only if we don't already have this link, create it
-                if (newMeasure.assayContextMeasures.find { it.assayContext == newAssayContext } == null) {
-                    AssayContextMeasure newAssayContextMeasure = new AssayContextMeasure(assayContext: newAssayContext, measure: newMeasure)
-                    newAssayContext.addToAssayContextMeasures(newAssayContextMeasure)
-                    newMeasure.addToAssayContextMeasures(newAssayContextMeasure)
-                    newAssayContextMeasure.save(failOnError: true)
-                }
-            }
-        }
+//        Map<AssayContext, AssayContext> contextMap = createContextMapping(sourceAssays, targetAssay)
+//
+//        for (Measure measure : measures) {
+//            for (assayContextMeasure in measure.assayContextMeasures) {
+//                Measure newMeasure = measureByKey[constructMeasureKey(measure)]
+//                AssayContext newAssayContext = contextMap[assayContextMeasure.assayContext]
+//                if (newAssayContext == null) {
+//                    throw new RuntimeException(
+//                            "Could not find assay context ${assayContextMeasure.assayContext.id} with name ${assayContextMeasure.assayContext.contextName} in assay with ADID: ${targetAssay.id}")
+//                }
+//                assert newMeasure != null
+//
+//                // only if we don't already have this link, create it
+//                if (newMeasure.assayContextMeasures.find { it.assayContext == newAssayContext } == null) {
+//                    AssayContextMeasure newAssayContextMeasure = new AssayContextMeasure(assayContext: newAssayContext, measure: newMeasure)
+//                    newAssayContext.addToAssayContextMeasures(newAssayContextMeasure)
+//                    newMeasure.addToAssayContextMeasures(newAssayContextMeasure)
+//                    newAssayContextMeasure.save(failOnError: true)
+//                }
+//            }
+//        }
 
     }
-    protected void updateExperiments(Assay targetAssay,Map<String, Measure> measureByKey){
+
+    protected void updateExperiments(Assay targetAssay, Map measureByKey) {
+        throw new RuntimeException("Requires rework")
+
         // update experiment measures
-        for (Experiment experiment : targetAssay.experiments) {
-            for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
-                // move those experiment measures which refer to a measure that got mapped to the destination.
-                // (skip those measures that already point to the destination)
-                Measure newMeasure = measureByKey[constructMeasureKey(experimentMeasure.measure)]
-
-                assert newMeasure != null
-                experimentMeasure.measure = newMeasure
-
-            }
-        }
+//        for (Experiment experiment : targetAssay.experiments) {
+//            for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
+//                // move those experiment measures which refer to a measure that got mapped to the destination.
+//                // (skip those measures that already point to the destination)
+//                Measure newMeasure = measureByKey[constructMeasureKey(experimentMeasure.measure)]
+//
+//                assert newMeasure != null
+//                experimentMeasure.measure = newMeasure
+//
+//            }
+//        }
     }
-    protected def finishHandlingMeasures(Assay targetAssay,List<Measure> measures){
-        targetAssay.save(failOnError: true)
-
-        validateAssayConsistent(targetAssay)
-        println("validating")
-        validateMeasures(measures)
-        validateMeasures(targetAssay.measures)
-    }
+//    protected def finishHandlingMeasures(Assay targetAssay,List<Measure> measures){
+//        targetAssay.save(failOnError: true)
+//
+//        validateAssayConsistent(targetAssay)
+//        println("validating")
+//        validateMeasures(measures)
+//        validateMeasures(targetAssay.measures)
+//    }
     // Measures:  keep the measures that are the unique set of all the measures in the duplicate set of removingAssays.
     // a measure is uniquely identified by the full path leading up to it as well as its result type and stats modifier
     // assume by this point, all of the context items have already been copied from removingAssays to assayWillKeep,
@@ -383,58 +385,57 @@ class MergeAssayService {
         //int addMeasureToExperimentInKeep = 0  //count number of measures added to experiments
 
         // create a map of measure key -> measure
-        Map<String, Measure> measureByKey = targetAssay.measures.collectEntries { [constructMeasureKey(it), it] }
-
-        Set<Measure> measuresFromExperimentsToMove = [] as HashSet<Measure>
-        //get measures associated with experiments to move
-        for (Experiment experiment : sourceExperiments) {
-            List<Measure> tempMeasures = experiment.experimentMeasures.collect { it.measure }
-            if (tempMeasures) {
-                measuresFromExperimentsToMove.addAll(tempMeasures)
-            }
-        }
-
-        List<Measure> measures = measuresFromExperimentsToMove as List<Measure>
-
-        // count number of measures added to assay
-        addMissingMeasuresToTargetAssay(session, modifiedBy, targetAssay, measures, measureByKey)
-
-        // copy over assayContextMeasures
-        copyOverContextMeasures([sourceAssay],targetAssay,measures,measureByKey)
-
-        // update experiment measures
-        updateExperiments(targetAssay,measureByKey)
-
-        //println("Total candidate measure: ${measures.size()}, added to assay ${addMeasureToKeep}, add to experiment ${addMeasureToExperimentInKeep}")
-        finishHandlingMeasures(targetAssay,measures)
+//        Map<String, Measure> measureByKey = targetAssay.measures.collectEntries { [constructMeasureKey(it), it] }
+//
+//        Set<Measure> measuresFromExperimentsToMove = [] as HashSet<Measure>
+//        //get measures associated with experiments to move
+//        for (Experiment experiment : sourceExperiments) {
+//            List<Measure> tempMeasures = experiment.experimentMeasures.collect { it.measure }
+//            if (tempMeasures) {
+//                measuresFromExperimentsToMove.addAll(tempMeasures)
+//            }
+//        }
+//
+//        List<Measure> measures = measuresFromExperimentsToMove as List<Measure>
+//
+//        // count number of measures added to assay
+//        //addMissingMeasuresToTargetAssay(session, modifiedBy, targetAssay, measures, measureByKey)
+//
+//        // copy over assayContextMeasures
+//        copyOverContextMeasures([sourceAssay],targetAssay,measures,measureByKey)
+//
+//        // update experiment measures
+//        updateExperiments(targetAssay,measureByKey)
+//
+//        //println("Total candidate measure: ${measures.size()}, added to assay ${addMeasureToKeep}, add to experiment ${addMeasureToExperimentInKeep}")
+//        finishHandlingMeasures(targetAssay,measures)
     }
-
 
     // Measures:  keep the measures that are the unique set of all the measures in the duplicate set of removingAssays.
     // a measure is uniquely identified by the full path leading up to it as well as its result type and stats modifier
     // assume by this point, all of the context items have already been copied from removingAssays to assayWillKeep,
     // which implies that all of the contexts have already been copied over as well.
-    def handleMeasure(def session, List<Assay> sourceAssays, Assay targetAssay, String modifiedBy) {
-       // int addMeasureToKeep = 0 // count number of measures added to assay
-        int addMeasureToExperimentInKeep = 0  //count number of measures added to experiments
-
-        // create a map of measure key -> measure
-        Map<String, Measure> measureByKey = targetAssay.measures.collectEntries { [constructMeasureKey(it), it] }
-
-        // iterate through measures sorted by path to ensure that the parents of the current measure
-        // have been completed prior to doing the current measure
-        List<Measure> measures = collectMeasuresSortedByPath(sourceAssays)
-        int addMeasureToKeep = addMissingMeasuresToTargetAssay(session, modifiedBy, targetAssay, measures, measureByKey)
-
-        copyOverContextMeasures(sourceAssays,targetAssay,measures,measureByKey)
-
-        // update experiment measures
-        updateExperiments(targetAssay,measureByKey)
-
-        println("Total candidate measure: ${measures.size()}, added to assay ${addMeasureToKeep}, add to experiment ${addMeasureToExperimentInKeep}")
-        finishHandlingMeasures(targetAssay,measures)
-
-    }
+//    def handleMeasure(def session, List<Assay> sourceAssays, Assay targetAssay, String modifiedBy) {
+//       // int addMeasureToKeep = 0 // count number of measures added to assay
+//        int addMeasureToExperimentInKeep = 0  //count number of measures added to experiments
+//
+//        // create a map of measure key -> measure
+//        Map<String, Measure> measureByKey = targetAssay.measures.collectEntries { [constructMeasureKey(it), it] }
+//
+//        // iterate through measures sorted by path to ensure that the parents of the current measure
+//        // have been completed prior to doing the current measure
+//        List<Measure> measures = collectMeasuresSortedByPath(sourceAssays)
+//        int addMeasureToKeep = addMissingMeasuresToTargetAssay(session, modifiedBy, targetAssay, measures, measureByKey)
+//
+//        copyOverContextMeasures(sourceAssays,targetAssay,measures,measureByKey)
+//
+//        // update experiment measures
+//        updateExperiments(targetAssay,measureByKey)
+//
+//        println("Total candidate measure: ${measures.size()}, added to assay ${addMeasureToKeep}, add to experiment ${addMeasureToExperimentInKeep}")
+//        finishHandlingMeasures(targetAssay,measures)
+//
+//    }
 
     def updateStatus(List<Assay> assays, String modifiedBy) {
         assays.each { Assay assay ->
@@ -445,7 +446,6 @@ class MergeAssayService {
             }
         }
     }
-
 
     //TODO:finish me
     def delete(Long assayid, Sql sql) {
@@ -475,11 +475,11 @@ class MergeAssayService {
         }
         assay.documents.removeAll(assay.documents)
 
-        assay.measures.each { Measure measure ->
-            measure.assayContextMeasures.removeAll(measure.assayContextMeasures)
-            measure.experimentMeasures.removeAll(measure.experimentMeasures)
-        }
-        assay.measures.removeAll(assay.measures)
+//        assay.measures.each { Measure measure ->
+//            measure.assayContextMeasures.removeAll(measure.assayContextMeasures)
+//            measure.experimentMeasures.removeAll(measure.experimentMeasures)
+//        }
+//        assay.measures.removeAll(assay.measures)
 
         assay.assayContextItems.each {
             it.delete()

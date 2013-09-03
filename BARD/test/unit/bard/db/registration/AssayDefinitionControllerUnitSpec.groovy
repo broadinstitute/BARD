@@ -6,6 +6,9 @@ import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
+import bard.db.experiment.AssayContextExperimentMeasure
+import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentMeasure
 import bard.db.project.InlineEditableCommand
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -29,8 +32,8 @@ import javax.servlet.http.HttpServletResponse
 
 
 @TestFor(AssayDefinitionController)
-@Build([Assay, Element, AssayContext, AssayContextMeasure, Measure])
-@Mock([Assay, Element, AssayContext, AssayContextMeasure, Measure])
+@Build([Assay, Element, AssayContext, AssayContextExperimentMeasure, ExperimentMeasure,Experiment])
+@Mock([Assay, Element, AssayContext, AssayContextExperimentMeasure, ExperimentMeasure,Experiment])
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
 class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
@@ -72,7 +75,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         def model = controller.save(assayCommand)
         then:
-        assert response.status==200
+        assert response.status == 200
     }
 
     void 'test create assay definition success'() {
@@ -290,7 +293,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
     void 'test clone assay'() {
         given:
         Assay newAssay = Assay.build()
-        controller.measureTreeService.createMeasureTree(_, _) >> []
+        //controller.measureTreeService.createMeasureTree(_, _) >> []
         when:
         controller.cloneAssay(assay.id)
         then:
@@ -300,8 +303,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
     }
 
     void 'test clone assay fail'() {
-        given:
-        controller.measureTreeService.createMeasureTree(_, _) >> []
+       // given:
+       // controller.measureTreeService.createMeasureTree(_, _) >> []
         when:
         controller.cloneAssay(assay.id)
         then:
@@ -314,7 +317,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         given:
         CapPermissionService capPermissionService = Mock(CapPermissionService)
         controller.capPermissionService = capPermissionService
-        controller.measureTreeService.createMeasureTree(_, _) >> []
+        //controller.measureTreeService.createMeasureTree(_, _) >> []
 
         when:
         params.id = assay.id
@@ -348,7 +351,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         given:
         CapPermissionService capPermissionService = Mock(CapPermissionService)
         controller.capPermissionService = capPermissionService
-        controller.measureTreeService.createMeasureTree(_, _) >> []
+       // controller.measureTreeService.createMeasureTree(_, _) >> []
 
         when:
         params.id = assay.id
@@ -365,14 +368,14 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         Element resultType = Element.build()
         Element statistic = Element.build()
         Element.saveAll([resultType, statistic])
-
-        params.id = assay.id
+        Experiment experiment = Experiment.build(assay: assay)
+        params.id = experiment.id
         params.resultTypeId = resultType.id
         params.statisticId = statistic.id
-        Measure newMeasure = Measure.build()
+        ExperimentMeasure newMeasure = ExperimentMeasure.build()
         def assayContextService = mockFor(AssayContextService)
-        assayContextService.demand.addMeasure(1) { assayInstance, parentMeasure, rt, sm, entryUnit, hierarchyType ->
-            assert assayInstance == assay.id
+        assayContextService.demand.addExperimentMeasure(1) { experimentInstance, parentMeasure, rt, sm, entryUnit, hierarchyType ->
+            assert experimentInstance == experiment.id
             assert parentMeasure == null
             assert rt == resultType
             assert sm == statistic
@@ -406,11 +409,11 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         params.id = assay.id
         params.resultTypeId = resultType.id
         params.statisticId = statistic.id
-        Measure newMeasure = Measure.build()
+        ExperimentMeasure newMeasure = ExperimentMeasure.build()
         controller.addMeasure()
 
         then:
-        controller.assayContextService.addMeasure(_, _, _, _, _, _) >> { throw new AccessDeniedException("msg") }
+        controller.assayContextService.addExperimentMeasure(_, _, _, _, _, _) >> { throw new AccessDeniedException("msg") }
         assertAccesDeniedErrorMessage()
     }
 
@@ -426,15 +429,17 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
     }
 
     void 'test delete measure with #desc'() {
+        given:
+        Experiment experiment = Experiment.build(assay: assay)
         when:
-        mockDomain(Measure)
-        def measure = Measure.build(assay: assay)
+        mockDomain(ExperimentMeasure)
+        def measure = ExperimentMeasure.build(experiment: experiment)
         if (hasChild) {
-            Measure.build(assay: assay, parentMeasure: measure)
+            ExperimentMeasure.build(experiment: experiment, parent: measure)
         }
 
         then:
-        Measure.count == beforeExpectedCount
+        ExperimentMeasure.count == beforeExpectedCount
 
         when:
         params.id = assay.id
@@ -443,7 +448,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
         then:
         response.redirectedUrl == '/assayDefinition/editMeasure/' + assay.id
-        Measure.count == afterExpectedCount
+        ExperimentMeasure.count == afterExpectedCount
 
         where:
         desc       | hasChild | beforeExpectedCount | afterExpectedCount
@@ -455,7 +460,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
     void 'test delete measure - access denied #desc'() {
         given:
         accessDeniedRoleMock()
-        def measure = Measure.build(assay: assay)
+        Experiment experiment = Experiment.build(assay: assay)
+        def measure = ExperimentMeasure.build(experiment: experiment)
         params.id = assay.id
         params.measureId = measure.id
         when:
@@ -469,13 +475,14 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         assay = Assay.build(assayName: 'Test')
         def context = AssayContext.build(assay: assay)
-        def measure = Measure.build(assay: assay)
+        Experiment experiment = Experiment.build(assay: assay)
+        def measure = ExperimentMeasure.build(experiment: experiment)
         params.id = assay.id
         params.measureId = measure.id
         params.assayContextId = context.id
 
         def assayContextService = mockFor(AssayContextService)
-        assayContextService.demand.associateContext(1) { Measure measureParam, AssayContext contextParam ->
+        assayContextService.demand.associateExperimentContext(1) { ExperimentMeasure measureParam, AssayContext contextParam ->
             assert measureParam == measure
             assert contextParam == context
         }
@@ -500,7 +507,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
         assay = Assay.build(assayName: 'Test')
         def context = AssayContext.build(assay: assay)
-        def measure = Measure.build(assay: assay)
+        Experiment experiment = Experiment.build(assay: assay)
+        def measure = ExperimentMeasure.build(experiment: experiment)
         params.id = assay.id
         params.measureId = measure.id
         params.assayContextId = context.id
@@ -508,7 +516,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         controller.associateContext()
 
         then:
-        controller.assayContextService.associateContext(_, _, _) >> { throw new AccessDeniedException("msg") }
+        controller.assayContextService.associateExperimentContext(_, _, _) >> { throw new AccessDeniedException("msg") }
 
         assertAccesDeniedErrorMessage()
     }
@@ -517,18 +525,20 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
         when:
         assay = Assay.build(assayName: 'Test')
+
         AssayContext context = AssayContext.build(assay: assay)
-        Measure measure = Measure.build(assay: assay)
-        def contextMeasure = AssayContextMeasure.build(measure: measure, assayContext: context)
-        context.addToAssayContextMeasures(contextMeasure)
-        measure.addToAssayContextMeasures(contextMeasure)
+        Experiment experiment = Experiment.build(assay: assay)
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(experiment: experiment)
+        def contextMeasure = AssayContextExperimentMeasure.build(experimentMeasure: experimentMeasure, assayContext: context)
+        context.addToAssayContextExperimentMeasures(contextMeasure)
+        experimentMeasure.addToAssayContextExperimentMeasures(contextMeasure)
 
         params.id = assay.id
-        params.measureId = measure.id
+        params.measureId = experimentMeasure.id
         params.assayContextId = context.id
         def assayContextService = mockFor(AssayContextService)
-        assayContextService.demand.disassociateContext(1) { Measure measureParam, AssayContext contextParam ->
-            assert measureParam == measure
+        assayContextService.demand.disassociateAssayContext(1) { ExperimentMeasure measureParam, AssayContext contextParam ->
+            assert measureParam == experimentMeasure
             assert contextParam == context
         }
         controller.setAssayContextService(assayContextService.createMock())
@@ -551,10 +561,12 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         accessDeniedRoleMock()
         assay = Assay.build(assayName: 'Test')
         AssayContext context = AssayContext.build(assay: assay)
-        Measure measure = Measure.build(assay: assay)
-        def contextMeasure = AssayContextMeasure.build(measure: measure, assayContext: context)
-        context.addToAssayContextMeasures(contextMeasure)
-        measure.addToAssayContextMeasures(contextMeasure)
+        Experiment experiment = Experiment.build(assay: assay)
+
+        ExperimentMeasure measure = ExperimentMeasure.build(experiment: experiment)
+        def contextMeasure = AssayContextExperimentMeasure.build(experimentMeasure: measure, assayContext: context)
+        context.addToAssayContextExperimentMeasures(contextMeasure)
+        measure.addToAssayContextExperimentMeasures(contextMeasure)
 
         params.id = assay.id
         params.measureId = measure.id
@@ -563,7 +575,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         controller.disassociateContext()
 
         then:
-        controller.assayContextService.disassociateContext(_, _, _) >> { throw new AccessDeniedException("msg") }
+        controller.assayContextService.disassociateAssayContext(_, _, _) >> { throw new AccessDeniedException("msg") }
         assertAccesDeniedErrorMessage()
 
     }
@@ -572,12 +584,15 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         given:
         def assayContextService = mockFor(AssayContextService)
         assay = Assay.build(assayName: 'Test')
-        Measure parent = Measure.build(assay: assay)
+        Experiment experiment = Experiment.build(assay: assay)
+        ExperimentMeasure parent = ExperimentMeasure.build(experiment: experiment)
+
+        //Measure parent = Measure.build(assay: assay)
         parent.parentChildRelationship = HierarchyType.CALCULATED_FROM
         params.measureId = parent.id
         params.relationship = HierarchyType.SUPPORTED_BY.getId()
         when:
-        assayContextService.demand.changeParentChildRelationship(1) { Measure measureParam, HierarchyType hierarchyType ->
+        assayContextService.demand.changeParentChildRelationship(1) { ExperimentMeasure measureParam, HierarchyType hierarchyType ->
             assert measureParam == parent
             assert hierarchyType == HierarchyType.SUPPORTED_BY
         }
@@ -591,8 +606,10 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         given:
         accessDeniedRoleMock()
         assay = Assay.build(assayName: 'Test')
-        Measure parent = Measure.build(assay: assay)
-        Measure child = Measure.build(assay: assay, parentMeasure: parent)
+        Experiment experiment = Experiment.build(assay: assay)
+        ExperimentMeasure parent = ExperimentMeasure.build(experiment: experiment)
+
+        ExperimentMeasure child = ExperimentMeasure.build(experiment: experiment, parent: parent)
         child.parentChildRelationship = HierarchyType.CALCULATED_FROM
         params.measureId = child.id
         params.relationship = HierarchyType.SUPPORTED_BY.getId()
@@ -607,10 +624,12 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     void 'test move measure #desc'() {
         given:
-        Measure child = Measure.build(assay: assay)
-        Measure parent = null
+        Experiment experiment = Experiment.build(assay: assay)
+        ExperimentMeasure child = ExperimentMeasure.build(experiment: experiment)
+
+        ExperimentMeasure parent = null
         if (parentMeasure) {
-            parent = Measure.build(assay: assay)
+            parent = ExperimentMeasure.build(experiment: experiment)
             child.parentChildRelationship = relationshipType
         }
 
@@ -618,9 +637,9 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         controller.moveMeasureNode(child.id, parent?.id)
         then:
         controller.assayDefinitionService.moveMeasure(_, _, _) >> { arg1, arg2, arg3 ->
-            arg2.parentMeasure = arg3
+            arg2.parent= arg3
         }
-        assert parent == child.parentMeasure
+        assert parent == child.parent
         assert expectedRelationshipType == child.parentChildRelationship
 
         where:

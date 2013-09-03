@@ -2,11 +2,11 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
+import bard.db.experiment.AssayContextExperimentMeasure
+import bard.db.experiment.ExperimentMeasure
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import org.apache.commons.collections.CollectionUtils
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -18,8 +18,8 @@ import spock.lang.Unroll
  * Time: 11:30 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, AssayContext, AssayContextItem, AssayContextMeasure, Measure])
-@Mock([AssayContext, AssayContextItem, AssayContextMeasure, Measure])
+@Build([Assay, AssayContext, AssayContextItem, AssayContextExperimentMeasure, ExperimentMeasure])
+@Mock([AssayContext, AssayContextItem, AssayContextExperimentMeasure, ExperimentMeasure])
 @TestFor(AssayContextService)
 @Unroll
 class AssayContextServiceUnitSpec extends Specification {
@@ -29,9 +29,9 @@ class AssayContextServiceUnitSpec extends Specification {
 
     void "test changeParentChildRelationship #desc"() {
         given:
-        Measure measure = Measure.build()
+        ExperimentMeasure measure = ExperimentMeasure.build()
         when:
-        Measure foundMeasure = service.changeParentChildRelationship(measure, hierarchyType, null)
+        ExperimentMeasure foundMeasure = service.changeParentChildRelationship(measure, hierarchyType, null)
         then:
         assert foundMeasure
 
@@ -110,27 +110,27 @@ class AssayContextServiceUnitSpec extends Specification {
 
     void "test associate and disassociate measure with context"() {
         given:
-        mockDomain(AssayContextMeasure.class)
+        mockDomain(AssayContextExperimentMeasure.class)
         AssayContext context = AssayContext.build()
-        Measure measure = Measure.build()
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build()
 
         when:
-        service.associateContext(measure, context, context.assay.id)
+        service.associateExperimentContext(experimentMeasure, context, context.assay.id)
 
         then:
-        measure.assayContextMeasures.size() == 1
-        context.assayContextMeasures.size() == 1
-        measure.assayContextMeasures.first() == context.assayContextMeasures.first()
-        AssayContextMeasure link = measure.assayContextMeasures.first()
-        link.measure == measure
+        experimentMeasure.assayContextExperimentMeasures.size() == 1
+        context.assayContextExperimentMeasures.size() == 1
+        experimentMeasure.assayContextExperimentMeasures.first() == context.assayContextExperimentMeasures.first()
+        AssayContextExperimentMeasure link = experimentMeasure.assayContextExperimentMeasures.first()
+        link.experimentMeasure == experimentMeasure
         link.assayContext == context
 
         when:
-        service.disassociateContext(measure, context, context.assay.id)
+        service.disassociateAssayContext(experimentMeasure, context, context.assay.id)
 
         then:
-        measure.assayContextMeasures.size() == 0
-        context.assayContextMeasures.size() == 0
+        experimentMeasure.assayContextExperimentMeasures.size() == 0
+        context.assayContextExperimentMeasures.size() == 0
     }
 
 

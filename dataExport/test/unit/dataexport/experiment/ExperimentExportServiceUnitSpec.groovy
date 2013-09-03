@@ -1,6 +1,7 @@
 package dataexport.experiment
 
 import bard.db.enums.ContextType
+import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
@@ -32,8 +33,8 @@ import bard.db.enums.HierarchyType
  * Time: 12:52 PM
  * To change this template use File | Settings | File Templates.
  */ @TestFor(ExperimentExportService)
-@Build([Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExternalReference, Measure])
-@Mock([Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExternalReference, Measure])
+@Build([Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExternalReference, AssayContextExperimentMeasure])
+@Mock([Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExternalReference, AssayContextExperimentMeasure])
 class ExperimentExportServiceUnitSpec extends Specification {
     Writer writer
     MarkupBuilder markupBuilder

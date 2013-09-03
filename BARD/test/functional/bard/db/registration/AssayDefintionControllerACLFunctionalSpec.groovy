@@ -5,7 +5,7 @@ import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ContextType
 import bard.db.enums.HierarchyType
-import bard.db.model.AbstractContextOwner
+import bard.db.experiment.ExperimentMeasure
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import spock.lang.Shared
@@ -62,35 +62,35 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         assayData = (Map) remote.exec({
             //Build assay as TEAM_A
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
-            String childLabel = "child"
-            String parentLabel = "parent"
-            Element childElement = Element.findByLabel(childLabel)
-            if (!childElement) {
-                childElement = Element.build(label: childLabel).save(flush: true)
-            }
-            Measure childMeasure = Measure.findByResultType(childElement)
-            if (!childMeasure) {
-                childMeasure = Measure.build(resultType: childElement).save(flush: true)
-            }
+         //   String childLabel = "child"
+           // String parentLabel = "parent"
+            //Element childElement = Element.findByLabel(childLabel)
+//            if (!childElement) {
+//                childElement = Element.build(label: childLabel).save(flush: true)
+//            }
+//            Measure childMeasure = Measure.findByResultType(childElement)
+//            if (!childMeasure) {
+//                childMeasure = Measure.build(resultType: childElement).save(flush: true)
+//            }
 
-            Element parentElement = Element.findByLabel(parentLabel)
-            if (!parentElement) {
-                parentElement = Element.build(label: parentLabel).save(flush: true)
-            }
-            Measure parentMeasure = Measure.findByResultType(parentElement)
-            if (!parentMeasure) {
-                parentMeasure = Measure.build(resultType: parentElement, childMeasures: [childMeasure] as Set).save(flush: true)
-            }
-            childMeasure.parentMeasure = parentMeasure
-            childMeasure.parentChildRelationship = HierarchyType.SUPPORTED_BY
-            childMeasure.save(flush: true)
+//            Element parentElement = Element.findByLabel(parentLabel)
+//            if (!parentElement) {
+//                parentElement = Element.build(label: parentLabel).save(flush: true)
+//            }
+//            Measure parentMeasure = Measure.findByResultType(parentElement)
+//            if (!parentMeasure) {
+//                parentMeasure = Measure.build(resultType: parentElement, childMeasures: [childMeasure] as Set).save(flush: true)
+//            }
+//            childMeasure.parentMeasure = parentMeasure
+//            childMeasure.parentChildRelationship = HierarchyType.SUPPORTED_BY
+//            childMeasure.save(flush: true)
 
-            Assay assay = Assay.build(assayName: "Assay Name10", measures: [childMeasure, parentMeasure] as Set).save(flush: true)
+            Assay assay = Assay.build(assayName: "Assay Name10").save(flush: true)
             AssayContext context = AssayContext.build(assay: assay, contextName: "alpha").save(flush: true)
 
             //create assay context
             return [id: assay.id, assayName: assay.assayName, assayContextId: context.id,
-                    measureId: childMeasure.id, parentMeasureId: parentMeasure.id]
+                    measureId: 0, parentMeasureId: 0]
         })
         assayIdList.add(assayData.id)
 
@@ -103,7 +103,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
             sql.call("{call bard_context.set_username(?)}", [TEAM_A_1_USERNAME])
 
             sql.execute("DELETE FROM ASSAY_CONTEXT WHERE ASSAY_ID=${assayData.id}")
-            sql.execute("DELETE FROM MEASURE WHERE ASSAY_ID=${assayData.id}")
+            //sql.execute("DELETE FROM MEASURE WHERE ASSAY_ID=${assayData.id}")
             sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${assayData.id}")
         }
     }
@@ -862,13 +862,13 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
             if (!element) {
                 element = Element.build(label: elementLabel).save(flush: true)
             }
-            Measure measure = Measure.findByResultType(element)
+            ExperimentMeasure measure = ExperimentMeasure.findByResultType(element)
 
             if (!measure) {
-                measure = Measure.build(resultType: element).save(flush: true)
+                measure = ExperimentMeasure.build(resultType: element).save(flush: true)
             }
             Assay assay = Assay.findById(assayId)
-            assay.addToMeasures(measure)
+           // assay.addToMeasures(measure)
             return measure.id
         })
         RESTClient client = getRestClient(controllerUrl,"deleteMeasure", team, teamPassword)

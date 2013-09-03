@@ -45,11 +45,11 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
             statsModifier = findElementByName(statistic);
         }
 
-        Measure measure = Measure.build(assay: experiment.assay, resultType: resultType, statsModifier: statsModifier)
-        experiment.assay.measures.add(measure)
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(experiment: experiment, resultType: resultType, statsModifier: statsModifier)
+        //experiment.assa.measures.add(measure)
 
-        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(measure: measure, experiment: experiment)
-        experiment.experimentMeasures.add(experimentMeasure)
+        //ExperimentMeasure experimentMeasure = ExperimentMeasure.build(measure: measure, experiment: experiment)
+        //experiment.experimentMeasures.add(experimentMeasure)
 
         return experimentMeasure
     }
@@ -77,7 +77,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
     }
 
     def associateContext(ExperimentMeasure experimentMeasure, AssayContext context) {
-        AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: context, measure: experimentMeasure.measure)
+        AssayContextExperimentMeasure assayContextMeasure = AssayContextExperimentMeasure.build(assayContext: context, experimentMeasure: experimentMeasure.experimentMeasure)
 //        experimentMeasure.measure.addToAssayContextMeasures(assayContextMeasure)
 //        context.addToAssayContextMeasures(assayContextMeasure)
     }

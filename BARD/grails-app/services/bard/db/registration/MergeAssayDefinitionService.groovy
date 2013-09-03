@@ -167,7 +167,8 @@ class MergeAssayDefinitionService {
         println("end handleExperiments")
         sessionFactory.currentSession.flush()
        // def session, Assay sourceAssay, Assay targetAssay, List<Experiment> sourceExperiments, String modifiedBy
-        mergeAssayService.handleMeasuresForMovedExperiments(sessionFactory.currentSession,sourceAssay,targetAssay,experiments,modifiedBy)
+        //TODO: Removing copying of measures
+      // mergeAssayService.handleMeasuresForMovedExperiments(sessionFactory.currentSession,sourceAssay,targetAssay,experiments,modifiedBy)
         sessionFactory.currentSession.flush()
 
         return Assay.findById(targetAssay.id)
@@ -184,11 +185,6 @@ class MergeAssayDefinitionService {
         sessionFactory.currentSession.flush()
 
 
-        println("start handleMeasure")
-
-        mergeAssayService.handleMeasure(sessionFactory.currentSession, assaysToMerge, targetAssay, modifiedBy)         // associate measure
-        println("end handleMeasure")
-        sessionFactory.currentSession.flush()
 
         println("Update assays status to Retired")
         mergeAssayService.updateStatus(assaysToMerge, modifiedBy)         // associate measure

@@ -334,8 +334,8 @@
 
 
     <div class="row-fluid">
-        <g:render template="measuresView"
-                  model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson, editable: editable]"/>
+        %{--<g:render template="measuresView"--}%
+                  %{--model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson, editable: editable]"/>--}%
     </div>
 </section>
 <br/>

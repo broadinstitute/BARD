@@ -1,9 +1,10 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
-import bard.db.enums.AssayStatus
-import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
+import bard.db.experiment.AssayContextExperimentMeasure
+import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentMeasure
 import bard.db.registration.additemwizard.*
 import org.apache.commons.lang.StringUtils
 import org.springframework.security.access.prepost.PreAuthorize
@@ -48,27 +49,57 @@ class AssayContextService {
     }
 
     @PreAuthorize("hasPermission(#id,'bard.db.registration.Assay',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    public Measure changeParentChildRelationship(Measure measure, HierarchyType hierarchyType, Long id) {
-        measure.parentChildRelationship = hierarchyType
-        measure.save(flush: true)
-        return measure
+    public ExperimentMeasure changeParentChildRelationship(ExperimentMeasure experimentMeasure, HierarchyType hierarchyType, Long id) {
+        experimentMeasure.parentChildRelationship = hierarchyType
+        experimentMeasure.save(flush: true)
+        return experimentMeasure
     }
-
+    @Deprecated
     @PreAuthorize("hasPermission(#id,'bard.db.registration.Assay',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    public void associateContext(Measure measure, AssayContext context, Long id) {
-        AssayContextMeasure assayContextMeasure = new AssayContextMeasure();
-        assayContextMeasure.measure = measure;
-        assayContextMeasure.assayContext = context;
-        measure.assayContextMeasures.add(assayContextMeasure)
-        context.assayContextMeasures.add(assayContextMeasure)
+    public void associateContext(ExperimentMeasure experimentMeasure, AssayContext context, Long id) {
+        throw new RuntimeException("Needs rework")
+       /* AssayContextExperimentMeasure assayContextExperimentMeasure = new AssayContextExperimentMeasure();
+        assayContextExperimentMeasure.experimentMeasure = experimentMeasure;
+        assayContextExperimentMeasure.assayContext = context;
+        experimentMeasure.assayContextExperimentMeasures.add(assayContextExperimentMeasure)
+        context.assayContextExperimentMeasures.add(assayContextExperimentMeasure) */
+    }
+    @PreAuthorize("hasPermission(#id,'bard.db.registration.Assay',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    public void associateExperimentContext(ExperimentMeasure experimentMeasure, AssayContext context, Long id) {
+        AssayContextExperimentMeasure assayContextExperimentMeasure = new AssayContextExperimentMeasure();
+        assayContextExperimentMeasure.experimentMeasure = experimentMeasure;
+        assayContextExperimentMeasure.assayContext = context;
+        experimentMeasure.assayContextExperimentMeasures.add(assayContextExperimentMeasure)
+        context.assayContextExperimentMeasures.add(assayContextExperimentMeasure)
+    }
+    @Deprecated
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    public boolean disassociateContext(ExperimentMeasure experimentMeasure, AssayContext context, Long id) {
+        throw new RuntimeException("Needs rework")
+//        AssayContextExperimentMeasure found = null;
+//        for (assayContextExperimentMeasure in context.assayContextExperimentMeasures) {
+//            if (assayContextExperimentMeasure.experimentMeasure == experimentMeasure && assayContextExperimentMeasure.assayContext) {
+//                found = assayContextExperimentMeasure;
+//                break;
+//            }
+//        }
+//
+//        if (found == null) {
+//            return false;
+//        } else {
+//            experimentMeasure.removeFromAssayContextExperimentMeasures(found)
+//            context.removeFromAssayContextExperimentMeasures(found)
+//            found.delete(flush: true)
+//            return true;
+//        }
     }
 
     @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    public boolean disassociateContext(Measure measure, AssayContext context, Long id) {
-        AssayContextMeasure found = null;
-        for (assayContextMeasure in context.assayContextMeasures) {
-            if (assayContextMeasure.measure == measure && assayContextMeasure.assayContext) {
-                found = assayContextMeasure;
+    public boolean disassociateAssayContext(ExperimentMeasure experimentMeasure, AssayContext context, Long id) {
+        AssayContextExperimentMeasure found = null;
+        for (assayContextExperimentMeasure in context.assayContextExperimentMeasures) {
+            if (assayContextExperimentMeasure.experimentMeasure == experimentMeasure && assayContextExperimentMeasure.assayContext) {
+                found = assayContextExperimentMeasure;
                 break;
             }
         }
@@ -76,8 +107,8 @@ class AssayContextService {
         if (found == null) {
             return false;
         } else {
-            measure.removeFromAssayContextMeasures(found)
-            context.removeFromAssayContextMeasures(found)
+            experimentMeasure.removeFromAssayContextExperimentMeasures(found)
+            context.removeFromAssayContextExperimentMeasures(found)
             found.delete(flush: true)
             return true;
         }
@@ -200,8 +231,10 @@ class AssayContextService {
     }
 
     @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    public Measure addMeasure(Long id, Measure parentMeasure, Element resultType, Element statsModifier, Element entryUnit, HierarchyType hierarchyType) {
-        Assay assay = Assay.findById(id)
+    @Deprecated
+    def addMeasure(Long id, ExperimentMeasure parentMeasure, Element resultType, Element statsModifier, Element entryUnit, HierarchyType hierarchyType) {
+        throw new RuntimeException("Needs rework");
+       /* Assay assay = Assay.findById(id)
         Measure measure = Measure.findByAssayAndResultTypeAndStatsModifierAndParentMeasure(assay, resultType, statsModifier, parentMeasure)
         if (measure) {
             //we need to throw an exception here
@@ -214,6 +247,24 @@ class AssayContextService {
         assay.addToMeasures(measure)
         measure.save()
 
-        return measure
+        return measure*/
+    }
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    public ExperimentMeasure addExperimentMeasure(Long id, ExperimentMeasure parentMeasure, Element resultType, Element statsModifier, Element entryUnit, HierarchyType hierarchyType) {
+        Experiment experiment = Experiment.findById(id)
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.findByExperimentAndResultTypeAndStatsModifierAndParent(experiment, resultType, statsModifier, parentMeasure)
+        if (experimentMeasure) {
+            //we need to throw an exception here
+            throw new RuntimeException("Duplicate measures cannot be added to the same assay")
+        }
+
+        experimentMeasure =
+            new ExperimentMeasure(experiment: experiment, resultType: resultType, statsModifier: statsModifier,
+                    entryUnit: entryUnit, parent: parentMeasure, parentChildRelationship: hierarchyType);
+        experiment.addToExperimentMeasures(experimentMeasure)
+        experimentMeasure.save()
+
+        return experimentMeasure
     }
 }

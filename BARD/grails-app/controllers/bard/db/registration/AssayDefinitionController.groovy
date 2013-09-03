@@ -9,6 +9,8 @@ import bard.db.enums.AssayType
 import bard.db.enums.ContextType
 import bard.db.enums.HierarchyType
 import bard.db.enums.ReadyForExtraction
+import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentMeasure
 import bard.db.model.AbstractContextOwner
 import bard.db.project.InlineEditableCommand
 import grails.converters.JSON
@@ -253,7 +255,7 @@ class AssayDefinitionController {
             return [message: messageStr]
         }
 
-        measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assayInstance, false))
+        measureTreeAsJson = []//new JSON(measureTreeService.createMeasureTree(assayInstance, false))
         boolean editable = canEdit(permissionEvaluator, springSecurityService, assayInstance)
         String owner = capPermissionService.getOwner(assayInstance)
         return [assayInstance: assayInstance, assayOwner: owner, measureTreeAsJson: measureTreeAsJson, editable: editable ? 'canedit' : 'cannotedit']
@@ -275,37 +277,40 @@ class AssayDefinitionController {
     def editMeasure() {
         JSON measuresTreeAsJson = null;
 
-        def assayInstance = Assay.get(params.id)
-        if (!assayInstance) {
+        def experimentInstance = Experiment.get(params.id)
+        if (!experimentInstance) {
             // FIXME:  Should not use flash if we do not redirect afterwards
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Experiment'), params.id])
             return
         } else {
-            measuresTreeAsJson = new JSON(measureTreeService.createMeasureTree(assayInstance, false));
+            measuresTreeAsJson = new JSON(measureTreeService.createMeasureTree(experimentInstance, false));
         }
 
-        [assayInstance: assayInstance, measuresTreeAsJson: measuresTreeAsJson]
+        [experimentInstance: experimentInstance, measuresTreeAsJson: measuresTreeAsJson]
     }
 
     def deleteMeasure() {
-        Measure measure = Measure.get(params.measureId)
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.get(params.measureId)
 
-        if (measure.childMeasures.size() != 0) {
-            flash.message = "Cannot delete measure \"${measure.displayLabel}\" because it has children"
-        } else if (measure.experimentMeasures.size() != 0) {
-            flash.message = "Cannot delete measure \"${measure.displayLabel}\" because it is used in an experiment definition"
-        } else {
-            if (!canEdit(permissionEvaluator, springSecurityService, measure.assay)) {
+        if (experimentMeasure.childMeasures.size() != 0) {
+            flash.message = "Cannot delete measure \"${experimentMeasure.displayLabel}\" because it has children"
+        }
+//        else if (measure.experimentMeasures.size() != 0) {
+//            flash.message = "Cannot delete measure \"${measure.displayLabel}\" because it is used in an experiment definition"
+//        }
+        else {
+            if (!canEdit(permissionEvaluator, springSecurityService, experimentMeasure.experiment)) {
                 render accessDeniedErrorMessage()
                 return
             }
-            measure.delete()
+            experimentMeasure.delete()
         }
         redirect(action: "editMeasure", id: params.id)
     }
 
     def addMeasure() {
-        final Assay assayInstance = Assay.get(params.id)
+        // final Assay assayInstance = Assay.get(params.id)
+        final Experiment experiment = Experiment.get(params.id)
         final Element resultType = Element.get(params.resultTypeId)
         final String parentChildRelationship = params.relationship
         HierarchyType hierarchyType = null
@@ -315,7 +320,7 @@ class AssayDefinitionController {
         } else {
             def parentMeasure = null
             if (params.parentMeasureId) {
-                parentMeasure = Measure.get(params.parentMeasureId)
+                parentMeasure = ExperimentMeasure.get(params.parentMeasureId)
             }
             //if there is a parent measure then there must be a selected relationship
             if (parentMeasure && (StringUtils.isBlank(parentChildRelationship) || "null".equals(parentChildRelationship))) {
@@ -336,7 +341,7 @@ class AssayDefinitionController {
                     entryUnit = Element.findByLabel(params.entryUnitName)
                 }
                 try {
-                    Measure newMeasure = assayContextService.addMeasure(assayInstance.id, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
+                    ExperimentMeasure newMeasure = assayContextService.addExperimentMeasure(experiment.id, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
                     render status: HttpServletResponse.SC_OK, text: "Successfully added measure " + newMeasure.displayLabel
                 }
                 catch (AccessDeniedException ade) {
@@ -354,7 +359,7 @@ class AssayDefinitionController {
     def disassociateContext() {
         final AssayContext assayContext = AssayContext.get(params.assayContextId)
         try {
-            final Measure measure = Measure.get(params.measureId)
+            final ExperimentMeasure measure = ExperimentMeasure.get(params.measureId)
 
             if (measure == null) {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
@@ -362,7 +367,7 @@ class AssayDefinitionController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.id])
             } else {
                 flash.message = null
-                assayContextService.disassociateContext(measure, assayContext, assayContext.assay.id)
+                assayContextService.disassociateAssayContext(measure, assayContext, assayContext.assay.id)
             }
         } catch (AccessDeniedException ade) {
             log.error(ade)
@@ -374,7 +379,7 @@ class AssayDefinitionController {
 
     def associateContext() {
         try {
-            def measure = Measure.get(params.measureId)
+            def measure = ExperimentMeasure.get(params.measureId)
             def context = null
             if (params.assayContextId && 'null' != params.assayContextId) {
                 context = AssayContext.get(params.assayContextId)
@@ -386,7 +391,7 @@ class AssayDefinitionController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.assayContextId])
             } else {
 
-                assayContextService.associateContext(measure, context, context.assay.id)
+                assayContextService.associateExperimentContext(measure, context, context.assay.id)
                 flash.message = "Measure '${measure?.displayLabel}' successfully associated to Context '${context?.contextName}'"
             }
         } catch (AccessDeniedException ade) {
@@ -399,7 +404,7 @@ class AssayDefinitionController {
 
     def changeRelationship() {
         try {
-            def measure = Measure.get(params.measureId)
+            def measure = ExperimentMeasure.get(params.measureId)
             def parentChildRelationship = params.relationship
 
             HierarchyType hierarchyType = null
@@ -410,8 +415,8 @@ class AssayDefinitionController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
             } else {
                 flash.message = null
-                if (measure.parentMeasure) { //if this measure has no parent then do nothing
-                    assayContextService.changeParentChildRelationship(measure, hierarchyType, measure.assay.id)
+                if (measure.parent) { //if this measure has no parent then do nothing
+                    assayContextService.changeParentChildRelationship(measure, hierarchyType, measure.id)
                 }
             }
         } catch (AccessDeniedException ade) {
@@ -491,12 +496,12 @@ class AssayDefinitionController {
      */
     def moveMeasureNode(Long measureId, Long parentMeasureId) {
         try {
-            Measure measure = Measure.get(measureId)
-            Measure parentMeasure = null
+            ExperimentMeasure measure = ExperimentMeasure.get(measureId)
+            ExperimentMeasure parentMeasure = null
             if (parentMeasureId) {
-                parentMeasure = Measure.get(parentMeasureId)
+                parentMeasure = ExperimentMeasure.get(parentMeasureId)
             }
-            assayDefinitionService.moveMeasure(measure.assay.id, measure, parentMeasure)
+            assayDefinitionService.moveMeasure(measure.experiment.assay.id, measure, parentMeasure)
             render new JSONArray()
         } catch (AccessDeniedException aee) {
             render accessDeniedErrorMessage()
@@ -598,7 +603,7 @@ class AssayCommand extends BardCommand {
     void copyFromCmdToDomain(Assay assay) {
         assay.designedBy = springSecurityService.principal?.username
         assay.modifiedBy = assay.designedBy
-        assay.assayShortName=this.assayName
+        assay.assayShortName = this.assayName
         for (String field in PROPS_FROM_CMD_TO_DOMAIN) {
             assay[(field)] = this[(field)]
         }

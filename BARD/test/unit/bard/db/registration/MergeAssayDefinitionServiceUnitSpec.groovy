@@ -1,9 +1,6 @@
 package bard.db.registration
 
-import acl.CapPermissionService
 import bard.db.dictionary.Element
-import bard.db.enums.AssayStatus
-import bard.db.enums.AssayType
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
@@ -23,8 +20,8 @@ import spock.lang.Unroll
  * Time: 2:07 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, Measure, Experiment, AssayContextMeasure, AssayContext, ExperimentMeasure, AssayContextItem, ExperimentContextItem, ExperimentContext, Element])
-@Mock([Assay, Measure, Experiment, ExperimentMeasure, AssayContext, AssayContextMeasure, AssayContextItem, ExperimentContextItem, ExperimentContext, Element])
+@Build([Assay,Experiment,  AssayContext, ExperimentMeasure, AssayContextItem, ExperimentContextItem, ExperimentContext, Element])
+@Mock([Assay,Experiment, ExperimentMeasure, AssayContext,AssayContextItem, ExperimentContextItem, ExperimentContext, Element])
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(MergeAssayDefinitionService)
 @Unroll
@@ -47,8 +44,8 @@ public class MergeAssayDefinitionServiceUnitSpec extends Specification {
         Element element = Element.build()
         AssayContext contextOne = AssayContext.build(assay: assayOne, contextName: "alpha")
         AssayContextItem assayContextItem = AssayContextItem.build(assayContext: contextOne, attributeType: AttributeType.Fixed,attributeElement: element)
-        Measure measureOne = Measure.build(assay: assayOne)
-        AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
+       // Measure measureOne = Measure.build(assay: assayOne)
+        //AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
 
         final ExperimentContextItem experimentContextItem = ExperimentContextItem.build(attributeElement: element)
         final Map<Element, AssayContextItem> targetElementToAssayContextItemMap = [:]
@@ -91,8 +88,8 @@ public class MergeAssayDefinitionServiceUnitSpec extends Specification {
         Assay assayOne = Assay.build()
         AssayContext contextOne = AssayContext.build(assay: assayOne, contextName: "alpha")
         AssayContextItem.build(assayContext: contextOne)
-        Measure measureOne = Measure.build(assay: assayOne)
-        AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
+        //Measure measureOne = Measure.build(assay: assayOne)
+        //AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
         when:
         service.convertAssaysToMerge([assayOne.id], AssayIdType.ADID, assayOne)
 
@@ -107,14 +104,14 @@ public class MergeAssayDefinitionServiceUnitSpec extends Specification {
         Assay assayOne = Assay.build()
         AssayContext contextOne = AssayContext.build(assay: assayOne, contextName: "alpha")
         AssayContextItem.build(assayContext: contextOne)
-        Measure measureOne = Measure.build(assay: assayOne)
-        AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
+       // Measure measureOne = Measure.build(assay: assayOne)
+        //AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
 
         Assay assayTwo = Assay.build()
         AssayContext contextTwo = AssayContext.build(assay: assayTwo, contextName: "alpha2")
         AssayContextItem.build(assayContext: contextTwo)
-        Measure measureTwo = Measure.build(assay: assayTwo)
-        AssayContextMeasure.build(assayContext: contextTwo, measure: measureTwo)
+       // Measure measureTwo = Measure.build(assay: assayTwo)
+        //AssayContextMeasure.build(assayContext: contextTwo, measure: measureTwo)
         when:
         service.convertAssaysToMerge([assayTwo.id, nonExistingAssayId], AssayIdType.ADID, assayOne)
 
@@ -128,14 +125,14 @@ public class MergeAssayDefinitionServiceUnitSpec extends Specification {
         Assay assayOne = Assay.build()
         AssayContext contextOne = AssayContext.build(assay: assayOne, contextName: "alpha")
         AssayContextItem.build(assayContext: contextOne)
-        Measure measureOne = Measure.build(assay: assayOne)
-        AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
+        //Measure measureOne = Measure.build(assay: assayOne)
+        //AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
 
         Assay assayTwo = Assay.build()
         AssayContext contextTwo = AssayContext.build(assay: assayTwo, contextName: "alpha2")
         AssayContextItem.build(assayContext: contextTwo)
-        Measure measureTwo = Measure.build(assay: assayTwo)
-        AssayContextMeasure.build(assayContext: contextTwo, measure: measureTwo)
+        //Measure measureTwo = Measure.build(assay: assayTwo)
+        //AssayContextMeasure.build(assayContext: contextTwo, measure: measureTwo)
 
         when:
         List<Long> assaysToMerge = service.convertAssaysToMerge([assayTwo.id], AssayIdType.ADID, assayOne)

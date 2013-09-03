@@ -1,8 +1,8 @@
 package bard.db.experiment
 
 import bard.db.BardIntegrationSpec
+import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
-import bard.db.registration.Measure
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -25,9 +25,9 @@ class ExperimentMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
 
     @Before
     void doSetup() {
-        domainInstance = ExperimentMeasure.buildWithoutSave()
-        domainInstance.measure.resultType.save()
-        domainInstance.measure.save(flush: true)
+        domainInstance = ExperimentMeasure.buildWithoutSave(resultType: Element.build())
+//        domainInstance.measure.resultType.save()
+//        domainInstance.measure.save(flush: true)
     }
 
     @After
@@ -37,6 +37,42 @@ class ExperimentMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
         }
     }
 
+    void "test statsModifier constraints #desc statsModifier: '#valueUnderTest'"() {
+
+        final String field = 'statsModifier'
+
+        when:
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc                  | valueUnderTest      | valid | errorCode
+        'null valid'          | { null }            | true  | null
+        'valid statsModifier' | { Element.build() } | true  | null
+
+    }
+
+
+    void "test resultType constraints #desc resultType: '#valueUnderTest'"() {
+
+        final String field = 'resultType'
+
+        when:
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc               | valueUnderTest      | valid | errorCode
+        'null not valid'   | { null }            | true  | null
+        'valid resultType' | { Element.build() } | true  | null
+
+    }
 
     void "test parent constraints #desc parent: '#valueUnderTest'"() {
 
@@ -111,24 +147,6 @@ class ExperimentMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
         desc               | valueUnderTest         | valid | errorCode
         'null not valid'   | { null }               | false | 'nullable'
         'valid experiment' | { Experiment.build() } | true  | null
-
-    }
-
-    void "test measure constraints #desc measure: '#valueUnderTest'"() {
-
-        final String field = 'measure'
-
-        when:
-        domainInstance[(field)] = valueUnderTest.call()
-        domainInstance.validate()
-
-        then:
-        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        where:
-        desc             | valueUnderTest      | valid | errorCode
-        'null not valid' | { null }            | false | 'nullable'
-        'valid measure'  | { Measure.build() } | true  | null
 
     }
 

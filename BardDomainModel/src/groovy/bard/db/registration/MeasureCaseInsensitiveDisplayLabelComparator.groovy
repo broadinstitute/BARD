@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.experiment.ExperimentMeasure
 import org.apache.commons.lang.builder.CompareToBuilder
 
 /**
@@ -9,8 +10,8 @@ import org.apache.commons.lang.builder.CompareToBuilder
  * Time: 12:22 PM
  * To change this template use File | Settings | File Templates.
  */
-class MeasureCaseInsensitiveDisplayLabelComparator implements Comparator<Measure> {
-    int compare(Measure lhs, Measure rhs) {
+class MeasureCaseInsensitiveDisplayLabelComparator implements Comparator<ExperimentMeasure> {
+    int compare(ExperimentMeasure lhs, ExperimentMeasure rhs) {
         CompareToBuilder ctb = new CompareToBuilder()
         ctb.append(lhs.getDisplayLabel().toUpperCase(), rhs.getDisplayLabel().toUpperCase())
         ctb.toComparison()

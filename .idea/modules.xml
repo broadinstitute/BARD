@@ -4,9 +4,20 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BARD/BARD.iml" filepath="$PROJECT_DIR$/BARD/BARD.iml" />
       <module fileurl="file://$PROJECT_DIR$/BARD/BARD-grailsPlugins.iml" filepath="$PROJECT_DIR$/BARD/BARD-grailsPlugins.iml" />
-      <module fileurl="file://$PROJECT_DIR$/BARD/bardDomainModel-inplacePlugin.iml" filepath="$PROJECT_DIR$/BARD/bardDomainModel-inplacePlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BardDataQa/BardDataQa.iml" filepath="$PROJECT_DIR$/BardDataQa/BardDataQa.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BardDomainModel/BardDomainModel.iml" filepath="$PROJECT_DIR$/BardDomainModel/BardDomainModel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MinAssayAnnotParser/MinAssayAnnotParser.iml" filepath="$PROJECT_DIR$/MinAssayAnnotParser/MinAssayAnnotParser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProjectStepsAndAssayNetworks/ProjectStepsAndAssayNetworks.iml" filepath="$PROJECT_DIR$/ProjectStepsAndAssayNetworks/ProjectStepsAndAssayNetworks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bard-cap-functional/bard-cap-functional.iml" filepath="$PROJECT_DIR$/bard-cap-functional/bard-cap-functional.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bard-rest-api-wrapper/bard-rest-api-wrapper.iml" filepath="$PROJECT_DIR$/bard-rest-api-wrapper/bard-rest-api-wrapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bard-web-client/bard-web-client.iml" filepath="$PROJECT_DIR$/bard-web-client/bard-web-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/crowdUserRegistration/crowdUserRegistration.iml" filepath="$PROJECT_DIR$/crowdUserRegistration/crowdUserRegistration.iml" />
       <module fileurl="file://$PROJECT_DIR$/dataExport/dataExport.iml" filepath="$PROJECT_DIR$/dataExport/dataExport.iml" />
       <module fileurl="file://$PROJECT_DIR$/dataExport/dataExport-grailsPlugins.iml" filepath="$PROJECT_DIR$/dataExport/dataExport-grailsPlugins.iml" />
+      <module fileurl="file://$PROJECT_DIR$/functional-spock/functional-spock.iml" filepath="$PROJECT_DIR$/functional-spock/functional-spock.iml" />
+      <module fileurl="file://$PROJECT_DIR$/external-validation/src/main/main.iml" filepath="$PROJECT_DIR$/external-validation/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shopping-cart-0.8.2/shopping-cart-0.8.2.iml" filepath="$PROJECT_DIR$/shopping-cart-0.8.2/shopping-cart-0.8.2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/external-validation/src/test/test.iml" filepath="$PROJECT_DIR$/external-validation/src/test/test.iml" />
     </modules>
   </component>
 </project>

@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContextItem
 import bard.db.experiment.ExperimentMeasure
@@ -12,8 +13,8 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
-@Build([AssayContext, AssayContextItem, AssayContextMeasure, Measure, Assay, Experiment, ExperimentMeasure])
-@Mock([AssayContext, AssayContextItem, AssayContextMeasure, Measure])
+@Build([AssayContext, AssayContextItem, AssayContextExperimentMeasure, ExperimentMeasure, Assay, Experiment, ExperimentMeasure])
+@Mock([AssayContext, AssayContextItem, AssayContextExperimentMeasure, ExperimentMeasure])
 @Ignore
 class AssayMergeUnitSpec extends Specification {
 
@@ -21,12 +22,12 @@ class AssayMergeUnitSpec extends Specification {
         throw new NotImplementedException();
     }
 
-    void verifyMeasuresAreConsistent(Assay assay) {
-        for(experiment in assay.experiments) {
-            for(experimentMeasure in experiment.experimentMeasures) {
-                assert experimentMeasure.measure.assay == assay
-            }
+    void verifyMeasuresAreConsistent(Experiment experiment) {
+        //  for(experiment in assay.experiments) {
+        for (experimentMeasure in experiment.experimentMeasures) {
+            assert experimentMeasure.experiment == experiment
         }
+        //  }
     }
 
     void "test merging measures"() {
@@ -35,19 +36,21 @@ class AssayMergeUnitSpec extends Specification {
         Element statModifier = Element.build()
 
         Assay assayA = Assay.build()
-        Measure measureAA = Measure.build(assay: assayA, resultType: rtA)
-        Measure measureAB = Measure.build(assay: assayA, resultType: rtB)
+        Experiment experimentA = Experiment.build(assay: assayA)
+        ExperimentMeasure measureAA = ExperimentMeasure.build(experiment: experimentA, resultType: rtA)
+        ExperimentMeasure measureAB = ExperimentMeasure.build(experiment: experimentA, resultType: rtB)
 
         Assay assayB = Assay.build()
         Experiment experimentB = Experiment.build(assay: assayB)
-        Measure measureBA = Measure.build(assay: assayB, resultType: rtA)
-        Measure measureBB = Measure.build(assay: assayB, resultType: rtB, statsModifier: statModifier) // having a different modifier means this is a different measurement
+        ExperimentMeasure measureBA = ExperimentMeasure.build(experiment: experimentB, resultType: rtA)
+        ExperimentMeasure measureBB = ExperimentMeasure.build(experiment: experimentB, resultType: rtB, statsModifier: statModifier) // having a different modifier means this is a different measurement
 
         when:
         merge(assayA, assayB)
 
         then: "We should end up with three measures:  rtA, rtB and (rtB, statsModifier)"
-        assayA.measures.size() == 3
+        assayA.experiments.first().experimentMeasures.size() == 2
+        assayB.experiments.first().experimentMeasures.size() == 2
     }
 
     void "test moving measures"() {
@@ -59,61 +62,48 @@ class AssayMergeUnitSpec extends Specification {
 
         Assay assayA = Assay.build()
         Experiment experimentA = Experiment.build(assay: assayA)
-        Measure measureAA = Measure.build(assay: assayA, resultType: rtA)
-        Measure measureAB = Measure.build(assay: assayA, resultType: rtB) // the same measure is collected in both assays
-        experimentA.addToExperimentMeasures(ExperimentMeasure.build(measure: measureAA))
-        experimentA.addToExperimentMeasures(ExperimentMeasure.build(measure: measureAB))
+        ExperimentMeasure measureAA = ExperimentMeasure.build(experiment: experimentA, resultType: rtA)
+        ExperimentMeasure measureAB = ExperimentMeasure.build(experiment: experimentA, resultType: rtB) // the same measure is collected in both assays
 
         Assay assayB = Assay.build()
         Experiment experimentB = Experiment.build(assay: assayB)
-        Measure measureBA = Measure.build(assay: assayB, resultType: rtB)
-        Measure measureBB = Measure.build(assay: assayB, resultType: rtC)
-        experimentB.addToExperimentMeasures(ExperimentMeasure.build(measure: measureBA))
-        experimentB.addToExperimentMeasures(ExperimentMeasure.build(measure: measureBB))
+        ExperimentMeasure measureBA = ExperimentMeasure.build(experiment: experimentB, resultType: rtB)
+        ExperimentMeasure measureBB = ExperimentMeasure.build(experiment: experimentB, resultType: rtC)
 
         when:
         merge(assayA, assayB)
-
-        then:  "we should have two experiments on the assay"
-        assayA.experiments.size() == 2
-
-        then:  "we should have three measures.  One got newly created, one existed before, and one was shared"
-        assayA.measures.size() == 3
-
-        then: "All experiment measures should point to the target assay"
-        verifyMeasuresAreConsistent(assayA)
 
         then: "Each experiment should still have the same measures as before"
         experimentA.experimentMeasures.size() == 2
         experimentB.experimentMeasures.size() == 2
     }
 
-    void "test measures with context association"() {
-        setup:
-        "we have two assays, with measures that will be merged, and one has a link to a context"
-        Element rt = Element.build()
-
-        Assay assayA = Assay.build()
-        Experiment experimentA = Experiment.build(assay: assayA)
-        Measure measureAA = Measure.build(assay: assayA, resultType: rt)
-
-        Assay assayB = Assay.build()
-        Experiment experimentB = Experiment.build(assay: assayB)
-        Measure measureBA = Measure.build(assay: assayB, resultType: rt)
-        AssayContext contextB = AssayContext.build(assay: assayB)
-        AssayContextMeasure link = AssayContextMeasure.build(assayContext: contextB, measure: measureBA)
-
-        when:
-        merge(assayA, assayB)
-
-        then:  "we should end up with the link on the measure on the target assay"
-        assayA.experiments.size() == 2
-        assayA.measures.size() == 1
-        Measure measure = assayA.measures.first()
-        measure.assayContextMeasures.size() == 1
-        AssayContextMeasure assayContextMeasure = measure.assayContextMeasures.first()
-        assayContextMeasure.assayContext.assay == assayA
-    }
+//    void "test measures with context association"() {
+//        setup:
+//        "we have two assays, with measures that will be merged, and one has a link to a context"
+//        Element rt = Element.build()
+//
+//        Assay assayA = Assay.build()
+//        Experiment experimentA = Experiment.build(assay: assayA)
+//        Measure measureAA = Measure.build(assay: assayA, resultType: rt)
+//
+//        Assay assayB = Assay.build()
+//        Experiment experimentB = Experiment.build(assay: assayB)
+//        Measure measureBA = Measure.build(assay: assayB, resultType: rt)
+//        AssayContext contextB = AssayContext.build(assay: assayB)
+//        AssayContextMeasure link = AssayContextMeasure.build(assayContext: contextB, measure: measureBA)
+//
+//        when:
+//        merge(assayA, assayB)
+//
+//        then:  "we should end up with the link on the measure on the target assay"
+//        assayA.experiments.size() == 2
+//        assayA.measures.size() == 1
+//        Measure measure = assayA.measures.first()
+//        measure.assayContextExperimentMeasures.size() == 1
+//        AssayContextMeasure assayContextMeasure = measure.assayContextExperimentMeasures.first()
+//        assayContextMeasure.assayContext.assay == assayA
+//    }
 
     void "test merging of assay contexts where fixed items mismatch"() {
         setup:
@@ -127,7 +117,7 @@ class AssayMergeUnitSpec extends Specification {
         Experiment experimentA = Experiment.build(assay: assayA)
 
         Assay assayB = Assay.build()
-        AssayContext contextB = AssayContext.build(assay:  assayB)
+        AssayContext contextB = AssayContext.build(assay: assayB)
         AssayContextItem itemB = AssayContextItem.build(assayContext: contextB, attributeType: AttributeType.Fixed, attributeElement: attribute, valueElement: valueB)
         Experiment experimentB = Experiment.build(assay: assayB)
 
@@ -158,7 +148,7 @@ class AssayMergeUnitSpec extends Specification {
         Experiment experimentA = Experiment.build(assay: assayA)
 
         Assay assayB = Assay.build()
-        AssayContext contextB = AssayContext.build(assay:  assayB)
+        AssayContext contextB = AssayContext.build(assay: assayB)
         AssayContextItem itemB = AssayContextItem.build(assayContext: contextB, attributeType: AttributeType.Fixed, attributeElement: attribute, valueElement: valueA)
         Experiment experimentB = Experiment.build(assay: assayB)
 
