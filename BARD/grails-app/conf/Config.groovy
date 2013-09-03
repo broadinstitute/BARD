@@ -13,8 +13,8 @@ server.port = System.properties.getProperty('server.port') ?: 8081
 grails.serverURL = "http://localhost:${server.port}/${appName}"
 //URL to the ROOT of the cap server
 bard.cap.home = "${grails.serverURL}"
-bard.cap.assay = "${bard.cap.home}assayDefinition/show/"
-bard.cap.project="${bard.cap.home}project/show/"
+bard.cap.assay = "${bard.cap.home}/assayDefinition/show/"
+bard.cap.project="${bard.cap.home}/project/show/"
 
 //Override in config file
 dataexport.apikey= "test"
