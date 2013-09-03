@@ -1,7 +1,7 @@
 package iteration_033
 
 databaseChangeLog = {
-    changeSet(author: "jasiedu", id: "iteration-033/01-update-expt-measure", dbms: "oracle", context: "standard") {
+    changeSet(author: "jasiedu", id: "iteration-033/01-alter-expt-measure", dbms: "oracle", context: "standard") {
 
         //Set the username in context
         grailsChange {
@@ -14,30 +14,10 @@ databaseChangeLog = {
         }
 
         //
-        sqlFile(path: "iteration_033/01-update-expt-measure.sql", stripComments: true)
-
-        grailsChange {
-            change {
-                /**
-                 *  update experiment measures with stats_modifier and result type
-                 */
-                String allMeasures = """SELECT MEASURE_ID FROM EXPRMT_MEASURE"""
-                sql.eachRow(allMeasures) { expt_measure_row ->
-                    String resultTypeStatsMod = """SELECT RESULT_TYPE_ID, STATS_MODIFIER_ID FROM MEASURE WHERE MEASURE_ID=${expt_measure_row.MEASURE_ID}"""
-                    sql.eachRow(resultTypeStatsMod) { measure_row ->
-                        String updateStatement = """UPDATE EXPRMT_MEASURE SET RESULT_TYPE_ID=${measure_row.RESULT_TYPE_ID},STATS_MODIFIER_ID=${measure_row.STATS_MODIFIER_ID} WHERE EXPRMT_MEASURE_ID=${expt_measure_row.MEASURE_ID}"""
-                        sql.executeUpdate(updateStatement)
-                    }
-                }
-//                sql.execute("""ALTER TABLE EXPRMT_MEASURE ADD CONSTRAINT CK_EXPM_RESULT_TYPE_ID CHECK (RESULT_TYPE_ID IS NOT NULL)""")
-            }
-            //add not null constraint
-        }
-
+        sqlFile(path: "iteration_033/01-alter-expt-measure.sql", stripComments: true)
 
     }
-
-    changeSet(author: "jasiedu", id: "iteration-033/02-create-assay-context-expt-measure", dbms: "oracle", context: "standard") {
+    changeSet(author: "jasiedu", id: "iteration-033/02-update-expt-measure", dbms: "oracle", context: "standard") {
 
         //Set the username in context
         grailsChange {
@@ -50,7 +30,51 @@ databaseChangeLog = {
         }
 
 
-       sqlFile(path: "iteration_033/02-create-assay-context-expt-measure.sql", stripComments: true)
+        grailsChange {
+            change {
+                /**
+                 *  update experiment measures with stats_modifier and result type
+                 */
+                String allMeasures = """SELECT MEASURE_ID FROM EXPRMT_MEASURE"""
+                sql.eachRow(allMeasures) { expt_measure_row ->
+                    String resultTypeStatsMod = """SELECT RESULT_TYPE_ID, STATS_MODIFIER_ID FROM MEASURE WHERE MEASURE_ID=${expt_measure_row.MEASURE_ID}"""
+                    sql.eachRow(resultTypeStatsMod) { measure_row ->
+                        String updateStatement = """UPDATE EXPRMT_MEASURE SET RESULT_TYPE_ID=${measure_row.RESULT_TYPE_ID},STATS_MODIFIER_ID=${measure_row.STATS_MODIFIER_ID} WHERE MEASURE_ID=${expt_measure_row.MEASURE_ID}"""
+                        sql.executeUpdate(updateStatement)
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    changeSet(author: "jasiedu", id: "iteration-033/03-create-assay-context-expt-measure", dbms: "oracle", context: "standard") {
+
+        //Set the username in context
+        grailsChange {
+            change {
+                sql.execute("""BEGIN
+                               bard_context.set_username('jasiedu');
+                               END;
+                               """)
+            }
+        }
+
+
+       sqlFile(path: "iteration_033/03-create-assay-context-expt-measure.sql", stripComments: true)
+    }
+    changeSet(author: "jasiedu", id: "iteration-033/04-update-assay-context-expt-measure", dbms: "oracle", context: "standard") {
+
+        //Set the username in context
+        grailsChange {
+            change {
+                sql.execute("""BEGIN
+                               bard_context.set_username('jasiedu');
+                               END;
+                               """)
+            }
+        }
 //        What we would need to do is:
 //
 //        1) For each row in the old table (Assay_Context_Measure table)
@@ -69,20 +93,20 @@ databaseChangeLog = {
 
                     String experimentMeasures = """SELECT EXPRMT_MEASURE_ID FROM EXPRMT_MEASURE WHERE MEASURE_ID=${assay_context_measure_row.MEASURE_ID}"""
 
-                   // println(experimentMeasures)
+                    // println(experimentMeasures)
                     sql.eachRow(experimentMeasures) { experiment_measures_row ->
 
                         String insertStatement = """
                         INSERT INTO ASSAY_CTXT_EXP_MEASURE(ASSAY_CTXT_EXP_MEASURE_ID,ASSAY_CONTEXT_ID,EXPERIMENT_MEASURE_ID,MODIFIED_BY) VALUES (assay_ctxt_exp_measure_ID_SEQ.nextval,${assay_context_measure_row.ASSAY_CONTEXT_ID},${experiment_measures_row.EXPRMT_MEASURE_ID},'jasiedu')
                         """
-                       // println(insertStatement)
+                        // println(insertStatement)
                         sql.execute(insertStatement)
                     }
                 }
             }
         }
     }
-    changeSet(author: "jasiedu", id: "iteration-033/03-delete-measure-and-references", dbms: "oracle", context: "standard") {
+    changeSet(author: "jasiedu", id: "iteration-033/05-delete-measure-and-references", dbms: "oracle", context: "standard") {
 
         //Set the username in context
         grailsChange {
@@ -93,7 +117,7 @@ databaseChangeLog = {
                                """)
             }
         }
-        sqlFile(path: "iteration_033/03-delete-measure-and-references.sql", stripComments: true)
+        sqlFile(path: "iteration_033/05-delete-measure-and-references.sql", stripComments: true)
     }
         //Code:
     // Remove AssayContextMeasure from AssayContext
