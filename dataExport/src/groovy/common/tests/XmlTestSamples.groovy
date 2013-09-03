@@ -696,58 +696,10 @@ class XmlTestSamples {
           </attributeId>
         </assayContextItem>'''
 
-    static final String MEASURE_MINIMAL = '''
-        <measure measureId='1'>
-          <resultTypeRef label='label1'>
-            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
-          </resultTypeRef>
-        </measure>'''
-    static final String MEASURE_WITH_PARENT_MEASURE_REF = '''
-        <measure measureId='2' parentMeasureRef='1'>
-          <resultTypeRef label='label2'>
-            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
-          </resultTypeRef>
-        </measure>'''
 
-    static final String MEASURE_WITH_STATS_MODIFIER_REF = '''
-        <measure measureId='1'>
-          <resultTypeRef label='label1'>
-            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
-          </resultTypeRef>
-          <statsModifierRef label='statsModifier'>
-            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
-          </statsModifierRef>
-        </measure>'''
 
-    static final String MEASURE_WITH_ENTRY_UNIT_REF = '''
-        <measure measureId='1'>
-          <resultTypeRef label='label1'>
-            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
-          </resultTypeRef>
-          <entryUnitRef label='entryUnit'>
-            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
-          </entryUnitRef>
-        </measure>'''
-    static final String MEASURE_WITH_ONE_ASSAY_CONTEXT_REF = '''
-        <measure measureId='1' >
-          <resultTypeRef label='label1'>
-            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
-          </resultTypeRef>
-          <assayContextRefs>
-            <assayContextRef>1</assayContextRef>
-          </assayContextRefs>
-        </measure>'''
-    static final String MEASURE_WITH_TWO_ASSAY_CONTEXT_REF = '''
-        <measure measureId='1' >
-          <resultTypeRef label='label1'>
-            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
-          </resultTypeRef>
-          <assayContextRefs>
-            <assayContextRef>1</assayContextRef>
-            <assayContextRef>2</assayContextRef>
-          </assayContextRefs>
-        </measure>
-     '''
+
+
 
     static final String ASSAY_CONTEXT_MINIMAL = '''
         <assayContext assayContextId='1' displayOrder='0'>
@@ -891,7 +843,7 @@ class XmlTestSamples {
 
     '''
     static String ASSAY_CONTEXT_WITH_MEASURES = '''
-  <assayContext assayContextId='' displayOrder='0'>
+  <assayContext assayContextId='1' displayOrder='0'>
     <contextName>Context for IC50</contextName>
   </assayContext>
 </assayContexts>

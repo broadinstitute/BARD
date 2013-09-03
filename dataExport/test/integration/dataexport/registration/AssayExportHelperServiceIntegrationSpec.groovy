@@ -5,19 +5,18 @@ import bard.db.enums.ContextType
 import bard.db.enums.DocumentType
 import bard.db.enums.ExpectedValueType
 import bard.db.enums.ReadyForExtraction
+import bard.db.registration.*
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import dataexport.util.ResetSequenceUtil
 import grails.buildtestdata.TestDataConfigurationHolder
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
+import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import spock.lang.Unroll
 
 import javax.sql.DataSource
-
-import bard.db.registration.*
-import org.springframework.core.io.FileSystemResource
 
 @Unroll
 class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
@@ -64,18 +63,6 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         XmlTestAssertions.assertResults(XmlTestSamples.ASSAY_CONTEXTS, this.writer.toString())
     }
 
-    void "test generate AssayContext with measureRefs"() {
-        given: "Given an Assay Id"
-        Assay assay = Assay.build(capPermissionService:null)
-        AssayContext.buildWithoutSave(assay: assay, contextName: 'Context for IC50', contextType: ContextType.UNCLASSIFIED)
-
-        when: "A service call is made to generate measure contexts for that Assay"
-        this.assayExportHelperService.generateAssayContexts(this.markupBuilder, assay.assayContexts)
-
-        then: "An XML is generated that conforms to the expected XML"
-
-        XmlTestAssertions.assertResults(XmlTestSamples.ASSAY_CONTEXT_WITH_MEASURES, this.writer.toString())
-    }
 
     void "test generate Full Assay"() {
         given:
