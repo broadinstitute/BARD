@@ -3,13 +3,10 @@
 <head>
     <title>BioAssay Research Database</title>
 
-
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BARD</title>
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
-          rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic' rel='stylesheet' type='text/css'>
     <link media="all" rel="stylesheet" href="css/bardHomepage/bootstrap.css">
     <link media="all" rel="stylesheet" href="css/bardHomepage/bootstrap-responsive.css">
     <link media="all" rel="stylesheet" href="css/bardHomepage/BardHomepage.css">
@@ -18,43 +15,24 @@
     <script src="js/bardHomepage/bootstrap.js"></script>
     <script src="js/bardHomepage/jquery.main.js"></script>
     <script src="js/bardHomepage/idSearchDialog.js"></script>
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="js/bardHomepage/windowOnerror.js"></script>
+    <link media="all" rel="stylesheet" href="css/bardHomepage/jquery-ui-1.10.3.custom.css">
+    <script src="js/bardHomepage/jquery-ui-1.10.3.custom.js"></script>
+    <script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js"></script>
     <script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js"></script>
     <!--[if lt IE 9]><link rel="stylesheet" href="css/bardHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
     <!--[if IE]><script src="js/bardHomepage/ie.js"></script><![endif]-->
 
+    %{--Make sure that people have their JavaScript turned on--}%
+    <noscript>
+        <a href="http://www.enable-javascript.com/" target="javascript">
+            <img src="${resource(dir: 'images', file: 'enable_js.png')}"
+                 alt="Please enable JavaScript to access the full functionality of this site."/>
+        </a>
+    </noscript>
 
-
-    %{--Good stuff--}%
-
-    %{--<script src="js/bardHomepage/bootstrap.js"></script>--}%
-    %{--<script src="js/bardHomepage/jquery.main.js"></script>--}%
-    %{--<script src="js/bardHomepage/idSearchDialog.js"></script>--}%
-     %{--<script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.autoSelect.js"></script>--}%
-    %{--<script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.selectFirst.js"></script>--}%
-
-
-
-    <script type="text/javascript">
-
-        //report error messages
-        window.onerror = bardClientErrorHandler;
-        //    Handle javascript errors
-        function bardClientErrorHandler(message, url, line) {
-            $.ajax({
-                cache:false,
-                type:"post",
-                data:{error:message, url:url, line:line, browser:navigator.userAgent},
-                url:"/bardwebclient/ErrorHandling/handleJsErrors",
-                async:true
-            });
-            return true;
-        }
-    </script>
+    %{--We have to run a small function in order to kickstart the auto complete--}%
     <script>
-
         $(document).ready(function () {
 
             //set up auto complete
@@ -122,10 +100,12 @@
                 </li>
                 <li><a href="#">Submissions</a></li>
             </ul>
-            <ul class="login-nav">
-                <li><a href="#">Sign up</a></li>
-                <li><a href="#">Sign in</a></li>
-            </ul>
+            <g:if test="${false}">
+                <ul class="login-nav">
+                    <li><a href="#">Sign up</a></li>
+                    <li><a href="#">Sign in</a></li>
+                </ul>
+            </g:if>
         </nav>
     </div>
 </header>
