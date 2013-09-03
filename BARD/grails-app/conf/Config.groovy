@@ -102,87 +102,87 @@ rememberme.key = 'bard_web_client_crowd_remember_me'
 rememberme.cookieName = 'bard_web_client_crowd_remember_me_cookie'
 
 bard.home.page = "http://localhost:8080/${appName}"
+
+
 // this should get overwritten by
 bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
+
+grails {
+    plugins {
+        springsecurity {
+            controllerAnnotations.staticRules = [
+                    '/console/**': ['ROLE_CONSOLE_USER']
+            ]
+            ipRestrictions = [
+                    '/console/**': '127.0.0.1'
+            ]
+            useBasicAuth = true
+            basic.realmName = 'CAP'
+            filterChain.chainMap = [
+                    '/bardWebInterface/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/chemAxon/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/context/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/contextItem/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/dictionaryTerms/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/document/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/doseResponseCurve/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/experiment/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/mergeAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/moveExperiments/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/person/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/project/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/sandbox/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/splitAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
+            ]
+
+            /** authenticationEntryPoint */
+            auth.loginFormUrl = '/bardLogin/auth'
+            auth.forceHttps = 'false'
+            auth.ajaxLoginFormUrl = '/bardLogin/authAjax'
+            auth.useForward = false
+
+            /** logoutFilter */
+            logout.afterLogoutUrl = '/bardLogout/afterLogout' // '/'
+            logout.filterProcessesUrl = '/j_spring_security_logout'
+            logout.handlerNames = [] // 'rememberMeServices', 'securityContextLogoutHandler'
+
+            // failureHandler
+            failureHandler.defaultFailureUrl = '/bardLogin/authfail?login_error=1'
+            failureHandler.ajaxAuthFailUrl = '/bardLogin/authfail?ajax=true'
+            failureHandler.exceptionMappings = [:]
+            failureHandler.useForward = false
+
+            // successHandler
+            successHandler.defaultTargetUrl = '/'
+            successHandler.alwaysUseDefault = false
+            successHandler.targetUrlParameter = AbstractAuthenticationTargetUrlRequestHandler.DEFAULT_TARGET_PARAMETER // 'spring-security-redirect'
+            successHandler.useReferer = false
+            successHandler.ajaxSuccessUrl = '/bardLogin/ajaxSuccess'
+
+            /**
+             * accessDeniedHandler
+             * set errorPage to null to send Error 403 instead of showing error page
+             */
+            adh.errorPage = '/bardLogin/denied'
+            adh.ajaxErrorPage = '/bardLogin/ajaxDenied'
+        }
+    }
+}
 grails.plugins.springsecurity.rememberMe.cookieName = rememberme.cookieName
 grails.plugins.springsecurity.rememberMe.key = rememberme.key
-
-
 switch (Environment.current) {
     case Environment.PRODUCTION:
         grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
-
-        grails {
-            plugins {
-                springsecurity {
-                    controllerAnnotations.staticRules = [
-                            '/console/**': ['ROLE_CONSOLE_USER']
-                    ]
-                    ipRestrictions = [
-                            '/console/**': '127.0.0.1'
-                    ]
-                    useBasicAuth = true
-                    basic.realmName = 'CAP'
-                    filterChain.chainMap = [
-                            '/bardWebInterface/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/chemAxon/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/context/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/contextItem/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/dictionaryTerms/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/document/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/doseResponseCurve/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/experiment/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/mergeAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/moveExperiments/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/person/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/project/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/splitAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
-                    ]
-                }
-            }
-        }
         break;
     default:
         //use basic auth and in memory security services in no-production environments
         grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
-        grails {
-            plugins {
-                springsecurity {
-                    controllerAnnotations.staticRules = [
-                            '/console/**': ['ROLE_CONSOLE_USER']
-                    ]
-                    ipRestrictions = [
-                            '/console/**': '127.0.0.1'
-                    ]
-                    useBasicAuth = true
-                    basic.realmName = 'CAP'
-                    filterChain.chainMap = [
-                            '/bardWebInterface/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/sandbox/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/mergeAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/splitAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/project/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/context/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/contextItem/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/dictionaryTerms/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/document/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/doseResponseCurve/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/experiment/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/mergeAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/moveExperiments/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/person/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/project/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/splitAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                            '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
-                    ]
-                }
-            }
-        }
+        break;
 }
+
+
 
 //prevent session fixation attacks
 grails.plugins.springsecurity.useSessionFixationPrevention = true
