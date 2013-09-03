@@ -1,6 +1,5 @@
-<g:if test="${assayInstance.experiments}">
-    <div id="showExperiments">
-
+<div id="showExperiments">
+    <g:if test="${assayInstance.experiments}">
         <table class="table table-striped table-hover table-bordered">
             <thead>
             <tr>
@@ -43,12 +42,12 @@
             </g:each>
             </tbody>
         </table>
-        <br/>
-        <g:if test="${assayInstance.allowsNewExperiments()}">
-            <g:if test="${editable == 'canedit'}">
-                <g:link controller="experiment" action="create" params="${[assayId: assayInstance.id]}"
-                        class="btn"><i class="icon-plus"></i>Create Experiment</g:link>
-            </g:if>
+    </g:if>
+    <br/>
+    <g:if test="${assayInstance.allowsNewExperiments()}">
+        <g:if test="${editable == 'canedit'}">
+            <g:link controller="experiment" action="create" params="${[assayId: assayInstance.id]}"
+                    class="btn"><i class="icon-plus"></i>Create Experiment</g:link>
         </g:if>
-    </div>
-</g:if>
+    </g:if>
+</div>

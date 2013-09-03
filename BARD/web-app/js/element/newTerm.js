@@ -61,6 +61,23 @@ $(document).ready(function () {
     });
     selectCurrentElement();
 });
+/**
+ *
+ * Some browsers will not allow you to close the window using window.close()
+ * unless the script opened the window. This is a little annoying sometimes.
+ * But there is a workaround to resolve this issue.
+ * If you observe the error message that is thrown by Mozilla Firefox,
+ * “Scripts may not close windows that were not opened by the script”,
+ * it clearly says that if the script didn’t open the window, you can’t close that.
+ * But we open a blank page in the same window using “_self” as the target window and close the same window.
+ * In that way, the script opens the window (which is a blank one) and closes the window too.
+ *
+ * Credit : http://raghunathgurjar.wordpress.com/2012/05/02/how-close-current-window-tab-in-all-browsers-using-javascript/
+ */
+function closeWindow() {
+    var win = window.open("","_self");
+    win.close();
+}
 function reloadActiveNode() {
     var node = $("#element-hierarchy-tree").dynatree("getActiveNode");
     if (node && node.isLazy()) {

@@ -149,6 +149,7 @@ switch (Environment.current) {
                     basic.realmName = 'CAP'
                     filterChain.chainMap = [
                             '/person/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/sandbox/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/mergeAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/splitAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
@@ -242,6 +243,12 @@ if (appName) {
         } else {
             println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
         }
+    }
+
+    if(System.getProperty("migrationContextsToRun") != null) {
+        grails.plugin.databasemigration.updateOnStart = true
+        grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+        grails.plugin.databasemigration.updateOnStartContexts = System.getProperty("migrationContextsToRun").split(",") as List
     }
 }
 

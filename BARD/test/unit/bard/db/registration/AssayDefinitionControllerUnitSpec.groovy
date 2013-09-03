@@ -7,7 +7,6 @@ import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
 import bard.db.project.InlineEditableCommand
-import bard.db.project.ProjectExperimentRenderService
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
@@ -22,7 +21,6 @@ import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
 import spock.lang.Unroll
-import acl.CapPermissionService
 
 import javax.servlet.http.HttpServletResponse
 
@@ -48,7 +46,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         MeasureTreeService measureTreeService = Mock(MeasureTreeService)
         AssayContextService assayContextService = Mock(AssayContextService)
         AssayDefinitionService assayDefinitionService = Mock(AssayDefinitionService)
-        CapPermissionService capPermissionService  = Mock(CapPermissionService)
+        CapPermissionService capPermissionService = Mock(CapPermissionService)
         controller.springSecurityService = Mock(SpringSecurityService)
         controller.measureTreeService = measureTreeService
         controller.assayContextService = assayContextService
@@ -57,6 +55,31 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         controller.capPermissionService = capPermissionService
         assay = Assay.build(assayName: 'Test')
         assert assay.validate()
+    }
+
+    void 'test save success'() {
+        given:
+        AssayCommand assayCommand = new AssayCommand(assayName: "Some Name", assayType: AssayType.TEMPLATE, springSecurityService: controller.springSecurityService)
+        when:
+        controller.save(assayCommand)
+        then:
+        assert controller.response.redirectedUrl.startsWith("/assayDefinition/show/")
+    }
+
+    void 'test save failure'() {
+        given:
+        AssayCommand assayCommand = new AssayCommand(assayType: AssayType.TEMPLATE, springSecurityService: controller.springSecurityService)
+        when:
+        def model = controller.save(assayCommand)
+        then:
+        assert response.status==200
+    }
+
+    void 'test create assay definition success'() {
+        when:
+        controller.create()
+        then:
+        assert response.status == 200
     }
 
     void 'test edit Assay Type success'() {
@@ -348,7 +371,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         params.statisticId = statistic.id
         Measure newMeasure = Measure.build()
         def assayContextService = mockFor(AssayContextService)
-        assayContextService.demand.addMeasure(1) { assayInstance , parentMeasure, rt, sm, entryUnit, hierarchyType ->
+        assayContextService.demand.addMeasure(1) { assayInstance, parentMeasure, rt, sm, entryUnit, hierarchyType ->
             assert assayInstance == assay.id
             assert parentMeasure == null
             assert rt == resultType

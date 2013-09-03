@@ -56,9 +56,14 @@
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="/BARD/assayDefinition/findById">Search by Assay Definition ID</a></li>
-                                <li><a href="/BARD/assayDefinition/findByName">Search by Assay Definition Name</a></li>
-                                <li><a href="/BARD/assayDefinition/assayComparisonReport">Compare Assays</a></li>
+                                <li class="controller"><g:link controller="assayDefinition"
+                                                               action="findById">Search by Assay Definition ID</g:link></li>
+                                <li class="controller"><g:link controller="assayDefinition"
+                                                               action="findByName">Search by Assay Definition Name</g:link></li>
+                                <li class="controller"><g:link controller="assayDefinition"
+                                                               action="create">Create Assay Definition</g:link></li>
+                                <li class="controller"><g:link controller="assayDefinition"
+                                                               action="assayComparisonReport">Compare Assay Definitions</g:link></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -67,11 +72,12 @@
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="/BARD/project/findById">Search by Project ID</a></li>
-
-                                <li><a href="/BARD/project/findByName">Search by Project Name</a></li>
-                                <li><a href="/BARD/project/create">Create a New Project</a></li>
-
+                                <li class="controller"><g:link controller="project"
+                                                               action="findById">Search by Project ID</g:link></li>
+                                <li class="controller"><g:link controller="project"
+                                                               action="findByName">Search by Project Name</g:link></li>
+                                <li class="controller"><g:link controller="project"
+                                                               action="create">Create a New Project</g:link></li>
                             </ul>
                         </li>
                         <li>
