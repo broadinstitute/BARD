@@ -39,7 +39,7 @@
     <script>
         /* Retrieve JSON data to build a histogram */
         $(document).ready( function () {
-            d3.json("/bardwebclient/bardWebInterface/retrieveExperimentResultsSummary/${tableModel?.additionalProperties?.bardExptId}", function (error, dataFromServer) {
+            d3.json("/BARD/bardWebInterface/retrieveExperimentResultsSummary/${tableModel?.additionalProperties?.bardExptId}", function (error, dataFromServer) {
                 if (!(dataFromServer === undefined)) {
                     for (var i = 0; i < dataFromServer.length; i++) {
                         if (!(dataFromServer[i] === undefined)) {

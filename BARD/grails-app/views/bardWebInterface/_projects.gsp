@@ -49,7 +49,7 @@
                         <dt>Number Of Experiments:</dt>
                         <dd>
                             <span class="badge badge-info">
-                                <a href="/bardwebclient/bardWebInterface/showProject/${projectAdapter.id}#experiments-info"
+                                <a href="/BARD/bardWebInterface/showProject/${projectAdapter.id}#experiments-info"
                                    style="color: white; text-decoration: underline">
                                     ${projectAdapter.getNumberOfExperiments()}
                                 </a>

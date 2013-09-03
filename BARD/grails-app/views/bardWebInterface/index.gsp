@@ -12,7 +12,7 @@
                 cache:false,
                 type:"post",
                 data:{error:message, url:url, line:line, browser:navigator.userAgent},
-                url:"/bardwebclient/ErrorHandling/handleJsErrors",
+                url:"/BARD/ErrorHandling/handleJsErrors",
                 async:true
             });
             return true;

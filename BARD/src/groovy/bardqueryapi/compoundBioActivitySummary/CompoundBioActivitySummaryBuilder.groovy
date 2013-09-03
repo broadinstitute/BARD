@@ -201,7 +201,7 @@ class CompoundBioActivitySummaryBuilder {
                             Pair<StringValue, StringValue> title = new ImmutablePair<StringValue, StringValue>(new StringValue(value: priorityElement.dictionaryLabel), new StringValue(value: "${priorityElement.qualifier ?: ''} ${priorityElement.value}"))
                             LinkValue dictionaryElement
                             if (priorityElement.dictElemId) {
-                                dictionaryElement = new LinkValue(value: "/bardwebclient/dictionaryTerms/#${priorityElement.dictElemId}")
+                                dictionaryElement = new LinkValue(value: "/BARD/dictionaryTerms/#${priorityElement.dictElemId}")
                             }
                             ConcentrationResponseSeriesValue concentrationResponseSeriesValue = new ConcentrationResponseSeriesValue(value: doseResponsePointsMap,
                                     title: new PairValue(value: title, dictionaryElement: dictionaryElement),
@@ -260,7 +260,7 @@ class CompoundBioActivitySummaryBuilder {
         LinkValue dictionaryElement
 
         if (priorityElement.dictElemId) {
-            dictionaryElement = new LinkValue(value: "/bardwebclient/dictionaryTerms/#${priorityElement.dictElemId}")
+            dictionaryElement = new LinkValue(value: "/BARD/dictionaryTerms/#${priorityElement.dictElemId}")
         }
 
         PairValue pairValue = new PairValue(value: pair, dictionaryElement: dictionaryElement)

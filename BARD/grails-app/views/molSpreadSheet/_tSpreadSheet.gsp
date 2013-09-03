@@ -113,7 +113,7 @@
                                     <g:if test="${columnDictionaryLookup[currentRowCounter]}">
                                         ${colHeader}
                                         <g:if test="${columnDictionaryLookup[currentRowCounter]}">
-                                            <a href="/bardwebclient/dictionaryTerms/#${columnDictionaryLookup[currentRowCounter]}"
+                                            <a href="/BARD/dictionaryTerms/#${columnDictionaryLookup[currentRowCounter]}"
                                                class="desc_tip mssheader" data-placement="top"
                                                target="datadictionary">
                                                 <i class="icon-question-sign"></i>
