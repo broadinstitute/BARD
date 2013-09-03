@@ -20,8 +20,8 @@ import static test.TestUtils.createString
  * Time: 12:35 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, Experiment, Element,ExperimentMeasure])
-@Mock([Assay, Experiment, Element,ExperimentMeasure])
+@Build([Assay, Experiment, Element, ExperimentMeasure])
+@Mock([Assay, Experiment, Element, ExperimentMeasure])
 @Unroll
 class ExperimentMeasureConstraintUnitSpec extends Specification {
 
@@ -112,6 +112,7 @@ class ExperimentMeasureConstraintUnitSpec extends Specification {
         'valid statsModifier' | { Element.build() } | true  | null
 
     }
+
     void "test resultType constraints #desc resultType: '#valueUnderTest'"() {
 
         final String field = 'resultType'
@@ -125,10 +126,11 @@ class ExperimentMeasureConstraintUnitSpec extends Specification {
 
         where:
         desc               | valueUnderTest      | valid | errorCode
-        'null not valid'   | { null }            | true  | null
+        'null not valid'   | { null }            | false | 'nullable'
         'valid resultType' | { Element.build() } | true  | null
 
     }
+
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {
 
         final String field = 'modifiedBy'

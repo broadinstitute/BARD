@@ -69,7 +69,7 @@ class ExperimentMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
 
         where:
         desc               | valueUnderTest      | valid | errorCode
-        'null not valid'   | { null }            | true  | null
+        'null not valid'   | { null }            | false | 'nullable'
         'valid resultType' | { Element.build() } | true  | null
 
     }

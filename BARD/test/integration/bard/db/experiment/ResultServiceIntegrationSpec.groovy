@@ -77,7 +77,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
     }
 
     def associateContext(ExperimentMeasure experimentMeasure, AssayContext context) {
-        AssayContextExperimentMeasure assayContextMeasure = AssayContextExperimentMeasure.build(assayContext: context, experimentMeasure: experimentMeasure.experimentMeasure)
+        AssayContextExperimentMeasure assayContextMeasure = AssayContextExperimentMeasure.build(assayContext: context, experimentMeasure: experimentMeasure)
 //        experimentMeasure.measure.addToAssayContextMeasures(assayContextMeasure)
 //        context.addToAssayContextMeasures(assayContextMeasure)
     }

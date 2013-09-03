@@ -92,7 +92,7 @@
                 </li>
             </ul>
         </li>
-        <li><a href="#measures-header"><i class="icon-chevron-right"></i>Measures</a></li>
+        %{--<li><a href="#measures-header"><i class="icon-chevron-right"></i>Measures</a></li>--}%
         <li><a href="#documents-header"><i class="icon-chevron-right"></i>Documents</a>
             <ul class="nav nav-list">
                 <li><a href="#documents-description-header"><i class="icon-chevron-right"></i>Descriptions</a>
@@ -326,18 +326,18 @@
 </section>
 <br/>
 
-<br/>
-<section id="measures-header">
+%{--<br/>--}%
+%{--<section id="measures-header">--}%
 
-    <h3 class="sect">Measures<g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
-            class="icon-question-sign"></i></g:link></h3>
+    %{--<h3 class="sect">Measures<g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i--}%
+            %{--class="icon-question-sign"></i></g:link></h3>--}%
 
 
-    <div class="row-fluid">
+    %{--<div class="row-fluid">--}%
         %{--<g:render template="measuresView"--}%
                   %{--model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson, editable: editable]"/>--}%
-    </div>
-</section>
+    %{--</div>--}%
+%{--</section>--}%
 <br/>
 <g:render template="/document/documents"
           model="[documentKind: DocumentKind.AssayDocument, owningEntity: assayInstance, canedit: editable, sectionNumber: '6.']"/>

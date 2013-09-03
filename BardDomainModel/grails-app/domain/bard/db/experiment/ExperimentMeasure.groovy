@@ -40,7 +40,7 @@ class ExperimentMeasure {
         parent(nullable: true)
         parentChildRelationship(nullable: true, maxSize: PARENT_CHILD_RELATIONSHIP_MAX_SIZE)
         experiment()
-        resultType(nullable: true)
+        resultType(nullable: false)
         statsModifier(nullable: true)
 
         dateCreated(nullable: false)
