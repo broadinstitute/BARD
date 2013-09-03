@@ -18,10 +18,19 @@
                    value="${fieldValue(bean: experiment, field: "experimentName")}"/>
         </dd>
 
+        <dt>Hold until Date:</dt><dd>
+        <input type="text" class="input-large date-selection" name="holdUntilDate"
+               placeholder="Click icon to select date"
+               value="${experiment.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.holdUntilDate) : experiment.holdUntilDate}"/>
+        (No more than 1 year from today)
+        </dd>
+
+        <%--
         <dt>Description:</dt><dd>
         <input class="input-xxlarge" type="text" name="description"
                value="${fieldValue(bean: experiment, field: "description")}"/>
     </dd>
+
 
         <dt><g:message code="experiment.experimentStatus.label" default="Status"/>:</dt>
         <dd>
@@ -30,12 +39,7 @@
                       optionValue="id"></g:select>
         </dd>
 
-        <dt>Hold until Date:</dt><dd>
-        <input type="text" class="input-large date-selection" name="holdUntilDate"
-               placeholder="Click icon to select date"
-               value="${experiment.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.holdUntilDate) : experiment.holdUntilDate}"/>
-        (No more than 1 year from today)
-    </dd>
+
 
         <dt>Run Date From:</dt><dd>
         <input type="text" class="input-large date-selection" name="runDateFrom"
@@ -46,6 +50,8 @@
         <dt>Run Date To:</dt><dd>
         <input type="text" class="input-large date-selection" name="runDateTo" placeholder="Click icon to select date"
                value="${experiment.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateTo) : experiment.runDateTo}"/>
+         --%>
+
     </dd>
     </dl>
 
