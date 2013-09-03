@@ -97,13 +97,8 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
         Element element = Element.build()
         Assay assay = Assay.build(capPermissionService:null)
         AssayContext assayContext = AssayContext.build(assay: assay, contextType: ContextType.UNCLASSIFIED)
-        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeElement: element)
+        AssayContextItem.build(assayContext: assayContext, attributeElement: element)
         AssayDocument.build(assay: assay)
-
-        Measure measure = Measure.build(assay: assay, resultType: element)
-        AssayContextMeasure.build(measure: measure, assayContext: assayContext)
-
-
         when:
         this.assayExportService.generateAssay(this.markupBuilder, assay.id)
 

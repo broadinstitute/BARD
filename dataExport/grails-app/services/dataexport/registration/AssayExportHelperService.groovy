@@ -4,14 +4,17 @@ import bard.db.dictionary.Element
 import bard.db.enums.ContextType
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
+import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.AssayContextItem
+import bard.db.registration.AssayDocument
 import dataexport.util.ExportAbstractService
 import groovy.xml.MarkupBuilder
-import org.codehaus.groovy.grails.web.mapping.LinkGenerator
-import bard.db.registration.*
 import org.apache.commons.lang.StringUtils
-import javax.xml.datatype.XMLGregorianCalendar
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
+
 import javax.xml.datatype.DatatypeFactory
-import bard.db.enums.HierarchyType
+import javax.xml.datatype.XMLGregorianCalendar
 
 /**
  * Helper Service for handling generation for XML documents for Assay definition extraction
@@ -30,60 +33,11 @@ class AssayExportHelperService extends ExportAbstractService {
                 contextGroup(assayContext.contextType.id)
             }
             generateAssayContextItems(markupBuilder, assayContext.assayContextItems)
-            generateAssayContextMeasureRefs(markupBuilder, 'measureRef', assayContext.assayContextMeasures)
         }
     }
 
-    protected void generateAssayContextMeasureRefs(MarkupBuilder markupBuilder, String refElementName, Set<AssayContextMeasure> assayContextMeasures) {
-        if (assayContextMeasures) {
-            String propName = refElementName - 'Ref'
-            markupBuilder."${refElementName}s"() {
-                for (AssayContextMeasure assayContextMeasure in assayContextMeasures) {
-                    "${refElementName}"(assayContextMeasure."${propName}".id)
-                }
-            }
-        }
-    }
-    /**
-     *
-     * @param measureDTO
-     * @return Map
-     */
-    protected Map<String, String> createAttributesForMeasure(final Measure measure) {
-        final Map<String, String> attributes = [:]
-        attributes.put('measureId', measure.id.toString())
-        if (measure.parentMeasure) {
-            attributes.put('parentMeasureRef', measure.parentMeasure.id.toString())
-        }
-        HierarchyType parentChildRelationship = measure.parentChildRelationship
-        if (parentChildRelationship) {
-            attributes.put('parentChildRelationship', parentChildRelationship.getId())
-        }
-        return attributes
-    }
 
-    protected void generateMeasure(final MarkupBuilder markupBuilder, final Measure measure) {
-
-        final Map<String, String> attributes = createAttributesForMeasure(measure);
-        markupBuilder.measure(attributes) {
-            final Element resultType = measure.resultType
-            if (resultType) { //this is the result type
-                createElementRef(markupBuilder, resultType, 'resultTypeRef', this.mediaTypesDTO.elementMediaType)
-            }
-            final Element statsModifier = measure.statsModifier
-            if (statsModifier) {
-                createElementRef(markupBuilder, statsModifier, 'statsModifierRef', this.mediaTypesDTO.elementMediaType)
-            }
-            final Element entryUnit = measure.entryUnit
-            if (entryUnit) {
-                createElementRef(markupBuilder, entryUnit, 'entryUnitRef', this.mediaTypesDTO.elementMediaType)
-            }
-
-            generateAssayContextMeasureRefs(markupBuilder, 'assayContextRef', measure.assayContextMeasures)
-        }
-    }
-
-    public createElementRef(MarkupBuilder markupBuilder, Element element, String refName, String mediaType) {
+    public static void createElementRef(MarkupBuilder markupBuilder, Element element, String refName, String mediaType, LinkGenerator grailsLinkGenerator) {
         markupBuilder."${refName}"(label: element.label) {
             final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: element.id]).toString()
             link(rel: 'related', href: href, type: mediaType)
@@ -171,15 +125,7 @@ class AssayExportHelperService extends ExportAbstractService {
         }
     }
 
-    protected void generateMeasures(final MarkupBuilder markupBuilder, final Set<Measure> measures) {
-        if (measures) {
-            markupBuilder.measures() {
-                for (Measure measure : measures) {
-                    generateMeasure(markupBuilder, measure)
-                }
-            }
-        }
-    }
+
 
     public void generateDocument(final MarkupBuilder markupBuilder, AssayDocument assayDocument) {
         generateDocument(this.grailsLinkGenerator, markupBuilder, assayDocument,
@@ -211,13 +157,13 @@ class AssayExportHelperService extends ExportAbstractService {
         if (assay.assayStatus) {
             attributes.put('status', assay.assayStatus.id)
         }
-        if(assay.lastUpdated){
+        if (assay.lastUpdated) {
             final GregorianCalendar gregorianCalendar = new GregorianCalendar();
             gregorianCalendar.setTime(assay.lastUpdated);
             final XMLGregorianCalendar lastUpdatedDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
             attributes.put('lastUpdated', lastUpdatedDate.toString())
-       }
-        if(StringUtils.isNotBlank(assay.modifiedBy)){
+        }
+        if (StringUtils.isNotBlank(assay.modifiedBy)) {
             attributes.put('modifiedBy', assay.modifiedBy)
         }
         markupBuilder.assay(attributes) {
@@ -229,9 +175,7 @@ class AssayExportHelperService extends ExportAbstractService {
             if (assay.assayContexts) {
                 generateAssayContexts(markupBuilder, assay.assayContexts)
             }
-            if (assay.measures) {
-                generateMeasures(markupBuilder, assay.measures)
-            }
+
             generateLinksForAssay(markupBuilder, assay)
         }
     }

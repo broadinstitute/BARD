@@ -68,13 +68,25 @@ class XmlTestSamples {
     '''
 
     static final String EXPERIMENT_MEASURE_MINIMAL = '''
-        <experimentMeasure experimentMeasureId='1' measureRef='1'  />
+        <experimentMeasure experimentMeasureId='1'>
+  <resultTypeRef label='label1'>
+    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+  </resultTypeRef>
+</experimentMeasure>
     '''
     static final String EXPERIMENT_MEASURE_WITH_PARENT_REF = '''
-        <experimentMeasure experimentMeasureId='2' measureRef='2'  parentExperimentMeasureRef='1'  />
+       <experimentMeasure experimentMeasureId='2' parentExperimentMeasureRef='1'>
+  <resultTypeRef label='label2'>
+    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+  </resultTypeRef>
+</experimentMeasure>
     '''
     static final String EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP = '''
-        <experimentMeasure experimentMeasureId='2' measureRef='2'  parentExperimentMeasureRef='1' parentChildRelationship='supported by' />
+        <experimentMeasure experimentMeasureId='2' parentExperimentMeasureRef='1' parentChildRelationship='supported by'>
+  <resultTypeRef label='label2'>
+    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+  </resultTypeRef>
+</experimentMeasure>
     '''
     static final String EXTERNAL_REFERENCES_UNT = '''
         <externalReferences>
@@ -785,22 +797,15 @@ class XmlTestSamples {
         </assayContext>
      '''
     static final String MINIMAL_ASSAY_CONTEXT_WITH_ONE_MEASURE_REF = '''
-        <assayContext assayContextId='1' displayOrder='0'>
-          <contextName/>
-          <measureRefs>
-            <measureRef>1</measureRef>
-          </measureRefs>
-        </assayContext>
+<assayContext assayContextId='1' displayOrder='0'>
+  <contextName />
+</assayContext>
      '''
 
     static final String MINIMAL_ASSAY_CONTEXT_WITH_TWO_MEASURE_REFS = '''
-        <assayContext assayContextId='1' displayOrder='0'>
-          <contextName/>
-          <measureRefs>
-            <measureRef>1</measureRef>
-            <measureRef>2</measureRef>
-          </measureRefs>
-        </assayContext>
+<assayContext assayContextId='1' displayOrder='0'>
+  <contextName />
+</assayContext>
      '''
 
     static String ASSAY_LINKS = '''
@@ -815,39 +820,26 @@ class XmlTestSamples {
 '''
 
     static String ASSAY_FULL_DOC = '''
-        <assay assayId='1' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft' lastUpdated='2013-06-17T22:45:13.910-04:00'>
-          <assayShortName>assayShortName</assayShortName>
-          <assayName>assayName</assayName>
-          <assayContexts>
-            <assayContext assayContextId='1' displayOrder='0'>
-              <contextName />
-              <assayContextItems>
-                <assayContextItem displayOrder='0' attributeType='Fixed'>
-                  <attributeId label='label1'>
-                    <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
-                  </attributeId>
-                </assayContextItem>
-              </assayContextItems>
-              <measureRefs>
-                <measureRef>1</measureRef>
-              </measureRefs>
-            </assayContext>
-          </assayContexts>
-          <measures>
-            <measure measureId='1'>
-              <resultTypeRef label='label1'>
-                <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
-              </resultTypeRef>
-              <assayContextRefs>
-                <assayContextRef>1</assayContextRef>
-              </assayContextRefs>
-            </measure>
-          </measures>
-          <link rel='edit' href='http://localhost:8080/dataExport/api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
-          <link rel='self' href='http://localhost:8080/dataExport/api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
-          <link rel='up' href='http://localhost:8080/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
-          <link rel='item' href='http://localhost:8080/dataExport/api/assayDocument/1' type='application/vnd.bard.cap+xml;type=assayDoc' />
-        </assay>
+       <assay assayId='8110' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft' lastUpdated='2013-09-03T12:04:53.689-04:00'>
+  <assayShortName>assayShortName</assayShortName>
+  <assayName>assayName</assayName>
+  <assayContexts>
+    <assayContext assayContextId='336356' displayOrder='0'>
+      <contextName />
+      <assayContextItems>
+        <assayContextItem displayOrder='0' attributeType='Fixed'>
+          <attributeId label='label1'>
+            <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/2363' type='application/vnd.bard.cap+xml;type=element' />
+          </attributeId>
+        </assayContextItem>
+      </assayContextItems>
+    </assayContext>
+  </assayContexts>
+  <link rel='edit' href='http://localhost:8080/dataExport/api/assays/8110' type='application/vnd.bard.cap+xml;type=assay' />
+  <link rel='self' href='http://localhost:8080/dataExport/api/assays/8110' type='application/vnd.bard.cap+xml;type=assay' />
+  <link rel='up' href='http://localhost:8080/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
+  <link rel='item' href='http://localhost:8080/dataExport/api/assayDocument/135527' type='application/vnd.bard.cap+xml;type=assayDoc' />
+</assay>
      '''
     static String PROJECT_FROM_SERVER = '''
    <project projectId='1' readyForExtraction='Not Ready' groupType='Project'>
@@ -899,14 +891,10 @@ class XmlTestSamples {
 
     '''
     static String ASSAY_CONTEXT_WITH_MEASURES = '''
-        <assayContexts>
-          <assayContext assayContextId='1' displayOrder='0'>
-            <contextName>Context for IC50</contextName>
-            <measureRefs>
-              <measureRef>1</measureRef>
-            </measureRefs>
-          </assayContext>
-        </assayContexts>
+  <assayContext assayContextId='' displayOrder='0'>
+    <contextName>Context for IC50</contextName>
+  </assayContext>
+</assayContexts>
     '''
 
 

@@ -99,6 +99,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
         then: "A valid xml measure is generated with the expected measure attributes, result type and entry unit"
         String actualXml = this.writer.toString()
+        println actualXml
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(schemaResource, actualXml)
 

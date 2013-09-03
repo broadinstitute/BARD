@@ -1,12 +1,15 @@
 package dataexport.experiment
 
+import bard.db.dictionary.Element
 import bard.db.enums.ExperimentStatus
 import bard.db.enums.ReadyForExtraction
+import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
 import bard.db.experiment.ExperimentMeasure
 import bard.db.registration.ExternalReference
+import dataexport.registration.AssayExportHelperService
 import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
 import dataexport.util.ExportAbstractService
@@ -305,8 +308,8 @@ class ExperimentExportService extends ExportAbstractService {
     }
 
     protected void generateExperimentMeasure(final MarkupBuilder markupBuilder, final ExperimentMeasure experimentMeasure) {
-        Map attributes = [experimentMeasureId: experimentMeasure.id,
-                measureRef: experimentMeasure.measure.id]
+
+        Map attributes = [experimentMeasureId: experimentMeasure.id]
         ExperimentMeasure parent = experimentMeasure.parent
         if (parent) {
             attributes.put('parentExperimentMeasureRef', parent.id)
@@ -315,6 +318,35 @@ class ExperimentExportService extends ExportAbstractService {
         if (parentChildRelationship) {
             attributes.put('parentChildRelationship', parentChildRelationship.getId())
         }
-        markupBuilder.experimentMeasure(attributes)
+        markupBuilder.experimentMeasure(attributes) {
+            final Element resultType = experimentMeasure.resultType
+            if (resultType) { //this is the result type
+                AssayExportHelperService.createElementRef(markupBuilder, resultType, 'resultTypeRef', this.mediaTypeDTO.elementMediaType,this.grailsLinkGenerator)
+            }
+            final Element statsModifier = experimentMeasure.statsModifier
+            if (statsModifier) {
+                AssayExportHelperService.createElementRef(markupBuilder, statsModifier, 'statsModifierRef', this.mediaTypeDTO.elementMediaType,this.grailsLinkGenerator)
+            }
+            generateAssayContextExperimentMeasureRefs(markupBuilder,  experimentMeasure.assayContextExperimentMeasures)
+            generateChildMeasuresRefs(markupBuilder,experimentMeasure.childMeasures)
+        }
+    }
+    protected void generateChildMeasuresRefs(MarkupBuilder markupBuilder,Set<ExperimentMeasure> childMeasures) {
+        if (childMeasures) {
+            markupBuilder.childMeasureRefs() {
+                for (ExperimentMeasure childMeasure : childMeasures) {
+                    childMeasureRef(childMeasure.id)
+                }
+            }
+        }
+    }
+    protected void generateAssayContextExperimentMeasureRefs(MarkupBuilder markupBuilder,Set<AssayContextExperimentMeasure> assayContextExperimentMeasures) {
+        if (assayContextExperimentMeasures) {
+            markupBuilder.assayContextRefs() {
+                for (AssayContextExperimentMeasure assayContextExperimentMeasure : assayContextExperimentMeasures) {
+                     assayContextRef(assayContextExperimentMeasure.assayContext.id)
+                }
+            }
+        }
     }
 }

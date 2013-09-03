@@ -3,6 +3,7 @@ package dataexport.registration
 import bard.db.dictionary.Element
 import bard.db.enums.ContextType
 import bard.db.enums.DocumentType
+import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.registration.*
 import common.tests.XmlTestAssertions
 import grails.buildtestdata.TestDataConfigurationHolder
@@ -25,8 +26,8 @@ import bard.db.enums.ExpectedValueType
  * Time: 12:52 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, AssayContext, AssayContextItem, AssayContextMeasure, AssayDocument, Element, Measure])
-@Mock([Assay, AssayContext, AssayContextItem, AssayContextMeasure, AssayDocument, Element, Measure])
+@Build([Assay, AssayContext, AssayContextItem, AssayContextExperimentMeasure, AssayDocument, Element])
+@Mock([Assay, AssayContext, AssayContextItem, AssayContextExperimentMeasure, AssayDocument, Element])
 @Unroll
 class AssayExportHelperServiceUnitSpec extends Specification {
     Writer writer
@@ -56,7 +57,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         given:
         AssayContext assayContext = AssayContext.build(map)
         numItems.times { AssayContextItem.build(assayContext: assayContext) }
-        numMeasureRefs.times { AssayContextMeasure.build(assayContext: assayContext) }
+//        numMeasureRefs.times { AssayContextMeasure.build(assayContext: assayContext) }
 
         when: "We attempt to generate a measure context in xml"
         this.assayExportHelperService.generateAssayContext(this.markupBuilder, assayContext)
@@ -127,25 +128,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         attributes == results
     }
 
-    void "test generate Measure #label"() {
-        given:
-        Measure measure = Measure.build(mapClosure.call())
-        numAssayContextMeasureRefs.times { AssayContextMeasure.build(measure: measure) }
 
-        when: "We attempt to generate a measure in xml"
-        this.assayExportHelperService.generateMeasure(this.markupBuilder, measure)
-        then: "A valid xml measure is generated with the expected measure attributes, result type and entry unit"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
-
-        where:
-        label                   | results                            | mapClosure                                                 | numAssayContextMeasureRefs
-        "minimal"               | MEASURE_MINIMAL                    | { [:] }                                                    | 0
-        "with parentMeasureRef" | MEASURE_WITH_PARENT_MEASURE_REF    | { [parentMeasure: Measure.build()] }                       | 0
-        "with statsModifierRef" | MEASURE_WITH_STATS_MODIFIER_REF    | { [statsModifier: Element.build(label: "statsModifier")] } | 0
-        "with entryUnitRef"     | MEASURE_WITH_ENTRY_UNIT_REF        | { [entryUnit: Element.build(label: "entryUnit")] }         | 0
-        "with assayContextRefs" | MEASURE_WITH_ONE_ASSAY_CONTEXT_REF | { [:] }                                                    | 1
-        "with assayContextRefs" | MEASURE_WITH_TWO_ASSAY_CONTEXT_REF | { [:] }                                                    | 2
-    }
 
     void "test generate AssayDocument #label"() {
         given:

@@ -67,9 +67,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
     void "test generate AssayContext with measureRefs"() {
         given: "Given an Assay Id"
         Assay assay = Assay.build(capPermissionService:null)
-        AssayContext assayContext = AssayContext.buildWithoutSave(assay: assay, contextName: 'Context for IC50', contextType: ContextType.UNCLASSIFIED)
-        Measure measure = Measure.build(assay: assay, resultType: Element.build(label: 'IC50'))
-        AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(measure: measure, assayContext: assayContext)
+        AssayContext.buildWithoutSave(assay: assay, contextName: 'Context for IC50', contextType: ContextType.UNCLASSIFIED)
 
         when: "A service call is made to generate measure contexts for that Assay"
         this.assayExportHelperService.generateAssayContexts(this.markupBuilder, assay.assayContexts)
@@ -84,11 +82,9 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         Element element = Element.build()
         Assay assay = Assay.build(capPermissionService:null)
         AssayContext assayContext = AssayContext.build(assay: assay, contextType: ContextType.UNCLASSIFIED)
-        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeElement: element)
+        AssayContextItem.build(assayContext: assayContext, attributeElement: element)
         AssayDocument.build(assay: assay)
 
-        Measure measure = Measure.build(assay: assay, resultType: element)
-        AssayContextMeasure.build(measure: measure, assayContext: assayContext)
 
 
         when:
