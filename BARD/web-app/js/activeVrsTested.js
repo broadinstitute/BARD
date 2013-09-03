@@ -1,5 +1,5 @@
 
-var waitingImage = '<img src="/BARD/static/images/ajax-loader.gif" alt="loading" title="loading"/>';
+var waitingImage = '<img src="/BARD/images/ajax-loader.gif" alt="loading" title="loading"/>';
 
 var ActiveVrsTestedHandler = {
     setup : function() {

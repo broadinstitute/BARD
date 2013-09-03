@@ -1,4 +1,4 @@
-var bigSpinnerImage = '<div class="tab-message"><img src="/BARD/static/images/ajax-loader.gif" alt="loading" title="loading"/></div>';
+var bigSpinnerImage = '<div class="tab-message"><img src="/BARD/images/ajax-loader.gif" alt="loading" title="loading"/></div>';
 //TODO: if javascript is not supported then do a full page load
 
 
