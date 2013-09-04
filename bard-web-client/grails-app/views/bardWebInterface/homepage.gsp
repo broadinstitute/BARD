@@ -7,21 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BARD</title>
     <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic' rel='stylesheet' type='text/css'>
-    <link media="all" rel="stylesheet" href="css/bardHomepage/bootstrap.css">
-    <link media="all" rel="stylesheet" href="css/bardHomepage/bootstrap-responsive.css">
-    <link media="all" rel="stylesheet" href="css/bardHomepage/BardHomepage.css">
+    <link media="all" rel="stylesheet" href="../css/bardHomepage/bootstrap.css">
+    <link media="all" rel="stylesheet" href="../css/bardHomepage/bootstrap-responsive.css">
+    <link media="all" rel="stylesheet" href="../css/bardHomepage/BardHomepage.css">
 
-    <script src="js/bardHomepage/jquery-1.8.3.min.js"></script>
-    <script src="js/bardHomepage/bootstrap.js"></script>
-    <script src="js/bardHomepage/jquery.main.js"></script>
-    <script src="js/bardHomepage/idSearchDialog.js"></script>
-    <script src="js/bardHomepage/windowOnerror.js"></script>
-    <link media="all" rel="stylesheet" href="css/bardHomepage/jquery-ui-1.10.3.custom.css">
-    <script src="js/bardHomepage/jquery-ui-1.10.3.custom.js"></script>
-    <script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js"></script>
-    <script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js"></script>
-    <!--[if lt IE 9]><link rel="stylesheet" href="css/bardHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
-    <!--[if IE]><script src="js/bardHomepage/ie.js"></script><![endif]-->
+    <script src="../js/bardHomepage/jquery-1.8.3.min.js"></script>
+    <script src="../js/bardHomepage/bootstrap.js"></script>
+    <script src="../js/bardHomepage/jquery.main.js"></script>
+    <script src="../js/bardHomepage/idSearchDialog.js"></script>
+    %{--<script src="js/bardHomepage/windowOnerror.js"></script>--}%
+    <link media="all" rel="stylesheet" href="../css/bardHomepage/jquery-ui-1.10.3.custom.css">
+    <script src="../js/bardHomepage/jquery-ui-1.10.3.custom.js"></script>
+    <script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js"></script>
+    <script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js"></script>
+    <!--[if lt IE 9]><link rel="stylesheet" href="../css/bardHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
+    <!--[if IE]><script src="../js/bardHomepage/ie.js"></script><![endif]-->
 
     %{--Make sure that people have their JavaScript turned on--}%
     <noscript>
@@ -128,6 +128,7 @@
     </div>
 </article>
 
+<g:if test="${true}">
 %{--Block to hold the main search textblock--}%
 <div class="search-panel">
     <div class="container-fluid">
@@ -171,8 +172,10 @@
 
     </div>
 </div>
+    </g:if>
 
 %{--carousel news panel. This will need dynamic content--}%
+<g:if test="${true}">
 <section class="news-panel">
     <div class="container-fluid">
         <div class="news-row">
@@ -210,6 +213,7 @@
         </div>
     </div>
 </section>
+    </g:if>
 
 %{--This is the main carousel, with three big pictures and associated buttons--}%
 <div class="articles-gallery slide" id="articles-gallery" data-interval="false">
@@ -221,7 +225,7 @@
             <div class="container-fluid">
                 <div class="row-fluid">
                     <div class="span6 img-box">
-                        <img src="images/bardHomepage/img-01.png" alt="image description">
+                        <img src="../images/bardHomepage/img-01.png" alt="image description">
                     </div>
 
                     <div class="span6 pull-right article">
@@ -239,7 +243,7 @@
             <div class="container-fluid">
                 <div class="row-fluid">
                     <div class="span6 img-box">
-                        <img src="images/bardHomepage/img-02.png" alt="image description">
+                        <img src="../images/bardHomepage/img-02.png" alt="image description">
                     </div>
 
                     <div class="span6 pull-right article">
@@ -257,7 +261,7 @@
             <div class="container-fluid">
                 <div class="row-fluid">
                     <div class="span6 img-box">
-                        <img src="images/bardHomepage/img-03.png" alt="image description">
+                        <img src="../images/bardHomepage/img-03.png" alt="image description">
                     </div>
 
                     <div class="span6 pull-right article">
@@ -274,6 +278,7 @@
     </div>
 </div>
 
+<g:if test="${true}">
 %{--The BARD is  growing line sits on its own above the blocks--}%
 <section class="tabs-section"> %{--This section tag binds 'Bard is growing', the blocks, and the tab information together  --}%
 <div class="container-fluid">
@@ -649,6 +654,8 @@
 </div>
 </div>
 </section>
+</g:if>
+
 
 %{--Now we have a footer section containing a bunch of links--}%
 <footer id="footer">
@@ -669,7 +676,7 @@
                     <ul>
                         <li><a href="#">Forums</a></li>
                         <li><a href="#">Submit a Bug Report</a></li>
-                        <li><a href="#">Ark a Qusteion</a></li>
+                        <li><a href="#">Ask a Question</a></li>
                     </ul>
                 </div>
 
@@ -703,8 +710,6 @@
     </div>
 </footer>
 </div>
-
-<r:layoutResources/>
 
 </body>
 </html>

@@ -77,6 +77,11 @@ class BardWebInterfaceController {
         render( view: 'homepage', model: {})
     }
 
+    def redirectToIndex(){
+        redirect( controller: 'bardWebInterface', action:'index' )
+    }
+
+
     def search() {
         flash.searchString = params.searchString
         if (!isMobile()) {
