@@ -17,6 +17,7 @@ import bardqueryapi.QueryService
 import grails.util.Environment
 import grails.util.GrailsUtil
 import org.codehaus.groovy.grails.orm.hibernate.HibernateEventListeners
+import org.springframework.http.client.SimpleClientHttpRequestFactory
 import org.springframework.web.client.RestTemplate
 import mockServices.MockQueryService
 import bardqueryapi.ETagsService
@@ -102,8 +103,18 @@ beans = {
         promiscuityUrl = badApplePromiscuityUrl
         capUrl = bardCapUrl
     }
+    /**
+     * setting timeouts for connections established by the restTemplate
+     *
+     * just using the SimpleClientHttpRequestFactory there is also CommonsClientHttpRequestFactory which would offer
+     * more configuration options if we need it
+     */
+    simpleClientHttpRequestFactory(SimpleClientHttpRequestFactory){
+        connectTimeout =  5 * 1000 // in milliseconds
+        readTimeout    = 25 * 1000 // in milliseconds
+    }
 
-    restTemplate(RestTemplate)
+    restTemplate(RestTemplate, ref('simpleClientHttpRequestFactory'))
     loggerService(LoggerService)
 
     compoundRestService(CompoundRestService) {
