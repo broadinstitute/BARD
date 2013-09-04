@@ -119,6 +119,7 @@ grails {
             useBasicAuth = true
             basic.realmName = 'CAP'
             filterChain.chainMap = [
+                    '/assayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/bardWebInterface/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/chemAxon/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/context/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
