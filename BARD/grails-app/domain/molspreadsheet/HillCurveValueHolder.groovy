@@ -21,9 +21,9 @@ class HillCurveValueHolder {
     String xAxisLabel = ''
     String yAxisLabel = ''
     static mapping = {
-        table('HILL_CURVE_VALUE_HOLDER')
+        table('MOL_SS_HILL_CURVE_VALUE_HOLDER')
         id(generator: 'sequence', params: [sequence: 'HILL_CURVE_VALUE_HOLDER_ID_SEQ'])
-        spreadSheetActivityStorage( column: "SS_ACTIVITY_STORAGE_ID")
+        spreadSheetActivityStorage( column: "MOL_SS_ACTIVITY_STORAGE_ID")
     }
     static constraints = {
         identifier nullable: false

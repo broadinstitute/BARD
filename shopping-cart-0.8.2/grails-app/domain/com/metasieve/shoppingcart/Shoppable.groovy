@@ -8,6 +8,7 @@ class Shoppable implements IShoppable {
 	}
 
     static mapping = {
-        id(generator: 'sequence', params: [sequence: 'SHOPPABLE_ID_SEQ'])
+        table('SC_SHOPPABLE')
+        id(generator: 'sequence', params: [sequence: 'SC_SHOPPABLE_ID_SEQ'])
     }
 }

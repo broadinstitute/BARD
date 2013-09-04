@@ -25,10 +25,10 @@ class SpreadSheetActivityStorage {
     int dictionaryId = 0
 
     static mapping = {
-        table(name: 'SS_ACTIVITY_STORAGE')
-        id(generator: 'sequence', params: [sequence: 'SS_ACTIVITY_STORAGE_ID_SEQ'])
+        table(name: 'MOL_SS_ACTIVITY_STORAGE')
+        id(generator: 'sequence', params: [sequence: 'MOL_SS_ACTIVITY_STORAGE_ID_SEQ'])
         molSpreadSheetCell(column: "MOL_SS_CELL")
-        hillCurveValueHolderList(column: "SS_ACTIVITY_STORAGE_ID", indexColumn: [name: "SS_ACTIVITY_STORAGE_LIST_IDX", type: Integer])
+        hillCurveValueHolderList(column: "MOL_SS_ACTIVITY_STORAGE_ID", indexColumn: [name: "MOL_SS_ACT_STORAGE_LIST_IDX", type: Integer])
     }
     static constraints = {
         eid(nullable: true)

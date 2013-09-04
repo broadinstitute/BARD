@@ -14,7 +14,8 @@ class ShoppingCart {
     }
 
     static mapping = {
-        table('SHOPPING_CART')
-        id(generator: 'sequence', params: [sequence: 'SHOPPING_CART_ID_SEQ'])
+        table('SC_SHOPPING_CART')
+        id(generator: 'sequence', params: [sequence: 'SC_SHOPPING_CART_ID_SEQ'])
+        items(joinTable: [name: 'SC_SC_SHOPPING_ITEM', key: 'SC_SHOPPING_CART_ID', column: "SC_SHOPPING_ITEM_ID"]    )
     }
 }

@@ -10,6 +10,7 @@ class Quantity {
 	}
 
     static mapping = {
-        id(generator: 'sequence', params: [sequence: 'QUANTITY_ID_SEQ'])
+        table(name:'SC_QUANTITY')
+        id(generator: 'sequence', params: [sequence: 'SC_QUANTITY_ID_SEQ'])
     }
 }
