@@ -6,7 +6,15 @@ class ProjectStatusController {
 
     def index() {
         List<ProjectStatus> projectStatusList = projectStatusService.retrieveAllProjectStatusWithMetaInfoSorted()
-        [projectStatusList: projectStatusList, qaStatusList:  QaStatus.withCriteria({order("id")})]
+
+        List<ProjectStatus> inProgressList = projectStatusList.findAll({ProjectStatus ps ->
+            ps.qaStatus.id < QaStatus.broadDone
+        })
+        List<ProjectStatus> doneList = projectStatusList.findAll({ProjectStatus ps ->
+            ps.qaStatus.id >= QaStatus.broadDone
+        })
+
+        [inProgressList: inProgressList, doneList: doneList, qaStatusList:  QaStatus.withCriteria({order("id")})]
     }
 
     def create(Long projectId, Long qaStatusId) {
