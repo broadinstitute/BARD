@@ -3,6 +3,7 @@ alter table EXPRMT_CONTEXT_ITEM add value_type varchar2(25);
 alter table PROJECT_CONTEXT_ITEM add value_type varchar2(25);
 alter table RSLT_CONTEXT_ITEM add value_type varchar2(25);
 alter table STEP_CONTEXT_ITEM add value_type varchar2(25);
+alter table PRJCT_EXPRMT_CNTXT_ITEM add value_type varchar2(25);
 
 update assay_context_item set value_type = case
   when qualifier is not null and value_num is not null then 'numeric'
@@ -13,6 +14,8 @@ update assay_context_item set value_type = case
   when value_display is not null and qualifier is null and value_id is null and ext_value_id is null and value_num is null and value_min is null and value_max is null then 'free text'
   else 'invalid' end;
 
+-- fix qualifier on non-numeric items
+update EXPRMT_CONTEXT_ITEM set qualifier = null where qualifier is not null and value_num is null;
 -- fix missing = on items
 update EXPRMT_CONTEXT_ITEM set qualifier = '= ' where qualifier is null and value_num is not null;
 
@@ -53,4 +56,5 @@ alter table EXPRMT_CONTEXT_ITEM add constraint ck_eci_value_type check (value_ty
 alter table PROJECT_CONTEXT_ITEM add constraint ck_pci_value_type check (value_type in ('numeric', 'element', 'external ontology', 'free text', 'range'));
 alter table RSLT_CONTEXT_ITEM add constraint ck_rsltci_value_type check (value_type in ('numeric', 'element', 'external ontology', 'free text', 'range'));
 alter table STEP_CONTEXT_ITEM add constraint ck_stepci_value_type check (value_type in ('numeric', 'element', 'external ontology', 'free text', 'range'));
+alter table PRJCT_EXPRMT_CNTXT_ITEM add constraint ck_peci_value_type check (value_type in ('numeric', 'element', 'external ontology', 'free text', 'range'));
 
