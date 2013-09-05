@@ -56,7 +56,12 @@
 		    				<label class="checkbox">
         						<input type="checkbox" name='${rememberMeParameter}' id='remember_me' <g:if test='${hasCookie}'>checked='checked'</g:if>> Remember me
      	 					</label>
-
+                            <span class="forgot-link">
+                                <g:link controller='register' action='forgotPassword'><g:message code='register.login.forgotPassword'/></g:link>
+                            </span>
+                            <td colspan='2'>
+                                <g:link elementId='register' controller='register' action="signup"> <g:message code='register.login.signup'/> </g:link>
+                            </td>
 		      				<button id="submit" type="submit" class="btn btn-primary">Sign in</button>
 		    			</div>
 	  				</div>

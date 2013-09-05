@@ -415,4 +415,7 @@ databaseChangeLog = {
         addForeignKeyConstraint(baseColumnNames: "MOL_SS_ACTIVITY_STORAGE_ID", baseTableName: "MOL_SS_HILL_CURVE_VALUE_HOLDER", constraintName: "SC_HL_CRV_VL_HLDR_SS_ACT_ST_FK", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "MOL_SS_ACTIVITY_STORAGE")
         addForeignKeyConstraint(baseColumnNames: "MOL_SS_DATA_ID", baseTableName: "MOL_SS_CELL", constraintName: "MOL_SS_CELL_MOL_SS_DATA_FK", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "MOL_SS_DATA")
     }
+    changeSet(author: "jasiedu", id: "iteration-033/01-create-registrationcode", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_033/01-create-registrationcode.sql", stripComments: true)
+    }
 }

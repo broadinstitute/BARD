@@ -1,6 +1,7 @@
 package register.crowd
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import wslite.json.JSONObject
 import wslite.rest.ContentType
 import wslite.rest.RESTClient
 import wslite.rest.RESTClientException
@@ -8,7 +9,9 @@ import wslite.rest.Response
 
 class CrowdRegisterUserService {
     RESTClient restClient
+
     ObjectMapper objectMapper = new ObjectMapper()
+
 
     CrowdRegistrationUser findUserByUserName(String username) {
         try {
@@ -48,7 +51,34 @@ class CrowdRegisterUserService {
         }
         return null
     }
+    void updateRegisteredUser(CrowdRegistrationUser registrationUser) {
+        try {
+            StringWriter w = new StringWriter()
+            this.objectMapper.writeValue(w, registrationUser)
 
+            final Response response = restClient.put(path: "/user?username=${registrationUser.name}") {
+                type "application/json"  // String or ContentType
+                text w.toString()
+            }
+            if (response.statusCode >= 300 && response.statusCode < 200) {
+                throw new RuntimeException("Error with status code ${response.statusCode}")
+            }
+        } catch (Exception ee) {
+            log.error(ee.getMessage())
+            throw ee
+        }
+    }
+    void warnErrors(bean, messageSource, Locale locale = Locale.getDefault()) {
+
+        def message = new StringBuilder(
+                "problem ${bean.id ? 'updating' : 'creating'} ${bean.getClass().simpleName}: $bean")
+        for (fieldErrors in bean.errors) {
+            for (error in fieldErrors.allErrors) {
+                message.append("\n\t").append(messageSource.getMessage(error, locale))
+            }
+        }
+        log.warn message
+    }
     void registerUser(final CrowdRegistrationUser registrationUser) {
         try {
             StringWriter w = new StringWriter()
@@ -135,4 +165,22 @@ class CrowdRegisterUserService {
         }
 
     }
+
+    void resetPassword(String userName,String resetPassword) {
+        try {
+            String payLoad = new JSONObject().put("value",resetPassword).toString();
+
+            final Response response = restClient.put(path: "/user/password?username=${userName}") {
+                type "application/json"  // String or ContentType
+                text payLoad
+            }
+            if (response.statusCode >= 300 && response.statusCode < 200) {
+                throw new RuntimeException("Error with status code ${response.statusCode}")
+            }
+        } catch (Exception ee) {
+            throw ee
+        }
+    }
+
+
 }
