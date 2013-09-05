@@ -3,8 +3,6 @@ import static groovy.io.FileType.FILES
 
 databaseChangeLog = {
     String BACKSLASH_ONLY_OPTIONAL_WHITESPACE = /(?m)^\s*\/\s*$/
-    String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
-    File migrationsDir = new File(bardDomainModelMigrationsDir)
 
     changeSet(author: 'pmontgom', id: 'invalid-context', dbms: 'oracle', context: 'invalidContext', runAlways: true) {
         grailsChange {
@@ -15,7 +13,7 @@ databaseChangeLog = {
     }
 
     changeSet(author: 'ddurkin', id: 'rename-changelog-filenames.sql', dbms: 'oracle', context: 'rename-changelog') {
-        sqlFile(path: "${migrationsDir}/sql/rename-changelog-filenames.sql", stripComments: true)
+        sqlFile(path: "sql/rename-changelog-filenames.sql", stripComments: true)
     }
 
     /* this needs to be created early in the process because some of the changelogs manually call set_context */
@@ -36,17 +34,30 @@ databaseChangeLog = {
     }
 
     changeSet(author: 'ddurkin', id: 'baseline-structure-ddl.sql', dbms: 'oracle', context: 'standard') {
-        sqlFile(path: "${migrationsDir}/sql/baseline-structure-ddl.sql", stripComments: true)
+        sqlFile(path: "sql/baseline-structure-ddl.sql", stripComments: true)
     }
 
-    migrationsDir.traverse(type: DIRECTORIES, nameFilter: ~/iteration_\d+/, maxDepth: 0, sort: { a, b -> a.name <=> b.name }) { dir ->
-        dir.traverse(type: FILES, nameFilter: ~/.*changelog.*\.groovy/, maxDepth: 0, sort: { a, b -> a.name <=> b.name }) { file ->
-            include(file: "${dir.name}/${file.name}")
-        }
-    }
+    include(file: "iteration_006/006_changelog.groovy")
+    include(file: "iteration_007/007_changelog.groovy")
+    include(file: "iteration_012/012_changelog.groovy")
+    include(file: "iteration_014/014_changelog.groovy")
+    include(file: "iteration_017/017_changelog.groovy")
+    include(file: "iteration_018/018_changelog.groovy")
+    include(file: "iteration_019/019_changelog.groovy")
+    include(file: "iteration_020/020_changelog.groovy")
+    include(file: "iteration_021/021_changelog.groovy")
+    include(file: "iteration_023/023_changelog.groovy")
+    include(file: "iteration_024/024_changelog.groovy")
+    include(file: "iteration_025/025_changelog.groovy")
+    include(file: "iteration_026/026_changelog.groovy")
+    include(file: "iteration_027/027_changelog.groovy")
+    include(file: "iteration_028/028_changelog.groovy")
+    include(file: "iteration_030/030_changelog.groovy")
+    include(file: "iteration_032/032_changelog.groovy")
+
     // views
     changeSet(author: 'ddurkin', id: 'create-or-replace-dictionary-views.sql', dbms: 'oracle', context: 'standard', runAlways: 'true') {
-        sqlFile(path: "${migrationsDir}/sql/create-or-replace-dictionary-views.sql", stripComments: true)
+        sqlFile(path: "sql/create-or-replace-dictionary-views.sql", stripComments: true)
     }
 
     // do last

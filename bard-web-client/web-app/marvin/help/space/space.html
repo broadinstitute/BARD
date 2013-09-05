@@ -1,0 +1,127 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="MarvinSpace Quick Help">
+<meta NAME="author" CONTENT="Judit Papp">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>MarvinSpace Quick Help</title>
+</head>
+<body>
+
+<h1>MarvinSpace Quick Help</h1>
+<table CELLPADDING=0 CELLSPACING=10 border="0">
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<strong>How to navigate</strong>
+<ul>
+    <li><b>Rotate</b> the view in the active cell by pressing the <b>left</b> mouse button and drag the mouse.</li>
+    <li><b>Zoom</b> by dragging while pressing the <b>middle</b> button or by <b>left-dragging</b> while
+        the <b>Alt</b> button is pressed.</li>
+    <li><b>Translate</b> by holding down the <b>right</b> mouse button and dragging or by <b>left-dragging</b> while
+        the <b>Shift</b> button is pressed. </li>
+    <li>Bring up the <b>Popup Menu</b> by clicking with the right mouse button.</li>
+    <li>Set the center of transformation by <b>middle click</b> on a component</li>
+    <li>If there are more cells, activate a cell by clicking it once.
+        The active cell has a red border, and navigation will perform in the active cell.<br>
+        Notes:
+        <ul>
+        <li>Starting navigation in an inactive cell activates the cell.</li>
+        <li>Navigation will take effect in every cell when <b>Synchron mode</b> is checked in the Layout menu.</li>
+        </ul>
+    </li>
+    <li>Navigation keys can be changed by selecting the Display ->Options menu and selecting
+    the <b>Controls tab</b> on the appering dialog.</li>
+    <li>Zoom can also be inverted by the Options dialog, so that dragging the mouse
+    up will take the view farther instead of bringing it closer.</li>
+</ul>
+<strong>How to use the Selection Panel</strong>
+<ul>
+    <li>Hiding and showing components can be done quickly by clicking on their image in the Selection Panel.</li>
+    <li>Further display settings can be accessed by right clicking on a node.</li>
+</ul>
+<strong>How to use Drag & Drop</strong>
+<ul>
+    <li>
+    Molecules can be moved from MarvinSpace to other applications if the Selection Panel is available.
+    Clicking on a molecule node of the Selection Panel and holding down the mouse button allows
+    dragging.</li>
+    <li>Molecules from other applications can be dropped to MarvinSpace.</li>
+</ul>
+</td>
+</tr>
+</table>
+<hr>
+<table CELLPADDING=0 CELLSPACING=10 border="0">
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<strong>How to use monitors</strong>
+<ul>
+    <li><b>Measure distance</b> by clicking the first icon on the Toolbar, and selecting
+    two components afterwards.</li>
+    <li><b>Measure angle</b> by clicking the second icon on the Toolbar, and selecting
+    three components afterwards.</li>
+    <li><b>Measure dihedral</b> by clicking the third icon on the Toolbar, and selecting
+    four components afterwards.</li>
+    <li>To measure again the buttons on the Toolbar have to be pressed again.</li>
+    <li>Selected components will loose selection after pressing any of the measure buttons.</li>
+</ul>
+
+<strong>How to change dihedral</strong>
+<ol>
+    <li>Measure the dihedral</li>
+    <li>Click on the green arrowed circle of the appearing dihedral monitor</li>
+    <li>Press and hold down the <b>Ctrl</b> button while left-dragging the mouse</li>
+</ol>
+
+<strong>How to use controls (translate, rotate, resize)</strong>
+<ol>
+    <li>Select e.g. a small molecule in the Selection Panel: click on it with the left mouse button</li>
+    <li>Click the right button to get the Popup Menu</li>
+    <li>Choose the first item, <B>Select</b>, so that atoms of the
+        selected structure become highlighted</li>
+    <li>Now press the <b>Translate</b> control button in the toolbar</li>
+    <li>Drag the selected object: hold down the left mouse button plus press
+        the <B>Ctrl</b> (control) key on the keyboard and
+        move the mouse</li>
+</ol>
+    <blockquote>
+    <b>Rotate</b> and <b>Resize</b> can be used the same way. Note that each controls may not be
+    allowed to each components, for example a molecule cannot be resized, or a molecular surface cannot
+    be translated or rotated without translating or rotating the molecule itself.
+    </blockquote>
+
+<A NAME="zoomtopocket"></A><strong>How to restict the view to a binding pocket</strong><br>
+    <blockquote>There are several ways to do that:</blockquote>
+    <ul>
+        <li>The easiest when you have a macromolecule loaded that has one ligand,
+        just bring up the Popup Menu, and select the <b>Zoom to pocket</b> option.</li>
+        <li>You can do this manually with lots of other options to customize:
+            <ol>
+                <li>Choose a ligand on the Selection Panel, and bring up its Popup Menu</li>
+                <li>The <b>Select neighborhood</b> will have every component that is closer
+                    to the ligand than 2 Angstroms to be selected.</li>
+                <li>Polymers have the option in their Popup Menu to <b>Extend the selection to residues</b></li>
+                <li>Now you may wish to select or deselect components manually</li>
+                <li>Bring up the main Popup Menu by right clicking on the canvas</li>
+                <li>Select either the <b>Hide unselected components</b> or the
+                <b>Fade unselected components</b> option. <!-- Link to faded components--></li>
+            </ol>
+        </li>
+    </ul>
+
+<strong>How to create molecular surface of a binding pocket</strong>
+    <ol>
+        <li>Restrict the view to the binding pocket</li>
+        <li>Create the molecular surface by the Show Surface menu in the main Menu Bar</li>
+        <li>Select the molecular surface through its Popup Menu in the Selection Panel, and a bounding box will appear</li>
+        <li>Select the <b>Resize</b> control option in the ToolBar</li>
+        <li>The bounding box can be considered as six clipping planes, and the resize control
+        will change the size of the bounding box</li>
+        <li>The bounding box can also be translated with the <b>Translate</b> control option.</li>
+    </ol>
+</td>
+</tr>
+</table>
+
+
+</body>
+</html>

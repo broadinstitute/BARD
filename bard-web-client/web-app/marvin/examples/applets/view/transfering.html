@@ -1,0 +1,106 @@
+<html>
+<head>
+  <meta NAME="author" CONTENT="Tamas Vertse">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+  <link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+  <meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+  <title>MarvinView Example - Editing the structures of the molecule table with MarvinSketch</title>
+
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinView Example - Editing the structures of the molecule table with MarvinSketch</h1>
+
+<p>In this example the structures of the molecule table can be altered with MarvinSketch,
+and transferred back to the table.</p>
+
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript"><!--
+// number of structures in the SD file
+var max = 8;
+
+var col = 2;
+var row;
+var vcol = 2;
+var vrow = 2;
+if(max < 2) {
+    col = 1;
+    row = 1;
+} else {
+    row = Math.floor((max + 1) / col);
+
+}
+if(vcol > col) {
+    vcol = col;
+}
+if(vrow > row) {
+    vrow = row;
+}
+mview_name="MView"
+mview_begin("../../..",430,440);
+mview_param("editable",2);
+mview_param("transferButtonIcon", "examples/applets/view/mview24.png");
+mview_param("transferButtonText", "Transfer molecule back to table");
+mview_param("confirmTransfer", "true");
+if(max > 1) {
+    mview_param("rows",row)
+    mview_param("cols",col)
+    mview_param("visibleCols",vcol)
+    mview_param("visibleRows",vrow)
+    mview_param("border",1)
+    mview_param("layout",":2:1:M:1:0:1:1:c:b:1:1:L:0:0:1:1:c:n:0:1")
+    mview_param("param",":M:200:200:L:10b")
+    for(i=0;i<(row*col);i++) {
+        mview_param("cell"+i,"||"+(i+1))
+    }
+}
+mview_param("mol","../../../mols-2d/mols.sdf");
+mview_end();
+//--></script>
+</center>
+
+<p>The structrures being in the cells of the molecule table can be altered with MarvinSketch after the cell is double-clicked with the mouse.
+The following parameter makes this function enabled:
+
+</p>
+
+<blockquote>
+<pre class="sh_javascript">
+mview_param(&quot;editable&quot;, 2)
+</pre>
+</blockquote>
+
+<p>In this usage MarvinSketch has an additional button on the General toolbar called <b>Transfer button</b>.
+The button can be used to transfer the altered molecule back to the original environment. Before transfering, a confirmation dialog is displayed by using the following parameter:</p>
+
+<blockquote>
+<pre class="sh_javascript">
+mview_param(&quot;confirmTransfer&quot;, "true")
+</pre>
+</blockquote>
+
+<p>The icon and the text of the Transfer button can optionally be customized.
+In this example we have replaced the default icon to the icon of MarvinView, and the text is also customized.</p>
+<blockquote>
+<pre class="sh_javascript">
+mview_param(&quot;transferButtonIcon&quot;, "mview24.png")
+mview_param(&quot;transferButtonText&quot;, "Transfer molecule back to table")
+</pre>
+</blockquote>
+
+Description of the used parameters:
+<ul>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.editable"><code>editable</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.confirmTransfer"><code>confirmTransfer</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.transferButtonIcon"><code>transferButtonIcon</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.transferButtonText"><code>transferButtonText</code></a></li>
+</ul>
+
+<center><div class="lenia">&nbsp;</div></center>
+<p>The <a href="advancedtable.html">next example</a> shows how to create an advanced molecule table.</p>
+</body>
+</html>

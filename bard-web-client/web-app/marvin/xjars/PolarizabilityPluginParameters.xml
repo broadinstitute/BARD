@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+    <Precision Key="precision" Label="Decimal places"/>
+    <MultipleSelection Key="type" Label="Type" Tooltip="Setting type of the calculus: molecular or atomic polarizability components.">
+	<Choice Value="molecular" Text="Molecular" Selected="true"/>
+	<Choice Value="atomic" Text="Atomic" Selected="true"/>
+	<Dependencies>
+	    <Item Key="thole" Range="false"/>
+	</Dependencies>
+    </MultipleSelection>
+    <Boolean Key="thole" Label="Take 3D geometry (Thole)" Tooltip="Calculates the polarization tensor values." Value="false"/>
+    <Boolean Key="microspecies" Label="Take major microspecies" Tooltip="The polarizability of major microspecies at the given pH is calculated." Value="false"/>
+    <Number Key="pH" Label="at pH" Range="[0.0,14.0]" Tooltip="pH value for major microspecies calculation, active when option 'Take major microspecies' is checked." Value="7.4">
+	<Dependencies>
+	    <Item Key="microspecies" Range="true"/>
+	</Dependencies>
+    </Number>
+    <Boolean Key="mspace" Label="Display in MarvinSpace" Tooltip="The result window opens as 3D MarvinSpace viewer." Value="true"/>
+</ParameterPanel>

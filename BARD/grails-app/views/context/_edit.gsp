@@ -10,6 +10,7 @@
 
 <%-- A template for both project and assay def --%>
 <r:require modules="assaycards"/>
+%{--<r:require modules="xeditable"/>--}%
 <div id="cardView" class="cardView" class="row-fluid">
 
     <div class="row-fluid">

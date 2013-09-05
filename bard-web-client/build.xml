@@ -1,0 +1,12 @@
+<project name="MyProject" default="test" basedir=".">
+    <target name="test">
+        <exec executable="cmd" dir="test" osfamily="windows">
+            <arg value="jasmine/jsTestDriver.bat"/>
+         </exec>
+
+        <exec executable="/bin/bash" dir="test" osfamily="unix">
+            <arg value="jasmine/jsTestDriver.sh"/>
+        </exec>
+        <echo message="Operation System: ${os.name}" />
+    </target>
+</project>

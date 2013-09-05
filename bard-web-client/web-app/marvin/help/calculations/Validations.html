@@ -1,0 +1,120 @@
+<html>
+<head>
+<link REL="stylesheet"  TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Validations">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Validation of predictions</title>
+<meta name="keywords" content="Validation of prediciton">
+<meta name="author" content="Szegezdi Jozsef">
+</head>
+<body>
+<H1><A class="anchor" NAME="Top">Test results of prediction tools</A></H1>
+
+<OL>
+   <LI><A HREF="#pKaVal">Test of p<i>K</i><sub>a</sub> prediction</A></LI>
+   <UL>
+	  <LI><A HREF="#pKaCorr">p<i>K</i><sub>a</sub> predicted vs. p<i>K</i><sub>a</sub> experimental </A></LI>
+	  <LI><A HREF="#pKaErrorDist">Distribution of p<i>K</i><sub>a</sub> estimation error</A></LI>
+   </UL>
+   <LI><A HREF="#logPVal">Test of log<i>P</i> prediction</A></LI>
+   <UL>
+	  <LI><A HREF="#logPCorr">log<i>P</i> predicted vs. log<i>P</i> experimental</A></LI>
+	  <LI><A HREF="#logPErrorDist">Distribution of log<i>P</i> estimation error</A></LI>
+   </UL>
+    <LI><A HREF="#MolPolVal">Test of average molecular polarizability prediction</A></LI>
+   <UL>
+	  <LI><A HREF="#MolPolCorr">Experimental vs. predicted molecular polarizability</A></LI>
+	  <LI><A HREF="#MolPolData">Experimental and predicted data</A></LI>
+   </UL>
+   <LI><A HREF="#3DMolPolVal">Test of 3D molecular polarizability prediction</A></LI>
+   <UL>
+      <LI><A HREF="#3DMolPolCorr"> Predicted vs. experimental molecular polarizability</A></LI>
+	  <LI><A HREF="#3DMolPolData">Experimental and predicted data</A></LI>
+   </UL>
+
+   <LI><A HREF="#References">References</A></LI>
+   <LI><A HREF="#Notes">Notes</A></LI>
+
+</OL>
+
+<BR>
+<H2><A class="anchor" NAME="pKaVal">1. Test of p<i>K</i><sub>a</sub> prediction</A></H2>
+
+
+<H3><a class="anchor" name="pKaCorr">p<i>K</i><sub>a</sub> predicted vs. p<i>K</i><sub>a</sub> experimental<sup><A HREF="#Ref1">1</A></sup></A></H3>
+<img src="Validations_files/pKaCorr.png">
+
+<BR>
+
+<H3><a class="anchor" name="pKaErrorDist">Distribution of p<i>K</i><sub>a</sub> estimation error</A></H3>
+<img src="Validations_files/pKaErrorDist.png">
+<BR>
+
+<a class="anchor" name="logPVal"><H2>2. Test of log<i>P</i> prediction</H2></A>
+
+
+
+<H3><a class="anchor" name="logPCorr">log<i>P</i> predicted vs. log<i>P</i> experimental<sup><A HREF="#Ref2">2</A></sup></A></H3>
+<img src="Validations_files/logPCorr.png">
+<BR>
+
+
+<a class="anchor" name="logPErrorDist"><H3>Distribution of log<i>P</i> estimation error</H3></A>
+<img src="Validations_files/logPErrorDist.png">
+<BR>
+
+
+<H2><a class="anchor" name="MolPolVal">3. Test of average molecular polarizability prediction</A></H2>
+
+
+
+<H3><a class="anchor" name="MolPolCorr">Experimental<sup><A HREF="#Ref3">3</A></sup> vs. predicted molecular polarizability</A></H3>
+<img src="Validations_files/MolPolCorr.png">
+<BR>
+
+
+
+<H3><a class="anchor" name="MolPolData">Experimental<sup><A HREF="#Ref3">3</A></sup> and predicted data</A></H3>
+<img src="Validations_files/MolPolData.png">
+<BR>
+
+
+<H2><a class="anchor" name="3DMolPolVal">4. Test of 3D<sup><A HREF="#Note1">1</A></sup> molecular polarizability prediction</A></H2>
+<BR>
+
+
+<H3><a class="anchor" name="3DMolPolCorr">Predicted vs. experimental<sup><A HREF="#Ref4">4</A></sup>molecular polarizability</A></H3>
+<img src="Validations_files/3DMolPolCorr.png">
+<BR>
+
+
+<H3><a class="anchor" name="3DMolPolData">Experimental<sup><A HREF="#Ref4">4</A></sup> and predicted data</A></H3>
+<img src="Validations_files/3DMolPolData.png">
+<BR>
+
+<H2><a class="anchor" name="evaluation_estimation_methods">5. Comparative evaluation of p<i>K</i><sub>a</sub> estimation methods</A></H2>
+<p>A study comparing various p<i>K</i><sub>a</sub> calculation results versus the measured p<i>K</i><sub>a</sub> values of compounds was published by John Manchester et al. <a href="http://pubs.acs.org/doi/abs/10.1021/ci100019p">Read the article here.</a>
+<!--additional references: http://www3.interscience.wiley.com/journal/122516406/abstract 
+https://www.chemaxon.com/wp-content/uploads/2010/05/UGM-poster-2010_RG_pKa.pdf-->
+<BR>
+
+
+<H2><a class="anchor" name="References">6. References</A></H2>
+<OL>
+   <LI><a class="text" name="Ref1"><i><b>PHYSPROP<sup>&copy;</sup> DATABASE</b></i></A></LI>
+   <LI><a class="text" name="Ref2">Klopman, G.;</A> Li, Ju-Yun.; Wang, S.; Dimayuga, M.: <i>J.Chem.Inf.Comput.Sci.</i>, <b>1994</b>, <i>34</i>, 752; <a href="http://dx.doi.org/10.1021/ci00020a009">doi</a></LI>
+   <LI><a class="text" name="Ref3">Miller</A>, K. J.; Savchik, J. A.: <i>J.Am.Chem.Soc.</i>, <b>1979</b>, <i>101</i>, 7206-7213; <a href="http://dx.doi.org/10.1021/ja00518a014">doi</a></LI>
+   <LI><a class="text" name="Ref4">Piet Th. van Duijnen.;</A> Swart, M.: <i>J.Phys.Chem. A</i>, <b>1998</b>, <i>102</i>, 2399-2407; <a href="http://dx.doi.org/10.1021/jp980221f">doi</a></LI>
+</OL>
+
+
+<H2><a class="anchor" name="Notes">7. Notes</A></H2>
+<OL>
+   <LI><a class="text" name="Note1">3D geometries of molecules were generated with Marvin.</A></LI>
+</OL>
+
+<BR>
+
+<A HREF="#Top">Return to Top</A>
+
+</body>
+</html>

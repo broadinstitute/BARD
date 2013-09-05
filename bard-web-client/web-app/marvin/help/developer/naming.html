@@ -1,0 +1,64 @@
+<HTML>
+<HEAD>
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" 
+TITLE="Style">
+<TITLE>Naming Developer's Guide</TITLE>
+</HEAD>
+<BODY>
+<center>
+<h1>Naming Developer's Guide</h1>
+<h3>Version 5.10.1</h3>
+</center>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#intro">Introduction</a>
+<li><a href="#s2n">Structure to name conversion</a>
+<li><a href="#n2s">Name to structure conversion</a>
+</ul>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a name="intro"></a>Introduction</h2>
+
+<p>
+ChemAxon's naming toolkit generates names from chemical structures (structure to name, s2n) and converts IUPAC, trivial, drug, CAS names to chemical structures (name to structure, n2s).
+</p>
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a name="s2n"></a>Structure to name conversion</h2>
+<p>Using the API for generating the name of a molecule:
+<pre>Molecule m = ...;
+String name = m.toFormat("name");
+String traditionalName = m.toFormat("name:t");
+</pre>
+See <a href="../calculations/s2n.html">user's documentation of s2n</a> here.
+</p>
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a name="n2s"></a>Name to structure conversion</h2>
+
+<p>
+Using the API to convert a name to a structure:
+<pre>
+String input = "2,3-dimethylbenzoic acid";
+Molecule m = MolImporter.importMol(input, "name");
+</pre>
+It is possible to register your own plugins to extend name to structure, for instance to lookup
+compound IDs in a database. This is documented in the
+<a href="beans/api/chemaxon/naming/NameConverters.html">NameConverters</a> class.  
+<p>
+See <a href="../naming/n2s.html">user's documentation of n2s</a> here.
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<center>
+<font size="-2" face="helvetica">
+Copyright &copy; 1999-2012 
+<a href="http://www.chemaxon.com">ChemAxon Ltd.</a>
+&nbsp;&nbsp;&nbsp;All rights reserved.
+</font>
+</center>
+
+</BODY>
+</HTML>

@@ -1,0 +1,11 @@
+input[type="text"] {
+    width: 30px;
+}
+
+input[type="text"].error {
+    width: 30px;
+    border-style: inset;
+    border-width: 2px;
+    border-color: red;
+    color: red;
+}

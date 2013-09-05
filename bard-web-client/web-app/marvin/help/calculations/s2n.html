@@ -1,0 +1,152 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="IUPAC name generator">
+<meta NAME="author" CONTENT="Daniel Bonniot">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>Name generator</title>
+</head>
+<body>
+
+<h1>Name generator</h1>
+
+Since version 4.1.7, Marvin contains a IUPAC name generator for the computation of the IUPAC name of any compound.
+<p>
+When possible, the generated name conforms to the
+<a href="http://www.iupac.org/reports/provisional/abstract04/favre_310305.html">
+IUPAC Provisional Recommendations for the Nomenclature of Organic Chemistry</a>
+published in 2004. However, we do not claim full conformance with that document.
+Our current goal is to generate chemically correct names for as many cases as possible.</p>
+<p>
+Importing IUPAC names is available from version 5.1.</p>
+
+<p>You can generate either the "Traditional Name" or the "Preferred IUPAC Name" of
+the molecules; you can change between these options in the <b CLASS="buttonName">IUPAC
+Name Options</b> panel. By default, the "Preferred IUPAC Name" option is set. If the traditional name cannot be generated, the preferred IUPAC Name will be
+generated automatically.<br>By default, molecules are handled separately if more than one molecule are drawn in the sketcher. However, sometimes a single molecule consists of more fragments (e.g. salt molecules), where the fragments should be treated as one molecule. This can be reached by switching off the "Single fragment mode" option in the <b CLASS="buttonName">IUPAC Name Options </b>panel.
+</p>
+
+<p><table>
+	<tr>
+		<td><img src="images/iupac_panel.png" width="199" height="154"></td>
+	</tr>
+</table>
+</p>
+The snapshot below shows a molecule taken from the IUPAC specification, with its
+name computed by Marvin.
+<p><table>
+	<tr>
+		<td><img src="images/iupacnaming.png" width="529" height="429"></td>
+	</tr>
+</table>
+</p>
+<p>The contents of the text field can be copied to the clipboard by Ctrl+C, the structure field offers a context menu from MarvinView.
+</p>
+
+<p>
+The next snapshot below shows a functionality that is available from version 5.0:
+the IUPAC name can be inserted into the sketch, and it changes with the structure
+dynamically. This functionality is available from the <b>Insert</b> menu by
+selecting the <b>IUPAC Name</b> option.
+<p align="left">
+<img src="images/iupacnaming_insert.png" width="530" height="224">
+
+<h3>Features</h3>
+Supported nomenclatures include:
+<ul>
+<li>Chains, Monocycles</li>
+<li>Retained/traditional names for ring systems with and without heteroatoms</li>
+<li>Spiro ring systems</li>
+<li>All cases of von Baeyer nomenclature for bridged ring systems</li>
+<li>Fused ring systems (linear fused ring systems are named using the fused nomenclature, others using von Baeyer nomenclature)</li>
+<li>Ethers</li>
+<li>Common characteristic groups</li>
+<li>Ionic compounds</li>
+<li>Compounds with one radical</li>
+<li>Unlimited number of atoms and rings</li>
+<li>All atom types</li>
+<li>Substitutive nomenclature</li>
+<li>Isotopes</li>
+<li>Stereochemistry</li>
+</ul>
+
+<h3>Current limitations</h3>
+
+<ul>
+<li>Molecules containing multiple radicals (e.g. <code>ethane-1,2-diyl</code>) are not supported yet.
+<li>Amino-acids and peptides are supported only when the amino-acids are represented as groups.
+<li>Molecules containing coordinate bond are not supported.
+<li>Some aspects of nomenclature are only partially implemented, in particular complex cases of fused
+systems and multiplicative nomenclature. In those cases, a less straightforward but chemically correct
+name will be generated.
+</ul>
+
+<h2>Usage</h2>
+
+<h3>Individual molecules</h3>
+
+You can name molecules by using the <b>Naming</b> menu entry of <b>Tools</b> menu in <a href="../applications/mview.html">MarvinView</a>, or <b>Calculations</b> > <b>Naming</b> in <a href="../applications/msketch.html">MarvinSketch</a>.
+<p>
+In <a href="../applications/msketch.html">MarvinSketch</a>, the name can be added to the canvas
+by using the "IUPAC Name" entry in the "Insert" menu. The name will be displayed below the molecule,
+and updated in real-time when the molecule is modified.
+
+<h3>Batch naming</h3>
+
+Naming of a large number of molecules contained in a file can be achieved in two ways:
+with <a href="../applications/mview.html">MarvinView</a>, and on the command line,
+with <a href="../applications/molconvert.html">molconvert</a>.
+In both cases, all formats supported by Marvin are acceptable as input.
+<p>
+With MarvinView, open the file containing the structures to be names. Then select the menu
+File/Save As, and choose "IUPAC Name files" in the "Files of type" drop-down box.
+Choose a name for the file, and click on the Save button. The file will contain the names of the
+structures, one per line.
+<p>
+Alternatively, on the command line, you can use the following command:
+<p>
+<blockquote><code>
+  molconvert name inputs.mol -o names.txt
+</code></blockquote>
+<p>
+The file <code>names.txt</code> will contain the names of the molecules in the input file,
+with one name per line.
+<p>
+It is possible to use a format option to chose a nomenclature style:
+<ul>
+<li><code>i</code> (default) uses the IUPAC rules for preferred names;
+<li><code>t</code> uses a more traditional style.
+</ul>
+For instance, to generate traditional names, use the following:
+<blockquote><code>
+  molconvert name:t inputs.mol -o names.txt
+</code></blockquote>
+Generate all common names for a structure:
+    <blockquote> <code>molconvert "name:common,all" -s tylenol</code> </blockquote>
+Generate the most popular common name for a structure (It fails if none is known.):
+    <blockquote> <code>molconvert name:common -s viagra</code> </blockquote>
+  
+<p>
+
+Adding names as an additional field to a <a href="../formats/mol-csmol-doc.html#mol-formats">SDfile</a>
+    can be achieved with the <a href="../applications/calc.html">cxcalc tool</a>.
+<blockquote>
+  cxcalc -S name input.sdf -o named.sdf
+</blockquote>
+
+<h3>API</h3>
+<p>
+For information about how names can be generated from Java programs,
+see the <a href="../developer/s2n.html">developer documentation</a>.
+</p>
+
+
+<h2>References</h2>
+
+<ul>
+	<li><a href="http://www.iupac.org/reports/provisional/abstract04/favre_310305.html">
+IUPAC Provisional Recommendations for the Nomenclature of Organic Chemistry</a>
+	</li>
+</ul>
+
+</body>
+</html>

@@ -620,7 +620,8 @@ class ResultsService {
                 return "The value \"${floatValue}\" outside of allowed range (${rangeMin} - ${rangeMax}) for ${rangeName}"
             }
 
-            return new Cell(value: floatValue)
+            return new Cell(value: floatValue,
+                    valueDisplay: floatValue.toString())
         } else {
             throw new RuntimeException("Did not know how to handle attribute ${item.displayLabel} of type ${item.type} (value: ${stringValue}) ")
         }

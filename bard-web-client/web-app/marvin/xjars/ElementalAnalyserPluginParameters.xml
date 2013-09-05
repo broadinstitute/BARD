@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+    <MultipleSelection Key="type" Label="Type">
+	<Choice Value="mass" Text="Mass" Tooltip="Average molecular mass calculated from the standard atomic weights." Selected="true"/>
+	<Choice Value="exactmass" Text="Exact mass" 
+        Tooltip="Monoisotopic mass calculated from the weights of the most abundant natural isotopes of the elements." Selected="true"/>
+	<Choice Value="formula" Text="Formula" Tooltip="Chemical formula of the molecule according to the Hill system." Selected="true"/>
+	<Choice Value="isotopeformula" Text="Isotope formula" 
+        Tooltip="Chemical formula of the molecule listing isotopes separately according to the Hill system." Selected="true"/>
+    <Choice Value="dotdisconnectedformula" Text="Dot-disconnected formula" 
+        Tooltip="Chemical formula of the molecule(s), separating fragment formulas by dots." Selected="true"/>
+    <Choice Value="dotdisconnectedisotopeformula" Text="Dot-disconnected isotope formula" 
+        Tooltip="Chemical formula of the molecule separating fragment formulas by dots and listing isotopes separately." Selected="true"/>
+	<Choice Value="composition" Text="Composition" 
+        Tooltip="Elemental composition given in weight percentage (w/w %) calculated from the atomic masses." Selected="true"/>
+	<Choice Value="isotopecomposition" Text="Isotope composition" 
+        Tooltip="Elemental composition listing isotopes separately (w/w %)." Selected="true"/>
+	<Choice Value="atomcount" Text="Atom count" Tooltip="Number of all atoms in the molecule." Selected="true"/>
+    </MultipleSelection>
+    <Boolean Key="symbolD" Label="Use D / T symbols for Deuterium / Tritium" 
+        Tooltip="If unchecked (default), isotopes of hydrogen are displayed in formulas as 2H and 3H, if checked, D and T symbols are used."  Value="true"/>
+    <Boolean Key="single" Label="Single fragment mode" 
+        Tooltip="If unchecked, the calculation handles unlinked molecules together (e.g. salt molecules), summing up the masses of each component; if checked, the results are displayed in a scroll window." Value="false"/>
+</ParameterPanel>

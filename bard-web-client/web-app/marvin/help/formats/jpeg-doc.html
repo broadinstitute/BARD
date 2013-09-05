@@ -1,0 +1,54 @@
+<html>
+<head>
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<meta NAME="author" CONTENT="Peter Csizmadia">
+<title>JPEG image export in Marvin</title>
+</head>
+<body BGCOLOR="#ffffff" TEXT="#333366">
+
+<h1>JPEG</h1>
+<p>
+Codename: <strong>jpeg</strong>
+
+<p>
+Marvin is able to export JPEG
+<a HREF="images-doc.html">image files</a>.
+The <a HREF="../developer/modules.html#JpegExport">JpegExport</a> module recognizes
+the <a HREF="images-doc.html#options">common image export options</a>, and the
+following special options:
+<blockquote>
+<table CELLSPACING="0" CELLPADDING="5" border="0">
+<tr><td><code>Q...</code></td>
+    <td>Quality (0-100). Default: 90</td></tr>
+<tr><td><code>nosource</code></td>
+    <td>Omits saving of molecule source into image as comment.</td></tr>
+</table>
+</blockquote>
+Examples:
+<blockquote>
+<table CELLSPACING="0" CELLPADDING="5" border="0">
+<tr VALIGN=TOP><td><code>jpeg</code></td>
+    <td>Default settings: 200x200 pixels,
+	white background (or black in 3D), 90% quality.</td></tr>
+<tr VALIGN=TOP><td><code>jpeg:w100,Q95,#ffff00</code></td>
+    <td>100x100 JPEG with yellow background, 95% quality.</td></tr>
+</table>
+</blockquote>
+<p>
+
+<h2>Reference</h2>
+<ul>
+<li><a HREF="http://www.ijg.org" TARGET="_top">Independent JPEG Group (http://www.ijg.org)</a></li>
+</ul>
+
+
+<p ALIGN=LEFT>
+<small>JpegExport uses the <em>JPEG encoder</em>,
+<a HREF="../license/JpegEncoder.license.txt">Copyright &copy; James R. Weeks
+and BioElectroMech</a>,
+<a HREF="../license/JpegEncoder.IJGreadme.txt">Independent JPEG Group</a>.
+</small>
+</p>
+
+</body>
+</html>

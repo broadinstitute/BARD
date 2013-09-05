@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+	<Tab Title="General Options">
+    <Group Title="Method">
+	    <RadioButtonGroup Key="method">
+			<Choice Value="vg" Text="VG" Tooltip="The calculation method derived from the method of Viswanadhan, Ghose, et al. is applied (VG stands for Viswanadhan and Ghose, first authors of the cited paper)."/>
+			<Choice Value="klop" Text="KLOP" Tooltip="logP data from Klopman's paper is applied."/>
+			<Choice Value="phys" Text="PHYS" Tooltip="logP data from PHYSPROP database is used."/>
+			<Choice Value="user" Text="User defined" Tooltip="If a training set of structures and corresponding experimental logP values
+			        is created by the user, and stored in the appropriate format, it can be used as a database for related molecules' logP calculations."/>
+			<Choice Value="weighted" Text="Weighted" Tooltip="The use of methods can be melted by the user, selecting this method turns the Method weights section active." Selected="true"/>
+	    </RadioButtonGroup>
+    </Group>
+    <Group>
+        <SingleSelection Key="trainingid" Label="Training ID" Tooltip="Select the user defined training." ChoiceListReaderJavaMethod="chemaxon.marvin.calculations.logPPlugin.getTrainingIds">
+			<Dependencies>
+	    		<Item Key="method" Range="user,weighted"/>
+			</Dependencies>
+        </SingleSelection>
+    </Group>    
+    <Group Title="Method weights" Tooltip="You can set the proportion of the methods used in the calculations. Acitve only in Weighted method.">
+    	<Number Key="wvg" Label="VG" Tooltip="Weight of VG method." Range="[0.0,1000]" Value="1">
+		<Dependencies>
+	    		<Item Key="method" Range="weighted"/>
+			</Dependencies>
+        </Number>
+        <Number Key="wklop" Label="KLOP" Tooltip="Weight of KLOP method." Range="[0.0,1000]" Value="1">
+			<Dependencies>
+	    		<Item Key="method" Range="weighted"/>
+			</Dependencies>
+        </Number>
+        <Number Key="wphys" Label="PHYS" Tooltip="Weight of PHYS method." Range="[0.0,1000]" Value="1">
+			<Dependencies>
+	    		<Item Key="method" Range="weighted"/>
+			</Dependencies>
+        </Number>
+        <Number Key="wuser" Label="User defined" Tooltip="Weight of user defined method." Range="[0.0,1000]" Value="0">
+			<Dependencies>
+	    		<Item Key="method" Range="weighted"/>
+			</Dependencies>
+        </Number>
+    </Group>
+    <Group Title="Electrolyte concentration">
+    <Number Key="anion" Label="&lt;html&gt;Cl&lt;sup&gt;-&lt;/sup&gt; concentration (mol/dm&lt;sup&gt;3&lt;/sup&gt;).&lt;/html&gt;"
+            Tooltip="&lt;html&gt;Cl&lt;sup&gt;-&lt;/sup&gt; concentration (mol/dm&lt;sup&gt;3&lt;/sup&gt;).&lt;/html&gt;" Range="[0.0,0.25]" Value="0.1"/>
+    <Number Key="kation" Label="&lt;html&gt;Na&lt;sup&gt;+&lt;/sup&gt; K&lt;sup&gt;+&lt;/sup&gt; concentration (mol/dm&lt;sup&gt;3&lt;/sup&gt;).&lt;/html&gt;"
+            Tooltip="&lt;html&gt;Na&lt;sup&gt;+&lt;/sup&gt; K&lt;sup&gt;+&lt;/sup&gt; concentration (mol/dm&lt;sup&gt;3&lt;/sup&gt;).&lt;/html&gt;" Range="[0.0,0.25]" Value="0.1"/>
+    </Group>
+    <Boolean Key="considertautomerization" Label="Consider tautomerization / resonance" Value="false"/>
+    </Tab>
+    <Tab Title="Display Options">
+    <Group Title="Precision">
+    <Precision Key="precision" Label="Decimal places"/>
+    </Group>
+    <Group Title="Show value">
+    <MultipleSelection Key="type" Tooltip="type of calculation" Label="Type">
+		<Choice Value="increments" Text="Increments" Tooltip="Calculates the increments given by the atoms." Selected="true"/>
+		<Choice Value="logP" Text="logP" Tooltip="Calculates the value of logP." Selected="true"/>
+    </MultipleSelection>
+    </Group>
+    <Group Title="MarvinSpace">
+    <Boolean Key="mspace" Label="Display in MarvinSpace" Tooltip="The result window opens as 3D MarvinSpace viewer.
+             If unchecked, the results will be shown on a 2D picture." Value="true"/>
+    </Group>
+    </Tab>
+</ParameterPanel>

@@ -1,0 +1,143 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="IUPAC InChI format in Marvin">
+<meta NAME="keywords" CONTENT="IUPAC, InChI, Java, Marvin">
+<meta NAME="author" CONTENT="Peter Vadasz">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title> IUPAC InChI in Marvin </title>
+</head>
+
+<body>
+<h1>IUPAC InChI and InChIKey</h1>
+
+<p>
+Codename: <strong>inchi, inchikey</strong>
+</p>
+<h2>Contents</h2>
+<ul>
+<li><a href="#inchi">IUPAC InChi format</a></li>
+<li><a href="#options">Export options</a></li>
+<li><a href="#knownissues">Known issues</a></li>
+<li><a href="#jniinchi">JNI-InChI</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+
+<h2><a class="anchor" name="inchi">IUPAC InChI format</a></h2>
+<p>
+The Marvin beans and applications are able to import and export IUPAC InChI
+files, and export IUPAC InChIKey files. This function does not work in the
+applets (except signed applets).
+</p>
+<p>
+The export makes an inchi with AuxInfo by default. The import requires an 
+inchi string (AuxInfo is optional). Without AuxInfo, the generated molecule
+does not include coordinates.
+</p>
+<p>
+At the moment Linux, Windows and Mac platforms are supported, but we will
+also add Sun and possibly HP Unix.
+</p>
+<p>
+Since Marvin 5.5 the InChI 1.03 version is integrated. Since Marvin 5.5 Marvin
+uses the jni-inchi sourceforge project to call the native c code. Since Marvin
+5.2.5 InChIKey export format is also included.
+</p>
+
+<h2><a class="anchor" NAME="options">Export options</a></h2>
+<p>
+Export options can be specified in the format string. The format descriptor
+and the options are separated by a colon, the options by commas.
+</p>
+
+<blockquote>
+<table CELLSPACING=10 CELLPADDING=0>
+<tr VALIGN="TOP">
+    <td NOWRAP>...</td>
+    <td><a class="text" HREF="basic-export-opts.html">Basic options for aromatization and
+	H atom adding/removal</a></td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_SNon"><strong>SNon</strong></a></td>
+    <td>Exclude stereo (Deafult: Include Absolute stereo)</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_SRel"><strong>SRel</strong></a></td>
+    <td>Relative stereo</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_SRac"><strong>SRac</strong></a></td>
+    <td>Racemic stereo</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_SUCF"><strong>SUCF</strong></a></td>
+    <td>Use Chiral Flag: On means Absolute stereo, Off - Relative</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_ChiralFlagON"><strong>ChiralFlagON</strong></a></td>
+    <td>Use Chiral Flag (Absolute stereo)</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_ChiralFlagOFF"><strong>ChiralFlagOFF</strong></a></td>
+    <td>Do not use Chiral Flag (relative stereo)</td></tr>    
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_SUU"><strong>SUU</strong></a></td>
+    <td>Include omitted unknown/undefined stereo</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_NEWPS"><strong>NEWPS</strong></a></td>
+    <td>Narrow end of wedge points to stereocenter (default: both)</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_RecMet"><strong>RecMet</strong></a></td>
+    <td>Include reconnected metals results</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_FixedH"><strong>FixedH</strong></a></td>
+    <td>Mobile H Perception Off (Default: On)</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_AuxNone"><strong>AuxNone</strong></a></td>
+    <td>Omit auxiliary information (default: Include)</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_NoADP"><strong>NoADP</strong></a></td>
+    <td>Disable Aggressive Deprotonation (for testing only)</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_Compress"><strong>Compress</strong></a></td>
+    <td>Compressed output</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_DoNotAddH"><strong>DoNotAddH</strong></a></td>
+    <td>Don't add H according to usual valences: all H are explicit</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_Key"><strong>Key</strong></a></td>
+    <td>Exports the InChIKey as well</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_Woff"><strong>Woff</strong></a></td>
+    <td>Do not display warnings</td></tr>
+</table>
+</blockquote>
+
+<h2><a class="anchor" NAME="knownissues">Known Issues</a></h2>
+<p>
+<ul>
+<li>Allenes and cumulenes are not supported yet.</li>
+</ul>
+</p>
+
+<h2><a class="anchor" NAME="jniinchi">JNI-InChI</a></h2>
+<p><a HREF="http://jni-inchi.sourceforge.net/">JNI-InChI</a> is Copyright � 2006-2010, Sam Adams. JNI-InChI is free software:
+you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License e as published
+by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+(See <a HREF="http://www.gnu.org/licenses/gpl.html">GPL</a>, <a HREF="http://www.gnu.org/licenses/lgpl.html">LGPL</a> licence.)
+</p>
+<p>The modified source, that we use in our program to locate and download dlls, is available <a HREF="srcjniinchi.zip">here</a>.</p>
+<p>The compiled version (jni-inchi_07.jar) is in the lib directory of the installed marvin. If you find any bugs, we recommend
+asking for a bugfix on our technical support forum, instead of modifying the source.</p>
+
+<h2><a class="anchor" name="references">References</a></h2>
+
+<ul>
+<li><a HREF="http://www.iupac.org/">www.iupac.org</a></li>
+<li><a HREF="http://www.iupac.org/inchi/">www.iupac.org/inchi</a></li>
+<li><a HREF="http://sourceforge.net/projects/inchi">sourceforge.net/projects/inchi</a></li>
+<li><a HREF="http://jni-inchi.sourceforge.net">jni-inchi.sourceforge.net</a></li>
+</ul>
+
+<p ALIGN=LEFT>
+<small>InchiExport uses the <em>InChI format</em>,
+<a HREF="../license/IUPACInChI.license.txt">InChITM Material is &copy; IUPAC 2005</a>
+</small>
+</p>
+
+
+</body>
+</html>

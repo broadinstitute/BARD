@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+<TITLE>Configurations of MarvinSketch</TITLE>
+<link rel=stylesheet type="text/css" href="../../marvinmanuals.css">
+</head>
+<body>
+<h1>Configurations of MarvinSketch</h1>
+
+<p>
+In the <a href="customization.html">Customization</a> section we have described the way
+of personalizing the graphical user interface of MarvinSketch. This includes
+adding, removing and modifying elements of the interface.<br>
+The whole collection of Menubar, Toolbar, Pop-up menu and Shortcut definitions is called <b>Configuration</b>.
+</p>
+<p>
+The first time MarvinSketch is launched, the GUI is organized according to the default configuration,
+called <b>Marvin Configuration</b>.<br> As soon as any change is made, the configuration becomes
+modified, but a new configuration is not created yet, only the modifications are stored.
+If the configuration is <b>reset</b>, the modifications will be lost, and it is not possible to restore them.
+To prevent this, a configuration should be made which stores the personalized GUI definition.
+</p>
+<p>There are four configurations available by default: <b>Marvin</b>, <b>Classic Marvin</b>,
+    <b>ISIS/Draw-like<a href="#trademark-note"><sup>*</sup></a></b> and <b>ChemDraw-like<a href="#trademark-note"><sup>*</sup></a></b>.<br>
+    Each one has its own menubars, toolbars, etc.
+    A configuration can inherit definitions from others. For example the Classic Marvin configuration
+    inherits the default menubar, pop-up menu and shortcuts definitions, only the toolbars are redefined.
+    Note, that configurations will not change the behavior of the application,
+    it only applies to the GUI.
+</p>
+<p>
+    The configuration-related commands can be found in the <b>View > Configurations</b> menu.<br>
+    <img src="gui-files/config_55.png"><br><br>
+    The available functions are described in the following table:</p>
+    <table cellspacing="0" id="grid">
+        <tr>
+            <td width="20%">Make Active</td>
+            <td>Activating a configuration which will not cause to loose modifications if the current configuration is modified.</td>
+        </tr>
+        <tr>
+            <td>Edit</td>
+            <td>This will open the <b>Customize</b> dialog with the selected configuration definitions loaded.</td>
+        </tr>
+        <tr>
+            <td>Rename</td>
+            <td>Simply changing the name of a configuration.</td>
+        </tr>
+        <tr>
+            <td>Copy</td>
+            <td>Creates a new configuration based on the selected one inheriting all GUI definitions.</td>
+        </tr>
+        <tr>
+            <td>Reset</td>
+            <td>Returns to the default configuration definitions by dismissing all modifications. <br>
+                <b>This operation cannot be undone.</b></td>
+        </tr>
+		 <tr>
+            <td>Import</td>
+            <td>Imports XML or serialized (.ser) configuration file.</td>
+        </tr>
+		 <tr>
+            <td>Export</td>
+            <td>Exports the active configuration to XML or serialized (.ser) file.</td>
+        </tr>
+    </table>
+
+<p>
+    Screenshots of the four available configurations:</p>
+    <ol>
+        <li>Marvin Configuration<br>
+            <img src="gui-files/config1_55.png">
+        </li>
+        <li>Classic Marvin Configuration<br>
+            <img src="gui-files/config2_55.png">
+        </li>
+        <li>ISIS/Draw-like<a href="#trademark-note"><sup>*</sup></a> Configuration<br>
+            <img src="gui-files/config3_55.png">
+        </li>
+        <li>ChemDraw-like<a href="#trademark-note"><sup>*</sup></a> Configuration<br>
+            <img src="gui-files/config4_55.png">
+        </li>
+    </ol>
+
+
+<hr>
+<a name="trademark-note"></a><sup>*</sup> Please see the <a href="../../Trademarks.html">Trademarks</a> document for details.
+
+</body>
+</html>

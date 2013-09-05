@@ -1,0 +1,123 @@
+Cyclopentane (house)
+  class M*03239812482D
+
+  5  5  0  0  0  0  0  0  0  0999 V2000
+000Wun+V60
+iuzV000W60
+iuzVGS2W60
+K72WGS2W60
+K72W000W60
+10201
+20301
+40501
+10501
+30401
+M  END
+>  <rotation.unit>
+90
+$$$$
+Pyrrole
+  class M*03239812482D
+
+  5  5  0  0  0  0  0  0  0  0999 V2000
+000Wun+V70
+iuzV000W60
+iuzVGS2W60
+K72WGS2W60
+K72W000W60
+10201
+20302
+40502
+10501
+30401
+M  END
+>  <rotation.unit>
+90
+$$$$
+Cyclopentane
+  class M*03239812502D
+
+  5  5  0  0  0  0  0  0  0  0999 V2000
+Z4kV-H5W60
+96iV9s3W60
+RsiVZX1W60
+hIlVZX1W60
+z2mV9s3W60
+10201
+20301
+30401
+40501
+10501
+M  END
+>  <rotation.unit>
+180
+$$$$
+Cyclohexane
+  class M*03239812442D
+
+  6  6  0  0  0  0  0  0  0  0999 V2000
+000WGS2W60
+iuzV8E1W60
+iuzVun+V60
+000WmZzV60
+K72Wun+V60
+K72W8E1W60
+10201
+20301
+30401
+40501
+50601
+10601
+M  END
+>  <rotation.unit>
+90
+$$$$
+Benzene
+  class M*03239812442D
+
+  6  6  0  0  0  0  0  0  0  0999 V2000
+000WGS2W60
+iuzV8E1W60
+iuzVun+V60
+000WmZzV60
+K72Wun+V60
+K72W8E1W60
+10201
+20302
+30401
+40502
+50601
+10602
+M  END
+>  <rotation.unit>
+30
+$$$$
+Naphthalene
+  class M*03239812522D
+
+ 10 11  0  0  0  0  0  0  0  0999 V2000
+000W8E1W60
+iuzVGS2W60
+NnxV8E1W60
+NnxVun+V60
+iuzVmZzV60
+000Wun+V60
+K72WmZzV60
+fE4Wun+V60
+fE4W8E1W60
+K72WGS2W60
+10201
+20302
+30401
+40502
+50601
+70802
+80901
+90A02
+10602
+10A01
+60701
+M  END
+>  <rotation.unit>
+90
+$$$$

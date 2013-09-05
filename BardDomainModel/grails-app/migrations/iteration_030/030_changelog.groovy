@@ -10,9 +10,6 @@ import org.apache.commons.lang3.time.StopWatch
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 databaseChangeLog = {
-    String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
-    File migrationsDir = new File(bardDomainModelMigrationsDir)
-
     changeSet(author: "gwalzer", id: "iteration-030/01-create-experiment-document-table", dbms: "oracle", context: "standard") {
 
         //Set the username in context
@@ -26,7 +23,7 @@ databaseChangeLog = {
         }
 
         //Create the new EXPERIMENT_DOCUMENT table
-        sqlFile(path: "${migrationsDir}/iteration_030/01-create-experiment-document-table.sql", stripComments: true)
+        sqlFile(path: "iteration_030/01-create-experiment-document-table.sql", stripComments: true)
     }
 }
 

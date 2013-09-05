@@ -1,0 +1,59 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Judit Vasko-Szedlar, Peter Csizmadia">
+<meta http-equiv="Content-Type" content="text/html">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinView Example - Japanese character support</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinView Example - Japanese character support</h1>
+
+In case the HTML <code>&lt;head&gt;</code> tag contains the encoding as shown in the row below,
+Japanese characters can be directly given as applet parameters as shown on the image.
+
+<pre>
+    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=Shift_JIS&quot;&gt;
+</pre>
+
+<img src="shift_jis.png" width="616" height="32">  <br>
+
+In this example the name of the molecule is given with JavaScript escapes:
+<pre>
+    <strong>mview_param(</strong>&quot;cell0&quot;<strong>,</strong> &quot;|C1=CC2=C(C=C1)C=CC=C2&quot;
+    <strong>+</strong>&quot;|Naphthalene|Name:|\u30CA\u30D5\u30BF\u30EC\u30F3|Weight:|128.17052&quot;<strong>);</strong>
+</pre>
+
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+mview_begin("../../..", 439, 385);
+mview_param("border", "1");
+mview_param("layout", ":5:3:"
++"M:0:0:5:1:nw:n:"
++"L:0:1:1:2:c:h:0:10:"
++"L:2:1:1:1:e:n:0:10:T:2:2:1:1:w:h:0:10:"
++"L:3:1:1:1:e:n:0:10:L:3:2:1:1:w:h:0:10");
+mview_param("param", ":"
++"M:140:100:"
++"L:12b:"
++"L:10i:T:12:"
++"L:10i:L:12");
+mview_param("cell0", "|C1=CC2=C(C=C1)C=CC=C2"
++"|Naphthalene|Name:|\u30CA\u30D5\u30BF\u30EC\u30F3|Weight:|128.17052");
+mview_end();
+//-->
+</script>
+</center>
+
+
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+The next example is about 
+<a HREF="listeners.html">Listening for events in applets</a>.
+
+
+</body>
+</html>

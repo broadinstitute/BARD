@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+	<Tab Title="General Options">
+	<Group Title="Calculation">
+	    <RadioButtonGroup Key="calctype">
+			<Choice Value="distribution"
+                Tooltip="Displays the percentage of different tautomers present at the given pH." Text="Dominant tautomer distribution"  Selected="true"/>
+			<Choice Value="canonical"
+                Tooltip="Calculates only the canonical tautomer of the structure." Text="Canonical tautomer"/>
+			<Choice Value="generic"
+                Tooltip="Used for the identification of tautomers in JChem databases. Please see details in the help." Text="Generic tautomer"/>
+			<Choice Value="major"
+                Tooltip="Gives the first species from the dominant tautomer distribution." Text="Major tautomer"/>
+			<Choice Value="alltautomers" Text="All tautomers"
+                Tooltip="Calculates all possible tautomers. If any deuterium or tritium is involved in the tautomerization, it moves during enumeration."/>
+	    </RadioButtonGroup>
+	</Group>
+    <Number Key="max" Label="Max. number of structures"
+        Tooltip="Maximizes the number of structures to display." Range="[1,]" Value="1000" Type="int">
+	<Dependencies>
+	    <Item Key="calctype" Range="alltautomers,distribution"/>
+	</Dependencies>
+    </Number>
+    <Boolean Key="considerpH" Label="Consider pH effect"
+        Tooltip="Takes into account the protonation states at given pH. Applicable for Major tautomer and Dominant tautomer distribution calculations." Value="false">
+	<Dependencies>
+	    <Item Key="calctype" Range="major,distribution"/>
+	</Dependencies>
+    </Boolean>
+    <Number Key="pH" Label="at pH" Range="[0.0,14.0]" Value="7.4">
+	<Dependencies>
+	    <Item Key="considerpH" Range="true"/>
+	    <Item Key="calctype" Range="major,distribution"/>
+	</Dependencies>
+    </Number>
+    <Boolean Key="rational" Label="Rational tautomer generation"
+        Tooltip="Generates only rational tautomers." Value="false">
+	<Dependencies>
+	    <Item Key="calctype" Range="canonical,alltautomers"/>
+	</Dependencies>
+    </Boolean>
+    </Tab>
+    <Tab Title="Advanced Options">
+    <Precision Key="precision" Label="Decimal places"  Value="0">
+	<Dependencies>
+	    <Item Key="calctype" Range="distribution"/>
+	</Dependencies>
+    </Precision>	
+    <Boolean Key="setpathlength" Label="Set max. allowed length of the tautomerization path"
+        Tooltip="Sets the number of bonds which are considered by displacing a double bond." Value="true">
+	<Dependencies>
+	    <Item Key="calctype" Range="alltautomers,generic,major,distribution"/>
+	</Dependencies>
+    </Boolean>
+    <Number Key="pathlength" Label="Path length" Range="[1,1000]" Value="4">
+	<Dependencies>
+	    <Item Key="setpathlength" Range="true"/>
+	    <Item Key="calctype" Range="alltautomers,generic,major,distribution"/>
+	</Dependencies>
+    </Number>
+    <Boolean Key="protectaromaticity" Label="Protect aromaticity"
+        Tooltip="If checked, the aromaticity will be maintained." Value="true">
+	<Dependencies>
+	    <Item Key="calctype" Range="alltautomers,canonical,major,distribution"/>
+	</Dependencies>
+    </Boolean>
+    <Boolean Key="protectcharge" Label="Protect charge"
+        Tooltip="If checked, defined charged atoms maintain their charge during calculation." Value="true">
+	<Dependencies>
+	    <Item Key="calctype" Range="alltautomers,canonical,major,distribution"/>
+	</Dependencies>
+    </Boolean>        
+    <Boolean Key="excludeantiaroma" Label="Exclude antiaromatic compounds"
+        Tooltip="If checked, any tautomer structure having an antiaromatic ring system will be discarded." Value="true">
+	<Dependencies>
+	    <Item Key="calctype" Range="alltautomers,canonical,major,distribution"/>
+	</Dependencies>
+    </Boolean>        
+    <Boolean Key="protectdoublebondstereo" Label="Protect double bond stereo"
+        Tooltip="If checked, all double bonds with stereo information remain intact. If unchecked, tautomer regions will lose the double bond stereo information, any other stereo information in the molecule is kept intact." Value="false">
+	<Dependencies>
+	    <Item Key="calctype" Range="alltautomers,canonical,major,distribution"/>
+	</Dependencies>
+    </Boolean>
+    <Boolean Key="protectalltetrahedralcenters" Label="Protect all tetrahedral stereo centers" 
+        Tooltip="If checked, stereocenters are not included in the tautomerization. If unchecked, tautomer regions will lose the tetrahedral stereo information, any other stereo information in the molecule is kept intact." Value="false">
+	<Dependencies>
+	    <Item Key="protectlabeledtetrahedralcenters" Range="false"/>
+	</Dependencies>
+	</Boolean>
+    <Boolean Key="protectlabeledtetrahedralcenters" Label="Protect labeled tetrahedral stereo centers only" 
+        Tooltip="If checked, stereocenters labeled with chiral flag or MDL Enhanced Stereo Represenation flags will not be included in tautomerization, other stereocenters will." Value="false">
+	<Dependencies>
+	    <Item Key="protectalltetrahedralcenters" Range="false"/>
+	    <Item Key="calctype" Range="alltautomers,canonical,major,distribution"/>
+	</Dependencies>
+	</Boolean>
+    <Boolean Key="protectestergroups" Label="Protect ester groups"
+        Tooltip="If checked, the ester groups will be excluded form the tautomerization." Value="true">
+        	<Dependencies>
+	    <Item Key="calctype" Range="alltautomers,canonical,major,distribution"/>
+	</Dependencies>
+    </Boolean>
+    <Boolean Key="ring" Label="Ring-chain tautomerization is allowed"
+        Tooltip="If checked, ring-chain tautomers will also be generated." Value="false">
+       	<Dependencies>
+		    <Item Key="calctype" Range="alltautomers"/>
+		</Dependencies>
+    </Boolean>
+	</Tab>
+    <Boolean Key="single" Label="Single fragment mode" 
+        Tooltip="If checked, the results are displayed in separate windows, if unchecked, the calculation handles unlinked molecules together and results are in the same window." Value="true"/>
+</ParameterPanel>

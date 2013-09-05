@@ -1,0 +1,36 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Gabor Bartha, Tamas Vertse">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../marvinmanuals.css" TITLE="Style">
+<title>Signed Marvin Applets</title>
+</head>
+<body>
+<h1>Signed Marvin Applets</h1>
+<p>
+Signed applets are <strong>trusted</strong>, they are allowed to access local system resources, e.g. to open or save files on local machine or to access the <a href="../../datatransfer.html#where_available">system's clipboard</a>.</p>
+
+<h2>Signing</h2>
+<p>
+<blockquote>
+"Signed applet" means that the <code>jar</code> file that contains the applet is signed.  A signed <code>jar</code> file can be downloaded from a standard HTTP server, just like any other <code>jar</code> file. However, for the signed applet to be trusted, the local system must trust the key that was used to sign the <code>jar</code> file. When a user encounters a signed applet, a security dialog pops up, which tells the user who signed the applet and provides four options:
+<ol>
+    <li>Grant always: If selected, the applet will be granted "AllPermission". Any signed applet that is signed using the same certificate will be trusted automatically in the future, and no security dialog will pop up again. This decision can be changed from the Java Plug-in Control Panel.
+    <li>Grant this session: If selected, the applet will be granted "AllPermission". Any signed applet that is signed using the same certificate will be trusted automatically within the same browser session.
+    <li>Deny: If selected, the applet will be granted the applicable permissions from the security policy of the Java runtime. By default, the permissions granted would be those for untrusted applets.
+    <li>More Info: If selected, users can examine the attributes of each certificate in the certificate chain in the <code>jar</code> file.
+</ol><p>
+Once the user selects an option from the security dialog, the applet will be run in the corresponding security context. Note that all these decisions are determined on the fly, and no preconfiguration is required.
+</p>
+<p>
+Our applets are signed by <a href="http://www.thawte.com">Thawte</a>'s Java Code Signing Certificate which uses JDK 1.3 codesigning tool. 
+</p>
+</blockquote>
+<h2>Howto unsign applets</h2>
+<p>All applets in the Marvin Applets package are signed. If you need unsigned 
+Marvin applets,  <a href="appletfaq.html#unsign_jar">unsign signed jar files</a>
+(<code>jmarvin.jar</code> and all jar files in the <code>sjars</code> 
+direcory).<br>
+Warning: If you unsign applets, some functionality will not be accessible in Marvin. The MarvinSpace applet requires trusted jars in all cases.</p>
+
+</body>
+</html>

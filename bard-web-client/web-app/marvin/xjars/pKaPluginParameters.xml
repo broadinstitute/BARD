@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+<Group>
+    <Precision Key="precision" Label="Decimal places"/>
+    <SingleSelection Key="mode" Label="Mode" Tooltip="Mode">
+	<Choice Value="macro" Text="macro" Tooltip="Calculates macro dissociation constants." Selected="true"/>
+	<Choice Value="micro" Text="micro" Tooltip="Calculates micro dissociation constants."/>
+    </SingleSelection>
+
+    <SingleSelection Key="prefix" Label="Acid/base prefix" Tooltip="Acid/base prefix">
+		<Choice Value="static" Text="static" Tooltip="Submitted ionic forms are converted to their neutral forms (adding or removing protons) and their pKa is calculated." Selected="true"/>
+		<Choice Value="dynamic" Text="dynamic" Tooltip="The pKa of ionic forms are calculated, not their conjugated acids or bases."/>
+    </SingleSelection>
+
+<!--
+    <Number Key="ions" Label="Ionizable atoms" Value="8" Type="int">
+	<Dependencies>
+	    <Item Key="mode" Range="macro"/>
+	</Dependencies>
+    </Number>
+-->
+    <Number Key="min" Label="Min basic pKa" Tooltip="Widens the calculation range because weak bases will have lower pKa values than the default -10." Value="-10" Type="real"/>
+    <Number Key="max" Label="Max acidic pKa" Tooltip="Widens the calculation range because weak acids will have higher pKa values than the default 20." Value="20" Type="real"/>
+    <Number Key="temperature" Label="Temperature (K)" Tooltip="Setting the temperature in Kelvin." Value="298" Type="real"/>
+</Group>
+<Group Title="Distribution chart">
+    <Boolean Key="mscalc" Label="Show distribution chart" Tooltip="Checking this box, you will have microspecies/macrospecies distribution as function of pH calculated and displayed. If not, only the pKa of the drawn molecule will be calculated." Value="true">
+	<Dependencies>
+	    <Item Key="mode" Range="macro"/>
+	</Dependencies>
+    </Boolean>
+    <Number Key="lower" Label="pH lower limit" Tooltip="pH lower limit." Value="0" Range="[0.0, 14.0]" Type="real">
+	<Dependencies>
+            <Item Key="mode" Range="macro"/>
+	    <Item Key="mscalc" Range="true"/>
+	</Dependencies>
+    </Number>
+    <Number Key="upper" Label="pH upper limit" Tooltip="pH upper limit." Value="14" Range="[0.0, 14.0]" Type="real">
+	<Dependencies>
+            <Item Key="mode" Range="macro"/>
+	    <Item Key="mscalc" Range="true"/>
+	</Dependencies>
+    </Number>
+    <Number Key="step" Label="pH step size" Tooltip="pH step size." Value="0.2" Type="real">
+	<Dependencies>
+            <Item Key="mode" Range="macro"/>
+	    <Item Key="mscalc" Range="true"/>
+	</Dependencies>
+    </Number>
+</Group>
+<Group Title="Correction library">
+	<Boolean Key="usecorrectionlibrary" Label="Use correction library" Tooltip="Check this box to use a file with experimental data for the calculation." Value="false"/>
+    <SingleSelection Key="correctionlibrary" Label="Correction library" Tooltip="Select the user defined correction library." ChoiceListReaderJavaMethod="chemaxon.marvin.calculations.pKaPlugin.getCorrectionLibraryIds">
+		<Dependencies>
+    		<Item Key="usecorrectionlibrary" Range="true"/>
+		</Dependencies>
+    </SingleSelection>
+</Group>
+<Boolean Key="considertautomerization" Label="Consider tautomerization / resonance" Tooltip="Consider tautomerization and resonance." Value="false"/>
+<Boolean Key="keephydrogens" Label="Keep explicit hydrogens" Tooltip="Keep explicit hydrogens on result molecule." Value="false"/>
+</ParameterPanel>

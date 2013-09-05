@@ -1,0 +1,1103 @@
+<HTML>
+<HEAD>
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css">
+<TITLE>Chemical Terms</TITLE>
+</HEAD>
+<BODY>
+<center>
+<h1>Chemical Terms Language Reference</h1>
+<h3>Version 5.10.1</h3>
+</center>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#intro">Introduction</a>
+<li><a href="#elements">Language Elements</a>
+<li><a href="#syntax">Expression Syntax</a>
+<li><a href="#functionalgroups">Predefined Functional Groups and Named Molecule Groups</a>
+<li><a href="#initialscripts">Initial Scripts</a>
+<li><a href="#context">Input Contexts</a>
+<li><a href="#config">Configuration</a>
+<li><a href="#examples">Examples</a>
+    <ul>
+      <li><a href="#molcontextexamples">Evaluator and JChem Cartridge Examples</a></li>
+      <li><a href="#reactioncontextexamples">Reactor Examples</a></li>
+      <li><a href="#searchcontextexamples">Search Filter Examples</a></li>
+    </ul>
+    </li>
+    </ul>
+    <h4>Further reading</h4>   
+<ul>
+  <li><a href="../../examples/evaluator/index.html">Working examples</a></li>
+  <li><a href="EvaluatorFunctions.html">Chemical Terms Reference Tables</a></li>
+</ul>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a name="intro"></a>Introduction</h2>
+
+<p>This document describes ChemAxon's <i>Chemical Terms Language</i>.
+This language is used to formulate chemical expressions in general. Its current usage includes
+<a href="http://www.chemaxon.com/jchem/doc/user/reactor_cline.html#rules">chemical rules for reaction processing</a>,
+<a href="http://www.chemaxon.com/jchem/doc/user/Jcsearch.html#expression">search filters</a> or both as 
+<a href="http://www.chemaxon.com/jchem/doc/guide/cartridge/cartapi.html#jc_evaluate">chemical calculations</a> and <a href="http://www.chemaxon.com/jchem/doc/guide/cartridge/cartapi.html#jc_compare_ctFilter">chemical filtering</a> in <a href="http://www.chemaxon.com/jchem/doc/guide/cartridge/index.html">JChem Cartridge</a>. 
+The <a href="Evaluator.html">Evaluator command line tool</a> and the 
+<a href="../developer/beans/api/chemaxon/jep/Evaluator.html">Evaluator API</a> are also available for 
+general purpose expression evaluation.</p>
+<p>The <i>Chemical Terms Evaluator</i> is designed to evaluate mathematical expressions
+on molecules using <a href="EvaluatorFunctions.html">built-in chemical and general purpose functions</a>.
+It is also possible to extend this built-in set of calculations by a
+<a href="#config">user-defined configuration</a>.</p>
+
+<p>The heart of the evaluator mechanism is the 
+<a href="http://jep.sourceforge.net/">JEP Java Expression Parser</a>, equipped with
+<a href="../developer/plugins.html">chemical plugin calculations</a>, 
+<a href="http://www.chemaxon.com/jchem/doc/user/queryindex.html">chemical substructure search</a> and some additional 
+<a href="Evaluator.html#functiondef">chemical and general purpose functions</a>. 
+<a href="#config">User defined functions</a> can also be added to this function set.</p>
+
+<p><a name="simpleexamples"></a>Here are some simple examples showing how some well-known chemical rules can be
+formulated for a given input molecule read from a <a href="#molcontext">molecule context</a>:</p>
+The following filters are used in drug discovery and drug development to narrow down the scope of molecules. 
+They provide estimation on solubility and permeability of orally active compounds considering their physical and chemical properties. 
+The examined properties are given as chemical terms.
+<ol>
+<li>Lipinski's rule of five states that the absorption or permeation of a molecule is more likely when the molecular weight is under 500 g/mol, 
+the value of logP is lower than 5, and the molecule has utmost 5 H-donor and 10 H-acceptor atoms. The definition of the aforementioned rule by ChemicalTerms is:
+<pre>
+(mass() <= 500) && 
+(logP() <= 5) && 
+(donorCount() <= 5) && 
+(acceptorCount() <= 10)
+</pre>
+<li>Lead-likeness:
+<pre>
+(mass() <= 450) &&
+(logD("7.4") >= -4) && (logD("7.4") <= 4) &&
+(ringCount() <= 4) &&
+(rotatableBondCount() <= 10) &&
+(donorCount() <= 5) &&
+(acceptorCount() <= 8)
+</pre>
+<li>Bioavailability:
+<pre>
+(mass() <= 500) +
+(logP() <= 5) +
+(donorCount() <= 5) +
+(acceptorCount() <= 10) +
+(rotatableBondCount() <= 10) +
+(PSA() <= 200) +
+(fusedAromaticRingCount() <= 5) >= 6
+</pre>
+Note, that summing up the <code>7</code> subresults above means to count how many of them
+are satisfied. The requirement that this sum should be at least <code>6</code> means that
+we do not require all of the subconditions to be satisfied but instead we allow 
+at <!-- ???? -->most one of them to fail.
+<p><li>Ghose filter:
+<pre>
+(mass() >= 160) && (mass() <= 480) &&
+(atomCount() >= 20) && (atomCount() <= 70) &&
+(logP() >= -0.4) && (logP() <= 5.6) &&
+(refractivity() >= 40) && (refractivity() <= 130)
+</pre>
+<li>Scaffold hopping:
+<pre>
+refmol = "actives.sdf";
+dissimilarity("ChemicalFingerprint", refmol) - 
+dissimilarity("PharmacophoreFingerprint", refmol) > 0.6
+</pre>
+Note, that molecule constants can be defined by a molecule file path or a SMILES string.
+Multiple expressions are separated by ';' characters, whitespace characters can be added
+freely for readability, since they are not considered by the evaluation process.
+</ol>
+
+<p>A set of <a href="../../examples/evaluator/index.html">working examples</a>
+is also available.</p>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a name="elements"></a>Language Elements</h2>
+
+<p>The <i>Chemical Terms Evaluator</i> parses and evaluates expressions that are built
+from the following language elements:
+<ul> 
+<li>the usual arithmetics: addition (<code>+</code>), 
+substraction(<code>-</code>), multiplication (<code>*</code>) and division (<code>/</code>),
+<li>the logical operators: AND (<code>&&</code>), OR (<code>||</code>), NOT (<code>!</code>)
+<li><a href="Evaluator.html#plugindef">structure based chemical calculations</a> with the help of 
+<a href="../developer/plugins.html">chemical calculator plugins</a> including charge, p<i>K</i><sub>a</sub>, 
+log<i>P</i>, log<i>D</i> calculations and extendible by others 
+<li><a href="Evaluator.html#functiondef">chemical and general purpose functions</a>:
+predefined functions for taking maximum, minimum, getting atomic and molecular properties,
+performing chemical calculations that are not implemented by 
+<a href="../developer/plugins.html">chemical calculator plugins</a>, etc. The set of available 
+functions can be extended by user defined functions.
+<li><a href="Evaluator.html#matchdef">matching conditions</a>:
+searches predefined functional groups or certain atoms of the functional groups 
+specified by atom maps in the target molecule, either matching a target atom
+with any of the specified query atoms or else searching the functional group in the 
+target molecule without a specified target atom, the return value is <code>true</code>
+if a matching is found, <code>false</code> otherwise 
+<br><b>Note:</b> matching condition functions are not available in Marvin, they can be used only 
+if JChem software package is installed.
+<li><a href="#context">input context</a> functions for accessing input data
+</ul>
+
+<p>A set of <a href="EvaluatorFunctions.html">short reference tables</a> provides a
+summary of the available functions / calculations and the use of matching conditions.</p>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a name="syntax"></a>Expression Syntax</h2>
+
+<p>Expression strings consist of an arbitrary number of initial <i>assignments</i>
+followed by a last subexpression that provides the evaluation result. 
+An <a name="assignment"></a><i>assignment</i> sets a variable to the 
+evaluation result of a subexpression. This variable can later be used to refererence this result. 
+The assignment syntax is:</p>
+<pre>
+&lt;identifier&gt; = &lt;subexpression&gt;;
+</pre>
+<p>Note the ending ';' character. Examples for assignments:</p>
+<pre>
+x = 2;
+y = x + 8;
+z = f(x,y) + g(x,y);
+</pre>
+where <code>f</code> and <code>g</code> are <a href="Evaluator.html#functiondef">predefined functions</a>.
+<p>An expression is an optional sequence of assignments followed by a subexpression providing
+the evaluation result:</p>
+<pre>
+&lt;identifier1&gt; = &lt;subexpression1&gt;;
+&lt;identifier2&gt; = &lt;subexpression2&gt;;
+...
+&lt;identifierN&gt; = &lt;subexpressionN&gt;;
+&lt;result subexpression&gt;
+</pre>
+where <code>N</code> can also be zero in which case the expression coincides with the result 
+subexpression. 
+<p>Here is an example with assignments:</p>
+<pre>
+a = f(2,3);
+b = g(4,5);
+x = a + b;
+x*x
+</pre>
+<p>Here is the same without assignments:</p>
+<pre>
+(f(2,3) + g(4,5))*(f(2,3) + g(4,5))
+</pre>
+<p>Assignments increase efficiency if the same evaluation result is used more than once since
+inline repetition of a subexpression results in multiple evaluation.
+Assignments can also be used to increase readability.
+However, in most cases, when the expression is simple, assignments are not needed.
+Note, that whitespace characters (new-line, tab, space) are skipped when parsing the
+expression string, so whitespace characters can be freely used for increasing readability.</p>
+<p>The following examples demonstrate the expression syntax with very simple subexpressions.
+Examples with chemical meaning are shown later for 
+<a href="#matchexamples">matching conditions</a>,
+<a href="#pluginexamples">chemical calculations</a> and
+<a href="#functionexamples">chemical and general purpose functions</a>.</p>
+
+<b>Examples:</b>
+
+<ol>
+<li>A simple expression:
+<pre>
+3+2
+</pre>
+<li>Using assignments:
+<pre>
+x = 2;
+y = 3;
+x + y
+</pre>
+<li>A more complicated one:
+<pre>
+x = 2;
+y = 3;
+z = 8*(x + y);
+t = 6*x*y;
+z + t
+</pre>
+<li>When the same value is used more than once:
+<pre>
+x = (3 + 4)*8 + 16;
+y = 3*x;
+z = x + 20;
+5*(y + 8) + 4*z
+</pre>
+</ol>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a name="functionalgroups"></a><a name="molsets"></a>Predefined Functional Groups and Named Molecule Groups</h2>
+
+<p>It is sometimes easier to refer molecules by names rather than explicit SMARTS 
+strings or molecule file paths. For example, you may want to write <i>nitro</i> 
+or <i>carboxyl</i> as query in a <a href="EvaluatorFunctions.html#matchdesc">match</a> 
+function. Frequently used queries are pre-defined in the 
+<a href="Evaluator_files/functionalgroups.cxsmi">built-in functional groups file</a>
+(<code>chemaxon/marvin/templates/functionalgroups.cxsmi</code> within <code>MarvinBeans-templates.jar</code>). 
+<p>You can also define your favourite query SMARTS in <code>marvin/config/marvin/templates/functionalgroups.cxsmi</code> file and in
+<code>$HOME\chemaxon\marvin\templates\functionalgroups.cxsmi</code> (Windows) or 
+<code>$HOME/.chemaxon/marvin/templates/functionalgroups.cxsmi</code> (UNIX / Linux) 
+file where <code>marvin</code> is the Marvin istallation directory, <code>$HOME</code> is your user 
+home directory.</p>
+<p>However, there are some <b>limitations</b> when choosing the molecule names.
+Molecule names should be composed of letter, digit characters, and the '_' character.
+This means that molecule names cannot contain special characters, such as '=', '-', etc. with the exception of '_'. 
+Molecule name definitions in <code>functionalgroups.cxsmi</code> file can contain whitespace characters (space, tab), but when 
+names are referenced from a Chemical Terms expression the whitespace characters should be replaced with a single '_' character
+(e.g. <code>secondary amine</code> should be referred as <code>secondary_amine</code> in Chemical Terms expressions).</p>
+
+<!--  TODO: link functionalgroups.cxsmi documentation -->
+
+<p><b>Note:</b> from Marvin 5.4 <code>mols.smarts</code> configuration file is not used by Chemical Terms. It is replaced by <code>functionalgroups.cxsmi</code> file.</p>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a name="initialscripts"></a>Initial Scripts</h2>
+
+<p>You can define molecule sets and other constants in the user-defined 
+initial script <code>$HOME/chemaxon/MARVIN_MAJOR_VERSION/jep.script</code> (Windows) or 
+<code>$HOME/.chemaxon/MARVIN_MAJOR_VERSION/jep.script</code> (UNIX / Linux), where <code>$HOME</code> is 
+your user home directory, and <code>MARVIN_MAJOR_VERSION</code> is the major version of Marvin (e.g. "5.1"). 
+This script is run right after the molecule sets are read and the constants defined here can be 
+used later in your chemical expressions. Any valid chemical terms assignment is allowed here, 
+and the terminating ';' characters may be omitted as long as you write each assignment in a 
+separate line.
+Typically, you will define a molecule set by
+<ol>
+<li>listing its members:
+<pre>
+x = {acid_halide, alcohol, "[#6]CC[#8]"}
+y = {alkene, amide, imide, imine} 
+z = {alkene, amide, amine, alcohol, isocyanate}
+</pre>
+<li>or deriving it from other sets with the help of set operators:
+<pre>
+all = x + y + z     (union of x, y, z)
+join = y * z        (join of y and z)
+C = (x + y) * z     (join of the union of x and y with z)
+D = z - alcohol     (all elements of z except alcohol)
+E = (x + y) - z     (union of x and y without the elements of z)
+</pre>
+where <code>+</code> means set-union, <code>*</code> means set-join and 
+<code>-</code> means exclusion.
+</ol>
+
+<p>Predefined molecules and molecule sets are most useful in query definitions
+of the <a href="EvaluatorFunctions.html#matchdesc">match</a> function:
+<ul>
+<li><code>match(amide)</code> will test whether the input molecule matches an amide group,
+    <code>match(reactant(0), {amide,amine})</code> will test whether the first reactant in a
+    <a href="#reactioncontext">reaction context</a> matches an amide or an amine
+<p><li><code>match(2, {metalloid,alcohol}, 1)</code> will check whether atom <code>2</code>
+    of the input molecule matches either a metalloid or an alcohol carbon - the last 
+    parameter <code>1</code> denotes the query atom map which picks the carbon from the
+    alcohol definition; <code>match(ratom(2), {metalloid,alcohol}, 1)</code> is the same in a 
+    <a href="#reactioncontext">reaction context</a> with checking target reactant atom which
+    corresponds to the reactant atom with map <code>2</code> in the reaction equation.
+</ul>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a name="context"></a>Input Contexts</h2>
+
+<p>When evaluating an expression, the Evaluator substitutes data reference symbols by the 
+corresponding data items. All data items belong to exactly one of the following data groups:
+<ol>
+<p><li><i>constants</i>: data having the same value at each evaluation
+    <ul>
+    <li>numerical or string constants (e.g. <code>5</code>, <code>7.4</code>, 
+        <code>"acidic"</code>, <code>"mols/amine.mol"</code>, 
+	<code>"NCC(N)C1=CC(=CC=C1)C(O)=O"</code>)
+    <li><a href="Evaluator.html#molsdef">molecule constants</a> declared in the 
+        <a href="#config">configuration XML</a> (e.g. <a href="Evaluator.html#nitro"><code>nitro</code></a>,
+	<a href="Evaluator.html#hydrazide"><code>hydrazide</code></a>, <a href="Evaluator.html#carboxyl"><code>carboxyl</code></a>)
+    </ul>
+<p><li><i>inputs</i>: data possibly changing for each evaluation, such as
+    <ul>
+    <li>input molecules and atoms,
+    <li>input reactants for reaction processing,
+    <li>created products in reaction processing
+    </ul>
+</ol>
+<p>The type of the input data depends on the <i>expression evaluation environment</i>,
+which currently is one of the following:</p>
+<ol>
+<li>an expression string evaluated by the command line version of Evaluator refers to the
+current input molecule read from the input file(s) or the standard input
+<p><li>an inner atomic expression refers to both the input molecule and the current atom -
+it is used when a Chemical Terms expression is evaluated on some or all atoms of the input molecule
+(e.g. <a href="Evaluator.html#filter">atom filtering conditions</a>, <a href="Evaluator.html#inner">atomic evaluators</a>
+and <a href="Evaluator.html#minmax">min-max evaluators</a>)
+<p><li>a <a href="http://www.chemaxon.com/jchem/doc/user/reactor_cline.html#reactionfile">reaction condition</a> can refer to a reactant and a product 
+array as well as to their atoms mapped according to the reaction equation
+</ol>
+<p>The evaluation environment provides a specific <i>input context</i> for accessing its input data.
+The input context consists of a bunch of accessor functions that can be used in the expression strings
+to access the input data. The following input contexts correspond to the evaluation environments
+described above:
+<ol>
+<p><li><a name="molcontext"></a><i>molecule context</i>, used for single molecule input
+(e.g. <a href="Evaluator.html">command line Evaluator</a>, 
+      <a href="http://www.chemaxon.com/jchem/doc/guide/cartridge/index.html">JChem Cartridge</a>):
+    <ul>
+    <li><code>mol()</code>: refers to the current input molecule
+    </ul>
+<p><li><a name="atomcontext"></a><i>atom context</i>, used for single atom input
+(e.g. inner atomic expressions):
+    <ul>
+    <li><code>mol()</code>: refers to the current input molecule
+    <li><code>atom()</code>: refers to the current input atom index in the input molecule
+    </ul>
+<p><li><a name="searchcontext"></a><i>search context</i>, used for filtering search hits
+(e.g. <a href="http://www.chemaxon.com/jchem/doc/user/Jcsearch.html"><code>jcsearch</code></a> and <a href="http://www.chemaxon.com/jchem/doc/user/query_features.html#filtering">search queries</a>):
+    <ul>
+    <li><code>mol(), target()</code>: both refer to the search target molecule
+    <li><code>query()</code>: refers to the search query molecule
+    <li><code>m(int i)</code>: refers to the query atom index with atom map <code>i</code>
+    <li><code>hit(), h()</code>: both refer to the search hit array 
+    <li><code>hit(int i), h(int i)</code>: both refer to the <code>i</code>-th element of the 
+              search hit array, this is the target atom index matching the query atom with 
+	      atom index <code>i</code>
+    <li><code>hm(int i)</code>: refers to the target atom index matching the query atom with
+              atom map <code>i</code> (shorthand for <code>h(m(i))</code>)
+    </ul>
+<p><li><a name="reactioncontext"></a><i>reaction context</i>, used for reaction input 
+    initiated by the <a href="http://www.chemaxon.com/jchem/doc/user/reactor.html">Reactor</a>:
+    <ul>
+    <li><code>reactant(int i)</code>: refers to the <code>i</code>-th reactant (0-based indexing)
+    <li><code>product(int i)</code>: refers to the <code>i</code>-th product (0-based indexing)
+    <li><code>ratom(int m)</code>: refers to the reactant atom corresponding to 
+              reactant atom map <code>m</code> according to the reaction equation
+    <li><code>patom(int m)</code>: refers to the product atom corresponding to 
+              product atom map <code>m</code> according to the reaction equation
+    </ul>
+    Note: In reaction context atoms also can be referred by atom index, but in this case the molecule 
+    (reactant / product) parameter always have to be specified in the parameter list of the function 
+    (see <a href="#rcontextatomindexample2">this example</a>).
+</ol>
+
+<p>Note, that the default input molecule is the molecule returned by <code>mol()</code>
+in case when this function exists in the context.</p>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a name="config"></a>Configuration</h2>
+
+<p>The <a href="Evaluator_files/evaluator.xml.txt">built-in configuration XML</a>
+can be extended by user-defined functions and plugin calculations. 
+The <a href="Evaluator.html#config">configuration syntax</a> is described in the
+<a href="Evaluator.html">Evaluator Manual</a>.</p>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a name="examples"></a>Examples</h2>
+
+<p>The examples below are divided into sections according to the <a href="#context">input context</a>
+applied, which corresponds to the different applications that can make use of ChemAxon's chemical
+expressions. These examples use the <a href="Evaluator_files/evaluator.xml.txt">built-in configuration XML</a>,
+the referenced functions and plugin calculations are listed in the <a href="EvaluatorFunctions.html">short reference tables</a>.
+
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h3><a name="molcontextexamples"></a><a href="Evaluator.html">Evaluator</a>
+   and <a href="http://www.chemaxon.com/jchem/doc/guide/cartridge/index.html">JChem Cartridge</a> examples 
+   (<a href="#molcontext">molecule context</a>)</h3>
+
+<ul>
+<li><a href="EvaluatorFunctions.html#plugindesc">Structure based calculations (plugin calculations)</a>
+
+<p>Plugin references provide access to 
+<a href="../developer/plugins.html">ChemAxon's calculator plugins</a>.
+These calculations equip our expressions with chemical meaning.</p>
+
+<ol>
+<li>The physiological microspecies at pH <code>7.4</code> of the input molecule:
+<pre>
+microspecies("7.4")
+</pre>
+<li>The partial charges on atoms <code>0</code>, <code>2</code> and <code>3</code> (0-based) 
+of the input molecule:
+<pre>
+charge(0, 2, 3)
+</pre>
+<li>The same with taking the physiological microspecies at pH <code>7.4</code>:
+<pre>
+charge(0, 2, 3, "7.4")
+</pre>
+<li>Checking whether the partial charge on atom <code>0</code> in the input molecule 
+is greater than or equal to this charge value in the physiological microspecies at pH <code>7.4</code>:
+<pre>
+charge(0) > charge(0, "7.4")
+</pre>
+<li>The significant p<i>K</i><sub>a</sub> value (acidic or basic) on atom <code>9</code> (0-based) 
+of the input molecule:
+<pre>
+pka(9)
+</pre>
+<li>The acidic p<i>K</i><sub>a</sub> value on atom <code>9</code> (0-based)
+of the input molecule:
+<pre>
+pka("acidic", 9)
+</pre>
+<p>Note that if the p<i>K</i><sub>a</sub> type "acidic" or "basic" is omitted (as in the previous example),
+then the more significant value is returned, while specifically the "acidic" (or "basic") 
+p<i>K</i><sub>a</sub> value is returned if the type is specified.</p>
+<li>The strongest acidic p<i>K</i><sub>a</sub> value of the input molecule:
+<pre>
+pka("acidic", "1")
+</pre>
+<p>Note the difference in the last two examples: in p<i>K</i><sub>a</sub> calculation a number
+denotes the atom index while a number in quotation marks denotes the strongness order:
+<code>9</code> in the previous example refers to atom <code>9</code> while <code>"1"</code>
+in the above example refers to the strongest acidic p<i>K</i><sub>a</sub> value 
+(<code>"2"</code> refers to the second strongest value, etc.).</p>
+<li>The log<i>P</i> value of the input molecule:
+<pre>
+logp()
+</pre>
+<li>The log<i>D</i> value at <code>pH=7.4</code> of the input molecule:
+<pre>
+logd("7.4")
+</pre>
+<p>Note that in log<i>D</i> calculation the pH value should be enclosed in quotation marks.</p>
+<li>Check the difference between log<i>D</i> values at two different pH-s:
+<pre>
+logd("7.4") - logd("3.8") > 0.5
+</pre>
+<li>The mass of the input molecule:
+<pre>
+mass()
+</pre>
+<li>The number of H bond acceptor atoms in the input molecule:
+<pre>
+acceptorCount()
+</pre>
+<li>The same with taking the physiological microspecies at pH <code>7.4</code>:
+<pre>
+acceptorCount("7.4")
+</pre>
+<li>Checking the difference of the two above:
+<pre>
+acceptorCount("7.4") - acceptorCount() > 1
+</pre>
+</ol>        
+
+<li><a href="EvaluatorFunctions.html#functiondesc">Functions</a>
+
+<p>There are different type of functions provided by ChemAxon:</p>
+<ol>
+<p><li><i>general purpose functions</i>: simple array utility functions, such as 
+minimum, maximum, sum or number of array elements and an array element sorter function
+<p><li><i>atomic functions</i>: functions referring to an input atom, such as the 
+atom property query function of which queries atom properties (e.g. hydrogen count) or
+the containment function that checks whether an atom index is contained in an 
+atom index array
+<p><li><i>molecular functions</i>: functions that calculate molecular properties, but do 
+not fit into the structure based calculations section (e.g. <code>isQuery</code> function)
+<p><li><i>evaluator functions</i>: functions containing an inner expression string
+as parameter - evaluate this expression for each atom in an 
+<a href="#atomcontext">atom context</a>, examples include a filtering function that takes a
+boolean expression and returns atoms satisfying it and min-max functions which evaluate the
+inner expression for all atoms in the context, return the minimum or maximum value or the
+corresponding atom index 
+</ol>
+
+<p>
+<ol>
+<li>The minimum of the partial charge values on atoms <code>7</code>, <code>8</code> and <code>9</code>
+(0-based) of the input molecule:
+<pre>
+min(charge(7), charge(8), charge(9))
+</pre>
+<li>The hydrogen count on atom <code>2</code> (0-based) of the input molecule:
+<pre>
+hcount(2)
+</pre>
+<li>The valence of atom <code>2</code> of the input molecule:
+<pre>
+valence(2) 
+</pre>
+<li>The atom indices corresponding to positive partial charges in the input molecule:
+<pre>
+filter("charge() > 0")
+</pre>
+<li>The number of atoms with positive partial charge in the input molecule:
+<pre>
+count(filter("charge() > 0")) 
+</pre>
+<li>The positive partial charges in the input molecule:
+<pre>
+charge(filter("charge() > 0"))
+</pre>
+<li>The same but sorted in ascending order:
+<pre>
+sortAsc(charge(filter("charge() > 0")))
+</pre>
+<li>Indices of atoms having partial charge at least <code>0.4</code> 
+in the major microspecies at <code>pH=7.4</code>:
+<pre>
+filter("charge('7.4') >= 0.4")
+</pre>
+<li>The partial charge values on these atoms in the input molecule:
+<pre>
+charge(filter("charge('7.4') >= 0.4"))
+</pre>
+<li>The minimum acidic p<i>K</i><sub>a</sub> value on hetero atoms 
+with a single hydrogen:
+<pre>
+min(pka(filter("match('[!#6!#1;H1]')"), "acidic"))
+</pre>
+<li>Checking whether there is a hetero atom with acidic p<i>K</i><sub>a</sub> value 
+less than <code>0.75</code>:
+<pre>
+min(pka(filter("match('[!#6!#1;H1]')"), "acidic")) < 0.75
+</pre>
+<li>Indices of atoms with the two strongest basic p<i>K</i><sub>a</sub> values:
+<pre>
+maxAtom("pka('basic')", 2)
+</pre>
+<p><b>Note</b>, that expression strings can be enclosed by either double or single quotes,
+in case of nested strings these can be used alternated. However, some UNIX shells interpret
+single quotes and therefore single quotes are hard to use in command line input - the file
+input solves this problem, or else single double quotes can be replaced by escaped inner double quotes:</p>
+<pre>
+maxAtom("pka(\"basic\")", 2)
+</pre>
+<li>The corresponding p<i>K</i><sub>a</sub> values:
+<pre>
+maxValue("pka('basic')", 2)
+</pre>
+<li>Testing whether the partial charge on the atom with the strongest basic p<i>K</i><sub>a</sub>
+value exceeds the partial charge on the atom with the second strongest basic p<i>K</i><sub>a</sub>
+value:
+<pre>
+x = maxAtom("pka('basic')", 2);
+charge(x[0]) > charge(x[1])
+</pre>
+<p><b>Note</b>, that in the current version the above expression cannot be evaluated if there are
+less than two basic p<i>K</i><sub>a</sub> values in the input molecule.</p>
+<li>The basic p<i>K</i><sub>a</sub> values for atoms with positive charge, sorted in descending order:
+<pre>
+sortDesc(pka("basic", filter("charge() > 0")))
+</pre>
+<p><b>Note</b>, that in the current version <code>NaN</code> (meaning that there is no valid 
+p<i>K</i><sub>a</sub> for the given atom) values are put to the end of the array after sorting.
+<li>Checking whether there is a sufficiently large difference between the two strongest 
+basic p<i>K</i><sub>a</sub> values of the previous example:
+<pre>
+x = sortDesc(pka("basic", filter("charge() > 0")));
+x[0] - x[1] > 1.5
+</pre>
+<li>The hydrogen count for each atom in the input molecule:
+<pre>
+eval("hcount()")
+</pre>
+<li>The number of hydrogens in the input molecule:
+<pre>
+sum(eval("hcount()"))
+</pre>
+<li>Dissimilarity between the benzene ring and the input molecule
+using pharmacophore fingerprint as molecular descriptor with Tanimoto (default) metric:
+<pre>
+refmol = "c1ccccc1";
+dissimilarity("PF", refmol) 
+</pre>
+<p><b>Note:</b> <code>dissimilarity</code> function is not available in Marvin, it can be used only
+if JChem software package is installed.
+<li>The same using Euclidean metric:
+<pre>
+refmol = "c1ccccc1";
+dissimilarity("PF:Euclidean", refmol) 
+</pre>
+<p><b>Note:</b> <code>dissimilarity</code> function is not available in Marvin, it can be used only
+if JChem software package is installed.
+<li>The partial charge on the two atoms out of <code>1, 6, 8</code> (0-based atom indices) having
+the first and second biggest hydrogen counts (<a href="#molcontext">molecule context</a>):
+<pre>
+x = array(1, 6, 8);
+y = maxAtom(x, "hcount()", 2);
+charge(y)
+</pre>
+<li>Checking whether atom <code>6</code> (0-based atom index) has the first or second smallest
+partial charge among atoms <code>1, 6, 8, 10, 12</code> (<a href="#molcontext">molecule context</a>):
+<pre>
+x = array(1, 6, 8, 10, 12);
+y = minAtom(x, "charge()", 2);
+in(6, y)
+</pre>
+</ol>
+
+<li><a href="EvaluatorFunctions.html#matchdesc">Matching conditions</a>
+<p>There are three options to reference <a href="http://www.chemaxon.com/jchem/doc/user/queryindex.html">substructure search</a>
+from our expressions: <code>match</code> function returns a <code>true / false</code> answer while 
+<code>matchCount</code> and <code>disjointMatchCount</code> functions return the number of search hits.</p>
+
+<p><b>Note:</b> <code>match</code>, <code>matchCount</code> and <code>disjointMatchCount</code> functions are not 
+available in Marvin, they can be used only if JChem software package is installed.
+
+<ol>
+<li>A simple molecule matching test taking the input molecule as target:
+<pre>
+match("C1CCOCC1")
+</pre>
+<li>Atom matching with target atom being atom <code>2</code> (0-based)
+of the input molecule and query atom set being all query atoms:
+<pre>
+match(2, "C1CCOCC1")
+</pre>
+<li>Atom matching with target atom being atom <code>2</code> (0-based)
+of the input molecule, and query atom set being both query carbon atoms
+attached to the oxygen:
+<pre>
+match(2, "C1C[C:1]O[C:2]C1", 1, 2)
+</pre>
+<li>The same with referencing the query by molecule file path:
+<pre>
+match(2, "mols/query.mol", 1, 2)
+</pre>
+<li>The same with referencing the query by molecule ID <code>nitro</code> as a 
+predefined molecule constant:
+<pre>
+match(2, nitro, 1, 2)
+</pre>
+<li>The sum of "C=O" and "CO" groups in the input molecule:
+<pre>
+matchCount("C=O") + matchCount("CO")
+</pre>
+<li>A more complex condition checking whether the input molecule contains sulfur and whether
+there are at least <code>6</code> "C=O" and "CO" groups in the input molecule alltogether:
+<pre>
+match("S") && (matchCount("C=O") + matchCount("CO") >= 6)
+</pre>
+</ol>
+
+</ul>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h3><a name="reactioncontextexamples"></a><a href="http://www.chemaxon.com/jchem/doc/user/reactor.html">Reactor</a> examples 
+   (<a href="#reactioncontext">reaction context</a>)</h3>
+
+<p><b>Note:</b> Reactor is part of JChem software package, it is not available in Marvin.
+
+<ul>
+<li><a name="pluginexamples"></a><a href="EvaluatorFunctions.html#plugindesc">Structure based calculations (plugin calculations)</a>
+
+<p>Plugin references provide access to 
+<a href="../developer/plugins.html">ChemAxon's calculator plugins</a>.
+These calculations equip our expressions with chemical meaning.</p>
+
+<ol>
+<li>The physiological microspecies at pH <code>7.4</code> of the second reactant:
+<pre>
+microspecies(reactant(0), "7.4")
+</pre>
+<li>The partial charges on reactant atom matching map <code>1</code> in the reaction equation:
+<pre>
+charge(ratom(1))
+</pre>
+<li>The same with taking the physiological microspecies at pH <code>7.4</code>:
+<pre>
+charge(ratom(1), "7.4")
+</pre>
+<li>The partial charges of atom having atom index <code>2</code> in the first reactant:
+<pre>
+charge(reactant(0), 2)
+</pre>
+<p>Note: Evaluation of this expression will result in error if there is no atom with index <code>2</code>
+in the first reactant. In reaction context referring by atom index (instead of atom map) is recommened only if the
+atom index(es) are returned by a Chemical Terms expression (see <a href="#rcontextatomindexample2">this example</a>).
+</p>
+<li>Checking whether the partial charge on reactant atom matching map <code>1</code> 
+is greater than or equal to this charge value in the physiological microspecies at pH <code>7.4</code>:
+<pre>
+charge(ratom(1)) > charge(ratom(1), "7.4")
+</pre>
+<li>The significant p<i>K</i><sub>a</sub> value (acidic or basic) on product atom 
+matching map <code>3</code> in the reaction equation:
+<pre>
+pka(ratom(3))
+</pre>
+<li>The acidic p<i>K</i><sub>a</sub> on the above atom:
+<pre>
+pka(ratom(3), "acidic")
+</pre>
+<p>Note that if the p<i>K</i><sub>a</sub> type "acidic" or "basic" is omitted (as in the previous example),
+then the more significant value is returned, while specifically the "acidic" (or "basic") 
+p<i>K</i><sub>a</sub> value is returned if the type is specified.</p>
+<li>The strongest acidic p<i>K</i><sub>a</sub> value of the first reactant:
+<pre>
+pka(reactant(0), "acidic", "1")
+</pre>
+<li>The log<i>P</i> value of the first product:
+<pre>
+logp(product(0))
+</pre>
+<li>The log<i>D</i> value at <code>pH=7.4</code> of the first product:
+<pre>
+logd(product(0), "7.4")
+</pre>
+<p>Note that in log<i>D</i> calculation the pH value should be enclosed in quotation marks.</p>
+<li>Check the difference between log<i>D</i> values at two different pH-s:
+<pre>
+logd(product(0), "7.4") - logd(product(0), "3.8") > 0.5
+</pre>
+<li>The mass of the second product:
+<pre>
+mass(product(1))
+</pre>
+<li>The number of H bond acceptor atoms in the second reactant:
+<pre>
+acceptorCount(reactant(1))
+</pre>
+<li>The same with taking the physiological microspecies at pH <code>7.4</code>:
+<pre>
+acceptorCount(reactant(1), "7.4")
+</pre>
+<li>Checking the difference of the two above:
+<pre>
+acceptorCount(reactant(1), "7.4") - acceptorCount(reactant(1)) > 1
+</pre>
+</ol>        
+
+<li><a name="functionexamples"></a><a href="EvaluatorFunctions.html#functiondesc">Functions</a>
+
+<p>There are different type of functions provided by ChemAxon:</p>
+<ol>
+<p><li><i>general purpose functions</i>: simple array utility functions, such as 
+minimum, maximum, sum or number of array elements and an array element sorter function
+<p><li><i>atomic functions</i>: functions referring to an input atom, such as the 
+atom property query function of which queries atom properties (e.g. hydrogen count) or
+the containment function that checks whether an atom index is contained in an 
+atom index array
+<p><li><i>molecular functions</i>: functions that calculate molecular properties, but do 
+not fit into the structure based calculations section (e.g. <code>isQuery</code> function)
+<p><li><i>evaluator functions</i>: functions containing an inner expression string
+as parameter - evaluate this expression for each atom in an 
+<a href="#atomcontext">atom context</a>, examples include a filtering function that takes a
+boolean expression and returns atoms satisfying it and min-max functions which evaluate the
+inner expression for all atoms in the context, return the minimum or maximum value or the
+corresponding atom index 
+</ol>
+
+<p>
+<ol>
+<li>The minimum of the partial charge values on reactant atoms matching maps <code>2</code>, 
+<code>3</code> and <code>4</code>:
+<pre>
+min(charge(ratom(2)), charge(ratom(3)), charge(ratom(4)))
+</pre>
+<li>The hydrogen count on product atom matching map <code>2</code>:
+<pre>
+hcount(patom(2))
+</pre>
+<li>The valence of reactant atom matching map <code>2</code>:
+<pre>
+valence(ratom(2)) 
+</pre>
+<li>The atom indices corresponding to positive partial charges in the first reactant:
+<pre>
+filter(reactant(0), "charge() > 0")
+</pre>
+<li>The number of atoms with positive partial charge in the first reactant:
+<pre>
+count(filter(reactant(0), "charge() > 0")) 
+</pre>
+<li><a name="rcontextatomindexample2"></a>The positive partial charges in the first reactant:
+<pre>
+charge(reactant(0), filter(reactant(0), "charge() > 0"))
+</pre>
+<li>The same but sorted in ascending order:
+<pre>
+sortAsc(charge(reactant(0), filter(reactant(0), "charge() > 0")))
+</pre>
+<li>Indices of atoms having partial charge at least <code>0.4</code> 
+in major microspecies of the first product at <code>pH=7.4</code>:
+<pre>
+filter(product(0), "charge('7.4') >= 0.4")
+</pre>
+<li>The partial charge values on these atoms in the input molecule:
+<pre>
+charge(product(0), filter(product(0), "charge('7.4') >= 0.4"))
+</pre>
+<li>The minimum acidic p<i>K</i><sub>a</sub> value on hetero atoms 
+with a single hydrogen in the first reactant:
+<pre>
+min(pka(reactant(0), filter(reactant(0), "match('[!#6!#1;H1]')"), "acidic"))
+</pre>
+<li>Checking whether there is a hetero atom with acidic p<i>K</i><sub>a</sub> value 
+less than <code>0.75</code> in the first reactant:
+<pre>
+min(pka(reactant(0), filter(reactant(0), "match('[!#6!#1;H1]')"), "acidic")) < 0.75
+</pre>
+<li>The minimum acidic p<i>K</i><sub>a</sub> value on aliphatic atoms 
+in the first reactant:
+<pre>
+min(pKa(reactant(0), filter(reactant(0), "aliphaticAtom()", "acidic")))
+</pre>
+<li>Checking whether the bond between reactant atom matching map <code>1</code> and reactant atom matching 
+map <code>2</code> is a single or double bond.
+<pre>
+(bondType(reactant(0), bond(ratom(1), ratom(2))) == 1 || bondType(reactant(0), bond(ratom(1), ratom(2))) == 2) 
+</pre>
+<p><b>Note</b>, that <code>bond(ratom(1), ratom(2))</code> subexpression returns an <code>&lt;atomIndex1&gt;-&lt;atomIndex2&gt;</code> 
+string, so in reaction context the molecule parameter also must be passed to <code>bondType()</code> 
+function (see <a href="EvaluatorFunctions.html#note1">this note</a>). In the example reactant atoms matching maps <code>1</code> and 
+<code>2</code> are atoms of the first reactant (<code>reactant(0)</code>).</p>
+<li>Indices of atoms with the two strongest basic p<i>K</i><sub>a</sub> values
+in the first product:
+<pre>
+maxAtom(product(0), "pka('basic')", 2)
+</pre>
+<p><b>Note</b>, that expression strings can be enclosed by either double or single quotes,
+in case of nested strings these can be used alternated. However, some UNIX shells interpret
+single quotes and therefore single quotes are hard to use in command line input - the file
+input solves this problem, or else single double quotes can be replaced by escaped inner double quotes:</p>
+<pre>
+maxAtom(product(0), "pka(\"basic\")", 2)
+</pre>
+<li>The corresponding p<i>K</i><sub>a</sub> values:
+<pre>
+maxValue(product(0), "pka('basic')", 2)
+</pre>
+<li>Testing whether the partial charge on the atom with the strongest basic p<i>K</i><sub>a</sub>
+value exceeds the partial charge on the atom with the second strongest basic p<i>K</i><sub>a</sub>
+value in the second product:
+<pre>
+x = maxAtom(product(1), "pka('basic')", 2);
+charge(x[0]) > charge(x[1])
+</pre>
+<p><b>Note</b>, that in the current version the above expression cannot be evaluated if there are
+less than two basic p<i>K</i><sub>a</sub> values in the molecule.</p>
+<li>The basic p<i>K</i><sub>a</sub> values for atoms with positive charge, sorted in descending order:
+<pre>
+sortDesc(pka("basic", reactant(0), filter(reactant(0), "charge() > 0")))
+</pre>
+<p><b>Note</b>, that in the current version <code>NaN</code> (meaning that there is no valid 
+p<i>K</i><sub>a</sub> for the given atom) values are put to the end of the array after sorting.
+<li>Checking whether there is a sufficiently large difference between the two strongest 
+basic p<i>K</i><sub>a</sub> values of the previous example:
+<pre>
+x = sortDesc(pka("basic", reactant(0), filter(reactant(0), "charge() > 0")));
+x[0] - x[1] > 1.5
+</pre>
+<li>The hydrogen count for each atom in the first product:
+<pre>
+eval(product(0), "hcount()")
+</pre>
+<li>The number of hydrogens in the first product:
+<pre>
+sum(eval(product(0), "hcount()"))
+</pre>
+<li>Dissimilarity between the first reactant and product 
+using pharmacophore fingerprint as molecular descriptor with Tanimoto (default) metric:
+<pre>
+dissimilarity("PF", reactant(0), product(0)) 
+</pre>
+<li>The same using Euclidean metric:
+<pre>
+dissimilarity("PF:Euclidean", reactant(0), product(0)) 
+</pre>
+</ol>
+
+<li><a name="matchexamples"></a><a href="EvaluatorFunctions.html#matchdesc">Matching conditions</a>
+<p>There are three options to reference <a href="http://www.chemaxon.com/jchem/doc/user/queryindex.html">substructure search</a>
+from our expressions: <code>match</code> function returns a <code>true / false</code> answer while 
+<code>matchCount</code> and <code>disjointMatchCount</code> functions return the number of search hits.</p>
+
+<ol>
+<li>A simple molecule matching test taking the first reactant as target:
+<pre>
+match(reactant(0), "C1CCOCC1")
+</pre>
+<li>Atom matching with target atom matching map <code>2</code> 
+and query atom set being all query atoms:
+<pre>
+match(patom(2), "C1CCOCC1")
+</pre>
+<li>Atom matching with target atom matching map <code>2</code>, 
+and query atom set being both query carbon atoms attached to the oxygen:
+<pre>
+match(patom(2), "C1C[C:1]O[C:2]C1", 1, 2)
+</pre>
+<li>The same with referencing the query by molecule file path:
+<pre>
+match(patom(2), "mols/query.mol", 1, 2)
+</pre>
+<li>The sum of "C=O" and "CO" groups in the second product:
+<pre>
+matchCount(product(1), "C=O") + matchCount(product(1), "CO")
+</pre>
+<li>A more complex condition checking whether the second product contains sulfur and whether
+there are at least <code>6</code> "C=O" and "CO" groups in the input molecule alltogether:
+<pre>
+match(product(1), "S") && (matchCount(product(1), "C=O") + matchCount(product(1), "CO") >= 6)
+</pre>
+</ol>
+
+</ul>
+
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h3><a name="searchcontextexamples"></a><a href="http://www.chemaxon.com/jchem/doc/user/query_features.html#filtering">Search filter</a> examples 
+   (<a href="#searchcontext">search context</a>)</h3>
+
+<ul>
+<li><a href="EvaluatorFunctions.html#plugindesc">Structure based calculations (plugin calculations)</a>
+
+<p>Plugin references provide access to 
+<a href="../developer/plugins.html">ChemAxon's calculator plugins</a>.
+These calculations equip our expressions with chemical meaning.</p>
+
+<ol>
+<li>Filter hits by requiring that the partial charge on target atom matching query map <code>1</code> 
+should be positive:
+<pre>
+charge(hm(1)) > 0
+</pre>
+<li>The same with taking the physiological microspecies of the target at pH <code>7.4</code>:
+<pre>
+charge(hm(1), "7.4") > 0
+</pre>
+<li>Checking whether the partial charge on target atom matching query map <code>1</code> 
+is greater than or equal to this charge value in the physiological microspecies at pH <code>7.4</code>:
+<pre>
+charge(hm(1)) > charge(hm(1), "7.4")
+</pre>
+<li>The basic p<i>K</i><sub>a</sub> value on target atom 
+matching query map <code>3</code> should be greater than <code>8.0</code>:
+<pre>
+pka(hm(3) "basic") > 8.0
+</pre>
+<li>The strongest acidic p<i>K</i><sub>a</sub> value of the target should be less than <code>0.5</code>:
+<pre>
+pka("acidic", "1") < 0.5
+</pre>
+<p><b>Note</b>, that by default, the expression refers to the target.
+Write <code>query()</code> to refer to the query:
+<pre>
+pka(query(), "acidic", "1") < 0.5
+</pre>
+<li>The log<i>P</i> value of the query should be greater than that of the target:
+<pre>
+logp(query()) > logp()
+</pre>
+<li>The log<i>D</i> value at <code>pH=7.4</code> of the target should be less than 
+the log<i>D</i> value at <code>pH=3.4</code>:
+<pre>
+logd("7.4") < logd("3.4")
+</pre>
+<p>Note that in log<i>D</i> calculation the pH value should be enclosed in quotation marks.</p>
+<li>Check the difference between log<i>D</i> values of the target at two different pH-s:
+<pre>
+logd("7.4") - logd("3.8") > 0.5
+</pre>
+<li>Require a sufficiently large target mass as well as a positive charge value
+at the target atom matching query map <code>1</code>:
+<pre>
+(mass() > 500) && (charge(hm(1)) > 0)
+</pre>
+</ol>        
+
+<li><a href="EvaluatorFunctions.html#functiondesc">Functions</a>
+
+<p>There are different type of functions provided by ChemAxon:</p>
+<ol>
+<p><li><i>general purpose functions</i>: simple array utility functions, such as 
+minimum, maximum, sum or number of array elements and an array element sorter function
+<p><li><i>atomic functions</i>: functions referring to an input atom, such as the 
+atom property query function of which queries atom properties (e.g. hydrogen count) or
+the containment function that checks whether an atom index is contained in an 
+atom index array
+<p><li><i>evaluator functions</i>: functions containing an inner expression string
+as parameter - evaluate this expression for each atom in an 
+<a href="#atomcontext">atom context</a>, examples include a filtering function that takes a
+boolean expression and returns atoms satisfying it and min-max functions which evaluate the
+inner expression for all atoms in the context, return the minimum or maximum value or the
+corresponding atom index 
+</ol>
+
+<ol>
+<li>The minimum of the partial charge values on target atoms matching maps <code>2</code>, 
+<code>3</code> and <code>4</code> should be negative, that is there should be at least 
+one negative among these charge values:
+<pre>
+min(charge(hm(2)), charge(hm(3)), charge(hm(4))) < 0
+</pre>
+<li>The hydrogen counts on target atom matching map <code>1</code> and on 
+target atom matching map <code>2</code> should be at least <code>1</code>:
+<pre>
+(hcount(hm(1)) >= 1) && (hcount(hm(2)) >= 1)
+</pre>
+<li>The valence of target atom matching map <code>1</code> or map <code>2</code>
+should be at least <code>1</code>:
+<pre>
+(valence(hm(1)) >= 1) || (valence(hm(2)) >= 1)
+</pre>
+<li>The number of atoms with positive partial charge in the target should be at least 
+that in the query:
+<pre>
+count(filter("charge() > 0")) >= count(filter(query()"charge() > 0"))
+</pre>
+<li>The minimum acidic p<i>K</i><sub>a</sub> value on hetero atoms 
+with a single hydrogen in the target should be less than <code>0.75</code>,
+that is, there should be at least one hetero atom with a single hydrogen 
+with acidic p<i>K</i><sub>a</sub> less than <code>0.75</code>:
+<pre>
+min(pka(filter("match('[!#6!#1;H1]')"), "acidic")) < 0.75
+</pre>
+<li>Testing whether the partial charge on the atom with the strongest basic p<i>K</i><sub>a</sub>
+value exceeds the partial charge on the atom with the second strongest basic p<i>K</i><sub>a</sub>
+value in the target:
+<pre>
+x = maxAtom("pka('basic')", 2);
+charge(x[0]) > charge(x[1])
+</pre>
+<p><b>Note</b>, that in the current version the above expression cannot be evaluated if there are
+less than two basic p<i>K</i><sub>a</sub> values in the molecule.</p>
+<li>Checking whether there is a sufficiently large difference between the two strongest 
+basic p<i>K</i><sub>a</sub> values among atoms with positive charge in the target and the query:
+<pre>
+x = max(pka("basic", query(), filter(query(), "charge() > 0")));
+y = max(pka("basic", filter("charge() > 0")));
+(x - y > 1.5) || (y - x > 1.5)
+</pre>
+<li>Dissimilarity between the target and query 
+using pharmacophore fingerprint as molecular descriptor with Tanimoto (default) metric
+should be sufficiently small:
+<pre>
+dissimilarity("PF", target(), query()) < 0.6 
+</pre>
+<p><b>Note</b>, that the <code>target()</code> can be omitted as in the above examples:
+<pre>
+dissimilarity("PF", query()) < 0.6 
+</pre>
+<li>The same using Euclidean metric:
+<pre>
+dissimilarity("PF:Euclidean", target(), query()) < 0.6 
+</pre>
+</ol>
+
+</ul>
+
+
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<center>
+<font size="-2" face="helvetica">
+Copyright &copy; 1999-2012 
+<a href="http://www.chemaxon.com">ChemAxon Ltd.</a>
+&nbsp;&nbsp;&nbsp;All rights reserved.
+</font>
+</center>
+
+</BODY>
+</HTML>

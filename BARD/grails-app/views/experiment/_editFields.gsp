@@ -3,6 +3,7 @@
 <div class="row-fluid">
 <div id="foo" class="span12">
 <h1>Create Experiment for ADID: ${assay.id}</h1>
+
 <h2><g:link controller="assayDefinition" action="show"
             id="${assay.id}">${assay.name}</g:link></h2>
 <g:if test="${experiment.experimentName == null || experiment.errors}">
@@ -11,18 +12,25 @@
 
     <dl class="dl-horizontal">
 
-
-
         <dt>Name:</dt>
         <dd>
             <input class="input-xxlarge" type="text" name="experimentName"
                    value="${fieldValue(bean: experiment, field: "experimentName")}"/>
         </dd>
 
+        <dt>Hold until Date:</dt><dd>
+        <input type="text" class="input-large date-selection" name="holdUntilDate"
+               placeholder="Click icon to select date"
+               value="${experiment.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.holdUntilDate) : experiment.holdUntilDate}"/>
+        (No more than 1 year from today)
+        </dd>
+
+        <%--
         <dt>Description:</dt><dd>
         <input class="input-xxlarge" type="text" name="description"
                value="${fieldValue(bean: experiment, field: "description")}"/>
     </dd>
+
 
         <dt><g:message code="experiment.experimentStatus.label" default="Status"/>:</dt>
         <dd>
@@ -31,12 +39,7 @@
                       optionValue="id"></g:select>
         </dd>
 
-        <dt>Hold until Date:</dt><dd>
-        <input type="text" class="input-large date-selection" name="holdUntilDate"
-               placeholder="Click icon to select date"
-               value="${experiment.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.holdUntilDate) : experiment.holdUntilDate}"/>
-        (No more than 1 year from today)
-    </dd>
+
 
         <dt>Run Date From:</dt><dd>
         <input type="text" class="input-large date-selection" name="runDateFrom"
@@ -45,17 +48,18 @@
     </dd>
 
         <dt>Run Date To:</dt><dd>
-        <input type="text" class="input-large date-selection" name="runDateTo"  placeholder="Click icon to select date"
+        <input type="text" class="input-large date-selection" name="runDateTo" placeholder="Click icon to select date"
                value="${experiment.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateTo) : experiment.runDateTo}"/>
+         --%>
+
     </dd>
     </dl>
 
     <r:script>
-         $('.date-selection').datepicker({
+        $('.date-selection').datepicker({
             format: 'MM/dd/yyyy',
             showOn: "button",
-            buttonImage: "../../images/calendar.gif",
-            buttonImageOnly: true
+            buttonText: '<i class="icon-calendar"></i>'
         });
     </r:script>
 </g:if>

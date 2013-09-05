@@ -1,0 +1,57 @@
+<html>
+<head>
+<title>Marvin caught a SecurityException</title>
+<link REL ="stylesheet" TYPE="text/css" HREF="../../marvinmanuals.css" TITLE="Style">
+</head>
+<body>
+<font COLOR="red">
+<blink>Error:</blink> Marvin cannot load a module, a template or a molecule file
+</font>
+
+<p>
+One of the following two possibilities might have caused the problem:
+<ul>
+<li>The file and Marvin are not on the same server.
+    From security reasons, Java applets can only access files from their host
+    web site.</li>
+<li>You are behind a <i>firewall</i> which does not proxy DNS correctly or
+at all. Netscape Navigator 4.01 and later versions do not trust in such
+misconfigured proxies by default, so applets cannot connect back to their host
+web site.</li>
+</ul>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<p>There are two ways to solve the <b>firewall</b> problem:
+<p>
+<i>1.</i>
+    Ask the system administrator of your intranet to reconfigure the firewall
+    correctly, or
+<p>
+<i>2.</i>
+Modify Netscape's preferences &quot;manually&quot; by editing your
+Preferences file.<p>
+The name and location of this file varies from platform to platform: 
+<blockquote>
+<table CELLSPACING=10 CELLPADDING=0 BORDER=0>
+<tr ALIGN=LEFT>
+    <td>Macintosh:</td>
+    <td>System Folder:Preferences:Netscape f:Netscape Preferences</td></tr>
+<tr ALIGN=LEFT>
+    <td>UNIX:</td>
+    <td>~/.netscape/preferences.js</td></tr>
+<tr ALIGN=LEFT>
+    <td>Windows:</td>
+    <td>\Program Files\Netscape\Users\&lt;username&gt;\prefs.js</td></tr>
+</table>
+</blockquote>
+Be sure to edit this file only while all instances of Netscape are shut down,
+as Netscape will overwrite the file when it exits. 
+<p>
+To enable the preference, add this line to the Preferences file:<br>
+<pre>
+user_pref("security.lower_java_network_security_by_trusting_proxies",true);
+</pre>
+
+</body>
+</html>

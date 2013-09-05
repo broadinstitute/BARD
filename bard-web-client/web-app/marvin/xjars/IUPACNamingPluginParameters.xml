@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+
+    <Group Title="Generate">
+    	<RadioButtonGroup Key="type">
+    		<Choice Value="preferred" Text="Preferred IUPAC Name" Tooltip="IUPAC name will be generated." Selected="true" />
+    		<Choice Value="traditional" Text="Traditional Name" Tooltip="If traditional name cannot be generated, IUPAC name will be generated automatically." />
+    	</RadioButtonGroup>
+    </Group>
+
+    <Boolean Key="single" Label="Single fragment mode" Tooltip="If unchecked, the names are displayed in a row divided by a semicolon, if checked, the results are displayed in a scroll window." Value="false" />
+
+</ParameterPanel>

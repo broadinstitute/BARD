@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <link rel="stylesheet" href="../marvinmanuals.css" type="text/css">
+    <title>Installing Licenses</title>
+</head>
+<body>
+    <h2>Installing Licenses</h2>
+<h5>Available ways of installing</h5>
+<ul>
+<li><a href="installToDesktop.html">Installing Licenses to Desktops</a></li>
+<li><a href="installToServer.html">Installing Licenses on Servers</a> (JSP, Pipeline Pilot, ...)</li>
+<li><a href="installToServer.html#applets">Licensing Applets</a></li>
+<li><a href="installToServer.html#jws">Licensing via Java Web Start</a></li>
+</ul>
+
+<h5>License file location</h5>
+The license file should either be at the default location or in case of a custom
+location, the location should be configured to the license manager.
+<p>The <em>default location</em> is <code>.chemaxon/license.cxl</code> (Unix)
+or <code>chemaxon\license.cxl</code> (Windows) under the user's home directory.</p>
+<p><b>From the 5.3.2 version license files can also be located at <code>(.)chemaxon/licenses/*.cxl</code>,
+the name of the license files can arbitrarily be changed.</b></p>    
+<p>On Unix systems - including most distributions of Linux -
+the home directory for each user takes the form <code>/home/username</code>
+(where <code>username</code> is the name of the user account).
+In newer versions of Microsoft Windows, based on the multi-user Windows NT,
+each user has a home directory which by default is located at
+<code>C:\Documents and Settings\username</code> when using the English language
+version of the OS (with <code>username</code> again replaced by the particular
+user's login name).</p>
+<p>In case of a <em>web application</em> (e.g. JSP pages) the license file should be placed
+on the server side, the user home is the home directory of the user that runs
+(owns) the web server.</p>
+
+<h5><a name="merge" class="anchor">Merging license files</a></h5>
+
+Detailed information is available <a href="merge.html">here</a>.     
+
+</body>
+</html>

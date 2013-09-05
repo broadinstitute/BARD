@@ -1,0 +1,181 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="MarvinSpace Developer's Guide">
+<meta NAME="author" CONTENT="Judit Papp">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>MarvinSpace Developer's Guide</title>
+</head>
+<body>
+<h1>MarvinSpace Developer's Guide</h1>
+
+<h2>Displaying atom properties - Step by Step</h2>
+
+
+<p>Let's suppose we have our own calculation that gives numbers to every atoms as a result, plus some
+molecular values or other information we would like to display with MarvinSpace.<br>
+In this step by step example our goal will be to have the result that can be seen
+on the folowing image.
+
+    <p>
+    <img alt="Result image" align="middle" src="space-files/result4.png"/>
+    </p>
+
+<p>Let's specialize it. We would like to:</p>
+<ul>
+<li>have two cells, the first will contain the molecule with labels showing our result values,
+and the second will contain the same molecule with a molecular surface that is colored
+according our calculation,</li>
+<li>manually set the coloring of the surface,</li>
+<li>set the colors of the labels and the background,</li>
+<li>create our own Popup menu with actions.</li>
+</ul>
+
+<h3>Creating a JFrame that contains MarvinSpace with two cells</h3>
+<strong>Runnable source code of this step can be found
+    <a href="../../examples/space/Example1.java.txt">here</a>.</strong>
+<img alt="Result image of the first step" align="right" src="space-files/result1.png"/>
+
+<p>We have a molecule and a set of values to each atoms of the molecule.
+<br><blockquote><code>
+    public JFrame createSpaceFrame(Molecule mol, ArrayList resultValues) throws Exception {
+</code></blockquote></p>
+
+<p>Let MarvinSpace install the necessary native libraries. We will use the <code>MSpaceEasy</code>
+class to easily configure MarvinSpace. First, we need 1 row and 2 columns.
+<br><blockquote><code>
+        chemaxon.marvin.space.MSpaceInstaller.load(false);<br>
+        chemaxon.marvin.space.MSpaceEasy mspace = new chemaxon.marvin.space.MSpaceEasy(1, 2);
+</code></blockquote></p>
+
+<p>Create the frame that contains the MarvinSpace canvas.
+<br><blockquote><code>
+        JFrame frame = new JFrame();<br>
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);<br>
+        mspace.addCanvas( frame.getContentPane() );<br>
+        mspace.setSize( 800, 600 );
+</code></blockquote></p>
+<p>We would like synchronous control of the cells.
+<br><blockquote><code>
+        mspace.setProperty("SynchronousMode", "true");<br>
+</code></blockquote></p>
+
+<p>We put the molecule to the first cell and create labels from the result values.
+<br><blockquote><code>
+        chemaxon.marvin.space.MoleculeComponent mc1 = mspace.addMoleculeTo( mol, 0 );<br>
+        mspace.getEventHandler().createAtomLabels(mc1, resultValues);
+</code></blockquote></p>
+
+<p>Then put the same molecule to the second cell, and have its Connolly surface calculated.
+<br><blockquote><code>
+        chemaxon.marvin.space.MoleculeComponent mc2 = mspace.addMoleculeTo(mol, 1);<br>
+        mspace.computeSurface( mc2 );
+</code></blockquote></p>
+
+<p>We are finished with the first step, the result can be seen on the image.
+<br><blockquote><code>
+        frame.pack();<br>
+        return frame;<br>
+    }
+</code></blockquote></p>
+
+<h3>Manually set the coloring of the surface</h3>
+<strong>Runnable source code of this step can be found
+    <a href="../../examples/space/Example2.java.txt">here</a>.</strong>
+<img alt="Result image of the second step" align="right" src="space-files/result2.png"/>
+
+<p>We should keep the component that represents the molecular surface.
+<br><blockquote><code>
+chemaxon.marvin.space.MolecularSurfaceComponent msc = mspace.computeSurface( mc2 );
+</code></blockquote></p>
+
+<p>We choose our own colors to color the molecular surface. In this example we would like
+to color areas that correspond to near zero values with gray, and areas that correspond
+to higher values with blue. We also put a color between gray and blue as a breakpoint in
+the homogenous color flow, so that we can better recognize higher values from lesser values.
+Say we have the value range 0 - 2.16. With two colors it is a simple linear coloring.
+But with adding an extra color that hardly differs from gray results the distribution
+of the range of colors mainly on the 1.08 - 2.16 range.
+<br><blockquote><code>
+    byte[][] paletteColors = new byte[][] { {89,89,89}, {69,69,89}, {0,0,127} };<br>
+    msc.setPalette( paletteColors );
+</code></blockquote></p>
+
+<p>We can pass the atomic values and have the surface colored by them according to the
+previously set colors.
+<br><blockquote><code>
+    msc.setAtomPropertyList( resultValues );<br>
+    msc.setDrawProperty( "Surface.ColorType", "AtomProperty" );
+</code></blockquote></p>
+
+<h3>Display settings</h3>
+<strong>Runnable source code of this step can be found
+    <a href="../../examples/space/Example3.java.txt">here</a>.</strong>
+<img alt="Result image of the second step" align="right" src="space-files/result3.png"/>
+
+<p>Setting the color of the background:
+<br><blockquote><code>
+mspace.setProperty( "BackgroundColor", "#ffffff" );
+</code></blockquote></p>
+
+<p>Label property settings that applies to all labels of the scene:
+    <br><blockquote><code>
+    mspace.setProperty( "Label.Draw2D", "true" );<br>
+    mspace.setProperty( "Label.ForegroundColor", "#000000" );<br>
+    mspace.setProperty( "Label.BackgroundColor", "#ffffff" );<br>
+    mspace.setProperty( "Label.Size", "small" );
+    </code></blockquote></p>
+
+<p>Although we might want certain labels to have individual settings, just as
+    the upper left label in our example. In this case property settings can be disabled.
+    <br><blockquote><code>
+    label.ignoreDrawProperties( true );<br>
+    label.setBorderColorMode(Label.BORDER_MODE_NONE);<br>
+    label.setBackgroundColor( Color.white );<br>
+    label.setForegroundColor( Color.black );
+
+    </code></blockquote></p>
+
+<h3>Coloring the labels</h3>
+<strong>Runnable source code of this step can be found
+    <a href="../../examples/space/Example4.java.txt">here</a>.</strong>
+<img alt="Result image of the second step" align="right" src="space-files/result4.png"/>
+
+<p>We should keep the labels that were created to each atom.
+<br><blockquote><code>
+chemaxon.marvin.space.monitor.Label[] labels = <br>
+    mspace.getEventHandler().createAtomLabels(mc1, resultValues);
+</code></blockquote></p>
+
+<p>The following property setting is unnecessary, because it would take effect just
+    after we set the color to each label, so we put this in comment.
+<br><blockquote><code>
+//mspace.setProperty( "Label.ForegroundColor", "#000000" );
+</code></blockquote></p>
+
+<p>We can color each label to the same color that is the color of the atom on the
+molecular surface. To do so, we get the color palette from the surface, and
+we can get the color to each atom.</p>
+<blockquote>
+<pre>
+chemaxon.marvin.space.util.Palette palette = msc.getPalette();
+for(int i=0; i&lt;labels.length; i++) {
+    float[] c = palette.getColor( Double.parseDouble( labels[i].getText() ) );
+    labels[i].setBorderColorMode(Label.BORDER_MODE_BRIGHTER_FOREGROUND);
+    labels[i].setForegroundColor( new Color(c[0], c[1], c[2]) );
+}
+</pre>
+</blockquote>
+
+
+<hr>
+<p>
+<center>
+<font size="-2" face="helvetica">
+
+Copyright &copy; 2004-2012
+<a href="http://www.chemaxon.com">ChemAxon Ltd.</a>
+&nbsp;&nbsp;&nbsp;All rights reserved.
+</font>
+</center>
+</body>
+</html>

@@ -12,9 +12,8 @@
         <div class="control-group">
             <div class="controls">
                 <input type="submit" class="btn btn-primary" value="Save" id="saveBtn">
-
-                <g:link class="btn" >Cancel</g:link>
-            </div>
+                <a href="javascript:closeWindow();">Close this window to cancel</a>
+              </div>
         </div>
     </g:form>
 </div>

@@ -1,9 +1,6 @@
 package iteration_025
 
 databaseChangeLog = {
-    String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
-    File migrationsDir = new File(bardDomainModelMigrationsDir)
-
 
     changeSet(author: 'jasiedu', id: 'add trigger to recompute assay short name on assayType update', dbms: 'oracle', context: 'standard') {
         grailsChange {
@@ -26,10 +23,10 @@ END;
     }
 
     changeSet(author: "jasiedu", id: "iteration-025/01-recreate-context-item-constraints", dbms: "oracle", context: "standard") {
-        sqlFile(path: "${migrationsDir}/iteration_025/01-recreate-context-item-constraints.sql", stripComments: true)
+        sqlFile(path: "iteration_025/01-recreate-context-item-constraints.sql", stripComments: true)
     }
     changeSet(author: "jasiedu", id: "iteration-025/02-rename-comments-column-element", dbms: "oracle", context: "standard") {
-        sqlFile(path: "${migrationsDir}/iteration_025/02-rename-comments-column-element.sql", stripComments: true)
+        sqlFile(path: "iteration_025/02-rename-comments-column-element.sql", stripComments: true)
     }
 
 
@@ -52,7 +49,7 @@ END;
     }
 
     changeSet(author: "ddurkin", id: "iteration_025/03-add-element-columns.sql", dbms: "oracle", context: "standard") {
-        sqlFile(path: "${migrationsDir}/iteration_025/03-add-element-columns.sql", stripComments: true)
+        sqlFile(path: "iteration_025/03-add-element-columns.sql", stripComments: true)
     }
 
     changeSet(author: "ddurkin", id: "iteration_025/04-element-update-data-for-2-new-columns.sql", dbms: "oracle", context: "production-data-update") {
@@ -64,7 +61,7 @@ END;
                                """)
             }
         }
-        sqlFile(path: "${migrationsDir}/iteration_025/04-element-update-data-for-2-new-columns.sql", stripComments: false) // there was a --- in a string that was getting stripped and messing up the executed sql
+        sqlFile(path: "iteration_025/04-element-update-data-for-2-new-columns.sql", stripComments: false) // there was a --- in a string that was getting stripped and messing up the executed sql
     }
 
 }

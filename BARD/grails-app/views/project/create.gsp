@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="bard.db.enums.ProjectStatus; bard.db.project.*" %>
+<%@ page import="bard.db.enums.ProjectGroupType; bard.db.enums.ProjectStatus; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,44 +40,66 @@
         </div>
     </div>
 </g:if>
+<div class="row-fluid">
+    <div class="span12">
+        <g:form class="form-horizontal" action="save" controller="project">
 
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span9">
-            <div id="msg"></div>
-            <dl class="dl-horizontal">
-                <dt>* <g:message code="project.projectStatus.label" default="Status"/>:</dt>
-                <dd>
-                    <span class="projectForm"
-                          id="statusId"  data-value="${projectCommand.status}" data-type="select" data-source="/BARD/project/projectStatus" data-name="status"
-                          data-original-title="Select Project Status"></span>
-                </dd>
+            <div class="control-group ${hasErrors(bean: projectCommand, field: 'name', 'error')}">
+                <label class="control-label" for="name">*
+                <g:message code="project.name.label"/>:</label>
 
-                <dt>* <g:message code="project.name.label" default="Fix i18n"/>:</dt>
-                <dd>
-                    <span  class="projectForm" id="nameId"
-                          data-type="text"
-                          data-name="name" data-placeholder="Required"
-                          data-original-title="Enter Project Name">${projectCommand.name}</span>
-                </dd>
-                <dt>* <g:message code="project.description.label" default="Fix i18n"/>:</dt>
-                <dd>
-                    <span class="projectForm"
-                          id="descriptionId"
-                          data-type="text" data-placeholder="Required" data-name="description"
-                          data-original-title="Enter Description">${projectCommand.description}</span>
-                </dd>
-            </dl>
+                <div class="controls">
+                    <g:textField id="name" name="name" value="${projectCommand?.name}"
+                                 required=""/>
+                    <span class="help-inline"><g:fieldError field="name" bean="projectCommand"/></span>
+                </div>
+            </div>
 
-        </div>
+            <div class="control-group ${hasErrors(bean:projectCommand, field: 'description', 'error')}">
+                <label class="control-label" for="description">*
+                <g:message code="project.description.label"/>:</label>
 
-        <div class="span9">
-            <g:link controller="project" action="findById"  class="btn">Cancel</g:link>
-            <button id="save-btn" class="btn btn-primary">Create New Project</button>
+                <div class="controls">
+                    <g:textField id="description" name="description" value="${projectCommand?.description}"
+                                 required=""/>
+                    <span class="help-inline"><g:fieldError field="description" bean="projectCommand"/></span>
+                </div>
+            </div>
 
-        </div>
+            <div class="control-group ${hasErrors(bean: projectCommand, field: 'projectStatus', 'error')}">
+                <label class="control-label" for="projectStatus">* <g:message
+                        code="project.projectStatus.label"/>:</label>
+
+                <div class="controls">
+                    <g:select name="projectStatus" id="projectStatus"
+                              from="${ProjectStatus.values()}"
+                              value="${projectCommand?.projectStatus}"
+                              optionValue="id"/>
+
+                </div>
+            </div>
+            <div class="control-group ${hasErrors(bean: projectCommand, field: 'projectGroupType', 'error')}">
+                <label class="control-label" for="projectGroupType">* <g:message
+                        code="project.groupType.label"/>:</label>
+
+                <div class="controls">
+                    <g:select name="projectGroupType" id="projectGroupType"
+                              from="${ProjectGroupType.values()}"
+                              value="${projectCommand?.projectGroupType}"
+                              optionValue="id"/>
+
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <g:link controller="project" action="findById"
+                            class="btn">Cancel</g:link>
+                    <input type="submit" class="btn btn-primary" value="Create New Project">
+                </div>
+            </div>
+
+        </g:form>
     </div>
 </div>
-
 </body>
 </html>

@@ -126,6 +126,7 @@ switch (Environment.current) {
                             '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/mergeAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/splitAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/moveExperiments/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
                     ]
                 }
@@ -148,6 +149,7 @@ switch (Environment.current) {
                     basic.realmName = 'CAP'
                     filterChain.chainMap = [
                             '/person/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/sandbox/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/mergeAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/splitAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
@@ -157,6 +159,7 @@ switch (Environment.current) {
                             '/document/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/assayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/experiment/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/moveExperiments/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
                     ]
                 }
@@ -240,6 +243,12 @@ if (appName) {
         } else {
             println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
         }
+    }
+
+    if(System.getProperty("migrationContextsToRun") != null) {
+        grails.plugin.databasemigration.updateOnStart = true
+        grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+        grails.plugin.databasemigration.updateOnStartContexts = System.getProperty("migrationContextsToRun").split(",") as List
     }
 }
 

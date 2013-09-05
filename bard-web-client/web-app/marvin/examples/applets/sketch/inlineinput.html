@@ -1,0 +1,167 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinSketch Example - Working with inline, compressed molfiles</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinSketch Example - Working with inline, compressed molfiles</h1>
+
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+msketch_begin("../../..", 540, 480);
+msketch_param("mol", "3,7-Dihydro-1,3,7-trimethyl-1H-purine-2,6-dione\n"+
+"  Marvin  07099920012D\n\n 14 15  0  0  0  0  0  0  0  0999 V2000\n"+
+"h3xVHbvV70\nh3xV5YzV70\nypxVis-V60\nXVyVhZxV60\nndsVx-zV60\n9PoVx-zV60\n"+
+"TWqVaLwV60\nndsVBhsV60\n5luVaLwV60\n5luVpnyV60\nndsVBS0W80\n9PoVR7vV80\n"+
+"TWqVpnyV70\nndsVR7vV70\n50D01\nD0701\n70E01\nE0901\n90A02\n50A01\n40201\n"+
+"20A01\n90101\n40102\n20301\n50B02\nD0601\n70C02\nE0801\nM  END\n");
+msketch_param("scale", "60");
+msketch_param("viewonly", "true");
+msketch_end();
+//-->
+</script>
+</center>
+
+<p>
+
+To speed up the downloading, you can specify the molfile inline instead of as
+a URL. This requires the browser to perform fewer http GET requests.
+
+<blockquote>
+<pre class="sh_html">
+&lt;script type=&quot;text/javascript&quot; SRC=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+</pre><pre class="sh_javascript">msketch_begin(&quot;../../..&quot;, 540, 480);
+msketch_param(&quot;mol&quot;, &quot;3,7-Dihydro-1,3,7-trimethyl-1H-purine-2,6-dione\n&quot;+
+&quot;  Marvin  07099920012D\n&quot;+
+&quot;\n&quot;+
+&quot; 14 15  0  0  0  0  0  0  0  0999 V2000\n&quot;+
+&quot;   -2.0245   -2.6287    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;+
+&quot;   -2.0245   -1.0107    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;+
+&quot;   -1.7156   -0.0596    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;+
+&quot;   -1.4367   -1.8197    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;+
+&quot;   -3.8415   -0.8197    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;+
+&quot;   -5.5735   -0.8197    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;+
+&quot;   -4.7075   -2.3196    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;+
+&quot;   -3.8415   -3.8197    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;+
+&quot;   -2.9755   -2.3196    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;+
+&quot;   -2.9755   -1.3197    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;+
+&quot;   -3.8415    0.1803    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;+
+&quot;   -5.5735   -2.8197    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;+
+&quot;   -4.7075   -1.3197    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;+
+&quot;   -3.8415   -2.8197    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;+
+&quot;  5 13  1  0  0  0  0\n&quot;+
+&quot; 13  7  1  0  0  0  0\n&quot;+
+&quot;  7 14  1  0  0  0  0\n&quot;+
+&quot; 14  9  1  0  0  0  0\n&quot;+
+&quot;  9 10  2  0  0  0  0\n&quot;+
+&quot;  5 10  1  0  0  0  0\n&quot;+
+&quot;  4  2  1  0  0  0  0\n&quot;+
+&quot;  2 10  1  0  0  0  0\n&quot;+
+&quot;  9  1  1  0  0  0  0\n&quot;+
+&quot;  4  1  2  0  0  0  0\n&quot;+
+&quot;  2  3  1  0  0  0  0\n&quot;+
+&quot;  5 11  2  0  0  0  0\n&quot;+
+&quot; 13  6  1  0  0  0  0\n&quot;+
+&quot;  7 12  2  0  0  0  0\n&quot;+
+&quot; 14  8  1  0  0  0  0\n&quot;+
+&quot;M  END&quot;);
+msketch_param(&quot;<a HREF="../../../help/developer/sketchman.html#parameters.scale">scale</a>&quot;, &quot;60&quot;);
+msketch_param(&quot;<a HREF="../../../help/developer/sketchman.html#parameters.viewonly">viewonly</a>&quot;, &quot;true&quot;);
+msketch_end();
+</pre><pre class="sh_html">//--&gt;
+&lt;/script&gt;
+</pre>
+</blockquote>
+
+<p>
+
+You can further decrease the download time by compressing the molfile:
+
+<blockquote>
+<pre class="sh_javascript">
+msketch_param(&quot;<a HREF="../../../help/developer/sketchman.html#parameters.mol">mol</a>&quot;, &quot;3,7-Dihydro-1,3,7-trimethyl-1H-purine-2,6-dione\n&quot;+
+&quot;  Marvin  07099920012D\n\n 14 15  0  0  0  0  0  0  0  0999 V2000\n&quot;+
+&quot;h3xVHbvV70\nh3xV5YzV70\nypxVis-V60\nXVyVhZxV60\nndsVx-zV60\n9PoVx-zV60\n&quot;+
+&quot;TWqVaLwV60\nndsVBhsV60\n5luVaLwV60\n5luVpnyV60\nndsVBS0W80\n9PoVR7vV80\n&quot;+
+&quot;TWqVpnyV70\nndsVR7vV70\n50D01\nD0701\n70E01\nE0901\n90A02\n50A01\n40201\n&quot;+
+&quot;20A01\n90101\n40102\n20301\n50B02\nD0601\n70C02\nE0801\nM  END\n&quot;);
+</pre>
+</blockquote>
+You can create this type of JavaScript string from an existing molecule using the &quot;Edit
+Source &quot; window of MarvinSketch or MarvinView
+(Edit -&gt; Source). Choose Format -&gt;
+Compressed mol, then Format -&gt; Convert to Java String.
+
+<p>
+If you decide <em>not</em> to use the utility functions in
+<a HREF="../marvin.js.txt">marvin.js</a>, then the corresponding MarvinSketch applet tag
+is the following:
+<blockquote>
+<pre class="sh_html">
+&lt;applet CODEBASE=&quot;../../..&quot; ARCHIVE=&quot;jmarvin.jar&quot; CODE=&quot;JMSketch.class&quot;
+        WIDTH=540 HEIGHT=480&gt;
+&lt;param NAME=&quot;<a HREF="../../../help/developer/sketchman.html#parameters.mol">mol</a>&quot; VALUE=&quot;3,7-Dihydro-1,3,7-trimethyl-1H-purine-2,6-dione\
+  Marvin  07099920012D\
+\
+ 14 15  0  0  0  0  0  0  0  0999 V2000\
+h3xVHbvV70\
+h3xV5YzV70\
+ypxVis-V60\
+XVyVhZxV60\
+ndsVx-zV60\
+9PoVx-zV60\
+TWqVaLwV60\
+ndsVBhsV60\
+5luVaLwV60\
+5luVpnyV60\
+ndsVBS0W80\
+9PoVR7vV80\
+TWqVpnyV70\
+ndsVR7vV70\
+50D01\
+D0701\
+70E01\
+E0901\
+90A02\
+50A01\
+40201\
+20A01\
+90101\
+40102\
+20301\
+50B02\
+D0601\
+70C02\
+E0801\
+M  END&quot;&gt;
+&lt;param NAME=&quot;<a HREF="../../../help/developer/sketchman.html#parameters.scale">scale</a>&quot; VALUE=&quot;60&quot;&gt;
+&lt;param NAME=&quot;<a HREF="../../../help/developer/sketchman.html#parameters.viewonly">viewonly</a>&quot; VALUE=&quot;true&quot;&gt;
+&lt;strong&gt;(YOU CANNOT SEE A JAVA APPLET HERE)&lt;/strong&gt;
+&lt;/applet&gt;
+</pre>
+</blockquote>
+
+Don't forget to end each line with a backslash.
+The reason for ending the lines with this special character is that web browsers
+filter out the real linebreaks from such multiline strings.
+
+<p>
+
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+In the previous examples the applet loaded the molecule at startup.
+However, in some cases it is necessary to load a molecule at
+<a HREF="js_triggering.html">runtime</a>.
+
+</body>
+</html>

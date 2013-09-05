@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+    
+    <Group Title="Alignment help">
+        <Label Text="Copy/Paste or drag two or more molecules into the same msketch window to align them."/>
+        <Label Text="Both flexible and rigid alignment is available."/>
+        <Label Text="By default molecular conformation is free to change."/>
+        <Label Text="To preserve the original input conformation simply select the molecule."/>
+        <Label Text="Use reaction mapping arrow to define optional atompairs."/>         
+    </Group>
+    
+    <Group Title="Alignment types">
+        <RadioButtonGroup Key="calctype">
+            <Choice Value="cxn" Text="Align by extended atom types" Selected="true" ToolTip ="Force field atomtypes are applied to align molecules. Atoms with similar types are tried to overlay."/>
+            <Choice Value="phr" Text="Align by pharmacophore types " ToolTip ="Use H-bond donor acceptor aromatic and hydrophobic and +, - charges."/>
+            <Choice Value="mcs" Text="Align by common scaffold (MCS)" ToolTip ="The atom-atom pairing is obtained from the maximum common substructure. Alignment by extended atom types is applied on the non MCS atoms."/>            
+        </RadioButtonGroup>
+    </Group>
+    
+    <Group Title="Detailed options">
+    <!--    <Number Key="ringLimit" Label="Minimum flexible ring size" ToolTip="Rings are treated flexible in case their size (number of atoms) exceeds this limit." Range="5,999" Value="8"/>
+        <Number Key="rotBRing" Label="Minimum number of non-barred bonds in flexible rings " ToolTip="Rings are treated flexible in case their non barred bond count exceeds this limit. Barred bonds are aromatic, amide, double, a member of another ring that is not flexible and a single bond that connects two aromatic rings." Range="-1,999" Value="4"/> -->
+        <Number Key="confcount" Label="Initial conformation count" ToolTip="Flexible alignment is launched all of these conformations." Range="1,999" Value="2"/> 
+<!--        <Boolean Key="shape" Label="More accurate shape " ToolTip="More smoother shape description but can be slow." Value="false"/>-->
+        <Number Key="mcssize" Label="Common scaffold minimum size"  ToolTip="Minimum number of atoms that are required for the maximum common substructure calculation prior to the alignment." Range="2,999" Value="7">
+            <Dependencies>
+                <Item Key="calctype" Range="mcs"/>
+            </Dependencies>
+        </Number>
+        <SingleSelection Key="mode" Label="Accuracy">
+            <Choice Value="0" Text="Fast"/>
+            <Choice Value="1" Text="Normal" Selected="true"/>
+            <Choice Value="2" Text="Accurate"/>
+        </SingleSelection> 
+        <!--<Boolean Key="heuristics" Label="Use extra heuristics." Tooltip="Slower but may results in better alignment." Value="true"/>-->
+    </Group>
+    <Boolean Key="mspace" Label="Display in MarvinSpace" Value="true"/>
+</ParameterPanel>

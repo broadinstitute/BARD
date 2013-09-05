@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- Electron flow arrows -->
+<MDocument>
+  <MEFlow arcAngle="90.0" headLength="0.6" headWidth="0.5">
+    <MPoint x="0" y="0" />
+    <MPoint x="1.54" y="0" />
+  </MEFlow>
+</MDocument>
+<MDocument>
+  <MEFlow arcAngle="90.0" headFlags="2" headLength="0.6" headWidth="0.5">
+    <MPoint x="0" y="0" />
+    <MPoint x="1.54" y="0" />
+  </MEFlow>
+</MDocument>

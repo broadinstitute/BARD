@@ -1,0 +1,305 @@
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Deprecated functions in Marvin</TITLE>
+ <link rel=stylesheet type="text/css" href="../marvinmanuals.css">
+</HEAD>
+<BODY>
+<h1 align=center>Deprecated functions</h1>
+
+<h3 align=center>Version 5.10.1</h3>
+<p>
+<table border="0" cellspacing="0" cellpadding="5" class="grid">
+<tr>
+<td><h3>Class name</h3></td>
+<td><h3>Deprecated function name</h3></td>
+<td><h3>Use instead</h3></td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.Molecule</td>
+<td>toFormat(String)</td>
+<td>chemaxon.formats.MolExporter#exportToFormat(Molecule, String)</td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.Molecule</td>
+<td>exportToFormat(String)</td>
+<td>chemaxon.formats.MolExporter#exportToFormat(Molecule, String)</td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.Molecule</td>
+<td>toBinFormat(String)</td>
+<td>chemaxon.formats.MolExporter#exportToBinFormat(Molecule, String)</td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.Molecule</td>
+<td>exportToBinFormat(String)</td>
+<td>chemaxon.formats.MolExporter#exportToBinFormat(Molecule, String)</td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.Molecule</td>
+<td>toObject(String)</td>
+<td>chemaxon.formats.MolExporter#exportToObject(Molecule, String)</td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.Molecule</td>
+<td>exportToFormat(String)</td>
+<td>chemaxon.formats.MolExporter#exportToObject(Molecule, String)</td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.Molecule</td>
+<td>exportToObject(Molecule[],String,MolExportModule)</td>
+<td>chemaxon.formats.MolExporter#exportToObject(Molecule[], String, MolExportModule)</td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.Molecule</td>
+<td>getProperty(String)</td>
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MoleculeGraph</td>
+<td>addExplicitHydrogens(int)</td>
+<td>chemaxon.calculations.Hydrogenize#addHAtoms(MoleculeGraph, MolAtom[], int)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MoleculeGraph</td>
+<td>addExplicitHydrogens(int,MolAtom[])</td>
+<td>chemaxon.calculations.Hydrogenize#addHAtoms(MoleculeGraph, MolAtom[], int)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MoleculeGraph</td>
+<td>hydrogenize(boolean)</td>
+<td>chemaxon.calculations.Hydrogenize#addHAtoms(MoleculeGraph)<br>
+chemaxon.calculations.Hydrogenize#removeHAtoms(MoleculeGraph)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MoleculeGraph</td>
+<td>addExplicitLonePairs()</td>
+<td>chemaxon.calculations.Hydrogenize#addLonePairs(MoleculeGraph, MolAtom[])</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MoleculeGraph</td>
+<td>removeExplicitLonePairs()</td>
+<td>chemaxon.calculations.Hydrogenize#removeLonePairs(MoleculeGraph)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MoleculeGraph</td>
+<td>implicitizeHydrogens(int)</td>
+<td>chemaxon.calculations.Hydrogenize#removeHAtoms(MoleculeGraph, int)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MoleculeGraph</td>
+<td>implicitizeHydrogens(int,MolAtom[])</td>
+<td>chemaxon.calculations.Hydrogenize#removeHAtoms(MoleculeGraph, MolAtom[], int)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MoleculeGraph</td>
+<td>implicitizeHydrogens(int,MolAtom[],boolean)</td>
+<td>chemaxon.calculations.Hydrogenize#removeHAtoms(MoleculeGraph, MolAtom[], int, boolean)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MoleculeGraph</td>
+<td>clean(int,String)</td>
+<td>chemaxon.calculations.clean.Cleaner#clean(MoleculeGraph, int, String)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MoleculeGraph</td>
+<td>partialClean(Molecule[],String)</td>
+<td>chemaxon.calculations.clean.Cleaner#partialClean(Molecule, Molecule[], String)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MoleculeGraph</td>
+<td>partialClean(MoleculeGraph,int[],String)</td>
+<td>chemaxon.calculations.clean.Cleaner#partialClean(MoleculeGraph, MoleculeGraph, int[], String)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MoleculeGraph</td>
+<td>partialClean(int,int[],String)</td>
+<td>chemaxon.calculations.clean.Cleaner#partialClean(MoleculeGraph, int, int[], String)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MoleculeGraph</td>
+<td>clean(int,String,MProgressMonitor)</td>
+<td>chemaxon.calculations.clean.Cleaner#clean(MoleculeGraph, int, String, MProgressMonitor)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MoleculeGraph</td>
+<td>arrangeComponents()</td>
+<td>chemaxon.marvin.util.CleanUtil#arrangeComponents(MoleculeGraph, boolean, boolean)</td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.MDocument</td>
+<td>parseMRV(String)</td>
+<td>chemaxon.formats.MolImporter#parseMRV(String)</td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.MDocument</td>
+<td>exportToFormat(String)</td>
+<td>chemaxon.formats.MolExporter#exportToFormat(MDocument, String)</td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.MDocument</td>
+<td>exportToBinFormat(String)</td>
+<td>chemaxon.formats.MolExporter#exportToBinFormat(MDocument, String)</td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.MDocument</td>
+<td>exportToObject(String)</td>
+<td>chemaxon.formats.MolExporter#exportToObject(MDocument, String)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MolAtom</td>
+<td>hasSMARTSProps()</td>
+<td>chemaxon.marvin.io.formats.smiles.SmartsAtomQuerifier#hasSMARTSProps(MolAtom)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MolAtom</td>
+<td>hasSMARTSPropsExcluding(String)</td>
+<td>chemaxon.marvin.io.formats.smiles.SmartsAtomQuerifier#hasSMARTSPropsExcluding(MolAtom, String)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MolAtom</td>
+<td>setSMARTS(String)</td>
+<td>chemaxon.marvin.io.formats.smiles.SmartsAtomQuerifier#setSMARTS(MolAtom, String)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MolAtom</td>
+<td>getQuerystr()</td>
+<td>getQueryString()</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MolAtom</td>
+<td> setQuerystr(String)</td>
+<td>chemaxon.marvin.io.formats.smiles.SmartsAtomQuerifier#setQuerystr(MolAtom, String)<br>
+setQueryString(String)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.MolAtom</td>
+<td>setQuerystr(String, int)</td>
+<td>chemaxon.marvin.io.formats.smiles.SmartsAtomQuerifier#setQuerystr(MolAtom, String, int)<br>
+setQueryString(String)</td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.MPropertyContainer
+<td>getString(String)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MPropertyContainer, String)
+</tr>
+<tr>
+<td>chemaxon.struc.MProp
+<td>convertToString(String,int)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+<tr>
+<td>chemaxon.struc.MProp
+<td>convertToString(String)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.prop.MDocument.Prop</td>
+<td>convertToString(String,int)</td>
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)</td>
+</tr>
+<tr>
+<td>chemaxon.struc.prop.MByteArrayProp
+<td>convertToString(String,int)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.prop.MBooleanProp
+<td>convertToString(String,int)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+<tr>
+<td>chemaxon.struc.prop.MHashProp
+<td>convertToString(String,int)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.prop.MListProp
+<td>convertToString(String,int)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+<tr>
+<td>chemaxon.struc.prop.MDoubleArrayProp
+<td>convertToString(String,int)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.prop.MDoubleProp
+<td>convertToString(String,int)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+<tr>
+<td>chemaxon.struc.prop.MFontProp
+<td>convertToString(String,int)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.prop.MHCoords3DProp
+<td>convertToString(String,int)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+<tr>
+<td>chemaxon.struc.prop.MIntegerArrayProp
+<td>convertToString(String,int)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.prop.MIntegerProp
+<td>convertToString(String,int)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+<tr>
+<td>chemaxon.struc.prop.MMoleculeProp
+<td>convertToString(String,int)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.prop.MObjectProp
+<td>convertToString(String,int)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+<tr>
+<td>chemaxon.struc.prop.MStringProp
+<td>convertToString(String,int)
+<td>chemaxon.marvin.io.MPropHandler#convertToString(MProp, String)
+</tr>
+</table>
+</p>
+<p>
+<table border="0" cellspacing="0" cellpadding="5" class="grid">
+<tr>
+<td colspan="3"><h3>Change in constructors</h3></td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.prop.MByteArrayProp</td>
+<td>&nbsp;</td>
+<td>constructor now throws IllegalArgumentException</td>
+</tr>
+<tr>
+<td>chemaxon.struc.prop.MDoubleArrayProp</td>
+<td>&nbsp;</td>
+<td>constructor now throws IllegalArgumentException</td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.prop.MHCoords3DProp</td>
+<td>&nbsp;</td>
+<td>constructor now throws IllegalArgumentException</td>
+</tr>
+<tr>
+<td>chemaxon.struc.prop.MIntegerArrayProp</td>
+<td>&nbsp;</td>
+<td>constructor now throws IllegalArgumentException</td>
+</tr>
+<tr bgcolor="#e0eeef">
+<td>chemaxon.struc.prop.MIntegerProp</td>
+<td>&nbsp;</td>
+<td>constructor now throws IllegalArgumentException</td>
+</tr>
+<tr>
+<td>chemaxon.struc.prop.MMoleculeProp</td>
+<td>MMoleculeProp(String)</td>
+<td>chemaxon.marvin.io.MPropHandler#createMMoleculeProp(String)</td>
+</tr>
+</table>
+</p>
+</BODY>

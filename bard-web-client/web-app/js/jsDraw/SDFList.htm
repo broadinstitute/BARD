@@ -1,0 +1,56 @@
+﻿<!--
+//////////////////////////////////////////////////////////////////////////////////
+//
+JSDraw
+// Copyright (C) 2013 Scilligence Corporation
+// http://www.scilligence.com/
+//
+//////////////////////////////////////////////////////////////////////////////////
+-->
+
+<!DOCTYPE html>
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" >
+<head>
+<title>JSDraw - SDF Viewer</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js" type="text/javascript"></script>
+<script type="text/javascript" src='Scilligence.JSDraw2.js'></script>
+
+
+</head>
+<body>
+
+<h2>JSDraw - SDF List Viewer</h2>
+
+Code:
+<pre style='border:solid 1px gray; background-color: #f0f0f0; margin:0px; padding:5px; font-size:x-small;'>
+&lt;script type="text/javascript"&gt;
+    new <font color=blue>JSDraw2.Table</font>("data/sdf4.sdf.txt", { searchable: true, showformula:true, showmolweight:true });
+&lt;/script&gt;
+</pre>
+
+<br />
+Display: (It's editable - double-click to edit.)
+<div id='a'></div>
+<script type="text/javascript">
+    JSDraw2.Table.init("data/sdf4.sdf.txt", { searchable: true, showformula: true, showmolweight: true }, 'a');
+</script>
+
+
+
+<br />
+<br />
+<hr />
+Copyright (C) 2013 Scilligence Corporation (<a href='http://www.scilligence.com/'>http://www.scilligence.com/</a>)
+<br />
+<br />
+<b>License:</b>
+<ul>
+<li>Free for education (<a href='http://www.scilligence.com/web/download.aspx?prod=JSDraw'>Download</a>)</li>
+<li>Please <a href='http://www.scilligence.com/web/contact.aspx'>contact us</a> for commercial licenses</li>
+</ul>    
+
+</body>
+</html>

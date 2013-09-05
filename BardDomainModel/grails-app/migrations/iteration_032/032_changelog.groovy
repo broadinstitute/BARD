@@ -10,9 +10,6 @@ import org.apache.commons.lang3.time.StopWatch
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 databaseChangeLog = {
-    String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
-    File migrationsDir = new File(bardDomainModelMigrationsDir)
-
     changeSet(author: "pmontgom", id: "iteration-032/01-remap-context-group", dbms: "oracle", context: "standard") {
 
         //Set the username in context
@@ -26,7 +23,22 @@ databaseChangeLog = {
         }
 
         //Create the new EXPERIMENT_DOCUMENT table
-        sqlFile(path: "${migrationsDir}/iteration_032/01-remap-context-group.sql", stripComments: true)
+        sqlFile(path: "iteration_032/01-remap-context-group.sql", stripComments: true)
+    }
+    changeSet(author: "jasiedu", id: "iteration-032/02-add-constraint-expt-doc", dbms: "oracle", context: "standard") {
+
+        //Set the username in context
+        grailsChange {
+            change {
+                sql.execute("""BEGIN
+                               bard_context.set_username('jasiedu');
+                               END;
+                               """)
+            }
+        }
+
+        //Create the new EXPERIMENT_DOCUMENT table
+        sqlFile(path: "iteration_032/02-add-constraint-expt-doc.sql", stripComments: true)
     }
 }
 

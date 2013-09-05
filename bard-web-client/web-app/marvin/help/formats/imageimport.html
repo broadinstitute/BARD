@@ -1,0 +1,101 @@
+<!--
+Created: 12 Dec 2009
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta NAME="description" CONTENT="Image import using OSRA">
+<meta NAME="keywords" CONTENT="OSRA, image, import, Marvin">
+<meta NAME="author" CONTENT="Peter Vadasz">   
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>Image import in Marvin</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+<h1>Image import in Marvin</h1>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#osra">OSRA software and integration into Marvin</a></li>
+<li><a href="#usage">Using OSRA in Marvin</a></li>
+<li><a href="#problems">Common problems</a></li>
+</ul>
+
+<h2><a class="anchor" name="osra">OSRA software and integration into Marvin</a></h2>
+<p>
+<a href="http://cactus.nci.nih.gov/osra/">OSRA</a> is a utility designed to convert graphical representations of chemical structures.
+</p>
+<p>
+Since Marvin version 5.3.0 images can be imported from files, and pasted into Marvin
+using the OSRA sofware.
+</p>
+
+<p>
+</p>
+
+<h2><a class="anchor" NAME="usage">Using OSRA in Marvin</a></h2>
+<p>
+To make OSRA usable in Marvin:
+<ul>
+ <li> Install the OSRA software (<a href="http://cactus.nci.nih.gov/osra/#6">installers</a> are available for Windows and Mac,
+      and it can be installed from source for Linux, Unix). Please make sure that <b>all
+      the required softwares for OSRA</b> is also installed. (The installer may install
+      them also.)</li>
+ <li> Set the OSRA <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> as the absolute path of the directory,
+      where OSRA is installed, or add this path to the PATH environment variable. 
+      <br/>
+      Note: In 5.6.x version of Marvin it works only when it is set in the PATH, this
+      is a known issue, that has been fixed in 5.7.0.</li>
+</ul>
+</p>
+
+<p>
+Two methods are available to import images into MarvinSketch:
+<ul>
+ <li> Opening an image chosen by a file chooser. (Use the Open Image, or the Open menu
+  item from the File menu. The simple Open item is usable to open images since 5.6.)</li>
+ <li> If there is an image on the clipboard, the default Marvin paste will
+      paste the image using OSRA.</li>
+</ul>
+</p>
+
+<h2><a class="anchor" name="problems">Common problems</a></h2>
+
+<p>
+Common problems quoted from OSRA home page:
+</p>
+<p>
+"Note that any software designed for optical recognition is unlikely to be perfect,
+and the output produced might, and probably will, contain errors, so a curation by a
+human knowledgeable in chemical structures is highly recommended." 
+</p>
+<p>
+So OSRA sometimes can not recognize a chemical structure or do some mistakes,
+and there are issues easy to forget about OSRA. These are the most common of problems: 
+<ul>
+<li> OSRA can not open small images, and molecules. If a molecule contains 
+    less than 6 atoms, or smaller than 20*20 pixels (depending also from
+    resolution, and font size) OSRA will most likely fail to recognize the structure.</li>
+<li> OSRA may need programs installed on the computer to process with special 
+    types. To open a pdf/ps file Adobe Acrobat Reader/Ghostscript has to be
+    installed on the computer.</li>
+<li> OSRA can not open all image file types perfectly. Converting the image
+    in different formats and importing them shows that there are formats OSRA
+    easier recognize. So in some cases conversion to png file format helps
+    (png seems to be the most OSRA friendly format).</li>
+<li> OSRA has to be installed on your computer and the OSRA environment
+    variable be set as the absolute path of the install directory. (If the
+    import menu item is not enabled surely this is the problem. After installing
+    OSRA and/or setting the variable Marvin must be restarted to make image import available.)</li>
+</ul>
+</p>
+
+<p ALIGN=LEFT>
+<small>Marvin uses <a HREF="http://osra.sourceforge.net">OSRA</a> software
+    for image import by <a HREF="http://cactus.nci.nih.gov/osra">CADD Group Chemoinformatics Tools and User Services</a>
+
+</small>
+</p>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+﻿<!--
+//////////////////////////////////////////////////////////////////////////////////
+//
+JSDraw
+// Copyright (C) 2013 Scilligence Corporation
+// http://www.scilligence.com/
+//
+//////////////////////////////////////////////////////////////////////////////////
+-->
+
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" >
+<head>
+<title>JSDraw2.Table - Intelligent Chemical Structure Spreadsheet</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js" type="text/javascript"></script>
+<script type="text/javascript" src='Scilligence.JSDraw2.js'></script>
+
+
+</head>
+<body>
+
+<h2>JSDraw2.Table - *html* column type</h2>
+
+Source Code:
+<pre style="padding:0;border:solid 1px #eee">
+    dojo.addOnLoad(function () {
+        var jss = new JSDraw2.Table("",
+            { columns: [
+                { key: 'smiles', caption: 'Smiles', width: 220 },
+                { key: 'structure', caption: 'Structure', type: 'html', 
+                    html: "&ltimg src='http://www.olncloud.com/oln/jsdraw/service.aspx?cmd=smiles2img&q={1}'&gt;", 
+                    formula:"escape($smiles)", width: 300, viewonly: true }
+                ]
+            }, "Div1");
+    });
+</pre>
+
+You can type SMILES in the Smiles column, and it will automatically show its picture in Structure column:<br />
+(there are many smiles samples you can copy from <a href='http://en.wikipedia.org/wiki/Simplified_molecular_input_line_entry_specification'>this page</a>)
+<br />
+<script type='text/javascript'>
+    dojo.addOnLoad(function () {
+        var jss = new JSDraw2.Table("",
+            { columns: [
+                { key: 'smiles', caption: 'Smiles', width: 220 },
+                { key: 'structure', caption: 'Structure', type: 'html', html: "<img src='http://www.olncloud.com/oln/jsdraw/service.aspx?cmd=smiles2img&q={1}'>", formula: "escape($smiles)", width: 300, viewonly: true }
+                ]
+            }, "Div1");
+        jss.insert(false, { smiles: 'c1ccccc1', structure: 'c1ccccc1' });
+    });
+</script>
+<div id='Div1'></div>
+
+
+
+
+<br />
+<br />
+<hr />
+Copyright (C) 2013 Scilligence Corporation (<a href='http://www.scilligence.com/'>http://www.scilligence.com/</a>)
+<br />
+<br />
+<b>License:</b>
+<ul>
+<li>Free for education (<a href='http://www.scilligence.com/web/download.aspx?prod=JSDraw'>Download</a>)</li>
+<li>Please <a href='http://www.scilligence.com/web/contact.aspx'>contact us</a> for commercial licenses</li>
+</ul>    
+
+</body>
+</html>

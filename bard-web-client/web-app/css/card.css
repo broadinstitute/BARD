@@ -1,0 +1,69 @@
+.btn-tiny {
+  padding: 0px 0px;
+  line-height: 0px;
+}
+
+.drophover {
+    background-color: yellow;
+    border-color: red;
+}
+
+.cardView .table caption.drophoverCaption {
+    background-color: green;
+}
+
+div.drophoverCard{
+    border: 2px solid green;
+    padding-left: 5px;
+    padding-right: 10px;
+}
+div.drophoverCard table.table{
+    margin-right: 5px;
+}
+
+.cardView .roundedBorder {
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.cardView table.table {
+    margin-bottom: 0px;
+    padding: 0px;
+}
+
+.cardView table.table th, .cardView table.table td {
+    margin-left: 1px;
+    margin-right: 1px;
+    line-height: 14px;
+    padding: 1px;
+    text-align: left;
+    vertical-align: top;
+    border: 1px solid #DDD;
+}
+.cardView table.table td.attributeLabel {
+    width: 35%;
+}
+.cardView table.table td.valuedLabel {
+    width: 63%;
+}
+.cardView table.table td.deleteItemButton {
+    width: 2%;
+}
+.card-table-container{
+    background-color: #ffffff;
+    /*overflow-x:auto;*/
+}
+.card-group {
+    margin: 5px;
+}
+.cardView .table caption {
+    font-size: 14px;
+    background-color: #C3D9FF;
+    font-weight:bold;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}

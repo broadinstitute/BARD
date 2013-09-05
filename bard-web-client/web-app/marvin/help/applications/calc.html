@@ -1,0 +1,448 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta name="author" content="Nora Mate">
+<link rel="stylesheet" type="text/css" href="../marvinmanuals.css" title="Style">
+<title>Calculator</title>
+</head>
+<body>
+
+<h1>Chemical Calculations with Calculator Plugins using <code>cxcalc</code></h1>
+<h3 align="center">Version 5.10.1</h3>
+
+<p><h2>Contents</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#inst">Installation</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#calculations">Calculations</a></li>
+<li><a href="#input">Input</a></li>
+<li><a href="#output">Output</a></li>
+<li><a href="#config">Configuration File</a></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="../licensedoc/index.html">License Management</a></li>
+<li><a href="../calculations/calc_training.html"><code>cxtrain</code> - <code>cxcalc</code>'s Plugin Training</a></li>
+</ul>
+ 
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a class="anchor" name="intro">Introduction</a></h2>
+
+ChemAxon's Calculator (<code>cxcalc</code>) is a command line program in Marvin Beans and JChem
+that performs chemical calculations using 
+<a href="../calculations/calculator-plugins.html">calculator plugins</a>.
+
+<p>There are a lot of calculations provided by ChemAxon (e.g. charge, p<i>K</i><sub>a</sub>, 
+log<i>P</i>, log<i>D</i>), and others can be added by writing custom plugins as described in the 
+<a href="../developer/plugins.html">Plugin Developer's Guide</a>.
+
+<p>To obtain a license key for calculations provided by ChemAxon Ltd., contact
+<script language="JavaScript"><!--
+document.write('<a href="mailto:'+'sales'+'@'+'chemaxon.com">'+'sales'+'@'+'chemaxon.com</a>');
+//--></script>.   <a href="../chemicalterms/EvaluatorAllFunctions.html">Please check
+this list</a> to ask for the appropriate License Key.
+</p>
+
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a class="anchor" name="inst">Installation</a></h2>
+<a href="../../download-user.html">Download</a> and launch platform specific 
+installer by following the <a href="install.html">installation instructions</a>.
+
+
+<h2><a class="anchor" name="usage">Usage</a></h2>
+Calculator performs plugin calculations in a uniform way: it processes
+general parameters referring to input, output, and SDF file tag names for storing calculation results
+as well as plugin specific parameters that are different for each plugin. The 
+<a href="#calculations">available calculations</a>
+are defined in the <a href="#config">configuration file</a> and listed below the
+general help message if you type <code>cxcalc -h</code> or simply <code>cxcalc</code>.
+Calculator can also be used to train some of the plugin calculations, for more see the 
+<a href="#training">training</a> section of the help.
+
+<blockquote>
+<font COLOR="#333399"><strong>cxcalc</strong></font>
+[<a href="#goptions">general options</a>]
+[input files/strings]
+&lt;plugin&gt;
+[<a href="#poptions">plugin options</a>]
+[input files/strings]
+</blockquote>
+<blockquote>
+<font COLOR="#333399"><strong>cxcalc</strong></font>
+[<a href="#goptions">general options</a>]
+[input files/strings]
+&lt;plugin1&gt;
+[<a href="#poptions">plugin1 options</a>]
+[input files/strings]
+&lt;plugin2&gt;
+[<a href="#poptions">plugin2 options</a>]
+[input files/strings]
+...
+</blockquote>
+<blockquote>
+<font COLOR="#333399"><strong>cxcalc</strong></font>
+[<a href="#trainingoptions">training options</a>]
+[input file (the training set)]
+</blockquote>
+<p>
+
+<h3><a name="goptions"></a>General Options</h3>
+
+<pre>
+  cxcalc -h, --help                 this help message,
+                                    list of available calculations
+  cxcalc &lt;plugin> -h, --help        plugin specific help message
+  -o, --output &lt;filepath>           output file path (default: standard output)
+  -t, --tag &lt;tag name>              name of the SDFile tag to store the
+                                    calculation results, tag name prefix
+                                    to default tag names in case of multiple
+                                    plugins (default: see plugin help)
+  -i, --id &lt;tag name|format>        the name of the existing SDFile tag that
+                                    stores the molecule ID; or create
+                                    molecule ID by converting the input
+                                    molecule into the specified format;
+                                    (default: molecule index is used as ID)
+  -N, --do-not-display &lt;type>       [i|h|ih]
+                                    do not display molecule ID and/or
+                                    table header (in table output form)
+          i                         no molecule ID
+          h                         no table header
+          ih                        neither molecule ID nor table header
+  -S, --sdf-output                  SDF output with results in SDF tags
+  -M, --mrv-output                  result molecule output in MRV format
+                                    (if neither -S nor -M is specified, then
+                                    plugin results are written in table form)
+  -g, --ignore-error                continue with next molecule on error
+  -v, --verbose                     print calculation warnings to the console
+      --log &lt;filepath>              write log messages to file
+                                    (default: write log to system error)
+      --log-level &lt;level>           [error|warning|off]
+                                    set log level (default: error)
+          error                     log error level information
+          warning                   log warning and error level information
+          off                       no log information
+      --log-options &lt;options>       list of logger options, separated by ','
+          time                      log calculation execution time; calculation
+                                    will run on ONE CPU in this case
+          timelimit=&lt;time in ms>    only execution times above the specified
+                                    limit will be logged
+          format=&lt;molecule format>  log file format; default is SDF when
+                                    logging to file and SMILES when logging to
+                                    system error
+</pre>
+
+<p>You can also pass <a href="javaoptions.html">some JVM options</a> 
+to the Java Virtual Machine as <code>cxcalc</code> command line arguments.</p>
+<p>Input files can be given both on the general option side and on the plugin specific option side,
+in either case these input files/strings give the input molecules for the calculations. If more 
+plugins are given then all plugin calculations are performed for all input molecules.</p>
+<p><b>Note</b>: plugin IDs are case-insensitive, you can alter upper- and lower case letters 
+if you like. For example:
+<ul>
+<li><code>cxcalc log<b>p</b> in.mol</code><br>
+is the same as<br>
+<code>cxcalc log<b>P</b> in.mol</code>
+</li>
+<li><code>cxcalc total<b>c</b>harge<b>d</b>ensity in.mol</code><br>
+is the same as<br>
+<code>cxcalc total<b>C</b>harge<b>D</b>ensity in.mol</code>
+</li>
+</ul>
+
+<p>
+<b>Note</b>: The syntax of commands can be different under various command line shells (bash, tcsh, zsh, etc.). 
+</p>
+<p>The available plugins are configured in the 
+<code>xjars/calc.properties</code>
+<a href="#config">configuration file</a>. The <code>xjars</code> directory is inside the <code>MarvinBeans.jar</code> (in Marvin Beans package) or <code>jchem.jar</code> (in JChem package). In Marvin Applets package, <code>xjars</code> directory is in the "marvin" directory. User-defined plugins may also be configured in this file. 
+The built-in plugins that can be purchased from 
+<script language="JavaScript"><!--
+document.write('<a href="mailto:'+'sales'+'@'+'chemaxon.com">'+'sales'+'@'+'chemaxon.com</a>');
+//--></script>.
+A detailed description of the <a href="#config">configuration file</a> is given below.</p>
+
+<h2><code>cxcalc</code> parameters</h2>
+<ul>
+<li>The command line parameter <code>--tag</code> specifies the SDF file tag name to be used
+when storing the calculation results in an SDF file.</li>
+<li>If the <code>--do-not-display</code> parameter is specified then no molecule ID and/or
+table header is displayed. This option has no effect in <code>--sdf-output</code> and
+<code>--mrv-output</code> output modes.</li>
+<li>If the <code>--sdf-output</code> parameter is given, then the input molecules are 
+written in SDF format and the calculation results are added in SDF file tags.</li> 
+<li>If the <code>--mrv-output</code> parameter is given, then the decorated result molecules
+are written in MRV format. Atomic results are written into atom labels, while molecular results
+are displayed as molecule properties. Not every calculation has this decorated molecule output.</li>
+<li>If neither <code>--sdf-output</code> nor <code>--mrv-output</code> are specified then
+the calculation results are shown in text table form. The display of table header and 
+molecule ID column can be altered in the <code>--do-not-display</code> option.</li>
+<li>The parameter <code>--id</code> parameter specifies the input SDF file tag that stores the
+molecule ID to be written in the output table. This parameter is only used if the output is in
+text table form (neither <code>--sdf-output</code> nor <code>--mrv-output</code> is specified). 
+By default the input file index of the molecule is used as molecule ID. Molecule formats can be
+specified with output options, for the available formats and options see the
+<a href="../formats/formats.html">File Formats in Marvin</a> manual. Probably the most frequently
+used format replacing a molecule ID is <a href="../formats/smiles-doc.html">SMILES</a>, possibly with the
+<a href="../formats/basic-export-opts.html"><code>a-H</code></a> (aromatize, remove explicit hydrogens)
+option (<code>smiles:a-H</code>) to generate canonical strings.</li>
+</ul>
+<p>
+<h2><a name="poptions"></a>Plugin Specific Options</h2>
+<p>
+The plugin specific help message is printed if the user types:
+<pre>
+    cxcalc &lt;plugin&gt; -h
+</pre>
+Here <code>plugin</code> is the plugin key from the <a href="#config">configuration file</a>.
+
+<p><h3>Example</h3>
+
+<p>Typing <code><b>cxcalc logp -h</b></code> produces the help string:
+<pre>
+Calculator plugin: logp.
+
+logP calculation:
+for type logPTrue: logP of uncharged species, or,
+in the case of zwitterions, logD at pI;
+for type logPMicro: logP of the input species.
+
+Usage:
+  cxcalc [general options] [input files/strings] logp
+[logp options] [input files/strings]
+
+logp options: 
+  
+ -h, --help                     this help message
+ -p, --precision                &lt;floating point precision as number of
+                                fractional digits: 0-8 or inf> (default: 2)
+ -m, --method                   [vg|klop|phys|user|weighted]
+                                (default: weighted)
+     --trainingid               &lt;training id>
+ -w, --weights                  &lt;wVG:wKLOP:wPHYS:wUSER> method weights
+                                (default: 1:1:1:0)
+                                wVG: weight of the VG method
+                                wKLOP: weight of the KLOP method
+                                wPHYS: weight of the PHYS method
+                                wUSER: weight of the user defined method
+ -a, --anion                    &lt;Cl- concentration>
+                                (default: 0.1, range: [0.0, 0.25])
+ -k, --kation                   &lt;Na+ K+ concentration>
+                                (default: 0.1, range: [0.0, 0.25])
+ -t, --type                     [increments|logPMicro|logPTrue]
+                                (default: logPTrue)
+ -i, --increments               [true|false] show atomic increments
+                                (default: false)
+     --considertautomerization  [true|false] consider tautomerization
+                                (default: false)
+Multiple values for the same parameter
+should be separated by commas (',' without space).
+
+Example:
+  cxcalc -S -t myLOGP logp -a 0.15 -k 0.05 test.mol
+</pre>
+<ul>
+<li>The command line parameter <code>--precision</code> specifies the required floating point 
+precision, that is, the number of required decimal digits in the output.</li>
+
+<li>The command line parameter <code>--type</code> specifies the result type: 
+<code>increments</code> gives the atomic logp increment values for each atom in the molecule
+while <code>logPTrue</code> gives the overall logp value for the molecule. Both results can be
+queried by specifying both types separated by a comma: <code>-t increments,implh,logPTrue</code>.</li>
+
+<li>The command line parameter <code>--majortautomer</code> specifies if major tautomeric form of the 
+input molecule should be taken as input for the logP calculation. In cases when an option takes <code>[true|false]</code> 
+parameter values the <code>true</code> parameter value can be omitted: 
+<code>cxcalc logp --majortautomer true mols.sdf</code> and <code>cxcalc logp --majortautomer mols.sdf</code> 
+commands produce the same results.</li>
+</ul>
+
+<h2><a class="anchor" name="calculations">Calculations</a></h2>
+
+See the <a href="cxcalc-calculations.html">list of calculations</a> or the output of <code>cxcalc -h</code> command
+for the list of available calculations. 
+
+<h2><a class="anchor" name="input">Input</a></h2>
+
+<p>The software may take molecules from text files or from SMILES string. 
+Most molecular file formats are accepted (for instance <a href="../formats/mol-csmol-doc.html"target="_blank">MDL molfile,
+Compressed molfile, SDfile, Compressed SDfile</a>,
+<a href="http://www.daylight.com/dayhtml/smiles/"target="_blank">SMILES</a>).
+
+
+<p>If no input file name or SMILES string is given in the command line, 
+then input molecules are read from the standard input.</p>
+
+<h2><a class="anchor" name="output">Output</a></h2>
+
+<p>Calculator writes calculation results in a format based on the specified tags.
+If the result 
+refers to the entire molecule, it is written as a single number. 
+If the calculation gives a separate number for each atom in the molecule, it is written
+ as a list of numbers separated by semicolons. The order of the results
+corresponds to the order of the atoms determined by their atom indices. Other output formats 
+may be available for certain plugins, see the <a href="#poptions">plugin specific options</a>
+for the specific plugin. By default, results are written without the input 
+molecule in a table form, but Calculation results can be written in an SDF file as an SDF tag 
+if the <code>--sdf-output</code> parameter is specified. </p>
+ 
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a class="anchor" name="config">Configuration File</a></h2>
+
+<p>The available plugins can be configured by editing the <code>plugins/calc.properties</code> file (path is taken 
+relative to the Marvin root directory). User-developed calculations can be added and built-in calculations can be 
+modified by editing this configuration file (configuration of the built-in calculations is defined in the 
+<code>xjars/calc.properties</code> file inside MarvinBeans.jar). The plugins provided by ChemAxon Ltd. can be purchased from 
+<script language="JavaScript"><!--
+document.write('<a href="mailto:'+'sales'+'@'+'chemaxon.com">'+'sales'+'@'+'chemaxon.com</a>');
+//--></script>.</p>
+
+<h3>Configuration File Format</h3>
+
+<p>The configuration file is a java property file. The format of the configuration file is best
+shown by an example:</p>
+<pre>
+charge=$chemaxon.marvin.calculations.ChargePlugin\
+	$ChargePlugin.jar\
+	$Charge\
+	$p=precision:2;t=type:total;i=implh:false;r=resonance:false;H=pH\
+	$CHARGE\
+	$Partial charge calculation.\nTypes aromaticsystem / aromaticring calculate the sum of charges\nin the aromatic system / aromatic ring containing the atom.\
+	$-p, --precision=&lt;floating point precision as number of
+	\nfractional digits: 0-8 or inf&gt;(default: 2);-t, --type=[sigma|pi|total|implh|\naromaticsystem|aromaticsystemsigma|aromaticsystempi|\naromaticring|aromaticringsigma|aromaticringpi]
+	\n(default: total);-i, --implh=[true|false] implicit H charge sum shown in brackets
+	\n(for sigma and total charge only) (default: false);-r, --resonance=[true|false]
+	\ntrue: take resonant structures (default: false);-H, --pH=&lt;pH value&gt;> takes major microspecies at this pH
+	\n(default: no pH, takes the input molecule)\
+	$cxcalc -S -o result.sdf -t myCHARGE charge -t pi,total -p 3 test.mol
+</pre>
+
+
+<p>The key <code>charge</code> is the plugin name that the plugin is 
+referenced by in the <code>cxcalc</code> command line tool.</p>
+<p>Configuration items are separated by '$' characters. The '\' characters allow property values 
+to be expanded to multiple lines: the '\' character itself as well as leading white spaces in 
+the next line are ignored.</p>
+<p>The configuration items:</p>
+<ol>
+<li>the plugin class with full package name
+<li>the plugin JAR name (with path relative to the <code>plugins</code> directory)
+<li>the plugin group name (used for grouping the available plugins in the help message)
+<li>the plugin specific parameters: 
+    <pre>&lt;short name&gt;=&lt;long name&gt;:&lt;default value&gt;</pre>
+    separated by semicolons
+<li>the default SDF file tag name storing the results in case of SDF file output
+<li>a short description used in the plugin specific help message
+<li>the plugin specific help text (parameter description text) with newline characters
+    replaced by semicolons 
+<li>an example usage text (optional)
+</ol>
+
+
+<p>The plugin loading mechanism is the following: 
+first the program tries to load the plugin class by the default class loader from the
+CLASSPATH; if this the plugin class is not found then the JAR is loaded and the system
+tries to load the plugin class from there.
+<p>If the plugin name is omitted then the plugin is loaded directly from the JAR where
+the <code>Plugin-Class</code> manifest attribute specifies the plugin class.
+<p>If the JAR name is omitted then the plugin is loaded from the CLASSPATH.
+<p>Missing configuration items should be denoted by '-' characters. For example, here is
+the above plugin configuration with omitted JAR name:
+
+</p>
+<pre>
+charge=$chemaxon.marvin.calculations.ChargePlugin\
+	$-\
+	$Charge\
+	$p=precision:2;t=type:total;i=implh:false;H=pH\
+	$CHARGE\
+	$Partial charge calculation.\nTypes aromaticsystem / aromaticring calculate the sum of charges\nin the aromatic system / aromatic ring containing the atom.\
+	$-p, --precision=&lt;floating point precision as number of
+	\nfractional digits: 0-8 or inf> (default: 2);-t, --type=[sigma|pi|total|implh|aromaticsystem|aromaticring]
+	\n(default: total);-i, --implh=[true|false] implicit H charge sum shown in brackets
+	\n(for sigma and total charge only) (default: false);-H, --pH=&lt;pH value> takes physiological microspecies at this pH
+	\n(default: no pH, takes the input molecule)\
+	$cxcalc -S -o result.sdf -t myCHARGE charge -t pi,total -p 3 test.mol
+</pre>
+
+
+<p><b>Important:</b> the long parameter names in the "plugin specific parameters" section 
+should correspond to the parameter property keys used in the plugin class in the 
+<a href="../developer/beans/api/chemaxon/marvin/plugin/CalculatorPlugin.html#setParameters(java.util.Properties)" target="_blank">
+<code>setParameters(Properties params)</code></a> method!</p>
+ 
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a class="anchor" name="examples">Examples</a></h2>
+<ol>
+<li>p<i>K</i><sub>a</sub> calculation with table form output, showing the two most significant acidic and
+the two most significant basic p<i>K</i><sub>a</sub> values (this is the default table output mode):
+<pre>
+cxcalc mols.sdf pka
+</pre>
+</li>
+<li>The same with molecule ID-s taken from the <code>ID</code> tag of the input SDF file,
+writing three significant values from each p<i>K</i><sub>a</sub> type:
+<pre>
+cxcalc mols.sdf -i ID pka -a 3 -b 3
+</pre>
+</li>
+<li>The same with setting minimum basic p<i>K</i><sub>a</sub> to <code>-5</code>, 
+maximum acidic p<i>K</i><sub>a</sub> to <code>15</code>:
+<pre>
+cxcalc mols.sdf -i ID pka -a 3 -b 3 -i -5 -x 15
+</pre>
+</li>
+<li>Charge calculation for molecules in the <code>mols.sdf</code> file,
+writes results to the standard output in MRV format, charge values displayed
+in atom labels:
+<pre>
+cxcalc -M charge mols.sdf
+</pre>
+</li>
+<li>The same with output to the <code>molcharges.mrv</code> file to be created in the
+same directory, displaying the results in MarvinView:
+<pre>
+cxcalc -M -o molcharges.mrv charge mols.sdf
+mview molcharges.mrv
+</pre>
+</li>
+<li>Log<i>P</i> calculation with both result types (atomic increments and overal molecule) and
+user defined SDF tag name, piping the result to MarvinView:
+<pre>
+cxcalc -S mols.sdf -t LOGP_BOTH logp -t increments,logP | mview -
+</pre>
+<p>Note, that such piping does not work in Windows. </p>
+<p>By setting the <code>Table / Show Fields</code> option in MarvinView the SDF file tags
+will be shown in the table cells and in this way the charge values can be seen.
+</p>
+</li>
+<li>Elemental analysis (all result types), output in table form,
+molecule ID-s taken from the <code>ID</code> tag of the input SDF file,
+output written to text file <code>elemanal.txt</code>:
+<pre>
+cxcalc -o elemanal.txt -i ID elemanal mols.sdf
+</pre>
+</li>
+<li>A similar example with input taken from <code>mols.smiles</code> and output written as SDF
+to <code>elemanal.sdf</code> with <code>ELEMANAL</code> tag name:
+<pre>
+cxcalc -S -t ELEMANAL -o elemanal.sdf elemanal mols.smiles
+</pre>
+</li>
+<li>Writting molecular mass, log<i>P</i> and log<i>D</i> at pH <code>6.4</code> in the same
+table:
+<pre>
+cxcalc mass logP logD -H 6.4 mols.smiles
+</pre>
+</li>
+<li>Calculating some topological data:
+<pre>
+cxcalc ringCount ringAtomCount ringBondCount mols.smiles
+</pre>
+</li>
+</ol>
+</body>
+</html>

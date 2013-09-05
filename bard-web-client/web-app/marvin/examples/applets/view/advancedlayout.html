@@ -1,0 +1,159 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinView Example - Fine-tuning the layout</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinView Example - Fine-tuning the layout</h1>
+
+Differences from the previous example:
+<ul>
+<li>no scrolling</li>
+<li>additional parameters for the label and button <em>layout</em></li>
+</ul>
+
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+mview_begin("../../..", 439, 385);
+mview_param("rows", "3");
+mview_param("cols", "2");
+mview_param("border", "1");
+mview_param("layoutH", ":1:3:L:0:0:1:2:L:0:2");
+mview_param("paramH", ":L:12b:L:12b");
+mview_param("cell0", "|Molecule|Image");
+mview_param("cell1", "|Molecule|Image");
+mview_param("layout", ":2:3:"
++"M:1:0:1:2:"
++"L:0:0:1:1:c:n:1:1:"
++"B:0:1:1:1:c:n:1:1:"
++"I:0:2:2:1:s:n:1:1");
+mview_param("param", ":M:150:150:"
++"L:10:"
++"B:10:search for more molecules like this:_self");
+mview_param("cell2", "|../../../mols-2d/caffeine.csmol"
++"|first"
++"| Search |%|example-searchmore1.cgi?mol=first"
++"|../../../img/easychart1.gif||");
+mview_param("cell3", "|O[C@H](\C=C\[C@@H](O)C1=CC=CC=C1)C2=CC=CC=C2"
++"|second"
++"| Search |%|example-searchmore1.cgi?mol=second"
++"|../../../img/easychart2.gif||");
+mview_param("cell4", "|Ethane\n"
++"  Marvin  07119915552D\n"
++"\n"
++"  2  1  0  0  0  0  0  0  0  0999 V2000\n"
++"   -0.5625    1.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n"
++"   -0.5625    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n"
++"  1  2  1  0  0  0  0\n"
++"M  END\n"
++"|third"
++"| Search |%|example-searchmore1.cgi?mol=third"
++"|../../../img/easychart3.gif||");
+mview_param("cell5", "|C[C@]12CC[C@@H]3[C@H](CC[C@H]4CC(=O)C(\C[C@]34C)=C\O)[C@@H]1CCC(=O)O2"
++"|fourth"
++"| Search |%|example-searchmore1.cgi?mol=fourth"
++"|../../../img/easychart4.gif||");
+mview_end();
+//-->
+</script>
+</center>
+
+<p>
+The additional parameters <code>c:n:1:1</code> for the label mean that
+the label is in the <strong>c</strong>enter of its subcell, it is <strong>n</strong>ot resized,
+and it has a vertical weight 1 and a horizontal weight 1.
+The button extra parameters are <code>c:b:1:1</code>, so the button is
+resized in <strong>b</strong>oth directions (horizontal and vertical) to fill all the
+available space in its subcell.
+The image extra parameters are <code>s:n:1:1</code>, so it is placed in
+the bottom (<strong>s</strong>outh).
+
+<p>
+The first extra parameter could be <code>n</code> (north),
+<code>ne</code> (northeast), <code>e</code> (east), etc. also.
+The second could also be <code>h</code> (horizontal resize)
+or <code>v</code> (vertical resize).
+The weights are nonnegative integers.
+
+<p>
+If you are familiar with the Java class
+<code>java.awt.GridBagLayout</code>, then you find that here you really
+specify the <code>GridBagConstraints</code> for a component.
+The only difference is that the weights must be integers here.
+
+<blockquote>
+<pre class="sh_html">
+&lt;script type=&quot;text/javascript&quot; SRC=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+</pre><pre class="sh_javascript">mview_begin(&quot;../../..&quot;, 439, 385);
+mview_param(&quot;rows&quot;, &quot;3&quot;);
+mview_param(&quot;cols&quot;, &quot;2&quot;);
+mview_param(&quot;border&quot;, &quot;1&quot;);
+mview_param(&quot;layoutH&quot;, &quot;:1:3:L:0:0:1:2:L:0:2:&quot;);
+mview_param(&quot;paramH&quot;, &quot;:L:12b:L:12b&quot;);
+mview_param(&quot;cell0&quot;, &quot;|Molecule|Image&quot;);
+mview_param(&quot;cell1&quot;, &quot;|Molecule|Image&quot;);
+mview_param(&quot;layout&quot;, &quot;:2:2:&quot;
++&quot;M:1:0:1:2:&quot;
++&quot;L:0:0:1:1:c:n:1:1:&quot;
++&quot;B:0:1:1:1:c:b:1:1:&quot;
++&quot;I:0:2:2:1:s:n:1:1&quot;);
+mview_param(&quot;param&quot;, &quot;:M:150:150:&quot;
++&quot;L:10:&quot;
++&quot;B:10:search for more molecules like this:_self&quot;);
+mview_param(&quot;cell2&quot;, &quot;|../../../mols-2d/caffeine.csmol&quot;
++&quot;|first&quot;
++&quot;| Search |%|example-searchmore1.cgi?mol=first&quot;
++&quot;|../../../img/easychart1.gif||");
+mview_param(&quot;cell3&quot;, &quot;|O[C@H](\C=C\[C@@H](O)C1=CC=CC=C1)C2=CC=CC=C2&quot;
++&quot;|second&quot;
++&quot;| Search |%|example-searchmore1.cgi?mol=second&quot;
++&quot;|../../../img/easychart2.gif||");
+mview_param(&quot;cell4&quot;, &quot;|Ethane\n&quot;
++&quot;  Marvin  07119915552D\n&quot;
++&quot;\n&quot;
++&quot;  2  1  0  0  0  0  0  0  0  0999 V2000\n&quot;
++&quot;   -0.5625    1.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;
++&quot;   -0.5625    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;
++&quot;  1  2  1  0  0  0  0\n&quot;
++&quot;M  END\n&quot;
++&quot;|third&quot;
++&quot;| Search |%|example-searchmore1.cgi?mol=third&quot;
++&quot;|../../../img/easychart3.gif||");
+mview_param(&quot;cell5&quot;, &quot;|C[C@]12CC[C@@H]3[C@H](CC[C@H]4CC(=O)C(\C[C@]34C)=C\O)[C@@H]1CCC(=O)O2&quot;
++&quot;|fourth&quot;
++&quot;| Search |%|example-searchmore1.cgi?mol=fourth&quot;
++&quot;|../../../img/easychart4.gif||");
+mview_end();
+</pre><pre class="sh_html">//--&gt;
+&lt;/script&gt;
+</pre>
+</blockquote>
+
+Description of the used parameters:
+<ul>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.rows"><code>rows</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.cols"><code>cols</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.border"><code>border</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.layout"><code>layoutH</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.param"><code>paramH</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.cell"><code>cell0</code></a></li>
+</ul>
+
+
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+The <a HREF="javascripting.html">next example</a> shows how to use buttons and
+checkboxes and how to trigger CGI calls and JavaScript expression evaluations.
+
+</body>
+</html>
