@@ -7,15 +7,17 @@ package bard.db.enums
  * Time: 4:33 PM
  * To change this template use File | Settings | File Templates.
  */
-enum ExpectedValueType implements IEnumUserType {
+enum ValueType implements IEnumUserType {
     NUMERIC("numeric"),
     ELEMENT('element'),
     EXTERNAL_ONTOLOGY('external ontology'),
     FREE_TEXT('free text'),
-    NONE('none')
+    NONE('none'),
+    RANGE('range')
+
     final String id;
 
-    private ExpectedValueType(String id) {
+    private ValueType(String id) {
         this.id = id
     }
 
@@ -23,8 +25,8 @@ enum ExpectedValueType implements IEnumUserType {
         return id
     }
 
-    static ExpectedValueType byId(String id) {
-        ExpectedValueType expectedValueType = values().find { it.id == id }
+    static ValueType byId(String id) {
+        ValueType expectedValueType = values().find { it.id == id }
         if (expectedValueType) {
             return expectedValueType
         }
