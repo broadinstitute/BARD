@@ -81,8 +81,8 @@ class RESTTestHelper {
 //        assert assay.description
         assert assay.category >= 0
         assert assay.type >= 0
-        assert assay.experiments
-        assert assay.projects
+        assert assay.experiments != null
+        assert assay.projects != null
     }
     /**
      * @param assaySearch
