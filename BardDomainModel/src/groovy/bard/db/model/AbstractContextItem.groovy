@@ -85,6 +85,8 @@ abstract class AbstractContextItem<T extends AbstractContext> {
                 return [valueMin, valueMax].findAll().join(' - ')
             case ValueType.NONE:
                 return null;
+            case ValueType.FREE_TEXT:
+                return valueDisplay
             default:
                 throw new RuntimeException("Invalid type: ${valueType}")
         }
