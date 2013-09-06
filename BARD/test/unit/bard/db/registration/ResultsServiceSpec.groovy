@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
+import bard.db.enums.ValueType
 import bard.db.experiment.*
 import bard.db.experiment.results.RawCell
 import bard.db.experiment.results.Row
@@ -106,10 +107,10 @@ class ResultsServiceSpec extends Specification {
         Experiment experiment = Experiment.build(assay: assay)
         AssayContext assayContext = AssayContext.build(assay: assay)
         AssayContext measureContext = AssayContext.build(assay: assay)
-        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "cell line", expectedValueType: FREE_TEXT))
+        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, valueDisplay: null, valueType: ValueType.NONE, attributeType: AttributeType.Free, attributeElement: Element.build(label: "cell line", expectedValueType: FREE_TEXT))
         Measure measure = Measure.build(resultType: Element.build(label: "ec50"))
         AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: measureContext, measure: measure)
-        AssayContextItem measureContextItem = AssayContextItem.build(assayContext: measureContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "hill slope",expectedValueType:NUMERIC))
+        AssayContextItem measureContextItem = AssayContextItem.build(assayContext: measureContext, attributeType: AttributeType.Free, valueDisplay: null, valueType: ValueType.NONE, attributeElement: Element.build(label: "hill slope",expectedValueType:NUMERIC))
         measureContext.assayContextMeasures = [assayContextMeasure] as Set
         assay.assayContexts = [assayContext, measureContext]
         assay.measures = [measure] as Set
@@ -333,7 +334,7 @@ class ResultsServiceSpec extends Specification {
         substance.save()
 
         def attribute = Element.build(label: "item", expectedValueType: NUMERIC)
-        def item = this.service.itemService.getLogicalItems([AssayContextItem.build(attributeType: AttributeType.Free, attributeElement: attribute)])[0]
+        def item = this.service.itemService.getLogicalItems([AssayContextItem.build(attributeType: AttributeType.Free, valueType: ValueType.NONE, valueDisplay: null, attributeElement: attribute)])[0]
         def resultType = Element.build(label: "measure")
         def measure = Measure.build(resultType: resultType)
         def experimentMeasure = ExperimentMeasure.build(measure: measure)
