@@ -5,6 +5,7 @@ import bard.db.enums.ContextType
 import bard.db.enums.DocumentType
 import bard.db.enums.ExpectedValueType
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.ValueType
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import dataexport.util.ResetSequenceUtil
@@ -55,7 +56,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         AssayContext assayContext = AssayContext.buildWithoutSave(assay: assay, contextName: 'Context for IC50', contextType: ContextType.UNCLASSIFIED)
         final Element freeTextAttribute = Element.build(label: 'software', expectedValueType: ExpectedValueType.FREE_TEXT)
         AssayContextItem.build(assayContext: assayContext, attributeElement: freeTextAttribute, attributeType: AttributeType.Fixed, valueDisplay: 'Assay Explorer')
-        AssayContextItem.build(assayContext: assayContext, attributeElement: Element.build(label: 'a label'), attributeType: AttributeType.Fixed)
+        AssayContextItem.build(assayContext: assayContext, attributeElement: Element.build(label: 'a label', expectedValueType: ExpectedValueType.FREE_TEXT), attributeType: AttributeType.Fixed, valueDisplay: "x", valueType: ValueType.FREE_TEXT)
 
         when: "A service call is made to generate measure contexts for that Assay"
         this.assayExportHelperService.generateAssayContexts(this.markupBuilder, assay.assayContexts)
@@ -81,10 +82,10 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate Full Assay"() {
         given:
-        Element element = Element.build()
+        Element element = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
         Assay assay = Assay.build(capPermissionService:null)
         AssayContext assayContext = AssayContext.build(assay: assay, contextType: ContextType.UNCLASSIFIED)
-        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeElement: element)
+        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeElement: element, valueType: ValueType.FREE_TEXT, valueDisplay: "x")
         AssayDocument.build(assay: assay)
 
         Measure measure = Measure.build(assay: assay, resultType: element)
