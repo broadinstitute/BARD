@@ -225,7 +225,7 @@ class RegisterController {
                 PersonCommand personCommand =
                     new PersonCommand(username: crowdRegistrationUser.name,
                             email: crowdRegistrationUser.email,
-                            displayName: crowdRegistrationUser.first_name + " " + crowdRegistrationUser.last_name,
+                            displayName: crowdRegistrationUser.display_name,
                             primaryGroup: null, roles: [], version: 0, validate: false)
                 final Person person = personCommand.createNewPerson()
                 if (!person) {
@@ -314,9 +314,11 @@ class SignupCommand extends BardCommand {
     String password2
     String firstName
     String lastName
-    String displayName
 
 
+    public String getDisplayName(){
+        return this.firstName + " " + this.lastName
+    }
     CrowdRegisterUserService crowdRegisterUserService
     SpringSecurityService springSecurityService
 
