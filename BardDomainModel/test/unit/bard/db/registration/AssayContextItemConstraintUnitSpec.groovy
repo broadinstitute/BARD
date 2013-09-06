@@ -26,10 +26,19 @@ import static test.TestUtils.assertFieldValidationExpectations
 @Mock([AssayContextItem, Element, Assay, AssayContext])
 @Unroll
 class AssayContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec<AssayContextItem> {
+
     @Before
     void doSetup() {
-        domainInstance = AssayContextItem.buildWithoutSave()
+        this.domainInstance = constructInstance([:])
     }
+
+    AssayContextItem constructInstance(Map props) {
+        def instance = AssayContextItem.buildWithoutSave(props)
+        instance.attributeElement.save(failOnError:true, flush: true)
+
+        return instance
+    }
+
     /**
      * Business rules for validating a contextItem are pretty complicated
      *
@@ -176,38 +185,6 @@ class AssayContextItemConstraintUnitSpec extends AbstractContextItemConstraintUn
         "List Attribute Type"  | AttributeType.List  | false
         "Range Attribute Type" | AttributeType.Range | false
 
-    }
-
-
-    void "test AssayContextItem deriveDisplayValue  #desc"() {
-
-        given:
-        Element attributeElement = optionallyCreateElement(attributeElementMap)
-        Element valueElement = optionallyCreateElement(valueElementMap)
-        Element unitElement = optionallyCreateElement(unitElementMap)
-
-        when:
-        domainInstance.attributeElement = attributeElement
-        domainInstance.attributeType = attributeType
-        domainInstance.valueElement = valueElement
-        domainInstance.qualifier = qualifier
-        domainInstance.valueNum = valueNum
-        domainInstance.attributeElement.unit = unitElement
-        domainInstance.valueMin = valueMin
-        domainInstance.valueMax = valueMax
-        domainInstance.valueDisplay = valueDisplay
-
-        then:
-        domainInstance.validate()
-        domainInstance.deriveDisplayValue() == expectedDisplayValue
-
-        where:
-        desc                            | expectedDisplayValue | attributeType | attributeElementMap          | valueElementMap | qualifier | valueNum | unitElementMap         | valueMin | valueMax | valueDisplay
-        'all null'                      | null                 | Fixed         | [expectedValueType: NONE]    | null            | null      | null     | null                   | null     | null     | null
-        'only valueElement'             | 't'                  | Fixed         | [expectedValueType: ELEMENT] | [label: 't']    | null      | null     | null                   | null     | null     | 'some value'
-        'qualifier and valueNum'        | '= 1.0'              | Fixed         | [expectedValueType: NUMERIC] | null            | '= '      | 1.0      | null                   | null     | null     | 'some value'
-        'qualifier, valueNum and units' | '= 1.0 abbr'         | Fixed         | [expectedValueType: NUMERIC] | null            | '= '      | 1.0      | [abbreviation: 'abbr'] | null     | null     | 'some value'
-        'range'                         | '5.0 - 6.0'          | RangeAttrType | [expectedValueType: NUMERIC] | null            | null      | null     | null                   | 5.0      | 6.0      | 'some value'
     }
 
     /**

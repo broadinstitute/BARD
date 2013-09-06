@@ -2,6 +2,7 @@ package bard.db.project
 
 import bard.db.BardIntegrationSpec
 import bard.db.dictionary.Element
+import bard.db.enums.ExpectedValueType
 import org.junit.Before
 
 /**
@@ -24,7 +25,7 @@ class ProjectStepIntegrationSpec extends BardIntegrationSpec {
         stepContext = StepContext.buildWithoutSave()
         domainInstance.addToStepContexts(stepContext)
 
-        stepContextItem = StepContextItem.buildWithoutSave(attributeElement: Element.build())
+        stepContextItem = StepContextItem.buildWithoutSave(attributeElement: Element.build(expectedValueType: ExpectedValueType.FREE_TEXT))
         stepContext.addToStepContextItems(stepContextItem)
     }
 

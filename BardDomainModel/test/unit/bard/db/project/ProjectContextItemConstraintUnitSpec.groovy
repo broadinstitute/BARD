@@ -1,5 +1,6 @@
 package bard.db.project
 
+import bard.db.registration.AssayContextItem
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
 import spock.lang.Unroll
@@ -20,6 +21,13 @@ class ProjectContextItemConstraintUnitSpec extends AbstractContextItemConstraint
     @Before
     @Override
     void doSetup() {
-        domainInstance = ProjectContextItem.buildWithoutSave()
+        this.domainInstance = constructInstance([:])
+    }
+
+    ProjectContextItem constructInstance(Map props) {
+        def instance = ProjectContextItem.buildWithoutSave(props)
+        instance.attributeElement.save(failOnError:true, flush: true)
+
+        return instance
     }
 }

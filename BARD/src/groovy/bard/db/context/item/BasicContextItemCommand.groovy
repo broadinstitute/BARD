@@ -166,23 +166,24 @@ class BasicContextItemCommand extends BardCommand {
 
     void copyFromCmdToDomain(AbstractContextItem contextItem) {
         contextItem.attributeElement = attemptFindById(Element, attributeElementId)
-        Element valueElement
+
+        // figure out the value type by what was provided.  Eventually it'd be nice to push value type into the
+        // form submission too
         if (valueElementId) {
+            Element valueElement
             valueElement = attemptFindById(Element, valueElementId)
+            contextItem.setDictionaryValue(valueElement)
+            contextItem.valueElement = valueElement
+
+        } else if(!StringUtils.isBlank(contextItem.extValueId)) {
+            contextItem.setExternalOntologyValue(StringUtils.trimToNull(extValueId), StringUtils.trimToNull(valueDisplay))
+
+        } else if(valueNum != null) {
+            contextItem.setNumericValue(StringUtils.isBlank(qualifier)?"= ":qualifier, convertToBigDecimal('valueNum', valueNum, contextItem.attributeElement?.unit)?.toFloat())
+        } else if(valueMin != null) {
+            contextItem.setRange(convertToBigDecimal('valueMin', valueMin, contextItem.attributeElement?.unit)?.toFloat(), convertToBigDecimal('valueMax', valueMax, contextItem.attributeElement?.unit)?.toFloat())
         }
-        contextItem.valueElement = valueElement
-        contextItem.extValueId = StringUtils.trimToNull(extValueId)
-        contextItem.valueDisplay = StringUtils.trimToNull(valueDisplay)
-        contextItem.qualifier = qualifier
-        contextItem.valueNum = convertToBigDecimal('valueNum', valueNum, contextItem.attributeElement?.unit)?.toFloat()
-        if (contextItem.valueNum != null && StringUtils.isBlank(qualifier)) {
-            contextItem.qualifier = '= '
-        }
-        contextItem.valueMin = convertToBigDecimal('valueMin', valueMin, contextItem.attributeElement?.unit)?.toFloat()
-        contextItem.valueMax = convertToBigDecimal('valueMax', valueMax, contextItem.attributeElement?.unit)?.toFloat()
-        if (valueNum || valueMin || valueMax) {
-            contextItem.valueDisplay = contextItem.deriveDisplayValue()
-        }
+
         if (contextItem instanceof AssayContextItem) {
             AssayContextItem assayContextItem = contextItem;
 

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>bard</groupId>
 	<artifactId>external-validation</artifactId>
-	<version>20130717</version>
+	<version>20130904</version>
 	<distributionManagement>
 		<repository>
 			<id>bard-repo.broadinstitute.org</id>
@@ -86,7 +86,7 @@
 		<dependency>
 			<groupId>uk.ac.ebi.uniprot.kraken</groupId>
 			<artifactId>uniprotjapi</artifactId>
-			<version>2013.01</version>
+			<version>2013.08</version>
 		</dependency>
 		<dependency>
 			<groupId>uk.ac.ebi.ols</groupId>

@@ -39,6 +39,7 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
+        build ":improx:0.2" // Interactive Mode Proxy; useful for IDE integration
         build(":tomcat:$grailsVersion",
                 ":release:2.0.3",
                 ":rest-client-builder:1.0.2") {
@@ -57,7 +58,7 @@ clover {
     includes = ['**/*.groovy', '**/*.java']
     excludes = ['**/RESTTestHelper.*', '**/*Spec*.*', '**/conf/**', '**/JSONNodeTestHelper.java']
 }
-codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
+codenarc.ruleSetFiles = "file:grails-app/conf/BardRestApiWrapperCodeNarcRuleSet.groovy"
 codenarc.reports = {
     html('html') {
         outputFile = 'target/codenarc-reports/html/BARD-CodeNarc-Report.html'
