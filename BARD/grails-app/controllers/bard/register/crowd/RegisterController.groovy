@@ -113,7 +113,7 @@ class RegisterController {
         }
         catch (Exception ee) {
             String errorMessage = ee?.message
-            if(!errorMessage){
+            if (!errorMessage) {
                 errorMessage = "Exception occured during registration. Please contact the BARD team at bard@broadinstitute.org"
             }
             return [command: signupCommand, errorMessage: errorMessage]
@@ -289,7 +289,7 @@ class RegisterCommand extends SignupCommand {
             if (attemptSave(person)) {
                 personToReturn = person
                 if (!PersonRole.findByPersonAndRole(person, person.newObjectRole)) {
-                    PersonRole.create(person, person.newObjectRole, springSecurityService.principal?.userName, true)
+                    PersonRole.create(person, person.newObjectRole, springSecurityService.principal?.username, true)
                 }
             }
 
@@ -368,11 +368,11 @@ class SignupCommand extends BardCommand {
             return 'command.password.error.username'
         }
 
-        /*if (!checkPasswordMinLength(password, command) ||
+        if (!checkPasswordMinLength(password, command) ||
                 !checkPasswordMaxLength(password, command) ||
                 !checkPasswordRegex(password, command)) {
             return 'command.password.error.strength'
-        } */
+        }
     }
 }
 
