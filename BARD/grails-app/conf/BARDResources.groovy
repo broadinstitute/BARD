@@ -95,19 +95,20 @@ modules = {
         resource url: "js/lib/crossfilter.js"
         resource url: "css/dc.css"
     }
+
     projectstep {
         dependsOn "handlebars"
         resource url: '/js/projectstep/projectstep.edit.js'
-        resource url: '/js/projectstep/raphael.js'
-        resource url: '/js/projectstep/dracula_graffle.js'
-        resource url: '/js/projectstep/dracula_graph.js'
-        resource url: '/js/projectstep/dracula_algorithms.js'
+//        resource url: '/js/projectstep/raphael.js'
+//        resource url: '/js/projectstep/dracula_graffle.js'
+//        resource url: '/js/projectstep/dracula_graph.js'
+//        resource url: '/js/projectstep/dracula_algorithms.js'
         resource url: '/js/projectstep/projectstep.show.js'
-        resource url: '/js/projectstep/rcolor.js'
+//        resource url: '/js/projectstep/rcolor.js'
         resource url: '/js/projectstep/viz.js'
-        resource url: '/js/projectstep/projectstep.css'
         resource url: '/css/projectstep.css'
     }
+
     //Adding version allows clients to not cache javascript
     search {
         resource url: "js/search.js"
