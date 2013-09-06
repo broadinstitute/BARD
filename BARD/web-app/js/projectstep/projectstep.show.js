@@ -137,6 +137,10 @@ function layoutGraph() {
     $(".graph").find(graphtitle).text("experiment relationships");
     var graphInJSON = $.parseJSON($('#stepGraph').html());
     var connectedNodes = graphInJSON.connectedNodes;
+    var isolatedNodes = graphInJSON.isolatedNodes;
+    var allNodes = [];
+    $.merge(allNodes, connectedNodes);
+    $.merge(allNodes, isolatedNodes);
     var nodeSelectionTemplate = Handlebars.compile($("#node-selection-template").html())
     var edgeSelectionTemplate = Handlebars.compile($("#edge-selection-template").html());
 
@@ -153,9 +157,9 @@ function layoutGraph() {
 
         var projectId = $('#projectIdForStep').val();
 
-        for (var i = 0; i < connectedNodes.length; i++) {
-            var keyValues = connectedNodes[i].keyValues;
-            if (connectedNodes[i].id == clickedNode) {
+        for (var i = 0; i < allNodes.length; i++) {
+            var keyValues = allNodes[i].keyValues;
+            if (allNodes[i].id == clickedNode) {
                 assignFillColor(thisId, "#00FFFF");
                 var params = {selected:keyValues, projectId:projectId, selectedNodeId:thisId};
                 $('#selection-details').html(nodeSelectionTemplate(params));
@@ -170,6 +174,7 @@ function layoutGraph() {
     });
 
     var edges = graphInJSON.edges;
+
     // set up click handler for edges
     $(".edge").click(function () {
         var prevSelectedNode = $("#selectedNodeId").text();
@@ -200,7 +205,145 @@ function layoutGraph() {
             }
         }
     });
+
+    setupGraphScrolling();
 }
+
+function setupGraphScrolling() {
+
+    var container = document.getElementById("canvas-container");
+    var content = document.getElementById("canvas");
+    var contentWidth = 2000;
+    var contentHeight = 2000;
+    var clientWidth = 0;
+    var clientHeight = 0;
+    var clientOffset = $("#canvas-container").offset();
+
+    var render = (function(global) {
+        var docStyle = document.documentElement.style;
+
+        var engine;
+        if (global.opera && Object.prototype.toString.call(opera) === '[object Opera]') {
+            engine = 'presto';
+        } else if ('MozAppearance' in docStyle) {
+            engine = 'gecko';
+        } else if ('WebkitAppearance' in docStyle) {
+            engine = 'webkit';
+        } else if (typeof navigator.cpuClass === 'string') {
+            engine = 'trident';
+        }
+
+        var vendorPrefix = {
+            trident: 'ms',
+            gecko: 'Moz',
+            webkit: 'Webkit',
+            presto: 'O'
+        }[engine];
+
+        var helperElem = document.createElement("div");
+        var undef;
+
+        var perspectiveProperty = vendorPrefix + "Perspective";
+        var transformProperty = vendorPrefix + "Transform";
+
+        return function(left, top, zoom) {
+            content.style.marginLeft = left ? (-left/zoom) + 'px' : '';
+            content.style.marginTop = top ? (-top/zoom) + 'px' : '';
+            content.style.zoom = zoom || '';
+        };
+
+    })(this);
+
+    scroller = new Scroller(render, {
+        zooming: true
+    });
+
+    var rect = container.getBoundingClientRect();
+    scroller.setPosition(rect.left + container.clientLeft, rect.top + container.clientTop);
+
+    // Reflow handling
+    var reflow = function() {
+        clientWidth = container.clientWidth;
+        clientHeight = container.clientHeight;
+        scroller.setDimensions(clientWidth, clientHeight, contentWidth, contentHeight);
+        clientOffset = $("#canvas-container").offset()
+    };
+
+    window.addEventListener("resize", reflow, false);
+    reflow();
+
+    if ('ontouchstart' in window) {
+        container.addEventListener("touchstart", function(e) {
+            // Don't react if initial down happens on a form element
+            if (e.touches[0] && e.touches[0].target && e.touches[0].target.tagName.match(/input|textarea|select/i)) {
+                return;
+            }
+
+            scroller.doTouchStart(e.touches, e.timeStamp);
+            e.preventDefault();
+        }, false);
+
+        document.addEventListener("touchmove", function(e) {
+            scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
+        }, false);
+
+        document.addEventListener("touchend", function(e) {
+            scroller.doTouchEnd(e.timeStamp);
+        }, false);
+
+        document.addEventListener("touchcancel", function(e) {
+            scroller.doTouchEnd(e.timeStamp);
+        }, false);
+
+    } else {
+        var mousedown = false;
+
+        container.addEventListener("mousedown", function(e) {
+            if (e.target.tagName.match(/input|textarea|select/i)) {
+                return;
+            }
+
+            scroller.doTouchStart([{
+                pageX: e.pageX,
+                pageY: e.pageY
+            }], e.timeStamp);
+
+            mousedown = true;
+        }, false);
+
+        document.addEventListener("mousemove", function(e) {
+            if (!mousedown) {
+                return;
+            }
+
+            scroller.doTouchMove([{
+                pageX: e.pageX,
+                pageY: e.pageY
+            }], e.timeStamp);
+
+            mousedown = true;
+        }, false);
+
+        document.addEventListener("mouseup", function(e) {
+            if (!mousedown) {
+                return;
+            }
+
+            scroller.doTouchEnd(e.timeStamp);
+
+            mousedown = false;
+        }, false);
+    }
+
+    $("#zoomIn").on("click", function() {
+        scroller.zoomBy(1.2, true);
+    });
+
+    $("#zoomOut").on("click", function() {
+        scroller.zoomBy(0.8, true);
+    });
+}
+
 
 // http://jqueryfordesigners.com/fixed-floating-elements/
 $(function () {
