@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContextItemIntegrationSpec
+import bard.db.project.ProjectExperimentContextItem
 import org.junit.Before
 import spock.lang.Ignore
 import spock.lang.Unroll
@@ -17,10 +18,18 @@ import spock.lang.Unroll
 class AssayContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec<AssayContextItem> {
 
     @Before
+    @Override
     void doSetup() {
-        domainInstance = AssayContextItem.buildWithoutSave()
-        domainInstance.attributeElement.save()
+        this.domainInstance = constructInstance([:])
     }
+
+    AssayContextItem constructInstance(Map props) {
+        def instance = AssayContextItem.buildWithoutSave(props)
+        instance.attributeElement.save(failOnError:true, flush: true)
+
+        return instance
+    }
+
     void "test canDelete has No experiments #desc"() {
         given:
         domainInstance.attributeType = attributeType
