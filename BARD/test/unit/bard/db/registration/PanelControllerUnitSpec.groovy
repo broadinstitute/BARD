@@ -212,12 +212,14 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         params.id = panel.id
         params.assayIds = assay.id
         when:
-        controller.addAssays()
+        def model = controller.addAssays()
 
         then:
         controller.panelService.associateAssays(_, _) >> { throw new AccessDeniedException("msg") }
-
-        assertAccesDeniedErrorMessage()
+        final AssociatePanelCommand associatePanelCommand = model.associatePanelCommand
+        assert associatePanelCommand.id== panel.id
+        assert associatePanelCommand.assayIds==assay.id.toString()
+        assert associatePanelCommand.hasErrors()
     }
 
     void 'test add assay'() {
@@ -258,12 +260,14 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         params.id = panel.id
         params.assayIds = assay.id
         when:
-        controller.addAssay()
+        def model = controller.addAssay()
 
         then:
         controller.panelService.associateAssay(_, _) >> { throw new AccessDeniedException("msg") }
-
-        assertAccesDeniedErrorMessage()
+        final AssociatePanelCommand associatePanelCommand = model.associatePanelCommand
+        assert associatePanelCommand.id== panel.id
+        assert associatePanelCommand.assayIds==assay.id.toString()
+        assert associatePanelCommand.hasErrors()
     }
 
     void 'test delete panel'() {
@@ -350,11 +354,14 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         params.id = panel.id
         params.assayIds = assay.id
         when:
-        controller.removeAssay()
+        def model = controller.removeAssay()
 
         then:
         controller.panelService.disassociateAssay(_, _) >> { throw new AccessDeniedException("msg") }
-        assertAccesDeniedErrorMessage()
+        final AssociatePanelCommand associatePanelCommand = model.associatePanelCommand
+        assert associatePanelCommand.id== panel.id
+        assert associatePanelCommand.assayIds==assay.id.toString()
+        assert associatePanelCommand.hasErrors()
 
     }
 
@@ -405,12 +412,14 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         params.id = panel.id
         params.assayIds = assay.id
         when:
-        controller.removeAssays()
+        def model = controller.removeAssays()
 
         then:
         controller.panelService.disassociateAssays(_, _) >> { throw new AccessDeniedException("msg") }
-        assertAccesDeniedErrorMessage()
-
+        final AssociatePanelCommand associatePanelCommand = model.associatePanelCommand
+        assert associatePanelCommand.id== panel.id
+        assert associatePanelCommand.assayIds==assay.id.toString()
+        assert associatePanelCommand.hasErrors()
     }
 
     void "test list"() {

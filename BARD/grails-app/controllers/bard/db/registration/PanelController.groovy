@@ -67,7 +67,7 @@ class PanelController {
         if (associatePanelCommand.hasErrors()) {
             return [associatePanelCommand: associatePanelCommand]
         }
-        this.panelService.associateAssay(associatePanelCommand.id, associatePanelCommand.assays.get(0))
+        this.panelService.associateAssay(associatePanelCommand.assays.get(0),associatePanelCommand.id)
         redirect(controller: "panel", action: "show", id: associatePanelCommand.id)
 
     }
@@ -258,10 +258,10 @@ class AssociatePanelCommand extends BardCommand {
             Panel panel = Panel.get(value.toLong())
             if (panel) {
                 if (!command.editingHelper.canEdit(command.permissionEvaluator, command.springSecurityService, panel)) {
-                   err.rejectValue('id', "message.code", "You do not have the privileges to add Assays to this Panel PLID:${id}");
+                   err.rejectValue('id', "message.code", "You do not have the privileges to add Assays to this Panel PLID:${value}");
                 }
             } else {
-                err.rejectValue("id", "message.code", "Panel with ID:${id} cannot be found");
+                err.rejectValue("id", "message.code", "Panel with ID:${value} cannot be found");
             }
 
         })
@@ -272,10 +272,10 @@ class AssociatePanelCommand extends BardCommand {
                     Assay assay = Assay.get(assayId)
                     if (assay) {
                         if (!command.editingHelper.canEdit(command.permissionEvaluator, command.springSecurityService, assay)) {
-                            err.rejectValue("assayIds", "message.code", "You do not have the privileges to add ADID:${assayId} to this Panel");
+                            err.rejectValue("assayIds", "message.code", "You do not have the privileges to add ADID:${value} to this Panel");
                         }
                     } else {
-                        err.rejectValue("assayIds", "message.code", "ADID:${assayId} not found");
+                        err.rejectValue("assayIds", "message.code", "ADID:${value} not found");
                     }
                 }
             }

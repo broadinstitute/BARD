@@ -96,6 +96,22 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
     }
 
+    def 'test list #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "list", team, teamPassword)
+
+        when:
+        final Response response = client.get()
+        then:
+        assert response.statusCode == expectedHttpResponse
+        where:
+        desc       | team              | teamPassword      | expectedHttpResponse
+        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
+        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
+        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
+        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
+        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
+    }
 
     def 'test show #desc'() {
         given:
@@ -118,26 +134,25 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     }
 
-    @IgnoreRest
+
     def 'test findById #desc'() {
         given:
 
-        RESTClient client = getRestClient(controllerUrl,"findById/${panelAssayData.panelId}", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "findById/${panelAssayData.panelId}", team, teamPassword)
 
         when:
         final Response response = client.get()
 
         then:
         assert response.statusCode == expectedHttpResponse
-        assert response.text.contains(team)
 
         where:
         desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
+        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
+        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FOUND
+        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
+        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
+        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
     }
 
 
@@ -165,17 +180,58 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
     }
 
-
-
-
-    def 'test associate assay #desc'() {
+    def 'test save #desc'() {
         given:
-        RESTClient client = getRestClient(controllerUrl, "associateAssay", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
+        when:
+        def response = client.post() {
+            urlenc name: "Some Name"
+        }
+
+        then:
+        assert response.statusCode == expectedHttpResponse
+
+        where:
+        desc       | team              | teamPassword      | expectedHttpResponse
+        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
+        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FOUND
+        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
+        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
+        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
+
+    }
+
+    def 'test addAssayToPanel #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "addAssayToPanel", team, teamPassword)
         long assayId = panelAssayData.assayId
         long panelId = panelAssayData.panelId
         when:
         def response = client.post() {
-            urlenc assayId: assayId, id: panelId
+            urlenc assayIds: assayId, id: panelId
+        }
+
+        then:
+        assert response.statusCode == expectedHttpResponse
+
+        where:
+        desc       | team              | teamPassword      | expectedHttpResponse
+        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
+        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
+        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
+        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
+        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
+
+    }
+
+    def 'test add assay #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "addAssay", team, teamPassword)
+        long assayId = panelAssayData.assayId
+        long panelId = panelAssayData.panelId
+        when:
+        def response = client.post() {
+            urlenc assayIds: assayId, id: panelId
         }
 
         then:
@@ -189,14 +245,14 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
     }
 
-    def 'test associate assay #forbidden'() {
+    def 'test add assay #forbidden'() {
         given:
-        RESTClient client = getRestClient(controllerUrl, "associateAssay", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "addAssay", team, teamPassword)
         long assayId = panelAssayData.assayId
         long panelId = panelAssayData.panelId
         when:
         response = client.post() {
-            urlenc assayId: assayId, id: panelId
+            urlenc assayIds: assayId, id: panelId
         }
 
         then:
@@ -205,19 +261,59 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         where:
         desc                  | team              | teamPassword      | expectedHttpResponse
-        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_NOT_FOUND
+        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_NOT_FOUND
     }
 
-    def 'test disassociate Assay  #desc'() {
+    def 'test add assays #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "addAssays", team, teamPassword)
+        long assayId = panelAssayData.assayId
+        long panelId = panelAssayData.panelId
+        when:
+        def response = client.post() {
+            urlenc assayIds: assayId, id: panelId
+        }
+
+        then:
+        //all of these redirect
+        assert response.statusCode == expectedHttpResponse
+
+        where:
+        desc                | team              | teamPassword      | expectedHttpResponse
+        "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
+        "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
+        "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
+    }
+
+    def 'test add assays forbidden #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "addAssays", team, teamPassword)
+        long assayId = panelAssayData.assayId
+        long panelId = panelAssayData.panelId
+        when:
+        def response = client.post() {
+            urlenc assayIds: assayId, id: panelId
+        }
+
+        then:
+        assert response.statusCode == expectedHttpResponse
+
+        where:
+        desc                  | team              | teamPassword      | expectedHttpResponse
+        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
+        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
+    }
+
+    def 'test remove Assays  #desc'() {
         given:
 
-        RESTClient client = getRestClient(controllerUrl, "disassociateAssay", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "removeAssays", team, teamPassword)
         long id = panelAssayData.panelId
         long assayId = panelAssayData.assayId
         when:
         def response = client.post() {
-            urlenc assayId: assayId, id: id
+            urlenc assayIds: assayId, id: id
         }
 
         then:
@@ -231,14 +327,55 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     }
 
 
-    def 'test disassociate Assay #forbidden'() {
+    def 'test remove Assays #forbidden'() {
         given:
-        RESTClient client = getRestClient(controllerUrl, "disassociateAssay", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "removeAssays", team, teamPassword)
+        long id = panelAssayData.panelId
+        long assayId = panelAssayData.assayId
+        when:
+        def response = client.post() {
+            urlenc assayIds: assayId, id: id
+        }
+
+        then:
+        response.statusCode == expectedHttpResponse
+
+        where:
+        desc                  | team              | teamPassword      | expectedHttpResponse
+        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
+        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
+    }
+
+    def 'test remove Assay  #desc'() {
+        given:
+
+        RESTClient client = getRestClient(controllerUrl, "removeAssay", team, teamPassword)
+        long id = panelAssayData.panelId
+        long assayId = panelAssayData.assayId
+        when:
+        def response = client.post() {
+            urlenc assayIds: assayId, id: id
+        }
+
+        then:
+        assert response.statusCode == expectedHttpResponse
+
+        where:
+        desc                | team              | teamPassword      | expectedHttpResponse
+        "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
+        "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
+        "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
+    }
+
+
+    def 'test remove Assay #forbidden'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "removeAssay", team, teamPassword)
         long id = panelAssayData.panelId
         long assayId = panelAssayData.assayId
         when:
         client.post() {
-            urlenc assayId: assayId, id: id
+            urlenc assayIds: assayId, id: id
         }
 
         then:
@@ -247,8 +384,8 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         where:
         desc                  | team              | teamPassword      | expectedHttpResponse
-        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_NOT_FOUND
+        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_NOT_FOUND
     }
 
 
@@ -355,7 +492,7 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         desc                | team              | teamPassword      | expectedHttpResponse
         "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
         "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
-        "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
+       // "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
     }
 
     private Map getCurrentPanelProperties() {
