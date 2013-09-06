@@ -1,3 +1,4 @@
+<div class="span-9">
 <div id="showstep" style="position: relative;">
     <input type="hidden" id="projectIdForStep" name="projectIdForStep" value="${instanceId}"/>
 
@@ -14,24 +15,21 @@
 
     <div id="ajaxProgress" style="color:#5bb75b">Please wait ...</div>
 
-    <div id="canvas"></div>
-
-    <div id="canvasIsolated"></div>
+    <div id="canvas-container" style="overflow: hidden; cursor: default ; border: 2px dotted black">
+        <div id="canvas"><p>Click and drag on background to pan in graph</p></div>
+    </div>
 
     <div id="nicedisplay"></div>
 
+    <div class="span-3">
     <div id="placeholder">
-
-        <div id="node-selection-details">
-            Click on an experiment to see the details here.
-        </div>
+        Zoom: <div class="btn-group"><input class="btn" type="button" id="zoomIn" value="In"/><input type="button" id="zoomOut" value="Out" class="btn"/></div>
         <br/>
         <br/>
 
-        <div id="edge-selection-details">
-            Click on an edge connecting experiments to see the details here.
+        <div id="selection-details">
+            Click on an experiment or a link to see the details here.
         </div>
-
 
         <script id="edge-selection-template" type="text/x-handlebars-template">
             <div id="selectedEdgeId" style="display: none">{{selectedEdgeId}}</div>
@@ -95,4 +93,6 @@
         </script>
 
     </div>
+    </div>
+</div>
 </div>

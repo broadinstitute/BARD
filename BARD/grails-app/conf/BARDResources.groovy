@@ -29,12 +29,12 @@ modules = {
         resource url: '/css/card.css'
     }
     addItem {
-        dependsOn(['bootstrapplus', 'card'])
+        dependsOn 'bootstrapplus, card'
 
         resource url: '/css/AddItemWizard.css'
     }
     contextItem {
-        dependsOn(['select2', 'bootstrapplus', 'card'])
+        dependsOn 'select2, bootstrapplus, card'
         resource url: '/js/cap/contextItem.js'
     }
     newTerm {
@@ -76,7 +76,7 @@ modules = {
         resource url: '/js/cap/assay.cards.js'
     }
     assayshow {
-        dependsOn(['bootstrapplus', 'card', 'sectionCounter'])
+        dependsOn 'bootstrapplus, card, sectionCounter'
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
         resource url: '/js/cap/assay.show.js'
         resource url: '/css/measures-dynatree.css'
@@ -95,19 +95,20 @@ modules = {
         resource url: "js/lib/crossfilter.js"
         resource url: "css/dc.css"
     }
+
     projectstep {
-        dependsOn "handlebars"
+        dependsOn "handlebars,zyngaScroller"
         resource url: '/js/projectstep/projectstep.edit.js'
-        resource url: '/js/projectstep/raphael.js'
-        resource url: '/js/projectstep/dracula_graffle.js'
-        resource url: '/js/projectstep/dracula_graph.js'
-        resource url: '/js/projectstep/dracula_algorithms.js'
+//        resource url: '/js/projectstep/raphael.js'
+//        resource url: '/js/projectstep/dracula_graffle.js'
+//        resource url: '/js/projectstep/dracula_graph.js'
+//        resource url: '/js/projectstep/dracula_algorithms.js'
         resource url: '/js/projectstep/projectstep.show.js'
-        resource url: '/js/projectstep/rcolor.js'
+//        resource url: '/js/projectstep/rcolor.js'
         resource url: '/js/projectstep/viz.js'
-        resource url: '/js/projectstep/projectstep.css'
         resource url: '/css/projectstep.css'
     }
+
     //Adding version allows clients to not cache javascript
     search {
         resource url: "js/search.js"
@@ -208,6 +209,11 @@ modules = {
     twitterBootstrapAffix {
         resource url: "/css/twitterBootstrapAffix.css"
         resource url: "/js/jquery-ui-bootstrap/bootstrap/js/twitterBootstrapAffix.js"
+    }
+    zyngaScroller {
+        resource url: "/js/zynga-scroller-a44d7c2/Animate.js"
+        resource url: "/js/zynga-scroller-a44d7c2/Scroller.js"
+        resource url: "/js/zynga-scroller-a44d7c2/render.js"
     }
     jsDrawEditor {
         resource url: "js/jsDraw/jsDrawEditor.js"

@@ -238,7 +238,7 @@ function handleSuccess(data) {
     }
     else {
         $("#showstep").html(data);
-        initProjectFunction();
+        layoutGraph();
         initProjectEditFunction();
         clearAvailableExperiment();
     }
