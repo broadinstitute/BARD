@@ -4,6 +4,8 @@ import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
+import bard.db.enums.ExpectedValueType
+import bard.db.enums.ValueType
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
@@ -44,9 +46,9 @@ public class MergeAssayDefinitionServiceUnitSpec extends Specification {
     void 'test validateExperimentContextItem - assay context item has fixed attribute'() {
         given:
         Assay assayOne = Assay.build()
-        Element element = Element.build()
+        Element element = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
         AssayContext contextOne = AssayContext.build(assay: assayOne, contextName: "alpha")
-        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: contextOne, attributeType: AttributeType.Fixed,attributeElement: element)
+        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: contextOne, attributeType: AttributeType.Fixed, valueType: ValueType.FREE_TEXT, valueDisplay: "x", attributeElement: element)
         Measure measureOne = Measure.build(assay: assayOne)
         AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
 

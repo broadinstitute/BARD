@@ -2,6 +2,7 @@ package bard.db.context.item
 
 import bard.db.dictionary.Element
 import bard.db.enums.ContextType
+import bard.db.enums.ExpectedValueType
 import bard.db.project.Project
 import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
@@ -71,7 +72,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
             final String elementLabel = "My Cool Label"
             final Element element = Element.findByLabel(elementLabel)
             if (!element) {
-                element = Element.build(label: elementLabel).save(flush: true)
+                element = Element.build(label: elementLabel, expectedValueType: ExpectedValueType.FREE_TEXT).save(flush: true)
             }
 
             long attributeElementId = element.id

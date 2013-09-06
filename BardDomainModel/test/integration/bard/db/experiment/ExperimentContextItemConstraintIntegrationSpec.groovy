@@ -17,8 +17,14 @@ class ExperimentContextItemConstraintIntegrationSpec extends AbstractContextItem
     @Before
     @Override
     void doSetup() {
-        domainInstance = ExperimentContextItem.buildWithoutSave()
-        domainInstance.attributeElement.save()
+        this.domainInstance = constructInstance([:])
+    }
+
+    ExperimentContextItem constructInstance(Map props) {
+        def instance = ExperimentContextItem.buildWithoutSave(props)
+        instance.attributeElement.save(failOnError:true, flush: true)
+
+        return instance
     }
 
 }

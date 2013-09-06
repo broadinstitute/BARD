@@ -1,5 +1,6 @@
 package bard.db.project
 
+import bard.db.experiment.ExperimentContextItem
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
 import spock.lang.Unroll
@@ -18,6 +19,13 @@ import bard.db.project.StepContextItem
 class StepContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec<StepContextItem>{
     @Before
      void doSetup(){
-        domainInstance = StepContextItem.buildWithoutSave()
+        this.domainInstance = constructInstance([:])
+    }
+
+    StepContextItem constructInstance(Map props) {
+        def instance = StepContextItem.buildWithoutSave(props)
+        instance.attributeElement.save(failOnError:true, flush: true)
+
+        return instance
     }
 }

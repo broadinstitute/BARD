@@ -3,6 +3,8 @@ package dataexport.registration
 import bard.db.dictionary.Element
 import bard.db.enums.ContextType
 import bard.db.enums.DocumentType
+import bard.db.enums.ExpectedValueType
+import bard.db.enums.ValueType
 import bard.db.registration.*
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
@@ -94,10 +96,10 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
     void "test generate and validate Assay"() {
 
         given:
-        Element element = Element.build()
+        Element element = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
         Assay assay = Assay.build(capPermissionService:null)
         AssayContext assayContext = AssayContext.build(assay: assay, contextType: ContextType.UNCLASSIFIED)
-        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeElement: element)
+        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeElement: element, valueType: ValueType.FREE_TEXT, valueDisplay: "value")
         AssayDocument.build(assay: assay)
 
         Measure measure = Measure.build(assay: assay, resultType: element)
