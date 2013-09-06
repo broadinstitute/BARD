@@ -57,6 +57,8 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="controller"><g:link controller="assayDefinition"
+                                                               action="groupAssays">My Assays</g:link></li>
+                                <li class="controller"><g:link controller="assayDefinition"
                                                                action="findById">Search by Assay Definition ID</g:link></li>
                                 <li class="controller"><g:link controller="assayDefinition"
                                                                action="findByName">Search by Assay Definition Name</g:link></li>
@@ -72,6 +74,8 @@
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
+                                <li class="controller"><g:link controller="project"
+                                                               action="groupProjects">My Projects</g:link></li>
                                 <li class="controller"><g:link controller="project"
                                                                action="findById">Search by Project ID</g:link></li>
                                 <li class="controller"><g:link controller="project"

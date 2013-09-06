@@ -1,0 +1,42 @@
+
+import bard.db.audit.BardContextUtils
+import bard.db.project.Project
+import grails.plugin.spock.IntegrationSpec
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.grails.plugins.springsecurity.service.acl.AclUtilService
+import org.hibernate.SessionFactory
+import bard.db.project.ProjectService
+import org.junit.Before
+import spock.lang.Unroll
+
+@Unroll
+class ProjectServiceIntegrationSpec extends IntegrationSpec {
+
+    ProjectService projectService;
+    SessionFactory sessionFactory
+    AclUtilService aclUtilService
+
+    @Before
+    void setup() {
+        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
+        SpringSecurityUtils.reauthenticate('integrationTestUser', null)
+    }
+
+    void "test get projects for user groups no results"(){
+        when:
+        List<Project> projects = projectService.getProjectsByGroup("abcde")
+
+        then:
+        assert projects.size() == 0
+
+    }
+
+    void "test get projects for user groups with results"(){
+        when:
+        List<Project> projects = projectService.getProjectsByGroup("pmontgom")
+
+        then:
+        assert projects.size() > 0
+
+    }
+}
