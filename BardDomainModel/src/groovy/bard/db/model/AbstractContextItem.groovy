@@ -2,6 +2,7 @@ package bard.db.model
 
 import bard.db.dictionary.Element
 import bard.db.enums.ExpectedValueType
+import bard.db.enums.ValueType
 import groovy.transform.TypeChecked
 import groovy.transform.TypeCheckingMode
 
@@ -23,6 +24,8 @@ abstract class AbstractContextItem<T extends AbstractContext> {
 
     Element attributeElement
     Element valueElement
+
+    ValueType valueType = ValueType.NONE
 
     String extValueId
     String qualifier
@@ -72,14 +75,21 @@ abstract class AbstractContextItem<T extends AbstractContext> {
     @TypeChecked(TypeCheckingMode.SKIP)
     String deriveDisplayValue() {
         String result = null
-        if (valueElement) {
-            result = valueElement.label
-        } else if (valueNum != null) {
-            result = [qualifier?.trim(), valueNum, attributeElement.unit?.abbreviation ?: attributeElement.unit?.label].findAll().join(' ')
-        } else if (valueMin != null || valueMax != null) {
-            result = [valueMin, valueMax].findAll().join(' - ')
+
+        switch(valueType) {
+            case ValueType.ELEMENT:
+                return valueElement.label
+            case ValueType.NUMERIC:
+                return [qualifier?.trim(), valueNum, attributeElement.unit?.abbreviation ?: attributeElement.unit?.label].findAll().join(' ')
+            case ValueType.RANGE:
+                return [valueMin, valueMax].findAll().join(' - ')
+            case ValueType.NONE:
+                return null;
+            case ValueType.FREE_TEXT:
+                return valueDisplay
+            default:
+                throw new RuntimeException("Invalid type: ${valueType}")
         }
-        result
     }
 
     /**
@@ -254,5 +264,84 @@ abstract class AbstractContextItem<T extends AbstractContext> {
         return false
     }
 
+    public Object getValue() {
+        switch(valueType) {
+            case ValueType.ELEMENT:
+                return valueElement;
+            case ValueType.EXTERNAL_ONTOLOGY:
+                return new ExternalOntologyValue(valueDisplay: valueDisplay, extValueId: extValueId)
+            case ValueType.FREE_TEXT:
+                return valueDisplay;
+            case ValueType.NUMERIC:
+                return new NumericValue(qualifier: qualifier, number: valueNum)
+            case ValueType.RANGE:
+                return new RangeValue(valueMin: valueMin, valueMax: valueMax)
+            case ValueType.NONE:
+                return null;
+            default:
+                throw new RuntimeException("Invalid type: ${valueType}")
+        }
+    }
 
+    protected void clearValue() {
+        valueElement = null
+        valueType = null
+        extValueId = null
+        qualifier = null
+        valueNum = null
+        valueMin = null
+        valueMax = null
+        valueDisplay = null
+    }
+
+
+    public void setDictionaryValue(Element element) {
+        clearValue()
+        valueType = ValueType.ELEMENT
+
+        this.valueElement = element
+
+        this.valueDisplay = deriveDisplayValue()
+    }
+
+    public void setExternalOntologyValue(String extValueId, String valueDisplay) {
+        clearValue()
+
+        this.valueType = ValueType.EXTERNAL_ONTOLOGY
+        this.valueDisplay = valueDisplay
+        this.extValueId = extValueId
+    }
+
+    public void setFreeTextValue(String valueDisplay) {
+        clearValue()
+
+        this.valueType = ValueType.FREE_TEXT
+        this.valueDisplay = valueDisplay
+    }
+
+    public void setNumericValue(String qualifier, float value) {
+        clearValue()
+
+        valueType = ValueType.NUMERIC
+        this.qualifier = qualifier
+        this.valueNum = value
+
+        this.valueDisplay = deriveDisplayValue()
+    }
+
+    public void setRange(float valueMin, float valueMax) {
+        clearValue()
+
+        valueType = ValueType.RANGE
+        this.valueMin = valueMin
+        this.valueMax = valueMax
+
+        this.valueDisplay = deriveDisplayValue()
+    }
+
+    public void setNoneValue() {
+        clearValue()
+
+        valueType = ValueType.NONE
+    }
 }

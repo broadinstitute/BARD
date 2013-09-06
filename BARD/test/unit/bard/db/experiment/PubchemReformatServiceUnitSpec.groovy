@@ -2,6 +2,7 @@ package bard.db.experiment
 
 import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
+import bard.db.enums.ValueType
 import bard.db.registration.*
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
@@ -150,7 +151,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         // and finally the experiment with the two measures, and one context item
         Assay assay = Assay.build()
         AssayContext context = AssayContext.build(assay: assay)
-        AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeType: AttributeType.Free, attributeElement: Element.build(label: "concentration", expectedValueType: NUMERIC))
+        AssayContextItem contextItem = AssayContextItem.build(assayContext: context, valueType: ValueType.NONE, valueDisplay: null, attributeType: AttributeType.Free, attributeElement: Element.build(label: "concentration", expectedValueType: NUMERIC))
         Measure childMeasure = Measure.build(assay: assay, resultType: Element.build(label: "child"))
         AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: context, measure: childMeasure)
 

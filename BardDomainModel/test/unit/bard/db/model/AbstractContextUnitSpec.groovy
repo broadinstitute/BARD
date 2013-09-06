@@ -1,6 +1,7 @@
 package bard.db.model
 
 import bard.db.dictionary.Element
+import bard.db.enums.ExpectedValueType
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -26,7 +27,7 @@ abstract class AbstractContextUnitSpec<T extends AbstractContext> extends Specif
         when:
         if (itemAttibuteLabels) {
             itemAttibuteLabels.each { label ->
-                final Element element = Element.findByLabel(label) ?: Element.build(label: label)
+                final Element element = Element.findByLabel(label) ?: Element.build(label: label, expectedValueType: ExpectedValueType.FREE_TEXT)
                 domainInstance.addContextItem(domainInstance.getItemSubClass().build(attributeElement: element))
             }
         }

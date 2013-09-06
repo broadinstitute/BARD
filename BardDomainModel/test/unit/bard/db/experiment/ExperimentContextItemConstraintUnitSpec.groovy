@@ -1,6 +1,7 @@
 package bard.db.experiment
 
 import bard.db.model.AbstractContextItemConstraintUnitSpec
+import bard.db.registration.AssayContextItem
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
 import spock.lang.Unroll
@@ -14,11 +15,18 @@ import spock.lang.Unroll
  */
 @Build(ExperimentContextItem)
 @Unroll
-class ExperimentContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec {
+class ExperimentContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec<ExperimentContextItem> {
 
     @Before
     @Override
     void doSetup() {
-        domainInstance = ExperimentContextItem.buildWithoutSave()
+        this.domainInstance = constructInstance([:])
+    }
+
+    ExperimentContextItem constructInstance(Map props) {
+        def instance = ExperimentContextItem.buildWithoutSave(props)
+        instance.attributeElement.save(failOnError:true, flush: true)
+
+        return instance
     }
 }
