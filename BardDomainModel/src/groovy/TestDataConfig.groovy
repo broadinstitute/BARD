@@ -1,4 +1,6 @@
+import bard.db.dictionary.Element
 import bard.db.enums.ExpectedValueType
+import bard.db.enums.ValueType
 
 ///**
 // * see https://bitbucket.org/tednaleid/grails-test-data/wiki/Features
@@ -60,22 +62,34 @@ testDataConfig {
             id = {-> i++ }
         }
         'bard.db.project.ProjectContextItem' {
-
+            valueType = ValueType.FREE_TEXT
+            valueDisplay = "valueDisplay"
+            attributeElement = {->Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)}
         }
         'bard.db.registration.AssayContextItem' {
-
+            valueType = ValueType.FREE_TEXT
+            valueDisplay = "valueDisplay"
+            attributeElement = {->Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)}
         }
         'bard.db.experiment.ExperimentContextItem' {
-
+            valueType = ValueType.FREE_TEXT
+            valueDisplay = "valueDisplay"
+            attributeElement = {-> Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)}
         }
         'bard.db.project.ProjectExperimentContextItem' {
-
+            valueType = ValueType.FREE_TEXT
+            valueDisplay = "valueDisplay"
+            attributeElement = {-> Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)}
         }
         'bard.db.project.StepContextItem' {
-
+            valueType = ValueType.FREE_TEXT
+            valueDisplay = "valueDisplay"
+            attributeElement = {-> Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)}
         }
         'bard.db.project.ResultContextItem' {
-
+            valueType = ValueType.FREE_TEXT
+            valueDisplay = "valueDisplay"
+            attributeElement = {-> Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)}
         }
 
     }

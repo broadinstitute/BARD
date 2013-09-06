@@ -17,6 +17,13 @@ import spock.lang.Unroll
 class ProjectExperimentContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec<ProjectExperimentContextItem>{
     @Before
      void doSetup(){
-        domainInstance = ProjectExperimentContextItem.buildWithoutSave()
+        this.domainInstance = constructInstance([:])
+    }
+
+    ProjectExperimentContextItem constructInstance(Map props) {
+        def instance = ProjectExperimentContextItem.buildWithoutSave(props)
+        instance.attributeElement.save(failOnError:true, flush: true)
+
+        return instance
     }
 }

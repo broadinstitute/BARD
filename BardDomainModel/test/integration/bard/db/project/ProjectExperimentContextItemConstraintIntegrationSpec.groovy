@@ -1,5 +1,6 @@
 package bard.db.project
 
+import bard.db.experiment.ExperimentContextItem
 import bard.db.model.AbstractContextItemIntegrationSpec
 import org.junit.Before
 
@@ -15,7 +16,14 @@ class ProjectExperimentContextItemConstraintIntegrationSpec extends AbstractCont
     @Before
     @Override
     void doSetup() {
-        domainInstance = ProjectExperimentContextItem.buildWithoutSave()
-        domainInstance.attributeElement.save()
+        this.domainInstance = constructInstance([:])
     }
+
+    ProjectExperimentContextItem constructInstance(Map props) {
+        def instance = ProjectExperimentContextItem.buildWithoutSave(props)
+        instance.attributeElement.save(failOnError:true, flush: true)
+
+        return instance
+    }
+
 }

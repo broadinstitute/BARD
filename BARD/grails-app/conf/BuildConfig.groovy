@@ -8,7 +8,9 @@ grails.project.source.level = 1.6
 grails.server.port.http = 8081
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
-def seleniumVersion = "2.27.0"
+def gebVersion = "0.9.0-RC-1"
+def seleniumVersion = "2.31.0"
+
 
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
@@ -27,6 +29,7 @@ grails.project.dependency.resolution = {
         grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
     }
     dependencies {
+        // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         // build scope
 
         // compile scope
@@ -38,8 +41,23 @@ grails.project.dependency.resolution = {
 
         compile "bard:external-validation:20130717"
 
+        compile "com.oracle:ojdbc6:11.2.0.2.0"
+        compile 'org.apache.commons:commons-lang3:3.1'
+        compile 'ChemAxon:ChemAxonJChemBase:5.10'
+        compile 'jfree:jfreechart:1.0.13'
+        compile('org.apache.httpcomponents:httpclient:4.1.2') {
+            excludes "commons-codec", "commons-logging"
+        }
+        compile 'com.thoughtworks.xstream:xstream:1.4.2'
+        compile "org.codehaus.groovy.modules.remote:remote-transport-http:0.5", {
+            excludes "servlet-api"
+        }
 
         // runtime scope
+        // runtime 'mysql:mysql-connector-java:5.1.16'
+        runtime('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
+            excludes "commons-logging", "xml-apis", "groovy", "httpclient", "httpcore", "nekohtml"
+        }
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
         runtime 'commons-net:commons-net:3.2'
         runtime 'net.sf.opencsv:opencsv:2.3'
@@ -56,22 +74,25 @@ grails.project.dependency.resolution = {
         // test scope
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
         test "org.objenesis:objenesis:1.3" // used by spock for Mocking object that lack no args constructor
-
-        test "org.gebish:geb-spock:0.9.0-RC-1"
+        test "org.gebish:geb-spock:$gebVersion"
         test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
-            excludes "xml-apis"
+            excludes "xml-apis", "commons-io"
         }
         test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion") {
             exclude "xml-apis"
         }
         test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion") {
-            excludes "xml-apis"
+            excludes "xml-apis", "commons-io"
         }
         test("org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion") {
             excludes "xml-apis"
         }
 
-        // provided  scope
+        // provided scope
+        provided('net.sourceforge.nekohtml:nekohtml:1.9.15') {
+            exclude "xml-api"
+        }
+        provided 'org.apache.httpcomponents:httpcomponents-core:4.1.3'
     }
 
 
@@ -86,10 +107,17 @@ grails.project.dependency.resolution = {
 
         // compile scope
         compile ":ajaxflow:0.2.4"
+        compile ":jquery-ui:1.8.15"
+        compile ":export:1.5"
+        // runtime ":resources:1.1.6"
+        compile ":resources:1.2.RC2"
+        // compile ":functional-spock:0.6"
+        compile ":twitter-bootstrap:2.3.0"
         compile(":cbipcrowdauthentication:0.3.4") {
             excludes('spock', 'release', 'google-collections')
         }
-        compile ":clover:3.1.6"
+        compile ":clover:3.1.10.1"
+        compile ":spring-mobile:0.4"
         compile ":console:1.2"
         compile ":jquery-validation-ui:1.4.2"
         compile ":twitter-bootstrap:2.2.2"
@@ -99,25 +127,29 @@ grails.project.dependency.resolution = {
         compile(":spring-security-acl:1.1.1")
         compile ":remote-control:1.4"
         compile ":google-analytics:2.0"
-
+        compile ":mail:1.0.1"
+        compile ":greenmail:1.3.3"
+        compile ":cache:1.0.1"
+//        compile ":ontology:0.0.2"
         // runtime scope
         runtime ":jquery:1.7.1"
-        runtime ":jquery-ui:1.8.15"
-        runtime ":resources:1.1.6"
 
         // test scope
-        test ":geb:0.7.2"
         test(":spock:0.7") {
             exclude "spock-grails-support"
         }
-        //compile ':functional-spock:0.6'
-        // provided  scope
+        test "org.grails.plugins:geb:$gebVersion"
+        test ":remote-control:1.4"
     }
 }
 
 // making the domain plugin an in-place plugin
 grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
 grails.plugin.location.'crowd-user-registration' = "../crowdUserRegistration"
+
+grails.plugin.location.'shopping-cart:0.8.2' = "../shopping-cart-0.8.2"
+
+grails.plugin.location.'bard-rest-api-wrapper' = "../bard-rest-api-wrapper"
 grails.plugin.location.'functional-spock'="../functional-spock"
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
 codenarc.reports = {

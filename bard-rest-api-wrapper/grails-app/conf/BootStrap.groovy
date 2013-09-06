@@ -24,7 +24,7 @@ class BootStrap {
     }
     void loadTargets(){
         try {
-            final File targets = new File("../bard-web-client/web-app/WEB-INF/resources/PantherProteinClassTree.txt")
+            final File targets = new File("../BARD/web-app/WEB-INF/resources/PantherProteinClassTree.txt")
             assert targets.exists()
             sunburstRestService.loadTargetsFromFile(targets)
         } catch (Exception ee) {

@@ -40,5 +40,20 @@ databaseChangeLog = {
         //Create the new EXPERIMENT_DOCUMENT table
         sqlFile(path: "iteration_032/02-add-constraint-expt-doc.sql", stripComments: true)
     }
+
+    changeSet(author: "pmontgom", id: "iteration-032/02-create-value-type", dbms: "oracle", context: "standard") {
+
+        //Set the username in context
+        grailsChange {
+            change {
+                sql.execute("""BEGIN
+                               bard_context.set_username('pmontgom');
+                               END;
+                               """)
+            }
+        }
+
+        sqlFile(path: "/iteration_032/02-create-value-type.sql", stripComments: true)
+    }
 }
 

@@ -159,7 +159,9 @@ WHERE table_name in (select table_name from tabs)
   AND TABLE_NAME NOT LIKE ''DATA%''
   AND TABLE_NAME NOT LIKE ''%TREE''
   AND TABLE_NAME NOT LIKE ''MIGRAT%''
-  AND TABLE_NAME NOT LIKE ''%LOG''';
+  AND TABLE_NAME NOT LIKE ''%LOG''
+  AND TABLE_NAME NOT LIKE ''SC_%''
+  AND TABLE_NAME NOT LIKE ''MOL_SC%''';
       IF avi_table_name IS NOT NULL
       THEN
           lv_sql := lv_sql || ' and table_name = ''' || Upper(avi_table_name) || '''';

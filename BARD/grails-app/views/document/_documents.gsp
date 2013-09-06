@@ -76,7 +76,6 @@
             <g:each in="${owningEntity.protocols}" var="protocol">
                 <div class="borderlist">
                     <br/>
-
                     <div id="protocolMsg_${protocol.id}"></div><br/>
                     <b>Document Name:</b>
                     <span data-type="text"
@@ -86,7 +85,7 @@
                           data-documentType="${protocol.documentType.id}"
                           data-documentKind="${documentKind}"
                           data-version="${protocol.version}"
-                          data-owningEntityId="${protocol.id}"
+                          data-owningEntityId="${owningEntity.id}"
                           data-inputclass="input-xxlarge"
                           data-toggle="manual"
                           data-document-name="${protocol.documentContent}"
@@ -146,7 +145,7 @@
                                                 data-documentType="${comment.documentType.id}"
                                                 data-documentKind="${documentKind}"
                                                 data-version="${comment.version}"
-                                                data-owningEntityId="${comment.id}"
+                                                data-owningEntityId="${owningEntity.id}"
                                                 data-inputclass="input-xxlarge"
                                                 data-toggle="manual"
                                                 data-document-name="${comment.documentContent}"
@@ -370,7 +369,7 @@
                           data-documentKind="${documentKind}"
                           data-toggle="manual"
                           data-version="${otherDocument.version}"
-                          data-owningEntityId="${otherDocument.id}"
+                          data-owningEntityId="${owningEntity.id}"
                           data-inputclass="input-xxlarge"
                           data-document-name="${otherDocument.documentContent}"
                           id="${otherDocument.id}_Name">
