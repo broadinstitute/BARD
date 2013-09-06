@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/2-inplacePlugin.iml" filepath="$PROJECT_DIR$/2-inplacePlugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/BARD.iml" filepath="$PROJECT_DIR$/BARD.iml" />
       <module fileurl="file://$PROJECT_DIR$/BARD-grailsPlugins.iml" filepath="$PROJECT_DIR$/BARD-grailsPlugins.iml" />
       <module fileurl="file://$PROJECT_DIR$/bardDomainModel-inplacePlugin.iml" filepath="$PROJECT_DIR$/bardDomainModel-inplacePlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bardRestApiWrapper-inplacePlugin.iml" filepath="$PROJECT_DIR$/bardRestApiWrapper-inplacePlugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/crowdUserRegistration-inplacePlugin.iml" filepath="$PROJECT_DIR$/crowdUserRegistration-inplacePlugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/functionalSpock-inplacePlugin.iml" filepath="$PROJECT_DIR$/functionalSpock-inplacePlugin.iml" />
     </modules>

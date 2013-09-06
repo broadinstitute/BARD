@@ -25,6 +25,8 @@ import bard.db.registration.AssayContextMeasure
 import bard.db.registration.AssayDocument
 import bard.db.registration.ExternalReference
 import bard.db.registration.ExternalSystem
+import bard.db.registration.Panel
+import bard.db.registration.PanelAssay
 import org.hibernate.HibernateException
 import org.hibernate.Session
 import org.hibernate.SessionFactory
@@ -168,6 +170,13 @@ class ReadyForExtractFlushListener implements FlushEventListener, PostInsertEven
             return (((AssayContextMeasure)entity).assayContext.assay)
         } else if (entity instanceof AssayDocument) {
             return ( ((AssayDocument)entity).assay )
+        }
+        //these update Panel status
+        else if(entity instanceof Panel){
+            return (Panel)entity
+        }
+        else if(entity instanceof PanelAssay){
+            return ((PanelAssay)entity).panel
         }
         // these classes update experiment's status
         else if (entity instanceof Experiment) {

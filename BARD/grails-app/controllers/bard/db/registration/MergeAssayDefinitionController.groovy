@@ -24,7 +24,7 @@ class MergeAssayDefinitionController {
         try {
             mergeAssayDefinitionService.validateConfirmMergeInputs(confirmMergeAssayCommand.targetAssayId, confirmMergeAssayCommand.sourceAssayIds, confirmMergeAssayCommand.assayIdType)
 
-            final List<Long> assayIdsToMerge = mergeAssayDefinitionService.convertStringToIdList(confirmMergeAssayCommand.sourceAssayIds)
+            final List<Long> assayIdsToMerge = MergeAssayDefinitionService.convertStringToIdList(confirmMergeAssayCommand.sourceAssayIds)
 
             final Assay assayToMergeInto = mergeAssayDefinitionService.convertIdToAssayDefinition(confirmMergeAssayCommand.assayIdType, confirmMergeAssayCommand.targetAssayId)
 

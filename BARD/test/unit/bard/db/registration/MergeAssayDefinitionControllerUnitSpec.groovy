@@ -82,7 +82,7 @@ class MergeAssayDefinitionControllerUnitSpec extends Specification {
         when:
         controller.confirmMerge(confirmMergeAssayCommand)
         then:
-        controller.mergeAssayDefinitionService.convertStringToIdList(_) >> { [assay2.id] }
+        MergeAssayDefinitionService.convertStringToIdList(_) >> { [assay2.id] }
         controller.mergeAssayDefinitionService.convertIdToAssayDefinition(_, _) >> { assay1 }
         controller.mergeAssayDefinitionService.convertAssaysToMerge(_, _, _) >> { [assay2.id] }
         assert response.status == HttpServletResponse.SC_OK
