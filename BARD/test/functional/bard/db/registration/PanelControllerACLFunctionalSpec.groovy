@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import groovy.sql.Sql
+import jxl.read.biff.SharedDateFormulaRecord
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import spock.lang.Shared
 import spock.lang.Unroll
@@ -36,6 +37,8 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     List<Long> assayIdList = []  //we keep ids of all assays here so we can delete after all the tests have finished
     @Shared
     List<Long> panelIdList = []
+    @Shared
+    List<String> panelNames = []
 
     def setupSpec() {
         String reauthenticateWithUser = TEAM_A_1_USERNAME
@@ -58,7 +61,7 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
 
             Assay assay = Assay.build(assayName: "Assay Name10").save(flush: true)
-            Panel panel = Panel.build(name: "Panel Name", description:"Panel Name").save(flush: true)
+            Panel panel = Panel.build(name: "Panel Name", description: "Panel Name").save(flush: true)
 
             return [assayId: assay.id, panelId: panel.id, panelName: panel.name]
         })
@@ -68,14 +71,20 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     }     // run before the first feature method
     def cleanupSpec() {
-        if (panelAssayData?.id) {
-            Sql sql = Sql.newInstance(dburl, dbusername,
-                    dbpassword, driverClassName)
-            sql.call("{call bard_context.set_username(?)}", [TEAM_A_1_USERNAME])
-
-            sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${panelAssayData.assayId}")
-            sql.execute("DELETE FROM PANEL WHERE PANEL_ID=${panelAssayData.panelId}")
+        //if (panelAssayData?.id) {
+        Sql sql = Sql.newInstance(dburl, dbusername,
+                dbpassword, driverClassName)
+        sql.call("{call bard_context.set_username(?)}", [TEAM_A_1_USERNAME])
+        for (Long assayId : assayIdList) {
+            sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${assayId}")
         }
+        for (Long panelId : panelIdList) {
+            sql.execute("DELETE FROM PANEL WHERE PANEL_ID=${panelId}")
+        }
+        for (Long panelName : panelNames) {
+            sql.execute("DELETE FROM PANEL WHERE NAME='" + panelName + "'")
+        }
+        // }
     }
 
     def 'test index #desc'() {
@@ -160,6 +169,7 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Map currentDataMap = getCurrentPanelProperties()
         RESTClient client = getRestClient(controllerUrl, "findByName", team, teamPassword)
         String panelName = currentDataMap.panelName
+        panelNames.add(panelName)
         when:
 
         final Response response = client.post() {
@@ -182,21 +192,22 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test save #desc'() {
         given:
         RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
+        panelNames.add(panelName)
         when:
         def response = client.post() {
-            urlenc name: "Some Name", description : "Some Description"
+            urlenc name: panelName, description: "Some Description"
         }
 
         then:
         assert response.statusCode == expectedHttpResponse
 
         where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
+        desc       | panelName  | team              | teamPassword      | expectedHttpResponse
+        "User A_1" | "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
+        "User B"   | "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FOUND
+        "User A_2" | "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
+        "ADMIN"    | "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
+        "CURATOR"  | "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
 
     }
 
@@ -399,6 +410,7 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Long version = currentDataMap.version
         String oldPanelName = currentDataMap.panelName
         String newPanelName = "${oldPanelName}_1"
+        panelNames.add(newPanelName)
         when:
 
         def response = client.post() {
@@ -517,17 +529,21 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test delete Panel #desc'() {
         given:
-        Long assayId = panelAssayData.assayId
         String reAuthenticateWith = TEAM_A_1_USERNAME
-
+        List<Long> closAssayIdList = assayIdList
         long panelId = (Long) remote.exec({
             SpringSecurityUtils.reauthenticate(reAuthenticateWith, null)
 
             Panel panel = Panel.build(name: "name")
             panel.save(flush: true)
-            Assay assay = Assay.findById(assayId)
+
+            Assay assay = Assay.build(assayName: "name")
+            assay.save(flush: true)
+            closAssayIdList.add(assay.id)
+
             PanelAssay panelAssay = new PanelAssay(panel: panel, assay: assay)
             panelAssay.save(flush: true)
+
             return panel.id
         })
         RESTClient client = getRestClient(controllerUrl, "deletePanel", team, teamPassword)
@@ -541,7 +557,7 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         desc                | team              | teamPassword      | expectedHttpResponse
         "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
         "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
-       // "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
+        //  "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
     }
 
     private Map getCurrentPanelProperties() {

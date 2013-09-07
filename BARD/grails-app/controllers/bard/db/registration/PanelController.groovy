@@ -67,7 +67,7 @@ class PanelController {
         if (associatePanelCommand.hasErrors()) {
             return [associatePanelCommand: associatePanelCommand]
         }
-        this.panelService.associateAssay(associatePanelCommand.assays.get(0),associatePanelCommand.id)
+        this.panelService.associateAssay(associatePanelCommand.assays.get(0), associatePanelCommand.id)
         redirect(controller: "panel", action: "show", id: associatePanelCommand.id)
 
     }
@@ -97,7 +97,7 @@ class PanelController {
             return [associatePanelCommand: associatePanelCommand]
         }
         final Assay assay = associatePanelCommand.assays.get(0)
-        this.panelService.disassociateAssay(assay,associatePanelCommand.id)
+        this.panelService.disassociateAssay(assay, associatePanelCommand.id)
         redirect(controller: "assayDefinition", action: "show", id: assay.id)
     }
 
@@ -105,6 +105,7 @@ class PanelController {
     def list() {
         render(view: "findByName", params: params, model: [panels: Panel.findAll()])
     }
+
     def editDescription(InlineEditableCommand inlineEditableCommand) {
         try {
             Panel panel = Panel.findById(inlineEditableCommand.pk)
@@ -135,6 +136,7 @@ class PanelController {
             editErrorMessage()
         }
     }
+
     def editPanelName(InlineEditableCommand inlineEditableCommand) {
         try {
             Panel panel = Panel.findById(inlineEditableCommand.pk)
@@ -250,10 +252,11 @@ class PanelController {
                         }
                 }
                 render(view: "findByName", params: params, model: [panels: panels])
-            } else if (panels?.size() == 1)
+            } else if (panels?.size() == 1) {
                 redirect(action: "show", id: panels.get(0).id)
-            else
+            } else {
                 flash.message = message(code: 'default.not.found.property.message', args: [message(code: 'panel.label', default: 'Panel'), "name", params.name])
+            }
         }
     }
 }
@@ -275,26 +278,28 @@ class AssociatePanelCommand extends BardCommand {
         }
         return sourceAssays
     }
-    List<Long> getAssayIdsAsLong(){
+
+    List<Long> getAssayIdsAsLong() {
         return MergeAssayDefinitionService.convertStringToIdList(assayIds)
     }
+
     Panel getPanel() {
         return Panel.get(id)
     }
 
     static constraints = {
-        id(nullable: false, validator: { value, command,err ->
+        id(nullable: false, validator: { value, command, err ->
             Panel panel = Panel.get(value.toLong())
             if (panel) {
                 if (!command.editingHelper.canEdit(command.permissionEvaluator, command.springSecurityService, panel)) {
-                   err.rejectValue('id', "message.code", "You do not have the privileges to add Assays to this Panel PLID:${value}");
+                    err.rejectValue('id', "message.code", "You do not have the privileges to add Assays to this Panel PLID:${value}");
                 }
             } else {
                 err.rejectValue("id", "message.code", "Panel with ID:${value} cannot be found");
             }
 
         })
-        assayIds blank: false, nullable: false, validator: { value, command,err ->
+        assayIds blank: false, nullable: false, validator: { value, command, err ->
             if (value) {
                 final List<Long> assayIds = command.getAssayIdsAsLong()
                 for (Long assayId : assayIds) {

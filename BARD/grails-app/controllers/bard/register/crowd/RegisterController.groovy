@@ -209,7 +209,7 @@ class RegisterController {
                 return
             }
 
-            CrowdRegistrationUser crowdRegistrationUser
+            CrowdRegistrationUser crowdRegistrationUser = null
             RegistrationCode.withTransaction { status ->
                 crowdRegistrationUser = crowdRegisterUserService.findUserByUserName(registrationCode.userName)
 
@@ -242,7 +242,7 @@ class RegisterController {
             render(view: "registerMessage", model: [successMessage: message(code: 'register.complete')])
         } catch (Exception ee) {
             render(view: "registerMessage", model: [errorMessage: ee?.message])
-            return
+
         }
     }
 
@@ -341,20 +341,20 @@ class SignupCommand extends BardCommand {
         password2 validator: password2Validator
     }
 
-    static boolean checkPasswordMinLength(String password, command) {
+    static boolean checkPasswordMinLength(String password) {
 
         int minLength = 8
 
         password && password.length() >= minLength
     }
 
-    static boolean checkPasswordMaxLength(String password, command) {
+    static boolean checkPasswordMaxLength(String password) {
         int maxLength = 64
 
         password && password.length() <= maxLength
     }
 
-    static boolean checkPasswordRegex(String password, command) {
+    static boolean checkPasswordRegex(String password) {
         String passValidationRegex = '^.*(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&]).*$'
 
         password && password.matches(passValidationRegex)
@@ -370,9 +370,9 @@ class SignupCommand extends BardCommand {
             return 'command.password.error.username'
         }
 
-        if (!checkPasswordMinLength(password, command) ||
-                !checkPasswordMaxLength(password, command) ||
-                !checkPasswordRegex(password, command)) {
+        if (!checkPasswordMinLength(password) ||
+                !checkPasswordMaxLength(password) ||
+                !checkPasswordRegex(password)) {
             return 'command.password.error.strength'
         }
     }
