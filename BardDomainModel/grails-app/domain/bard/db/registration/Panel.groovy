@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
+import bard.db.project.Project
 
 /**
  * A Panel has a many-to-many relationship with Assays
@@ -11,9 +12,10 @@ import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 class Panel {
     public static final int MODIFIED_BY_MAX_SIZE = 40
     public static final int PANEL_NAME_MAX_SIZE = 250
-
+    public static final int PANEL_DESCRIPTION_MAX_SIZE = 1000
 
     String name
+    String description
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
 
     String modifiedBy
@@ -28,6 +30,7 @@ class Panel {
 
     static constraints = {
         name(nullable: false, blank: false, maxSize: PANEL_NAME_MAX_SIZE)
+        description(nullable: true, blank: false, maxSize: PANEL_DESCRIPTION_MAX_SIZE)
         readyForExtraction(nullable: false)
         dateCreated(nullable: false)
         lastUpdated(nullable: false)
@@ -47,7 +50,7 @@ class Panel {
 
     def afterDelete() {
         Panel.withNewSession {
-           capPermissionService?.removePermission(this)
+            capPermissionService?.removePermission(this)
         }
     }
 

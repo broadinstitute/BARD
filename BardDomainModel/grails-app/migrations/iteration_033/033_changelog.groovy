@@ -421,4 +421,7 @@ databaseChangeLog = {
     changeSet(author: "jasiedu", id: "iteration-033/02-create-panel", dbms: "oracle", context: "standard") {
         sqlFile(path: "iteration_033/02-create-panel.sql", stripComments: true)
     }
+    changeSet(author: "jasiedu", id: "iteration-033/03-add-description-to-panel", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_033/03-add-description-to-panel.sql", stripComments: true)
+    }
 }

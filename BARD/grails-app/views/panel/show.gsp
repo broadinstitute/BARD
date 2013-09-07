@@ -84,14 +84,30 @@
                                                 data-type="text"
                                                 data-value="${panelInstance?.name}"
                                                 data-pk="${panelInstance.id}"
-                                                data-url="/BARD/panel/editName"
+                                                data-url="/BARD/panel/editPanelName"
                                                 data-placeholder="Required"
                                                 data-original-title="Edit Panel Name">${panelInstance?.name}</span>
                                         <a href="#" class="icon-pencil documentPencil ${editable}"
                                            title="Click to edit Name"
                                            data-id="nameId"></a>
                                     </dd>
-
+                                    <dt><g:message code="panel.description.label" default="Description"/>:</dt>
+                                    <dd>
+                                        <span
+                                                class="panelDescriptionY"
+                                                id="descriptionId"
+                                                data-toggle="manual"
+                                                data-type="text"
+                                                data-value="${panelInstance?.description}"
+                                                data-pk="${panelInstance.id}"
+                                                data-url="/BARD/panel/editDescription"
+                                                data-placeholder="Required"
+                                                data-inputclass="input-xxlarge"
+                                                data-original-title="Edit Panel Description">${panelInstance?.description}</span>
+                                        <a href="#" class="icon-pencil documentPencil ${editable}"
+                                           title="Click to edit Description"
+                                           data-id="descriptionId"></a>
+                                    </dd>
 
                                     <dt>Owner:</dt>
                                     <dd>${panelOwner}</dd>
@@ -124,11 +140,14 @@
                                     <tr>
                                         <td><g:link controller="assayDefinition" action="show"
                                                     id="${panelAssay.assay.id}">${panelAssay.assay.id}</g:link></td><td>${panelAssay.assay.assayName}</td>
-                                    <td>
-                                        <g:if test="${editable == 'canedit'}">
-                                             <g:link controller="panel" action="removeAssay" params="${[id: panelInstance.id, assayIds:panelAssay.assay.id]}"
-                                                    class="btn btn-mini" title="Remove From Panel" onclick="return confirm('Are you sure you wish to remove this Assay from this Panel?');"><i class="icon-trash"></i>Remove From Panel</g:link>
-                                        </g:if>
+                                        <td>
+                                            <g:if test="${editable == 'canedit'}">
+                                                <g:link controller="panel" action="removeAssay"
+                                                        params="${[id: panelInstance.id, assayIds: panelAssay.assay.id]}"
+                                                        class="btn btn-mini" title="Remove From Panel"
+                                                        onclick="return confirm('Are you sure you wish to remove this Assay from this Panel?');"><i
+                                                        class="icon-trash"></i>Remove From Panel</g:link>
+                                            </g:if>
                                     </tr>
                                 </g:each>
                                 </tbody>
@@ -139,7 +158,9 @@
                                         class="btn"><i class="icon-plus"></i>Add Assays To This Panel</g:link>
 
                                 <g:link controller="panel" action="deletePanel" params="${[id: panelInstance.id]}"
-                                        class="btn" title="Delete Panel" onclick="return confirm('Are you sure you wish to delete this Panel?');"><i class="icon-trash"></i>Delete Panel</g:link>
+                                        class="btn" title="Delete Panel"
+                                        onclick="return confirm('Are you sure you wish to delete this Panel?');"><i
+                                        class="icon-trash"></i>Delete Panel</g:link>
                             </g:if>
                             <g:link controller="panel" action="create"
                                     class="btn"><i class="icon-plus"></i>Create a New Panel</g:link>

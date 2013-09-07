@@ -61,6 +61,18 @@ class AssayExportHelperService extends ExportAbstractService {
         }
         return attributes
     }
+    /**
+     *
+     * @param markupBuilder
+     * @param assay
+     */
+    public void generatePanel(
+            final MarkupBuilder markupBuilder,
+            final PanelAssay panelAssay) {
+        final Map<String, String> attributes = ['panelRef': panelAssay.panel.id]
+        markupBuilder.panel(attributes) {
+        }
+    }
 
     protected void generateMeasure(final MarkupBuilder markupBuilder, final Measure measure) {
 
@@ -102,11 +114,11 @@ class AssayExportHelperService extends ExportAbstractService {
                 assayContextItem.assayContext.assayContextItems.indexOf(assayContextItem))
     }
 
-    /**
-     * Generate a measure contexts
-     * @param markupBuilder
-     * @param assayContexts
-     */
+/**
+ * Generate a measure contexts
+ * @param markupBuilder
+ * @param assayContexts
+ */
     protected void generateAssayContexts(final MarkupBuilder markupBuilder, final List<AssayContext> assayContexts) {
         if (assayContexts) {
             markupBuilder.assayContexts() {
@@ -116,11 +128,11 @@ class AssayExportHelperService extends ExportAbstractService {
             }
         }
     }
-    /**
-     *
-     * @param markupBuilder
-     * @param assayContextItems
-     */
+/**
+ *
+ * @param markupBuilder
+ * @param assayContextItems
+ */
     public void generateAssayContextItems(final MarkupBuilder markupBuilder, final List<AssayContextItem> allAssayContextItems) {
         if (allAssayContextItems) {
             markupBuilder.assayContextItems() {
@@ -132,10 +144,10 @@ class AssayExportHelperService extends ExportAbstractService {
             }
         }
     }
-    /**
-     * Generates a xml document for list of assays
-     * @param markupBuilder
-     */
+/**
+ * Generates a xml document for list of assays
+ * @param markupBuilder
+ */
     public void generateAssays(final MarkupBuilder markupBuilder) {
         final List<Assay> assays = Assay.findAllByReadyForExtraction(ReadyForExtraction.READY)
 
@@ -180,6 +192,23 @@ class AssayExportHelperService extends ExportAbstractService {
             }
         }
     }
+/**
+ *
+ * @param markupBuilder
+ * @param assay
+ */
+    public void generatePanels(
+            final MarkupBuilder markupBuilder,
+            final Set<PanelAssay> panelAssays) {
+        if (panelAssays) {
+            markupBuilder.panels() {
+                for (PanelAssay panelAssay : panelAssays) {
+                    generatePanel(markupBuilder, panelAssay)
+                }
+            }
+        }
+    }
+
 
     public void generateDocument(final MarkupBuilder markupBuilder, AssayDocument assayDocument) {
         generateDocument(this.grailsLinkGenerator, markupBuilder, assayDocument,
@@ -190,11 +219,11 @@ class AssayExportHelperService extends ExportAbstractService {
 
     }
 
-    /**
-     *
-     * @param markupBuilder
-     * @param assay
-     */
+/**
+ *
+ * @param markupBuilder
+ * @param assay
+ */
     public void generateAssay(
             final MarkupBuilder markupBuilder,
             final Assay assay) {
@@ -211,13 +240,13 @@ class AssayExportHelperService extends ExportAbstractService {
         if (assay.assayStatus) {
             attributes.put('status', assay.assayStatus.id)
         }
-        if(assay.lastUpdated){
+        if (assay.lastUpdated) {
             final GregorianCalendar gregorianCalendar = new GregorianCalendar();
             gregorianCalendar.setTime(assay.lastUpdated);
             final XMLGregorianCalendar lastUpdatedDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
             attributes.put('lastUpdated', lastUpdatedDate.toString())
-       }
-        if(StringUtils.isNotBlank(assay.modifiedBy)){
+        }
+        if (StringUtils.isNotBlank(assay.modifiedBy)) {
             attributes.put('modifiedBy', assay.modifiedBy)
         }
         markupBuilder.assay(attributes) {
@@ -232,7 +261,11 @@ class AssayExportHelperService extends ExportAbstractService {
             if (assay.measures) {
                 generateMeasures(markupBuilder, assay.measures)
             }
+            if (assay.panelAssays) {
+                generatePanels(markupBuilder, assay.panelAssays)
+            }
             generateLinksForAssay(markupBuilder, assay)
         }
     }
+
 }

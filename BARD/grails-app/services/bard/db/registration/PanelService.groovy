@@ -27,7 +27,16 @@ class PanelService {
         }
         return Panel.findById(id)
     }
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Panel', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Panel updatePanelDescription(String description, Long id) {
+        Panel panel = Panel.findById(id)
 
+        if (panel) {
+            panel.description = description
+            panel.save(flush: true)
+        }
+        return Panel.findById(id)
+    }
     /**
      * Both the panel and the assay must exist
      * Only the owner of the panel can associate an assay to the panel
@@ -93,4 +102,6 @@ class PanelService {
             disassociateAssay(assay,id)
         }
     }
+
+
 }

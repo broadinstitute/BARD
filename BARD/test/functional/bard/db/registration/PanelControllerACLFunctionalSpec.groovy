@@ -2,7 +2,6 @@ package bard.db.registration
 
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 import wslite.rest.RESTClient
@@ -59,7 +58,7 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
 
             Assay assay = Assay.build(assayName: "Assay Name10").save(flush: true)
-            Panel panel = Panel.build(name: "Panel Name").save(flush: true)
+            Panel panel = Panel.build(name: "Panel Name", description:"Panel Name").save(flush: true)
 
             return [assayId: assay.id, panelId: panel.id, panelName: panel.name]
         })
@@ -185,7 +184,7 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
         when:
         def response = client.post() {
-            urlenc name: "Some Name"
+            urlenc name: "Some Name", description : "Some Description"
         }
 
         then:
@@ -442,7 +441,57 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
     }
 
+    def 'test edit Panel Description #desc'() {
+        given:
+        long id = panelAssayData.panelId
+        Map currentDataMap = getCurrentPanelProperties()
+        RESTClient client = getRestClient(controllerUrl, "editDescription", team, teamPassword)
 
+
+        Long version = currentDataMap.version
+        String oldPanelDescription = currentDataMap.panelName
+        String newPanelDescription = "${oldPanelDescription}_1"
+        when:
+
+        def response = client.post() {
+            urlenc version: version, pk: id, value: newPanelDescription
+        }
+
+        then:
+        assert response.statusCode == expectedHttpResponse
+
+        where:
+        desc                | team              | teamPassword      | expectedHttpResponse
+        "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
+        "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
+        "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
+    }
+
+    def 'test edit Panel Description #desc - Forbidden'() {
+        given:
+        long id = panelAssayData.panelId
+        Map currentDataMap = getCurrentPanelProperties()
+        RESTClient client = getRestClient(controllerUrl, "editDescription", team, teamPassword)
+
+
+        Long version = currentDataMap.version
+        String oldPanelDescription = currentDataMap.panelName
+        String newPanelDescription = "${oldPanelDescription}_1"
+        when:
+
+        client.post() {
+            urlenc version: version, pk: id, value: newPanelDescription
+        }
+
+        then:
+        def ex = thrown(RESTClientException)
+        assert ex.response.statusCode == expectedHttpResponse
+
+        where:
+        desc                  | team              | teamPassword      | expectedHttpResponse
+        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
+        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+    }
 
     def 'test delete Panel - unauthorized #desc'() {
         given:

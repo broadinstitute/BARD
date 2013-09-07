@@ -105,7 +105,36 @@ class PanelController {
     def list() {
         render(view: "findByName", params: params, model: [panels: Panel.findAll()])
     }
+    def editDescription(InlineEditableCommand inlineEditableCommand) {
+        try {
+            Panel panel = Panel.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(panel.version, Panel.class)
+            if (message) {
+                conflictMessage(message)
+                return
+            }
 
+            final String inputValue = inlineEditableCommand.value.trim()
+            String maxSizeMessage = validateInputSize(Panel.PANEL_DESCRIPTION_MAX_SIZE, inputValue.length())
+            if (maxSizeMessage) {
+                editExceedsLimitErrorMessage(maxSizeMessage)
+                return
+            }
+            panel = panelService.updatePanelDescription(inputValue, inlineEditableCommand.pk)
+            if (panel?.hasErrors()) {
+                throw new Exception("Error while editing panel Description")
+            }
+            generateAndRenderJSONResponse(panel.version, panel.modifiedBy, "", panel.lastUpdated, panel.description)
+        }
+        catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+        }
+        catch (Exception ee) {
+            log.error(ee)
+            editErrorMessage()
+        }
+    }
     def editPanelName(InlineEditableCommand inlineEditableCommand) {
         try {
             Panel panel = Panel.findById(inlineEditableCommand.pk)
@@ -287,6 +316,7 @@ class AssociatePanelCommand extends BardCommand {
 class PanelCommand extends BardCommand {
 
     String name
+    String description
     SpringSecurityService springSecurityService
 
 
@@ -315,5 +345,6 @@ class PanelCommand extends BardCommand {
 
         panel.modifiedBy = springSecurityService.principal?.username
         panel.name = this.name
+        panel.description = this.description
     }
 }

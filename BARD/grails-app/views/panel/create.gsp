@@ -19,10 +19,18 @@
 
                 <div class="controls">
                     <g:textField id="name" name="name" value="${panelCommand?.name}" required=""/>
-                    <span class="help-inline"><g:fieldError field="name" bean="panel"/></span>
+                    <span class="help-inline"><g:fieldError field="name" bean="panelCommand"/></span>
                 </div>
             </div>
+            <div class="control-group ${hasErrors(bean: panelCommand, field: 'description', 'error')}">
+                <label class="control-label" for="description">
+                    <g:message code="panel.description.label"/>:</label>
 
+                <div class="controls">
+                    <g:textField id="description" name="description" value="${panelCommand?.description}" required=""/>
+                    <span class="help-inline"><g:fieldError field="description" bean="panelCommand"/></span>
+                </div>
+            </div>
             <div class="control-group">
                 <div class="controls">
                     <g:link controller="panel" action="findById"
