@@ -3,6 +3,7 @@ package acl
 import bard.acl.CapPermissionInterface
 import bard.db.people.Person
 import bard.db.people.Role
+import bard.db.registration.Assay
 import grails.plugins.springsecurity.SpringSecurityService
 import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclClass
 import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclEntry
