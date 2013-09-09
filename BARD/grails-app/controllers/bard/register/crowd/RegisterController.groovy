@@ -113,7 +113,7 @@ class RegisterController {
         }
         catch (Exception ee) {
             String errorMessage = ee?.message
-            if(!errorMessage){
+            if (!errorMessage) {
                 errorMessage = "Exception occured during registration. Please contact the BARD team at bard@broadinstitute.org"
             }
             return [command: signupCommand, errorMessage: errorMessage]
@@ -209,7 +209,7 @@ class RegisterController {
                 return
             }
 
-            CrowdRegistrationUser crowdRegistrationUser
+            CrowdRegistrationUser crowdRegistrationUser = null
             RegistrationCode.withTransaction { status ->
                 crowdRegistrationUser = crowdRegisterUserService.findUserByUserName(registrationCode.userName)
 
@@ -225,7 +225,7 @@ class RegisterController {
                 PersonCommand personCommand =
                     new PersonCommand(username: crowdRegistrationUser.name,
                             email: crowdRegistrationUser.email,
-                            displayName: crowdRegistrationUser.first_name + " " + crowdRegistrationUser.last_name,
+                            displayName: crowdRegistrationUser.display_name,
                             primaryGroup: null, roles: [], version: 0, validate: false)
                 final Person person = personCommand.createNewPerson()
                 if (!person) {
@@ -242,7 +242,7 @@ class RegisterController {
             render(view: "registerMessage", model: [successMessage: message(code: 'register.complete')])
         } catch (Exception ee) {
             render(view: "registerMessage", model: [errorMessage: ee?.message])
-            return
+
         }
     }
 
@@ -289,7 +289,7 @@ class RegisterCommand extends SignupCommand {
             if (attemptSave(person)) {
                 personToReturn = person
                 if (!PersonRole.findByPersonAndRole(person, person.newObjectRole)) {
-                    PersonRole.create(person, person.newObjectRole, springSecurityService.principal?.userName, true)
+                    PersonRole.create(person, person.newObjectRole, springSecurityService.principal?.username, true)
                 }
             }
 
@@ -314,9 +314,11 @@ class SignupCommand extends BardCommand {
     String password2
     String firstName
     String lastName
-    String displayName
 
 
+    public String getDisplayName(){
+        return this.firstName + " " + this.lastName
+    }
     CrowdRegisterUserService crowdRegisterUserService
     SpringSecurityService springSecurityService
 
@@ -339,20 +341,20 @@ class SignupCommand extends BardCommand {
         password2 validator: password2Validator
     }
 
-    static boolean checkPasswordMinLength(String password, command) {
+    static boolean checkPasswordMinLength(String password) {
 
         int minLength = 8
 
         password && password.length() >= minLength
     }
 
-    static boolean checkPasswordMaxLength(String password, command) {
+    static boolean checkPasswordMaxLength(String password) {
         int maxLength = 64
 
         password && password.length() <= maxLength
     }
 
-    static boolean checkPasswordRegex(String password, command) {
+    static boolean checkPasswordRegex(String password) {
         String passValidationRegex = '^.*(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&]).*$'
 
         password && password.matches(passValidationRegex)
@@ -368,11 +370,11 @@ class SignupCommand extends BardCommand {
             return 'command.password.error.username'
         }
 
-        /*if (!checkPasswordMinLength(password, command) ||
-                !checkPasswordMaxLength(password, command) ||
-                !checkPasswordRegex(password, command)) {
+        if (!checkPasswordMinLength(password) ||
+                !checkPasswordMaxLength(password) ||
+                !checkPasswordRegex(password)) {
             return 'command.password.error.strength'
-        } */
+        }
     }
 }
 

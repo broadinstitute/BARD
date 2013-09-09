@@ -28,7 +28,7 @@ class CapPermissionService  implements CapPermissionInterface{
 
         //we would use a default role so that all of our tests can pass
         //Take this out as soon as we complete https://www.pivotaltracker.com/story/show/51238251
-        Role newObjectRole = person?.newObjectRole ?: new Role(authority: 'ROLE_TEAM_UNASSIGNED')
+        Role newObjectRole = person?.newObjectRole ?: new Role(authority: userName)
         //we assume that the newObjectRole should never be null. There will be a check constraint to insure that
         addPermission(domainObjectInstance, newObjectRole, BasePermission.ADMINISTRATION)
     }

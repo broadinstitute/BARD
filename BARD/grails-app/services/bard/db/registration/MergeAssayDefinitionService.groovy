@@ -47,12 +47,12 @@ class MergeAssayDefinitionService {
         return findAssayByAssayIdType(assayId, assayIdType)
     }
 
-    List<Long> convertStringToIdList(final String assayIdsToMerge) {
+    static List<Long> convertStringToIdList(final String idsAsString) {
         final List<Long> ids = []
 
-        final List<String> assayIds = StringUtils.split(assayIdsToMerge, " ")
+        final List<String> idsAsList = StringUtils.split(idsAsString, " ")
 
-        assayIds.each {
+        idsAsList.each {
             ids << Long.valueOf(it)
         }
         return ids

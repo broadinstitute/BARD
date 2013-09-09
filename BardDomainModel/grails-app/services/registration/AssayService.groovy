@@ -9,6 +9,7 @@ import org.grails.plugins.springsecurity.service.acl.AclUtilService
 import org.hibernate.Query
 import org.hibernate.Session
 
+
 class AssayService {
 
     List<Assay> findByPubChemAid(Long aid) {
