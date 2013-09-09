@@ -15,12 +15,15 @@ class Project extends AbstractContextOwner {
     public static final int MODIFIED_BY_MAX_SIZE = 40
     public static final int DESCRIPTION_MAX_SIZE = 1000
     public static final int GROUP_TYPE_MAX_SIZE = 20
+
     def capPermissionService
+
     String name
     ProjectGroupType groupType = ProjectGroupType.PROJECT
     String description
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
     ProjectStatus projectStatus = ProjectStatus.DRAFT
+    Long ncgcWarehouseId;
 
     Date dateCreated
     Date lastUpdated = new Date()

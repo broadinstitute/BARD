@@ -418,4 +418,7 @@ databaseChangeLog = {
     changeSet(author: "jasiedu", id: "iteration-033/01-create-registrationcode", dbms: "oracle", context: "standard") {
         sqlFile(path: "iteration_033/01-create-registrationcode.sql", stripComments: true)
     }
+    changeSet(author: "pmontgom", id: "iteration-033/02-add-project-ncgc-warehouse-id", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_033/02-add-project-ncgc-warehouse-id.sql", stripComments: true)
+    }
 }

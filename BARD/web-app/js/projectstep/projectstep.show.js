@@ -344,7 +344,6 @@ function setupGraphScrolling() {
     });
 }
 
-
 // http://jqueryfordesigners.com/fixed-floating-elements/
 $(function () {
     var msie6 = $.browser == 'msie' && $.browser.version < 7;
