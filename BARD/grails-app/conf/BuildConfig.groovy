@@ -106,7 +106,6 @@ grails.project.dependency.resolution = {
         build ":tomcat:$grailsVersion"
 
         // compile scope
-        compile ":ajaxflow:0.2.4"
         compile ":jquery-ui:1.8.15"
         compile ":export:1.5"
         // runtime ":resources:1.1.6"

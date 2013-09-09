@@ -28,11 +28,6 @@ modules = {
     card {
         resource url: '/css/card.css'
     }
-    addItem {
-        dependsOn 'bootstrapplus, card'
-
-        resource url: '/css/AddItemWizard.css'
-    }
     contextItem {
         dependsOn 'select2, bootstrapplus, card'
         resource url: '/js/cap/contextItem.js'
