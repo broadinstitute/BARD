@@ -48,7 +48,7 @@
         <div class="span9">
             <div class="pull-left">
                 <g:if test="${panelInstance?.id}">
-                    <h4>View Panel (PLID: ${panelInstance?.id})</h4>
+                    <h4>View Panel (Panel ID: ${panelInstance?.id})</h4>
                 </g:if>
             </div>
         </div>
@@ -128,7 +128,7 @@
 
                         <div>
                             <g:if test="${panelInstance.panelAssays}">
-                                <h3>Associated Assays</h3>
+                                <h3>Associated Assay Definitions</h3>
                                 <table class="table table-striped table-hover table-bordered">
                                    <thead>
                                    <tr>
@@ -145,7 +145,7 @@
                                                 <g:link controller="panel" action="removeAssay"
                                                         params="${[id: panelInstance.id, assayIds: panelAssay.assay.id]}"
                                                         class="btn btn-mini" title="Remove From Panel"
-                                                        onclick="return confirm('Are you sure you wish to remove this Assay from this Panel?');"><i
+                                                        onclick="return confirm('Are you sure you wish to remove this Assay Definition from this Panel?');"><i
                                                         class="icon-trash"></i>Remove From Panel</g:link>
                                             </g:if>
                                     </tr>
@@ -155,7 +155,7 @@
                             </g:if>
                             <g:if test="${editable == 'canedit'}">
                                 <g:link controller="panel" action="addAssays" params="${[id: panelInstance.id]}"
-                                        class="btn"><i class="icon-plus"></i>Add Assays To This Panel</g:link>
+                                        class="btn"><i class="icon-plus"></i>Add Assay Definitions To This Panel</g:link>
 
                                 <g:link controller="panel" action="deletePanel" params="${[id: panelInstance.id]}"
                                         class="btn" title="Delete Panel"
