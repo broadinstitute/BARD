@@ -1,7 +1,6 @@
 import acl.CapPermissionService
 import bard.core.helper.LoggerService
 import bard.core.rest.spring.AssayRestService
-import bard.core.rest.spring.CapRestService
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.DictionaryRestService
 import bard.core.rest.spring.ETagRestService
@@ -159,12 +158,6 @@ beans = {
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
-    capRestService(CapRestService) {
-        externalUrlDTO = ref('externalUrlDTO')
-        restTemplate = ref('restTemplate')
-        loggerService = ref('loggerService')
-        grailsApplication = grailsApplication
-    }
 
     switch (Environment.current) {
         case "offline":
@@ -180,7 +173,6 @@ beans = {
                 assayRestService = ref('assayRestService')
                 substanceRestService = ref('substanceRestService')
                 experimentRestService = ref('experimentRestService')
-                capRestService = ref('capRestService')
             }
             eTagsService(ETagsService) {
                 compoundRestService = ref('compoundRestService')
