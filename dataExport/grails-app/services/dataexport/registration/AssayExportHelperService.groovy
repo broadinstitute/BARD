@@ -69,8 +69,12 @@ class AssayExportHelperService extends ExportAbstractService {
     public void generatePanel(
             final MarkupBuilder markupBuilder,
             final PanelAssay panelAssay) {
-        final Map<String, String> attributes = ['panelRef': panelAssay.panel.id]
+        final Map<String, String> attributes = ['id': panelAssay.panel.id]
         markupBuilder.panel(attributes) {
+            name(panelAssay.panel.name)
+            if (panelAssay.panel.description) {
+                description(panelAssay.panel.description)
+            }
         }
     }
 
