@@ -46,8 +46,7 @@ class AssayDefinitionController {
     CapPermissionService capPermissionService
 
     def groupAssays(){
-        String username = springSecurityService.principal?.username
-        List<Assay> assays = assayDefinitionService.getAssaysByGroup(username)
+        List<Assay> assays = assayDefinitionService.getAssaysByGroup()
         LinkedHashSet<Assay>  uniqueAssays = new LinkedHashSet<Assay>(assays)
         render(view: "groupAssays", model: [assays: uniqueAssays])
     }
