@@ -1,68 +1,28 @@
 package bard.db.registration
 
+import acl.CapPermissionService
 import bard.db.context.item.ContextDTO
 import bard.db.context.item.ContextItemDTO
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
-import bard.db.people.Person
-import bard.db.people.Role
-import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import org.apache.commons.collections.CollectionUtils
-import org.grails.plugins.springsecurity.service.acl.AclService
-import org.hibernate.Query
-import org.hibernate.Session
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UserDetailsService
 import registration.AssayService
 
 
 class AssayDefinitionService {
     AssayService assayService
-    UserDetailsService userDetailsService
     SpringSecurityService springSecurityService
-    AclService aclService
+    CapPermissionService capPermissionService
 
     List<Assay> getAssaysByGroup() {
-        final UserDetails user = springSecurityService.principal
-        List<String> allRolesAndUserName = []
-        if(user){
-            allRolesAndUserName.addAll(user.getAuthorities()*.getAuthority())
-            allRolesAndUserName.add(user.username)
-            return findAllAssaysForRoles(allRolesAndUserName)
-        }
-        else{
-            return []
-        }
+        capPermissionService.findAllObjectsForRoles(Assay)
     }
 
-    /**
-     *
-     *
-     * @param roleNames list or role names (may also include username )
-     * @return List of Assays that the list of roles has permissions for
-     */
-    private List<Assay> findAllAssaysForRoles(List<String> roleNames) {
-        Assay.withSession { Session session ->
-            Query query = session.createSQLQuery("""
-                        select a.*
-                        from assay a
-                            join acl_object_identity acl_oi on acl_oi.object_id_identity = a.assay_id
-                            join acl_class acl_c on acl_c.id = acl_oi.object_id_class
-                            join acl_entry acl_e on acl_e.acl_object_identity = acl_oi.id
-                            join acl_sid sid on sid.id  = acl_e.sid
-                        where acl_c.class = 'bard.db.registration.Assay'
-                        and sid.sid in (:roleNames)
-                        order by a.date_created desc
-                    """)
-            query.addEntity(Assay)
-            query.setParameterList('roleNames', roleNames)
-            query.setReadOnly(true)
-            return query.list()
-        }
-    }
+
 
     Map generateAssayComparisonReport(final Assay assayOne, final Assay assayTwo) {
 
