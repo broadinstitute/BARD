@@ -331,7 +331,7 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         controller.removeAssay()
 
         then:
-        response.redirectedUrl == '/assayDefinition/show/' + assay.id
+        response.redirectedUrl == '/panel/show/' + panel.id
 
         when:
         panelService.verify()

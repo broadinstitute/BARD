@@ -81,7 +81,7 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         for (Long panelId : panelIdList) {
             sql.execute("DELETE FROM PANEL WHERE PANEL_ID=${panelId}")
         }
-        for (Long panelName : panelNames) {
+        for (String panelName : panelNames) {
             sql.execute("DELETE FROM PANEL WHERE NAME='" + panelName + "'")
         }
         // }
@@ -178,15 +178,14 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         then:
         assert response.statusCode == expectedHttpResponse
-        assert response.text.contains(team)
 
         where:
         desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
+        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
+        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FOUND
+        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
+        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
+        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
     }
 
     def 'test save #desc'() {
