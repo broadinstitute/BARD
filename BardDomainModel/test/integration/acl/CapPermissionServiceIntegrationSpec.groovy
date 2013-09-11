@@ -25,6 +25,11 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
     SpringSecurityService springSecurityService
 
 
+    void cleanup() {
+        // remove authenticated user from context to clean up
+        SecurityContextHolder.clearContext();
+    }
+
 
     void "test getOwner #desc"() {
         given: 'a logged in user creates an assay'
