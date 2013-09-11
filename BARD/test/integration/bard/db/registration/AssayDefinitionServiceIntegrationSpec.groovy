@@ -30,6 +30,24 @@ class AssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
     }
 
+    void "test get assays for user groups no results"(){
+        when:
+        List<Assay> assays = assayDefinitionService.getAssaysByGroup("abcde")
+
+        then:
+        assert assays.size() == 0
+
+    }
+
+    void "test get assays for user groups with results"(){
+        when:
+        List<Assay> assays = assayDefinitionService.getAssaysByGroup("pmontgom")
+
+        then:
+        assert assays.size() > 0
+
+    }
+
     void "test update designed By"() {
         given:
         final Assay assay = Assay.build(assayName: 'assayName20', designedBy: "BARD")

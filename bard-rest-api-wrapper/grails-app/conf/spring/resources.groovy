@@ -1,3 +1,4 @@
+import org.springframework.http.client.SimpleClientHttpRequestFactory
 import org.springframework.web.client.RestTemplate
 
 import java.util.concurrent.Executors
@@ -20,8 +21,17 @@ beans = {
         promiscuityUrl = badApplePromiscuityUrl
         capUrl = bardCapUrl
     }
-
-    restTemplate(RestTemplate)
+    /**
+     * setting timeouts for connections established by the restTemplate
+     *
+     * just using the SimpleClientHttpRequestFactory there is also CommonsClientHttpRequestFactory which would offer
+     * more configuration options if we need it
+     */
+    simpleClientHttpRequestFactory(SimpleClientHttpRequestFactory){
+        connectTimeout =  5 * 1000 // in milliseconds
+        readTimeout    = 25 * 1000 // in milliseconds
+    }
+    restTemplate(RestTemplate, ref('simpleClientHttpRequestFactory'))
     loggerService(LoggerService)
 
     compoundRestService(CompoundRestService) {

@@ -9,6 +9,8 @@ import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContextOwner
+import bard.db.people.Person
+import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.EditingHelper
 import grails.converters.JSON
@@ -31,6 +33,13 @@ class ProjectController {
     SpringSecurityService springSecurityService
     def permissionEvaluator
     CapPermissionService capPermissionService
+
+    def groupProjects(){
+        String username = springSecurityService.principal?.username
+        List<Project> projects = projectService.getProjectsByGroup(username)
+        LinkedHashSet<Project>  uniqueProjects = new LinkedHashSet<Project>(projects)
+        render(view: "groupProjects", model: [projects: uniqueProjects])
+    }
 
     def create(ProjectCommand projectCommand) {
         if (!projectCommand) {

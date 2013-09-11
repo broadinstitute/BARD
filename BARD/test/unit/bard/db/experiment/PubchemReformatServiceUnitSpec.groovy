@@ -20,8 +20,8 @@ import static bard.db.enums.ExpectedValueType.NUMERIC
  * Time: 3:38 PM
  * To change this template use File | Settings | File Templates.
  */
-@Mock([Assay, AssayContext, AssayContextItem, AssayContextExperimentMeasure,Element, Experiment, ExperimentMeasure])
-@Build([Assay, AssayContext, AssayContextItem, AssayContextExperimentMeasure,Element, Experiment, ExperimentMeasure])
+@Mock([Assay, AssayContext, AssayContextItem, AssayContextExperimentMeasure, Element, Experiment, ExperimentMeasure])
+@Build([Assay, AssayContext, AssayContextItem, AssayContextExperimentMeasure, Element, Experiment, ExperimentMeasure])
 class PubchemReformatServiceUnitSpec extends Specification {
     static TABLE_COLUMNS = [
             "TID",
@@ -40,7 +40,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
             "VALUE2",
             "SERIESNO",
             "QUALIFIERTID",
-            "EXCLUDED_POINTS_SERIES_NO","RELATIONSHIP"];
+            "EXCLUDED_POINTS_SERIES_NO", "RELATIONSHIP"];
 
     def fillInRows(List<Map> rows) {
         for (row in rows) {
@@ -161,7 +161,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         AssayContextExperimentMeasure.build(assayContext: context, experimentMeasure: childMeasure)
 
 
-        ExperimentMeasure parentExpMeasure = ExperimentMeasure.build(experiment: experiment,resultType: Element.build(label: "parent"))
+        ExperimentMeasure parentExpMeasure = ExperimentMeasure.build(experiment: experiment, resultType: Element.build(label: "parent"))
         ExperimentMeasure childExpMeasure = ExperimentMeasure.build(experiment: experiment, parent: parentExpMeasure)
 
         when:
@@ -276,7 +276,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
 
         Collection<PubchemReformatService.MappedStub> newMeasures = [
                 new PubchemReformatService.MappedStub(resultType: Element.build(), parentChildRelationship: HierarchyType.CALCULATED_FROM,
-                        contextItems: [ (cellCount): ["100.0", "200.0"]])
+                        contextItems: [(cellCount): ["100.0", "200.0"]])
         ]
 
         when:
@@ -288,7 +288,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         context.assayContextExperimentMeasures.size() == 1
 
         experiment.experimentMeasures.size() == 1
-       // assay.measures.size() == 1
+        // assay.measures.size() == 1
     }
 
     def 'test recreating measures on an existing experiment'() {
@@ -296,14 +296,14 @@ class PubchemReformatServiceUnitSpec extends Specification {
         PubchemReformatService service = new PubchemReformatService()
         Assay assay = Assay.build()
         Experiment experiment = Experiment.build(assay: assay)
-       // ExperimentMeasure oldMeasure = ExperimentMeasure.build(experiment: experiment)
-       // Experiment experiment = Experiment.build(assay: assay)
+        // ExperimentMeasure oldMeasure = ExperimentMeasure.build(experiment: experiment)
+        // Experiment experiment = Experiment.build(assay: assay)
         ExperimentMeasure oldExperimentMeasure = ExperimentMeasure.build(experiment: experiment)
         Element cellCount = Element.build(label: "cell count", expectedValueType: NUMERIC)
 
         Collection<PubchemReformatService.MappedStub> newMeasures = [
                 new PubchemReformatService.MappedStub(resultType: Element.build(), parentChildRelationship: HierarchyType.CALCULATED_FROM,
-                        contextItems: [ (cellCount): ["100.0", "200.0"]])
+                        contextItems: [(cellCount): ["100.0", "200.0"]])
         ]
 
         when:
@@ -317,7 +317,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         experiment.experimentMeasures.size() == 1
         !experiment.experimentMeasures.contains(oldExperimentMeasure)
         // there is the original measure, and a new one used by this experiment
-       // assay.measures.size() == 2
+        // assay.measures.size() == 2
     }
 
     def 'test creating measure hierarchy from result map'() {
@@ -328,8 +328,8 @@ class PubchemReformatServiceUnitSpec extends Specification {
         PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap("100", [
                 new PubchemReformatService.ResultMapRecord(tid: "0", resultType: "outcome"),
                 new PubchemReformatService.ResultMapRecord(tid: "1", resultType: "activity", statsModifier: "mean", parentTid: "0"),
-                new PubchemReformatService.ResultMapRecord(tid: "2", resultType: "activity", parentTid: "1", staticContextItems: ["cell count":"100"]),
-                new PubchemReformatService.ResultMapRecord(tid: "3", resultType: "activity", parentTid: "1", staticContextItems: ["cell count":"100"])
+                new PubchemReformatService.ResultMapRecord(tid: "2", resultType: "activity", parentTid: "1", staticContextItems: ["cell count": "100"]),
+                new PubchemReformatService.ResultMapRecord(tid: "3", resultType: "activity", parentTid: "1", staticContextItems: ["cell count": "100"])
         ])
         def measures = service.createMeasures(map)
 

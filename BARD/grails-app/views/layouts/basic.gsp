@@ -57,6 +57,8 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="controller"><g:link controller="assayDefinition"
+                                                               action="groupAssays">My Assays</g:link></li>
+                                <li class="controller"><g:link controller="assayDefinition"
                                                                action="findById">Search by Assay Definition ID</g:link></li>
                                 <li class="controller"><g:link controller="assayDefinition"
                                                                action="findByName">Search by Assay Definition Name</g:link></li>
@@ -73,11 +75,27 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="controller"><g:link controller="project"
+                                                               action="groupProjects">My Projects</g:link></li>
+                                <li class="controller"><g:link controller="project"
                                                                action="findById">Search by Project ID</g:link></li>
                                 <li class="controller"><g:link controller="project"
                                                                action="findByName">Search by Project Name</g:link></li>
                                 <li class="controller"><g:link controller="project"
                                                                action="create">Create a New Project</g:link></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Panels
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                 <li class="controller"><g:link controller="panel"
+                                                               action="create">Create Panel</g:link></li>
+                                <li class="controller"><g:link controller="panel"
+                                                               action="findById">Search by Panel ID</g:link></li>
+                                <li class="controller"><g:link controller="panel"
+                                                               action="findByName">Search by Panel Name</g:link></li>
                             </ul>
                         </li>
                         <li>

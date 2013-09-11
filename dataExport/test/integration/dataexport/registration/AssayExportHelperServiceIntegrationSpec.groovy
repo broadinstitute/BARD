@@ -1,10 +1,7 @@
 package dataexport.registration
 
 import bard.db.dictionary.Element
-import bard.db.enums.ContextType
-import bard.db.enums.DocumentType
-import bard.db.enums.ExpectedValueType
-import bard.db.enums.ReadyForExtraction
+import bard.db.enums.*
 import bard.db.registration.*
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
@@ -26,6 +23,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
     DataSource dataSource
     ResetSequenceUtil resetSequenceUtil
     Resource schemaResource = new FileSystemResource(new File("web-app/schemas/assaySchema.xsd"))
+
     void setup() {
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(this.writer)
@@ -38,6 +36,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
                 'ASSAY_CONTEXT_ITEM_ID_SEQ',
                 'ASSAY_CONTEXT_MEASURE_ID_SEQ',
                 'ASSAY_DOCUMENT_ID_SEQ',
+                'PANEL_ID_SEQ',
                 'ELEMENT_ID_SEQ',
                 'MEASURE_ID_SEQ'].each {
             this.resetSequenceUtil.resetSequence(it)
@@ -50,11 +49,11 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate AssayContext with contextItems"() {
         given: "Given an Assay Id"
-        Assay assay = Assay.build(capPermissionService:null)
+        Assay assay = Assay.build(capPermissionService: null)
         AssayContext assayContext = AssayContext.buildWithoutSave(assay: assay, contextName: 'Context for IC50', contextType: ContextType.UNCLASSIFIED)
         final Element freeTextAttribute = Element.build(label: 'software', expectedValueType: ExpectedValueType.FREE_TEXT)
         AssayContextItem.build(assayContext: assayContext, attributeElement: freeTextAttribute, attributeType: AttributeType.Fixed, valueDisplay: 'Assay Explorer')
-        AssayContextItem.build(assayContext: assayContext, attributeElement: Element.build(label: 'a label'), attributeType: AttributeType.Fixed)
+        AssayContextItem.build(assayContext: assayContext, attributeElement: Element.build(label: 'a label', expectedValueType: ExpectedValueType.FREE_TEXT), attributeType: AttributeType.Fixed, valueDisplay: "x", valueType: ValueType.FREE_TEXT)
 
         when: "A service call is made to generate measure contexts for that Assay"
         this.assayExportHelperService.generateAssayContexts(this.markupBuilder, assay.assayContexts)
@@ -64,16 +63,19 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
+
+
     void "test generate Full Assay"() {
         given:
-        Element element = Element.build()
-        Assay assay = Assay.build(capPermissionService:null)
+        Element element = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
+        Assay assay = Assay.build(capPermissionService: null)
         AssayContext assayContext = AssayContext.build(assay: assay, contextType: ContextType.UNCLASSIFIED)
         AssayContextItem.build(assayContext: assayContext, attributeElement: element)
         AssayDocument.build(assay: assay)
 
 
-
+        Panel panel = Panel.build()
+        PanelAssay.build(assay: assay, panel: panel)
         when:
         this.assayExportHelperService.generateAssay(this.markupBuilder, assay)
 
@@ -85,7 +87,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate Assays readyForExtraction"() {
         given: "Given there is at least one assay ready for extraction"
-        Assay.build(readyForExtraction: ReadyForExtraction.READY,capPermissionService:null)
+        Assay.build(readyForExtraction: ReadyForExtraction.READY, capPermissionService: null)
 
         when: "A service call is made to generate a list of assays ready to be extracted"
         this.assayExportHelperService.generateAssays(this.markupBuilder)

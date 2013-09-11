@@ -8,6 +8,7 @@ import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
 import bard.db.registration.AssayDocument
+import bard.db.registration.PanelAssay
 import dataexport.util.ExportAbstractService
 import groovy.xml.MarkupBuilder
 import org.apache.commons.lang.StringUtils
@@ -35,6 +36,22 @@ class AssayExportHelperService extends ExportAbstractService {
             generateAssayContextItems(markupBuilder, assayContext.assayContextItems)
         }
     }
+    /**
+     *
+     * @param markupBuilder
+     * @param assay
+     */
+    public void generatePanel(
+            final MarkupBuilder markupBuilder,
+            final PanelAssay panelAssay) {
+        final Map<String, String> attributes = ['id': panelAssay.panel.id]
+        markupBuilder.panel(attributes) {
+            name(panelAssay.panel.name)
+            if (panelAssay.panel.description) {
+                description(panelAssay.panel.description)
+            }
+        }
+    }
 
 
     public static void createElementRef(MarkupBuilder markupBuilder, Element element, String refName, String mediaType, LinkGenerator grailsLinkGenerator) {
@@ -56,11 +73,11 @@ class AssayExportHelperService extends ExportAbstractService {
                 assayContextItem.assayContext.assayContextItems.indexOf(assayContextItem))
     }
 
-    /**
-     * Generate a measure contexts
-     * @param markupBuilder
-     * @param assayContexts
-     */
+/**
+ * Generate a measure contexts
+ * @param markupBuilder
+ * @param assayContexts
+ */
     protected void generateAssayContexts(final MarkupBuilder markupBuilder, final List<AssayContext> assayContexts) {
         if (assayContexts) {
             markupBuilder.assayContexts() {
@@ -70,11 +87,11 @@ class AssayExportHelperService extends ExportAbstractService {
             }
         }
     }
-    /**
-     *
-     * @param markupBuilder
-     * @param assayContextItems
-     */
+/**
+ *
+ * @param markupBuilder
+ * @param assayContextItems
+ */
     public void generateAssayContextItems(final MarkupBuilder markupBuilder, final List<AssayContextItem> allAssayContextItems) {
         if (allAssayContextItems) {
             markupBuilder.assayContextItems() {
@@ -86,10 +103,10 @@ class AssayExportHelperService extends ExportAbstractService {
             }
         }
     }
-    /**
-     * Generates a xml document for list of assays
-     * @param markupBuilder
-     */
+/**
+ * Generates a xml document for list of assays
+ * @param markupBuilder
+ */
     public void generateAssays(final MarkupBuilder markupBuilder) {
         final List<Assay> assays = Assay.findAllByReadyForExtraction(ReadyForExtraction.READY)
 
@@ -125,6 +142,23 @@ class AssayExportHelperService extends ExportAbstractService {
         }
     }
 
+/**
+ *
+ * @param markupBuilder
+ * @param assay
+ */
+    public void generatePanels(
+            final MarkupBuilder markupBuilder,
+            final Set<PanelAssay> panelAssays) {
+        if (panelAssays) {
+            markupBuilder.panels() {
+                for (PanelAssay panelAssay : panelAssays) {
+                    generatePanel(markupBuilder, panelAssay)
+                }
+            }
+        }
+    }
+
 
 
     public void generateDocument(final MarkupBuilder markupBuilder, AssayDocument assayDocument) {
@@ -136,11 +170,11 @@ class AssayExportHelperService extends ExportAbstractService {
 
     }
 
-    /**
-     *
-     * @param markupBuilder
-     * @param assay
-     */
+/**
+ *
+ * @param markupBuilder
+ * @param assay
+ */
     public void generateAssay(
             final MarkupBuilder markupBuilder,
             final Assay assay) {
@@ -175,8 +209,11 @@ class AssayExportHelperService extends ExportAbstractService {
             if (assay.assayContexts) {
                 generateAssayContexts(markupBuilder, assay.assayContexts)
             }
-
+            if (assay.panelAssays) {
+                generatePanels(markupBuilder, assay.panelAssays)
+            }
             generateLinksForAssay(markupBuilder, assay)
         }
     }
+
 }

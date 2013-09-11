@@ -24,11 +24,10 @@ class PersonController {
 
     def edit() {
         Person person = Person.findById(params.id)
-        if(person){
+        if (person) {
             PersonCommand personCommand = new PersonCommand(person)
             render(view: 'edit', model: [person: person, roles: Role.all, personCommand: personCommand])
-        }
-        else{
+        } else {
             flash.message = "Person not found. Try again"
             redirect action: "list"
             return
@@ -69,6 +68,8 @@ class PersonCommand extends BardCommand {
     Role primaryGroup
     List<Role> roles = []
     Long version
+    //We turn this off to allow user sign ups, since we want only admins to assign primary groups
+    boolean validate = true
 
     SpringSecurityService springSecurityService
 
@@ -96,7 +97,14 @@ class PersonCommand extends BardCommand {
                     }
                 }
         displayName blank: false, nullable: false
-        primaryGroup nullable: false
+        primaryGroup nullable: true, validator: { value, command ->
+            if (command.validate) {
+                if (!value) {
+                    return 'registerCommand.primaryGroup.nullable'
+                }
+            }
+        }
+
     }
 
     Person createNewPerson() {
@@ -114,6 +122,9 @@ class PersonCommand extends BardCommand {
     }
 
     void addPersonRoles(Person person) {
+        if (!this.primaryGroup) {
+            return
+        }
         if (!PersonRole.findAllByPersonAndRole(person, this.primaryGroup)) {
 
             PersonRole.create(person, person.newObjectRole, springSecurityService.principal?.username, true)
@@ -152,7 +163,9 @@ class PersonCommand extends BardCommand {
         person.userName = this.username
         person.emailAddress = this.email
         person.fullName = this.displayName
-        person.newObjectRole = Role.findByAuthority(primaryGroup.authority)
+        if (this.primaryGroup) {
+            person.newObjectRole = Role.findByAuthority(primaryGroup.authority)
+        }
     }
 
     void copyFromDomainToCmd(Person person) {

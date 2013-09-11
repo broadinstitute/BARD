@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
+import bard.db.enums.ValueType
 import bard.db.experiment.*
 import bard.db.experiment.results.RawCell
 import bard.db.experiment.results.Row
@@ -104,11 +105,13 @@ class ResultsServiceSpec extends Specification {
         Experiment experiment = Experiment.build(assay: assay)
         AssayContext assayContext = AssayContext.build(assay: assay)
         AssayContext measureContext = AssayContext.build(assay: assay)
+
         AssayContextItem.build(assayContext: assayContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "cell line", expectedValueType: FREE_TEXT))
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(resultType: Element.build(label: "ec50"))
         AssayContextExperimentMeasure assayContextExperimentMeasure = AssayContextExperimentMeasure.build(assayContext: measureContext, experimentMeasure: experimentMeasure)
         AssayContextItem.build(assayContext: measureContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "hill slope", expectedValueType: NUMERIC))
         measureContext.assayContextExperimentMeasures = [assayContextExperimentMeasure] as Set
+
         assay.assayContexts = [assayContext, measureContext]
         //assay.measures = [experimentMeasure] as Set
         experiment.experimentMeasures = [experimentMeasure] as Set
@@ -330,7 +333,7 @@ class ResultsServiceSpec extends Specification {
         substance.save()
 
         def attribute = Element.build(label: "item", expectedValueType: NUMERIC)
-        def item = this.service.itemService.getLogicalItems([AssayContextItem.build(attributeType: AttributeType.Free, attributeElement: attribute)])[0]
+        def item = this.service.itemService.getLogicalItems([AssayContextItem.build(attributeType: AttributeType.Free, valueType: ValueType.NONE, valueDisplay: null, attributeElement: attribute)])[0]
         def resultType = Element.build(label: "measure")
         def experimentMeasure = ExperimentMeasure.build(resultType: resultType)
 

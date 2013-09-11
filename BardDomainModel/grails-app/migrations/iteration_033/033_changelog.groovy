@@ -62,7 +62,7 @@ databaseChangeLog = {
         }
 
 
-       sqlFile(path: "iteration_033/03-create-assay-context-expt-measure.sql", stripComments: true)
+        sqlFile(path: "iteration_033/03-create-assay-context-expt-measure.sql", stripComments: true)
     }
     changeSet(author: "jasiedu", id: "iteration-033/04-update-assay-context-expt-measure", dbms: "oracle", context: "standard") {
 
@@ -119,7 +119,7 @@ databaseChangeLog = {
         }
         sqlFile(path: "iteration_033/05-delete-measure-and-references.sql", stripComments: true)
     }
-        //Code:
+    //Code:
     // Remove AssayContextMeasure from AssayContext
     //Remove AssayContextMeasure from Measure
     //Drop AssayContextMeasure table
@@ -546,6 +546,15 @@ databaseChangeLog = {
     changeSet(author: "ddurkin (generated)", id: "add foreign keys", context: "standard") {
         addForeignKeyConstraint(baseColumnNames: "MOL_SS_ACTIVITY_STORAGE_ID", baseTableName: "MOL_SS_HILL_CURVE_VALUE_HOLDER", constraintName: "SC_HL_CRV_VL_HLDR_SS_ACT_ST_FK", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "MOL_SS_ACTIVITY_STORAGE")
         addForeignKeyConstraint(baseColumnNames: "MOL_SS_DATA_ID", baseTableName: "MOL_SS_CELL", constraintName: "MOL_SS_CELL_MOL_SS_DATA_FK", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "MOL_SS_DATA")
+    }
+    changeSet(author: "jasiedu", id: "iteration-033/01-create-registrationcode", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_033/01-create-registrationcode.sql", stripComments: true)
+    }
+    changeSet(author: "jasiedu", id: "iteration-033/02-create-panel", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_033/02-create-panel.sql", stripComments: true)
+    }
+    changeSet(author: "jasiedu", id: "iteration-033/03-add-description-to-panel", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_033/03-add-description-to-panel.sql", stripComments: true)
     }
 }
 

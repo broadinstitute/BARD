@@ -26,7 +26,7 @@ class AssayService {
     Map cloneAssay(Assay assay) {
         String assayNamePrefix = ""
         Assay newAssay = cloneAssayOnly(assay, assay.dateCreated, assay.designedBy, assayNamePrefix, assay.assayStatus, assay.readyForExtraction)
-        newAssay = newAssay.save(flush:true)
+        newAssay = newAssay.save(flush: true)
         Map<AssayContext, AssayContext> assayContextOldToNew = cloneContexts(assay, newAssay, false)
         cloneDocuments(assay, newAssay)
         // clone all measures
@@ -52,7 +52,7 @@ class AssayService {
         //Map<Measure, Measure> measureOldToNew = cloneMeasures(assay, newAssay)
         //assignParentMeasures(assay, measureOldToNew)
 
-      //  cloneContextsMeasures(assay, assayContextOldToNew, measureOldToNew)
+        //  cloneContextsMeasures(assay, assayContextOldToNew, measureOldToNew)
         newAssay.save(flush: true, failOnError: true, validate: false)
 
         //now call the manage names stored procedure
@@ -109,7 +109,7 @@ class AssayService {
 
             // this shouldn't be necessary, but it appears that if you save, bypassing validating, any invalid items
             // were not actually getting written to the db (even though they _would_ get an ID assigned)
-            for(item in newContext.contextItems) {
+            for (item in newContext.contextItems) {
                 item.save(failOnError: true, validate: validate)
             }
         }
@@ -140,9 +140,10 @@ class AssayService {
 //
 //            clonedAssay.addToMeasures(newMeasure)
 //        }
-       // return measureOldToNew
+        // return measureOldToNew
         return [:]
     }
+
     @Deprecated
     void assignParentMeasures(Assay assay, Map measureOldToNew) {
         // assign parent measures now that all measures have been created
@@ -153,6 +154,7 @@ class AssayService {
             measure.save(failOnError: true)
         }*/
     }
+
     @Deprecated
     void cloneContextsMeasures(Assay assay, Map<AssayContext, AssayContext> assayContextOldToNew, Map measureOldToNew) {
 //        Set<AssayContextMeasure> assayContextMeasures = assay.measures.collectMany { it.assayContextMeasures }
@@ -161,19 +163,19 @@ class AssayService {
 //            cloneContextsMeasure(assayContextMeasure, assayContextOldToNew, measureOldToNew)
 //        }
     }
+
     @Deprecated
     void cloneContextsMeasure(def assayContextMeasure, Map<AssayContext, AssayContext> assayContextOldToNew, Map measureOldToNew) {
 
+        /* AssayContext newAssayContext = assayContextOldToNew[assayContextMeasure.assayContext]
+         Measure newMeasure = measureOldToNew[assayContextMeasure.measure]
 
-       /* AssayContext newAssayContext = assayContextOldToNew[assayContextMeasure.assayContext]
-        Measure newMeasure = measureOldToNew[assayContextMeasure.measure]
+         AssayContextMeasure newAssayContextMeasure = new AssayContextMeasure()
 
-        AssayContextMeasure newAssayContextMeasure = new AssayContextMeasure()
+         newAssayContext.addToAssayContextMeasures(newAssayContextMeasure)
+         newMeasure.addToAssayContextMeasures(newAssayContextMeasure)
 
-        newAssayContext.addToAssayContextMeasures(newAssayContextMeasure)
-        newMeasure.addToAssayContextMeasures(newAssayContextMeasure)
-
-        newAssayContextMeasure.save(failOnError: true)  */
+         newAssayContextMeasure.save(failOnError: true)  */
 
     }
 

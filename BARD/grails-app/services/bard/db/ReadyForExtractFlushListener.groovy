@@ -141,6 +141,13 @@ class ReadyForExtractFlushListener implements FlushEventListener, PostInsertEven
         } else if (entity instanceof AssayDocument) {
             return (((AssayDocument) entity).assay)
         }
+        //these update Panel status
+        else if(entity instanceof Panel){
+            return (Panel)entity
+        }
+        else if(entity instanceof PanelAssay){
+            return ((PanelAssay)entity).panel
+        }
         // these classes update experiment's status
         else if (entity instanceof Experiment) {
             return ((Experiment) entity)

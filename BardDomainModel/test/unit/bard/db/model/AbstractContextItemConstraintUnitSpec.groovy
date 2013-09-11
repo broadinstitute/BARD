@@ -1,6 +1,8 @@
 package bard.db.model
 
 import bard.db.dictionary.Element
+import bard.db.enums.ExpectedValueType
+import bard.db.enums.ValueType
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -22,6 +24,8 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
 
     T domainInstance
 
+    abstract T constructInstance(Map props);
+
     @Before
     abstract void doSetup()
 
@@ -38,8 +42,7 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
         where:
         desc                     | valueUnderTest      | valid | errorCode
         'null is not valid'      | { null }            | false | 'nullable'
-        'valid attributeElement' | { Element.build() } | true  | null
-
+        'valid attributeElement' | { Element.build(expectedValueType: ExpectedValueType.FREE_TEXT ) } | true  | null
     }
 
     void "test deriveDisplayValue  #desc"() {
@@ -48,27 +51,28 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
         Element attributeElement = optionallyCreateElement(attributeElementMap)
         Element valueElement = optionallyCreateElement(valueElementMap)
         Element unitElement = optionallyCreateElement(unitElementMap)
+        AbstractContextItem instance = constructInstance(instanceMap)
+        domainInstance = instance
 
         when:
-        domainInstance.attributeElement = attributeElement
-        domainInstance.valueElement = valueElement
-        domainInstance.qualifier = qualifier
-        domainInstance.valueNum = valueNum
-        domainInstance.attributeElement.unit = unitElement
-        domainInstance.valueMin = valueMin
-        domainInstance.valueMax = valueMax
-        domainInstance.valueDisplay = valueDisplay
+        instance.attributeElement = attributeElement
+        instance.valueElement = valueElement
+        instance.qualifier = qualifier
+        instance.valueNum = valueNum
+        instance.attributeElement.unit = unitElement
+        instance.valueMin = valueMin
+        instance.valueMax = valueMax
+        instance.valueDisplay = valueDisplay
 
         then:
-        domainInstance.validate()
-        domainInstance.deriveDisplayValue() == expectedDisplayValue
+        instance.validate()
+        instance.deriveDisplayValue() == expectedDisplayValue
 
         where:
-        desc                            | expectedDisplayValue | attributeElementMap          | valueElementMap | qualifier | valueNum | unitElementMap         | valueMin | valueMax | valueDisplay
-        'all null'                      | null                 | [expectedValueType: NONE]    | null            | null      | null     | null                   | null     | null     | null
-        'only valueElement'             | 't'                  | [expectedValueType: ELEMENT] | [label: 't']    | null      | null     | null                   | null     | null     | 'some value'
-        'qualifier and valueNum'        | '= 1.0'              | [expectedValueType: NUMERIC] | null            | '= '      | 1.0      | null                   | null     | null     | 'some value'
-        'qualifier, valueNum and units' | '= 1.0 abbr'         | [expectedValueType: NUMERIC] | null            | '= '      | 1.0      | [abbreviation: 'abbr'] | null     | null     | 'some value'
+        desc                            | expectedDisplayValue | attributeElementMap            | instanceMap                    | valueElementMap | qualifier | valueNum | unitElementMap         | valueMin | valueMax | valueDisplay
+        'only valueElement'             | 't'                  | [expectedValueType: ELEMENT]   | [valueType: ValueType.ELEMENT] | [label: 't']    | null      | null     | null                   | null     | null     | 'some value'
+        'qualifier and valueNum'        | '= 1.0'              | [expectedValueType: NUMERIC]   | [valueType: ValueType.NUMERIC] | null            | '= '      | 1.0      | null                   | null     | null     | 'some value'
+        'qualifier, valueNum and units' | '= 1.0 abbr'         | [expectedValueType: NUMERIC]   | [valueType: ValueType.NUMERIC] | null            | '= '      | 1.0      | [abbreviation: 'abbr'] | null     | null     | 'some value'
     }
 
     /**

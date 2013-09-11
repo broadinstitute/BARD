@@ -3,6 +3,37 @@ import org.apache.log4j.DailyRollingFileAppender
 import org.apache.log4j.net.SMTPAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
+
+registeruser {
+    signup {
+        emailBody = '''
+Hi $username,<br/>
+<br/>
+You (or someone pretending to be you) created an account with this email address.<br/>
+<br/>
+If you made the request, please click&nbsp;<a href="$url">here</a> to finish the registration.
+'''
+        emailFrom = 'do.not.reply@localhost'
+        emailSubject = 'New Account'
+        defaultRoleNames = ['ROLE_USER']
+        postRegisterUrl = null // use defaultTargetUrl if not set
+    }
+    forgotPassword {
+        emailBody = '''
+Hi $username,<br/>
+<br/>
+You (or someone pretending to be you) requested that your password be reset.<br/>
+<br/>
+If you didn't make this request then ignore the email; no changes have been made.<br/>
+<br/>
+If you did make the request, then click <a href="$url">here</a> to reset your password.
+'''
+        emailFrom = 'do.not.reply@localhost'
+        emailSubject = 'Password Reset'
+        postResetUrl = null // use defaultTargetUrl if not set
+    }
+}
+
 ncgc.thickclient.compounds.url="http://bard.nih.gov/bard/compounds/"
 ncgc.thickclient.etags.url="http://bard.nih.gov/bard/etag/"
 
@@ -120,6 +151,7 @@ grails {
             basic.realmName = 'CAP'
             filterChain.chainMap = [
                     '/assayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/panel/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/bardWebInterface/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/chemAxon/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/context/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
@@ -274,73 +306,73 @@ if (appName) {
     }
 }
 
-    if(System.getProperty("migrationContextsToRun") != null) {
-        grails.plugin.databasemigration.updateOnStart = true
-        grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
-        grails.plugin.databasemigration.updateOnStartContexts = System.getProperty("migrationContextsToRun").split(",") as List
-    }
+if (System.getProperty("migrationContextsToRun") != null) {
+    grails.plugin.databasemigration.updateOnStart = true
+    grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+    grails.plugin.databasemigration.updateOnStartContexts = System.getProperty("migrationContextsToRun").split(",") as List
+}
 
-    log4j = {
+log4j = {
+    appenders {
+        // This should work on both windows and unix
+        appender new DailyRollingFileAppender(
+                name: "NCGCErrorAppender",
+                file: "logs/" + Environment.current.name + "/NCGC_Errors.log",
+                layout: pattern(conversionPattern: '%m%n'),
+                immediateFlush: true,
+                threshold: org.apache.log4j.Level.ERROR,
+                datePattern: "'.'yyyy-MM-dd"
+        )
+        appender new DailyRollingFileAppender(
+                name: "JavaScriptErrorsAppender",
+                file: "logs/" + Environment.current.name + "/Client_JavaScript_Errors.log",
+                layout: pattern(conversionPattern: '%m%n'),
+                immediateFlush: true,
+                threshold: org.apache.log4j.Level.ERROR,
+                datePattern: "'.'yyyy-MM-dd"
+        )
         appenders {
             // This should work on both windows and unix
             appender new DailyRollingFileAppender(
-                    name: "NCGCErrorAppender",
-                    file: "logs/" + Environment.current.name + "/NCGC_Errors.log",
+                    name: "NCGCRestApiTimingAppender",
+                    file: "logs/" + Environment.current.name + "/NCGC_StopWatch.log",
                     layout: pattern(conversionPattern: '%m%n'),
                     immediateFlush: true,
-                    threshold: org.apache.log4j.Level.ERROR,
+                    threshold: org.apache.log4j.Level.INFO,
                     datePattern: "'.'yyyy-MM-dd"
-            )
-            appender new DailyRollingFileAppender(
-                    name: "JavaScriptErrorsAppender",
-                    file: "logs/" + Environment.current.name + "/Client_JavaScript_Errors.log",
-                    layout: pattern(conversionPattern: '%m%n'),
-                    immediateFlush: true,
-                    threshold: org.apache.log4j.Level.ERROR,
-                    datePattern: "'.'yyyy-MM-dd"
-            )
-            appenders {
-                // This should work on both windows and unix
-                appender new DailyRollingFileAppender(
-                        name: "NCGCRestApiTimingAppender",
-                        file: "logs/" + Environment.current.name + "/NCGC_StopWatch.log",
-                        layout: pattern(conversionPattern: '%m%n'),
-                        immediateFlush: true,
-                        threshold: org.apache.log4j.Level.INFO,
-                        datePattern: "'.'yyyy-MM-dd"
-                )
-            }
-
-            def patternLayout = new org.apache.log4j.PatternLayout()
-            patternLayout.setConversionPattern("%d [%t] %-5p %c - %m%n")
-            appender new SMTPAppender(
-                    name: "mail",
-                    smtpPort: config.grails.mail.port,
-                    from: config.grails.mail.default.from,
-                    to: config.grails.mail.default.to,
-                    subject: "[${InetAddress.getLocalHost().getHostName()}] " + config.grails.mail.default.subject,
-                    smtpHost: config.grails.mail.host,
-                    layout: patternLayout,
-                    threshold: org.apache.log4j.Level.ERROR
             )
         }
 
-        root {
-            debug 'stdout'
-            error 'mail', 'fileAppender'
-        }
-
-
-        error additivity: false,
-                //Capture errors from the NCGC API (via JDO) but DO NOT send emails about them.
-                NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService']
-        error additivity: true,
-                //Capture JavaScript errors from the client (via the ErrorHandling controller)
-                JavaScriptErrorsAppender: ['grails.app.controllers.bardqueryapi.ErrorHandlingController']
-
-        //Capture NCGC REST API roundtrip timing.
-        info NCGCRestApiTimingAppender: ['grails.app.services.bard.core.helper.LoggerService']
+        def patternLayout = new org.apache.log4j.PatternLayout()
+        patternLayout.setConversionPattern("%d [%t] %-5p %c - %m%n")
+        appender new SMTPAppender(
+                name: "mail",
+                smtpPort: config.grails.mail.port,
+                from: config.grails.mail.default.from,
+                to: config.grails.mail.default.to,
+                subject: "[${InetAddress.getLocalHost().getHostName()}] " + config.grails.mail.default.subject,
+                smtpHost: config.grails.mail.host,
+                layout: patternLayout,
+                threshold: org.apache.log4j.Level.ERROR
+        )
     }
+
+    root {
+        debug 'stdout'
+        error 'mail', 'fileAppender'
+    }
+
+
+    error additivity: false,
+            //Capture errors from the NCGC API (via JDO) but DO NOT send emails about them.
+            NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService']
+    error additivity: true,
+            //Capture JavaScript errors from the client (via the ErrorHandling controller)
+            JavaScriptErrorsAppender: ['grails.app.controllers.bardqueryapi.ErrorHandlingController']
+
+    //Capture NCGC REST API roundtrip timing.
+    info NCGCRestApiTimingAppender: ['grails.app.services.bard.core.helper.LoggerService']
+}
 
 // Added by the JQuery Validation UI plugin:
 jqueryValidationUi {

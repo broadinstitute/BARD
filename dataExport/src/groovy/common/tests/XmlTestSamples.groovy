@@ -343,7 +343,7 @@ class XmlTestSamples {
          <context id='1' displayOrder='0'>
             <contextName />
             <contextItems>
-                <contextItem displayOrder='0'>
+                <contextItem displayOrder='0' valueDisplay='valueDisplay'>
                   <attributeId label='label1'>
                     <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
                   </attributeId>
@@ -355,12 +355,12 @@ class XmlTestSamples {
          <context id='1' displayOrder='0'>
             <contextName />
             <contextItems>
-                <contextItem displayOrder='0'>
+                <contextItem displayOrder='0' valueDisplay='valueDisplay'>
                   <attributeId label='label1'>
                     <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
                   </attributeId>
                 </contextItem>
-                <contextItem displayOrder='1'>
+                <contextItem displayOrder='1' valueDisplay='valueDisplay'>
                   <attributeId label='label2'>
                     <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
                   </attributeId>
@@ -695,6 +695,24 @@ class XmlTestSamples {
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
           </attributeId>
         </assayContextItem>'''
+    static final String PANEL_MEASURE = '''
+<panel id='1'>
+  <name>name</name>
+  <description>description</description>
+</panel>
+'''
+    static final String PANELS = '''
+<panels>
+  <panel id='1'>
+    <name>name1</name>
+    <description>description1</description>
+  </panel>
+  <panel id='2'>
+    <name>name2</name>
+    <description>description2</description>
+  </panel>
+</panels>
+'''
 
 
 
@@ -723,7 +741,7 @@ class XmlTestSamples {
         <assayContext assayContextId='1' displayOrder='0'>
           <contextName/>
           <assayContextItems>
-            <assayContextItem displayOrder='0' attributeType='Fixed'>
+            <assayContextItem displayOrder='0' attributeType='Fixed' valueDisplay='valueDisplay'>
               <attributeId label='label1'>
                 <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
               </attributeId>
@@ -735,12 +753,12 @@ class XmlTestSamples {
         <assayContext assayContextId='1' displayOrder='0'>
           <contextName/>
           <assayContextItems>
-            <assayContextItem displayOrder='0' attributeType='Fixed'>
+            <assayContextItem displayOrder='0' attributeType='Fixed' valueDisplay='valueDisplay'>
               <attributeId label='label1'>
                 <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
               </attributeId>
             </assayContextItem>
-            <assayContextItem displayOrder='1' attributeType='Fixed'>
+            <assayContextItem displayOrder='1' attributeType='Fixed' valueDisplay='valueDisplay'>
               <attributeId label='label2'>
                 <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
               </attributeId>
@@ -772,6 +790,7 @@ class XmlTestSamples {
 '''
 
     static String ASSAY_FULL_DOC = '''
+<<<<<<< HEAD
        <assay assayId='8110' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft' lastUpdated='2013-09-03T12:04:53.689-04:00'>
   <assayShortName>assayShortName</assayShortName>
   <assayName>assayName</assayName>
@@ -786,12 +805,18 @@ class XmlTestSamples {
         </assayContextItem>
       </assayContextItems>
     </assayContext>
+                <panels>
+    <panel id='61'>
+      <name>name</name>
+    </panel>
+  </panels>
   </assayContexts>
   <link rel='edit' href='http://localhost:8080/dataExport/api/assays/8110' type='application/vnd.bard.cap+xml;type=assay' />
   <link rel='self' href='http://localhost:8080/dataExport/api/assays/8110' type='application/vnd.bard.cap+xml;type=assay' />
   <link rel='up' href='http://localhost:8080/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
   <link rel='item' href='http://localhost:8080/dataExport/api/assayDocument/135527' type='application/vnd.bard.cap+xml;type=assayDoc' />
 </assay>
+
      '''
     static String PROJECT_FROM_SERVER = '''
    <project projectId='1' readyForExtraction='Not Ready' groupType='Project'>
@@ -860,7 +885,7 @@ class XmlTestSamples {
                   <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
                 </attributeId>
               </assayContextItem>
-              <assayContextItem displayOrder='1' attributeType='Fixed'>
+              <assayContextItem displayOrder='1' attributeType='Fixed' valueDisplay='x'>
                 <attributeId label='a label'>
                   <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/2' type='application/vnd.bard.cap+xml;type=element' />
                 </attributeId>
@@ -1141,21 +1166,21 @@ class XmlTestSamples {
 </resultType>
 '''
 
-  static String ONTOLOGY_FULL='''
+    static String ONTOLOGY_FULL = '''
 <ontology name='name' abbreviation='BAO' sourceUrl='http://purl.org/obo/owl/UO#UO_0000244' />
 '''
-  static final String ONTOLOGY_MISSING_ATTRIBUTES ="<ontology name='name' />"
-    static String ONTOLOGIES_FULL='''<ontologies>
+    static final String ONTOLOGY_MISSING_ATTRIBUTES = "<ontology name='name' />"
+    static String ONTOLOGIES_FULL = '''<ontologies>
     <ontology name='name1' abbreviation='BAO' sourceUrl='http://purl.org/obo/owl/UO#UO_0000244' />
     <ontology name='name2' />
     </ontologies>'''
 
-    static final String ONTOLOGIES_MISSING_ATTRIBUTES ='''
+    static final String ONTOLOGIES_MISSING_ATTRIBUTES = '''
    <ontologies>
   <ontology name='name' />
 </ontologies>
 '''
-  static final String ELEMENT_WITH_ONTOLOGY=  '''
+    static final String ELEMENT_WITH_ONTOLOGY = '''
 <element elementId='' readyForExtraction='Ready' elementStatus='Pending'>
   <label>label</label>
   <externalUrl>http://www.broad.org</externalUrl>

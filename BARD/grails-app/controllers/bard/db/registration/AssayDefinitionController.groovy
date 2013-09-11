@@ -12,6 +12,8 @@ import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
 import bard.db.model.AbstractContextOwner
+import bard.db.people.Person
+import bard.db.people.Role
 import bard.db.project.InlineEditableCommand
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
@@ -44,6 +46,13 @@ class AssayDefinitionController {
     MeasureTreeService measureTreeService
     AssayDefinitionService assayDefinitionService
     CapPermissionService capPermissionService
+
+    def groupAssays(){
+        String username = springSecurityService.principal?.username
+        List<Assay> assays = assayDefinitionService.getAssaysByGroup(username)
+        LinkedHashSet<Assay>  uniqueAssays = new LinkedHashSet<Assay>(assays)
+        render(view: "groupAssays", model: [assays: uniqueAssays])
+    }
 
     def assayComparisonReport() {
 
