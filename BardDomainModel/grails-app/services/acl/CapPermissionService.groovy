@@ -5,8 +5,10 @@ import bard.db.people.Person
 import bard.db.people.Role
 import bard.db.registration.Assay
 import grails.plugins.springsecurity.SpringSecurityService
+import grails.util.GrailsNameUtils
 import groovy.transform.TypeChecked
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclClass
 import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclEntry
 import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclObjectIdentity
 import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclSid
@@ -49,26 +51,27 @@ class CapPermissionService implements CapPermissionInterface {
             }
         }
     }
-           //TODO ensure that domainClass is passed in and used correctly as Ids overlap
+    /**
+     * @param domainObjectInstance a domainInstance we track ACL permissions on
+     * @return a String representing the Role name or username that owns this domainInstance
+     */
     String getOwner(domainObjectInstance) {
         String owner = "none"
-        try {
-            final AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByObjectIdAndAclClass(domainObjectInstance.id, domainObjectInstance.getClass().getName())
-            if (aclObjectIdentity) {
-                AclEntry aclEntry = AclEntry.findByAclObjectIdentity(aclObjectIdentity)
-                AclSid aclSid = aclEntry?.sid
-                if (aclSid) {
-                    if (!aclSid.principal) {
-                        Role role = Role.findByAuthority(aclSid.sid)
-                        owner = role?.displayName
-                    } else {
-                        owner = aclSid.sid
-                    }
+
+        final Class<?> clazz = domainObjectInstance.getClass()
+        AclClass aclClass = AclClass.findByClassName(clazz.getName())
+        final AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByObjectIdAndAclClass(domainObjectInstance.id, aclClass)
+        if (aclObjectIdentity) {
+            AclEntry aclEntry = AclEntry.findByAclObjectIdentity(aclObjectIdentity)
+            AclSid aclSid = aclEntry?.sid
+            if (aclSid) {
+                if (!aclSid.principal) {
+                    Role role = Role.findByAuthority(aclSid.sid)
+                    owner = role?.displayName
+                } else {
+                    owner = aclSid.sid
                 }
             }
-        }
-        catch (NotFoundException nfe) {
-
         }
         return owner
     }
@@ -84,12 +87,11 @@ class CapPermissionService implements CapPermissionInterface {
     public <T> List<T> findAllObjectsForRoles(Class<T> domainClass) {
         final String username = springSecurityService.principal?.username
         List<String> allRolesAndUserName = []
-        if(username){
+        if (username) {
             allRolesAndUserName.addAll(SpringSecurityUtils.getPrincipalAuthorities()*.getAuthority())
             allRolesAndUserName.add(username)
             return findAllByRolesAndClass(allRolesAndUserName, domainClass)
-        }
-        else{
+        } else {
             return []
         }
     }
@@ -102,7 +104,9 @@ class CapPermissionService implements CapPermissionInterface {
      * @return List of Assays that the list of roles has permissions for
      */
     private <T> List<T> findAllByRolesAndClass(List<String> roleNames, Class<T> domainClass) {
-       String tableName = domainClass.getSimpleName().toLowerCase()
+        // a little hack here, to get the table name
+        // will break if we start tracking ACLs on domains with non-standard naming
+        final String tableName = domainClass.getSimpleName().toLowerCase()
         Assay.withSession { Session session ->
             Query query = session.createSQLQuery("""
                         select a.*
@@ -123,4 +127,6 @@ class CapPermissionService implements CapPermissionInterface {
 
         }
     }
+
+
 }
