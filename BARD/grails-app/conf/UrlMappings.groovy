@@ -12,7 +12,7 @@ class UrlMappings {
         "/bbgrid/$id?"(controller: "grid") {
             action = [GET:"list", POST: "save", DELETE: "delete", PUT: "edit"]
         }
-        "/"(controller: 'bardWebInterface', action: 'index')
+        "/"(controller: 'bardWebInterface', action: 'redirectToIndex')
         "403"(controller: "errors", action: "error403")
         "500"(controller: "errors", action: "error500")
         "500"(controller: "errors", action: "error403",
