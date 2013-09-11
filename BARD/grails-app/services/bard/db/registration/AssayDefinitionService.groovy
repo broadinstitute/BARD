@@ -1,27 +1,16 @@
 package bard.db.registration
 
-import acl.CapPermissionService
 import bard.db.context.item.ContextDTO
 import bard.db.context.item.ContextItemDTO
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
-import grails.plugins.springsecurity.SpringSecurityService
 import org.apache.commons.collections.CollectionUtils
-import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.access.prepost.PreAuthorize
 import registration.AssayService
 
-
 class AssayDefinitionService {
     AssayService assayService
-    SpringSecurityService springSecurityService
-    CapPermissionService capPermissionService
-
-    List<Assay> getAssaysByGroup() {
-        capPermissionService.findAllObjectsForRoles(Assay)
-    }
-
 
 
     Map generateAssayComparisonReport(final Assay assayOne, final Assay assayTwo) {

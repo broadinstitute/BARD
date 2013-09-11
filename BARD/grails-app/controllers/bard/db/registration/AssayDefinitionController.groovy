@@ -46,7 +46,7 @@ class AssayDefinitionController {
     CapPermissionService capPermissionService
 
     def groupAssays(){
-        List<Assay> assays = assayDefinitionService.getAssaysByGroup()
+        List<Assay> assays = capPermissionService.findAllObjectsForRoles(Assay)
         LinkedHashSet<Assay>  uniqueAssays = new LinkedHashSet<Assay>(assays)
         render(view: "groupAssays", model: [assays: uniqueAssays])
     }

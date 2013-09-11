@@ -8,7 +8,6 @@ import grails.plugins.springsecurity.SpringSecurityService
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.SessionFactory
 import org.junit.Before
-import org.springframework.security.core.context.SecurityContextHolder
 import spock.lang.Unroll
 
 /**
@@ -29,41 +28,6 @@ class AssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
     void setup() {
         BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
-    }
-
-    void "test get assays for user groups no results"() {
-        when:
-        List<Assay> assays = assayDefinitionService.getAssaysByGroup()
-
-        then:
-        assert assays.size() == 0
-
-    }
-
-    void "test get assays for user groups with results"() {
-        final List<Assay> builtAssays = []
-
-        given:
-        SecurityContextHolder.clearContext();
-
-        if (username) {
-            springSecurityService.reauthenticate(username)
-            numberOfAssays.times { builtAssays.add(Assay.build()) }
-        }
-
-        when:
-        List<Assay> foundAssays = assayDefinitionService.getAssaysByGroup()
-
-        then:
-        assert foundAssays.size() == numberOfAssays
-        assert foundAssays.containsAll(builtAssays)
-
-        where:
-        desc                               | numberOfAssays | username
-        'no user no assays'                | 0              | null
-        'authenticated user with 0 assays' | 0              | 'integrationTestUser'
-        'authenticated user with 1 assay'  | 1              | 'integrationTestUser'
-        'authenticated user with 2 assays' | 2              | 'integrationTestUser'
     }
 
     void "test update designed By"() {

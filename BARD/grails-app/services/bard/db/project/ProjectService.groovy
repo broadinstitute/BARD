@@ -11,42 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize
 
 class ProjectService {
 
-    List<Project> getProjectsByGroup(String username){
-
-        List<Project> results = []
-        List<String> userRoles = new ArrayList<String>();
-        Person person = Person.findByUserName(username)
-        if(person) {
-            for(Role role : person.roles){
-                userRoles.add(role.authority)
-            }
-            if(userRoles && userRoles.size() > 0){
-                Project.withSession { Session session ->
-                    Query query = session.createSQLQuery("""
-                    select p.*
-                    from project p,
-                    acl_object_identity acl_oi,
-                    acl_class acl_c,
-                    acl_entry acl_e,
-                    acl_sid sid
-                    where acl_c.class = 'bard.db.project.Project'
-                    and acl_c.id = acl_oi.object_id_class
-                    and acl_e.acl_object_identity = acl_oi.id
-                    and acl_e.sid = sid.id
-                    and p.project_id = acl_oi.object_id_identity
-                    and sid.sid in (:user_roles)
-                    order by p.date_created desc
-                """)
-                query.addEntity(Project)
-                query.setParameterList('user_roles', userRoles)
-                query.setReadOnly(true)
-                results = query.list()
-                }
-            }
-        }
-        return results
-    }
-
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Project updateProjectStatus(Long id, ProjectStatus newProjectStatus) {
         Project project = Project.findById(id)

@@ -93,7 +93,6 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
 
         given: 'a team member with Person.newObjecRole set to a team'
         SecurityContextHolder.clearContext();
-
         springSecurityService.reauthenticate(teamMember1)
         if (newObjectRoleMap) {
             Role newObjectRole = Role.build(newObjectRoleMap).save(flush: true)
