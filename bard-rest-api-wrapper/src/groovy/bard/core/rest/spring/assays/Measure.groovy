@@ -56,6 +56,10 @@ public class Measure extends JsonUtil {
         return []
     }
 
+    String toString() {
+        return "${this.name} (${this.id})"
+    }
+
     int hashCode() {
         def builder = new HashCodeBuilder()
         builder.append id

@@ -10,7 +10,9 @@ import bard.core.rest.spring.util.JsonUtil
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BardAnnotation extends JsonUtil {
 
+    @JsonProperty("contexts")
     List<Context> contexts = new ArrayList<Context>();
+    @JsonProperty("measures")
     List<Measure> measures = new ArrayList<Measure>();
     List<Doc> docs = new ArrayList<Doc>();
     @JsonProperty("misc")

@@ -4,8 +4,8 @@ import bard.db.audit.BardContextUtils
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import grails.plugin.spock.IntegrationSpec
+import grails.plugins.springsecurity.SpringSecurityService
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import org.grails.plugins.springsecurity.service.acl.AclUtilService
 import org.hibernate.SessionFactory
 import org.junit.Before
 import spock.lang.Unroll
@@ -22,30 +22,12 @@ class AssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
 
     AssayDefinitionService assayDefinitionService
     SessionFactory sessionFactory
-    AclUtilService aclUtilService
+    SpringSecurityService springSecurityService
 
     @Before
     void setup() {
         BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
-    }
-
-    void "test get assays for user groups no results"(){
-        when:
-        List<Assay> assays = assayDefinitionService.getAssaysByGroup("abcde")
-
-        then:
-        assert assays.size() == 0
-
-    }
-
-    void "test get assays for user groups with results"(){
-        when:
-        List<Assay> assays = assayDefinitionService.getAssaysByGroup("pmontgom")
-
-        then:
-        assert assays.size() > 0
-
     }
 
     void "test update designed By"() {
