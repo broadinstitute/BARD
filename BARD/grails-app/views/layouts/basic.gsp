@@ -64,12 +64,6 @@
                                                                action="findByName">Search by Assay Definition Name</g:link></li>
                                 <li class="controller"><g:link controller="assayDefinition"
                                                                action="create">Create Assay Definition</g:link></li>
-                                <li class="controller"><g:link controller="panel"
-                                                               action="create">Create Panel</g:link></li>
-                                <li class="controller"><g:link controller="panel"
-                                                               action="findById">Search by Panel ID</g:link></li>
-                                <li class="controller"><g:link controller="panel"
-                                                               action="findByName">Search by Panel Name</g:link></li>
                                 <li class="controller"><g:link controller="assayDefinition"
                                                                action="assayComparisonReport">Compare Assay Definitions</g:link></li>
                             </ul>
@@ -88,6 +82,20 @@
                                                                action="findByName">Search by Project Name</g:link></li>
                                 <li class="controller"><g:link controller="project"
                                                                action="create">Create a New Project</g:link></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Panels
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                 <li class="controller"><g:link controller="panel"
+                                                               action="create">Create Panel</g:link></li>
+                                <li class="controller"><g:link controller="panel"
+                                                               action="findById">Search by Panel ID</g:link></li>
+                                <li class="controller"><g:link controller="panel"
+                                                               action="findByName">Search by Panel Name</g:link></li>
                             </ul>
                         </li>
                         <li>
