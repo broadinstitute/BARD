@@ -37,6 +37,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
                 'ASSAY_CONTEXT_MEASURE_ID_SEQ',
                 'ASSAY_DOCUMENT_ID_SEQ',
                 'PANEL_ID_SEQ',
+                'PANEL_ASSAY_ID_SEQ',
                 'ELEMENT_ID_SEQ',
                 'MEASURE_ID_SEQ'].each {
             this.resetSequenceUtil.resetSequence(it)
