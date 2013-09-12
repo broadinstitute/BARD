@@ -113,7 +113,8 @@
                         <g:form class="navbar-form pull-right" name="loginForm" controller="login">
                             Not logged in&nbsp;&nbsp;
                             <button type="submit" class="btn">Login</button>
-                        </g:form>
+                        </g:form> OR
+                        <a class="btn btn-large" id='signin'>Sign in with your Email</a>
                     </sec:ifNotLoggedIn>
                 </div>
             </div>

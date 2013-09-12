@@ -1,4 +1,4 @@
-<g:render template="/layouts/templates/handleOldBrowsers" />
+<g:render template="/layouts/templates/handleOldBrowsers"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -83,6 +83,11 @@
         <button class="btn btn-large btn-primary" type="submit">
             <g:message code="springSecurity.login.button"/>
         </button>
+        OR<br/><br/>
+        <label>
+            <a class="btn btn-large" id='signin'>Sign in with your Email</a>
+            %{--<a id='signin' class="persona-button dark"><span>Sign in with your Email</span></a>--}%
+        </label>
     </form>
 </div> <!-- /container -->
 

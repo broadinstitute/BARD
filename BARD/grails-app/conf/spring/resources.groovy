@@ -21,11 +21,25 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory
 import org.springframework.web.client.RestTemplate
 import mockServices.MockQueryService
 import bardqueryapi.ETagsService
+import persona.OnlinePersonaVerifyer
+import persona.PersonaAuthenticationProvider
 
 // Place your Spring DSL code here
 beans = {
 
     customPropertyEditorRegistrar(RoleEditorRegistrar)
+    /**
+     * setting timeouts for connections established by the restTemplate
+     *
+     * just using the SimpleClientHttpRequestFactory there is also CommonsClientHttpRequestFactory which would offer
+     * more configuration options if we need it
+     */
+    simpleClientHttpRequestFactory(SimpleClientHttpRequestFactory){
+        connectTimeout =  5 * 1000 // in milliseconds
+        readTimeout    = 25 * 1000 // in milliseconds
+    }
+
+    restTemplate(RestTemplate, ref('simpleClientHttpRequestFactory'))
 
     clientBasicAuth(wslite.http.auth.HTTPBasicAuthorization) {
         username = grailsApplication.config.CbipCrowd.application.username
@@ -66,6 +80,14 @@ beans = {
         crowdClient = ref('crowdClient')
         grailsApplication = application
     }
+    onlinePersonaVerifyer(OnlinePersonaVerifyer){
+        restTemplate=ref('restTemplate')
+        audience=grailsApplication.config.Persona.audience.url
+    }
+    personaAuthenticationProvider(PersonaAuthenticationProvider){
+        onlinePersonaVerifyer=ref('onlinePersonaVerifyer')
+        bardAuthorizationProviderService=ref('bardAuthorizationProviderService')
+    }
     //if production then eliminate the mock user because it is a security hole in production
 
     switch (Environment.current) {
@@ -103,18 +125,7 @@ beans = {
         promiscuityUrl = badApplePromiscuityUrl
         capUrl = bardCapUrl
     }
-    /**
-     * setting timeouts for connections established by the restTemplate
-     *
-     * just using the SimpleClientHttpRequestFactory there is also CommonsClientHttpRequestFactory which would offer
-     * more configuration options if we need it
-     */
-    simpleClientHttpRequestFactory(SimpleClientHttpRequestFactory){
-        connectTimeout =  5 * 1000 // in milliseconds
-        readTimeout    = 25 * 1000 // in milliseconds
-    }
 
-    restTemplate(RestTemplate, ref('simpleClientHttpRequestFactory'))
     loggerService(LoggerService)
 
     compoundRestService(CompoundRestService) {
