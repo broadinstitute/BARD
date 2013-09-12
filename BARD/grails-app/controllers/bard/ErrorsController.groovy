@@ -1,10 +1,8 @@
 package bard
 
-import bard.util.ErrorService
 import clover.org.apache.commons.lang.exception.ExceptionUtils
 import grails.plugins.springsecurity.Secured
 import grails.util.Environment
-import org.codehaus.groovy.grails.commons.GrailsApplication
 
 @Secured(['permitAll'])
 class ErrorsController {
