@@ -27,7 +27,6 @@ class Assay extends AbstractContextOwner {
      */
     boolean fullyValidateContextItems = true
 
-
     def capPermissionService
     AssayStatus assayStatus = AssayStatus.DRAFT
     String assayShortName
@@ -68,6 +67,7 @@ class Assay extends AbstractContextOwner {
         assayName(maxSize: ASSAY_NAME_MAX_SIZE, blank: false)
         assayVersion(maxSize: ASSAY_VERSION_MAX_SIZE, blank: false)
         designedBy(nullable: true, maxSize: DESIGNED_BY_MAX_SIZE)
+        ncgcWarehouseId(nullable: true)
         readyForExtraction(nullable: false)
         // TODO we can use enum mapping for this http://stackoverflow.com/questions/3748760/grails-enum-mapping
         // the ' - ' is this issue in this case

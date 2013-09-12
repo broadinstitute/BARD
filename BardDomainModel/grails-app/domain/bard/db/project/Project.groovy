@@ -60,6 +60,7 @@ class Project extends AbstractContextOwner {
         description(nullable: true, blank: false, maxSize: DESCRIPTION_MAX_SIZE)
         readyForExtraction(nullable: false)
         lastUpdated(nullable: false)
+        ncgcWarehouseId(nullable: true)
         dateCreated(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
