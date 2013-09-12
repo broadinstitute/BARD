@@ -6,7 +6,6 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.rest.spring.CapRestService
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.experiment.ExperimentData
 import bard.core.rest.spring.experiment.ExperimentSearch
@@ -16,6 +15,7 @@ import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
+import bard.db.dictionary.BardDescriptor
 import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
 import bardqueryapi.experiment.ExperimentBuilder
 import bard.core.rest.spring.*
@@ -38,7 +38,6 @@ class QueryService implements IQueryService {
     ProjectRestService projectRestService
     SubstanceRestService substanceRestService
     ExperimentRestService experimentRestService
-    CapRestService capRestService
 //    GOOntologyService goOntologyService
 
     //========================================================== Free Text Searches ================================
@@ -652,35 +651,22 @@ class QueryService implements IQueryService {
 
     @Override
     Map getPathsForAssayFormat(String endNode) {
-        return getPathsForType('assayFormat', endNode)
+        return getPathsForType('assay format', endNode)
     }
 
     @Override
     Map getPathsForAssayType(String endNode) {
-        return getPathsForType('assayType', endNode)
+        return getPathsForType('assay type', endNode)
     }
 
     Map getPathsForType(String type, String endNode) {
-        Map dictionaryElementPaths = this.capRestService.getDictionaryElementPaths()
-        List<String> paths = dictionaryElementPaths[type] ?: []
-        String startingNode = type.replaceAll(/[A-Z]/, { (' ' + it[0]).toLowerCase() }) //convert assayType --> 'assay type'
-        String foundPath = paths.find { it.endsWith(endNode + '/') }
-        if (!foundPath) {
-            return [:]
+        Map<String, String> labelToPathMap = [:]
+        BardDescriptor root = BardDescriptor.findByLabel(type)
+        if(root){
+            for(BardDescriptor bardDescriptor in root.getDescendentsAndSelf()){
+                labelToPathMap.put(bardDescriptor.label, bardDescriptor.getPath(root)*.label.join('/'))
+            }
         }
-        return buildPathMap(foundPath, startingNode)
-    }
-
-    private Map buildPathMap(String path, String startingNode) {
-        String[] foundPathSplit = path.split('/')
-        Integer startingNodeIndex = foundPathSplit.findIndexOf { it == startingNode } // e.g., find 'assay format' in '/BARD/assay protocol/assay format/biochemical format/nucleic acid format/'
-        if (startingNodeIndex < 0) {
-            return [:]
-        }
-        Map pathsForType = [:]
-        for (Integer i in startingNodeIndex..(foundPathSplit.size() - 1)) {
-            pathsForType.put(foundPathSplit[i], foundPathSplit[startingNodeIndex..i].join('/'))
-        }
-        return pathsForType
+        labelToPathMap
     }
 }

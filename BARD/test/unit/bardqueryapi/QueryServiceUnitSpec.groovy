@@ -4,7 +4,6 @@ import bard.core.SearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.rest.spring.CapRestService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.assays.ExpandedAssay
@@ -38,7 +37,6 @@ class QueryServiceUnitSpec extends Specification {
     ProjectRestService projectRestService
     ExperimentRestService experimentRestService
     SubstanceRestService substanceRestService
-    CapRestService capRestService
     @Shared ExpandedAssayResult expandedAssayResult = new ExpandedAssayResult()
     @Shared CompoundResult compoundResult = new CompoundResult()
     @Shared ExpandedAssay expandedAssay1 = new ExpandedAssay()
@@ -318,7 +316,6 @@ class QueryServiceUnitSpec extends Specification {
         experimentRestService = Mock(ExperimentRestService)
         substanceRestService = Mock(SubstanceRestService)
         queryHelperService = Mock(QueryHelperService)
-        capRestService = Mock(CapRestService)
 
         service.queryHelperService = queryHelperService
         service.assayRestService = assayRestService
@@ -326,7 +323,6 @@ class QueryServiceUnitSpec extends Specification {
         service.projectRestService = projectRestService
         service.substanceRestService = substanceRestService
         service.experimentRestService = experimentRestService
-        service.capRestService = capRestService
         this.compoundSummary2 = objectMapper.readValue(COMPOUND_SUMMARY, CompoundSummary.class)
     }
 
@@ -973,27 +969,6 @@ class QueryServiceUnitSpec extends Specification {
         "group-by assay, actives-only"   | 1234 | GroupByTypes.ASSAY   | []                   | 1                          | AssayValue
         "group-by project, tested"       | 1234 | GroupByTypes.PROJECT | [FilterTypes.TESTED] | 2                          | ProjectValue
         "group-by project, actives-pnly" | 1234 | GroupByTypes.PROJECT | []                   | 1                          | ProjectValue
-    }
-
-    void "test getPathsForType #label"() {
-        when:
-        final Map result = service.getPathsForType(type, endNode)
-
-        then:
-        this.capRestService.getDictionaryElementPaths() >> { this.ELEMENT_PATHS_MAP }
-
-        assert result[endNode] == expectedResultPath
-
-        where:
-        label                                                                 | type                | endNode                      | expectedResultSize | expectedResultPath
-        'with assayFormat type and Protein Format end-node'                   | 'assayFormat'       | 'protein format'             | 3                  | 'assay format/biochemical format/protein format'
-        'with assayFormat type and Assay Format end-node'                     | 'assayFormat'       | 'assay format'               | 1                  | 'assay format'
-        'with assayType type and In Vivo end-node'                            | 'assayType'         | 'in vivo'                    | 2                  | 'assay type/assay mode/in vivo'
-        'with assayType type and Assay Type end-node'                         | 'assayType'         | 'assay type'                 | 1                  | 'assay type'
-        'with biologicalProcess type and GO Biological Process Term end-node' | 'biologicalProcess' | 'GO biological process term' | 2                  | 'biological process/GO biological process term'
-        'with biologicalProcess type and Biological Process end-node'         | 'biologicalProcess' | 'biological process'         | 1                  | 'biological process'
-        'with non-existing end-node'                                          | 'assayFormat'       | 'non-existing-end-node'      | 0                  | null
-        'with the wrong type'                                                 | 'theWrongType'      | 'protein format'             | 0                  | null
     }
 
 }

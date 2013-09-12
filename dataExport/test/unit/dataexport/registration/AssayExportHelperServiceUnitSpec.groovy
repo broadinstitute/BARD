@@ -12,6 +12,7 @@ import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -25,8 +26,8 @@ import bard.db.enums.ExpectedValueType
  * Time: 12:52 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, AssayContext, AssayContextItem, AssayContextMeasure, AssayDocument, Element, Measure])
-@Mock([Assay, AssayContext, AssayContextItem, AssayContextMeasure, AssayDocument, Element, Measure])
+@Build([Assay, AssayContext, AssayContextItem, AssayContextMeasure, AssayDocument, Element, Measure, Panel,PanelAssay])
+@Mock([Assay, AssayContext, AssayContextItem, AssayContextMeasure, AssayDocument, Element, Measure,Panel,PanelAssay])
 @Unroll
 class AssayExportHelperServiceUnitSpec extends Specification {
     Writer writer
@@ -147,6 +148,38 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         "with assayContextRefs" | MEASURE_WITH_TWO_ASSAY_CONTEXT_REF | { [:] }                                                    | 2
     }
 
+    void "test generate Assay with Panels #label"() {
+        given:
+        String results =  PANELS
+        Panel panel1 = Panel.build(name:"name1",description:"description1")
+        Panel panel2 = Panel.build(name:"name2",description:"description2")
+        Assay assay = Assay.build()
+
+        PanelAssay panelAssay1 = PanelAssay.build(assay:assay,panel:panel1)
+
+        PanelAssay panelAssay2 = PanelAssay.build(assay:assay,panel:panel2)
+
+
+        when: "We attempt to generate a panel in xml"
+        this.assayExportHelperService.generatePanels(this.markupBuilder,assay.panelAssays)
+        then: "A valid xml panel is generated with the expected panel attributes"
+        XmlTestAssertions.assertResults(results, this.writer.toString())
+
+
+    }
+    void "test generate Panel #label"() {
+        given:
+        String results =  PANEL_MEASURE
+        Panel panel = Panel.build(name:"name",description:"description")
+        Assay assay = Assay.build()
+        PanelAssay panelAssay = PanelAssay.build(assay:assay,panel:panel)
+        when: "We attempt to generate a panel in xml"
+        this.assayExportHelperService.generatePanel(this.markupBuilder, panelAssay)
+        then: "A valid xml panel is generated with the expected panel attributes"
+        XmlTestAssertions.assertResults(results, this.writer.toString())
+
+
+    }
     void "test generate AssayDocument #label"() {
         given:
         AssayDocument assayDocument = AssayDocument.build(map)

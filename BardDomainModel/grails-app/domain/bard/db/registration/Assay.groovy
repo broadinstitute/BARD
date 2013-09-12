@@ -18,7 +18,6 @@ class Assay extends AbstractContextOwner {
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int ASSAY_SHORT_NAME_MAX_SIZE = 250
 
-
     /**
      This transient variable determines whether context items should be fully validated or not
      This is a short term fix, until we implement the Guidance work, that Dan is working on
@@ -48,6 +47,7 @@ class Assay extends AbstractContextOwner {
     Set<Measure> measures = [] as Set<Measure>
     List<AssayContext> assayContexts = [] as List<AssayContext>
     Set<AssayDocument> assayDocuments = [] as Set<AssayDocument>
+    Set<PanelAssay> panelAssays = [] as Set
 
     // if this is set, then don't automatically update readyForExtraction when this entity is dirty
     // this is needed to change the value to anything except "Ready"
@@ -57,7 +57,9 @@ class Assay extends AbstractContextOwner {
             experiments: Experiment,
             measures: Measure,
             assayContexts: AssayContext,
-            assayDocuments: AssayDocument
+            assayDocuments: AssayDocument,
+            panelAssays: PanelAssay
+
     ]
 
     static constraints = {
@@ -83,19 +85,19 @@ class Assay extends AbstractContextOwner {
         assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true', cascade: 'all-delete-orphan')
     }
 
-    static transients = ['fullyValidateContextItems','assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions', "disableUpdateReadyForExtraction"]
+    static transients = ['fullyValidateContextItems', 'assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions', "disableUpdateReadyForExtraction"]
 
     def afterInsert() {
         Assay.withNewSession {
             capPermissionService?.addPermission(this)
         }
     }
-	
-	String getOwner(assay){
-		Assay.withNewSession {
-			return capPermissionService?.getOwner(this)
-		}
-	}
+
+    String getOwner(assay) {
+        Assay.withNewSession {
+            return capPermissionService?.getOwner(this)
+        }
+    }
 
     List<AssayDocument> getPublications() {
         final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION } as List<AssayDocument>

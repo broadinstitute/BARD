@@ -127,11 +127,11 @@ class PersonCommand extends BardCommand {
         }
         if (!PersonRole.findAllByPersonAndRole(person, this.primaryGroup)) {
 
-            PersonRole.create(person, person.newObjectRole, springSecurityService.principal?.userName, true)
+            PersonRole.create(person, person.newObjectRole, springSecurityService.principal?.username, true)
         }
         for (Role role : this.roles) {
             if (role != primaryGroup) {
-                PersonRole.create(person, Role.findByAuthority(role.authority), springSecurityService.principal?.userName, true)
+                PersonRole.create(person, Role.findByAuthority(role.authority), springSecurityService.principal?.username, true)
             }
         }
     }

@@ -41,7 +41,7 @@ class ProjectController {
 
     def groupProjects(){
         String username = springSecurityService.principal?.username
-        List<Project> projects = projectService.getProjectsByGroup(username)
+        List<Project> projects = capPermissionService.findAllObjectsForRoles(Project)
         LinkedHashSet<Project>  uniqueProjects = new LinkedHashSet<Project>(projects)
         render(view: "groupProjects", model: [projects: uniqueProjects])
     }

@@ -62,26 +62,6 @@
         </div>
     </div>
 
-    <div class="control-group  fieldcontain ${hasErrors(bean: command, field: 'displayName', 'error')} required">
-        <label class="control-label" for="displayName"><g:message code="register.displayname.label"
-                                                                  default="Display Name"/>:</label>
-
-        <div class="controls">
-            <g:textField name="displayName" class="input-xxlarge" maxlength="250" required=""
-                         value="${command.displayName}" placeholder="Enter Display Name"/>
-            <span class="help-inline">
-                <g:hasErrors bean="${command}" field="displayName">
-                    <div class="alert alert-block alert-error fade in">
-                        <g:eachError bean="${command}" field="displayName">
-                            <p style="color: red;"><i class="icon-warning-sign"></i>&nbsp;<g:message
-                                    error="${it}"/></p>
-                        </g:eachError>
-                    </div>
-                </g:hasErrors>
-            </span>
-        </div>
-    </div>
-
     <div class="control-group  fieldcontain ${hasErrors(bean: command, field: 'email', 'error')} required">
         <label class="control-label" for="email"><g:message code="register.email.label"
                                                             default="Email Address"/>:</label>

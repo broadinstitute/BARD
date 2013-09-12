@@ -84,6 +84,20 @@
                                                                action="create">Create a New Project</g:link></li>
                             </ul>
                         </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Panels
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                 <li class="controller"><g:link controller="panel"
+                                                               action="create">Create Panel</g:link></li>
+                                <li class="controller"><g:link controller="panel"
+                                                               action="findById">Search by Panel ID</g:link></li>
+                                <li class="controller"><g:link controller="panel"
+                                                               action="findByName">Search by Panel Name</g:link></li>
+                            </ul>
+                        </li>
                         <li>
                             <g:link url="${grailsApplication.config.bard.home.page}">Bard Web Client</g:link>
                         </li>
