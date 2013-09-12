@@ -1,4 +1,47 @@
 ****************************************************************************************************************
+* 09/10/2013 - assaySchema.xsd Related changes
+****************************************************************************************************************
+ The assay element now has an optional panels element.
+ There are many because an assayDefinition can be associated with more than one panel.
+ The panels element contains one or more panel element.
+ Each panel element has an id attribute which is the id of the panel, a name element that has the name
+ of the panel and a description element that holds the description for that panel.
+
+****************************************************************************************************************
+* 09/10/2013 - experimentSchema.xsd Related changes
+****************************************************************************************************************
+Should contain an experimentDocument object that has the same document type as and assay/projectDocument object
+There are links from each document to the experiment and vice versa much like how assayDocuments and projectDocuments
+are represented .
+
+
+
+****************************************************************************************************************
+* removing measures from assay. Adding measures to experiments - Not yet implement   Proposed changes
+****************************************************************************************************************
+1. All references to Measures will be removed from the schema. This also means that assayContext will lose the measureRefs element.
+ This will affect assaySchema.xsd
+2. Changes to experimentSchema.xsd
+An experiment element should now have an optional experimentMeasures element, which is made up of 1 or more experimentMeasure element.
+Each experimentMeasure will have the following attributes:
+1. experimentMeasureId   an integer
+2. parentExperimentMeasureRef  an integer which references the parent measure
+3. parentChildRelationship  a controlled string just like we had in Measure
+
+It will also have the following elements:
+1. required resultType reference (same as was in Measure)
+2. statsModifier reference (same as was in Measure)
+3. optional list of assayContext references
+4. optional list of child measure references
+
+
+
+
+****************************************************************************************************************
+* End 09/10/2013 - schema changes
+****************************************************************************************************************
+
+****************************************************************************************************************
 * dictionarySchema.xsd Related changes
 ****************************************************************************************************************
 Element

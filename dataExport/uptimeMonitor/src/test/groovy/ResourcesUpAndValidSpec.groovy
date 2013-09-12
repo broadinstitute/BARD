@@ -90,18 +90,19 @@ class ResourcesUpAndValidSpec extends Specification {
         getServerResponse(requestUrl, mimeType, true)
     }
 
-    Response getServerResponse(String requestUrl, String mimeType,boolean sslTrustAllCerts) {
+    Response getServerResponse(String requestUrl, String mimeType, boolean sslTrustAllCerts) {
 
         RESTClient http = new RESTClient(requestUrl)
         http.httpClient.sslTrustAllCerts = sslTrustAllCerts
-
-        Response serverResponse = http.get(accept: ContentType.XML,
+        Map getParamMap = [accept: ContentType.XML,
                 headers: [Accept: mimeType, (apiKeyHeader): apiKeyHashed],
                 connectTimeout: 5000,
                 readTimeout: 30000,
                 followRedirects: false,
                 useCaches: false,
-                sslTrustAllCerts: true)
+                sslTrustAllCerts: true]
+        println("getParamMap ${getParamMap}")
+        Response serverResponse = http.get(getParamMap)
 
         return serverResponse
     }
