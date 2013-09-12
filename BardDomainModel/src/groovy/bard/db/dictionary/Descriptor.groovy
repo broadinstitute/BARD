@@ -32,6 +32,9 @@ abstract class Descriptor<T extends Descriptor> {
     String externalURL
     Element unit
 
+
+
+
     static constraints = {
 
         parent(nullable: true)
@@ -84,6 +87,14 @@ abstract class Descriptor<T extends Descriptor> {
             parent.getPath() << this
         } else {
             [this]
+        }
+    }
+
+    List<T> getPath(BardDescriptor root) {
+        if (this.equals(root) || parent == null) {
+            [this]
+        } else {
+            parent.getPath(root) << this
         }
     }
 

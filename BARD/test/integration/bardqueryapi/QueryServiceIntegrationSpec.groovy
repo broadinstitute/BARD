@@ -8,7 +8,11 @@ import bard.core.interfaces.AssayRole
 import bard.core.interfaces.AssayType
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.util.StructureSearchParams
+import bard.db.dictionary.BardDescriptor
 import grails.plugin.spock.IntegrationSpec
+import grails.plugins.springsecurity.SpringSecurityService
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.hibernate.SessionFactory
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -16,6 +20,7 @@ import spock.lang.Unroll
 class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     QueryService queryService
+    SpringSecurityService springSecurityService
 
     @Shared
     List<Long> PIDS = [2]
@@ -362,17 +367,28 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
     }
 
     void "test assay-format and assay-type in #methodName #label"() {
-        when: ""
+        given:
+        springSecurityService.reauthenticate('integrationTestUser')
+        BardDescriptor parent
+        for (String nodeLabel in expectedPath.split('/')) {
+            Map buildMap = [label: nodeLabel]
+            if (parent) {
+                buildMap.put('parent', parent)
+            }
+            parent = BardDescriptor.findByLabel(nodeLabel)?: BardDescriptor.build(buildMap)
+        }
+
+        when:
         final Map paths = queryService."${methodName}"(endNode)
 
         then:
         assert paths[endNode] == expectedPath
 
         where:
-        methodName                     | label                       | endNode              | expectedPath
-        'getPathsForAssayFormat'       | "with 'protein format'"     | 'protein format'     | 'assay format/biochemical format/protein format'
-        'getPathsForAssayFormat'       | "with 'assay format'"       | 'assay format'       | 'assay format'
-        'getPathsForAssayType'         | "with 'in vitro'"           | 'in vitro'           | 'assay type/assay mode/in vitro'
-        'getPathsForAssayType'         | "with 'assay type'"         | 'assay type'         | 'assay type'
+        methodName               | label                   | endNode          | expectedPath
+        'getPathsForAssayFormat' | "with 'protein format'" | 'protein format' | 'assay format/biochemical format/protein format'
+        'getPathsForAssayFormat' | "with 'assay format'"   | 'assay format'   | 'assay format'
+        'getPathsForAssayType'   | "with 'in vitro'"       | 'in vitro'       | 'assay type/assay mode/in vitro'
+        'getPathsForAssayType'   | "with 'assay type'"     | 'assay type'     | 'assay type'
     }
 }

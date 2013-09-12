@@ -6,7 +6,7 @@ web-app/WEB-INF/classes/
 *.class
 build/
 out/
-/.idea
+.idea/
 /.idea/workspace.xml
 /.clover
 *.war
