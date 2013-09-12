@@ -190,16 +190,16 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
 
         where:
-        dataIsSufficient | cartAssay             | cartProject             | cartCompound
-        false            | null                  | null                    | null
-        false            | new CartAssay("A", 1) | null                    | null
-        false            | null                  | new CartProject("P", 8) | null
-        true             | null                  | null                    | new CartCompound("C", "c", 1, 0, 0)
-        true             | null                  | new CartProject("P", 8) | new CartCompound("C", "c", 1, 0, 0)
-        true             | new CartAssay("A", 1) | null                    | new CartCompound("C", "c", 1, 0, 0)
-        false            | new CartAssay("A", 1) | new CartProject("P", 8) | null
-        true             | new CartAssay("A", 1) | new CartProject("P", 8) | new CartCompound("C", "c", 1, 0, 0)
-        false            | null                  | null                    | null
+        dataIsSufficient | cartAssay              | cartProject              | cartCompound
+        false            | null                   | null                     | null
+        false            | new CartAssay("A",1,1) | null                     | null
+        false            | null                   | new CartProject("P",8,8) | null
+        true             | null                   | null                     | new CartCompound("C", "c", 1, 0, 0)
+        true             | null                   | new CartProject("P",8,8) | new CartCompound("C", "c", 1, 0, 0)
+        true             | new CartAssay("A",1,1) | null                     | new CartCompound("C", "c", 1, 0, 0)
+        false            | new CartAssay("A",1,1) | new CartProject("P",8,8) | null
+        true             | new CartAssay("A",1,1) | new CartProject("P",8,8) | new CartCompound("C", "c", 1, 0, 0)
+        false            | null                   | null                     | null
     }
 
 
@@ -207,9 +207,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
     void "test try different cart combos"() {
         given:
-        final CartAssay assay1 = new CartAssay("Assay Definition: Identification of inhibitors of RAD54 Measured in Biochemical System Using Plate Reader - 2159-01_Inhibitor_SinglePoint_HTS_Activity", 4332L)
+        final CartAssay assay1 = new CartAssay("Assay Definition: Identification of inhibitors of RAD54 Measured in Biochemical System Using Plate Reader - 2159-01_Inhibitor_SinglePoint_HTS_Activity", 1, 4332L)
         final CartCompound compound1 = new CartCompound("COC1=CC=C(C=C1)C#CC1=CC=C(C=C1)[C@H]1[C@@H](CO)N2CCCCN(C[C@H]12)C(=O)NC1=CC(F)=CC=C1", "BRD-K70362473-001-01-0", 54667549, 0, 0)
-        final CartAssay assay = new CartAssay("Assay Definition: Confirmation Concentration-Response Assay for Inhibitors of Human Muscle isoform 2 Pyruvate Kinase", 364L)
+        final CartAssay assay = new CartAssay("Assay Definition: Confirmation Concentration-Response Assay for Inhibitors of Human Muscle isoform 2 Pyruvate Kinase", 2, 364L)
         final CartCompound compound = new CartCompound("CC1=CC=C(O1)C1=C(NC2=CC=C(C)C=C2)N2C(C=CC=C2C)=N1", "HMS1817I15", 4085914L, 0, 0)
 
 
@@ -387,7 +387,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have list of cart compounds"
         List<CartProject> cartProjectList = []
         Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
-        cartProjectList << new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", TEST_PID)
+        cartProjectList << new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 1, TEST_PID)
         List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.projectIdsToExperiments(cartProjectList*.externalId, mapExperimentIdsToCapAssayIds)
         String eTag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(finalExperimentList)
 
@@ -454,7 +454,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         List<CartProject> cartProjectList = []
         Map<Long, Long> mapExperimentIdsToCapAssayIds  = [:]
-        cartProjectList.add(new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", TEST_PID))
+        cartProjectList.add(new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 1, TEST_PID))
         List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.projectIdsToExperiments(cartProjectList*.externalId,mapExperimentIdsToCapAssayIds)
 
         then: "we should be able to generate a list of spreadsheet activity elements"
@@ -485,7 +485,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         mapExperimentIdsToCapAssayIds.size() == 1
         where:
         label                                | cartAssays
-        "An existing assay with experiments" | [new CartAssay("Test", TEST_ADIDS.get(0))]
+        "An existing assay with experiments" | [new CartAssay("Test", 1, TEST_ADIDS.get(0))]
     }
 
     void "tests empty cartAssaysToExperiments"() {

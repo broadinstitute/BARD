@@ -59,7 +59,7 @@
                 <g:each in="${projects}" var="elem" status="item">
                     <tr>
                         <td class="QcartAppearance">
-                            <a href="${createLink(controller:'bardWebInterface' , action: 'showProject', id:elem.externalId)}">${elem.toString()}</a>
+                            <a href="${createLink(controller:'project' , action: 'show', id:elem.externalId)}">${elem.toString()}</a>
                         </td>
                         <td>
                             <button title="Remove ${elem.toString()}" class="removeItemFromCart btn btn-link"

@@ -25,7 +25,7 @@ class CartAssayUnitSpec extends Specification {
         given:
         int assayId = 2
         when:
-        CartAssay cartAssay = new CartAssay("Assay title", assayId)
+        CartAssay cartAssay = new CartAssay("Assay title", assayId-1, assayId)
 
         then:
         assert cartAssay.name == 'Assay title'
@@ -39,10 +39,10 @@ class CartAssayUnitSpec extends Specification {
         then:
         assert assayAsString == expectedTitle
         where:
-        label                  | cartAssay                        | expectedTitle
-        "Empty Title"          | new CartAssay()                  | ""
-        "Null String as title" | new CartAssay("null", 100)       | ""
-        "With title"           | new CartAssay("Some Title", 110) | "Some Title"
+        label                  | cartAssay                             | expectedTitle
+        "Empty Title"          | new CartAssay()                       | ""
+        "Null String as title" | new CartAssay("null", 99, 100)        | ""
+        "With title"           | new CartAssay("Some Title", 109, 110) | "Some Title"
     }
 
     void "Test equals #label"() {
@@ -52,10 +52,10 @@ class CartAssayUnitSpec extends Specification {
         then:
         equals == equality
         where:
-        label               | cartAssay                        | otherCartAssay                   | equality
-        "Other is null"     | new CartAssay()                  | null                             | false
-        "Different classes" | new CartAssay()                  | 20                               | false
-        "Equality"          | new CartAssay("Some Title", 120) | new CartAssay("Some Title", 120) | true
+        label               | cartAssay                             | otherCartAssay                        | equality
+        "Other is null"     | new CartAssay()                       | null                                  | false
+        "Different classes" | new CartAssay()                       | 20                                    | false
+        "Equality"          | new CartAssay("Some Title", 119, 120) | new CartAssay("Some Title", 119, 120) | true
 
 
     }
@@ -70,14 +70,14 @@ class CartAssayUnitSpec extends Specification {
         label               | cartAssay
         "Other is null"     | new CartAssay()
         "Different classes" | new CartAssay()
-        "Equality"          | new CartAssay("Some Title", 50)
+        "Equality"          | new CartAssay("Some Title", 49, 50)
 
 
     }
 
     void "test shopping cart assay element"() {
         when:
-        CartAssay cartAssay = new CartAssay("Assay title", 50)
+        CartAssay cartAssay = new CartAssay("Assay title", 49, 50)
         assertNotNull(cartAssay)
 
         then:
@@ -95,7 +95,7 @@ class CartAssayUnitSpec extends Specification {
         final String assayTitle = RandomStringUtils.randomAlphabetic(stringLength)
 
         when:
-        CartAssay cartAssay = new CartAssay(assayTitle, 47 as Long)
+        CartAssay cartAssay = new CartAssay(assayTitle, 46, 47 as Long)
         cartAssay.validate()
 
         then:
@@ -115,7 +115,7 @@ class CartAssayUnitSpec extends Specification {
         final String assayTitle = RandomStringUtils.randomAlphabetic(stringLength)
 
         when:
-        CartAssay cartAssay = new CartAssay(assayTitle, assayId)
+        CartAssay cartAssay = new CartAssay(assayTitle, assayId-1, assayId)
         cartAssay.validate()
 
         then:

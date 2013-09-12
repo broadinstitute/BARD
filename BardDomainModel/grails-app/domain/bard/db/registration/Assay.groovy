@@ -37,6 +37,7 @@ class Assay extends AbstractContextOwner {
     String designedBy
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
     AssayType assayType = AssayType.REGULAR
+    Long ncgcWarehouseId;
 
     String modifiedBy
     // grails auto-timestamp

@@ -37,7 +37,7 @@
             <div class="span3 bs-docs-sidebar heading-numbering">
                 <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar">
                     <li><a href="#summary-header"><i class="icon-chevron-right"></i>Overview</a></li>
-                    <li><a href="#contexts-header"><i class="icon-chevron-right"></i>Contexts</a></li>
+                    <li><a href="#annotations-header"><i class="icon-chevron-right"></i>Annotations</a></li>
                     <li><a href="#experiment-and-step-header"><i class="icon-chevron-right"></i>Experiments and steps</a></li>
                     <li><a href="#documents-header"><i class="icon-chevron-right"></i>Documents</a>
                         <ul class="nav nav-list">
@@ -63,7 +63,7 @@
                 </h2>
 
                 <g:if test="${projectAdapter != null}">
-                    <g:saveToCartButton id="${projectAdapter?.id}"
+                    <g:saveToCartButton id="${instance.id}"
                                         name="${bardqueryapi.JavaScriptUtility.cleanup(projectAdapter?.name)}"
                                         type="${querycart.QueryItemType.Project}"/>
                 </g:if>
@@ -113,8 +113,8 @@
 
                 <br/>
 
-                <section id="contexts-header">
-                    <h3 class="sect">Contexts</h3>
+                <section id="annotations-header">
+                    <h3 class="sect">Annotations</h3>
 
                     <div class="row-fluid">
                         <div id="cardHolderAssayComponents" class="span12">

@@ -1,8 +1,11 @@
 package querycart
 
+import bard.db.project.Project
+import bard.db.registration.Assay
 import com.metasieve.shoppingcart.IShoppable
 import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartService
+import grails.converters.JSON
 
 class QueryCartService {
 
@@ -179,5 +182,68 @@ class QueryCartService {
     boolean isInShoppingCart(ShoppingCartService shoppingCartSrvc = shoppingCartService, IShoppable product) {
         return shoppingCartSrvc?.getQuantity(product) > 0
     }
+
+    def findQueryItemById(Long id, QueryItemType queryItemType) {
+        QueryItem item
+        if(queryItemType == QueryItemType.Compound) {
+            item = QueryItem.findByExternalIdAndQueryItemType(id, queryItemType)
+        } else {
+            item = QueryItem.findByInternalIdAndQueryItemType(id, queryItemType)
+        }
+        return item
+    }
+
+    QueryItem getQueryItem(def id, def itemType, def name, def smiles, def numActive, def numAssays) {
+        QueryItem item
+
+        // compounds have no internal id, so we must look them up by external ID
+        if(itemType == QueryItemType.Compound) {
+            item = QueryItem.findByExternalIdAndQueryItemType(id, itemType)
+        } else {
+            item = QueryItem.findByInternalIdAndQueryItemType(id, itemType)
+        }
+
+        if (!item) {
+            switch (itemType) {
+                case QueryItemType.Compound:
+                    int numAssayActive = numActive ? new Integer(numActive) : 0
+                    int numAssayTested = numAssays ? new Integer(numAssays) : 0
+                    item = new CartCompound()
+                    item.smiles = smiles
+                    item.name = name
+                    item.externalId = id
+                    item.numAssayActive = numAssayActive
+                    item.numAssayTested = numAssayTested
+                    break
+                case QueryItemType.Project:
+                    Long externalId = Project.get(id).ncgcWarehouseId
+                    item = new CartProject()
+                    item.name = name
+                    item.externalId = externalId
+                    item.internalId = id
+                    println "item.internalId=${item.internalId}"
+                    break
+                case QueryItemType.AssayDefinition:
+                    Long externalId = Assay.get(id).ncgcWarehouseId
+                    item = new CartAssay()
+                    item.name = name
+                    item.internalId = id
+                    item.externalId = externalId
+                    break
+///CLOVER:OFF
+                default:
+                    throw new RuntimeException("Unsupported QueryItemType [${itemType}]")
+///CLOVER:ON
+            }
+        }
+
+        if (!item.validate()) {
+            throw new RuntimeException(item.errors.toString())
+        }
+
+        return item
+    }
+
+
 
 }

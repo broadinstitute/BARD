@@ -1041,47 +1041,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
-    void "test showProject with Exception"() {
-        given:
-        Integer pid = 872
-        when:
-        request.method = 'GET'
-        controller.showProject(pid)
-        then:
-        queryService.showProject(_) >> { throw exceptionType }
-        assert response.status == statusCode
-        where:
-        label                                | exceptionType                                      | statusCode
-        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
-        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-    }
-
-    void "test showProject #label"() {
-
-        when:
-        request.method = 'GET'
-        controller.showProject(pid)
-
-        then:
-        queryService.showProject(_) >> { projectAdapter }
-        queryProjectExperimentRenderService.constructGraph(_, _) >> { [:] }
-        expectedProjectView == view
-        if (pid && projectAdapter) {
-            assert model.projectAdapter
-            pid == model.projectAdapter.project.id
-            name == model.projectAdapter.name
-        }
-        assert response.status == statusCode
-        where:
-        label                          | pid    | name   | projectAdapter                                                         | expectedProjectView             | statusCode
-        "Return a ProjectSearchResult" | 485349 | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showProject" | HttpServletResponse.SC_OK
-        "Project PID is null"          | null   | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | null                            | HttpServletResponse.SC_BAD_REQUEST
-        "Project Adapter is null"      | null   | "Test" | null                                                                   | null                            | HttpServletResponse.SC_BAD_REQUEST
-        "Project Adapter is null"      | 1234   | "Test" | [:]                                                                    | null                            | HttpServletResponse.SC_NOT_FOUND
-
-    }
-
-
     void "test autocomplete #label"() {
         when:
         request.method = 'GET'
