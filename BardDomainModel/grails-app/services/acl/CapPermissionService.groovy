@@ -53,7 +53,10 @@ class CapPermissionService  implements CapPermissionInterface{
 	String getOwner(domainObjectInstance){
         String owner = "none"
         try{
-            final AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByObjectId(domainObjectInstance.id)
+            Object className = domainObjectInstance.getClass().getName()
+            println("Class Name: " + className)
+            AclClass aclClass = AclClass.findByClassName(className)
+            final AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByObjectIdAndAclClass(domainObjectInstance.id, aclClass)
             if (aclObjectIdentity) {
                 AclEntry aclEntry = AclEntry.findByAclObjectIdentity(aclObjectIdentity)
                 AclSid aclSid = aclEntry?.sid
