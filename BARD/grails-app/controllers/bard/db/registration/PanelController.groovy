@@ -98,7 +98,7 @@ class PanelController {
         }
         final Assay assay = associatePanelCommand.assays.get(0)
         this.panelService.disassociateAssay(assay, associatePanelCommand.id)
-        redirect(controller: "assayDefinition", action: "show", id: assay.id)
+        redirect(controller: "panel", action: "show", id: associatePanelCommand.id)
     }
 
 

@@ -683,6 +683,24 @@ class XmlTestSamples {
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
           </attributeId>
         </assayContextItem>'''
+    static final String PANEL_MEASURE = '''
+<panel id='1'>
+  <name>name</name>
+  <description>description</description>
+</panel>
+'''
+    static final String PANELS = '''
+<panels>
+  <panel id='1'>
+    <name>name1</name>
+    <description>description1</description>
+  </panel>
+  <panel id='2'>
+    <name>name2</name>
+    <description>description2</description>
+  </panel>
+</panels>
+'''
 
     static final String MEASURE_MINIMAL = '''
         <measure measureId='1'>
@@ -843,6 +861,11 @@ class XmlTestSamples {
               </assayContextRefs>
             </measure>
           </measures>
+            <panels>
+    <panel id='61'>
+      <name>name</name>
+    </panel>
+  </panels>
           <link rel='edit' href='http://localhost:8080/dataExport/api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
           <link rel='self' href='http://localhost:8080/dataExport/api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
           <link rel='up' href='http://localhost:8080/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
@@ -1201,21 +1224,21 @@ class XmlTestSamples {
 </resultType>
 '''
 
-  static String ONTOLOGY_FULL='''
+    static String ONTOLOGY_FULL = '''
 <ontology name='name' abbreviation='BAO' sourceUrl='http://purl.org/obo/owl/UO#UO_0000244' />
 '''
-  static final String ONTOLOGY_MISSING_ATTRIBUTES ="<ontology name='name' />"
-    static String ONTOLOGIES_FULL='''<ontologies>
+    static final String ONTOLOGY_MISSING_ATTRIBUTES = "<ontology name='name' />"
+    static String ONTOLOGIES_FULL = '''<ontologies>
     <ontology name='name1' abbreviation='BAO' sourceUrl='http://purl.org/obo/owl/UO#UO_0000244' />
     <ontology name='name2' />
     </ontologies>'''
 
-    static final String ONTOLOGIES_MISSING_ATTRIBUTES ='''
+    static final String ONTOLOGIES_MISSING_ATTRIBUTES = '''
    <ontologies>
   <ontology name='name' />
 </ontologies>
 '''
-  static final String ELEMENT_WITH_ONTOLOGY=  '''
+    static final String ELEMENT_WITH_ONTOLOGY = '''
 <element elementId='' readyForExtraction='Ready' elementStatus='Pending'>
   <label>label</label>
   <externalUrl>http://www.broad.org</externalUrl>

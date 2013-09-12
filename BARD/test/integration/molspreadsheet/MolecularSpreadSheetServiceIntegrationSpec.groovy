@@ -1,7 +1,9 @@
 package molspreadsheet
 
 import bard.core.SearchParams
+import bard.core.rest.spring.*
 import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.experiment.*
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.plugin.spock.IntegrationSpec
 import querycart.CartAssay
@@ -10,8 +12,6 @@ import querycart.CartProject
 import querycart.QueryCartService
 import spock.lang.Shared
 import spock.lang.Unroll
-import bard.core.rest.spring.*
-import bard.core.rest.spring.experiment.*
 
 import static junit.framework.Assert.assertNotNull
 
@@ -31,7 +31,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     @Shared
     List<Long> TEST_EIDS = [625, 3]
     @Shared
-    List<Long> TEST_ADIDS = [25, 26]
+    List<Long> TEST_ADIDS = [25, 30]
     @Shared
     Long TEST_PID = 2
     @Shared
@@ -145,7 +145,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
     void "test fillInTheMissingCellsAndConvertToExpandedMatrix"() {
         when: "we have a molecularSpreadSheetService"
-        Map<String, List <MolSpreadSheetCell>> dataMap = [:]
+        Map<String, List<MolSpreadSheetCell>> dataMap = [:]
         dataMap["0_3"] = [new MolSpreadSheetCell()]
         MolSpreadSheetCell flawedMolSpreadSheetCell = new MolSpreadSheetCell()
         flawedMolSpreadSheetCell.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
@@ -245,10 +245,10 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
 
- //       List<ExperimentSearch> finalExperimentList  = assayRestService.findExperimentsByAssayId(assayId1)
-        List<ExperimentSearch> finalExperimentList  = [new ExperimentSearch(),new ExperimentSearch()]
-        List<SpreadSheetActivity> spreadSheetActivityList = [new SpreadSheetActivity (cid: 4540 as Long, eid: 47 as Long),
-                                                             new SpreadSheetActivity (cid: 777 as Long, eid: 888 as Long)]
+        //       List<ExperimentSearch> finalExperimentList  = assayRestService.findExperimentsByAssayId(assayId1)
+        List<ExperimentSearch> finalExperimentList = [new ExperimentSearch(), new ExperimentSearch()]
+        List<SpreadSheetActivity> spreadSheetActivityList = [new SpreadSheetActivity(cid: 4540 as Long, eid: 47 as Long),
+                new SpreadSheetActivity(cid: 777 as Long, eid: 888 as Long)]
         molSpreadSheetData.rowPointer[4540 as Long] = 0
         Map<String, List<MolSpreadSheetCell>> dataMap = [:]
 
@@ -285,12 +285,12 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
             molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader()
         }
 
-        List<SpreadSheetActivity> spreadSheetActivityList2 = [new SpreadSheetActivity (cid: 4540 as Long, eid: 3705 as Long) ]
+        List<SpreadSheetActivity> spreadSheetActivityList2 = [new SpreadSheetActivity(cid: 4540 as Long, eid: 3705 as Long)]
         molSpreadSheetData.rowPointer[4540 as Long] = 0
         molSpreadSheetData.rowPointer[4544 as Long] = 1
         molSpreadSheetData.rowPointer[4549 as Long] = 2
         molSpreadSheetData.columnPointer[3705 as Long] = 0
-        Map<String, List <MolSpreadSheetCell>> dataMap = [:]
+        Map<String, List<MolSpreadSheetCell>> dataMap = [:]
 
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData,
                 finalExperimentList,
@@ -308,10 +308,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-
     void "test extractMolSpreadSheetData"() {
         given:
-        long assayId1 =TEST_ADIDS.get(0)
+        long assayId1 = TEST_ADIDS.get(0)
 
         when: "we have a molecularSpreadSheetService"
         List<ExperimentSearch> experiments = assayRestService.findExperimentsByAssayId(assayId1)
@@ -319,7 +318,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         5.times {
             molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader()
         }
-        String etag = this.compoundRestService.newETag((new Date()).toTimestamp().toString(), [2382353  as Long, 11958440 as Long, 46897918 as Long])
+        String etag = this.compoundRestService.newETag((new Date()).toTimestamp().toString(), [2382353 as Long, 11958440 as Long, 46897918 as Long])
         List<SpreadSheetActivity> spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData,
                 experiments,
                 etag)
@@ -327,14 +326,14 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         then: "we should be able to generate a list of spreadsheet activity elements"
         assertNotNull spreadSheetActivityList
         spreadSheetActivityList.size() > 0
-        spreadSheetActivityList.each {  SpreadSheetActivity spreadSheetActivity ->
+        spreadSheetActivityList.each { SpreadSheetActivity spreadSheetActivity ->
             assertNotNull spreadSheetActivity.eid
             assertNotNull spreadSheetActivity.cid
             assertNotNull spreadSheetActivity.sid
         }
     }
 
-   void "test extractMolSpreadSheetData with no compounds selected"() {
+    void "test extractMolSpreadSheetData with no compounds selected"() {
         given:
         long assayId1 = TEST_ADIDS.get(1) //use this specific ADID because it comes back fairly quickly
         when: "we have a molecularSpreadSheetService"
@@ -351,7 +350,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         then: "we should be able to generate a list of spreadsheet activity elements"
         assertNotNull spreadSheetActivityList
         spreadSheetActivityList.size() > 0
-        spreadSheetActivityList.each {  SpreadSheetActivity spreadSheetActivity ->
+        spreadSheetActivityList.each { SpreadSheetActivity spreadSheetActivity ->
             assertNotNull spreadSheetActivity.eid
             assertNotNull spreadSheetActivity.cid
             assertNotNull spreadSheetActivity.sid
@@ -440,7 +439,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void "test empty cartCompoundsToExperiments"() {
         when: "we have a molecularSpreadSheetService"
         List<Long> cartCompoundList = []
-        Map<Long, Long> mapExperimentIdsToCapAssayIds  = [:]
+        Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
         List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.compoundIdsToExperiments(cartCompoundList, mapExperimentIdsToCapAssayIds)
 
         then: "we should be able to generate a list of spreadsheet activity elements"
@@ -453,9 +452,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void "test cartProjectsToExperiments"() {
         when: "we have a molecularSpreadSheetService"
         List<CartProject> cartProjectList = []
-        Map<Long, Long> mapExperimentIdsToCapAssayIds  = [:]
+        Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
         cartProjectList.add(new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", TEST_PID))
-        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.projectIdsToExperiments(cartProjectList*.externalId,mapExperimentIdsToCapAssayIds)
+        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.projectIdsToExperiments(cartProjectList*.externalId, mapExperimentIdsToCapAssayIds)
 
         then: "we should be able to generate a list of spreadsheet activity elements"
         assertNotNull finalExperimentList
@@ -513,7 +512,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         List<ExperimentSearch> experiments = molecularSpreadSheetService.assayIdsToExperiments(experimentList, givenCartAssays, mapExperimentIdsToCapAssayIds)
         then: "We expect experiments for each of the assays to be found"
         experiments.size() == 1
-        mapExperimentIdsToCapAssayIds.size()==0
+        mapExperimentIdsToCapAssayIds.size() == 0
     }
 
 
@@ -534,8 +533,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert activity.sid
         assert activity.resultData
         where:
-        label                                    | cids                         | experimentId
-        "An existing experiment with activities" | [3793L]                      | 1
+        label                                    | cids    | experimentId
+        "An existing experiment with activities" | [3793L] | 1
 
     }
 

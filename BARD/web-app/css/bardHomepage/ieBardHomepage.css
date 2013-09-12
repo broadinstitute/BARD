@@ -1,0 +1,8 @@
+body{min-width:1232px;}
+#header{background:url(../images/bg-header.png);}
+.nav-panel .nav > li.open > .dropdown-toggle:before{display:none;}
+.tabs-list .arrow{background-position:-392px 0;}
+.tabs-list .active .arrow{background-position:-434px 0;}
+.search-form{
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#33e4e4e4', endColorstr='#33e4e4e4',GradientType=0 );
+}
