@@ -146,6 +146,7 @@ grails.project.dependency.resolution = {
 // making the domain plugin an in-place plugin
 grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
 grails.plugin.location.'crowd-user-registration' = "../crowdUserRegistration"
+grails.plugin.location.'spring-security-persona'='../../grails-spring-security-persona'
 
 grails.plugin.location.'shopping-cart:0.8.2' = "../shopping-cart-0.8.2"
 
