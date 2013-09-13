@@ -10,6 +10,7 @@ class QueryItem extends Shoppable {
     static final int MAXIMUM_NAME_FIELD_LENGTH = 4000
 
     QueryItemType queryItemType
+    Long internalId
     Long externalId
     String name
 
@@ -17,12 +18,12 @@ class QueryItem extends Shoppable {
 
     }
 
-    QueryItem(String name, Long externalId, QueryItemType queryItemType) {
+    QueryItem(String name, Long internalId, Long externalId, QueryItemType queryItemType) {
         this.name = name
         this.externalId = externalId
+        this.internalId = internalId
         this.queryItemType = queryItemType
     }
-
 
    /**
      * Catch the beforeValidate event and apply pre-processing to the fields
@@ -33,6 +34,7 @@ class QueryItem extends Shoppable {
 
     static constraints = {
         queryItemType nullable: false
+        internalId nullable: true, min: 1L
         externalId nullable: false, min: 1L, unique: 'queryItemType'
         name nullable: false, blank: false, maxSize: MAXIMUM_NAME_FIELD_LENGTH
     }

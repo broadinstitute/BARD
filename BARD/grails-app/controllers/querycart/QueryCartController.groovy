@@ -1,5 +1,7 @@
 package querycart
 
+import bard.db.project.Project
+import bard.db.registration.Assay
 import bardqueryapi.BardUtilitiesService
 import bardqueryapi.InetAddressUtil
 import com.metasieve.shoppingcart.ShoppingCartService
@@ -69,44 +71,7 @@ class QueryCartController {
 
         String name = params.name
 
-        QueryItem item = QueryItem.findByExternalIdAndQueryItemType(id, itemType)
-        if (!item) {
-            switch (itemType) {
-                case QueryItemType.Compound:
-                    String smiles = params.smiles
-                    int numAssayActive = params.numActive ? new Integer(params.numActive) : 0
-                    int numAssayTested = params.numAssays ? new Integer(params.numAssays) : 0
-                    item = new CartCompound()
-                    item.smiles = smiles
-                    item.name = name
-                    item.externalId = id
-                    item.numAssayActive = numAssayActive
-                    item.numAssayTested = numAssayTested
-                    break
-                case QueryItemType.Project:
-                    item = new CartProject()
-                    item.name = name
-                    item.externalId = id
-                    break
-                case QueryItemType.AssayDefinition:
-                    item = new CartAssay()
-                    item.name = name
-                    item.externalId = id
-                    break
-///CLOVER:OFF
-                default:
-                    return render(status: 400, text: "Unsupported QueryItemType [${itemType}]")
-///CLOVER:ON
-            }
-        }
-
-        if (!item.validate()) {
-            response.status = 500
-            return render(item.errors.allErrors.collect {
-                message(error: it, encodeAs: 'HTML')
-            } as JSON)
-        }
-
+        QueryItem item = queryCartService.getQueryItem(id, itemType, name, params.smiles, params.numActive, params.numAssays)
         queryCartService.addToShoppingCart(item)
 
         return render(status: 200, text: "Added item [${item}] to cart")
@@ -145,7 +110,7 @@ class QueryCartController {
             return render(errorResponse)
         }
 
-        QueryItem item = QueryItem.findByExternalIdAndQueryItemType(id, itemType)
+        QueryItem item = queryCartService.findQueryItemById(id, itemType)
         if (item) {
             queryCartService.removeFromShoppingCart(item)
         }
@@ -173,7 +138,7 @@ class QueryCartController {
         }
 
         Boolean result = false
-        QueryItem shoppingItem = QueryItem.findByExternalIdAndQueryItemType(id, itemType)
+        QueryItem shoppingItem = queryCartService.findQueryItemById(id, itemType)
         if (shoppingItem) {
             result = queryCartService.isInShoppingCart(shoppingItem)
         }

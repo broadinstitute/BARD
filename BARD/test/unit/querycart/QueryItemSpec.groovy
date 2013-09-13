@@ -15,7 +15,7 @@ class QueryItemSpec extends Specification {
 
     void "test toString #label"() {
         given:
-        QueryItem item = new QueryItem(name, 5, QueryItemType.Project)
+        QueryItem item = new QueryItem(name, 1, 5, QueryItemType.Project)
 
         when:
         String itemAsString = item.toString()
@@ -33,8 +33,8 @@ class QueryItemSpec extends Specification {
 
     void "Test equals and hashCode #label"() {
         given:
-        QueryItem queryItem1 = new QueryItem(name1, id1, type1)
-        QueryItem queryItem2 = new QueryItem(name2, id2, type2)
+        QueryItem queryItem1 = new QueryItem(name1, id1, id1, type1)
+        QueryItem queryItem2 = new QueryItem(name2, id2, id2, type2)
 
         when:
         int code1 = queryItem1.hashCode()
@@ -66,7 +66,7 @@ class QueryItemSpec extends Specification {
         String name = RandomStringUtils.randomAlphabetic(stringLength)
         String truncatedName = StringUtils.abbreviate(name, CartCompound.MAXIMUM_NAME_FIELD_LENGTH)
 
-        QueryItem queryItem = new QueryItem(name, externalId, QueryItemType.Project)
+        QueryItem queryItem = new QueryItem(name, externalId, externalId, QueryItemType.Project)
 
         when:
         queryItem.validate()
@@ -87,7 +87,7 @@ class QueryItemSpec extends Specification {
         mockForConstraintsTests(QueryItem)
 
         when:
-        QueryItem queryItem = new QueryItem(name, id, type)
+        QueryItem queryItem = new QueryItem(name, id, id, type)
         queryItem.validate()
 
         then:

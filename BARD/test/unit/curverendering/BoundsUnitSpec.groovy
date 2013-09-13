@@ -26,7 +26,7 @@ class BoundsUnitSpec extends Specification {
         double eyMin = 2
         double eyMax = 4
         Bounds bounds = new Bounds(exMin, exMax, eyMin, eyMax)
-        when: "We call the expandToContain() method on the given Boundss object"
+        when: "We call the expandToContain() method on the given Bounds object"
         bounds.expandToContain(xMin, xMax, yMin, yMax)
         then: "The expected to get back the expected warning level"
         bounds.xMax == exMax

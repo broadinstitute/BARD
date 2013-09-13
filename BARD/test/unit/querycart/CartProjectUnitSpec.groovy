@@ -27,16 +27,17 @@ class CartProjectUnitSpec extends Specification {
         int projectId = 2
         final String projectName = "ProjectSearchResult title"
         when:
-        CartProject cartProject = new CartProject(projectName, projectId)
+        CartProject cartProject = new CartProject(projectName, 1, projectId)
 
         then:
         assert cartProject.name == 'ProjectSearchResult title'
         assert cartProject.externalId == projectId
+        assert cartProject.internalId == 1
     }
 
     void "test toString #label"() {
         given:
-        CartProject cartProject = new CartProject(projectName, 5)
+        CartProject cartProject = new CartProject(projectName, 1, 5)
 
         when:
         String projectAsString = cartProject.toString()
@@ -60,10 +61,10 @@ class CartProjectUnitSpec extends Specification {
         then:
         equals == equality
         where:
-        label               | cartProject                       | otherCartProject                  | equality
-        "Other is null"     | new CartProject()                 | null                              | false
-        "Different classes" | new CartProject()                 | 20                                | false
-        "Equality"          | new CartProject("Some Title", 24) | new CartProject("Some Title", 24) | true
+        label               | cartProject                          | otherCartProject                     | equality
+        "Other is null"     | new CartProject()                    | null                                 | false
+        "Different classes" | new CartProject()                    | 20                                   | false
+        "Equality"          | new CartProject("Some Title", 1, 24) | new CartProject("Some Title", 1, 24) | true
 
 
     }
@@ -77,12 +78,12 @@ class CartProjectUnitSpec extends Specification {
         assert (code1 == code2) == expectation
 
         where:
-        label                  | cartProject1                      | cartProject2                      | expectation
-        "Empty classes"        | new CartProject()                 | new CartProject()                 | true
-        "Diff ids, diff names" | new CartProject("Test 1", 5)      | new CartProject("Test 2", 3)      | false
-        "Same ids, diff names" | new CartProject("Test 1", 3)      | new CartProject("Test 2", 3)      | true
-        "Diff ids, same names" | new CartProject("Some Title", 22) | new CartProject("Some Title", 25) | false
-        "Same ids, same names" | new CartProject("Some Title", 22) | new CartProject("Some Title", 22) | true
+        label                  | cartProject1                         | cartProject2                         | expectation
+        "Empty classes"        | new CartProject()                    | new CartProject()                    | true
+        "Diff ids, diff names" | new CartProject("Test 1", 1, 5)      | new CartProject("Test 2", 2, 3)      | false
+        "Same ids, diff names" | new CartProject("Test 1", 1, 3)      | new CartProject("Test 2", 1, 3)      | true
+        "Diff ids, same names" | new CartProject("Some Title", 2, 22) | new CartProject("Some Title", 1, 25) | false
+        "Same ids, same names" | new CartProject("Some Title", 2, 22) | new CartProject("Some Title", 2, 22) | true
 
     }
 
@@ -92,7 +93,7 @@ class CartProjectUnitSpec extends Specification {
         final String name = RandomStringUtils.randomAlphabetic(stringLength)
         String truncatedName = StringUtils.abbreviate(name, CartCompound.MAXIMUM_NAME_FIELD_LENGTH)
 
-        CartProject cartProject = new CartProject(name, projectId)
+        CartProject cartProject = new CartProject(name, projectId, projectId)
 
         when:
         cartProject.validate()
@@ -110,7 +111,7 @@ class CartProjectUnitSpec extends Specification {
 
     void "test shopping cart project element"() {
         when:
-        CartProject cartProject = new CartProject("my project name", 20)
+        CartProject cartProject = new CartProject("my project name", 19, 20)
         assertNotNull(cartProject)
 
         then:
@@ -126,7 +127,7 @@ class CartProjectUnitSpec extends Specification {
         mockForConstraintsTests(CartProject)
 
         when:
-        CartProject cartProject = new CartProject(projectName, 20)
+        CartProject cartProject = new CartProject(projectName, 19, 20)
         cartProject.validate()
 
         then:

@@ -9,17 +9,21 @@ class UrlMappings {
 				// apply constraints here
 			}
 		}
+
         "/bbgrid/$id?"(controller: "grid") {
             action = [GET:"list", POST: "save", DELETE: "delete", PUT: "edit"]
         }
+
         "/"(controller: 'bardWebInterface', action: 'redirectToIndex')
+
         "403"(controller: "errors", action: "error403")
+
         "500"(controller: "errors", action: "error500")
+
         "500"(controller: "errors", action: "error403",
                 exception: AccessDeniedException)
+
         "500"(controller: "errors", action: "error403",
                 exception: NotFoundException)
-
-	"500"(view:'/error')
 	}
 }

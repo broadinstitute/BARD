@@ -10,6 +10,8 @@ import bard.db.registration.AbstractInlineEditingControllerUnitSpec
 import bard.db.registration.Assay
 import bard.db.registration.EditingHelper
 import bard.db.registration.ExternalReference
+import bardqueryapi.IQueryService
+import bardqueryapi.QueryService
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
@@ -379,6 +381,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         controller.capPermissionService = capPermissionService
         ProjectExperimentRenderService projectExperimentRenderService = Mock(ProjectExperimentRenderService)
         controller.projectExperimentRenderService = projectExperimentRenderService
+        controller.queryService = Mock(IQueryService)
 
         when:
         params.id = project.id

@@ -12,10 +12,19 @@ class SaveToCartButtonTagLib {
     def saveToCartButton = { attrs, body ->
         
         Boolean isInCart = false
-        QueryItem item = QueryItem.findByExternalIdAndQueryItemType(attrs.id as Long, attrs.type as QueryItemType)
+
+        QueryItemType queryItemType = attrs.type as QueryItemType
+        QueryItem item
+        if(queryItemType == QueryItemType.Compound) {
+            item = QueryItem.findByExternalIdAndQueryItemType(attrs.id as Long, queryItemType)
+        } else {
+            item = QueryItem.findByInternalIdAndQueryItemType(attrs.id as Long, queryItemType)
+        }
+
         if (item) {
             isInCart = queryCartService.isInShoppingCart(item)
         }
+
         out << render(template: "/tagLibTemplates/saveToCartButton", model: [name: attrs.name, id: attrs.id, type: attrs.type,
                 smiles: attrs.smiles, isInCart: isInCart, numAssays: attrs.numAssays, numActive: attrs.numActive, hideLabel: attrs.hideLabel])
     }

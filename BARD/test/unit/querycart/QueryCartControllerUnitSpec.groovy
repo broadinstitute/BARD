@@ -27,12 +27,14 @@ class QueryCartControllerUnitSpec extends Specification {
     ETagsService eTagsService
 
     static final Long ID_IN_CART = 1
+    static final Long EXTERNAL_ID = 2
     static final QueryItemType TYPE_IN_CART = QueryItemType.AssayDefinition
     static final String MOCK_SUMMARY_CONTENT = 'mock summary content'
     static final String MOCK_DETAILS_CONTENT = 'mock summary content'
 
     void setup() {
         controller.metaClass.mixin(InetAddressUtil)
+
         bardUtilitiesService = Mock(BardUtilitiesService)
         controller.bardUtilitiesService = bardUtilitiesService
         this.eTagsService = Mock(ETagsService)
@@ -41,7 +43,9 @@ class QueryCartControllerUnitSpec extends Specification {
         controller.shoppingCartService = this.shoppingCartService
         this.queryCartService = Mock(QueryCartService)
         controller.queryCartService = this.queryCartService
-        cartAssay = new CartAssay("foo", ID_IN_CART)
+
+        cartAssay = new CartAssay("foo", ID_IN_CART, EXTERNAL_ID)
+
         assert cartAssay.save()
 
         views['/bardWebInterface/_queryCartIndicator.gsp'] = MOCK_SUMMARY_CONTENT
@@ -61,6 +65,8 @@ class QueryCartControllerUnitSpec extends Specification {
 
 
         when:
+        QueryItem item =  Mock(QueryItem)
+        1 * queryCartService.getQueryItem(_, _, _, _, _, _) >> item
         1 * queryCartService.addToShoppingCart(_ as QueryItem)
 
         controller.addItem()
@@ -89,6 +95,8 @@ class QueryCartControllerUnitSpec extends Specification {
         params.numAssays = "3"
 
         when:
+        QueryItem item =  Mock(QueryItem)
+        1 * queryCartService.getQueryItem(_, _, _, _, _, _) >> item
         1 * queryCartService.addToShoppingCart(_ as QueryItem)
 
         controller.addItem()
@@ -116,12 +124,9 @@ class QueryCartControllerUnitSpec extends Specification {
 
     }
 
-
-
-
     void "test add existing assay not in cart"() {
         given:
-        CartProject project = new CartProject('Test', 3)
+        CartProject project = new CartProject('Test', 3, 2)
         params.type = project.queryItemType as String
         params.id = project.externalId as String
         params.name = project.name
@@ -129,6 +134,7 @@ class QueryCartControllerUnitSpec extends Specification {
         when:
         project.save()
 
+        1 * queryCartService.getQueryItem(_, _, _, _, _, _) >> project
         1 * queryCartService.addToShoppingCart(project)
 
         controller.addItem()
@@ -144,6 +150,7 @@ class QueryCartControllerUnitSpec extends Specification {
         params.name = 'Test'
 
         when:
+        (_..1) * queryCartService.getQueryItem(_, _, _, _, _, _) >> null
         0 * queryCartService.addToShoppingCart(_ as QueryItem)
         controller.addItem()
 
@@ -153,7 +160,6 @@ class QueryCartControllerUnitSpec extends Specification {
         where:
         label          | type                  | id    | expectedStatus
         "unknown type" | 'temp'                | 6     | HttpServletResponse.SC_BAD_REQUEST
-        "invalid id"   | QueryItemType.Project | -1    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
         "bad id"       | QueryItemType.Project | 'bad' | HttpServletResponse.SC_BAD_REQUEST
         "null type"    | null                  | 7     | HttpServletResponse.SC_BAD_REQUEST
         "null id"      | QueryItemType.Project | null  | HttpServletResponse.SC_BAD_REQUEST
@@ -212,6 +218,7 @@ class QueryCartControllerUnitSpec extends Specification {
         params.id = ID_IN_CART as String
 
         when:
+        queryCartService.findQueryItemById(_, _) >> cartAssay
         1 * queryCartService.removeFromShoppingCart(cartAssay)
 
         controller.removeItem()
@@ -272,6 +279,7 @@ class QueryCartControllerUnitSpec extends Specification {
 
         when:
         if (shouldFind) {
+            1 * queryCartService.findQueryItemById(_, _) >> cartAssay
             1 * queryCartService.isInShoppingCart(_) >> true
         }
         else {
@@ -318,6 +326,8 @@ class QueryCartControllerUnitSpec extends Specification {
         params.items = itemsJSON
 
         when:
+        QueryItem item =  Mock(QueryItem)
+        1 * queryCartService.getQueryItem(_, _, _, _, _, _) >> item
         1 * queryCartService.addToShoppingCart(_ as QueryItem)
 
         controller.addItems()
@@ -352,7 +362,6 @@ class QueryCartControllerUnitSpec extends Specification {
         where:
         label          | type                  | id    | expectedStatus
         "unknown type" | 'temp'                | 6     | HttpServletResponse.SC_BAD_REQUEST
-        "invalid id"   | QueryItemType.Project | -1    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
         "bad id"       | QueryItemType.Project | 'bad' | HttpServletResponse.SC_BAD_REQUEST
     }
 }
