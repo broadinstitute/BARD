@@ -31,7 +31,7 @@ class SaveToCartButtonTagLibSpec extends Specification {
                 'name="${title}" ' +
                 'type="'+QueryItemType.AssayDefinition.name()+'" hideLabel="${hideLabel}"/>'
 
-        QueryItem queryItem = new CartAssay(title, id)
+        QueryItem queryItem = new CartAssay(title, id, id)
         assert queryItem.save()
 
         when:
