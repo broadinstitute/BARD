@@ -67,7 +67,7 @@ class BardLoginControllerUnitSpec extends Specification {
         label                       | isLoggedIn | expectedResponseStatus | expectedRedirectUrl | isMobile | expectedResponseText
         'logged in'                 | true       | 302                    | '/'                 | false    | ''
         'not logged in, mobile'     | false      | 200                    | null                | true     | '$.mobile.ajaxEnabled = false;'
-        'not logged in, not mobile' | false      | 200                    | null                | false    | '<r:require modules="core,bootstrap"></r:require>'
+        'not logged in, not mobile' | false      | 200                    | null                | false    | '<r:require modules="core,bootstrap,login"></r:require>'
     }
 
     void "test authAjax()"() {
