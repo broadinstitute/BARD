@@ -1,7 +1,6 @@
 package bard.db.project
 
 import acl.CapPermissionService
-import bard.core.adapter.ProjectAdapter
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
@@ -10,8 +9,6 @@ import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContextOwner
-import bard.db.people.Person
-import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.EditingHelper
 import bardqueryapi.IQueryService
@@ -20,10 +17,8 @@ import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
-import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.AccessDeniedException
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
