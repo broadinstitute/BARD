@@ -1,5 +1,6 @@
 <div id="login-form">
     <sec:ifLoggedIn>
+
         <g:form name="logoutForm" controller="bardLogout">
             Logged in as: <span
                 style="font-weight: bold;"><sec:username/></span>&nbsp;&nbsp;
@@ -11,5 +12,7 @@
             Not logged in&nbsp;&nbsp;
             <button type="submit" class="btn btn-mini">Login</button>
         </g:form>
+        OR
+        <a class="btn btn-mini" id='signin'>Sign in with your Email</a>
     </sec:ifNotLoggedIn>
 </div>

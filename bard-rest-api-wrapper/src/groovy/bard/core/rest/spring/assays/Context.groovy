@@ -43,6 +43,10 @@ public class Context extends JsonUtil {
         return measureIds
     }
 
+    String toString() {
+        return "${this.name} (${this.id})"
+    }
+
     int hashCode() {
         def builder = new HashCodeBuilder()
         builder.append id

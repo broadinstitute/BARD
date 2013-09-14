@@ -9,18 +9,17 @@ import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContextOwner
-import bard.db.people.Person
-import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.EditingHelper
+import bardqueryapi.IQueryService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
-import org.codehaus.groovy.grails.web.mapping.LinkGenerator
+import org.springframework.http.HttpStatus
 import org.springframework.security.access.AccessDeniedException
-import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
 
@@ -33,10 +32,11 @@ class ProjectController {
     SpringSecurityService springSecurityService
     def permissionEvaluator
     CapPermissionService capPermissionService
+    IQueryService queryService
 
     def groupProjects(){
         String username = springSecurityService.principal?.username
-        List<Project> projects = projectService.getProjectsByGroup(username)
+        List<Project> projects = capPermissionService.findAllObjectsForRoles(Project)
         LinkedHashSet<Project>  uniqueProjects = new LinkedHashSet<Project>(projects)
         render(view: "groupProjects", model: [projects: uniqueProjects])
     }
@@ -47,6 +47,7 @@ class ProjectController {
         }
         [projectCommand: projectCommand]
     }
+
     def save(ProjectCommand projectCommand) {
         if (!projectCommand.validate()) {
             create(projectCommand)
@@ -175,14 +176,39 @@ class ProjectController {
 
     def show() {
         def projectInstance = Project.get(params.id)
+
         if (!projectInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), params.id])
             return
         }
+
         boolean editable = canEdit(permissionEvaluator, springSecurityService, projectInstance)
+        if(params.disableEdit)
+            editable = false
+
         String owner = capPermissionService.getOwner(projectInstance)
 
-        [instance: projectInstance, projectOwner: owner, pexperiment: projectExperimentRenderService.contructGraph(projectInstance), editable: editable ? 'canedit' : 'cannotedit']
+        Map projectMap = null;
+        try {
+            if(projectInstance.ncgcWarehouseId != null) {
+                projectMap = this.queryService.showProject(projectInstance.ncgcWarehouseId)
+            }
+        }
+        catch (HttpClientErrorException httpClientErrorException) {
+            if (httpClientErrorException.statusCode != HttpStatus.NOT_FOUND) {
+                throw new RuntimeException("Exception for Project capId:${params.id} ncgcWarehouseId:${projectInstance.ncgcWarehouseId}", httpClientErrorException)
+            }
+        }
+
+        return [instance: projectInstance,
+                projectOwner: owner,
+                pexperiment: projectExperimentRenderService.contructGraph(projectInstance),
+                editable: editable ? 'canedit' : 'cannotedit',
+                projectAdapter: projectMap?.projectAdapter,
+                experiments: projectMap?.experiments,
+                assays: projectMap?.assays,
+                searchString: params.searchString
+        ]
     }
 
     @Deprecated //this method is not used anymore. The editing is now done from the SHOW page.

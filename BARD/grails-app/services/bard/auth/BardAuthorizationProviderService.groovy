@@ -36,7 +36,7 @@ class BardAuthorizationProviderService extends CrowdAuthenticationProviderServic
      * @param userName
      * @return {@link List} of {@GrantedAuthority}
      */
-    protected List<GrantedAuthority> getRolesFromDatabase(String userName) {
+    public List<GrantedAuthority> getRolesFromDatabase(String userName) {
         final List<GrantedAuthority> roles = []
         final Person person = Person.findByUserNameIlike(userName)
         if (person) {

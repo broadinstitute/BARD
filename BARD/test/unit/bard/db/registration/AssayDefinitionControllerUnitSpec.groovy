@@ -23,6 +23,7 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse

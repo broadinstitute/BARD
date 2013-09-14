@@ -17,6 +17,7 @@ class MolSpreadSheetController {
     GrailsApplication grailsApplication  //inject GrailsApplication
     RetainSpreadsheetService retainSpreadsheetService
     BardUtilitiesService bardUtilitiesService
+
     def index() {
         render(view: 'molecularSpreadSheet', model: [transpose: params.transpose, norefresh: params.norefresh, ChangeNorm: params.ChangeNorm] )
     }

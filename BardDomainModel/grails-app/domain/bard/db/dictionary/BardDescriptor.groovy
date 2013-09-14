@@ -10,6 +10,8 @@ package bard.db.dictionary
 class BardDescriptor extends Descriptor<BardDescriptor> {
     public static String ROOT_PREFIX = "BARD> "
 
+    Set<BardDescriptor> children = [] as Set<BardDescriptor>
+
     static mapping = {
         table('BARD_TREE')
         id(column: 'NODE_ID', generator: 'assigned')
@@ -18,12 +20,30 @@ class BardDescriptor extends Descriptor<BardDescriptor> {
         externalURL(column: 'EXTERNAL_URL')
         parent(column: 'PARENT_NODE_ID')
         fullPath(column: 'FULL_PATH')
+
     }
+
+    static hasMany = [children: BardDescriptor]
 
     String getDisplayPath() {
         if (fullPath.startsWith(ROOT_PREFIX)) {
             return fullPath.substring(ROOT_PREFIX.length())
         }
         return fullPath
+    }
+
+    List<BardDescriptor> getDescendents() {
+        List<BardDescriptor> descendants = []
+        for (BardDescriptor child in children) {
+            descendants.add(child)
+            descendants.addAll(child.getDescendents())
+        }
+        descendants
+    }
+
+    List<BardDescriptor> getDescendentsAndSelf() {
+        List<BardDescriptor>  descendentsAndSelf = [this]
+        descendentsAndSelf.addAll(getDescendents())
+        descendentsAndSelf
     }
 }

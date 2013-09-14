@@ -1,32 +1,55 @@
 import acl.CapPermissionService
 import bard.core.helper.LoggerService
-import bard.core.rest.spring.AssayRestService
-import bard.core.rest.spring.CapRestService
-import bard.core.rest.spring.CompoundRestService
-import bard.core.rest.spring.DictionaryRestService
-import bard.core.rest.spring.ETagRestService
-import bard.core.rest.spring.ExperimentRestService
-import bard.core.rest.spring.ProjectRestService
-import bard.core.rest.spring.SubstanceRestService
-import bard.core.rest.spring.TargetRestService
+import bard.core.rest.spring.*
 import bard.core.util.ExternalUrlDTO
 import bard.db.ReadyForExtractFlushListener
 import bard.hibernate.ModifiedByListener
 import bard.person.RoleEditorRegistrar
+import bardqueryapi.ETagsService
 import bardqueryapi.QueryService
 import grails.util.Environment
-import grails.util.GrailsUtil
+import mockServices.MockQueryService
 import org.codehaus.groovy.grails.orm.hibernate.HibernateEventListeners
 import org.springframework.http.client.SimpleClientHttpRequestFactory
 import org.springframework.web.client.RestTemplate
-import mockServices.MockQueryService
-import bardqueryapi.ETagsService
+import persona.OnlinePersonaVerifyer
+import persona.PersonaAuthenticationFilter
+import persona.PersonaAuthenticationProvider
 
 // Place your Spring DSL code here
 beans = {
 
-    customPropertyEditorRegistrar(RoleEditorRegistrar)
 
+    customPropertyEditorRegistrar(RoleEditorRegistrar)
+    /**
+     * setting timeouts for connections established by the restTemplate
+     *
+     * just using the SimpleClientHttpRequestFactory there is also CommonsClientHttpRequestFactory which would offer
+     * more configuration options if we need it
+     */
+    simpleClientHttpRequestFactory(SimpleClientHttpRequestFactory) {
+        connectTimeout = 5 * 1000 // in milliseconds
+        readTimeout = 25 * 1000 // in milliseconds
+    }
+
+    restTemplate(RestTemplate, ref('simpleClientHttpRequestFactory'))
+
+    //Wiring for Persona
+    personaAuthenticationFilter(PersonaAuthenticationFilter) {
+        filterProcessesUrl = grailsApplication.config.Persona.filterProcessesUrl
+        authenticationSuccessHandler = ref('authenticationSuccessHandler')
+        authenticationFailureHandler = ref('authenticationFailureHandler')
+        authenticationManager = ref('authenticationManager')
+    }
+    onlinePersonaVerifyer(OnlinePersonaVerifyer) {
+        restTemplate = ref('restTemplate')
+        audience = grailsApplication.config.Persona.audience
+        verificationUrl = grailsApplication.config.Persona.verificationUrl
+    }
+
+    personaAuthenticationProvider(PersonaAuthenticationProvider) {
+        onlinePersonaVerifyer = ref('onlinePersonaVerifyer')
+    }
     clientBasicAuth(wslite.http.auth.HTTPBasicAuthorization) {
         username = grailsApplication.config.CbipCrowd.application.username
         password = grailsApplication.config.CbipCrowd.application.password
@@ -66,13 +89,14 @@ beans = {
         crowdClient = ref('crowdClient')
         grailsApplication = application
     }
+
     //if production then eliminate the mock user because it is a security hole in production
 
     switch (Environment.current) {
         case Environment.PRODUCTION:
             //don't use in memory map in production
             userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService) {
-                crowdAuthenticationProviders = [ref('bardAuthorizationProviderService')]
+                crowdAuthenticationProviders = [ref('bardAuthorizationProviderService'),ref('personaAuthenticationProvider')]
             }
             break
         default:
@@ -80,7 +104,7 @@ beans = {
                 grailsApplication = application
             }
             userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService) {
-                crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('bardAuthorizationProviderService')]
+                crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('bardAuthorizationProviderService'),ref('personaAuthenticationProvider')]
             }
     }
 
@@ -92,7 +116,6 @@ beans = {
         bean.factoryMethod = "getInstance"
     }
 
-
     // from web-client
     String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
     String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
@@ -103,18 +126,7 @@ beans = {
         promiscuityUrl = badApplePromiscuityUrl
         capUrl = bardCapUrl
     }
-    /**
-     * setting timeouts for connections established by the restTemplate
-     *
-     * just using the SimpleClientHttpRequestFactory there is also CommonsClientHttpRequestFactory which would offer
-     * more configuration options if we need it
-     */
-    simpleClientHttpRequestFactory(SimpleClientHttpRequestFactory){
-        connectTimeout =  5 * 1000 // in milliseconds
-        readTimeout    = 25 * 1000 // in milliseconds
-    }
 
-    restTemplate(RestTemplate, ref('simpleClientHttpRequestFactory'))
     loggerService(LoggerService)
 
     compoundRestService(CompoundRestService) {
@@ -159,12 +171,6 @@ beans = {
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
-    capRestService(CapRestService) {
-        externalUrlDTO = ref('externalUrlDTO')
-        restTemplate = ref('restTemplate')
-        loggerService = ref('loggerService')
-        grailsApplication = grailsApplication
-    }
 
     switch (Environment.current) {
         case "offline":
@@ -180,7 +186,6 @@ beans = {
                 assayRestService = ref('assayRestService')
                 substanceRestService = ref('substanceRestService')
                 experimentRestService = ref('experimentRestService')
-                capRestService = ref('capRestService')
             }
             eTagsService(ETagsService) {
                 compoundRestService = ref('compoundRestService')

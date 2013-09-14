@@ -48,8 +48,7 @@ class AssayDefinitionController {
     CapPermissionService capPermissionService
 
     def groupAssays(){
-        String username = springSecurityService.principal?.username
-        List<Assay> assays = assayDefinitionService.getAssaysByGroup(username)
+        List<Assay> assays = capPermissionService.findAllObjectsForRoles(Assay)
         LinkedHashSet<Assay>  uniqueAssays = new LinkedHashSet<Assay>(assays)
         render(view: "groupAssays", model: [assays: uniqueAssays])
     }
@@ -247,6 +246,11 @@ class AssayDefinitionController {
 
     def show() {
         def assayInstance = Assay.get(params.id)
+
+        if (!assayInstance) {
+            def messageStr = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+            return [message: messageStr]
+        }
         JSON measureTreeAsJson = null
 
         // sanity check the context items
@@ -259,10 +263,7 @@ class AssayDefinitionController {
             }
         }
 
-        if (!assayInstance) {
-            def messageStr = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
-            return [message: messageStr]
-        }
+
 
         measureTreeAsJson = []//new JSON(measureTreeService.createMeasureTree(assayInstance, false))
         boolean editable = canEdit(permissionEvaluator, springSecurityService, assayInstance)

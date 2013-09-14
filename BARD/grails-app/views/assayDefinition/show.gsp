@@ -77,7 +77,7 @@
         <li><a href="#summary-header"><i class="icon-chevron-right"></i>Overview</a></li>
         <li><a href="#biology-header"><i class="icon-chevron-right"></i>Biology</a></li>
         <li><a href="#assay-protocol-header"><i class="icon-chevron-right"></i>Assay Protocol</a>
-            <ul class="nav nav-list">
+            <ul class="nav nav-list bs-docs-sidenav" style="padding-left: 0; margin: 0;">
                 <li><a href="#assay-design-header"><i class="icon-chevron-right"></i>Assay Design</a></li>
                 <li><a href="#assay-readout-header"><i class="icon-chevron-right"></i>Assay Readout</a></li>
                 <li><a href="#assay-components-header"><i class="icon-chevron-right"></i>Assay Components
@@ -86,7 +86,7 @@
             </ul>
         </li>
         <li><a href="#experiments-header"><i class="icon-chevron-right"></i>Experiments</a>
-            <ul class="nav nav-list">
+            <ul class="nav nav-list bs-docs-sidenav" style="padding-left: 0; margin: 0;">
                 <li><a href="#experimental-variables-header"><i class="icon-chevron-right"></i>Experimental Variables
                 </a>
                 </li>
@@ -95,7 +95,7 @@
         <li><a href="#panels-header"><i class="icon-chevron-right"></i>Panels</a></li>
 
         <li><a href="#documents-header"><i class="icon-chevron-right"></i>Documents</a>
-            <ul class="nav nav-list">
+            <ul class="nav nav-list bs-docs-sidenav" style="padding-left: 0; margin: 0;">
                 <li><a href="#documents-description-header"><i class="icon-chevron-right"></i>Descriptions</a>
                 </li>
                 <li><a href="#documents-protocol-header"><i class="icon-chevron-right"></i>Protocols</a></li>

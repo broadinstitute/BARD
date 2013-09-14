@@ -1,8 +1,6 @@
 import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
-import org.apache.log4j.net.SMTPAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
-
 
 registeruser {
     signup {
@@ -34,8 +32,8 @@ If you did make the request, then click <a href="$url">here</a> to reset your pa
     }
 }
 
-ncgc.thickclient.compounds.url="http://bard.nih.gov/bard/compounds/"
-ncgc.thickclient.etags.url="http://bard.nih.gov/bard/etag/"
+ncgc.thickclient.compounds.url = "http://bard.nih.gov/bard/compounds/"
+ncgc.thickclient.etags.url = "http://bard.nih.gov/bard/etag/"
 
 ncgc.server.root.url = "http://bard.nih.gov/api/v17.3"
 promiscuity.badapple.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/"
@@ -45,18 +43,18 @@ grails.serverURL = "http://localhost:${server.port}/${appName}"
 //URL to the ROOT of the cap server
 bard.cap.home = "${grails.serverURL}"
 bard.cap.assay = "${bard.cap.home}/assayDefinition/show/"
-bard.cap.project="${bard.cap.home}/project/show/"
+bard.cap.project = "${bard.cap.home}/project/show/"
 
 //Override in config file
-dataexport.apikey= "test"
-dataexport.dictionary.accept.type= "application/vnd.bard.cap+xml;type=dictionary"
+dataexport.apikey = "test"
+dataexport.dictionary.accept.type = "application/vnd.bard.cap+xml;type=dictionary"
 dataexport.dictionary.url = "https://bard-qa.broadinstitute.org/dataExport/api/dictionary"
 
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
-grails.cache.clearAtStartup=true
+grails.cache.clearAtStartup = true
 grails.cache.config = {
     cache {
         name 'dictionaryElements'
@@ -134,7 +132,6 @@ rememberme.cookieName = 'bard_web_client_crowd_remember_me_cookie'
 
 bard.home.page = "http://localhost:8080/${appName}"
 
-
 // this should get overwritten by
 bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
 
@@ -147,29 +144,6 @@ grails {
             ipRestrictions = [
                     '/console/**': '127.0.0.1'
             ]
-            useBasicAuth = true
-            basic.realmName = 'CAP'
-            filterChain.chainMap = [
-                    '/assayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/panel/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/bardWebInterface/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/chemAxon/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/context/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/contextItem/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/dictionaryTerms/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/document/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/doseResponseCurve/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/experiment/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/mergeAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/moveExperiments/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/person/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/project/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/sandbox/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/splitAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
-            ]
-
             /** authenticationEntryPoint */
             auth.loginFormUrl = '/bardLogin/auth'
             auth.forceHttps = 'false'
@@ -207,27 +181,31 @@ grails.plugins.springsecurity.rememberMe.cookieName = rememberme.cookieName
 grails.plugins.springsecurity.rememberMe.key = rememberme.key
 switch (Environment.current) {
     case Environment.PRODUCTION:
-        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'personaAuthenticationProvider', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
         break;
     default:
         //use basic auth and in memory security services in no-production environments
-        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'personaAuthenticationProvider', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
         break;
 }
-
-
 
 //prevent session fixation attacks
 grails.plugins.springsecurity.useSessionFixationPrevention = true
 
 //grails.plugins.springsecurity.rejectIfNoRule = true
 
+//Persona configs
+Persona {
+    verificationUrl = "https://verifier.login.persona.org/verify"
+    audience = "${bard.cap.home}"
+    filterProcessesUrl = "/j_spring_persona_security_check"
+}
 CbipCrowd {
     application.url = 'https://crowd.somewhere.com/crowd/'
     register.url = 'https://crowd.somewhere.com/crowd/'
     application.username = 'bard'
     application.password = 'ChangeMe'
-    applicationSpecificRoles = ['ROLE_TEAM_A', 'ROLE_TEAM_B', 'ROLE_Bard','ROLE_MOBILE', 'ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'ROLE_CURATOR', 'CURATOR', "ROLE_BARD_ADMINISTRATOR", "ROLE_TEAM_BROAD"]
+    applicationSpecificRoles = ['ROLE_TEAM_A', 'ROLE_TEAM_B', 'ROLE_Bard', 'ROLE_MOBILE', 'ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'ROLE_CURATOR', 'CURATOR', "ROLE_BARD_ADMINISTRATOR", "ROLE_TEAM_BROAD"]
     mockUsers {
         integrationTestUser {
             roles = ['ROLE_USER', 'ROLE_CURATOR', 'ROLE_BARD_ADMINISTRATOR']
@@ -304,6 +282,11 @@ if (appName) {
             println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
         }
     }
+    switch (Environment.current) {
+        case Environment.TEST:
+            grails.config.locations << "classpath:Config-for-test.groovy"
+            break
+    }
 }
 
 if (System.getProperty("migrationContextsToRun") != null) {
@@ -314,64 +297,57 @@ if (System.getProperty("migrationContextsToRun") != null) {
 
 log4j = {
     appenders {
-        // This should work on both windows and unix
-        appender new DailyRollingFileAppender(
+        String baselogDir = grails.util.Environment.warDeployed ? System.getProperty('catalina.home') : 'target'
+        String logDir = "$baselogDir/logs"
+        String defaultPattern = '%d [%t] %-5p %c{1} - %m%n' // see http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html
+        console(name: "stdout", layout: pattern(defaultPattern));
+        appender(new DailyRollingFileAppender(
                 name: "NCGCErrorAppender",
-                file: "logs/" + Environment.current.name + "/NCGC_Errors.log",
-                layout: pattern(conversionPattern: '%m%n'),
+                file: "$logDir/NCGC_Errors.log",
+                layout: pattern(defaultPattern),
                 immediateFlush: true,
-                threshold: org.apache.log4j.Level.ERROR,
-                datePattern: "'.'yyyy-MM-dd"
-        )
-        appender new DailyRollingFileAppender(
+                datePattern: "'.'yyyy-MM-dd"))
+        appender(new DailyRollingFileAppender(
                 name: "JavaScriptErrorsAppender",
-                file: "logs/" + Environment.current.name + "/Client_JavaScript_Errors.log",
-                layout: pattern(conversionPattern: '%m%n'),
+                file: "$logDir/Client_JavaScript_Errors.log",
+                layout: pattern(defaultPattern),
                 immediateFlush: true,
-                threshold: org.apache.log4j.Level.ERROR,
-                datePattern: "'.'yyyy-MM-dd"
-        )
-        appenders {
-            // This should work on both windows and unix
-            appender new DailyRollingFileAppender(
-                    name: "NCGCRestApiTimingAppender",
-                    file: "logs/" + Environment.current.name + "/NCGC_StopWatch.log",
-                    layout: pattern(conversionPattern: '%m%n'),
-                    immediateFlush: true,
-                    threshold: org.apache.log4j.Level.INFO,
-                    datePattern: "'.'yyyy-MM-dd"
-            )
-        }
+                datePattern: "'.'yyyy-MM-dd"))
+        appender(new DailyRollingFileAppender(
+                name: "NCGCRestApiTimingAppender",
+                file: "$logDir/NCGC_StopWatch.log",
+                layout: pattern(defaultPattern),
+                immediateFlush: true,
+                datePattern: "'.'yyyy-MM-dd"))
 
-        def patternLayout = new org.apache.log4j.PatternLayout()
-        patternLayout.setConversionPattern("%d [%t] %-5p %c - %m%n")
-        appender new SMTPAppender(
-                name: "mail",
-                smtpPort: config.grails.mail.port,
-                from: config.grails.mail.default.from,
-                to: config.grails.mail.default.to,
-                subject: "[${InetAddress.getLocalHost().getHostName()}] " + config.grails.mail.default.subject,
-                smtpHost: config.grails.mail.host,
-                layout: patternLayout,
-                threshold: org.apache.log4j.Level.ERROR
-        )
+        appender(new DailyRollingFileAppender(
+                name: "outputFile",
+                file: "$logDir/output.log",
+                layout: pattern(defaultPattern),
+                immediateFlush: true,
+                datePattern: "'.'yyyy-MM-dd"))
     }
-
+    // stdout is a default console appender ss
     root {
-        debug 'stdout'
-        error 'mail', 'fileAppender'
+        info('outputFile', 'stdout')
     }
-
-
-    error additivity: false,
-            //Capture errors from the NCGC API (via JDO) but DO NOT send emails about them.
-            NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService']
-    error additivity: true,
-            //Capture JavaScript errors from the client (via the ErrorHandling controller)
-            JavaScriptErrorsAppender: ['grails.app.controllers.bardqueryapi.ErrorHandlingController']
-
+    error('org.codehaus.groovy.grails.web.servlet',  //  controllers
+            'org.codehaus.groovy.grails.web.pages', //  GSP
+            'org.codehaus.groovy.grails.web.sitemesh', //  layouts
+            'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
+            'org.codehaus.groovy.grails.web.mapping', // URL mapping
+            'org.codehaus.groovy.grails.commons', // core / classloading
+            'org.codehaus.groovy.grails.plugins', // plugins
+            'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
+            'org.springframework',
+            'org.hibernate',
+            'net.sf.ehcache.hibernate')
+    //Capture errors from the NCGC API (via JDO) but DO NOT send emails about them.
+    error(additivity: false, NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService'])
+    //Capture JavaScript errors from the client (via the ErrorHandling controller)
+    error(additivity: true, JavaScriptErrorsAppender: ['grails.app.controllers.bardqueryapi.ErrorHandlingController'])
     //Capture NCGC REST API roundtrip timing.
-    info NCGCRestApiTimingAppender: ['grails.app.services.bard.core.helper.LoggerService']
+    info(additivity: false['grails.app.services.bard.core.helper.LoggerService'])
 }
 
 // Added by the JQuery Validation UI plugin:
@@ -453,3 +429,5 @@ jqueryValidationUi {
 
 grails.plugins.twitterbootstrap.fixtaglib = true
 grails.spring.disable.aspectj.autoweaving = true
+//grails.plugins.springsecurity.twitter.consumerKey=null
+//grails.plugins.springsecurity.twitter.consumerSecret=null

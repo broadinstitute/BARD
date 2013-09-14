@@ -40,10 +40,13 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
         TestDataConfigurationHolder.reset()
         resetSequenceUtil = new ResetSequenceUtil(dataSource)
-        ['ASSAY_ID_SEQ',
+        [
+                'ASSAY_ID_SEQ',
                 'ASSAY_CONTEXT_ID_SEQ',
                 'ASSAY_CONTEXT_MEASURE_ID_SEQ',
                 'ASSAY_DOCUMENT_ID_SEQ',
+                'PANEL_ID_SEQ',
+                'PANEL_ASSAY_ID_SEQ',
                 'ELEMENT_ID_SEQ',
                 'MEASURE_ID_SEQ'].each {
             this.resetSequenceUtil.resetSequence(it)
@@ -65,7 +68,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test update #label"() {
         given: "Given an Assay with id #id and version #version"
-        Assay.build(readyForExtraction: initialReadyForExtraction, capPermissionService:null)
+        Assay.build(readyForExtraction: initialReadyForExtraction, capPermissionService: null)
 
         when: "We call the assay service to update this assay"
         final BardHttpResponse bardHttpResponse = this.assayExportService.update(assayId, version, COMPLETE)
@@ -99,9 +102,13 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
         given:
         Element element = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
-        Assay assay = Assay.build(capPermissionService:null)
+        Assay assay = Assay.build(capPermissionService: null)
         AssayContext assayContext = AssayContext.build(assay: assay, contextType: ContextType.UNCLASSIFIED)
         AssayContextItem.build(assayContext: assayContext, attributeElement: element)
+
+        Panel panel = Panel.build()
+        PanelAssay.build(assay: assay, panel: panel)
+
 
         AssayDocument.build(assay: assay)
         when:
@@ -117,7 +124,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate and validate Assays #label"() {
         given: "Given there is at least one assay ready for extraction"
-        Assay.build(readyForExtraction: READY,capPermissionService:null)
+        Assay.build(readyForExtraction: READY, capPermissionService: null)
 
         when: "A service call is made to generate a list of assays ready to be extracted"
         this.assayExportService.generateAssays(this.markupBuilder)

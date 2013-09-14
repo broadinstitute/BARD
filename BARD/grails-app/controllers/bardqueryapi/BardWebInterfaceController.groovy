@@ -71,8 +71,15 @@ class BardWebInterfaceController {
         return mobileService.detect(request)
     }
 
+
     def index() {
+        render( view: 'homepage', model: {})
     }
+
+    def redirectToIndex(){
+        redirect( controller: 'bardWebInterface', action:'index' )
+    }
+
 
     def search() {
         flash.searchString = params.searchString
@@ -522,43 +529,6 @@ class BardWebInterfaceController {
         }
         catch (Exception exp) {
             final String errorMessage = "Search For Assay Id ${assayId}:\n${exp.message}"
-            log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username), exp)
-            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(), errorMessage)
-        }
-
-    }
-
-    def showProject(Integer projectId) {
-        Integer projId = projectId ?: params.id as Integer//if 'project' param is provided, use that; otherwise, try the default id one
-        if (isHTTPBadRequest(projId, "Project Id is required", bardUtilitiesService.username)) {
-            return
-        }
-
-        try {
-
-            Map projectMap = this.queryService.showProject(projId)
-
-            if (projectMap) {
-                ProjectAdapter projectAdapter = projectMap.projectAdapter
-                final Map projectExperimentMap = this.queryProjectExperimentRenderService.constructGraph(projId, projectAdapter.experimentTypes)
-                def projectExperimentJSON = null
-                if (projectExperimentMap) {
-                    projectExperimentJSON = new JSON(projectExperimentMap)
-                }
-
-
-                render(view: "showProject", model: [projectAdapter: projectAdapter, experiments: projectMap.experiments, assays: projectMap.assays,
-                        searchString: params.searchString, pegraph: projectExperimentJSON])
-            } else {
-                throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Could not find Project Id ${projId}")
-            }
-        }
-        catch (HttpClientErrorException httpClientErrorException) {
-            String message = "Could not find Project with ID ${projId}"
-            handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
-        }
-        catch (Exception exp) {
-            final String errorMessage = "Search For Project By Id ${projectId}:\n${exp.message}"
             log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username), exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(), errorMessage)
         }

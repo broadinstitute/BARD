@@ -60,13 +60,13 @@ class MolSpreadSheetDataBuilderIntegrationSpec extends IntegrationSpec {
         where:
         label                         | dataIsSufficient | cartAssay             | cartProject             | cartCompound                        | expectedMolSpreadsheetDerivedMethod
         "All null"                    | false            | null                  | null                    | null                                | null
-        "Assay"                       | true             | new CartAssay("A", 1) | null                    | null                                | MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
-        "Project"                     | true             | null                  | new CartProject("P", 8) | null                                | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
+        "Assay"                       | true             | new CartAssay("A", 1, 1) | null                    | null                                | MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
+        "Project"                     | true             | null                  | new CartProject("P", 8, 8) | null                                | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
         "Compound"                    | true             | null                  | null                    | new CartCompound("C", "c", 1, 0, 0) | null
-        "Project and Compound"        | true             | null                  | new CartProject("P", 8) | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
-        "Assay and Compound"          | true             | new CartAssay("A", 1) | null                    | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
-        "Assay and Project"           | true             | new CartAssay("A", 1) | new CartProject("P", 8) | null                                | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
-        "Assay, Project and Compound" | true             | new CartAssay("A", 1) | new CartProject("P", 8) | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
+        "Project and Compound"        | true             | null                  | new CartProject("P", 8, 8) | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
+        "Assay and Compound"          | true             | new CartAssay("A", 1, 1) | null                    | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
+        "Assay and Project"           | true             | new CartAssay("A", 1, 1) | new CartProject("P", 8, 8) | null                                | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
+        "Assay, Project and Compound" | true             | new CartAssay("A", 1, 1) | new CartProject("P", 8, 8) | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
         "None"                        | false            | null                  | null                    | null                                | null
     }
 

@@ -14,7 +14,7 @@ class CartProjectService {
         assert projectAdapters.size() <= 1, "ProjectAdapter must be unique given a PID"
         ProjectAdapter projectAdapter = projectAdapters ? projectAdapters.first() : null
         if (projectAdapter) {
-            cartProject = new CartProject(projectAdapter.name, projectAdapter.id)
+            cartProject = new CartProject(projectAdapter.name, pid, projectAdapter.id)
         }
 
         return cartProject
