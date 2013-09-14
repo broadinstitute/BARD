@@ -40,7 +40,7 @@
                     <li><a href="#annotations-header"><i class="icon-chevron-right"></i>Annotations</a></li>
                     <li><a href="#experiment-and-step-header"><i class="icon-chevron-right"></i>Experiments and steps</a></li>
                     <li><a href="#documents-header"><i class="icon-chevron-right"></i>Documents</a>
-                        <ul class="nav nav-list">
+                        <ul class="nav nav-list bs-docs-sidenav" style="padding-left: 0; margin: 0;">
                             <li><a href="#documents-description-header"><i class="icon-chevron-right"></i>Descriptions</a>
                             </li>
                             <li><a href="#documents-protocol-header"><i class="icon-chevron-right"></i>Protocols</a></li>
