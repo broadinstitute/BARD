@@ -1,7 +1,4 @@
-package persona;
-
-import java.io.Serializable;
-import java.util.Date;
+package persona
 
 public class PersonaVerificationResponse implements Serializable {
 	private static final long serialVersionUID = 1L;

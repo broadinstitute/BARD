@@ -1,11 +1,9 @@
 import bard.db.dictionary.OntologyDataAccessService
+import bard.validation.ext.ExternalOntologyFactory
 import bard.validation.extext.PersonCreator
 import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.springframework.context.ApplicationContext
-import org.springframework.web.context.support.WebApplicationContextUtils
-import bard.validation.extext.ExternalOntologyPerson
-import bard.validation.ext.ExternalOntologyFactory
-import bard.validation.extext.ExternalOntologyPerson
+import org.codehaus.groovy.grails.plugins.springsecurity.SecurityFilterPosition
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 class BootStrap {
     OntologyDataAccessService ontologyDataAccessService
@@ -13,6 +11,7 @@ class BootStrap {
     GrailsApplication grailsApplication
 
 	def init = { servletContext ->
+        SpringSecurityUtils.clientRegisterFilter('personaAuthenticationFilter', SecurityFilterPosition.SECURITY_CONTEXT_FILTER.order + 10)
         loadPersonOntology()
         computeTrees()
 	}

@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>BioAssay Research Database</title>
-    <r:require modules="core,bootstrap"/>
+    <r:require modules="core,bootstrap,login"/>
     <r:layoutResources/>
 
     <style type="text/css">
@@ -52,9 +52,9 @@
 <body>
 <div class="container">
 
-    <form class="form-signin" action='${postUrl}' method='POST' id='loginForm' autocomplete='off'>
+    <form action='${postUrl}' method='POST' id='loginForm' autocomplete='off'>
 
-        <div style="text-align: center;">
+        <div>
             <img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database"/>
         </div>
         <br>
@@ -68,27 +68,28 @@
 
         <h2 class="form-signin-heading">Please sign in</h2>
 
-        <input type="text" class="input-block-level" name='j_username' id='username'
+        <input type="text" name='j_username' id='username'
                placeholder="${message(code: "springSecurity.login.username.label")}">
 
-        <input type="password" class="input-block-level"
+        <input type="password"
                placeholder="${message(code: "springSecurity.login.password.label")}" name='j_password' id='password'>
 
-        <label for='remember_me' class="checkbox">
-            <input type="checkbox" name='${rememberMeParameter}' id='remember_me'
-                   <g:if test='${hasCookie}'>checked='checked'</g:if>>
-            <g:message code="springSecurity.login.remember.me.label"/>
-        </label>
+        %{--<label for='remember_me' class="checkbox">--}%
+        <input type="checkbox" name='${rememberMeParameter}' id='remember_me'
+               <g:if test='${hasCookie}'>checked='checked'</g:if>>
+        <g:message code="springSecurity.login.remember.me.label"/>
+        %{--</label>--}%
 
-        <button class="btn btn-large btn-primary" type="submit">
-            <g:message code="springSecurity.login.button"/>
+        <button class="btn btn-medium btn-primary" type="submit">
+            <g:message code="bard.springSecurity.login.button"/>
         </button>
-        OR<br/><br/>
-        <label>
-            <a class="btn btn-large" id='signin'>Sign in with your Email</a>
-            %{--<a id='signin' class="persona-button dark"><span>Sign in with your Email</span></a>--}%
-        </label>
     </form>
+    <br/>
+    <a class="btn btn-medium btn-info" id='signin'>Sign in with your Email</a>
+    %{--<button class="btn btn-medium btn-facebook"><i class="icon-facebook"></i> | Connect with Facebook</button>--}%
+    %{--<button class="btn btn-medium btn-twitter"><i class="icon-twitter"></i> | Connect with Twitter</button>--}%
+    %{--<button class="btn btn-medium btn-linkedin"><i class="icon-linkedin"></i> | Connect with LinkedIn</button>--}%
+
 </div> <!-- /container -->
 
 <r:layoutResources/>

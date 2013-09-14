@@ -106,7 +106,7 @@
                         <g:form class="navbar-form pull-right" name="logoutForm" controller="logout">
                             <span
                                     style="color: white; font-weight: bold;">Logged in as: <sec:username/></span>&nbsp;&nbsp;
-                            <button type="submit" class="btn">Logout</button>
+                            <button type="submit" class="btn" id="logoutButton">Logout</button>
                         </g:form>
                     </sec:ifLoggedIn>
                     <sec:ifNotLoggedIn>

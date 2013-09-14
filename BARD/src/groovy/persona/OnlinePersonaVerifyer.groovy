@@ -6,14 +6,17 @@ import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.RestTemplate
 
-public class OnlinePersonaVerifyer  {
+public class OnlinePersonaVerifyer{
 	RestTemplate restTemplate;
 	String audience; //your url
+    String verificationUrl
 
 	public OnlinePersonaVerifyer() {
 
 	}
 
+
+	@Override
 	public PersonaVerificationResponse verify(final String assertion) {
 
 		final LinkedMultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
@@ -22,7 +25,7 @@ public class OnlinePersonaVerifyer  {
 
 		try {
 			final ResponseEntity<PersonaVerificationResponse> response = restTemplate
-					.postForEntity("https://verifier.login.persona.org/verify",
+					.postForEntity(this.verificationUrl,
 							request, PersonaVerificationResponse.class);
 
 			if (response.getStatusCode() != HttpStatus.OK) {

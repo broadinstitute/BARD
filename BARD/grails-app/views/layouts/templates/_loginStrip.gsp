@@ -1,5 +1,6 @@
 <div id="login-form">
     <sec:ifLoggedIn>
+
         <g:form name="logoutForm" controller="bardLogout">
             Logged in as: <span
                 style="font-weight: bold;"><sec:username/></span>&nbsp;&nbsp;

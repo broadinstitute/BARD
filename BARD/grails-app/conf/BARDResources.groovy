@@ -16,6 +16,10 @@ modules = {
         resource url: '/js/persona/include.js'
         resource url: 'js/persona/signin.js'
     }
+    login{
+        resource url:"css/font-awesome/css/font-awesome.css"
+        resource url:"css/social-buttons.css"
+    }
     xeditable {
         resource url: "/js/x-editable/bootstrap-editable.js"
         resource url: "/css/x-editable/bootstrap-editable.css"

@@ -129,6 +129,7 @@ grails.project.dependency.resolution = {
         compile ":mail:1.0.1"
         compile ":greenmail:1.3.3"
         compile ":cache:1.0.1"
+        //compile ":spring-security-twitter:0.5.4"
 //        compile ":ontology:0.0.2"
         // runtime scope
         runtime ":jquery:1.7.1"
@@ -139,13 +140,14 @@ grails.project.dependency.resolution = {
         }
         test "org.grails.plugins:geb:$gebVersion"
         test ":remote-control:1.4"
+
     }
 }
 
 // making the domain plugin an in-place plugin
 grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
 grails.plugin.location.'crowd-user-registration' = "../crowdUserRegistration"
-grails.plugin.location.'spring-security-persona'='../../grails-spring-security-persona'
+
 
 grails.plugin.location.'shopping-cart:0.8.2' = "../shopping-cart-0.8.2"
 

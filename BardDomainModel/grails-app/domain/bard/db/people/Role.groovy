@@ -1,6 +1,8 @@
 package bard.db.people
 
-class Role {
+import org.springframework.security.core.GrantedAuthority
+
+class Role implements GrantedAuthority{
 
     String authority
     Date dateCreated = new Date()
