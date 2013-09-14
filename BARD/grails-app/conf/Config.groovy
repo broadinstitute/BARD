@@ -283,6 +283,7 @@ if (appName) {
         }
     }
     switch (Environment.current) {
+        case Environment.CUSTOM://Allows tests to run in other environments
         case Environment.TEST:
             grails.config.locations << "classpath:Config-for-test.groovy"
             break
