@@ -57,7 +57,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="controller"><g:link controller="assayDefinition"
-                                                               action="groupAssays">My Assays</g:link></li>
+                                                               action="groupAssays">My Assay Definitions</g:link></li>
                                 <li class="controller"><g:link controller="assayDefinition"
                                                                action="findById">Search by Assay Definition ID</g:link></li>
                                 <li class="controller"><g:link controller="assayDefinition"
@@ -90,12 +90,15 @@
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                 <li class="controller"><g:link controller="panel"
-                                                               action="create">Create Panel</g:link></li>
+                                <li class="controller"><g:link controller="panel"
+                                                               action="myPanels">My Panels</g:link></li>
+
                                 <li class="controller"><g:link controller="panel"
                                                                action="findById">Search by Panel ID</g:link></li>
                                 <li class="controller"><g:link controller="panel"
                                                                action="findByName">Search by Panel Name</g:link></li>
+                                <li class="controller"><g:link controller="panel"
+                                                               action="create">Create New Panel</g:link></li>
                             </ul>
                         </li>
                         <li>

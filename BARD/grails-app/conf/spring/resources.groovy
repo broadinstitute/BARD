@@ -1,4 +1,5 @@
 import acl.CapPermissionService
+import bard.auth.InMemMapAuthenticationProviderService
 import bard.core.helper.LoggerService
 import bard.core.rest.spring.*
 import bard.core.util.ExternalUrlDTO
@@ -100,7 +101,7 @@ beans = {
             }
             break
         default:
-            inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService) {
+            inMemMapAuthenticationProviderService(InMemMapAuthenticationProviderService) {
                 grailsApplication = application
             }
             userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService) {

@@ -8,12 +8,11 @@ import com.atlassian.crowd.service.client.CrowdClient
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import org.broadinstitute.cbip.crowd.CbipUser
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.GrantedAuthorityImpl
 import spock.lang.Specification
 import spock.lang.Unroll
+import util.BardUser
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
@@ -22,46 +21,47 @@ import spock.lang.Unroll
 @Mock([Person, Role, PersonRole])
 @TestFor(BardAuthorizationProviderService)
 @Unroll
-class BardAuthorizationProviderServiceSpec extends Specification {
+class BardAuthorizationProviderServiceIntegrationSpec extends Specification {
 
-    void "test getRolesFromDatabase Role: #desc"() {
+    void "test addRolesFromDatabase Role: #desc"() {
         given:
-        Person person = Person.build()
+        Person person = Person.build(userName: roleName)
         Role role = Role.build(authority: roleName)
         PersonRole.build(person: person, role: role)
-
+        BardUser bardUser = new BardUser(username: person.userName)
         when:
-        final List<GrantedAuthority> roles = service.getRolesFromDatabase(person.userName)
+        service.addRolesFromDatabase(bardUser)
         then:
-        assert roles
-        assert roles.size() == 1
-        assert roles.get(0).authority == expectedRoleName
+        assert bardUser.authorities
+        assert bardUser.authorities.size() == 1
+        assert bardUser.authorities.iterator().next().authority == expectedRoleName
         where:
         desc                                                                           | roleName       | expectedRoleName
         "Has a role that exists in CAP"                                                | "ROLE_CURATOR" | "ROLE_CURATOR"
-        "Has a role that exists in CAP, but it does not start with the prefix 'ROLE_'" | "CURATOR"      | "ROLE_CURATOR"
+        "Has a role that exists in CAP, but it does not start with the prefix 'ROLE_'" | "CURATOR"      | "CURATOR"
     }
 
     void "test Person #desc"() {
         given:
         Person person = Person.build()
+        BardUser bardUser = new BardUser(username: person.userName)
         when:
-        final List<GrantedAuthority> roles = service.getRolesFromDatabase(person.userName)
+        service.addRolesFromDatabase(bardUser)
         then:
-        assert roles.isEmpty()
+        assert bardUser.authorities.isEmpty()
         where:
         desc           | roleName  | expectedRoleName
         "has no roles" | "CURATOR" | "ROLE_CURATOR"
     }
 
-    void "test getRolesFromDatabase Person #desc"() {
+    void "test addRolesFromDatabase Person #desc"() {
         given:
         String userName = "some username"
-
+        BardUser bardUser = new BardUser(username: userName)
         when:
-        final List<GrantedAuthority> roles = service.getRolesFromDatabase(userName)
+        service.addRolesFromDatabase(bardUser)
         then:
-        assert roles.isEmpty()
+        assert bardUser.authorities.isEmpty()
         where:
         desc                         | roleName  | expectedRoleName
         "Does not exist in database" | "CURATOR" | "ROLE_CURATOR"
@@ -71,7 +71,7 @@ class BardAuthorizationProviderServiceSpec extends Specification {
         given:
         Authentication authentication = Mock(Authentication)
         use(MockedTestCategoryException) {
-            service.getRolesFromDatabase("userName")
+            service.addRolesFromDatabase(new BardUser(username: "userName"))
         }
         when:
         service.authenticate(authentication)
@@ -96,13 +96,13 @@ class BardAuthorizationProviderServiceSpec extends Specification {
         CrowdClient crowdClient = Mock(CrowdClient)
         service.crowdClient = crowdClient
         use(MockedTestCategory) {
-            List list = service.getRolesFromDatabase("userName")
+           service.addRolesFromDatabase(new BardUser(username:"userName"))
         }
         when:
-        CbipUser cbipUser = service.findByUserName("userName")
+        BardUser bardUser = service.findByUserName("userName")
         then:
         crowdClient.getUser(_) >> { new UserEntity("name", "firstName", "lastName", "displayName", "emailAddress", null, true) }
-        assert cbipUser
+        assert bardUser
     }
 
     void "test authenticate with success"() {
@@ -111,7 +111,7 @@ class BardAuthorizationProviderServiceSpec extends Specification {
         CrowdClient crowdClient = Mock(CrowdClient)
         service.crowdClient = crowdClient
         use(MockedTestCategory) {
-            List list = service.getRolesFromDatabase("userName")
+            service.addRolesFromDatabase(new BardUser(username: "userName"))
         }
         when:
         def results = service.authenticate(authentication)
@@ -123,14 +123,14 @@ class BardAuthorizationProviderServiceSpec extends Specification {
 }
 class MockedTestCategory {
 
-    static List getRolesFromDatabase(String userName) {
-        return [new GrantedAuthorityImpl("ROLE_TEST")]
+    static void addRolesFromDatabase(BardUser bardUser) {
+        bardUser.authorities = [new GrantedAuthorityImpl("ROLE_TEST")]
     }
 
 }
 class MockedTestCategoryException {
 
-    static List getRolesFromDatabase(String userName) {
+    static void addRolesFromDatabase(BardUser userName) {
         throw new Exception("")
     }
 

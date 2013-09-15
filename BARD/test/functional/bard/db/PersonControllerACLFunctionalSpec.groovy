@@ -1,6 +1,7 @@
 package bard.db
 
 import bard.db.people.Person
+import bard.db.people.PersonRole
 import bard.db.people.Role
 import bard.db.registration.BardControllerFunctionalSpec
 import groovy.sql.Sql
@@ -31,7 +32,7 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def setupSpec() {
         String reauthenticateWithUser = ADMIN_USERNAME
         String adminRole = ADMIN_ROLE
-        createTeamsInDatabase(ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_ROLE, reauthenticateWithUser)
+        createPersonInDatabase(ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_ROLE, reauthenticateWithUser)
 
         personId = (Map) remote.exec({
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
@@ -40,7 +41,27 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             return [id: person.id, roleId: role.id]
         })
     }
+    static void createPersonInDatabase(String teamuserName, String teamEmail, String teamRole, String reAuthenticateWith) {
+        assert teamuserName != null
 
+        remote.exec({
+            SpringSecurityUtils.reauthenticate(reAuthenticateWith, null)
+            Person person = Person.findByUserName(teamuserName)
+            Role role = Role.findByAuthority(teamRole)
+            if (!role) {
+                role = Role.build(authority: teamRole, displayName:teamRole).save(flush: true)
+            }
+            if (!person) {
+                person = Person.build(userName: teamuserName, emailAddress: teamEmail,
+                        dateCreated: new Date(), newObjectRole: role).save(flush: true)
+            }
+            PersonRole personRole = PersonRole.findByPersonAndRole(person, role)
+            if (!personRole) {
+                PersonRole.build(role: role, person: person).save(flush: true)
+            }
+            return true
+        })
+    }
     def cleanupSpec() {
 
         Sql sql = Sql.newInstance(dburl, dbusername,

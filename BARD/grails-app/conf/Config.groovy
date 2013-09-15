@@ -205,7 +205,7 @@ CbipCrowd {
     register.url = 'https://crowd.somewhere.com/crowd/'
     application.username = 'bard'
     application.password = 'ChangeMe'
-    applicationSpecificRoles = ['ROLE_TEAM_A', 'ROLE_TEAM_B', 'ROLE_Bard', 'ROLE_MOBILE', 'ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'ROLE_CURATOR', 'CURATOR', "ROLE_BARD_ADMINISTRATOR", "ROLE_TEAM_BROAD"]
+    applicationSpecificRoles = ['ROLE_Bard', 'ROLE_MOBILE', 'ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'ROLE_CURATOR', "ROLE_BARD_ADMINISTRATOR", "ROLE_TEAM_BROAD"]
     mockUsers {
         integrationTestUser {
             roles = ['ROLE_USER', 'ROLE_CURATOR', 'ROLE_BARD_ADMINISTRATOR']
@@ -215,24 +215,28 @@ CbipCrowd {
         }
         curator {
             roles = ['ROLE_CURATOR']
+            owningRole = 'ROLE_CURATOR'
             username = 'curator'
             password = 'curator'
             email = 'curator@nowhere.com'
         }
         teamA_1 {
             roles = ['ROLE_TEAM_A']
+            owningRole = 'ROLE_TEAM_A'
             username = 'teamA_1'
             password = 'teamA_1'
             email = 'team1@nowhere.com'
         }
         teamA_2 {
             roles = ['ROLE_TEAM_A']
+            owningRole = 'ROLE_TEAM_A'
             username = 'teamA_2'
             password = 'teamA_2'
             email = 'teamA2@nowhere.com'
         }
         teamB_1 {
             roles = ['ROLE_TEAM_B']
+            owningRole = 'ROLE_TEAM_B'
             username = 'teamB_1'
             password = 'teamB_2'
             email = 'team2@nowhere.com'

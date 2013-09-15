@@ -1,13 +1,10 @@
 package acl
 
 import bard.db.experiment.Experiment
-import bard.db.people.Person
-import bard.db.people.Role
 import bard.db.project.Project
 import bard.db.registration.Assay
 import grails.plugin.spock.IntegrationSpec
 import grails.plugins.springsecurity.SpringSecurityService
-import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.core.context.SecurityContextHolder
 import spock.lang.Unroll
 
@@ -35,12 +32,7 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
         given: 'a logged in user creates an assay'
         springSecurityService.reauthenticate(username)
 
-        if (newObjectRoleMap) {
-            Role newObjectRole = Role.build(newObjectRoleMap).save(flush: true)
-            Person.build(userName: username, newObjectRole: newObjectRole).save(flush: true)
-
-        }
-        Assay assay = buildClosure.call()
+        Assay assay = Assay.build()
         assay.save(flush: true)
 
         when:
@@ -50,10 +42,10 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
         actualOwner == expectedOwner
 
         where:
-        desc                   | buildClosure      | username              | newObjectRoleMap                                  | expectedOwner
-        'owner is teamMember1' | { Assay.build() } | 'integrationTestUser' | null                                              | 'integrationTestUser'
-        'owner is teamMember1' | { Assay.build() } | 'teamA_1'             | null                                              | 'teamA_1'
-        'owner is teamMember1' | { Assay.build() } | 'teamA_1'             | [authority: 'ROLE_TEAM_A', displayName: 'Team A'] | 'Team A'
+        desc                             | username              | expectedOwner
+        'owner is integration test user' | 'integrationTestUser' | 'integrationTestUser'
+        'owner is teamMember1'           | 'teamA_1'             | 'ROLE_TEAM_A'
+        'owner is teamMember2'           | 'teamA_2'             | 'ROLE_TEAM_A'
     }
 
 
@@ -99,10 +91,7 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
         given: 'a team member with Person.newObjecRole set to a team'
         SecurityContextHolder.clearContext();
         springSecurityService.reauthenticate(teamMember1)
-        if (newObjectRoleMap) {
-            Role newObjectRole = Role.build(newObjectRoleMap).save(flush: true)
-            Person.build(userName: teamMember1, newObjectRole: newObjectRole).save(flush: true)
-        }
+
 
         when: '1 team member creates entities'
         num.times { builtInstances.add(buildClosure.call()) }
@@ -124,12 +113,12 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
         assert foundInstancesForTeamMember2.size() == num
 
         where:
-        desc                                    | num | teamMember1 | teamMember2 | newObjectRoleMap                                  | domainClass | buildClosure
-        'authenticated user with 1 assay'       | 1   | 'teamA_1'   | 'teamA_2'   | [authority: 'ROLE_TEAM_A', displayName: 'Team A'] | Assay       | { Assay.build() }
-        'authenticated user with 2 assays'      | 2   | 'teamA_1'   | 'teamA_2'   | [authority: 'ROLE_TEAM_A', displayName: 'Team A'] | Assay       | { Assay.build() }
-        'authenticated user with 1 projects'    | 1   | 'teamA_1'   | 'teamA_2'   | [authority: 'ROLE_TEAM_A', displayName: 'Team A'] | Project     | { Project.build() }
-        'authenticated user with 2 projects'    | 2   | 'teamA_1'   | 'teamA_2'   | [authority: 'ROLE_TEAM_A', displayName: 'Team A'] | Project     | { Project.build() }
-        'authenticated user with 1 experiments' | 1   | 'teamA_1'   | 'teamA_2'   | [authority: 'ROLE_TEAM_A', displayName: 'Team A'] | Experiment  | { Experiment.build() }
-        'authenticated user with 2 experiments' | 2   | 'teamA_1'   | 'teamA_2'   | [authority: 'ROLE_TEAM_A', displayName: 'Team A'] | Experiment  | { Experiment.build() }
+        desc                                    | num | teamMember1 | teamMember2 | domainClass | buildClosure
+        'authenticated user with 1 assay'       | 1   | 'teamA_1'   | 'teamA_2'   | Assay       | { Assay.build() }
+        'authenticated user with 2 assays'      | 2   | 'teamA_1'   | 'teamA_2'   | Assay       | { Assay.build() }
+        'authenticated user with 1 projects'    | 1   | 'teamA_1'   | 'teamA_2'   | Project     | { Project.build() }
+        'authenticated user with 2 projects'    | 2   | 'teamA_1'   | 'teamA_2'   | Project     | { Project.build() }
+        'authenticated user with 1 experiments' | 1   | 'teamA_1'   | 'teamA_2'   | Experiment  | { Experiment.build() }
+        'authenticated user with 2 experiments' | 2   | 'teamA_1'   | 'teamA_2'   | Experiment  | { Experiment.build() }
     }
 }

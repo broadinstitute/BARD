@@ -20,7 +20,11 @@ class PanelController {
 
     PanelService panelService
 
-
+    def myPanels() {
+        List<Panel> panels = capPermissionService.findAllObjectsForRoles(Panel)
+        Set<Panel> uniquePanels = new HashSet<Panel>(panels)
+        [panels: uniquePanels]
+    }
 
     def deletePanel() {
         Panel panel = Panel.get(params.id)

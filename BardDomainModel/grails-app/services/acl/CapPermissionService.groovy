@@ -18,6 +18,7 @@ import org.hibernate.Session
 import org.springframework.security.acls.domain.BasePermission
 import org.springframework.security.acls.model.NotFoundException
 import org.springframework.security.acls.model.Permission
+import util.BardUser
 
 class CapPermissionService implements CapPermissionInterface {
 
@@ -25,14 +26,16 @@ class CapPermissionService implements CapPermissionInterface {
     SpringSecurityService springSecurityService
 
     void addPermission(domainObjectInstance) {
-        String userName = springSecurityService.principal?.username
-        Person person = Person.findByUserName(userName)
+        final BardUser bardUser = (BardUser) springSecurityService.principal
+        //  String userName = bardUser?.username
+
+        //Person person = Person.findByUserName(userName)
 
         //we would use a default role so that all of our tests can pass
         //Take this out as soon as we complete https://www.pivotaltracker.com/story/show/51238251
-        Role newObjectRole = person?.newObjectRole ?: new Role(authority: userName)
+        // Role newObjectRole = person?.newObjectRole ?: new Role(authority: userName)
         //we assume that the newObjectRole should never be null. There will be a check constraint to insure that
-        addPermission(domainObjectInstance, newObjectRole, BasePermission.ADMINISTRATION)
+        addPermission(domainObjectInstance, bardUser.owningRole, BasePermission.ADMINISTRATION)
     }
 
     void addPermission(domainObjectInstance, Role role, Permission permission) {
@@ -41,7 +44,7 @@ class CapPermissionService implements CapPermissionInterface {
 
     void removePermission(domainObjectInstance) {
         //find the recipient
-
+        final Class<?> clazz = domainObjectInstance.getClass()
         final AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByObjectId(domainObjectInstance.id)
         if (aclObjectIdentity) {
             AclEntry aclEntry = AclEntry.findByAclObjectIdentity(aclObjectIdentity)
@@ -67,7 +70,12 @@ class CapPermissionService implements CapPermissionInterface {
             if (aclSid) {
                 if (!aclSid.principal) {
                     Role role = Role.findByAuthority(aclSid.sid)
-                    owner = role?.displayName
+                    if (role) {
+                        owner = role?.displayName
+                    } else {
+                        owner = aclSid.sid
+                    }
+
                 } else {
                     owner = aclSid.sid
                 }

@@ -1,9 +1,10 @@
 import acl.CapPermissionService
+import bard.auth.InMemMapAuthenticationProviderService
 import grails.util.Environment
 
 // Place your Spring DSL code here
 beans = {
-    inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService) {
+    inMemMapAuthenticationProviderService(InMemMapAuthenticationProviderService) {
         grailsApplication = application
     }
     crowdAuthenticationProvider(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {// beans here
@@ -18,9 +19,6 @@ beans = {
             }
             break
         default:
-            inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService) {
-                grailsApplication = application
-            }
             userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService) {
                 crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('crowdAuthenticationProvider')]
             }

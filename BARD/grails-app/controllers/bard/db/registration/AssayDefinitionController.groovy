@@ -45,9 +45,9 @@ class AssayDefinitionController {
     AssayDefinitionService assayDefinitionService
     CapPermissionService capPermissionService
 
-    def groupAssays(){
+    def groupAssays() {
         List<Assay> assays = capPermissionService.findAllObjectsForRoles(Assay)
-        LinkedHashSet<Assay>  uniqueAssays = new LinkedHashSet<Assay>(assays)
+        LinkedHashSet<Assay> uniqueAssays = new LinkedHashSet<Assay>(assays)
         render(view: "groupAssays", model: [assays: uniqueAssays])
     }
 
@@ -608,7 +608,7 @@ class AssayCommand extends BardCommand {
     void copyFromCmdToDomain(Assay assay) {
         assay.designedBy = springSecurityService.principal?.username
         assay.modifiedBy = assay.designedBy
-        assay.assayShortName=this.assayName
+        assay.assayShortName = this.assayName
         for (String field in PROPS_FROM_CMD_TO_DOMAIN) {
             assay[(field)] = this[(field)]
         }

@@ -56,7 +56,6 @@ class Panel {
 
 
     String getOwner() {
-        //TODO: Does this work?
         Panel.withNewSession {
             return capPermissionService?.getOwner(this)
         }
