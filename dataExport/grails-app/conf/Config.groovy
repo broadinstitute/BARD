@@ -214,3 +214,18 @@ if (appName) {
         }
     }
 }
+CbipCrowd {
+    application.url = 'https://crowd.somewhere.com/crowd/'
+    register.url = 'https://crowd.somewhere.com/crowd/'
+    application.username = 'bard'
+    application.password = 'ChangeMe'
+    applicationSpecificRoles = ['ROLE_USER','ROLE_BARD_ADMINISTRATOR']
+    mockUsers {
+        integrationTestUser {
+            roles = ['ROLE_USER', 'ROLE_BARD_ADMINISTRATOR']
+            username = 'integrationTestUser'
+            password = 'integrationTestUser'
+            email = 'integrationTestUser@nowhere.com'
+        }
+    }
+}

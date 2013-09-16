@@ -5,23 +5,23 @@
     <r:require
             modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,assaysummary,canEditWidget"/>
     <meta name="layout" content="basic"/>
-    <title>My Assays</title>
+    <title>My Assay Definitions</title>
 </head>
 <body>
     <div class="row-fluid">
         <div class="span12">
             <div class="hero-unit-v1">
-                <h4>My Assays</h4>
+                <h4>My Assay Definitions</h4>
             </div>
         </div>
     </div>
-    <p><b>Total assays:</b> ${assays.size()}</p>
+    <p><b>Total Assay Definitions:</b> ${assays.size()}</p>
     <div id="showAssays">
         <g:if test="${assays}">
             <table class="table table-striped table-hover table-bordered">
                 <thead>
                 <tr>
-                    <th>AID</th><th>Assay Name</th><th>Status</th> <th>Date Created</th>
+                    <th>ADID</th><th>Name</th><th>Status</th> <th>Date Created</th>
                 </tr>
                 </thead>
                 <tbody>

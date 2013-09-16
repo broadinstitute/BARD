@@ -8,6 +8,7 @@ import bard.core.interfaces.AssayRole
 import bard.core.interfaces.AssayType
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.util.StructureSearchParams
+import bard.db.audit.BardContextUtils
 import bard.db.dictionary.BardDescriptor
 import grails.plugin.spock.IntegrationSpec
 import grails.plugins.springsecurity.SpringSecurityService
@@ -21,6 +22,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     QueryService queryService
     SpringSecurityService springSecurityService
+    SessionFactory sessionFactory
 
     @Shared
     List<Long> PIDS = [2]
@@ -366,16 +368,20 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         //"Search with a list of project ids" | PIDS
     }
 
+
+
     void "test assay-format and assay-type in #methodName #label"() {
         given:
-        springSecurityService.reauthenticate('integrationTestUser')
+
+        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
+        SpringSecurityUtils.reauthenticate('integrationTestUser', null)
         BardDescriptor parent
         for (String nodeLabel in expectedPath.split('/')) {
             Map buildMap = [label: nodeLabel]
             if (parent) {
                 buildMap.put('parent', parent)
             }
-            parent = BardDescriptor.findByLabel(nodeLabel)?: BardDescriptor.build(buildMap)
+            parent = BardDescriptor.findByLabel(nodeLabel) ?: BardDescriptor.build(buildMap)
         }
 
         when:

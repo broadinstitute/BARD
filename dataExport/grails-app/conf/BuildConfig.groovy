@@ -63,6 +63,9 @@ grails.project.dependency.resolution = {
 
         runtime(":hibernate:$grailsVersion")
         runtime(":resources:1.1.6")
+        compile(":cbipcrowdauthentication:0.3.4") {
+            excludes('spock', 'release', 'google-collections')
+        }
     }
 }
 

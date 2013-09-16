@@ -1,12 +1,8 @@
 package bard.db.registration
 
-import bard.db.people.Person
-import bard.db.people.PersonRole
-import bard.db.people.Role
 import grails.plugin.remotecontrol.RemoteControl
 import grails.util.BuildSettingsHolder
 import org.apache.commons.lang.StringUtils
-import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import spock.lang.Specification
 import spock.lang.Unroll
 import wslite.http.auth.HTTPBasicAuthorization
@@ -88,26 +84,28 @@ abstract class BardControllerFunctionalSpec extends Specification {
         client.httpClient.followRedirects = false
         return client
     }
+    @Deprecated
+    //"No longer needed since the mock user creates users with roles"
     static void createTeamsInDatabase(String teamuserName, String teamEmail, String teamRole, String reAuthenticateWith) {
-        assert teamuserName != null
-
-        remote.exec({
-            SpringSecurityUtils.reauthenticate(reAuthenticateWith, null)
-            Person person = Person.findByUserName(teamuserName)
-            Role role = Role.findByAuthority(teamRole)
-            if (!role) {
-                role = Role.build(authority: teamRole, displayName:teamRole).save(flush: true)
-            }
-            if (!person) {
-                person = Person.build(userName: teamuserName, emailAddress: teamEmail,
-                        dateCreated: new Date(), newObjectRole: role).save(flush: true)
-            }
-            PersonRole personRole = PersonRole.findByPersonAndRole(person, role)
-            if (!personRole) {
-                PersonRole.build(role: role, person: person).save(flush: true)
-            }
-            return true
-        })
+//        assert teamuserName != null
+//
+//        remote.exec({
+//            SpringSecurityUtils.reauthenticate(reAuthenticateWith, null)
+//            Person person = Person.findByUserName(teamuserName)
+//            Role role = Role.findByAuthority(teamRole)
+//            if (!role) {
+//                role = Role.build(authority: teamRole, displayName:teamRole).save(flush: true)
+//            }
+//            if (!person) {
+//                person = Person.build(userName: teamuserName, emailAddress: teamEmail,
+//                        dateCreated: new Date(), newObjectRole: role).save(flush: true)
+//            }
+//            PersonRole personRole = PersonRole.findByPersonAndRole(person, role)
+//            if (!personRole) {
+//                PersonRole.build(role: role, person: person).save(flush: true)
+//            }
+//            return true
+//        })
 
     }
 }

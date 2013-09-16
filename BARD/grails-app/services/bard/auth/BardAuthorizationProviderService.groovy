@@ -7,8 +7,8 @@ import org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.GrantedAuthorityImpl
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import util.BardUser
 
 class BardAuthorizationProviderService extends CrowdAuthenticationProviderService {
     /**
@@ -21,10 +21,17 @@ class BardAuthorizationProviderService extends CrowdAuthenticationProviderServic
         try {
             //get the authenticated user from crowd
             UsernamePasswordAuthenticationToken authenticate = (UsernamePasswordAuthenticationToken) super.authenticate(authentication)
-            CbipUser cbipUser = (CbipUser) authenticate.principal
+            final Object principal = authenticate.principal
+            BardUser bardUser = null
+            if (principal instanceof CbipUser) {
+                bardUser = new BardUser((CbipUser) principal)
+            } else {//it must be a BardUser
+                bardUser = (BardUser) principal
+            }
+
             def credentials = authenticate.credentials
-            final List<GrantedAuthority> roles = getRolesFromDatabase(cbipUser.username)
-            return new UsernamePasswordAuthenticationToken(cbipUser, credentials, roles);
+            addRolesFromDatabase(bardUser)
+            return new UsernamePasswordAuthenticationToken(bardUser, credentials, bardUser.authorities);
         } catch (Exception ee) {
             log.error(ee)
             throw ee
@@ -33,27 +40,24 @@ class BardAuthorizationProviderService extends CrowdAuthenticationProviderServic
     }
     /**
      *
-     * @param userName
-     * @return {@link List} of {@GrantedAuthority}
+     * @param bardUser
      */
-    protected List<GrantedAuthority> getRolesFromDatabase(String userName) {
-        final List<GrantedAuthority> roles = []
-        final Person person = Person.findByUserNameIlike(userName)
-        if (person) {
-            final Set<Role> authorities = person.getRoles()
-            if (authorities) {
-                for (Role role : authorities) {
-                    if (role.authority.startsWith("ROLE_")) {
-                        roles.add(new GrantedAuthorityImpl(role.authority));
-                    } else {
-                        roles.add(new GrantedAuthorityImpl("ROLE_" + role.authority));
+    public void addRolesFromDatabase(final BardUser bardUser) {
 
-                    }
-                }
+        final String userName = bardUser.username
+
+        final Person person = Person.findByUserNameIlike(userName)
+        bardUser.owningRole = new Role(authority:userName)
+        if (person) {
+            if (person.newObjectRole) {
+                bardUser.owningRole = person.newObjectRole
             }
+            final Set<Role> authorities = person.getRoles()
+            bardUser.authorities = authorities
+        } else{
+            bardUser.authorities = []
         }
-        return roles
-    }
+     }
     /**
      *
      * @param userName
@@ -61,11 +65,18 @@ class BardAuthorizationProviderService extends CrowdAuthenticationProviderServic
      * @throws UsernameNotFoundException
      */
     @Override
-    public CbipUser findByUserName(String userName) throws UsernameNotFoundException {
+    public BardUser findByUserName(String userName) throws UsernameNotFoundException {
         try {
-            CbipUser user = super.findByUserName(userName)
-            final List<GrantedAuthority> roles = getRolesFromDatabase(user.getUsername())
-            return new CbipUser(user.getUsername(), user.getFullName(), user.getEmail(), user.isActive, roles);
+            final Object user = super.findByUserName(userName)
+            BardUser bardUser = null
+            if(user instanceof CbipUser){
+                bardUser = new BardUser((CbipUser)user)
+            }
+            else if(user instanceof BardUser){
+                bardUser = (BardUser)user
+            }
+            addRolesFromDatabase(bardUser)
+            return bardUser
         } catch (Exception ee) {
             throw new UsernameNotFoundException(ee.getMessage());
         }
@@ -78,7 +89,8 @@ class BardAuthorizationProviderService extends CrowdAuthenticationProviderServic
      */
     @Override
     List<GrantedAuthority> getNamesOfGroupsForUser(String userName) {
-        return getRolesFromDatabase(userName)
+
+        return []
     }
 
     /**
@@ -89,15 +101,8 @@ class BardAuthorizationProviderService extends CrowdAuthenticationProviderServic
      */
     @Override
     boolean isUserDirectGroupMember(String username, String groupName) {
-        boolean isMember = false
-        final List<GrantedAuthority> roles = getRolesFromDatabase(username)
-        for (GrantedAuthority role : roles) {
-            if (role.authority == groupName) {
-                isMember = true;
-                break;
-            }
-        }
-        return isMember
+
+        return false
     }
 
 }

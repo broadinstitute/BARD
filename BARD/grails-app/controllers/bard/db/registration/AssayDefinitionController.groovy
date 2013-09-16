@@ -45,9 +45,9 @@ class AssayDefinitionController {
     AssayDefinitionService assayDefinitionService
     CapPermissionService capPermissionService
 
-    def groupAssays(){
+    def groupAssays() {
         List<Assay> assays = capPermissionService.findAllObjectsForRoles(Assay)
-        LinkedHashSet<Assay>  uniqueAssays = new LinkedHashSet<Assay>(assays)
+        LinkedHashSet<Assay> uniqueAssays = new LinkedHashSet<Assay>(assays)
         render(view: "groupAssays", model: [assays: uniqueAssays])
     }
 
@@ -244,6 +244,11 @@ class AssayDefinitionController {
 
     def show() {
         def assayInstance = Assay.get(params.id)
+
+        if (!assayInstance) {
+            def messageStr = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+            return [message: messageStr]
+        }
         JSON measureTreeAsJson = null
 
         // sanity check the context items
@@ -256,10 +261,7 @@ class AssayDefinitionController {
             }
         }
 
-        if (!assayInstance) {
-            def messageStr = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
-            return [message: messageStr]
-        }
+
 
         measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assayInstance, false))
         boolean editable = canEdit(permissionEvaluator, springSecurityService, assayInstance)
@@ -606,7 +608,7 @@ class AssayCommand extends BardCommand {
     void copyFromCmdToDomain(Assay assay) {
         assay.designedBy = springSecurityService.principal?.username
         assay.modifiedBy = assay.designedBy
-        assay.assayShortName=this.assayName
+        assay.assayShortName = this.assayName
         for (String field in PROPS_FROM_CMD_TO_DOMAIN) {
             assay[(field)] = this[(field)]
         }

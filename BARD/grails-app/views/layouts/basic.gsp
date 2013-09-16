@@ -57,7 +57,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="controller"><g:link controller="assayDefinition"
-                                                               action="groupAssays">My Assays</g:link></li>
+                                                               action="groupAssays">My Assay Definitions</g:link></li>
                                 <li class="controller"><g:link controller="assayDefinition"
                                                                action="findById">Search by Assay Definition ID</g:link></li>
                                 <li class="controller"><g:link controller="assayDefinition"
@@ -90,12 +90,15 @@
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                 <li class="controller"><g:link controller="panel"
-                                                               action="create">Create Panel</g:link></li>
+                                <li class="controller"><g:link controller="panel"
+                                                               action="myPanels">My Panels</g:link></li>
+
                                 <li class="controller"><g:link controller="panel"
                                                                action="findById">Search by Panel ID</g:link></li>
                                 <li class="controller"><g:link controller="panel"
                                                                action="findByName">Search by Panel Name</g:link></li>
+                                <li class="controller"><g:link controller="panel"
+                                                               action="create">Create New Panel</g:link></li>
                             </ul>
                         </li>
                         <li>
@@ -106,14 +109,15 @@
                         <g:form class="navbar-form pull-right" name="logoutForm" controller="logout">
                             <span
                                     style="color: white; font-weight: bold;">Logged in as: <sec:username/></span>&nbsp;&nbsp;
-                            <button type="submit" class="btn">Logout</button>
+                            <button type="submit" class="btn" id="logoutButton">Logout</button>
                         </g:form>
                     </sec:ifLoggedIn>
                     <sec:ifNotLoggedIn>
                         <g:form class="navbar-form pull-right" name="loginForm" controller="login">
                             Not logged in&nbsp;&nbsp;
                             <button type="submit" class="btn">Login</button>
-                        </g:form>
+                        </g:form> OR
+                        <a class="btn btn-large" id='signin'>Sign in with your Email</a>
                     </sec:ifNotLoggedIn>
                 </div>
             </div>

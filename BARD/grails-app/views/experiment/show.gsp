@@ -49,7 +49,7 @@
         <li><a href="#contexts-header"><i class="icon-chevron-right"></i>Contexts</a></li>
         <li><a href="#measures-header"><i class="icon-chevron-right"></i>Measures</a></li>
         <li><a href="#documents-header"><i class="icon-chevron-right"></i>Documents</a>
-            <ul class="nav nav-list">
+            <ul class="nav nav-list bs-docs-sidenav" style="padding-left: 0; margin: 0;">
                 <li><a href="#documents-description-header"><i class="icon-chevron-right"></i>Descriptions</a>
                 </li>
                 <li><a href="#documents-protocol-header"><i class="icon-chevron-right"></i>Protocols</a></li>
