@@ -38,6 +38,8 @@ class CapPermissionService implements CapPermissionInterface {
         addPermission(domainObjectInstance, bardUser.owningRole, BasePermission.ADMINISTRATION)
     }
 
+
+
     void addPermission(domainObjectInstance, Role role, Permission permission) {
         aclUtilService.addPermission(domainObjectInstance, role.authority, permission)
     }
@@ -45,12 +47,19 @@ class CapPermissionService implements CapPermissionInterface {
     void removePermission(domainObjectInstance) {
         //find the recipient
         final Class<?> clazz = domainObjectInstance.getClass()
-        final AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByObjectId(domainObjectInstance.id)
+        AclClass aclClass = AclClass.findByClassName(clazz.getName())
+        final AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByObjectIdAndAclClass(domainObjectInstance.id, aclClass)
+
         if (aclObjectIdentity) {
-            AclEntry aclEntry = AclEntry.findByAclObjectIdentity(aclObjectIdentity)
-            final String recipient = aclEntry?.sid?.sid
-            if (recipient) {
-                aclUtilService.deletePermission(domainObjectInstance, recipient, BasePermission.ADMINISTRATION)
+            List<AclEntry> aclEntryList = AclEntry.findAllByAclObjectIdentity(aclObjectIdentity)
+
+            for (AclEntry aclEntry : aclEntryList) {
+                final String recipient = aclEntry?.sid?.sid
+                if (recipient) {
+                    //we're using BasePermission.ADMINISTRATION here because it is deeply inconvenient to obtain the real mask object from
+                    //aclEntry
+                    aclUtilService.deletePermission(domainObjectInstance, recipient, BasePermission.ADMINISTRATION)
+                }
             }
         }
     }
