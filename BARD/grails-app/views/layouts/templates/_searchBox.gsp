@@ -1008,7 +1008,16 @@
         margin:0;
         font:16px/24px "Lato", Arial, Helvetica, sans-serif;
         color:#2d2f32;
-        background:#fefdf9;
+        background: rgb(111,179,206);
+        background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzZmYjNjZSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjY0JSIgc3RvcC1jb2xvcj0iI2VkZjRmOSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmY2ZjZmMiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+        background: -moz-linear-gradient(top,  rgba(111,179,206,1) 0%, rgba(237,244,249,1) 64%, rgba(252,252,252,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(111,179,206,1)), color-stop(64%,rgba(237,244,249,1)), color-stop(100%,rgba(252,252,252,1)));
+        background: -webkit-linear-gradient(top,  rgba(111,179,206,1) 0%,rgba(237,244,249,1) 64%,rgba(252,252,252,1) 100%);
+        background: -o-linear-gradient(top,  rgba(111,179,206,1) 0%,rgba(237,244,249,1) 64%,rgba(252,252,252,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(111,179,206,1) 0%,rgba(237,244,249,1) 64%,rgba(252,252,252,1) 100%);
+        background: linear-gradient(to bottom,  rgba(111,179,206,1) 0%,rgba(237,244,249,1) 64%,rgba(252,252,252,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6fb3ce', endColorstr='#fcfcfc',GradientType=0 );
+
         -webkit-text-size-adjust:100%;
         -ms-text-size-adjust:none;
      }
@@ -1123,39 +1132,45 @@
     /*}*/
 /*}*/
 </style>
-<div class="search-panel">
-<div class="search-block">
-    %{--<g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="form-inline">--}%
-        <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form">
-    <div class="row-fluid" style="margin-top: 15px;">
-        <div class="search-field input-append">
-            <div class="text-field">
-            <g:if test="${flash?.searchString}">
-                <g:textField id="searchString" name="searchString" value="${flash.searchString}"/>
-            </g:if>
-            <g:elseif test="${params?.searchString}">
-                <g:textField id="searchString" name="searchString" value="${params?.searchString}"/>
-            </g:elseif>
-            <g:else>
-                <g:textField id="searchString" name="searchString" value="" />
-            </g:else>
-            </div>
-            <div class="btn-field">
-            <button type="submit" name="search" class="btn btn-primary" id="searchButton">Search</button>
-            </div>
-        </div>
-    </div>
 
-    <div class="row-fluid">
-        <div class="span10">
-            %{--<r:script> $(document).on('click', '#structureSearchLink', showJSDrawEditor)</r:script>--}%
-            <div class="pull-right"><g:link controller="bardWebInterface" action="jsDrawEditor">
-                <img src="${resource(dir: 'images', file: 'structureEditIcon.png')}" alt="Draw or paste a structure"
-                     title="Draw or paste a structure"/> Draw or paste a structure</g:link> or <a
-                    data-toggle="modal" href="#idModalDiv">list of IDs for search</a></div>
+<div class="search-panel">
+    <div class="container-fluid">
+        <div class="search-block">
+        %{--<g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="form-inline">--}%
+            <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form">
+                <div class="row-fluid" style="margin-top: 15px;">
+                    <div class="search-field input-append">
+                        <div class="text-field">
+                            <g:if test="${flash?.searchString}">
+                                <g:textField id="searchString" name="searchString" value="${flash.searchString}"/>
+                            </g:if>
+                            <g:elseif test="${params?.searchString}">
+                                <g:textField id="searchString" name="searchString" value="${params?.searchString}"/>
+                            </g:elseif>
+                            <g:else>
+                                <g:textField id="searchString" name="searchString" value=""/>
+                            </g:else>
+                        </div>
+
+                        <div class="btn-field">
+                            <button type="submit" name="search" class="btn btn-primary"
+                                    id="searchButton">Search</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row-fluid">
+                    <div class="span10">
+                        %{--<r:script> $(document).on('click', '#structureSearchLink', showJSDrawEditor)</r:script>--}%
+                        <div class="pull-right"><g:link controller="bardWebInterface" action="jsDrawEditor">
+                            <img src="${resource(dir: 'images', file: 'structureEditIcon.png')}"
+                                 alt="Draw or paste a structure"
+                                 title="Draw or paste a structure"/> Draw or paste a structure</g:link> or <a
+                                data-toggle="modal" href="#idModalDiv">list of IDs for search</a></div>
+                    </div>
+                </div>
+            </g:form>
         </div>
     </div>
-</g:form>
-</div>
 </div>
 <g:render template="/layouts/templates/IdSearchBox"/>
