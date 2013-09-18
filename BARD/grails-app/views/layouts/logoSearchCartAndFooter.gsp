@@ -174,6 +174,58 @@
 .qcart {
     display: inline;
 }
+    #footer{
+    padding:0 0 3px;
+    background:#2d2f32;
+    }
+    .footer-columns{
+    padding:26px 0 33px;
+    color:#fff;
+    font-size:14px;
+    line-height:18px;
+    }
+    .footer-columns a{color:#fff;}
+    .footer-columns a:hover{color:#38d9c1;}
+    .footer-columns h3{
+    margin:0 0 13px;
+    font-weight:normal;
+    font-size:18px;
+    line-height:22px;
+    color:#0093d0;
+    }
+    .footer-columns ul{
+    margin:0 0 20px;
+    list-style:none;
+    font-size:12px;
+    line-height:16px;
+    }
+    .footer-columns ul li{padding:0 0 8px;}
+    .footer-columns .by{
+    padding:13px 0 0;
+    text-align:right;
+    line-height:22px;
+    }
+    .footer-info{
+    padding:29px 0 33px;
+    font-size:14px;
+    line-height:20px;
+    text-align:center;
+    color:#fff;
+    background:#21495c;
+    }
+    .footer-info ul{
+    margin:0;
+    list-style:none;
+    }
+    .footer-info ul li{display:inline;}
+    .footer-info ul li:before{
+    content:'·';
+    margin:0 3px 0 0;
+    }
+    .footer-info ul li:first-child:before{display:none;}
+    .footer-info a{color:#fff;}
+    .footer-info a:hover{color:#38d9c1;}
+     media queries
 
 
 @media only screen and (max-width: 767px) {
