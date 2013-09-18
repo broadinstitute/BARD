@@ -53,7 +53,7 @@ class BardWebInterfaceController {
     List<SearchFilter> filters = []
 
     //An AfterInterceptor to handle mobile-view routing.
-    def afterInterceptor = [action: this.&handleMobile]
+//    def afterInterceptor = [action: this.&handleMobile]
 
 
     protected handleMobile(model, modelAndView) {
@@ -69,7 +69,8 @@ class BardWebInterfaceController {
     }
 
     Boolean isMobile() {
-        return mobileService.detect(request)
+//        return mobileService.detect(request)
+        return false
     }
 
 
