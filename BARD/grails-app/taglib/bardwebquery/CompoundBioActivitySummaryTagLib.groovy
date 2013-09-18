@@ -31,7 +31,7 @@ class CompoundBioActivitySummaryTagLib {
 
     def projectDescription = { attrs, body ->
 
-        out << generateShortNameHTML(attrs.projectAdapter?.name, attrs.projectAdapter?.id, attrs.projectAdapter?.capProjectId, 'showProject')
+        out << generateShortNameHTML(attrs.projectAdapter?.name, attrs.projectAdapter?.id, attrs.projectAdapter?.capProjectId, 'show', 'project')
     }
 
     def experimentDescription = { attrs, body ->
@@ -107,7 +107,7 @@ class CompoundBioActivitySummaryTagLib {
         out << "</tbody></table>"
     }
 
-    String generateShortNameHTML(String name, Long bardId, Long capId, String action) {
+    String generateShortNameHTML(String name, Long bardId, Long capId, String action, String controller = "bardWebInterface") {
         String[] nameWords = name.split()
         StringBuilder sb = new StringBuilder()
 
@@ -122,7 +122,11 @@ class CompoundBioActivitySummaryTagLib {
         }
 
         if (bardId && capId) {
-            sb.append("""<a href="${createLink(controller: 'bardWebInterface', action: action, id: bardId)}"><em> (${capId})</em></a>""")
+            if(controller == "bardWebInterface") {
+                sb.append("""<a href="${createLink(controller: controller, action: action, id: bardId)}"><em> (${capId})</em></a>""")
+            } else {
+                sb.append("""<a href="${createLink(controller: controller, action: action, id: capId)}"><em> (${capId})</em></a>""")
+            }
         }
 
         sb.append("</p>")

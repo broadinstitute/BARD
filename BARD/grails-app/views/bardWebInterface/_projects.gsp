@@ -23,12 +23,12 @@
             <li>
                 <h3>
                     <g:if test="${searchString}">
-                        <g:link action="showProject" id="${projectAdapter.id}"
+                        <g:link controller="project" action="show" id="${projectAdapter.capProjectId}"
                                 params='[searchString: "${searchString}"]'>${projectAdapter.name} <small>(Project ID: ${projectAdapter.capProjectId})</small></g:link>
                     </g:if>
                     <g:else>
-                        <g:link action="showProject"
-                                id="${projectAdapter.id}">${projectAdapter.name} <small>(Project ID: ${projectAdapter.capProjectId})</small></g:link>
+                        <g:link controller="project" action="show"
+                                id="${projectAdapter.capProjectId}">${projectAdapter.name} <small>(Project ID: ${projectAdapter.capProjectId})</small></g:link>
                     </g:else>
 
                 </h3>
@@ -49,7 +49,7 @@
                         <dt>Number Of Experiments:</dt>
                         <dd>
                             <span class="badge badge-info">
-                                <a href="/BARD/bardWebInterface/showProject/${projectAdapter.id}#experiments-info"
+                                <a href="/BARD/project/show/${projectAdapter.id}#experiments-info"
                                    style="color: white; text-decoration: underline">
                                     ${projectAdapter.getNumberOfExperiments()}
                                 </a>

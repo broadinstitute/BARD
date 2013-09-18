@@ -12,6 +12,7 @@ import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
+import bard.db.project.Project
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import molspreadsheet.CompoundSummaryCategorizer
@@ -189,7 +190,8 @@ class BardWebInterfaceController {
         try {
             CompoundAdapter compoundAdapter = queryService.findProbe(probeId)
             if (compoundAdapter && compoundAdapter.bardProjectId != -1) {
-                render(template: 'probes', model: [projectId: compoundAdapter.bardProjectId])
+                Project project = Project.findByNcgcWarehouseId(compoundAdapter.bardProjectId)
+                render(template: 'probes', model: [projectId: project.id])
             } else {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND)
             }
