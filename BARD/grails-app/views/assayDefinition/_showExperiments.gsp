@@ -1,16 +1,34 @@
+<%@ page import="org.apache.commons.lang3.tuple.Pair" %>
 <div id="showExperiments">
     <g:if test="${assayInstance.experiments}">
         <table class="table table-striped table-hover table-bordered">
             <thead>
             <tr>
-                <th>EID</th><th>Experiment Name</th><th>External References</th> <th>Substances Tested</th> <th>PID</th><th>Project Name</th>
+                <th rowspan="2">EID</th>
+                <th rowspan="2">Experiment Name</th>
+                <th rowspan="2">External References</th>
+                <th colspan="2"># Compounds</th>
+                <th rowspan="2">PID</th>
+                <th rowspan="2">Project Name</th>
+            </tr>
+            <tr>
+                <th>Tested</th>
+                <th>Active</th>
             </tr>
             </thead>
             <tbody>
             <g:each in="${assayInstance.experiments}" var="experiment">
                 <tr>
-                    <td><g:link controller="experiment" id="${experiment.id}"
-                                action="show">${experiment.id}</g:link></td>
+                    <td>
+                        <g:if test="${experiment.ncgcWarehouseId}">
+                            <g:link controller="bardWebInterface" action="showExperiment"
+                                    id="${experiment.ncgcWarehouseId}">${experiment.id}</g:link>
+                        </g:if>
+                        <g:else>
+                            ${experiment.id}
+                        %{--TODO: Mark as not in warehouse--}%
+                        </g:else>
+                    </td>
                     <td style="line-height: 150%"><p>${experiment.experimentName}</p></td>
                     <td>
                         <g:if test="${!experiment.externalReferences.isEmpty()}">
@@ -21,13 +39,25 @@
                             </g:each>
                         </g:if>
                     </td>
-                    <td></td>
+                    <td>
+                        <%
+                            Pair<Long, Long> activeVsTested = experimentsActiveVsTested[experiment.id]
+                            String active = activeVsTested?.left?.toString() ?: ""
+                            String tested = activeVsTested?.right?.toString() ?: ""
+                        %>
+                        ${tested}
+                    </td>
+                    <td>
+                        ${active}
+                    </td>
                     <g:if test="${!experiment.projectExperiments.isEmpty()}">
 
                         <g:each in="${experiment.projectExperiments}" var="projExp">
                             <td>
+
                                 <g:link controller="project" id="${projExp.project.id}"
                                         action="show">${projExp.project.id}</g:link>
+
                             </td>
                             <td style="line-height: 150%">
                                 ${projExp.project.name}

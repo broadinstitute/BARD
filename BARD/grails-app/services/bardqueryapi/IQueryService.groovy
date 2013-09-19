@@ -5,10 +5,12 @@ import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.util.FilterTypes
 import bard.core.SearchParams
+import org.apache.commons.lang3.tuple.Pair
 
 public interface IQueryService {
+    Map<Long, Pair<Long, Long>> findActiveVsTestedForExperiments(final List<Long> capExperimentIds);
 
-    /**
+        /**
      *
      * @param cid
      * @return {@link bard.core.rest.spring.compounds.CompoundSummary}

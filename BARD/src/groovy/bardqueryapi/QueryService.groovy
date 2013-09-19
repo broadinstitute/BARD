@@ -23,6 +23,9 @@ import bard.core.rest.spring.assays.*
 import bard.core.rest.spring.compounds.*
 import bard.core.rest.spring.experiment.ExperimentSearchResult
 import org.apache.commons.lang3.StringUtils
+import org.apache.commons.lang3.tuple.ImmutablePair
+import org.apache.commons.lang3.tuple.Pair
+
 //import org.broadinstitute.ontology.GOOntologyService
 import org.springframework.cache.annotation.Cacheable
 
@@ -110,6 +113,8 @@ class QueryService implements IQueryService {
         }
         return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
+
+
     /**
      * @param searchString
      * @param top
@@ -160,6 +165,24 @@ class QueryService implements IQueryService {
             eTag = projectResult.etag
         }
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits, eTag: eTag]
+    }
+    Map<Long, Pair<Long, Long>> findActiveVsTestedForExperiments(final List<Long> capExperimentIds) {
+        Map<Long, Pair<Long, Long>> activeVTestedMap = [:]
+        final List<SearchFilter> searchFilters = []
+        if (capExperimentIds) {
+            final SearchParams searchParams = this.queryHelperService.constructSearchParams("", capExperimentIds.size(), 0, searchFilters)
+            final ExperimentSearchResult experimentSearchResult = experimentRestService.searchExperimentsByCapIds(capExperimentIds,searchParams,true)
+
+            final List<ExperimentSearch> experiments = experimentSearchResult?.experiments
+            if (experiments) {
+                activeVTestedMap = experiments.collectEntries { ExperimentSearch experimentSearch ->
+                    [experimentSearch.capExptId, new ImmutablePair<Long, Long>(experimentSearch.activeCompounds, experimentSearch.compounds)]
+
+                }
+            }
+
+        }
+        return activeVTestedMap
     }
     /**
      * @param searchString
@@ -662,8 +685,8 @@ class QueryService implements IQueryService {
     Map getPathsForType(String type, String endNode) {
         Map<String, String> labelToPathMap = [:]
         BardDescriptor root = BardDescriptor.findByLabel(type)
-        if(root){
-            for(BardDescriptor bardDescriptor in root.getDescendentsAndSelf()){
+        if (root) {
+            for (BardDescriptor bardDescriptor in root.getDescendentsAndSelf()) {
                 labelToPathMap.put(bardDescriptor.label, bardDescriptor.getPath(root)*.label.join('/'))
             }
         }

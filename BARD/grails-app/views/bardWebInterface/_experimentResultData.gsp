@@ -16,15 +16,15 @@
 <p>
     <b>Assay ID :
     <g:if test="${tableModel?.additionalProperties.searchString}">
-        <g:link controller="bardWebInterface" action="showAssay"
-                id="${tableModel?.additionalProperties.bardAssayId}"
+        <g:link controller="assayDefinition" action="show"
+                id="${tableModel?.additionalProperties.capAssayId}"
                 params='[searchString: "${tableModel?.additionalProperties.searchString}"]'>
             ${tableModel?.additionalProperties.capAssayId}
         </g:link>
     </g:if>
     <g:else>
-        <g:link controller="bardWebInterface" action="showAssay"
-                id="${tableModel?.additionalProperties.bardAssayId}">
+        <g:link controller="assayDefinition" action="show"
+                id="${tableModel?.additionalProperties.capAssayId}">
             ${tableModel?.additionalProperties.capAssayId}
 
         </g:link>

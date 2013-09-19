@@ -83,7 +83,7 @@
                         colspan=2><%="${((columnHeaders?.size() > 3) ? (columnHeaders[3]) : 'inactive/active')}"%></th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <% String activeVrsTested = """${molSpreadSheetData?.displayValue(rowCnt, 3)?."value"}""".toString() %>
-                        <% String cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
+                        <% cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
                         <td class="molSpreadSheet" property="cid">
                             <g:activeVrsTestedCell activeVrsTested="${activeVrsTested}"  cid="${cid}"/>
                         </td>
@@ -103,9 +103,10 @@
                                     <g:set var="currentAssayIdHeader" value="${assayHeaderIterator.next()}"/>
                                     <% rowsToSkipBeforeNextAssayid = currentAssayIdHeader."numberOfResultTypes" %>
                                     <th class="molSpreadSheetHeadData"
-                                        rowspan="<%=rowsToSkipBeforeNextAssayid%>"><a
-                                            href="../bardWebInterface/showAssay/<%=currentAssayIdHeader."assayName"%>">
-                                        <%=currentAssayIdHeader."fullAssayName"%></a>
+                                        rowspan="<%=rowsToSkipBeforeNextAssayid%>">
+                                        <g:link controller="assayDefinition" action="show" id='<%=currentAssayIdHeader."bardAssayId"%>'>
+                                            <%=currentAssayIdHeader."fullAssayName"%>
+                                        </g:link>
                                     </th>
                                 </g:if>
                                 <% rowsToSkipBeforeNextAssayid-- %>

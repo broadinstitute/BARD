@@ -7,6 +7,7 @@ import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
 import bard.db.project.InlineEditableCommand
+import bardqueryapi.QueryService
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
@@ -16,6 +17,7 @@ import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import grails.validation.ValidationException
+import org.apache.commons.lang3.tuple.ImmutablePair
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
 import org.junit.Before
@@ -54,6 +56,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         controller.assayDefinitionService = assayDefinitionService
         controller.contextService = Mock(ContextService)
         controller.capPermissionService = capPermissionService
+        controller.queryService = Mock(QueryService)
         assay = Assay.build(assayName: 'Test')
         assert assay.validate()
     }
@@ -73,7 +76,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         def model = controller.save(assayCommand)
         then:
-        assert response.status==200
+        assert response.status == 200
     }
 
     void 'test create assay definition success'() {
@@ -322,6 +325,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         def model = controller.show()
 
         then:
+        controller.queryService.findActiveVsTestedForExperiments(_) >> { [:] }
         capPermissionService.getOwner(_) >> { 'owner' }
         model.assayInstance == assay
     }

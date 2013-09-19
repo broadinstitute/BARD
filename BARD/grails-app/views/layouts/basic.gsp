@@ -88,6 +88,16 @@
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Experiments
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="controller"><g:link controller="experiment"
+                                                               action="myExperiments">My Experiments</g:link></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 Panels
                                 <b class="caret"></b>
                             </a>
