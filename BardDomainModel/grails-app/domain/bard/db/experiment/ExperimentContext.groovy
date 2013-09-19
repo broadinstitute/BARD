@@ -8,7 +8,6 @@ import bard.db.model.AbstractContextOwner
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
-import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import org.apache.commons.lang.StringUtils
 import spock.lang.Unroll
