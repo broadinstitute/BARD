@@ -8,6 +8,8 @@ import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.ETagCollection
 import bard.core.rest.spring.util.Facet
+import bard.core.util.ExternalUrlDTO
+import bard.core.util.FilterTypes
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.time.StopWatch
 import org.springframework.http.HttpEntity
@@ -15,11 +17,9 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.client.HttpClientErrorException
-import bard.core.util.FilterTypes
-import bard.core.util.ExternalUrlDTO
 
 abstract class AbstractRestService {
     RestTemplate restTemplate

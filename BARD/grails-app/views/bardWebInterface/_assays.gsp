@@ -41,7 +41,7 @@
         <tbody>
         <g:each var="assayAdapter" in="${assayAdapters}" status="i">
             <tr>
-                <td class="align-center"><g:saveToCartButton id="${assayAdapter.id}"
+                <td class="align-center"><g:saveToCartButton id="${assayAdapter.capAssayId}"
                                                              name="${JavaScriptUtility.cleanup(assayAdapter.name)}"
                                                              type="${querycart.QueryItemType.AssayDefinition}"
                                                              hideLabel="true"/></td>
@@ -49,7 +49,7 @@
                 <td>${assayAdapter.minimumAnnotation.getAssayType()}</td>
                 <td>${assayAdapter.minimumAnnotation.getDetectionMethodType()}</td>
                 <td>${assayAdapter.capAssayId}</td>
-                <td><g:link action="showAssay" id="${assayAdapter.id}">
+                <td><g:link controller="assayDefinition" action="show" id="${assayAdapter.capAssayId}">
                     ${assayAdapter.name}</g:link><br/>
                     <small class="muted">${assayAdapter.highlight}</small></td>
                 <td class="align-center"><g:if test="${assayAdapter.assayStatus == 'Draft'}">
