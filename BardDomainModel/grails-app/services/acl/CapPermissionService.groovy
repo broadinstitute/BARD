@@ -49,27 +49,33 @@ class CapPermissionService  implements CapPermissionInterface{
         }
     }
 	
-	String getOwner(domainObjectInstance){
+    /**
+     * @param domainObjectInstance a domainInstance we track ACL permissions on
+     * @return a String representing the Role name or username that owns this domainInstance
+     */
+    String getOwner(domainObjectInstance) {
         String owner = "none"
-        try{
-            final AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByObjectId(domainObjectInstance.id)
-            if (aclObjectIdentity) {
-                AclEntry aclEntry = AclEntry.findByAclObjectIdentity(aclObjectIdentity)
-                AclSid aclSid = aclEntry?.sid
-                if(aclSid){
-                    if(!aclSid.principal)  {
-                        Role role = Role.findByAuthority(aclSid.sid)
+
+        final Class<?> clazz = domainObjectInstance.getClass()
+        AclClass aclClass = AclClass.findByClassName(clazz.getName())
+        final AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByObjectIdAndAclClass(domainObjectInstance.id, aclClass)
+        if (aclObjectIdentity) {
+            AclEntry aclEntry = AclEntry.findByAclObjectIdentity(aclObjectIdentity)
+            AclSid aclSid = aclEntry?.sid
+            if (aclSid) {
+                if (!aclSid.principal) {
+                    Role role = Role.findByAuthority(aclSid.sid)
+                    if (role) {
                         owner = role?.displayName
-                    }
-                    else{
+                    } else {
                         owner = aclSid.sid
                     }
+
+                } else {
+                    owner = aclSid.sid
                 }
             }
         }
-        catch(NotFoundException nfe)  {
-
-        }
-		return owner
-	}
+        return owner
+    }
 }
