@@ -176,7 +176,15 @@ class QueryService implements IQueryService {
             final List<ExperimentSearch> experiments = experimentSearchResult?.experiments
             if (experiments) {
                 activeVTestedMap = experiments.collectEntries { ExperimentSearch experimentSearch ->
-                    [experimentSearch.capExptId, new ImmutablePair<Long, Long>(experimentSearch.activeCompounds, experimentSearch.compounds)]
+                    Long activeCompounds = experimentSearch.activeCompounds
+                    Long testedCompounds = experimentSearch.compounds
+                    if(testedCompounds < 0){
+                        testedCompounds = 0
+                    }
+                    if(activeCompounds < 0){
+                        activeCompounds = 0
+                    }
+                    [experimentSearch.capExptId, new ImmutablePair<Long, Long>(activeCompounds,testedCompounds)]
 
                 }
             }

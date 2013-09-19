@@ -115,7 +115,7 @@ class AssayDefinitionService {
         return assayService.cloneAssayForEditing(assay, designedBy)
     }
 
-    void loadNCGCAssayIds() {
+    List<String> loadNCGCAssayIds() {
         //look for assays with an NCGC ID of null and Ready for extraction status of complete
         List<Long> capIds = Assay.findAllByNcgcWarehouseIdIsNullAndReadyForExtraction(ReadyForExtraction.COMPLETE).collect { it.id }
 
@@ -142,7 +142,7 @@ class AssayDefinitionService {
             }
         }
 
-        println updateStatements.join("\n")
+        return updateStatements
     }
 
     List<String> loadNCGCAssayIdsFromList(List<Long> capAssayIds) {

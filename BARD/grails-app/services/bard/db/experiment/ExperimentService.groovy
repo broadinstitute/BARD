@@ -237,7 +237,7 @@ class ExperimentService {
     }
 
 
-    void loadNCGCExperimentIds() {
+    List<String> loadNCGCExperimentIds() {
         //look for experiments with an NCGC ID of null and Ready for extraction status of complete
         List<Long> capIds = Experiment.findAllByNcgcWarehouseIdIsNullAndReadyForExtraction(ReadyForExtraction.COMPLETE).collect { it.id }
 
@@ -264,7 +264,7 @@ class ExperimentService {
             }
         }
 
-        println updateStatements.join("\n")
+        return updateStatements
     }
 
     List<String> loadNCGCExperimentIdsFromList(List<Long> capExperimentIds) {
