@@ -101,10 +101,12 @@
                             <tr>
                                 <g:if test="${(rowsToSkipBeforeNextAssayid == 0)}">
                                     <g:set var="currentAssayIdHeader" value="${assayHeaderIterator.next()}"/>
-                                    <% rowsToSkipBeforeNextAssayid = currentAssayIdHeader."numberOfResultTypes" %>
+                                    <% rowsToSkipBeforeNextAssayid = currentAssayIdHeader."numberOfResultTypes"
+                                      def bardAssayId = currentAssayIdHeader."bardAssayId"
+                                    %>
                                     <th class="molSpreadSheetHeadData"
                                         rowspan="<%=rowsToSkipBeforeNextAssayid%>">
-                                        <g:link controller="assayDefinition" action="show" id='<%=currentAssayIdHeader."bardAssayId"%>'>
+                                        <g:link controller="assayDefinition" action="show" id="${bardAssayId}">
                                             <%=currentAssayIdHeader."fullAssayName"%>
                                         </g:link>
                                     </th>
