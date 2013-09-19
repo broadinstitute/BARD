@@ -1,4 +1,6 @@
 %{--<r:require modules="autocomplete, structureSearch"/>--}%
+<script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js"></script>
+<script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js"></script>
 <r:require modules="autocomplete"/>
 <noscript>
     <a href="http://www.enable-javascript.com/" target="javascript">
@@ -282,6 +284,12 @@
     /*line-height:36px;*/
 /*}*/
 /*.hero-block p{margin:0 0 27px;}*/
+
+
+
+
+
+
 .search-panel{
     position:relative;
     z-index:1;
@@ -435,6 +443,12 @@
     content:' ';
     background-position:-74px 0;
 }
+
+
+
+
+
+
 /*.news-panel{*/
     /*position:relative;*/
     /*z-index:1;*/

@@ -138,6 +138,9 @@ modules = {
         resource url: "js/cart.js", disposition: 'head'
         resource url: "css/cart.css"
     }
+    bardHeaderFooter {
+        resource url: "css/bardHomepage/BardHeaderFooter.css"
+    }
     experimentsummary {
         resource url: '/js/cap/editExperimentSummary.js'
     }

@@ -13,7 +13,7 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
 
     <g:layoutHead/>
-    <r:require modules="core,bootstrap,cart"/>
+    <r:require modules="core,bootstrap,cart,bardHeaderFooter"/>
     <script type="text/javascript">
 
         //report error messages
@@ -225,7 +225,7 @@
     .footer-info ul li:first-child:before{display:none;}
     .footer-info a{color:#fff;}
     .footer-info a:hover{color:#38d9c1;}
-     media queries
+
 
 
 @media only screen and (max-width: 767px) {
@@ -397,30 +397,22 @@
 <body>
 <div class="container-fluid">
 
-    %{--<div class="row-fluid header">--}%
     <header  class="navbar navbar-static-top" id="header">
     <div class="container-fluid">
-        %{--<div class="span3">--}%
-            %{--<a href="${createLink(controller: 'BardWebInterface', action: 'index')}">--}%
-                %{--<img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database"/>--}%
-            %{--</a>--}%
-        %{--</div>--}%
-
-        <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
+            %{--switch eventally to <img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database"/>--}%
+        <strong class="logo"><a href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a></strong>
 
         <nav class="nav-panel">
-        %{--<div class="span3">--}%
             <div class="center-aligned">
                 <g:render template="/layouts/templates/loginStrip"/>
             </div>
             <div class="qcart">
             <g:render template="/layouts/templates/queryCart"/>
             </div>
-        %{--</div>--}%
         </nav>
     </div>
     </header>
-    %{--</div>--}%
+
     <g:render template="/layouts/templates/searchBox"/>
 
 
@@ -430,12 +422,6 @@
             ${flash.message}
         </div>
     </g:if>
-
-
-    %{--<div class="span6">--}%
-        %{--<g:render template="/layouts/templates/searchBox"/>--}%
-    %{--</div>--}%
-
 
 
     <g:layoutBody/>
