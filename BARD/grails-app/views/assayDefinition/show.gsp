@@ -49,6 +49,11 @@
             <div class="pull-left">
                 <g:if test="${assayInstance?.id}">
                     <h4>View Assay Definition (ADID: ${assayInstance?.id})</h4>
+                    <g:if test="${assayInstance.ncgcWarehouseId}">
+                        <g:saveToCartButton id="${assayInstance?.id}"
+                                            name="${bardqueryapi.JavaScriptUtility.cleanup(assayInstance?.assayName)}"
+                                            type="${querycart.QueryItemType.AssayDefinition}"/>
+                    </g:if>
                 </g:if>
             </div>
         </div>
