@@ -56,22 +56,22 @@
                     <g:if test="${i == 0}">
                         <td rowspan="${experimentList.size()}">
                             <g:if test="${searchString}">
-                                <g:link controller="bardWebInterface" action="showProject" id="${currProject.id}"
-                                        params='[searchString: "${searchString}"]'>${currProject.id}</g:link>
+                                <g:link controller="project" action="show" id="${currProject.capProjectId}"
+                                        params='[searchString: "${searchString}"]'>${currProject.capProjectId}</g:link>
                             </g:if>
                             <g:else>
-                                <g:link controller="bardWebInterface" action="showProject"
-                                        id="${currProject.id}">${currProject.id}</g:link>
+                                <g:link controller="project" action="show"
+                                        id="${currProject.capProjectId}">${currProject.capProjectId}</g:link>
                             </g:else>
                         </td>
                         <td rowspan="${experimentList.size()}">
                             <g:if test="${searchString}">
-                                <g:link controller="bardWebInterface" action="showProject" id="${currProject.id}"
+                                <g:link controller="project" action="show" id="${currProject.capProjectId}"
                                         params='[searchString: "${searchString}"]'>${currProject.name}</g:link>
                             </g:if>
                             <g:else>
-                                <g:link controller="bardWebInterface" action="showProject"
-                                        id="${currProject.id}">${currProject.name}</g:link>
+                                <g:link controller="project" action="show"
+                                        id="${currProject.capProjectId}">${currProject.name}</g:link>
                             </g:else>
                         </td>
                     </g:if>

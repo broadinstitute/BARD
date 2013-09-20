@@ -42,12 +42,12 @@
                 <td>${experiment.activeCompounds ?: 0}</td>
                 <g:if test="${i==0}">
                     <td rowspan="${experiments.size()}">
-                        <g:link controller="bardWebInterface" action="showAssay" id="${assay.bardAssayId}"
+                        <g:link controller="assayDefinition" action="show" id="${assay.capAssayId}"
                                 params='${ searchString ? '[searchString: ${searchString}]' : ""}'>
                             ${assay.capAssayId}</g:link>
                     </td>
                     <td rowspan="${experiments.size()}">
-                        <g:link controller="bardWebInterface" action="showAssay" id="${assay.bardAssayId}"
+                        <g:link controller="assayDefinition" action="show" id="${assay.capAssayId}"
                                 params='${ searchString ? '[searchString: ${searchString}]' : ""}'>
                             ${assay.name}</g:link>
                         %{--<dl class="dl-horizontal muted">--}%

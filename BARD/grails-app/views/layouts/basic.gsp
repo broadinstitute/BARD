@@ -34,6 +34,7 @@
 
     <header  class="navbar navbar-static-top" id="header">
         <div class="container-fluid">
+
             <strong class="logo"><a href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a></strong>
 
             <nav class="nav-panel">
@@ -56,7 +57,6 @@
                             <a class="btn btn-mini" id='signin'>Sign in with your Email</a>
                         </sec:ifNotLoggedIn>
                     </div>
-
 
                 </div>
                 <div class="qcart">

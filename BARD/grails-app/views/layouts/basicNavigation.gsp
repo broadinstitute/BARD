@@ -32,6 +32,8 @@
 
                                 <ul class="dropdown-menu">
                                     <li class="controller"><g:link
+                                            controller="aclClass">ACL Management</g:link></li>
+                                    <li class="controller"><g:link
                                             controller="register">Register External BARD User</g:link></li>
                                     <li class="controller"><g:link controller="register"
                                                                    action="listUsersAndGroups">List External BARD Users</g:link></li>

@@ -138,6 +138,17 @@ bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
 grails {
     plugins {
         springsecurity {
+            userLookup.userDomainClassName = 'Person'
+            userLookup.usernamePropertyName = 'userName'
+            userLookup.enabledPropertyName = 'enabled'
+            userLookup.passwordPropertyName = 'password'
+            userLookup.authoritiesPropertyName = 'authorities'
+            userLookup.accountExpiredPropertyName = 'accountExpired'
+            userLookup.accountLockedPropertyName = 'accountLocked'
+            userLookup.passwordExpiredPropertyName = 'passwordExpired'
+            userLookup.authorityJoinClassName = 'PersonRole'
+            authority.className = 'Role'
+            authority.nameField = 'authority'
             controllerAnnotations.staticRules = [
                     '/console/**': ['ROLE_CONSOLE_USER']
             ]
@@ -434,5 +445,3 @@ jqueryValidationUi {
 
 grails.plugins.twitterbootstrap.fixtaglib = true
 grails.spring.disable.aspectj.autoweaving = true
-//grails.plugins.springsecurity.twitter.consumerKey=null
-//grails.plugins.springsecurity.twitter.consumerSecret=null

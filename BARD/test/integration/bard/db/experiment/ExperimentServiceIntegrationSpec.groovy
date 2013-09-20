@@ -1,13 +1,9 @@
 package bard.db.experiment
 
 import bard.db.audit.BardContextUtils
-import bard.db.enums.AssayStatus
-import bard.db.enums.AssayType
 import bard.db.registration.Assay
-import bard.db.registration.AssayDefinitionService
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import org.grails.plugins.springsecurity.service.acl.AclUtilService
 import org.hibernate.SessionFactory
 import org.junit.Before
 import spock.lang.Unroll
@@ -43,5 +39,16 @@ class ExperimentServiceIntegrationSpec extends IntegrationSpec {
         assert newAssay.experiments
         assert newAssay.experiments.first().id == experiment.id
     }
+
+
+//    void 'test x'() {
+//        when:
+//
+//        experimentService.loadNCGCExperimentIds()
+//
+//        then:
+//        assert 1==1
+//    }
+
 
 }

@@ -29,7 +29,13 @@ class AssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
     }
-
+//    @IgnoreRest
+//    void 'test assay definition integrationxs'(){
+//        when:
+//        assayDefinitionService.loadNCGCAssayIds()
+//        then:
+//        assert 1==1
+//    }
     void "test update designed By"() {
         given:
         final Assay assay = Assay.build(assayName: 'assayName20', designedBy: "BARD")

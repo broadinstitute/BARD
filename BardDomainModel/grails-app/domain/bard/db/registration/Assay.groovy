@@ -175,7 +175,7 @@ class Assay extends AbstractContextOwner {
     }
 
     boolean allowsNewExperiments() {
-        return (assayStatus != AssayStatus.RETIRED && assayType != AssayType.TEMPLATE && measures.size() > 0)
+        return (assayStatus != AssayStatus.RETIRED && assayType != AssayType.TEMPLATE)
     }
 
     @Override

@@ -121,9 +121,14 @@
                     <g:each var="assayColumn" in="${molSpreadSheetData.determineResponseTypesPerAssay()}">
                         <th class="molSpreadSheetHeadData" rel="tooltip"
                             colspan="<%=assayColumn."numberOfResultTypes"%>"
-                            title="<%=assayColumn."fullAssayName"%>"><a
-                                href="../bardWebInterface/showAssay/<%=assayColumn."assayName"%>">
-                            ADID=<%=assayColumn."bardAssayId"%></a><br />
+                            title="<%=assayColumn."fullAssayName"%>">
+                            <%
+                               def bardAssayId =assayColumn."bardAssayId"
+                               %>
+                            <g:link controller="assayDefinition" action="show" id="${bardAssayId}">
+                                ADID=${bardAssayId}</a><br />
+                            </g:link>
+
                             <div>
                                 <g:if test="${assayColumn."normalized"}">
                                     <a class="normalizationtext" href="${createLink(controller: 'molSpreadSheet', action: 'index', params: [ChangeNorm:assayColumn."bardAssayId",norefresh:true])}">
