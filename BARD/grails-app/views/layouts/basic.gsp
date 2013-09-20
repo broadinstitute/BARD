@@ -14,7 +14,7 @@
     <r:require modules="autocomplete"/>
     <r:require module="cart"/>
     <r:require module="idSearch"/>
-    <%@page defaultCodec="none"%>
+    <%@ page defaultCodec="none" %>
     <%@ page import="bardqueryapi.IDSearchType" %>
     <r:layoutResources/>
 
@@ -30,10 +30,12 @@
 
 <div class="container-fluid">
 
-    <header  class="navbar navbar-static-top" id="header">
+    <header class="navbar navbar-static-top" id="header">
         <div class="container-fluid">
 
-            <strong class="logo"><a href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a></strong>
+            <strong class="logo"><a
+                    href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a>
+            </strong>
 
             <nav class="nav-panel">
                 <div class="center-aligned">
@@ -51,21 +53,25 @@
                                 Not logged in&nbsp;&nbsp;
                                 <button type="submit" class="btn btn-mini">Login</button>
                             </g:form>
-                            OR
-                            <a class="btn btn-mini" id='signin'>Sign in with your Email</a>
+                            <g:if env="development">
+                                OR
+                                <a class="btn btn-mini" id='signin'>Sign in with your Email</a>
+                            </g:if>
                         </sec:ifNotLoggedIn>
                     </div>
 
                 </div>
-                <div class="qcart">
 
+                <div class="qcart">
 
                     <div class="well well-small">
                         <g:if test="${flash.searchString}">
-                            <g:include controller="queryCart" action="refreshSummaryView" params="[searchString: flash.searchString]"/>
+                            <g:include controller="queryCart" action="refreshSummaryView"
+                                       params="[searchString: flash.searchString]"/>
                         </g:if>
                         <g:elseif test="${params?.searchString}">
-                            <g:include controller="queryCart" action="refreshSummaryView" params="[searchString: params.searchString]"/>
+                            <g:include controller="queryCart" action="refreshSummaryView"
+                                       params="[searchString: params.searchString]"/>
                         </g:elseif>
                         <g:else>
                             <g:include controller="queryCart" action="refreshSummaryView"/>
@@ -75,10 +81,12 @@
                     <div class="panel" style="z-index: 10">
                         <a class="trigger" href="#">Click to hide query cart</a>
                         <g:if test="${flash.searchString}">
-                            <g:include controller="queryCart" action="refreshDetailsView" params="[searchString: flash.searchString]"/>
+                            <g:include controller="queryCart" action="refreshDetailsView"
+                                       params="[searchString: flash.searchString]"/>
                         </g:if>
                         <g:elseif test="${params?.searchString}">
-                            <g:include controller="queryCart" action="refreshDetailsView" params="[searchString: params.searchString]"/>
+                            <g:include controller="queryCart" action="refreshDetailsView"
+                                       params="[searchString: params.searchString]"/>
                         </g:elseif>
                         <g:else>
                             <g:include controller="queryCart" action="refreshDetailsView"/>
@@ -95,7 +103,8 @@
         <div class="container-fluid">
             <div class="search-block">
             %{--<g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="form-inline">--}%
-                <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form">
+                <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm"
+                        class="search-form">
                     <div class="row-fluid">
                         <div class="search-field input-append" style="display: table; width:100%;">
                             <div class="text-field">
@@ -129,10 +138,10 @@
                     </div>
                 </g:form>
             </div>
-            <a href='/BARD/bardWebInterface/navigationPage' style="float: right; color: white; margin-bottom: 5px" CLASS="btn btn-primary">Submissions</a>
+            <a href='/BARD/bardWebInterface/navigationPage' style="float: right; color: white; margin-bottom: 5px"
+               CLASS="btn btn-primary">Submissions</a>
         </div>
     </div>
-
 
 
     <div class="modal hide" id="idModalDiv">
@@ -169,6 +178,7 @@
         </div>
 
     </div>
+
     <div class="modal hide" id="idModalDiv">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">×</a>
@@ -213,9 +223,7 @@
         </div>
     </g:if>
 
-
- </div>
-
+</div>
 
 
 <div class="container-fluid">
@@ -230,13 +238,11 @@
     </div>
 
 
-
     <div class="row-fluid bard-footer">
         <footer id="footer">
             <div class="footer-columns">
                 <div class="container-fluid">
                     <div class="row-fluid">
-
 
                         <div class="span5 bard-footer-versioninfo muted">
                             <div>
@@ -249,8 +255,9 @@
 
 
                         <div class="span2 right-aligned">
-                            <a href="http://www.chemaxon.com/" target="chemAxon"><img src="${resource(dir: 'images/bardHomepage', file: 'logo-by.png')}"
-                                                                                      alt="Powered by ChemAxon"/></a>
+                            <a href="http://www.chemaxon.com/" target="chemAxon"><img
+                                    src="${resource(dir: 'images/bardHomepage', file: 'logo-by.png')}"
+                                    alt="Powered by ChemAxon"/></a>
                         </div>
                     </div>
                 </div>
@@ -269,7 +276,6 @@
         </footer>
     </div>
 
-
 </div>
 
 <r:layoutResources/>
@@ -279,151 +285,151 @@
 %{--<!DOCTYPE html>--}%
 %{--<html>--}%
 %{--<head>--}%
-    %{--<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">--}%
-    %{--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">--}%
-    %{--<g:layoutHead/>--}%
-    %{--<r:layoutResources/>--}%
-    %{--<title>BARD: Catalog of Assay Protocols</title>--}%
-    %{--<r:external uri="/css/layout.css"/>--}%
-    %{--<r:external uri="/css/table.css"/>--}%
+%{--<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">--}%
+%{--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">--}%
+%{--<g:layoutHead/>--}%
+%{--<r:layoutResources/>--}%
+%{--<title>BARD: Catalog of Assay Protocols</title>--}%
+%{--<r:external uri="/css/layout.css"/>--}%
+%{--<r:external uri="/css/table.css"/>--}%
 %{--</head>--}%
 
 %{--<body>--}%
 %{--<div class="navbar navbar-inverse navbar-static-top">--}%
-    %{--<div class="navbar-inner">--}%
-        %{--<div class="container-fluid">--}%
-            %{--<div class="row-fluid">--}%
-                %{--<div class="span12">--}%
-                    %{--<a class="brand" href="/BARD">--}%
-                        %{--<img width="140" height="43" src="${resource(dir: 'images', file: 'bard_logo_small.png')}"--}%
-                             %{--alt="BioAssay Research Database"/>--}%
-                    %{--</a>--}%
-                    %{--<ul class="nav">--}%
-                        %{--<li><a href="/BARD">CAP</a></li>--}%
+%{--<div class="navbar-inner">--}%
+%{--<div class="container-fluid">--}%
+%{--<div class="row-fluid">--}%
+%{--<div class="span12">--}%
+%{--<a class="brand" href="/BARD">--}%
+%{--<img width="140" height="43" src="${resource(dir: 'images', file: 'bard_logo_small.png')}"--}%
+%{--alt="BioAssay Research Database"/>--}%
+%{--</a>--}%
+%{--<ul class="nav">--}%
+%{--<li><a href="/BARD">CAP</a></li>--}%
 
-                        %{--<sec:ifAnyGranted roles="ROLE_BARD_ADMINISTRATOR">--}%
-                            %{--<li class="dropdown">--}%
-                                %{--<a href="#" class="dropdown-toggle" data-toggle="dropdown">--}%
-                                    %{--Admin--}%
-                                    %{--<b class="caret"></b>--}%
-                                %{--</a>--}%
+%{--<sec:ifAnyGranted roles="ROLE_BARD_ADMINISTRATOR">--}%
+%{--<li class="dropdown">--}%
+%{--<a href="#" class="dropdown-toggle" data-toggle="dropdown">--}%
+%{--Admin--}%
+%{--<b class="caret"></b>--}%
+%{--</a>--}%
 
-                                %{--<ul class="dropdown-menu">--}%
-                                    %{--<li class="controller"><g:link--}%
-                                            %{--controller="aclClass">ACL Management</g:link></li>--}%
-                                    %{--<li class="controller"><g:link--}%
-                                            %{--controller="register">Register External BARD User</g:link></li>--}%
-                                    %{--<li class="controller"><g:link controller="register"--}%
-                                                                   %{--action="listUsersAndGroups">List External BARD Users</g:link></li>--}%
-                                    %{--<li class="controller"><g:link controller="person"--}%
-                                                                   %{--action="list">List Person Table</g:link></li>--}%
-                                    %{--<li class="controller"><g:link controller="moveExperiments"--}%
-                                                                   %{--action="show">Move Experiments</g:link></li>--}%
-                                    %{--<li class="controller"><g:link controller="mergeAssayDefinition"--}%
-                                                                   %{--action="show">Merge Assays</g:link></li>--}%
-                                    %{--<li class="controller"><g:link controller="assayDefinition"--}%
-                                                                   %{--action="assayComparisonReport">Compare Assays</g:link></li>--}%
-                                    %{--<li class="controller"><g:link controller="splitAssayDefinition"--}%
-                                                                   %{--action="show">Split Assays</g:link></li>--}%
-                                %{--</ul>--}%
+%{--<ul class="dropdown-menu">--}%
+%{--<li class="controller"><g:link--}%
+%{--controller="aclClass">ACL Management</g:link></li>--}%
+%{--<li class="controller"><g:link--}%
+%{--controller="register">Register External BARD User</g:link></li>--}%
+%{--<li class="controller"><g:link controller="register"--}%
+%{--action="listUsersAndGroups">List External BARD Users</g:link></li>--}%
+%{--<li class="controller"><g:link controller="person"--}%
+%{--action="list">List Person Table</g:link></li>--}%
+%{--<li class="controller"><g:link controller="moveExperiments"--}%
+%{--action="show">Move Experiments</g:link></li>--}%
+%{--<li class="controller"><g:link controller="mergeAssayDefinition"--}%
+%{--action="show">Merge Assays</g:link></li>--}%
+%{--<li class="controller"><g:link controller="assayDefinition"--}%
+%{--action="assayComparisonReport">Compare Assays</g:link></li>--}%
+%{--<li class="controller"><g:link controller="splitAssayDefinition"--}%
+%{--action="show">Split Assays</g:link></li>--}%
+%{--</ul>--}%
 
-                            %{--</li>--}%
-                        %{--</sec:ifAnyGranted>--}%
+%{--</li>--}%
+%{--</sec:ifAnyGranted>--}%
 
-                        %{--<li class="dropdown">--}%
-                            %{--<a href="#" class="dropdown-toggle" data-toggle="dropdown">--}%
-                                %{--Assay Definitions--}%
-                                %{--<b class="caret"></b>--}%
-                            %{--</a>--}%
-                            %{--<ul class="dropdown-menu">--}%
-                                %{--<li class="controller"><g:link controller="assayDefinition"--}%
-                                                               %{--action="groupAssays">My Assay Definitions</g:link></li>--}%
-                                %{--<li class="controller"><g:link controller="assayDefinition"--}%
-                                                               %{--action="findById">Search by Assay Definition ID</g:link></li>--}%
-                                %{--<li class="controller"><g:link controller="assayDefinition"--}%
-                                                               %{--action="findByName">Search by Assay Definition Name</g:link></li>--}%
-                                %{--<li class="controller"><g:link controller="assayDefinition"--}%
-                                                               %{--action="create">Create Assay Definition</g:link></li>--}%
-                                %{--<li class="controller"><g:link controller="assayDefinition"--}%
-                                                               %{--action="assayComparisonReport">Compare Assay Definitions</g:link></li>--}%
-                            %{--</ul>--}%
-                        %{--</li>--}%
-                        %{--<li class="dropdown">--}%
-                            %{--<a href="#" class="dropdown-toggle" data-toggle="dropdown">--}%
-                                %{--Projects--}%
-                                %{--<b class="caret"></b>--}%
-                            %{--</a>--}%
-                            %{--<ul class="dropdown-menu">--}%
-                                %{--<li class="controller"><g:link controller="project"--}%
-                                                               %{--action="groupProjects">My Projects</g:link></li>--}%
-                                %{--<li class="controller"><g:link controller="project"--}%
-                                                               %{--action="findById">Search by Project ID</g:link></li>--}%
-                                %{--<li class="controller"><g:link controller="project"--}%
-                                                               %{--action="findByName">Search by Project Name</g:link></li>--}%
-                                %{--<li class="controller"><g:link controller="project"--}%
-                                                               %{--action="create">Create a New Project</g:link></li>--}%
-                            %{--</ul>--}%
-                        %{--</li>--}%
-                        %{--<li class="dropdown">--}%
-                            %{--<a href="#" class="dropdown-toggle" data-toggle="dropdown">--}%
-                                %{--Panels--}%
-                                %{--<b class="caret"></b>--}%
-                            %{--</a>--}%
-                            %{--<ul class="dropdown-menu">--}%
-                                %{--<li class="controller"><g:link controller="panel"--}%
-                                                               %{--action="myPanels">My Panels</g:link></li>--}%
+%{--<li class="dropdown">--}%
+%{--<a href="#" class="dropdown-toggle" data-toggle="dropdown">--}%
+%{--Assay Definitions--}%
+%{--<b class="caret"></b>--}%
+%{--</a>--}%
+%{--<ul class="dropdown-menu">--}%
+%{--<li class="controller"><g:link controller="assayDefinition"--}%
+%{--action="groupAssays">My Assay Definitions</g:link></li>--}%
+%{--<li class="controller"><g:link controller="assayDefinition"--}%
+%{--action="findById">Search by Assay Definition ID</g:link></li>--}%
+%{--<li class="controller"><g:link controller="assayDefinition"--}%
+%{--action="findByName">Search by Assay Definition Name</g:link></li>--}%
+%{--<li class="controller"><g:link controller="assayDefinition"--}%
+%{--action="create">Create Assay Definition</g:link></li>--}%
+%{--<li class="controller"><g:link controller="assayDefinition"--}%
+%{--action="assayComparisonReport">Compare Assay Definitions</g:link></li>--}%
+%{--</ul>--}%
+%{--</li>--}%
+%{--<li class="dropdown">--}%
+%{--<a href="#" class="dropdown-toggle" data-toggle="dropdown">--}%
+%{--Projects--}%
+%{--<b class="caret"></b>--}%
+%{--</a>--}%
+%{--<ul class="dropdown-menu">--}%
+%{--<li class="controller"><g:link controller="project"--}%
+%{--action="groupProjects">My Projects</g:link></li>--}%
+%{--<li class="controller"><g:link controller="project"--}%
+%{--action="findById">Search by Project ID</g:link></li>--}%
+%{--<li class="controller"><g:link controller="project"--}%
+%{--action="findByName">Search by Project Name</g:link></li>--}%
+%{--<li class="controller"><g:link controller="project"--}%
+%{--action="create">Create a New Project</g:link></li>--}%
+%{--</ul>--}%
+%{--</li>--}%
+%{--<li class="dropdown">--}%
+%{--<a href="#" class="dropdown-toggle" data-toggle="dropdown">--}%
+%{--Panels--}%
+%{--<b class="caret"></b>--}%
+%{--</a>--}%
+%{--<ul class="dropdown-menu">--}%
+%{--<li class="controller"><g:link controller="panel"--}%
+%{--action="myPanels">My Panels</g:link></li>--}%
 
-                                %{--<li class="controller"><g:link controller="panel"--}%
-                                                               %{--action="findById">Search by Panel ID</g:link></li>--}%
-                                %{--<li class="controller"><g:link controller="panel"--}%
-                                                               %{--action="findByName">Search by Panel Name</g:link></li>--}%
-                                %{--<li class="controller"><g:link controller="panel"--}%
-                                                               %{--action="create">Create New Panel</g:link></li>--}%
-                            %{--</ul>--}%
-                        %{--</li>--}%
-                        %{--<li>--}%
-                            %{--<g:link url="${grailsApplication.config.bard.home.page}">Bard Web Client</g:link>--}%
-                        %{--</li>--}%
-                    %{--</ul>--}%
-                    %{--<sec:ifLoggedIn>--}%
-                        %{--<g:form class="navbar-form pull-right" name="logoutForm" controller="logout">--}%
-                            %{--<span--}%
-                                    %{--style="color: white; font-weight: bold;">Logged in as: <sec:username/></span>&nbsp;&nbsp;--}%
-                            %{--<button type="submit" class="btn" id="logoutButton">Logout</button>--}%
-                        %{--</g:form>--}%
-                    %{--</sec:ifLoggedIn>--}%
-                    %{--<sec:ifNotLoggedIn>--}%
-                        %{--<g:form class="navbar-form pull-right" name="loginForm" controller="login">--}%
-                            %{--Not logged in&nbsp;&nbsp;--}%
-                            %{--<button type="submit" class="btn">Login</button>--}%
-                        %{--</g:form> OR--}%
-                        %{--<a class="btn btn-large" id='signin'>Sign in with your Email</a>--}%
-                    %{--</sec:ifNotLoggedIn>--}%
-                %{--</div>--}%
-            %{--</div>--}%
-        %{--</div>--}%
-    %{--</div>--}%
+%{--<li class="controller"><g:link controller="panel"--}%
+%{--action="findById">Search by Panel ID</g:link></li>--}%
+%{--<li class="controller"><g:link controller="panel"--}%
+%{--action="findByName">Search by Panel Name</g:link></li>--}%
+%{--<li class="controller"><g:link controller="panel"--}%
+%{--action="create">Create New Panel</g:link></li>--}%
+%{--</ul>--}%
+%{--</li>--}%
+%{--<li>--}%
+%{--<g:link url="${grailsApplication.config.bard.home.page}">Bard Web Client</g:link>--}%
+%{--</li>--}%
+%{--</ul>--}%
+%{--<sec:ifLoggedIn>--}%
+%{--<g:form class="navbar-form pull-right" name="logoutForm" controller="logout">--}%
+%{--<span--}%
+%{--style="color: white; font-weight: bold;">Logged in as: <sec:username/></span>&nbsp;&nbsp;--}%
+%{--<button type="submit" class="btn" id="logoutButton">Logout</button>--}%
+%{--</g:form>--}%
+%{--</sec:ifLoggedIn>--}%
+%{--<sec:ifNotLoggedIn>--}%
+%{--<g:form class="navbar-form pull-right" name="loginForm" controller="login">--}%
+%{--Not logged in&nbsp;&nbsp;--}%
+%{--<button type="submit" class="btn">Login</button>--}%
+%{--</g:form> OR--}%
+%{--<a class="btn btn-large" id='signin'>Sign in with your Email</a>--}%
+%{--</sec:ifNotLoggedIn>--}%
+%{--</div>--}%
+%{--</div>--}%
+%{--</div>--}%
+%{--</div>--}%
 %{--</div>--}%
 
 %{--<div class="container-fluid">--}%
-    %{--<div class="row-fluid">--}%
-        %{--<div class="span12">--}%
-            %{--<div class="spinner-container">--}%
-                %{--<div id="spinner" class="spinner" style="display:none; color: blue;"><g:message code="spinner.alt"--}%
-                                                                                                %{--default="Loading&hellip;"/></div>--}%
-            %{--</div>--}%
-            %{--<g:layoutBody/>--}%
-        %{--</div>--}%
-    %{--</div>--}%
-
-    %{--<div class="row-fluid">--}%
-        %{--<div class="span12 cap-footer">--}%
-            %{--<b>Version:</b> ${grailsApplication?.metadata['app.version']} <b>branch:</b> ${grailsApplication?.metadata['git.branch.name']} <b>revision:</b> ${grailsApplication?.metadata['git.branch.version']}--}%
-        %{--</div>--}%
-    %{--</div>--}%
+%{--<div class="row-fluid">--}%
+%{--<div class="span12">--}%
+%{--<div class="spinner-container">--}%
+%{--<div id="spinner" class="spinner" style="display:none; color: blue;"><g:message code="spinner.alt"--}%
+%{--default="Loading&hellip;"/></div>--}%
+%{--</div>--}%
+%{--<g:layoutBody/>--}%
+%{--</div>--}%
 %{--</div>--}%
 
- %{--<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>--}%
+%{--<div class="row-fluid">--}%
+%{--<div class="span12 cap-footer">--}%
+%{--<b>Version:</b> ${grailsApplication?.metadata['app.version']} <b>branch:</b> ${grailsApplication?.metadata['git.branch.name']} <b>revision:</b> ${grailsApplication?.metadata['git.branch.version']}--}%
+%{--</div>--}%
+%{--</div>--}%
+%{--</div>--}%
+
+%{--<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>--}%
 
 %{--<r:layoutResources/>--}%
 %{--</body>--}%
