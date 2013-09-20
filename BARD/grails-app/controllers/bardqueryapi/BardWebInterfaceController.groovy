@@ -1,18 +1,15 @@
 package bardqueryapi
-
 import bard.core.IntValue
 import bard.core.SearchParams
 import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
-import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
-import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import molspreadsheet.CompoundSummaryCategorizer
 import molspreadsheet.LinkedVisHierData
@@ -23,7 +20,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
-
 /**
  *
  * TODO: Refactor into individual classes. Class is too big. We need to have different controllers for each entityß
@@ -79,6 +75,10 @@ class BardWebInterfaceController {
 
     def redirectToIndex(){
         redirect( controller: 'bardWebInterface', action:'index' )
+    }
+
+    def navigationPage(){
+        render( view: 'navigationPage', model: {})
     }
 
 

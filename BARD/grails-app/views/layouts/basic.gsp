@@ -9,6 +9,8 @@
     <r:external uri="/css/layout.css"/>
     <r:external uri="/css/table.css"/>
     <r:external uri="/css/bardHomepage/BardHeaderFooter.css"/>
+    <script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js"></script>
+    <script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js"></script>
     <r:require modules="autocomplete"/>
     <r:require module="cart"/>
     <r:require module="idSearch"/>
@@ -16,584 +18,10 @@
     <%@ page import="bardqueryapi.IDSearchType" %>
     <r:layoutResources/>
 
-%{--<style>--}%
-%{--.search-panel{--}%
-    %{--position:relative;--}%
-    %{--z-index:1;--}%
-    %{--padding:23px 0 20px;--}%
-    %{--text-align:center;--}%
-    %{--color:#fff;--}%
-    %{--background:#062a3b url('../images/bardHomepage/bg-search-panel.png') no-repeat;--}%
-    %{--background-size:586px 100%;--}%
-%{--}--}%
-%{--.search-panel a:focus{--}%
-    %{--text-decoration:none;--}%
-    %{--color:#0093d0;--}%
-%{--}--}%
-%{--.search-panel a:hover{--}%
-    %{--text-decoration:none;--}%
-    %{--color:#38d9c1;--}%
-%{--}--}%
-%{--.search-panel a:active{background-color:transparent;}--}%
-%{--input,--}%
-%{--textarea,--}%
-%{--select{--}%
-    %{--font:100% "Lato", Arial, Helvetica, sans-serif;--}%
-    %{--vertical-align:middle;--}%
-    %{--color:#000;--}%
-%{--}--}%
-%{--.search-panel a:active{background-color:transparent;}--}%
-%{--.search-panel input,--}%
-%{--textarea,--}%
-%{--select{--}%
-    %{--font:100% "Lato", Arial, Helvetica, sans-serif;--}%
-    %{--vertical-align:middle;--}%
-    %{--color:#000;--}%
-%{--}--}%
-%{--.search-panel input::-webkit-input-placeholder{color:#000;}--}%
-%{--.search-panel input:-moz-placeholder{color:#000;}--}%
-%{--input::-moz-placeholder{--}%
-    %{--color:#000;--}%
-    %{--opacity:1;--}%
-%{--}--}%
-%{--input:-ms-input-placeholder{color:#000;}--}%
-%{--.search-panel .head-holder{--}%
-    %{--display:table;--}%
-    %{--text-align:left;--}%
-    %{--margin:0 auto 35px;--}%
-%{--}--}%
-%{--.search-panel .head-holder h2{--}%
-    %{--display:table-cell;--}%
-    %{--vertical-align:top;--}%
-    %{--white-space:nowrap;--}%
-    %{--margin:0;--}%
-    %{--padding:0 22px 0 0;--}%
-    %{--font:300 32px/36px "Lato", Arial, Helvetica, sans-serif;--}%
-    %{--letter-spacing:5px;--}%
-    %{--color:#fff;--}%
-    %{--text-transform:uppercase;--}%
-%{--}--}%
-%{--.search-panel .head-holder p{--}%
-    %{--display:table-cell;--}%
-    %{--vertical-align:bottom;--}%
-    %{--margin:0;--}%
-    %{--padding:3px 0 0;--}%
-    %{--font-size:16px;--}%
-    %{--line-height:24px;--}%
-%{--}--}%
-%{--.search-block{--}%
-    %{--max-width:660px;--}%
-    %{--margin:0 auto;--}%
-    %{--padding:0 0 11px;--}%
-%{--}--}%
-%{--.search-form{--}%
-    %{--margin:0 0 26px;--}%
-    %{--padding:8px 9px 10px;--}%
-    %{--border:1px solid rgba(244, 244, 244, 0.2);--}%
-    %{--background:rgba(228, 228, 228, 0.2);--}%
-%{--}--}%
-%{--.search-field{--}%
-    %{--display:table;--}%
-    %{--width:100%;--}%
-%{--}--}%
-%{--.search-field .text-field,--}%
-%{--.search-field .btn-field{--}%
-    %{--display:table-cell;--}%
-    %{--vertical-align:top;--}%
-%{--}--}%
-%{--.search-form input[type="text"],--}%
-%{--.search-form input[type="search"]{--}%
-    %{---moz-box-sizing:border-box;--}%
-    %{---webkit-box-sizing:border-box;--}%
-    %{--box-sizing:border-box;--}%
-    %{--width:100%;--}%
-    %{--height:39px;--}%
-    %{--margin:0;--}%
-    %{--padding:9px 11px 7px;--}%
-    %{--border:3px solid #fff;--}%
-    %{---moz-border-radius:0;--}%
-    %{---webkit-border-radius:0;--}%
-    %{--border-radius:0;--}%
-    %{---moz-box-shadow:none;--}%
-    %{---webkit-box-shadow:none;--}%
-    %{--box-shadow:none;--}%
-    %{--font-size:14px;--}%
-    %{--line-height:17px;--}%
-    %{--background:#e4e4e4;--}%
-%{--}--}%
-%{--.search-field .btn-field{--}%
-    %{--width:1px;--}%
-    %{--white-space:nowrap;--}%
-    %{--padding:0 0 0 2px;--}%
-%{--}--}%
-%{--.search-form .btn{line-height:39px;}--}%
-%{--.search-block .links-holder{--}%
-    %{--padding:0 21px 0 10px;--}%
-    %{--font-weight:bold;--}%
-    %{--font-size:15px;--}%
-    %{--line-height:20px;--}%
-    %{--letter-spacing:1px;--}%
-    %{--overflow:hidden;--}%
-%{--}--}%
-%{--.search-block .links-holder a{--}%
-    %{--position:relative;--}%
-    %{--float:left;--}%
-    %{--padding:0 15px 0 0;--}%
-%{--}--}%
-%{--.search-block .links-holder a:first-child{float:right;}--}%
-%{--.search-block .links-holder a:after{--}%
-    %{--content:'';--}%
-    %{--position:absolute;--}%
-    %{--top:50%;--}%
-    %{--right:0;--}%
-    %{--width:6px;--}%
-    %{--height:8px;--}%
-    %{--margin:-2px 0 0;--}%
-    %{--background:url('../../images/bardHomepage/sprite.png') no-repeat -38px 0;--}%
-%{--}--}%
-%{--.search-block .links-holder a:hover:after{--}%
-    %{--content:' ';--}%
-    %{--background-position:-38px -12px;--}%
-%{--}--}%
-%{--.search-block .links-holder .download-link{padding-left:39px;}--}%
-%{--.search-block .links-holder .download-link:before{--}%
-    %{--content:'';--}%
-    %{--position:absolute;--}%
-    %{--top:50%;--}%
-    %{--left:0;--}%
-    %{--width:25px;--}%
-    %{--height:18px;--}%
-    %{--margin:-9px 0 0;--}%
-    %{--background:url('../../images/bardHomepage/sprite.png') no-repeat -46px 0;--}%
-%{--}--}%
-%{--.search-block .links-holder .download-link:hover:before{--}%
-    %{--content:' ';--}%
-    %{--background-position:-74px 0;--}%
-%{--}--}%
-%{--.search-panel{padding:26px 0 20px;}--}%
-%{--.search-panel .head-holder{margin:0 0 17px;}--}%
-%{--.search-panel .head-holder h2{--}%
-    %{--padding:0 41px 0 0;--}%
-    %{--font-size:28px;--}%
-    %{--line-height:34px;--}%
-%{--}--}%
-%{--.search-panel .head-holder p{padding:3px 30px 0 0;}--}%
-%{--.search-panel {--}%
-    %{--margin:0;--}%
-    %{--font:16px/24px "Lato", Arial, Helvetica, sans-serif;--}%
-    %{--color:#2d2f32;--}%
-    %{--background: rgb(111,179,206);--}%
-    %{--background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzZmYjNjZSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjY0JSIgc3RvcC1jb2xvcj0iI2VkZjRmOSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmY2ZjZmMiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);--}%
-    %{--background: -moz-linear-gradient(top,  rgba(111,179,206,1) 0%, rgba(237,244,249,1) 64%, rgba(252,252,252,1) 100%);--}%
-    %{--background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(111,179,206,1)), color-stop(64%,rgba(237,244,249,1)), color-stop(100%,rgba(252,252,252,1)));--}%
-    %{--background: -webkit-linear-gradient(top,  rgba(111,179,206,1) 0%,rgba(237,244,249,1) 64%,rgba(252,252,252,1) 100%);--}%
-    %{--background: -o-linear-gradient(top,  rgba(111,179,206,1) 0%,rgba(237,244,249,1) 64%,rgba(252,252,252,1) 100%);--}%
-    %{--background: -ms-linear-gradient(top,  rgba(111,179,206,1) 0%,rgba(237,244,249,1) 64%,rgba(252,252,252,1) 100%);--}%
-    %{--background: linear-gradient(to bottom,  rgba(111,179,206,1) 0%,rgba(237,244,249,1) 64%,rgba(252,252,252,1) 100%);--}%
-    %{--filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6fb3ce', endColorstr='#fcfcfc',GradientType=0 );--}%
-
-    %{---webkit-text-size-adjust:100%;--}%
-    %{---ms-text-size-adjust:none;--}%
-%{--}--}%
-%{--.search-panel{padding:32px 0 1px;}--}%
-%{--.search-panel .head-holder{--}%
-    %{--display:block;--}%
-    %{--text-align:center;--}%
-%{--}--}%
-%{--.search-panel .head-holder h2{--}%
-    %{--display:block;--}%
-    %{--margin:0 0 26px;--}%
-    %{--padding:0;--}%
-%{--}--}%
-%{--.search-panel .head-holder p{--}%
-    %{--display:block;--}%
-    %{--padding:0;--}%
-    %{--margin:0 0 27px;--}%
-%{--}--}%
-%{--.search-form input[type="text"],--}%
-%{--.search-form input[type="search"]{--}%
-    %{--padding:9px 11px;--}%
-    %{--font-size:12px;--}%
-    %{--line-height:15px;--}%
-%{--}--}%
-%{--.search-block .links-holder{text-align:center;}--}%
-%{--.search-block .links-holder a{--}%
-    %{--float:none !important;--}%
-    %{--display:inline-block;--}%
-    %{--vertical-align:top;--}%
-    %{--margin:0 0 17px;--}%
-%{--}--}%
-%{--.search-form{margin:0 0 19px;}--}%
-%{--.search-form .btn{--}%
-    %{--padding-left:15px;--}%
-    %{--padding-right:15px;--}%
-%{--}--}%
-
-%{--.logo {--}%
-    %{--float: left;--}%
-    %{--margin-top: 10px;--}%
-    %{--margin-bottom: 20px;--}%
-    %{--width: 280px;--}%
-    %{--height: 85px;--}%
-    %{--text-indent: -9999px;--}%
-    %{--overflow: hidden;--}%
-    %{--background: url('../images/bard_logo_small.png') no-repeat;--}%
-%{--}--}%
-
-%{--.logo a {--}%
-    %{--display: block;--}%
-    %{--height: 100%;--}%
-%{--}--}%
-
-%{--.social-networks {--}%
-    %{--float: right;--}%
-    %{--margin: -6px -12px 0 0;--}%
-    %{--list-style: none;--}%
-%{--}--}%
-
-%{--.social-networks li {--}%
-    %{--float: left;--}%
-    %{--margin: 0 0 0 4px;--}%
-%{--}--}%
-
-%{--.social-networks a {--}%
-    %{--display: block;--}%
-    %{--width: 16px;--}%
-    %{--height: 16px;--}%
-    %{--text-indent: -9999px;--}%
-    %{--overflow: hidden;--}%
-    %{--background: url('../images/bardHomepage/sprite.png') no-repeat;--}%
-%{--}--}%
-
-%{--.social-networks .google {--}%
-    %{--background-position: -18px 0;--}%
-%{--}--}%
-
-%{--.nav-panel {--}%
-    %{--position: absolute;--}%
-    %{--right: 0;--}%
-    %{--top: 0;--}%
-%{--}--}%
-
-%{--.nav-panel .nav {--}%
-    %{--float: right;--}%
-    %{--display: inline-block;--}%
-    %{--vertical-align: bottom;--}%
-    %{--font-size: 13px;--}%
-    %{--line-height: 16px;--}%
-%{--}--}%
-
-%{--.nav-panel .nav > li {--}%
-    %{--margin: 0 0 0 5px;--}%
-%{--}--}%
-
-%{--.nav-panel .nav > li > a {--}%
-    %{--position: relative;--}%
-    %{--padding: 14px 15px;--}%
-    %{--letter-spacing: 1px;--}%
-    %{--text-transform: uppercase;--}%
-    %{--color: #100d0d;--}%
-%{--}--}%
-
-%{--.nav-panel .nav > li:hover > a,--}%
-%{--.nav-panel .nav > .active > a,--}%
-%{--.nav-panel .nav > .active:hover > a,--}%
-%{--.nav-panel .nav > .active > a:focus,--}%
-%{--.nav-panel .nav li.dropdown.open > .dropdown-toggle,--}%
-%{--.nav-panel .nav li.dropdown.active > .dropdown-toggle,--}%
-%{--.nav-panel .nav li.dropdown.open.active > .dropdown-toggle {--}%
-    %{--color: #38d9c1;--}%
-    %{---webkit-box-shadow: 10px 10px 5px -8px rgba(6, 42, 59, 0.1) inset, -10px 0 5px -8px rgba(6, 42, 59, 0.1) inset, 4px 1px 2px -4px rgba(0, 0, 0, 0.2), -4px 1px 2px -4px rgba(0, 0, 0, 0.2);--}%
-    %{--box-shadow: 10px 10px 5px -8px rgba(6, 42, 59, 0.1) inset, -10px 0 5px -8px rgba(6, 42, 59, 0.1) inset, 4px 1px 2px -4px rgba(0, 0, 0, 0.2), -4px 1px 2px -4px rgba(0, 0, 0, 0.2);--}%
-    %{--background: #fff;--}%
-%{--}--}%
-
-%{--.nav-panel .nav > li > .dropdown-toggle:after {--}%
-    %{--content: '';--}%
-    %{--display: inline-block;--}%
-    %{--vertical-align: middle;--}%
-    %{--width: 8px;--}%
-    %{--height: 4px;--}%
-    %{--margin: -1px 0 0 10px;--}%
-    %{--background: url('../images/bardHomepage/sprite.png') no-repeat -46px -20px;--}%
-%{--}--}%
-
-%{--.nav-panel .nav > li:hover > .dropdown-toggle:after,--}%
-%{--.nav-panel .nav li.dropdown.open > .dropdown-toggle:after,--}%
-%{--.nav-panel .nav li.dropdown.active > .dropdown-toggle:after {--}%
-    %{--content: ' ';--}%
-    %{--background-position: -56px -20px;--}%
-%{--}--}%
-
-%{--.nav-panel .nav > li.open > .dropdown-toggle {--}%
-    %{--position: relative;--}%
-    %{--z-index: 1001;--}%
-    %{--margin-bottom: -8px;--}%
-    %{--padding-bottom: 22px;--}%
-%{--}--}%
-
-%{--.nav-panel .nav > li.open > .dropdown-toggle:before {--}%
-    %{--content: '';--}%
-    %{--position: absolute;--}%
-    %{--right: -7px;--}%
-    %{--bottom: -3px;--}%
-    %{--width: 18px;--}%
-    %{--height: 18px;--}%
-    %{--background: url('../images/bardHomepage/sprite.png') no-repeat -320px 0;--}%
-%{--}--}%
-
-%{--.nav-panel .nav > li > .dropdown-menu {--}%
-    %{--min-width: 197px;--}%
-    %{--border: 0;--}%
-    %{---moz-border-radius: 0;--}%
-    %{---webkit-border-radius: 0;--}%
-    %{--border-radius: 0;--}%
-    %{--margin: 0;--}%
-    %{--padding: 17px 0 24px;--}%
-    %{--font-size: 13px;--}%
-    %{--line-height: 16px;--}%
-    %{---webkit-box-shadow: 0 0 6px rgba(6, 42, 59, 0.2) inset, 0 4px 2px rgba(0, 0, 0, 0.2);--}%
-    %{--box-shadow: 0 0 6px rgba(6, 42, 59, 0.2) inset, 0 4px 2px rgba(0, 0, 0, 0.2);--}%
-%{--}--}%
-
-%{--.nav-panel .nav > li > .dropdown-menu:before,--}%
-%{--.nav-panel .nav > li > .dropdown-menu:after {--}%
-    %{--display: none;--}%
-%{--}--}%
-%{--.page-header {--}%
-    %{--margin: 0 0 25px;--}%
-%{--}--}%
-
-%{--.page-header h1 small {--}%
-    %{--margin: 0 0 0 74px;--}%
-%{--}--}%
-%{--.qcart {--}%
-    %{--display: inline;--}%
-%{--}--}%
-%{--#footer{--}%
-    %{--padding:0 0 3px;--}%
-    %{--background:#2d2f32;--}%
-%{--}--}%
-%{--.footer-columns{--}%
-    %{--padding:26px 0 33px;--}%
-    %{--color:#fff;--}%
-    %{--font-size:14px;--}%
-    %{--line-height:18px;--}%
-%{--}--}%
-%{--.footer-columns a{color:#fff;}--}%
-%{--.footer-columns a:hover{color:#38d9c1;}--}%
-%{--.footer-columns h3{--}%
-    %{--margin:0 0 13px;--}%
-    %{--font-weight:normal;--}%
-    %{--font-size:18px;--}%
-    %{--line-height:22px;--}%
-    %{--color:#0093d0;--}%
-%{--}--}%
-%{--.footer-columns ul{--}%
-    %{--margin:0 0 20px;--}%
-    %{--list-style:none;--}%
-    %{--font-size:12px;--}%
-    %{--line-height:16px;--}%
-%{--}--}%
-%{--.footer-columns ul li{padding:0 0 8px;}--}%
-%{--.footer-columns .by{--}%
-    %{--padding:13px 0 0;--}%
-    %{--text-align:right;--}%
-    %{--line-height:22px;--}%
-%{--}--}%
-%{--.footer-info{--}%
-    %{--padding:29px 0 33px;--}%
-    %{--font-size:14px;--}%
-    %{--line-height:20px;--}%
-    %{--text-align:center;--}%
-    %{--color:#fff;--}%
-    %{--background:#21495c;--}%
-%{--}--}%
-%{--.footer-info ul{--}%
-    %{--margin:0;--}%
-    %{--list-style:none;--}%
-%{--}--}%
-%{--.footer-info ul li{display:inline;}--}%
-%{--.footer-info ul li:before{--}%
-    %{--content:'·';--}%
-    %{--margin:0 3px 0 0;--}%
-%{--}--}%
-%{--.footer-info ul li:first-child:before{display:none;}--}%
-%{--.footer-info a{color:#fff;}--}%
-%{--.footer-info a:hover{color:#38d9c1;}--}%
-
-%{--@media only screen and (max-width: 767px) {--}%
-    %{--body {--}%
-        %{--padding: 0;--}%
-    %{--}--}%
-    %{--.qcart {--}%
-        %{--display: inline;--}%
-    %{--}--}%
-
-
-    %{--.container-fluid {--}%
-        %{--padding-left: 32px;--}%
-        %{--padding-right: 32px;--}%
-    %{--}--}%
-
-    %{--#header {--}%
-        %{--margin: 0;--}%
-    %{--}--}%
-
-    %{--#header .social-networks {--}%
-        %{--display: none;--}%
-    %{--}--}%
-
-    %{--.logo {--}%
-        %{--margin: 0 0 0 -14px;--}%
-    %{--}--}%
-
-    %{--.nav-panel {--}%
-        %{--margin: 0 -30px 0 -25px;--}%
-    %{--}--}%
-
-    %{--.login-nav {--}%
-        %{--float: none;--}%
-        %{--position: absolute;--}%
-        %{--top: 0;--}%
-        %{--right: 0;--}%
-        %{--margin: 0;--}%
-    %{--}--}%
-
-    %{--.articles-gallery {--}%
-        %{--display: none;--}%
-    %{--}--}%
-
-    %{--.footer-columns [class*="span"] {--}%
-        %{--float: left;--}%
-        %{--width: 33.3%;--}%
-    %{--}--}%
-
-    %{--.footer-columns .by {--}%
-        %{--float: none;--}%
-        %{--clear: both;--}%
-        %{--width: auto;--}%
-        %{--text-align: left;--}%
-        %{--overflow: hidden;--}%
-    %{--}--}%
-
-    %{--.footer-columns .logo-by {--}%
-        %{--float: right;--}%
-        %{--margin: 0 0 0 20px;--}%
-    %{--}--}%
-
-    %{--.footer-columns p {--}%
-        %{--overflow: hidden;--}%
-    %{--}--}%
-%{--}--}%
-
-%{--@media only screen and (max-width: 700px) {--}%
-    %{--#header .container-fluid {--}%
-        %{--padding-top: 13px;--}%
-    %{--}--}%
-    %{--.qcart {--}%
-        %{--display: inline;--}%
-    %{--}--}%
-
-
-    %{--.logo {--}%
-        %{--margin: 0 0 3px -14px;--}%
-    %{--}--}%
-
-    %{--.nav-panel .nav > li > a {--}%
-        %{--padding-top: 14px;--}%
-        %{--padding-bottom: 11px;--}%
-        %{--letter-spacing: normal;--}%
-        %{--text-shadow: none;--}%
-    %{--}--}%
-
-    %{--.nav-panel .nav > li.open > .dropdown-toggle {--}%
-        %{--margin-bottom: -8px;--}%
-        %{--padding-bottom: 19px;--}%
-    %{--}--}%
-
-    %{--.nav-panel .nav > li > .dropdown-toggle:after {--}%
-        %{--margin-left: 7px;--}%
-    %{--}--}%
-
-    %{--.login-nav {--}%
-        %{--padding: 14px 21px 16px 17px;--}%
-    %{--}--}%
-    %{--.tabs-section {--}%
-        %{--display: none;--}%
-    %{--}--}%
-
-    %{--.footer-info {--}%
-        %{--padding: 18px 0 26px;--}%
-    %{--}--}%
-%{--}--}%
-
-%{--@media only screen and (max-width: 479px) {--}%
-    %{--.container-fluid {--}%
-        %{--padding-left: 10px;--}%
-        %{--padding-right: 10px;--}%
-    %{--}--}%
-    %{--.qcart {--}%
-        %{--display: none;--}%
-    %{--}--}%
-    %{--.logo {--}%
-        %{--margin: 0 0 3px;--}%
-        %{--width: 104px;--}%
-        %{--height: 31px;--}%
-        %{--background-size: 100% 100%;--}%
-    %{--}--}%
-
-    %{--.nav-panel {--}%
-        %{--margin: 0 -10px;--}%
-    %{--}--}%
-
-    %{--.nav-panel .nav {--}%
-        %{--font-size: 10px;--}%
-        %{--line-height: 14px;--}%
-    %{--}--}%
-
-    %{--.nav-panel .nav > li > a {--}%
-        %{--padding: 5px;--}%
-    %{--}--}%
-
-    %{--.nav-panel .nav > li.open > .dropdown-toggle {--}%
-        %{--margin-bottom: -8px;--}%
-        %{--padding-bottom: 13px;--}%
-    %{--}--}%
-
-    %{--.nav-panel .nav > li > .dropdown-menu {--}%
-        %{--padding: 10px 0;--}%
-        %{--min-width: 150px;--}%
-        %{--width: 150px;--}%
-    %{--}--}%
-
-    %{--.dropdown-menu > li {--}%
-        %{--padding: 5px 10px;--}%
-    %{--}--}%
-
-    %{--.dropdown-menu > li > a {--}%
-        %{--white-space: normal;--}%
-    %{--}--}%
-
-    %{--.login-nav {--}%
-        %{--padding: 10px;--}%
-        %{--font-size: 11px;--}%
-        %{--line-height: 14px;--}%
-    %{--}--}%
-    %{--.footer-columns [class*="span"] {--}%
-        %{--float: none;--}%
-        %{--width: auto;--}%
-    %{--}--}%
-%{--}--}%
-
-
-%{--</style>--}%
 </head>
 
 <body>
 
-<script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js"></script>
-<script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js"></script>
 
 <noscript>
     <a href="http://www.enable-javascript.com/" target="javascript">
@@ -606,7 +34,6 @@
 
     <header  class="navbar navbar-static-top" id="header">
         <div class="container-fluid">
-            %{--switch eventally to <img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database"/>--}%
             <strong class="logo"><a href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a></strong>
 
             <nav class="nav-panel">
@@ -629,6 +56,7 @@
                             <a class="btn btn-mini" id='signin'>Sign in with your Email</a>
                         </sec:ifNotLoggedIn>
                     </div>
+
 
                 </div>
                 <div class="qcart">
@@ -670,8 +98,8 @@
             <div class="search-block">
             %{--<g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="form-inline">--}%
                 <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form">
-                    <div class="row-fluid" style="margin-top: 15px;">
-                        <div class="search-field input-append">
+                    <div class="row-fluid">
+                        <div class="search-field input-append" style="display: table; width:100%;">
                             <div class="text-field">
                                 <g:if test="${flash?.searchString}">
                                     <g:textField id="searchString" name="searchString" value="${flash.searchString}"/>
@@ -703,6 +131,7 @@
                     </div>
                 </g:form>
             </div>
+            <a href='/BARD/bardWebInterface/navigationPage' style="float: right; color: white" CLASS="btn btn-primary">Submissions</a>
         </div>
     </div>
 
@@ -802,11 +231,47 @@
         </div>
     </div>
 
-    <div class="row-fluid">
-        <div class="span12 cap-footer">
-            <b>Version:</b> ${grailsApplication?.metadata['app.version']} <b>branch:</b> ${grailsApplication?.metadata['git.branch.name']} <b>revision:</b> ${grailsApplication?.metadata['git.branch.version']}
-        </div>
+
+
+    <div class="row-fluid bard-footer">
+        <footer id="footer">
+            <div class="footer-columns">
+                <div class="container-fluid">
+                    <div class="row-fluid">
+
+
+                        <div class="span5 bard-footer-versioninfo muted">
+                            <div>
+                                <b>Version:</b> ${grailsApplication.metadata['app.version']} <b>branch:</b> ${grailsApplication?.metadata['git.branch.name']} <b>revision:</b> ${grailsApplication?.metadata['git.branch.version']}
+                            </div>
+                        </div>
+
+                        <div class="span5">
+                        </div>
+
+
+                        <div class="span2 right-aligned">
+                            <a href="http://www.chemaxon.com/" target="chemAxon"><img src="${resource(dir: 'images/bardHomepage', file: 'logo-by.png')}"
+                                                                                      alt="Powered by ChemAxon"/></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            %{--The bottom line of the whole page--}%
+            <div class="footer-info">
+                <div class="container-fluid">
+                    <ul>
+                        <li><a href="#">National Institutes of Health</a></li>
+                        <li><a href="#">U.S. Department of Health and Human Services</a></li>
+                        <li><a href="#">USA.gov – Government Made Easy</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
     </div>
+
+
 </div>
 
 <r:layoutResources/>
