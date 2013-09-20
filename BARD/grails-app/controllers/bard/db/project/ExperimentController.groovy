@@ -36,6 +36,12 @@ class ExperimentController {
     def permissionEvaluator
     CapPermissionService capPermissionService
 
+
+    def myExperiments() {
+        List<Experiment> experiments = capPermissionService.findAllObjectsForRoles(Experiment)
+        Set<Experiment> uniqueExperiments = new HashSet<Experiment>(experiments)
+        [experiments: uniqueExperiments]
+    }
     def create() {
         def assay = Assay.get(params.assayId)
         render renderEditFieldsForView("create", new Experiment(), assay);

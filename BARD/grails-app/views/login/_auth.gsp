@@ -85,10 +85,9 @@
         </button>
     </form>
     <br/>
-    <a class="btn btn-medium btn-info" id='signin'>Sign in with your Email</a>
-    %{--<button class="btn btn-medium btn-facebook"><i class="icon-facebook"></i> | Connect with Facebook</button>--}%
-    %{--<button class="btn btn-medium btn-twitter"><i class="icon-twitter"></i> | Connect with Twitter</button>--}%
-    %{--<button class="btn btn-medium btn-linkedin"><i class="icon-linkedin"></i> | Connect with LinkedIn</button>--}%
+    <g:if env="development">
+        <a class="btn btn-medium btn-info" id='signin'>Sign in with your Email</a>
+    </g:if>
 
 </div> <!-- /container -->
 

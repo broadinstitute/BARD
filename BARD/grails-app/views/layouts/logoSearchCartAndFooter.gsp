@@ -13,7 +13,7 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
 
     <g:layoutHead/>
-    <r:require modules="core,bootstrap,cart"/>
+    <r:require modules="core,bootstrap,cart,bardHeaderFooter"/>
     <script type="text/javascript">
 
         //report error messages
@@ -32,30 +32,29 @@
     </script>
     <r:layoutResources/>
     <ga:trackPageview />
+
 </head>
 
 <body>
 <div class="container-fluid">
 
-    <div class="row-fluid header">
-        <div class="span3">
-            <a href="${createLink(controller: 'BardWebInterface', action: 'index')}">
-                <img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database"/>
-            </a>
-        </div>
+    <header  class="navbar navbar-static-top" id="header">
+    <div class="container-fluid">
+        <strong class="logo"><a href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a></strong>
 
-        <div class="span6">
-            <g:render template="/layouts/templates/searchBox"/>
-        </div>
-
-        <div class="span3">
+        <nav class="nav-panel">
             <div class="center-aligned">
                 <g:render template="/layouts/templates/loginStrip"/>
             </div>
+            <div class="qcart">
             <g:render template="/layouts/templates/queryCart"/>
-        </div>
-
+            </div>
+        </nav>
     </div>
+    </header>
+
+    <g:render template="/layouts/templates/searchBox"/>
+
 
     <g:if test="${flash.message}">
         <div class="alert">
@@ -63,6 +62,7 @@
             ${flash.message}
         </div>
     </g:if>
+
 
     <g:layoutBody/>
 

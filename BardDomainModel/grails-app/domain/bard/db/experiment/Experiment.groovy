@@ -32,7 +32,7 @@ class Experiment extends AbstractContextOwner {
     Date lastUpdated = new Date()
     String modifiedBy
     Long id;
-
+    Long ncgcWarehouseId;
     Integer confidenceLevel = 1
 
     List<ExperimentContext> experimentContexts = []
@@ -83,6 +83,8 @@ class Experiment extends AbstractContextOwner {
         dateCreated(nullable: false)
         lastUpdated(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+
+        ncgcWarehouseId(nullable: true)
     }
 
     String getDisplayName() {

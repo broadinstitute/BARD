@@ -81,9 +81,11 @@ class CapPermissionService implements CapPermissionInterface {
                     Role role = Role.findByAuthority(aclSid.sid)
                     if (role) {
                         owner = role?.displayName
+                    } else {
+                        owner = aclSid.sid
                     }
-                }
-                if (!owner) { //use the sid name if for some reason the display name for the role is null or that the aclSid is a principal
+
+                } else {
                     owner = aclSid.sid
                 }
             }

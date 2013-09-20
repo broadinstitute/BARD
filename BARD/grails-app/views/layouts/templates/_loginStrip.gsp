@@ -12,7 +12,9 @@
             Not logged in&nbsp;&nbsp;
             <button type="submit" class="btn btn-mini">Login</button>
         </g:form>
-        OR
-        <a class="btn btn-mini" id='signin'>Sign in with your Email</a>
+        <g:if env="development">
+            OR
+            <a class="btn btn-mini" id='signin'>Sign in with your Email</a>
+        </g:if>
     </sec:ifNotLoggedIn>
 </div>

@@ -13,12 +13,15 @@ class RegistrationCode {
     Date lastUpdated = new Date()
 
     static mapping = {
+
+        autoImport false
+
         version false
         id(column: "REGISTRATION_CODE_ID", generator: "sequence", params: [sequence: 'REGISTRATION_CODE_ID_SEQ'])
         userName(column: 'USER_NAME')
     }
     static constraints = {
-        userName(nullable: false,blank: false)
-        token(nullable:false, blank: false, maxSize: Experiment.DESCRIPTION_MAX_SIZE)
+        userName(nullable: false, blank: false)
+        token(nullable: false, blank: false, maxSize: Experiment.DESCRIPTION_MAX_SIZE)
     }
 }

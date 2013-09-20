@@ -1,17 +1,16 @@
 package bardqueryapi
-
 import bard.core.IntValue
 import bard.core.SearchParams
 import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
-import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
+import bard.db.project.Project
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import molspreadsheet.CompoundSummaryCategorizer
@@ -23,7 +22,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
-
 /**
  *
  * TODO: Refactor into individual classes. Class is too big. We need to have different controllers for each entityß
@@ -52,7 +50,7 @@ class BardWebInterfaceController {
     List<SearchFilter> filters = []
 
     //An AfterInterceptor to handle mobile-view routing.
-    def afterInterceptor = [action: this.&handleMobile]
+//    def afterInterceptor = [action: this.&handleMobile]
 
 
     protected handleMobile(model, modelAndView) {
@@ -68,7 +66,8 @@ class BardWebInterfaceController {
     }
 
     Boolean isMobile() {
-        return mobileService.detect(request)
+//        return mobileService.detect(request)
+        return false
     }
 
 
@@ -78,6 +77,10 @@ class BardWebInterfaceController {
 
     def redirectToIndex(){
         redirect( controller: 'bardWebInterface', action:'index' )
+    }
+
+    def navigationPage(){
+        render( view: 'navigationPage', model: {})
     }
 
 
@@ -189,7 +192,8 @@ class BardWebInterfaceController {
         try {
             CompoundAdapter compoundAdapter = queryService.findProbe(probeId)
             if (compoundAdapter && compoundAdapter.bardProjectId != -1) {
-                render(template: 'probes', model: [projectId: compoundAdapter.bardProjectId])
+                Project project = Project.findByNcgcWarehouseId(compoundAdapter.bardProjectId)
+                render(template: 'probes', model: [projectId: project.id])
             } else {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND)
             }

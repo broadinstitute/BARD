@@ -6,7 +6,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BARD</title>
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
+          rel='stylesheet' type='text/css'>
     <link media="all" rel="stylesheet" href="../css/bardHomepage/bootstrap.css">
     <link media="all" rel="stylesheet" href="../css/bardHomepage/bootstrap-responsive.css">
     <link media="all" rel="stylesheet" href="../css/bardHomepage/BardHomepage.css">
@@ -37,10 +38,10 @@
 
             //set up auto complete
             var autoOpts = {
-                source:"/BARD/bardWebInterface/autoCompleteAssayNames",
-                minLength:2,
+                source: "/BARD/bardWebInterface/autoCompleteAssayNames",
+                minLength: 2,
                 html: true,
-                delay:1000
+                delay: 1000
             };
 
             $("#searchString").autocomplete(autoOpts);
@@ -52,21 +53,18 @@
             $("#searchButton").click(function () {
                 $("#searchString").autocomplete("close");
             });
-            $('#searchButton').keypress(function(eventData) {
-                if(eventData.which == 13) {
+            $('#searchButton').keypress(function (eventData) {
+                if (eventData.which == 13) {
                     $("#searchString").autocomplete("close");
                 }
             });
 
         });
-
     </script>
-
 
 </head>
 
 <body>
-
 
 <div id="wrapper">
 
@@ -75,8 +73,77 @@
     <div class="container-fluid">
         <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
         <ul class="social-networks">
-            <li><a href="#" title="Share">Share</a></li>
-            <li><a href="#" title="Google" class="google">Google</a></li>
+            <li>
+                %{--Facebook widget plugin--}%
+                <a href="#"
+                   onclick="
+                       window.open(
+                               'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href),
+                               'facebook-share-dialog',
+                               'width=626,height=436');
+                       return false;"
+                   style="background:url('../images/bardHomepage/facebook-share-icon.gif') no-repeat; width:58px; height:18px;">
+                </a>
+            </li>
+            %{--<li>--}%
+            %{--<script>--}%
+            %{--//Facebook LIKE widget plugin--}%
+            %{--(function (d, s, id) {--}%
+            %{--var js, fjs = d.getElementsByTagName(s)[0];--}%
+            %{--if (d.getElementById(id)) return;--}%
+            %{--js = d.createElement(s);--}%
+            %{--js.id = id;--}%
+            %{--js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";--}%
+            %{--fjs.parentNode.insertBefore(js, fjs);--}%
+            %{--}(document, 'script', 'facebook-jssdk'));--}%
+            %{--</script>--}%
+
+            %{--<div id="fb-root"></div>--}%
+
+            %{--<div class="fb-like" data-href="https://bard.nih.gov/BARD/" data-width="auto" data-layout="button_count"--}%
+            %{--data-show-faces="false" data-send="false"></div>--}%
+            %{--</li>--}%
+            <li style="width: 80px;">
+                %{--Twitter widget plugin--}%
+                <script>!function (d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                    if (!d.getElementById(id)) {
+                        js = d.createElement(s);
+                        js.id = id;
+                        js.src = p + '://platform.twitter.com/widgets.js';
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }
+                }(document, 'script', 'twitter-wjs');
+                </script>
+
+                <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://bard.nih.gov/BARD/"
+                   data-text="BARD">Tweet</a>
+            </li>
+            <li>
+                %{--LinkedIn widget plugin--}%
+                <script src="//platform.linkedin.com/in.js" type="text/javascript">
+                    lang: en_US
+                </script>
+                <script type="IN/Share" data-url="https://bard.nih.gov/BARD/" data-counter="right"></script>
+            </li>
+            <li>
+                %{--Google Plus widget plugin--}%
+
+                <!-- Place this tag where you want the +1 button to render. -->
+                <div class="g-plusone"></div>
+
+                <!-- Place this tag after the last +1 button tag. -->
+                <script type="text/javascript">
+                    (function () {
+                        var po = document.createElement('script');
+                        po.type = 'text/javascript';
+                        po.async = true;
+                        po.src = 'https://apis.google.com/js/plusone.js';
+                        var s = document.getElementsByTagName('script')[0];
+                        s.parentNode.insertBefore(po, s);
+                    })();
+                </script>
+            </li>
         </ul>
         <nav class="nav-panel">
             <ul class="nav">
@@ -130,28 +197,31 @@
 
 <g:if test="${true}">
 %{--Block to hold the main search textblock--}%
-<div class="search-panel">
-    <div class="container-fluid">
+    <div class="search-panel">
+        <div class="container-fluid">
 
-        <div class="head-holder">
-            <h2>SEARCH BARD</h2>
+            <div class="head-holder">
+                <h2>SEARCH BARD</h2>
 
-            <p>Search assay, project and experiment data or <a
-                    href="#">learn about BARD’s innovative search features.</a></p>
-        </div>
+                <p>Search assay, project and experiment data or <a
+                        href="#">learn about BARD’s innovative search features.</a></p>
+            </div>
 
-        <div class="search-block">
+            <div class="search-block">
 
-
-                <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form">
+                <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm"
+                        class="search-form">
                     <fieldset>
                         <div class="search-field input-append">
                             <div class="text-field">
-                                <g:textField id="searchString" name="searchString" placeholder="Search by Chemistry, Biology, Structure and More" value="${flash.searchString}"/>
+                                <g:textField id="searchString" name="searchString"
+                                             placeholder="Search by Chemistry, Biology, Structure and More"
+                                             value="${flash.searchString}"/>
                             </div>
 
                             <div class="btn-field">
-                                <button name="search" class="btn btn-primary"  id="searchButton" type="submit">Search <span
+                                <button name="search" class="btn btn-primary" id="searchButton"
+                                        type="submit">Search <span
                                         class="hidden-phone">BARD</span>
                                 </button>
                             </div>
@@ -161,59 +231,60 @@
 
 
 
-        <div class="links-holder">
-            <a href="#">Advanced Search</a>
-            <a href="#" class="download-link hidden-phone">Download the BARD Desktop Client</a>
+                <div class="links-holder">
+                    <a href="#">Advanced Search</a>
+                    <a href="#" class="download-link hidden-phone">Download the BARD Desktop Client</a>
+                </div>
+
+            </div>
+
         </div>
-
-
-
-        </div>
-
     </div>
-</div>
-    </g:if>
+</g:if>
 
 %{--carousel news panel. This will need dynamic content--}%
 <g:if test="${true}">
-<section class="news-panel">
-    <div class="container-fluid">
-        <div class="news-row">
-            <h1>BARD NEWS</h1>
+    <section class="news-panel">
+        <div class="container-fluid">
+            <div class="news-row">
+                <h1>BARD NEWS</h1>
 
-            <div class="news-holder">
-                <div class="news-gallery slide" id="news-gallery" data-interval="false">
-                    <a href="#news-gallery" class="btn-prev" data-slide="prev">Previous</a>
-                    <a href="#news-gallery" class="btn-next" data-slide="next">Next</a>
+                <div class="news-holder">
+                    <div class="news-gallery slide" id="news-gallery" data-interval="false">
+                        <a href="#news-gallery" class="btn-prev" data-slide="prev">Previous</a>
+                        <a href="#news-gallery" class="btn-next" data-slide="next">Next</a>
 
-                    <div class="carousel-inner">
-                        <div class="item active">
-                            <strong class="ttl">Webcast <time datetime="2013-08-16T08:20">AUG 26 2013 @ 8:20 pm</time>
-                            </strong>
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <strong class="ttl">Webcast <time
+                                        datetime="2013-08-16T08:20">AUG 26 2013 @ 8:20 pm</time>
+                                </strong>
 
-                            <p><a href="#">Bard news to go here when we have it.</a></p>
-                        </div>
+                                <p><a href="#">Bard news to go here when we have it.</a></p>
+                            </div>
 
-                        <div class="item">
-                            <strong class="ttl">Webcast <time datetime="2013-08-17T08:20">AUG 27 2013 @ 8:20 pm</time>
-                            </strong>
+                            <div class="item">
+                                <strong class="ttl">Webcast <time
+                                        datetime="2013-08-17T08:20">AUG 27 2013 @ 8:20 pm</time>
+                                </strong>
 
-                            <p><a href="#">Bard news to go here when we have it, too.</a></p>
-                        </div>
+                                <p><a href="#">Bard news to go here when we have it, too.</a></p>
+                            </div>
 
-                        <div class="item">
-                            <strong class="ttl">Webcast <time datetime="2013-08-18T08:20">AUG 28 2013 @ 8:20 pm</time>
-                            </strong>
+                            <div class="item">
+                                <strong class="ttl">Webcast <time
+                                        datetime="2013-08-18T08:20">AUG 28 2013 @ 8:20 pm</time>
+                                </strong>
 
-                            <p><a href="#">More Bard news, as it becomes available.</a></p>
+                                <p><a href="#">More Bard news, as it becomes available.</a></p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-    </g:if>
+    </section>
+</g:if>
 
 %{--This is the main carousel, with three big pictures and associated buttons--}%
 <div class="articles-gallery slide" id="articles-gallery" data-interval="false">
@@ -280,7 +351,8 @@
 
 <g:if test="${true}">
 %{--The BARD is  growing line sits on its own above the blocks--}%
-<section class="tabs-section"> %{--This section tag binds 'Bard is growing', the blocks, and the tab information together  --}%
+<section
+        class="tabs-section">%{--This section tag binds 'Bard is growing', the blocks, and the tab information together  --}%
 <div class="container-fluid">
     <div class="page-header">
         <h1>BARD Is Growing <small>Statistics &amp; Recent Submissions</small></h1>

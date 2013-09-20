@@ -13,6 +13,7 @@ import bard.db.model.AbstractContextOwner
 import bard.db.people.Person
 import bard.db.people.Role
 import bard.db.project.InlineEditableCommand
+import bardqueryapi.IQueryService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
@@ -20,6 +21,7 @@ import grails.validation.Validateable
 import grails.validation.ValidationException
 import groovy.transform.InheritConstructors
 import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.tuple.Pair
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.springframework.security.access.AccessDeniedException
@@ -44,6 +46,7 @@ class AssayDefinitionController {
     MeasureTreeService measureTreeService
     AssayDefinitionService assayDefinitionService
     CapPermissionService capPermissionService
+    IQueryService queryService
 
     def groupAssays() {
         List<Assay> assays = capPermissionService.findAllObjectsForRoles(Assay)
@@ -266,7 +269,13 @@ class AssayDefinitionController {
         measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assayInstance, false))
         boolean editable = canEdit(permissionEvaluator, springSecurityService, assayInstance)
         String owner = capPermissionService.getOwner(assayInstance)
-        return [assayInstance: assayInstance, assayOwner: owner, measureTreeAsJson: measureTreeAsJson, editable: editable ? 'canedit' : 'cannotedit']
+
+        //TODO: This should get replaced with cache. Get the active vs tested compound counts
+        //grab all of the experiment ids
+        final List<Long> experimentIds = assayInstance.experiments.collect { it.id }
+
+        final Map<Long, Pair<Long, Long>> experimentsActiveVsTested = queryService.findActiveVsTestedForExperiments(experimentIds)
+        return [assayInstance: assayInstance, assayOwner: owner, measureTreeAsJson: measureTreeAsJson, editable: editable ? 'canedit' : 'cannotedit', experimentsActiveVsTested: experimentsActiveVsTested]
     }
 
     def editContext(Long id, String groupBySection) {

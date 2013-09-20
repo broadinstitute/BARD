@@ -1,7 +1,12 @@
 package bard.db.experiment
 
+import bard.core.SearchParams
+import bard.core.rest.spring.ExperimentRestService
+import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.db.enums.ExperimentStatus
 import bard.db.enums.HierarchyType
+import bard.db.enums.ReadyForExtraction
 import bard.db.registration.Assay
 import bard.db.registration.Measure
 import org.apache.commons.lang.StringUtils
@@ -10,9 +15,11 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.security.access.prepost.PreAuthorize
 import registration.AssayService
 
+
 class ExperimentService {
 
     AssayService assayService;
+    ExperimentRestService experimentRestService
 
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Experiment updateRunFromDate(final Long id, final Date runDateFrom) {
@@ -204,7 +211,7 @@ class ExperimentService {
         def mapping = assayService.cloneAssay(oldAssay)
 
         Assay newAssay = mapping.assay
-        newAssay.fullyValidateContextItems=false
+        newAssay.fullyValidateContextItems = false
 
         Map<Measure, Measure> measureOldToNew = mapping.measureOldToNew
 
@@ -228,4 +235,85 @@ class ExperimentService {
         newAssay = newAssay.save(flush: true)
         return Assay.findById(newAssay.id)
     }
+
+
+    List<String> loadNCGCExperimentIds() {
+        //look for experiments with an NCGC ID of null and Ready for extraction status of complete
+        List<Long> capIds = Experiment.findAllByNcgcWarehouseIdIsNullAndReadyForExtraction(ReadyForExtraction.COMPLETE).collect { it.id }
+
+        if (!capIds) {
+            return
+        }
+        int start = 0
+        final int NUMBER_OF_RECORDS_TO_PROCESS_PER_ROUND = 5
+        int end = capIds.size() > NUMBER_OF_RECORDS_TO_PROCESS_PER_ROUND ? NUMBER_OF_RECORDS_TO_PROCESS_PER_ROUND : capIds.size()
+        List<String> updateStatements = []
+        List<Long> toProcess = capIds.subList(start, end)
+        while (toProcess) {
+            updateStatements.addAll(loadNCGCExperimentIdsFromList(toProcess))
+            start = end
+            end = end + NUMBER_OF_RECORDS_TO_PROCESS_PER_ROUND
+
+            if (end > capIds.size()) {
+                end = capIds.size()
+            }
+            if (start == end) {
+                toProcess = []
+            } else {
+                toProcess = capIds.subList(start, end)
+            }
+        }
+
+        return updateStatements
+    }
+
+    List<String> loadNCGCExperimentIdsFromList(List<Long> capExperimentIds) {
+        if (!capExperimentIds) {
+            return
+        }
+        List<String> updateStatements = []
+        SearchParams searchParams = new SearchParams(skip: 0, top: capExperimentIds.size())
+
+        try {
+            ExperimentSearchResult experimentSearchResult = experimentRestService.searchExperimentsByCapIds(capExperimentIds, searchParams, false)
+            if (experimentSearchResult) {
+                final List<ExperimentSearch> experiments = experimentSearchResult.experiments
+                if (experiments) {
+                    for (ExperimentSearch experimentSearch : experiments) {
+                        if (experimentSearch) {
+                            //batch update or do it one by one?
+                            final Experiment experiment = Experiment.get(experimentSearch.capExptId)
+                            if (experiment) {
+                                updateStatements.add("UPDATE EXPERIMENT SET NCGC_WAREHOUSE_ID=${experimentSearch.bardExptId} WHERE EXPERIMENT_ID=${experimentSearch.capExptId};")
+                                experiment.ncgcWarehouseId = experimentSearch.bardExptId
+                                experiment.save(flush: true)
+                            } else {
+                                log.error("Could not find Experiment with id ${experimentSearch.capExptId}")
+                            }
+                        }
+                    }
+                } else {
+                    log.error("The following Cap Experiment Ids ${capExperimentIds} could not be found in the warehouse")
+                }
+            } else {
+                log.error("The following Cap Experiment Ids ${capExperimentIds} could not be found in the warehouse")
+            }
+        } catch (Exception ee) {
+            log.error("Error From loadNCGCExperimentIdsFromList " + ee.message)
+            ee.stackTrace
+        }
+        return updateStatements
+    }
+
+    public static int getTotalLengthRec2(final List<String> lst) {
+        return getTotalLengthRecHelper(lst, 0, lst.size());
+    }
+
+    public static int getTotalLengthRecHelper(final List<String> lst, final int from, final int to) {
+        if (to - from <= 1)
+            return lst.get(from).length();
+        final int middle = (from + to) >> 1;
+        return getTotalLengthRecHelper(lst, from, middle) + getTotalLengthRecHelper(lst, middle, to);
+    }
+
 }

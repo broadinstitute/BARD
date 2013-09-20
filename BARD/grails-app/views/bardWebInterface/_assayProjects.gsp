@@ -4,11 +4,11 @@
         <dt>Name</dt>
         <dd>
         <g:if test="${searchString}">
-            <g:link controller="bardWebInterface" action="showProject" id="${project.id}"
+            <g:link controller="project" action="show" id="${project.capProjectId}"
                     params='[searchString: "${searchString}"]'>${project.name}</g:link>
         </g:if>
         <g:else>
-            <g:link controller="bardWebInterface" action="showProject" id="${project.id}">${project.name}</g:link>
+            <g:link controller="project" action="show" id="${project.capProjectId}">${project.name}</g:link>
         </g:else>
         </dd>
         <dt>Description</dt>

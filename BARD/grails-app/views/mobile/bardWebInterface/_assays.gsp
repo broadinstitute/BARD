@@ -10,7 +10,7 @@
         <ul>
             <g:each var="assayAdapter" in="${assayAdapters}">
                 <li>
-                    <g:link action="showAssay" id="${assayAdapter.id}"
+                    <g:link controller="assayDefinition" action="show" id="${assayAdapter.capAssayId}"
                             params='[searchString: "${searchString}"]'>${assayAdapter.title} <small>(ADID: ${assayAdapter.capAssayId})</small></g:link>
                 </li>
             </g:each>
