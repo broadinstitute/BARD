@@ -21,8 +21,6 @@
 </head>
 
 <body>
-
-
 <noscript>
     <a href="http://www.enable-javascript.com/" target="javascript">
         <img src="${resource(dir: 'images', file: 'enable_js.png')}"
@@ -131,7 +129,7 @@
                     </div>
                 </g:form>
             </div>
-            <a href='/BARD/bardWebInterface/navigationPage' style="float: right; color: white" CLASS="btn btn-primary">Submissions</a>
+            <a href='/BARD/bardWebInterface/navigationPage' style="float: right; color: white; margin-bottom: 5px" CLASS="btn btn-primary">Submissions</a>
         </div>
     </div>
 

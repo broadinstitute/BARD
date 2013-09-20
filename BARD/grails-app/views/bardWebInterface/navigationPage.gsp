@@ -9,6 +9,6 @@
 </head>
 
 <body>
-<h1>This is a stub navigation page that will be replaced later</h1>
+<h3>This is a stub navigation page that will be replaced later</h3>
 </body>
 </html>
