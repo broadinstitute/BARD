@@ -10,7 +10,7 @@
     </div>
 
     <div class="modal-body">
-        <textarea class="field span12" id="idSearchString" name="idSearchString" rows="15"></textarea>
+        <textarea class="field span12" class="idSearchString" name="idSearchString" rows="15"></textarea>
     </div>
 
     <div class="modal-footer">
@@ -30,7 +30,7 @@
 
             <div>
                 <a href="#" class="btn" data-dismiss="modal" id="closeButton2">Close</a>
-                <a href="#" id="idSearchButton" class="btn btn-primary" data-dismiss="modal">Search</a>
+                <a href="#" class="idSearchButton btn btn-primary" data-dismiss="modal">Search</a>
             </div>
         </g:form>
     </div>
