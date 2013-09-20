@@ -9,8 +9,21 @@
             <li><g:img uri="/js/dynatree-1.2.2/skin/add_children.jpg"/> ${AddChildMethod.DIRECT.description}</li>
         </ul>
     </div>
-    <br/>
 
+    <div class="control-group">
+        <div class="controls">
+            <label class="checkbox">
+                <g:checkBox id="doNotShowRetiredTerms" name="doNotShowRetiredTerms" checked="False" onclick="reloadTree();" onchange="reloadTree();"/>
+                <strong>Do NOT show 'Retired' terms in hierarchy</strong>
+            </label>
+        </div>
+    </div>
+    <%--
+    <form>
+        <input type="checkbox" id="doNotShowRetiredTerms" name="doNotShowRetiredTerms" checked="False" onclick="createHierarchyTree();" onchange="createHierarchyTree();">
+        <strong>Do NOT show 'Retired' terms in hierarchy</strong>
+    </form>
+    --%>
     <div id="element-hierarchy-tree"></div>
 
     <div>

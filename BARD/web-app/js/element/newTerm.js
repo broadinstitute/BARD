@@ -1,11 +1,39 @@
 $(document).ready(function () {
+    createHierarchyTree();
+});
+
+function reloadTree(){
+    var doNotShowRetired = $("#doNotShowRetiredTerms").is(':checked');
+    $("#element-hierarchy-tree").dynatree("option", "initAjax", {
+        url: "/BARD/element/buildTopLevelHierarchyTree",
+        data: {doNotShowRetired: doNotShowRetired}
+    });
+
+    $("#element-hierarchy-tree").dynatree("option", "onLazyRead", function (node){
+        node.appendAjax(
+            {
+                url: "/BARD/element/getChildrenAsJson",
+                dataType: "json",
+                data: {elementId: node.data.elementId, doNotShowRetired: doNotShowRetired}
+            }
+        )
+    });
+    $("#element-hierarchy-tree").dynatree("getTree").reload();
+
+    $("#saveTerm")[0].reset();
+}
+
+function createHierarchyTree()  {
+    var doNotShowRetired = $("#doNotShowRetiredTerms").is(':checked');
+
     $("#element-hierarchy-tree").dynatree
     (
         {
             title: "BARD Hierarchy Tree",
             autoFocus: false,
             initAjax: {
-                url: "/BARD/element/buildTopLevelHierarchyTree"
+                url: "/BARD/element/buildTopLevelHierarchyTree",
+                data: {doNotShowRetired: doNotShowRetired}
             },
             onActivate: function (node) {
                 $("#parentLabel").val(node.data.title);
@@ -37,7 +65,7 @@ $(document).ready(function () {
                     {
                         url: "/BARD/element/getChildrenAsJson",
                         dataType: "json",
-                        data: {elementId: node.data.elementId}
+                        data: {elementId: node.data.elementId, doNotShowRetired: doNotShowRetired}
 
                     }
                 );
@@ -60,7 +88,8 @@ $(document).ready(function () {
 
     });
     selectCurrentElement();
-});
+}
+
 /**
  *
  * Some browsers will not allow you to close the window using window.close()

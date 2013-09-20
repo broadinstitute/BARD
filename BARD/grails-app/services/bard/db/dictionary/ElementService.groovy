@@ -70,7 +70,7 @@ class ElementService {
      * @param elementId
      * @return List
      */
-    List getChildNodes(long elementId) {
+    List getChildNodes(long elementId, boolean doNotShowRetired) {
         def childNodes = []
         final Element parentElement = Element.get(elementId)
         final List<ElementHierarchy> list = new ArrayList(parentElement.parentHierarchies)
@@ -78,12 +78,16 @@ class ElementService {
         Set<Element> seenSet = new HashSet<Element>()
         for (ElementHierarchy elementHierarchy : hierarchies) {
             final Element childElement = elementHierarchy.childElement
+            if(doNotShowRetired && childElement.elementStatus.equals(ElementStatus.Retired)){
+                continue
+            }
             if (!seenSet.contains(childElement)) {
                 seenSet.add(childElement)
                 boolean isLazy = childElement.parentHierarchies ? true : false
                 boolean isFolder = childElement.parentHierarchies ? true : false
                 final AddChildMethod childMethod = childElement.addChildMethod
-                childNodes.add([elementId: childElement.id, childMethodDescription: childMethod.description, childMethod: childMethod.toString(), addClass: childMethod.label, title: childElement.label, description: childElement.description, isFolder: isFolder, isLazy: isLazy])
+                String childElementLabel = childElement.label + (childElement.elementStatus.equals(ElementStatus.Retired) ? " (Retired)" : "")
+                childNodes.add([elementId: childElement.id, childMethodDescription: childMethod.description, childMethod: childMethod.toString(), addClass: childMethod.label, title: childElementLabel, description: childElement.description, isFolder: isFolder, isLazy: isLazy])
             }
         }
         childNodes.sort { Map a, Map b -> a["title"].toLowerCase().compareTo(b["title"].toLowerCase()) }
@@ -93,8 +97,8 @@ class ElementService {
      * @param full = will render the full tree otherwise it will lazily render it
      * @return list of hierarchy
      */
-    public List createElementHierarchyTree() {
+    public List createElementHierarchyTree(boolean doNotShowRetired) {
         Element element = Element.findByLabel("BARD")//find the ROOT OF THE BARD TREE
-        return getChildNodes(element.id)
+        return getChildNodes(element.id, doNotShowRetired)
     }
 }
