@@ -24,7 +24,7 @@
         </script>
         <g:if test="${assays}">
             <table id="myAssays" class="tablesorter table table-striped table-hover table-bordered">
-                <caption><b>My Assay Definitions Total:</b> ${assays.size()}</caption>
+                <caption><b>My Assay Definitions; Total:</b> ${assays.size()}</caption>
                 <thead>
                 <tr>
                     <th>ADID</th><th>Name</th><th>Status</th> <th>Date Created</th>

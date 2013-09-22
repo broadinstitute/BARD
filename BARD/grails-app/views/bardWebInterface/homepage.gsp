@@ -165,7 +165,7 @@
                         <li><a href="#">Contact us</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Submissions</a></li>
+                <li><a href="/BARD/bardWebInterface/navigationPage">Submissions</a></li>
             </ul>
             <g:if test="${false}">
                 <ul class="login-nav">

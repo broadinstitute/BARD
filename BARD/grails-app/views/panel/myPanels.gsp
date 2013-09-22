@@ -24,7 +24,7 @@
 
         <g:if test="${panels}">
             <table id="myPanels" class="tablesorter table table-striped table-hover table-bordered">
-                <caption><b>My Panels Total:</b> ${panels.size()}</caption>
+                <caption><b>My Panels; Total:</b> ${panels.size()}</caption>
 
                 <thead>
 
