@@ -283,7 +283,7 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         controller.deletePanel()
 
         then:
-        assert "/panel/list" == response.redirectedUrl
+        assert "/panel/myPanels" == response.redirectedUrl
 
         when:
         panelService.verify()

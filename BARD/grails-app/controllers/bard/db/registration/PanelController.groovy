@@ -35,7 +35,7 @@ class PanelController {
         }
         this.panelService.deletePanel(panel.id)
         flash.message = "Panel deleted successfully"
-        redirect(action: "list")
+        redirect(action: "myPanels")
     }
 
     def addAssayToPanel(AssociatePanelCommand associatePanelCommand) {
