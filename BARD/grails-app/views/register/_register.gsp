@@ -5,7 +5,7 @@
 
         <div class="controls">
             <g:textField name="username" class="input-large" maxlength="250" required=""
-                         value="${command.username}"
+                         value="${command?.username}"
                          placeholder="Enter user Name"/>
             <span class="help-inline">
                 <g:hasErrors bean="${command}" field="username">
@@ -26,7 +26,7 @@
 
         <div class="controls">
             <g:textField name="firstName" class="input-large" maxlength="250" required=""
-                         value="${command.firstName}"
+                         value="${command?.firstName}"
                          placeholder="Enter First Name"/>
             <span class="help-inline">
                 <g:hasErrors bean="${command}" field="firstName">
@@ -47,7 +47,7 @@
 
         <div class="controls">
             <g:textField name="lastName" class="input-large" maxlength="250" required=""
-                         value="${command.lastName}"
+                         value="${command?.lastName}"
                          placeholder="Enter Last Name"/>
             <span class="help-inline">
                 <g:hasErrors bean="${command}" field="lastName">
@@ -69,7 +69,7 @@
         <div class="controls">
             <input type="email" id="email" name="email" class="input-xxlarge" maxlength="250"
                    required=""
-                   value="${command.email}"
+                   value="${command?.email}"
                    placeholder="Enter Email Address"/>
             <span class="help-inline">
                 <g:hasErrors bean="${command}" field="email">
@@ -90,7 +90,7 @@
 
         <div class="controls">
             <g:passwordField name="password" class="input-xxlarge" maxlength="250" required=""
-                             value="${command.password}"
+                             value="${command?.password}"
                              placeholder="Enter Password"/>
             <span class="help-inline">
                 <g:hasErrors bean="${command}" field="password">
@@ -111,7 +111,7 @@
 
         <div class="controls">
             <g:passwordField name="password2" class="input-xxlarge" maxlength="250" required=""
-                             value="${command.password2}"
+                             value="${command?.password2}"
                              placeholder="Enter Password Again"/>
             <span class="help-inline">
                 <g:hasErrors bean="${command}" field="password2">

@@ -2,44 +2,50 @@
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,assayshow,assaysummary"/>
+            modules="core,bootstrap,tableSorter"/>
     <meta name="layout" content="basic"/>
     <title>My Experiments</title>
+
 </head>
 
 <body>
-<div class="row-fluid">
-    <div class="span12">
-        <div class="hero-unit-v1">
-            <h4>My Experiments</h4>
-        </div>
-    </div>
-</div>
 
-<p><b>Total Experiments:</b> ${experiments.size()}</p>
-
-<div id="showExperiments">
-    <g:if test="${experiments}">
-        <table class="table table-striped table-hover table-bordered">
-            <thead>
-            <tr>
-                <th>Experiment ID</th><th>Name</th><th>Description</th> <th>Date Created</th>
-            </tr>
-            </thead>
-            <tbody>
-            <g:each in="${experiments}" var="experiment">
+<div class="container-fluid">
+    <div class="row-fluid">
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#myExperiments").tablesorter({
+                    headers:
+                    {
+                        3: { sorter: "shortDate"  }
+                    },
+                    widgets: ['zebra']
+                });
+            });
+        </script>
+        <g:if test="${experiments}">
+            <table id="myExperiments" class="tablesorter table table-striped table-hover table-bordered">
+                <caption><b>My Experiments Total:</b> ${experiments.size()}</caption>
+                <thead>
                 <tr>
-                    <td><g:link controller="experiment" id="${experiment.id}"
-                                action="show">${experiment.id}</g:link></td>
-                    <td style="line-height: 150%"><p>${experiment.experimentName}</p></td>
-                    <td style="line-height: 150%"><p>${experiment.description}</p></td>
-                    <td><g:formatDate date="${experiment.dateCreated}" format="MM/dd/yyyy"/></td>
+                    <th>Experiment ID</th><th>Name</th><th>Status</th> <th>Date Created</th>
                 </tr>
-            </g:each>
-            </tbody>
-        </table>
-    </g:if>
-    <br/>
+                </thead>
+                <tbody>
+                <g:each in="${experiments}" var="experiment">
+                    <tr>
+                        <td><g:link controller="experiment" id="${experiment.id}"
+                                    action="show">${experiment.id}</g:link></td>
+                        <td style="line-height: 150%"><p>${experiment.experimentName}</p></td>
+                        <td style="line-height: 150%"><p>${experiment.experimentStatus.id}</p></td>
+                        <td><g:formatDate date="${experiment.dateCreated}" format="MM/dd/yyyy"/></td>
+                    </tr>
+                </g:each>
+                </tbody>
+            </table>
+        </g:if>
+        <br/>
+    </div>
 </div>
 </body>
 </html>

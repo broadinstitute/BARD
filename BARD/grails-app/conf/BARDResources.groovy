@@ -1,7 +1,7 @@
 modules = {
     overrides {
         'jquery-theme' {
-            resource id: 'theme', url: '/css/flick/jquery-ui-1.8.20.custom.css'          
+            resource id: 'theme', url: '/css/flick/jquery-ui-1.8.20.custom.css'
         }
         'bootstrap' {
             resource id: 'bootstrap-css', url: '/js/jquery-ui-bootstrap/bootstrap/bootstrap.css'
@@ -16,9 +16,9 @@ modules = {
         resource url: '/js/persona/include.js'
         resource url: 'js/persona/signin.js'
     }
-    login{
-        resource url:"css/font-awesome/css/font-awesome.css"
-        resource url:"css/social-buttons.css"
+    login {
+        resource url: "css/font-awesome/css/font-awesome.css"
+        resource url: "css/social-buttons.css"
     }
     xeditable {
         resource url: "/js/x-editable/bootstrap-editable.js"
@@ -47,10 +47,13 @@ modules = {
     grailspagination {
         resource url: '/css/grailspagination.css'
     }
-    dictionaryPage {
-        resource url: "js/html5historyapi/history.js"
+    tableSorter {
         resource url: '/js/jquery-table-sorter/jquery.tablesorter.min.js'
         resource url: '/js/jquery-table-sorter/theme.default.css'
+    }
+    dictionaryPage {
+        dependsOn("tableSorter")
+        resource url: "js/html5historyapi/history.js"
     }
     dynatree {
         dependsOn 'jquery, jquery-ui'

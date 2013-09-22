@@ -30,7 +30,7 @@ class RegisterController {
         def copy = [:] + (flash.chainedParams ?: [:])
         copy.remove 'controller'
         copy.remove 'action'
-        [registerCommand: new RegisterCommand(copy)]
+        [command: new RegisterCommand(copy)]
     }
 
     @Secured(["hasRole('ROLE_BARD_ADMINISTRATOR')"])

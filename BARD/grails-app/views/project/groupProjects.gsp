@@ -1,43 +1,49 @@
-<%@ page import="bard.db.enums.ContextType; bard.db.model.AbstractContextOwner; org.springframework.security.acls.domain.BasePermission; bard.db.registration.*" %>
 <!DOCTYPE html>
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,assaysummary,canEditWidget"/>
+            modules="core,bootstrap,tableSorter"/>
     <meta name="layout" content="basic"/>
     <title>My Projects</title>
 </head>
+
 <body>
-<div class="row-fluid">
-    <div class="span12">
-        <div class="hero-unit-v1">
-            <h4>My Projects</h4>
-        </div>
-    </div>
-</div>
-<p><b>Total projects:</b> ${projects.size()}</p>
-<div id="showAssays">
-    <g:if test="${projects}">
-        <table class="table table-striped table-hover table-bordered">
-            <thead>
-            <tr>
-                <th>PID</th><th>Project Name</th><th>Status</th> <th>Date Created</th>
-            </tr>
-            </thead>
-            <tbody>
-            <g:each in="${projects}" var="project">
+<div class="container-fluid">
+    <div class="row-fluid">
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#myProjects').tablesorter({
+                    headers: {
+                        3: { sorter: "shortDate"  }
+                    },
+                    widgets: ['zebra']
+                });
+            });
+        </script>
+        <g:if test="${projects}">
+            <table id="myProjects" class="tablesorter table table-striped table-hover table-bordered">
+                <caption><b>My Projects; Total:</b> ${projects.size()}</caption>
+                <thead>
+
                 <tr>
-                    <td><g:link controller="project" id="${project.id}"
-                                action="show">${project.id}</g:link></td>
-                    <td style="line-height: 150%"><p>${project.name}</p></td>
-                    <td>${project.projectStatus}</td>
-                    <td><g:formatDate date="${project.dateCreated}" format="MM/dd/yyyy"/></td>
+                    <th>PID</th><th>Project Name</th><th>Status</th> <th>Date Created</th>
                 </tr>
-            </g:each>
-            </tbody>
-        </table>
-    </g:if>
-    <br/>
+                </thead>
+                <tbody>
+                <g:each in="${projects}" var="project">
+                    <tr>
+                        <td><g:link controller="project" id="${project.id}"
+                                    action="show">${project.id}</g:link></td>
+                        <td style="line-height: 150%"><p>${project.name}</p></td>
+                        <td>${project.projectStatus.id}</td>
+                        <td><g:formatDate date="${project.dateCreated}" format="MM/dd/yyyy"/></td>
+                    </tr>
+                </g:each>
+                </tbody>
+            </table>
+        </g:if>
+        <br/>
+    </div>
 </div>
 </body>
 </html>
