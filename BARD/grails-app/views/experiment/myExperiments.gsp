@@ -15,10 +15,10 @@
         <script type="text/javascript">
             $(document).ready(function () {
                 $("#myExperiments").tablesorter({
-                    headers:
-                    {
-                        0:  { sorter: "digit"  },
-                        3: { sorter: "shortDate"  }
+                    headers: {
+                        0: { sorter: "digit"  },
+                        3: { sorter: "digit"  },
+                        4: { sorter: "shortDate"  }
                     },
                     widgets: ['zebra']
                 });
@@ -26,10 +26,10 @@
         </script>
         <g:if test="${experiments}">
             <table id="myExperiments" class="tablesorter table table-striped table-hover table-bordered">
-                <caption><b>My Experiments; Total:</b> ${experiments.size()}</caption>
+                <caption><b>Total:</b> ${experiments.size()}</caption>
                 <thead>
                 <tr>
-                    <th>Experiment ID</th><th>Name</th><th>Status</th> <th>Date Created</th>
+                    <th>Experiment ID</th><th>Name</th><th>Status</th><th>Belongs to ADID</th> <th>Date Created</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -39,6 +39,10 @@
                                     action="show">${experiment.id}</g:link></td>
                         <td style="line-height: 150%"><p>${experiment.experimentName}</p></td>
                         <td style="line-height: 150%"><p>${experiment.experimentStatus.id}</p></td>
+                        <td style="line-height: 150%"><p>
+                            <g:link controller="assayDefinition" id="${experiment.assay.id}"
+                                    action="show">${experiment.assay.id}</g:link>
+                        </p></td>
                         <td><g:formatDate date="${experiment.dateCreated}" format="MM/dd/yyyy"/></td>
                     </tr>
                 </g:each>

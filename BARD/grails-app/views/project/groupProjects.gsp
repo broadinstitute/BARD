@@ -23,7 +23,7 @@
         </script>
         <g:if test="${projects}">
             <table id="myProjects" class="tablesorter table table-striped table-hover table-bordered">
-                <caption><b>My Projects; Total:</b> ${projects.size()}</caption>
+                <caption><b>Total:</b> ${projects.size()}</caption>
                 <thead>
 
                 <tr>
