@@ -3,7 +3,7 @@
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,assaysummary,canEditWidget"/>
+            modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,projectsummary,canEditWidget"/>
     <meta name="layout" content="basic"/>
     <title>Panel</title>
 </head>
@@ -93,9 +93,9 @@
                                     </dd>
                                     <dt><g:message code="panel.description.label" default="Description"/>:</dt>
                                     <dd>
-                                        <span
-                                                class="panelDescriptionY"
+                                        <span class="description"
                                                 id="descriptionId"
+                                                data-type="text"
                                                 data-toggle="manual"
                                                 data-type="text"
                                                 data-value="${panelInstance?.description}"
@@ -104,11 +104,9 @@
                                                 data-placeholder="Required"
                                                 data-inputclass="input-xxlarge"
                                                 data-original-title="Edit Panel Description">${panelInstance?.description}</span>
-                                        <a href="#" class="icon-pencil documentPencil ${editable}"
-                                           title="Click to edit Description"
-                                           data-id="descriptionId"></a>
+                                        <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description" data-id="descriptionId"></a>
                                     </dd>
-
+                                    <g:hiddenField name="version" id="versionId" value="${panelInstance.version}"/>
                                     <dt>Owner:</dt>
                                     <dd>${panelOwner}</dd>
 
