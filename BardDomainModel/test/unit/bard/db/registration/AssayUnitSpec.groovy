@@ -33,7 +33,6 @@ class AssayUnitSpec extends Specification {
         desc              | assayType          | assayStatus         | measureCount | expectedAllowsNewExperiments
         'retired assay'   | AssayType.REGULAR  | AssayStatus.RETIRED | 1            | false
         'template assay'  | AssayType.TEMPLATE | AssayStatus.DRAFT   | 1            | false
-        'no measures'     | AssayType.REGULAR  | AssayStatus.DRAFT   | 0            | false
         'everything good' | AssayType.REGULAR  | AssayStatus.DRAFT   | 1            | true
     }
 }
