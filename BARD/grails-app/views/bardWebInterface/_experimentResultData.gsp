@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <p>
-    <b>Title: ${tableModel?.additionalProperties?.experimentName} (ID: ${tableModel?.additionalProperties?.id})</b>
+    <b>Title: ${tableModel?.additionalProperties?.experimentName} (ID: ${tableModel?.additionalProperties?.capExptId})</b>
 </p>
 
 

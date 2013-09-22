@@ -52,15 +52,15 @@
                     </td>
                     <g:if test="${!experiment.projectExperiments.isEmpty()}">
 
-                        <g:each in="${experiment.projectExperiments}" var="projExp">
+                        <g:each in="${experiment.projectExperiments}" var="projectExperiment">
                             <td>
 
-                                <g:link controller="project" id="${projExp.project.id}"
-                                        action="show">${projExp.project.id}</g:link>
+                                <g:link controller="project" id="${projectExperiment.project.id}"
+                                        action="show">${projectExperiment.project.id}</g:link>
 
                             </td>
                             <td style="line-height: 150%">
-                                ${projExp.project.name}
+                                ${projectExperiment.project.name}
                             </td>
                         </g:each>
 
