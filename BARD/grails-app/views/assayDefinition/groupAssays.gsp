@@ -15,6 +15,7 @@
             $(document).ready(function () {
                 $('#myAssays').tablesorter({
                     headers: {
+                        0: { sorter: "digit"  },
                         3: { sorter: "shortDate"  }
                     },
                     widgets: ['zebra']

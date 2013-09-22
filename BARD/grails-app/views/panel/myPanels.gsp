@@ -14,6 +14,7 @@
             $(document).ready(function () {
                 $("#myPanels").tablesorter({
                     headers: {
+                        0:  { sorter: "digit"  },
                         3: { sorter: "shortDate"  }
                     },
                     widgets: ['zebra']
