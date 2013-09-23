@@ -19,6 +19,10 @@ modules = {
         resource url: '/js/application.js'
         resource url: '/css/dl-horizontal-fix.css'
     }
+    moveExperiments{
+    dependsOn 'core,bootstrap'
+        resource url:'/js/cap/moveExperiments.js'
+    }
     xeditable {
         resource url: "/js/x-editable/bootstrap-editable.js"
         resource url: "/css/x-editable/bootstrap-editable.css"
