@@ -30,9 +30,10 @@ class ElementServiceIntegrationSpec extends IntegrationSpec {
         final Element childElement = Element.build(label: childLabel, description: description)
         final Element leafElement = Element.build(label: leafLabel, description: description)
         ElementHierarchy eh0a = buildElementHierarchy(parentElement, childElement, "subClassOf")
+        boolean doNotShowRetired = false
         buildElementHierarchy(eh0a.childElement, leafElement, "subClassOf")
         when:
-        List hierarchies = elementService.getChildNodes(childElement.id)
+        List hierarchies = elementService.getChildNodes(childElement.id, doNotShowRetired)
         then:
         assert hierarchies
         assert 1 == hierarchies.size()
@@ -58,9 +59,10 @@ class ElementServiceIntegrationSpec extends IntegrationSpec {
         final Element childElement = Element.build(label: childLabel, description: description)
         final Element leafElement = Element.build(label: leafLabel, description: description)
         ElementHierarchy eh0a = buildElementHierarchy(parentElement, childElement, "subClassOf")
+        boolean doNotShowRetired = false
         buildElementHierarchy(eh0a.childElement, leafElement, "subClassOf")
         when:
-        List hierarchies = elementService.createElementHierarchyTree()
+        List hierarchies = elementService.createElementHierarchyTree(doNotShowRetired)
         then:
         assert hierarchies
         assert 1 == hierarchies.size()
