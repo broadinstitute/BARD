@@ -40,25 +40,7 @@ public class MergeAssayDefinitionServiceUnitSpec extends Specification {
         assert errorMessages.get(0) == "Experiment Context Item : ${experimentContextItem.id}, on Experiment: ${experimentContextItem.experimentContext.experiment.id}, which is part of the Assay: ${experimentContextItem.experimentContext.experiment.assay.id} does not exist as a context item on the target assay"
     }
 
-    void 'test validateExperimentContextItem - assay context item has fixed attribute'() {
-        given:
-        Assay assayOne = Assay.build()
-        Element element = Element.build()
-        AssayContext contextOne = AssayContext.build(assay: assayOne, contextName: "alpha")
-        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: contextOne, attributeType: AttributeType.Fixed, attributeElement: element)
-        Measure measureOne = Measure.build(assay: assayOne)
-        AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
 
-        final ExperimentContextItem experimentContextItem = ExperimentContextItem.build(attributeElement: element)
-        final Map<Element, AssayContextItem> targetElementToAssayContextItemMap = [:]
-        targetElementToAssayContextItemMap.put(element, assayContextItem)
-        final List<String> errorMessages = []
-        when:
-        service.validateExperimentContextItem(experimentContextItem, targetElementToAssayContextItemMap, errorMessages)
-        then:
-        assert errorMessages
-        assert errorMessages.get(0) == "Cannot validate Experiment Context Item : ${experimentContextItem.id}, on Experiment: ${experimentContextItem.experimentContext.experiment.id}, which is part of the Assay: ${experimentContextItem.experimentContext.experiment.assay.id}  because the target context item 1 has an attribute type of Fixed"
-    }
 
     void 'test validateConfirmMergeInputs - exceptions #desc'() {
         when:
