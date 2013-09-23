@@ -1,70 +1,84 @@
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span2">
+<%@ page import="bard.db.enums.AssayStatus; bard.db.registration.ExternalReference" %>
+<div class="container">
+    <div>
+        <h2>(${moveExperimentsCommand.experiments?.size()}) Experiments found - choose which ones to move</h2>
+    </div>
 
-        </div>
-
-        <div class="span8">
-
+    <div class="row">
+        <div class="span12">
             <g:formRemote url="[controller: 'moveExperiments', action: 'moveSelectedExperiments']"
-                          name="moveSelectedExperiments"
-                          update="[success: 'responseDiv', failure: 'responseDiv']">
+                          name="splitExperiments"
+                          update="[success: 'displayResponseDiv', failure: 'displayResponseDiv']">
+            %{--Select all check boxes by default otherwise toggle--}%
+                <g:checkBox name="selectAll" id="selectAll" class="selectAll" checked="true"/> select all <br/>
+                <table id="myExperiments" class="table table-striped table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th></th><th>Experiment ID</th><th>ADID</th><th>PubChem AID</th><th>Experiment Name</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <g:each var="experiment" in="${moveExperimentsCommand.experiments}">
+                        <tr>
+                            <td>
+                                <g:checkBox name="experimentIds" value="${experiment.id}" class="check"
+                                            onclick="resetSelectAll();"/>
+                            </td>
+                            <td>
+                                <g:link controller="experiment"
+                                        action="show" id="${experiment.id}">${experiment.id}</g:link>
+                            </td>
+                            <td>
+                                <g:link controller="assayDefinition"
+                                        action="show" id="${experiment.assay.id}">${experiment.assay.id}</g:link>
+                            </td>
+                            <td>
+                                <%
+                                    ExternalReference externalReference = bard.db.registration.ExternalReference.findByExperiment(experiment)
 
-                <div class="control-group">
-                    <label><h3>Select one or more Experiments to move to Target Assay:</h3>
-                    </label>
-                    <label><h4>Source Assay :
-                    <g:link controller="assayDefinition" action="show" id="${sourceAssay.id}"
-                            target="_blank">
-                        ${sourceAssay.id} - ${sourceAssay.assayName}
-                    </g:link>
-                    </h4>
-                    </label>
-                </div>
-
-                <div class="control-group">
-                    <g:hiddenField name="sourceAssay.id" value="${sourceAssay.id}"/>
-                    <g:hiddenField name="targetAssay.id" value="${targetAssay.id}"/>
-
-                    <g:each var="experiment" in="${sourceAssay.experiments}">
-                        <g:checkBox name="experimentIds" value="${experiment.id}"
-                                    checked="false"/> <g:link controller="experiment"
-                                                              action="show" id="${experiment.id}">${experiment.id + ' : ' + experiment.experimentName}</g:link><br/>
+                                    String aid = externalReference?.getAid() ?: ""
+                                %>
+                                ${aid}
+                            </td>
+                            <td>${experiment.experimentName}</td>
+                        </tr>
                     </g:each>
-                </div>
+                    </tbody>
+                </table>
+                <g:hiddenField name="targetAssay.id" value="${moveExperimentsCommand.targetAssay.id}"/>
                 <br/>
-
-                <div class="control-group">
-                    <label><h4>Target Assay :
-                        <g:link controller="assayDefinition" action="show" id="${targetAssay.id}"
-                                target="_blank">${targetAssay.id} - ${targetAssay.assayName}</g:link></h4></label>
-                    <ul> Experiments:
-                        <g:each var="experiment" in="${targetAssay.experiments}">
+                <br/>
+                <div>
+                    <h2>Assay Definition to move to:</h2>
+                    <ul>
+                         <g:link controller="assayDefinition" action="show" id="${moveExperimentsCommand.targetAssay.id}"
+                                target="_blank">
                             <li>
-                                <g:link controller="experiment" action="show" id="${experiment.id}">
-                                    ${experiment.id + ' : ' + experiment.experimentName}
-                                </g:link>
+                                ${moveExperimentsCommand.targetAssay.id} - ${moveExperimentsCommand.targetAssay.assayName}
+                                <g:if test="${moveExperimentsCommand.targetAssay.assayStatus == AssayStatus.RETIRED}">
+                                    <span class="alert-error">
+                                        - ${moveExperimentsCommand.targetAssay.assayStatus}
+                                    </span>
+                                </g:if>
                             </li>
-                        </g:each>
+                        </g:link>
                     </ul>
                 </div>
+
                 <br/>
-
-                <div class="control-group">
-                    <div class="controls">
-                        <input type="submit" class="btn btn-primary" name="Move Experiments" value="Move Experiments">
-                    </div>
-                </div>
-
-                <div id="responseDiv"></div>
                 <br/>
-
+                <input type="submit" class="btn btn-primary" name="Move Experiments" value="Move Experiments">
             </g:formRemote>
+            <div id="displayResponseDiv">
 
+            </div>
         </div>
 
-        <div class="span2">
-
-        </div>
     </div>
+    <script>
+        $('.selectAll').on('click', function () {
+            $('.check').prop('checked', isChecked('selectAll'));
+        });
+    </script>
 </div>
+
