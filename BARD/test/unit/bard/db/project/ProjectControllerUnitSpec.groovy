@@ -394,6 +394,23 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         model.pexperiment != null
     }
 
+    void 'test show #desc'() {
+        when:
+        params.id = idClosure.call() // deferred execution so project is initialized
+        def model = controller.show()
+
+        then:
+        flash?.message == expectedFlashMessage
+        model?.instance == expectedProject.call()
+
+        where:
+        desc                  | idClosure      | expectedFlashMessage        | expectedProject
+        'with bad id'         | { -100L }      | 'default.not.found.message' | { null }
+        'with non numeric id' | { 'foo' }      | 'default.not.found.message' | { null }
+        'with null id'        | { null }       | 'default.not.found.message' | { null }
+        'with good id'        | { project.id } | null                        | { project }
+    }
+
     void 'test remove experiment from project success'() {
         given:
 
