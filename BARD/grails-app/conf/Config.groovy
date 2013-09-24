@@ -266,6 +266,14 @@ grails.mail.default.subject = "Error From BARD Web Query"
 google.analytics.webPropertyID = "UA-xxxxxx-x"
 
 /**
+ * Whether to include basic auth or not. Headless functional tests, requires basic auth so
+* So run with -Dbard.basic.auth=true
+ *
+ * Note that the default is false
+ */
+bard.basic.auth = System.properties.getProperty('bard.basic.auth') ?: false
+
+/**
  * Loads external config files from the .grails subfolder in the user's home directory
  * Home directory in Windows is usually: C:\Users\<username>\.grails
  * In Unix, this is usually ~\.grails
@@ -297,12 +305,10 @@ if (appName) {
             println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
         }
     }
-    switch (Environment.current) {
-        case Environment.CUSTOM://Allows tests to run in other environments
-        case Environment.TEST:
-            grails.config.locations << "classpath:Config-for-test.groovy"
-            break
+    if (bard.basic.auth){
+        grails.config.locations << "classpath:bard-basic-auth-config.groovy"
     }
+
 }
 
 if (System.getProperty("migrationContextsToRun") != null) {
