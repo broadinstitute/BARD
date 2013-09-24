@@ -45,10 +45,10 @@ class MergeAssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         final Experiment experiment = Experiment.build(experimentName: experimentsAlias, assay: assay, capPermissionService: null)
         ExternalReference.build(extAssayRef: "aid=${id}", experiment: experiment)
         when:
-        final Assay updatedAssay = mergeAssayDefinitionService.findEntityByIdType(id, IdType.AID)
+        final Experiment updatedExperiment = mergeAssayDefinitionService.findEntityByIdType(id, IdType.AID)
         then:
-        assert updatedAssay
-        assert assay.id == updatedAssay.id
+        assert updatedExperiment
+        assert experiment.id == updatedExperiment.id
     }
 
 

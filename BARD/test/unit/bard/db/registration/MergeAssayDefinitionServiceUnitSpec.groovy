@@ -10,7 +10,6 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -98,7 +97,7 @@ public class MergeAssayDefinitionServiceUnitSpec extends Specification {
 
         then:
         RuntimeException e = thrown()
-        assert e.message == "Assay with Assay Definition ID ${assayOne.id} cannot be merged into itself. Please remove it from the 'Assays to move list'"
+        assert e.message == "Assay with Assay Definition ID ${assayOne.id} cannot be moved into itself. Please remove it from the 'Assays to move list'"
     }
 
     void 'test normalizeEntitiesToMoveToExperimentIds - Assays to move contains non-existing assays'() {

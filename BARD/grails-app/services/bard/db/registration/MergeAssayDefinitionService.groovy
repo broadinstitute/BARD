@@ -6,7 +6,6 @@ import bard.db.experiment.ExperimentContextItem
 import grails.plugins.springsecurity.SpringSecurityService
 import merge.MergeAssayService
 import org.apache.commons.lang3.StringUtils
-import registration.AssayService
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,7 +17,6 @@ import registration.AssayService
 class MergeAssayDefinitionService {
     MergeAssayService mergeAssayService
     SpringSecurityService springSecurityService
-    AssayService assayService
     def sessionFactory
 
     List<Long> normalizeEntitiesToMoveToExperimentIds(final List<Long> entityIdsToMove, final IdType idType, final Assay targetAssay) {
@@ -30,14 +28,20 @@ class MergeAssayDefinitionService {
             if (found) {
                 switch (idType) {
                     case IdType.ADID:
-                    case IdType.AID:
                         Assay assay = (Assay) found
                         if (assay == targetAssay) {
-                            throw new RuntimeException("Assay with ${idType.name} ${id} cannot be merged into itself. Please remove it from the 'Assays to move list'")
+                            throw new RuntimeException("Assay with ${idType.name} ${id} cannot be moved into itself. Please remove it from the 'Assays to move list'")
                         }
                         for (Experiment experiment : assay.experiments) {
                             entitiesToMove << experiment.id
                         }
+                        break;
+                    case IdType.AID:
+                        Experiment experiment = (Experiment) found
+                        if (experiment.assay == targetAssay) {
+                            throw new RuntimeException("Experiment with ID: ${id} already belongs to the target Assay ${targetAssay.id}. Please remove it from the 'Experiments to move list'")
+                        }
+                        entitiesToMove << experiment.id
                         break;
                     case IdType.EID:
                         Experiment foundExperiment = (Experiment) found
@@ -126,9 +130,9 @@ class MergeAssayDefinitionService {
             case IdType.EID:
                 return Experiment.findById(entityId)
             case IdType.AID:
-                final List<Assay> assays = assayService.findByPubChemAid(entityId)
-                if (assays) {
-                    return assays.get(0)
+                ExternalReference externalReference = bard.db.registration.ExternalReference.findByExtAssayRef("aid=${entityId}")
+                if(externalReference){
+                    return externalReference.experiment
                 }
 
         }
