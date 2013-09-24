@@ -46,16 +46,18 @@ class BardAuthorizationProviderService extends CrowdAuthenticationProviderServic
 
         final String userName = bardUser.username
 
+        Person.withSession {session ->
         final Person person = Person.findByUserNameIlike(userName)
-        bardUser.owningRole = new Role(authority:userName)
-        if (person) {
-            if (person.newObjectRole) {
-                bardUser.owningRole = person.newObjectRole
+            bardUser.owningRole = new Role(authority:userName)
+            if (person) {
+                if (person.newObjectRole) {
+                    bardUser.owningRole = person.newObjectRole
+                }
+                final Set<Role> authorities = person.getRoles()
+                bardUser.authorities = authorities
+            } else{
+                bardUser.authorities = []
             }
-            final Set<Role> authorities = person.getRoles()
-            bardUser.authorities = authorities
-        } else{
-            bardUser.authorities = []
         }
      }
     /**
