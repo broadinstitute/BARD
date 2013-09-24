@@ -1,7 +1,7 @@
 <div id="login-form">
     <sec:ifLoggedIn>
 
-        <g:form name="logoutForm" controller="bardLogout">
+        <g:form name="logoutForm" controller="bardLogout" style="color:white">
             Logged in as: <span
                 style="font-weight: bold;"><sec:username/></span>&nbsp;&nbsp;
             <button type="submit" class="btn btn-mini" id="logoutButton">Logout</button>

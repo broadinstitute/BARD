@@ -210,7 +210,7 @@ input:-ms-input-placeholder{color:#000;}
     vertical-align:top;
     margin:0 0 17px;
 }
-.search-form{margin:0 0 19px;}
+.search-form{margin:0 0 2px;}
 .search-form .btn{
     padding-left:15px;
     padding-right:15px;
@@ -218,13 +218,16 @@ input:-ms-input-placeholder{color:#000;}
 
 .logo {
     float: left;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    width: 280px;
-    height: 85px;
+    /*margin-top: 10px;*/
+    /*margin-bottom: 20px;*/
+    /*width: 280px;*/
+    /*height: 85px;*/
+    width: 207px;
+    height: 62px;
     text-indent: -9999px;
     overflow: hidden;
-    background: url('../../images/bard_logo_small.png') no-repeat;
+    /*background: url('../../images/bard_logo_small.png') no-repeat;*/
+    background:url('../../images/bardHomepage/logo.png') no-repeat;
 }
 
 .logo a {
@@ -479,7 +482,7 @@ input:-ms-input-placeholder{color:#000;}
         padding-top: 13px;
     }
     .qcart {
-        display: inline;
+        display: none;
     }
 
 

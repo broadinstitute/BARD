@@ -12,8 +12,10 @@
 
 <div class="search-panel">
     <div class="container-fluid">
+
+        <strong class="logo"><a href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a></strong>
+
         <div class="search-block">
-        %{--<g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="form-inline">--}%
             <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form">
                 <div class="row-fluid" style="margin-top: 15px;">
                     <div class="search-field input-append">
@@ -49,5 +51,13 @@
             </g:form>
         </div>
     </div>
+    <nav class="nav-panel">
+        <div class="center-aligned">
+            <g:render template="/layouts/templates/loginStrip"/>
+        </div>
+        <div class="visible-desktop">
+            <g:render template="/layouts/templates/queryCart"/>
+        </div>
+    </nav>
 </div>
 <g:render template="/layouts/templates/IdSearchBox"/>

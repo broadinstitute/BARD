@@ -38,20 +38,20 @@
 <body>
 <div class="container-fluid">
 
-    <header  class="navbar navbar-static-top" id="header">
-    <div class="container-fluid">
-        <strong class="logo"><a href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a></strong>
+    %{--<header  class="navbar navbar-static-top" id="header">--}%
+    %{--<div class="container-fluid">--}%
+        %{--<strong class="logo"><a href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a></strong>--}%
 
-        <nav class="nav-panel">
-            <div class="center-aligned">
-                <g:render template="/layouts/templates/loginStrip"/>
-            </div>
-            <div class="qcart">
-            <g:render template="/layouts/templates/queryCart"/>
-            </div>
-        </nav>
-    </div>
-    </header>
+        %{--<nav class="nav-panel">--}%
+            %{--<div class="center-aligned">--}%
+                %{--<g:render template="/layouts/templates/loginStrip"/>--}%
+            %{--</div>--}%
+            %{--<div class="qcart">--}%
+            %{--<g:render template="/layouts/templates/queryCart"/>--}%
+            %{--</div>--}%
+        %{--</nav>--}%
+    %{--</div>--}%
+    %{--</header>--}%
 
     <g:render template="/layouts/templates/searchBox"/>
 

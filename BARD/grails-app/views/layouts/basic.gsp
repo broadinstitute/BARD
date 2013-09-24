@@ -28,81 +28,18 @@
     </a>
 </noscript>
 
-<div class="container-fluid">
+<header class="container-fluid">
 
-    <header class="navbar navbar-static-top" id="header">
+
+    <div class="search-panel">
+
         <div class="container-fluid">
 
             <strong class="logo"><a
                     href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a>
             </strong>
 
-            <nav class="nav-panel">
-                <div class="center-aligned">
-                    <div id="login-form">
-                        <sec:ifLoggedIn>
-
-                            <g:form name="logoutForm" controller="bardLogout">
-                                Logged in as: <span
-                                    style="font-weight: bold;"><sec:username/></span>&nbsp;&nbsp;
-                                <button type="submit" class="btn btn-mini" id="logoutButton">Logout</button>
-                            </g:form>
-                        </sec:ifLoggedIn>
-                        <sec:ifNotLoggedIn>
-                            <g:form name="loginForm" controller="bardLogin">
-                                Not logged in&nbsp;&nbsp;
-                                <button type="submit" class="btn btn-mini">Login</button>
-                            </g:form>
-                            <g:if env="development">
-                                OR
-                                <a class="btn btn-mini" id='signin'>Sign in with your Email</a>
-                            </g:if>
-                        </sec:ifNotLoggedIn>
-                    </div>
-
-                </div>
-
-                <div class="qcart">
-
-                    <div class="well well-small">
-                        <g:if test="${flash.searchString}">
-                            <g:include controller="queryCart" action="refreshSummaryView"
-                                       params="[searchString: flash.searchString]"/>
-                        </g:if>
-                        <g:elseif test="${params?.searchString}">
-                            <g:include controller="queryCart" action="refreshSummaryView"
-                                       params="[searchString: params.searchString]"/>
-                        </g:elseif>
-                        <g:else>
-                            <g:include controller="queryCart" action="refreshSummaryView"/>
-                        </g:else>
-                    </div>
-
-                    <div class="panel" style="z-index: 10">
-                        <a class="trigger" href="#">Click to hide query cart</a>
-                        <g:if test="${flash.searchString}">
-                            <g:include controller="queryCart" action="refreshDetailsView"
-                                       params="[searchString: flash.searchString]"/>
-                        </g:if>
-                        <g:elseif test="${params?.searchString}">
-                            <g:include controller="queryCart" action="refreshDetailsView"
-                                       params="[searchString: params.searchString]"/>
-                        </g:elseif>
-                        <g:else>
-                            <g:include controller="queryCart" action="refreshDetailsView"/>
-                        </g:else>
-                    </div>
-
-                </div>
-            </nav>
-        </div>
-    </header>
-
-
-    <div class="search-panel">
-        <div class="container-fluid">
             <div class="search-block">
-            %{--<g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="form-inline">--}%
                 <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm"
                         class="search-form">
                     <div class="row-fluid">
@@ -138,6 +75,71 @@
                     </div>
                 </g:form>
             </div>
+
+
+            <nav class="nav-panel">
+                <div class="center-aligned">
+                    <div id="login-form">
+                        <sec:ifLoggedIn>
+
+                            <g:form name="logoutForm" controller="bardLogout" style="font-weight: bold; color: white">
+                                Logged in as: <span
+                                    ><sec:username/></span>&nbsp;&nbsp;
+                                <button type="submit" class="btn btn-mini" id="logoutButton">Logout</button>
+                            </g:form>
+                        </sec:ifLoggedIn>
+                        <sec:ifNotLoggedIn>
+                            <g:form name="loginForm" controller="bardLogin">
+                                Not logged in&nbsp;&nbsp;
+                                <button type="submit" class="btn btn-mini">Login</button>
+                            </g:form>
+                            <g:if env="development">
+                                OR
+                                <a class="btn btn-mini" id='signin'>Sign in with your Email</a>
+                            </g:if>
+                        </sec:ifNotLoggedIn>
+                    </div>
+
+                </div>
+
+                <div class="qcart visible-desktop">
+
+                    <div class="well well-small">
+                        <g:if test="${flash.searchString}">
+                            <g:include controller="queryCart" action="refreshSummaryView"
+                                       params="[searchString: flash.searchString]"/>
+                        </g:if>
+                        <g:elseif test="${params?.searchString}">
+                            <g:include controller="queryCart" action="refreshSummaryView"
+                                       params="[searchString: params.searchString]"/>
+                        </g:elseif>
+                        <g:else>
+                            <g:include controller="queryCart" action="refreshSummaryView"/>
+                        </g:else>
+                    </div>
+
+                    <div class="panel" style="z-index: 10">
+                        <a class="trigger" href="#">Click to hide query cart</a>
+                        <g:if test="${flash.searchString}">
+                            <g:include controller="queryCart" action="refreshDetailsView"
+                                       params="[searchString: flash.searchString]"/>
+                        </g:if>
+                        <g:elseif test="${params?.searchString}">
+                            <g:include controller="queryCart" action="refreshDetailsView"
+                                       params="[searchString: params.searchString]"/>
+                        </g:elseif>
+                        <g:else>
+                            <g:include controller="queryCart" action="refreshDetailsView"/>
+                        </g:else>
+                    </div>
+
+                </div>
+            </nav>
+
+
+
+
+
             <a href='/BARD/bardWebInterface/navigationPage' style="float: right; color: white; margin-bottom: 5px"
                class="btn btn-primary">Submissions</a>
         </div>
@@ -223,7 +225,7 @@
         </div>
     </g:if>
 
-</div>
+</header>
 
 
 <div class="container-fluid">

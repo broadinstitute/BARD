@@ -1,6 +1,10 @@
 <r:require module="cart"/>
-
-<div class="well well-small">
+<style>
+.querycartholder {
+   background: transparent;
+}
+</style>
+<div class="querycartholder">
     <g:if test="${flash.searchString}">
         <g:include controller="queryCart" action="refreshSummaryView" params="[searchString: flash.searchString]"/>
     </g:if>
