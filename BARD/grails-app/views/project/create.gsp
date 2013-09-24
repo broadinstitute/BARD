@@ -92,7 +92,7 @@
             </div>
             <div class="control-group">
                 <div class="controls">
-                    <g:link controller="project" action="findById"
+                    <g:link controller="project" action="groupProjects"
                             class="btn">Cancel</g:link>
                     <input type="submit" class="btn btn-primary" value="Create New Project">
                 </div>
