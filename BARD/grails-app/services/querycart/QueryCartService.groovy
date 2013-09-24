@@ -216,7 +216,7 @@ class QueryCartService {
                     item.numAssayTested = numAssayTested
                     break
                 case QueryItemType.Project:
-                    Long externalId = Project.get(id).ncgcWarehouseId
+                    Long externalId = Project.get(id)?.ncgcWarehouseId
                     item = new CartProject()
                     item.name = name
                     item.externalId = externalId
@@ -224,7 +224,7 @@ class QueryCartService {
                     println "item.internalId=${item.internalId}"
                     break
                 case QueryItemType.AssayDefinition:
-                    Long externalId = Assay.get(id).ncgcWarehouseId
+                    Long externalId = Assay.get(id)?.ncgcWarehouseId
                     item = new CartAssay()
                     item.name = name
                     item.internalId = id

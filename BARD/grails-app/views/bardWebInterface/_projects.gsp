@@ -35,7 +35,7 @@
                 <g:if test="${projectAdapter.hasProbes()}">
                     <span class="badge badge-info">Probe</span>
                 </g:if>
-                <g:saveToCartButton id="${projectAdapter.id}"
+                <g:saveToCartButton id="${projectAdapter.capProjectId}"
                                     name="${JavaScriptUtility.cleanup(projectAdapter.name)}"
                                     type="${querycart.QueryItemType.Project}"/>
                 <g:if test="${projectAdapter.highlight}">
@@ -49,7 +49,7 @@
                         <dt>Number Of Experiments:</dt>
                         <dd>
                             <span class="badge badge-info">
-                                <a href="/BARD/project/show/${projectAdapter.id}#experiments-info"
+                                <a href="/BARD/project/show/${projectAdapter.capProjectId}#experiments-info"
                                    style="color: white; text-decoration: underline">
                                     ${projectAdapter.getNumberOfExperiments()}
                                 </a>
