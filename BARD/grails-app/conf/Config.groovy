@@ -351,7 +351,7 @@ log4j = {
     }
     // stdout is a default console appender ss
     root {
-        info('outputFile', 'stdout')
+        warn('outputFile', 'stdout')
     }
     error('org.codehaus.groovy.grails.web.servlet',  //  controllers
             'org.codehaus.groovy.grails.web.pages', //  GSP
