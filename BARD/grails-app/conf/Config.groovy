@@ -127,8 +127,8 @@ environments {
     }
 }
 
-rememberme.key = 'bard_web_client_crowd_remember_me'
-rememberme.cookieName = 'bard_web_client_crowd_remember_me_cookie'
+rememberme.key = 'bard_crowd_remember_me_2'
+rememberme.cookieName = 'bard_crowd_remember_me_cookie_2'
 
 bard.home.page = "http://localhost:8080/${appName}"
 
