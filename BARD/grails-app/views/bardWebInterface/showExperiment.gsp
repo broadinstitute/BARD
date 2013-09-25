@@ -10,9 +10,11 @@
 
 <body>
 <div class="row-fluid" id="showExperimentDiv">
-    <g:render template="facets"
-              model="['facets': facets, 'formName': FacetFormType.ExperimentFacetForm, 'total': tableModel.additionalProperties?.total]"/>
-    <g:hiddenField name="experimentId" id='experimentId' value="${params?.id}"/>
+    <g:if test="${tableModel?.data}">
+        <g:render template="facets"
+                  model="['facets': facets, 'formName': FacetFormType.ExperimentFacetForm, 'total': tableModel.additionalProperties?.total]"/>
+        <g:hiddenField name="experimentId" id='experimentId' value="${params?.id}"/>
+    </g:if>
 
 <div class="span9">
     <g:if test="${tableModel?.data}">
@@ -24,7 +26,7 @@
     </g:if>
     <g:else>
         <p class="text-info"><i
-                class="icon-warning-sign"></i> No information found for this experiment ${tableModel?.additionalProperties?.id}
+                class="icon-warning-sign"></i> No results found for this experiment ${tableModel?.additionalProperties?.id}
         </p>
     </g:else>
 </div>
