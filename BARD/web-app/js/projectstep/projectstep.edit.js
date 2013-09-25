@@ -204,7 +204,7 @@ function setAvailableExperimentAfterSelect(data) {
 
 function setAvailableExperiment(data) {
     for (var i = 0; i < data.length; i++) {
-        $("#selectedExperiments").append("<option value='" + data + "'>" + data + "</option>");
+        $("#selectedExperiments").append("<option value='" + data[i] + "'>" + data[i] + "</option>");
     }
 }
 
