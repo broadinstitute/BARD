@@ -10,9 +10,11 @@
 
 <body>
 <div class="row-fluid" id="showExperimentDiv">
-    <g:render template="facets"
-              model="['facets': facets, 'formName': FacetFormType.ExperimentFacetForm, 'total': tableModel.additionalProperties?.total]"/>
-    <g:hiddenField name="experimentId" id='experimentId' value="${params?.id}"/>
+    <g:if test="${tableModel?.data}">
+        <g:render template="facets"
+                  model="['facets': facets, 'formName': FacetFormType.ExperimentFacetForm, 'total': tableModel.additionalProperties?.total]"/>
+        <g:hiddenField name="experimentId" id='experimentId' value="${params?.id}"/>
+    </g:if>
 
 <div class="span9">
     <g:if test="${tableModel?.data}">
