@@ -1,5 +1,10 @@
 package persona
-
+/**
+ * Most of the code is borrowed from https://github.com/phjardas/spring-security-persona
+ *
+ * and modified slightly for BARD
+ *
+ */
 import bard.auth.BardAuthorizationProviderService
 import bard.db.people.Person
 import bard.db.people.Role
@@ -31,7 +36,7 @@ public class PersonaAuthenticationProvider extends BardAuthorizationProviderServ
             throw new AuthenticationCredentialsNotFoundException("No token returned by verifier");
         }
 
-        final String assertion = token.getCredentials().toString();
+        final String assertion = token.credentials.toString();
         final PersonaVerificationResponse verification = onlinePersonaVerifyer.verify(assertion);
 
         if (!verification.isOK()) {

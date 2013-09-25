@@ -26,7 +26,7 @@
     </g:if>
     <g:else>
         <p class="text-info"><i
-                class="icon-warning-sign"></i> No information found for this experiment ${tableModel?.additionalProperties?.id}
+                class="icon-warning-sign"></i> No results found for this experiment ${tableModel?.additionalProperties?.id}
         </p>
     </g:else>
 </div>
