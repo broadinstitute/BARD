@@ -6,7 +6,6 @@ import bard.db.experiment.ExperimentContextItem
 import grails.plugins.springsecurity.SpringSecurityService
 import merge.MergeAssayService
 import org.apache.commons.lang3.StringUtils
-import registration.AssayService
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,33 +17,68 @@ import registration.AssayService
 class MergeAssayDefinitionService {
     MergeAssayService mergeAssayService
     SpringSecurityService springSecurityService
-    AssayService assayService
     def sessionFactory
 
-    List<Long> convertAssaysToMerge(
-            final List<Long> assayIdsToMerge, final AssayIdType assayIdType, final Assay assayToMergeInto) {
-        final List<Long> notFoundAssays = []
-        final List<Long> assaysToMerge = []
-        for (Long id : assayIdsToMerge) {
-            Assay found = convertIdToAssayDefinition(assayIdType, id)
-            if (found == assayToMergeInto) {
-                throw new RuntimeException("Assay with ${assayIdType} ${id} cannot be merged into itself. Please remove it from the 'Assays to merge into list'")
-            }
+    List<Long> normalizeEntitiesToMoveToExperimentIds(final List<Long> entityIdsToMove, final IdType idType, final Assay targetAssay) {
+        final List<Long> notFoundEntities = []
+        final List<Long> entitiesToMove = []
+        for (Long id : entityIdsToMove) {
+
+            def found = convertIdToEntity(idType, id)
             if (found) {
-                assaysToMerge << found.id
-            } else {
-                notFoundAssays.add(id)
+                switch (idType) {
+                    case IdType.ADID:
+                        Assay assay = (Assay) found
+                        if (assay == targetAssay) {
+                            throw new RuntimeException("Assay with ${idType.name} ${id} cannot be moved into itself. Please remove it from the 'Assays to move list'")
+                        }
+                        for (Experiment experiment : assay.experiments) {
+                            entitiesToMove << experiment.id
+                        }
+                        break;
+                    case IdType.AID:
+                        Experiment experiment = (Experiment) found
+                        if (experiment.assay == targetAssay) {
+                            throw new RuntimeException("Experiment with ID: ${id} already belongs to the target Assay ${targetAssay.id}. Please remove it from the 'Experiments to move list'")
+                        }
+                        entitiesToMove << experiment.id
+                        break;
+                    case IdType.EID:
+                        Experiment foundExperiment = (Experiment) found
+                        if (foundExperiment.assay == targetAssay) {
+                            throw new RuntimeException("Experiment with ID: ${id} already belongs to the target Assay ${targetAssay.id}. Please remove it from the 'Experiments to move list'")
+                        }
+                        entitiesToMove << foundExperiment.id
+                        break;
+                }
+            }
+            if (!found) {
+                notFoundEntities.add(id)
             }
         }
         //if we did not find any of the given assays throw an exception
-        if (notFoundAssays) {
-            throw new RuntimeException("Could not find assays with ${assayIdType} " + StringUtils.join(notFoundAssays, ","))
-        }
-        return assaysToMerge
-    }
+        if (notFoundEntities) {
+            switch (idType) {
+                case IdType.ADID:
+                case IdType.AID:
+                    throw new RuntimeException("Could not find assays with ${idType.name}: " + StringUtils.join(notFoundEntities, ","))
+                    break;
+                case IdType.EID:
+                    throw new RuntimeException("Could not find the following experiments with ids: " + StringUtils.join(notFoundEntities, ","))
+                    break;
+            }
 
-    Assay convertIdToAssayDefinition(final AssayIdType assayIdType, final Long assayId) {
-        return findAssayByAssayIdType(assayId, assayIdType)
+        }
+        return entitiesToMove
+    }
+    /**
+     *
+     * @param idType
+     * @param entityId -  Could be an AID, ADID or EID
+     * @return the entity (one of Experiment or Assay)
+     */
+    def convertIdToEntity(final IdType idType, final Long entityId) {
+        return findEntityByIdType(entityId, idType)
     }
 
     static List<Long> convertStringToIdList(final String idsAsString) {
@@ -58,28 +92,47 @@ class MergeAssayDefinitionService {
         return ids
     }
 
-    void validateConfirmMergeInputs(final Long targetAssayId, final String assayIdsToMerge, final AssayIdType assayIdType) {
+    void validateConfirmMergeInputs(final Long targetAssayId, final String assayIdsToMerge, final IdType idType) {
         if (!targetAssayId) {
             throw new RuntimeException("The ID of the Assay to merge into is required and must be a number")
         }
 
+        if (!idType) {
+            throw new RuntimeException("Select one of ${IdType.ADID.name} or ${IdType.AID.name} or ${IdType.EID.name}")
+        }
         if (!assayIdsToMerge?.trim()) {
-            throw new RuntimeException("Enter at least one id for an assay to merge")
+            String errorMessage = ""
+            switch (idType) {
+                case IdType.EID:
+                    errorMessage = "Enter at least one experiment ID to move"
+                    break;
+                case IdType.ADID:
+                    errorMessage = "Enter at least one Assay Definition ID(ADID) to move"
+                    break;
+                case IdType.AID:
+                    errorMessage = "Enter at least one PubChem AID to move"
+                    break;
+            }
+            throw new RuntimeException(errorMessage)
         }
 
-        if (!assayIdType) {
-            throw new RuntimeException("Select one of ${AssayIdType.ADID} or ${AssayIdType.AID}")
-        }
     }
-
-    Assay findAssayByAssayIdType(final Long someAssayId, final AssayIdType assayIdType) {
-        switch (assayIdType) {
-            case AssayIdType.ADID:
-                return Assay.findById(someAssayId)
-            case AssayIdType.AID:
-                final List<Assay> assays = assayService.findByPubChemAid(someAssayId)
-                if (assays) {
-                    return assays.get(0)
+    /**
+     *
+     * @param entityId -  Could be an AID, ADID or EID
+     *  * @param idType
+     * @return the entity (one of Experiment or Assay)
+     */
+    def findEntityByIdType(final Long entityId, final IdType idType) {
+        switch (idType) {
+            case IdType.ADID:
+                return Assay.findById(entityId)
+            case IdType.EID:
+                return Experiment.findById(entityId)
+            case IdType.AID:
+                ExternalReference externalReference = bard.db.registration.ExternalReference.findByExtAssayRef("aid=${entityId}")
+                if(externalReference){
+                    return externalReference.experiment
                 }
 
         }
@@ -124,10 +177,10 @@ class MergeAssayDefinitionService {
      *  1.for each context item i, make sure there exists a context item j on the target assay where i.attributeElement == j.attributeElement
      *  2. and the Context Item on the target(merging into) assay must have an AttributeType != AttributeType.Fixed
      * @param targetAssay
-     * @param assaysToMerge
+     * @param sourceAssays
      * @return
      */
-    public List<String> validateAllContextItems(final Assay targetAssay, final List<Assay> assaysToMerge) {
+    public List<String> validateAllContextItems(final Assay targetAssay, final List<Assay> sourceAssays) {
         Map<Element, AssayContextItem> targetElementToAssayContextItemMap = [:]
         final List<AssayContextItem> assayContextItems = targetAssay.assayContextItems
         for (AssayContextItem assayContextItem : assayContextItems) {
@@ -135,7 +188,7 @@ class MergeAssayDefinitionService {
             targetElementToAssayContextItemMap.put(element, assayContextItem)
         }
         final List<String> errorMessages = []
-        for (Assay assayToMerge : assaysToMerge) {
+        for (Assay assayToMerge : sourceAssays) {
             for (Experiment experiment : assayToMerge.experiments) {
                 final List<ExperimentContextItem> experimentContextItems = experiment.experimentContextItems
                 validateExperimentContextItems(experimentContextItems, targetElementToAssayContextItemMap, errorMessages)
@@ -155,19 +208,35 @@ class MergeAssayDefinitionService {
             throw new RuntimeException(org.apache.commons.lang.StringUtils.join(errorMessages, ","))
         }
     }
-
-
+    //use #moveExperimentsFromAssay(Assay,List<Experiment>) instead
+    @Deprecated
     Assay moveExperimentsFromAssay(Assay sourceAssay, Assay targetAssay,
                                    List<Experiment> experiments) {
         validateExperimentsToMerge(sourceAssay, experiments)
         targetAssay.fullyValidateContextItems = false
 
         String modifiedBy = springSecurityService.principal?.username
-        mergeAssayService.moveExperiments(experiments,targetAssay,modifiedBy)
+        mergeAssayService.moveExperiments(experiments, targetAssay, modifiedBy)
         println("end handleExperiments")
         sessionFactory.currentSession.flush()
-       // def session, Assay sourceAssay, Assay targetAssay, List<Experiment> sourceExperiments, String modifiedBy
-        mergeAssayService.handleMeasuresForMovedExperiments(sessionFactory.currentSession,sourceAssay,targetAssay,experiments,modifiedBy)
+        // def session, Assay sourceAssay, Assay targetAssay, List<Experiment> sourceExperiments, String modifiedBy
+        mergeAssayService.handleMeasuresForMovedExperiments(sessionFactory.currentSession, sourceAssay, targetAssay, experiments, modifiedBy)
+        sessionFactory.currentSession.flush()
+
+        return Assay.findById(targetAssay.id)
+
+    }
+
+    Assay moveExperimentsFromAssay(Assay targetAssay,
+                                   List<Experiment> experiments) {
+        targetAssay.fullyValidateContextItems = false
+
+        String modifiedBy = springSecurityService.principal?.username
+        mergeAssayService.moveExperiments(experiments, targetAssay, modifiedBy)
+        println("end handleExperiments")
+        sessionFactory.currentSession.flush()
+        // def session, Assay sourceAssay, Assay targetAssay, List<Experiment> sourceExperiments, String modifiedBy
+        mergeAssayService.handleMeasuresForMovedExperiments(sessionFactory.currentSession, targetAssay, experiments, modifiedBy)
         sessionFactory.currentSession.flush()
 
         return Assay.findById(targetAssay.id)
@@ -197,13 +266,14 @@ class MergeAssayDefinitionService {
         return Assay.findById(targetAssay.id)
     }
 }
-enum AssayIdType {
-    ADID('ADID'),
-    AID('AID')
+enum IdType {
+    ADID('Assay Definition ID'),
+    AID('PubChem AID'),
+    EID("Experiment ID")
 
     String name
 
-    AssayIdType(String name) {
+    IdType(String name) {
         this.name = name
     }
 }

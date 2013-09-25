@@ -256,27 +256,27 @@
 
                         <div class="carousel-inner">
                             <div class="item active">
-                                <strong class="ttl">Webcast <time
-                                        datetime="2013-08-16T08:20">AUG 26 2013 @ 8:20 pm</time>
+                                <strong class="ttl">Presentation<time
+                                        datetime="2013-08-16T08:20">SEP 20 2013 @ 1:00 pm</time>
                                 </strong>
 
-                                <p><a href="#">Bard news to go here when we have it.</a></p>
+                                <p><a href="#">Steve Brudz reviews BARD in keynote at CBBO</a></p>
                             </div>
 
                             <div class="item">
-                                <strong class="ttl">Webcast <time
-                                        datetime="2013-08-17T08:20">AUG 27 2013 @ 8:20 pm</time>
+                                <strong class="ttl">Presentation<time
+                                        datetime="2013-08-17T08:20">SEP 08 2013 @ 9:00 am</time>
                                 </strong>
 
-                                <p><a href="#">Bard news to go here when we have it, too.</a></p>
+                                <p><a href="#">Session at ACS meeting devoted to Bard</a></p>
                             </div>
 
                             <div class="item">
-                                <strong class="ttl">Webcast <time
-                                        datetime="2013-08-18T08:20">AUG 28 2013 @ 8:20 pm</time>
+                                <strong class="ttl">Demonstration<time
+                                        datetime="2013-08-18T08:20">SEP 24 2013 @ 2:00 pm</time>
                                 </strong>
 
-                                <p><a href="#">More Bard news, as it becomes available.</a></p>
+                                <p><a href="#">Next regularly scheduled BARD iteration demo.</a></p>
                             </div>
                         </div>
                     </div>

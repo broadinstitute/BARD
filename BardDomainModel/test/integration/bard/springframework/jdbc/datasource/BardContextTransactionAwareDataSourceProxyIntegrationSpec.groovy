@@ -3,6 +3,7 @@ package bard.springframework.jdbc.datasource
 import bard.db.audit.BardContextUtils
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.springframework.security.core.context.SecurityContextHolder
 import spock.lang.Unroll
 
 import javax.sql.DataSource
@@ -26,6 +27,8 @@ class BardContextTransactionAwareDataSourceProxyIntegrationSpec extends Integrat
     }
 
     void "getConnection when #desc"() {
+        SecurityContextHolder.clearContext() // ensure SecurityContextHolder is clean, another test could have left a user authenticated
+
         given:
         springSecurityContextConfig.call()
 

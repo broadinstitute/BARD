@@ -33,7 +33,7 @@
             </div>
             <div class="control-group">
                 <div class="controls">
-                    <g:link controller="panel" action="findById"
+                    <g:link controller="panel" action="myPanels"
                             class="btn">Cancel</g:link>
                     <input type="submit" class="btn btn-primary" value="Create New Panel">
                 </div>

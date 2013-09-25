@@ -26,11 +26,15 @@ class PubchemImportService {
         pubchemFileDir = "${pubchemPrefix}/pubchem-files"
         convertedFileDir = "${pubchemPrefix}/converted-files"
 
-        ExternalReference ref = ExternalReference.findByExtAssayRef("aid=${aid}")
-
-        if(ref == null) {
+        List<ExternalReference> refs = ExternalReference.findAllByExtAssayRef("aid=${aid}")
+        if(refs.size() == 0) {
             throw new RuntimeException("skipping ${aid} because it was not in the database at all")
         }
+        if(refs.size() != 1) {
+            throw new RuntimeException("${aid} in DB multiple times: ${refs.collect {it.experiment}}")
+        }
+
+        ExternalReference ref = refs[0]
 
         if (ref.experiment == null) {
             throw new RuntimeException("Skipping ${aid} because it looks like its a summary aid")

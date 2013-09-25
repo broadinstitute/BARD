@@ -4,6 +4,7 @@ import bard.db.command.BardCommand
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
 import bard.db.registration.EditingHelper
+import bard.db.registration.IdType
 import bard.db.registration.MergeAssayDefinitionService
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
@@ -29,31 +30,32 @@ class MoveExperimentsController {
 
     }
 
-    def selectAssays(ExperimentsFromAssayCommand experimentsFromAssayCommand) {
-        if (!experimentsFromAssayCommand.sourceAssayId) {
-            render(status: HttpServletResponse.SC_BAD_REQUEST, template: "assayError", model: [message: "Source Assay Id is required"])
-            return
-        }
-        if (!experimentsFromAssayCommand.targetAssayId) {
-            render(status: HttpServletResponse.SC_BAD_REQUEST, template: "assayError", model: [message: "Target Assay Id is required"])
-            return
-        }
+    def confirmMoveExperiments(ConfirmMoveExperimentsCommand confirmMoveExperimentsCommand) {
+        try {
+            mergeAssayDefinitionService.validateConfirmMergeInputs(confirmMoveExperimentsCommand.targetAssayId, confirmMoveExperimentsCommand.sourceEntityIds, confirmMoveExperimentsCommand.idType)
 
-        if (!experimentsFromAssayCommand.sourceAssay) {
-            render(status: HttpServletResponse.SC_BAD_REQUEST, template: "assayError", model: [message: "Source Assay ${experimentsFromAssayCommand.sourceAssayId} not found"])
-            return
-        }
-        if (!experimentsFromAssayCommand.targetAssay) {
-            render(status: HttpServletResponse.SC_BAD_REQUEST, template: "assayError", model: [message: "Target Assay ${experimentsFromAssayCommand.targetAssayId} not found"])
-            return
-        }
+            final List<Long> entityIdsToMove = mergeAssayDefinitionService.convertStringToIdList(confirmMoveExperimentsCommand.sourceEntityIds)
+
+            final Assay targetAssay = mergeAssayDefinitionService.convertIdToEntity(IdType.ADID, confirmMoveExperimentsCommand.targetAssayId)
+
+            if (!targetAssay) {
+                throw new RuntimeException("Could not find assay with ADID: ${confirmMoveExperimentsCommand.targetAssayId}")
+            }
+            final List<Long> experimentsToMove = mergeAssayDefinitionService.normalizeEntitiesToMoveToExperimentIds(
+                    entityIdsToMove, confirmMoveExperimentsCommand.idType, targetAssay)
+
+            MoveExperimentsCommand moveExperimentsCommand = new MoveExperimentsCommand(targetAssay: targetAssay, experimentIds: experimentsToMove)
+            render(status: HttpServletResponse.SC_OK, template: "selectExperimentsToMove", model: [moveExperimentsCommand: moveExperimentsCommand])
 
 
-        render(status: HttpServletResponse.SC_OK, template: "selectExperimentsToMove",
-                model: [sourceAssay: experimentsFromAssayCommand.sourceAssay, targetAssay: experimentsFromAssayCommand.targetAssay])
-
+        } catch (Exception ee) {
+            render(status: HttpServletResponse.SC_BAD_REQUEST, template: "assayError", model: [message: ee.message])
+        }
     }
-    def moveSelectedExperiments(MoveExperimentsCommand moveExperimentsCommand){
+
+
+
+    def moveSelectedExperiments(MoveExperimentsCommand moveExperimentsCommand) {
         if (!moveExperimentsCommand.experimentIds) {
             render(status: HttpServletResponse.SC_BAD_REQUEST, template: "assayError", model: [message: "Select at least one experiment to move to target"])
             return
@@ -65,14 +67,12 @@ class MoveExperimentsController {
 
         try {
             Assay targetAssay = mergeAssayDefinitionService.moveExperimentsFromAssay(
-                    moveExperimentsCommand.sourceAssay,
                     moveExperimentsCommand.targetAssay,
                     moveExperimentsCommand.experiments
             )
 
-            Assay sourceAssay = Assay.findById(moveExperimentsCommand.sourceAssay?.id)
-            render(status: HttpServletResponse.SC_OK, template: "moveExperimentsSuccess", model: [sourceAssay: sourceAssay,
-                    targetAssay: targetAssay, movedExperiments:moveExperimentsCommand.experiments])
+            render(status: HttpServletResponse.SC_OK, template: "moveExperimentsSuccess", model: [
+                    targetAssay: targetAssay, movedExperiments: moveExperimentsCommand.experiments])
         }
         catch (ValidationException validationError) {
             render(status: HttpServletResponse.SC_BAD_REQUEST, template: "moveValidationError", model: [validationError: validationError])
@@ -103,6 +103,23 @@ class MoveExperimentsCommand extends BardCommand {
             }
         }
         return experiments
+    }
+}
+@InheritConstructors
+@Validateable
+class ConfirmMoveExperimentsCommand extends BardCommand {
+    Long targetAssayId
+    String sourceEntityIds
+    IdType idType
+
+    ConfirmMoveExperimentsCommand() {}
+
+
+
+    static constraints = {
+        targetAssayId(nullable: false)
+        sourceEntityIds(nullable: false, blank: false)
+        idType(nullable: false)
     }
 }
 @InheritConstructors

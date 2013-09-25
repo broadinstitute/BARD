@@ -59,11 +59,11 @@
                 <g:each in="${projects}" var="elem" status="item">
                     <tr>
                         <td class="QcartAppearance">
-                            <a href="${createLink(controller:'project' , action: 'show', id:elem.externalId)}">${elem.toString()}</a>
+                            <a href="${createLink(controller:'project' , action: 'show', id:elem.internalId)}">${elem.toString()}</a>
                         </td>
                         <td>
                             <button title="Remove ${elem.toString()}" class="removeItemFromCart btn btn-link"
-                                    data-cart-id="${elem.externalId}" data-cart-type="${elem.queryItemType}">
+                                    data-cart-id="${elem.internalId}" data-cart-type="${elem.queryItemType}">
                                 <i class="icon-remove-sign"></i>
                             </button>
                         </td>

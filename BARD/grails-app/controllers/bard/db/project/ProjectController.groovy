@@ -174,8 +174,8 @@ class ProjectController {
         render text: json, contentType: 'text/json', template: null
     }
 
-    def show() {
-        def projectInstance = Project.get(params.id)
+    def show(Long id) {
+        def projectInstance = Project.get(id)
 
         if (!projectInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), params.id])

@@ -25,7 +25,7 @@ $(document).ready(function () {
                 break;
 
         }
-        $('.idSearchString').val(currentSearchString)
+        $('#idSearchString').val(currentSearchString)
 
     });
     $('#idModalDiv').modal({
@@ -44,7 +44,7 @@ $(document).ready(function () {
     });
     $('.idSearchButton').click(function () {
         var idSearchTypeSelected = $('input:radio[name=idSearchType]:checked').val();
-        var ids = $('.idSearchString').val()
+        var ids = $('#idSearchString').val()
         //construct the query into a form that we want
         //replace with a single space
         var constructedSearch = ids.replace(/(\r\n|\n|\r)/gm, " ");

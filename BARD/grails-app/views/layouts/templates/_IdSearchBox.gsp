@@ -10,7 +10,7 @@
     </div>
 
     <div class="modal-body">
-        <textarea class="field span12" class="idSearchString" name="idSearchString" rows="15"></textarea>
+        <textarea class="field span12" id="idSearchString" name="idSearchString" rows="15"></textarea>
     </div>
 
     <div class="modal-footer">
