@@ -13,7 +13,7 @@
             <g:each in="${compounds}" var="elem" status="item">
                 <tr>
                     <td class="QcartAppearance">
-                        <a href="${createLink(controller:'bardWebInterface' , action: 'showCompound', id:elem.externalId)}">${elem.toString()}</a>
+                        <a href="${createLink(controller:'bardWebInterface' , action: 'showCompound', id:elem.externalId)}" style="color: #000000;">${elem.toString()}</a>
                     </td>
                     <td>
                         <button title="Remove ${elem.toString()}" class="removeItemFromCart btn btn-link"
@@ -36,7 +36,7 @@
             <g:each in="${assayDefinitions}" var="elem" status="item">
                 <tr>
                     <td class="QcartAppearance">
-                        <a href="${createLink(controller:'assayDefinition' , action: 'show', id:elem.internalId)}">${elem.toString()}</a>
+                        <a href="${createLink(controller:'assayDefinition' , action: 'show', id:elem.internalId)}" style="color: #000000;">${elem.toString()}</a>
                     </td>
                     <td>
                         <button title="Remove ${elem.toString()}" class="removeItemFromCart btn btn-link"
@@ -59,7 +59,7 @@
                 <g:each in="${projects}" var="elem" status="item">
                     <tr>
                         <td class="QcartAppearance">
-                            <a href="${createLink(controller:'project' , action: 'show', id:elem.internalId)}">${elem.toString()}</a>
+                            <a href="${createLink(controller:'project' , action: 'show', id:elem.internalId)}" style="color: #000000;">${elem.toString()}</a>
                         </td>
                         <td>
                             <button title="Remove ${elem.toString()}" class="removeItemFromCart btn btn-link"
@@ -80,13 +80,14 @@
             <br/>
             <div class="leftofline">
                 <div class="btn-group" style="vertical-align: bottom;">
-                    <a class="btn dropdown-toggle" data-toggle="dropdown"  role="button" data-target="#">
-                        <i class="icon-eye-open"></i> Visualize
+                    <a class="btn dropdown-toggle" data-toggle="dropdown"  role="button" data-target="#"
+                       style="background: #0093d0;  color: #ffffff">
+                        <i class="icon-eye-open"></i> VISUALIZE
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu pull-left"  role="menu">
-                        <li><g:link controller="molSpreadSheet">Molecular Spreadsheet</g:link></li>
-                       <li><a href="${createLink(controller: 'queryCart', action: 'toDesktopClient')}" target="_blank">Desktop Client</a></li>
+                        <li><g:link controller="molSpreadSheet" style="color: #000000;">Molecular Spreadsheet</g:link></li>
+                       <li><a  style="color: #000000;" href="${createLink(controller: 'queryCart', action: 'toDesktopClient')}" target="_blank">Desktop Client</a></li>
 
                         %{--<li><a href="http://bard.nih.gov/bard/compounds/44552613?view=Record" target="_blank">Desktop Client</a></li>--}%
                     </ul>
@@ -95,8 +96,9 @@
 
             <div class="rightofline">
 
-                <a class="removeAllFromCart btn" role="button" href="#" >
-                    Clear all
+                <a class="removeAllFromCart btn" role="button" href="#"
+                   style="background: #0093d0;  color: #ffffff">
+                    CLEAR ALL
                 </a>
 
             </div>

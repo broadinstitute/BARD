@@ -15,8 +15,6 @@
 
         <strong class="logo"><a href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a></strong>
 
-        %{--<g:render template="/layouts/templates/searchBlock"/>--}%
-
         <div class="search-block">
             <g:render template="/layouts/templates/searchBlock"/>
         </div>

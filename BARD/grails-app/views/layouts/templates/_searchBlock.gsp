@@ -17,7 +17,7 @@
                      title="List of IDs for search"  data-toggle="modal" href="#idModalDiv"
                      style="width:44px;float: left;"/>
 
-                <div class="text-field"  style="width:67%;margin-right: 0px">
+                <div class="text-field"  style="width:67%;margin-right: 0px; float:left;">
                     <g:if test="${flash?.searchString}">
                         <g:textField id="searchString" name="searchString" value="${flash.searchString}"/>
                     </g:if>
