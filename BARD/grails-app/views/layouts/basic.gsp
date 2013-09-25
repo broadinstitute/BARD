@@ -39,8 +39,6 @@
                                                                    action="list">List Person Table</g:link></li>
                                     <li class="controller"><g:link controller="moveExperiments"
                                                                    action="show">Move Experiments</g:link></li>
-                                    <li class="controller"><g:link controller="mergeAssayDefinition"
-                                                                   action="show">Merge Assays</g:link></li>
                                     <li class="controller"><g:link controller="assayDefinition"
                                                                    action="assayComparisonReport">Compare Assays</g:link></li>
                                     <li class="controller"><g:link controller="splitAssayDefinition"
