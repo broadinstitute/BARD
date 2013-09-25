@@ -2,6 +2,7 @@
 <style>
 .querycartholder {
    background: transparent;
+    padding-right: 5px;
 }
 </style>
 <div class="querycartholder">
