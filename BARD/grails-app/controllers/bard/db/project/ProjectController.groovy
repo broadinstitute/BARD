@@ -328,7 +328,7 @@ class ProjectController {
         Long stageId = params.getLong('stageId')
         Element element = Element.findById(stageId)
 
-        if (selectedExperiments.isEmpty()) {
+        if (selectedExperiments?.isEmpty()) {
             render status: HttpServletResponse.SC_BAD_REQUEST, text: 'Experiment must be selected'
         } else {
             try {
