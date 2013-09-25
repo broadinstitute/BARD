@@ -30,7 +30,7 @@ beans = {
      */
     simpleClientHttpRequestFactory(SimpleClientHttpRequestFactory) {
         connectTimeout = 5 * 1000 // in milliseconds
-        readTimeout = 25 * 1000 // in milliseconds
+        readTimeout = 40 * 1000 // in milliseconds
     }
 
     restTemplate(RestTemplate, ref('simpleClientHttpRequestFactory'))
