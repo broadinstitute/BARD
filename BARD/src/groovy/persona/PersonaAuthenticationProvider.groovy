@@ -60,25 +60,19 @@ public class PersonaAuthenticationProvider extends BardAuthorizationProviderServ
 
     private BardUser getOrCreateUser(final String email) {
         try {
-            return findByEmailAddress(email);
+            return findByUserName(email);
         } catch (final UsernameNotFoundException e) {
             log.warn(e.message)
         }
-
-        String userName = email.substring(0, email.indexOf("@"))
-        String fullName = userName
         BardUser bardUser = null
         Person.withTransaction {
 
-            Person person = new Person(userName: userName, emailAddress: email, fullName: fullName, modifiedBy: userName)
+            Person person = new Person(userName: email, emailAddress: email, fullName: email, modifiedBy: email)
             person.save(flush: true)
 
-            person = Person.findByUserNameIlike(userName)
-            bardUser= new BardUser(username: person.userName, fullName: person.fullName, email:  new Email(person.emailAddress), isActive:true,
-                    authorities:person.roles,owningRole: person.newObjectRole?:new Role(authority:person.userName));
-
-          //  final Collection<GrantedAuthority> roles = person.getRoles();
-            //cbipUser = new CbipUser(person.userName, person.fullName, new Email(person.emailAddress), true, roles);
+            person = Person.findByUserNameIlike(email)
+            bardUser = new BardUser(username: person.userName, fullName: person.fullName, email: new Email(person.emailAddress), isActive: true,
+                    authorities: person.roles, owningRole: person.newObjectRole ?: new Role(authority: person.userName));
         }
         return bardUser
     }
@@ -88,20 +82,9 @@ public class PersonaAuthenticationProvider extends BardAuthorizationProviderServ
             assert userName, "User Name is required"
 
             Person person = Person.findByUserNameIlike(userName);
-            return new BardUser(username: person.userName, fullName: person.fullName, email:  new Email(person.emailAddress), isActive:true,
-                    authorities:person.roles,owningRole: person.newObjectRole?:new Role(authority:person.userName));
+            return new BardUser(username: person.userName, fullName: person.fullName, email: new Email(person.emailAddress), isActive: true,
+                    authorities: person.roles, owningRole: person.newObjectRole ?: new Role(authority: person.userName));
 
-        } catch (Exception ee) {
-            throw new UsernameNotFoundException(ee.getMessage());
-        }
-    }
-
-    BardUser findByEmailAddress(String email) {
-        try {
-            Person person = Person.findByEmailAddressIlike(email);
-
-            return new BardUser(username: person.userName, fullName: person.fullName, email:  new Email(person.emailAddress), isActive:true,
-                    authorities:person.roles,owningRole: person.newObjectRole?:new Role(authority:person.userName));
         } catch (Exception ee) {
             throw new UsernameNotFoundException(ee.getMessage());
         }

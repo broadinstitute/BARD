@@ -33,15 +33,14 @@ public class OnlinePersonaVerifyer{
 					.postForEntity(this.verificationUrl,
 							request, PersonaVerificationResponse.class);
 
-			if (response.getStatusCode() != HttpStatus.OK) {
-				// FIXME exception
-				throw new BadCredentialsException(
-						"Assertion verification failed: "
-								+ response.getStatusCode());
+			if (response.getStatusCode() != HttpStatus.OK) { //If status is not OK then throw exception
+				String errorMessage ="Assertion verification failed: ${response.getStatusCode()}"
+                log?.error(errorMessage)
+				throw new BadCredentialsException(errorMessage);
 			}
-
 			return response.getBody();
 		} catch (final RuntimeException e) {
+            log.error("Error verifying assertion: " + e,e)
 			e.printStackTrace();
 
 			throw new RuntimeException(
