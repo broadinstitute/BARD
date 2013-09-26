@@ -18,8 +18,9 @@
                    value="${fieldValue(bean: experiment, field: "experimentName")}"/>
         </dd>
 
-        <dt>Hold until Date:</dt><dd>
-        <input type="text" class="input-large date-selection" name="holdUntilDate"
+        <dt>Hold until Date:</dt>
+        <dd>
+        <input type="text" class="input-large date-selection" id="holdUntilDate" name="holdUntilDate"
                placeholder="Click icon to select date"
                value="${experiment.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.holdUntilDate) : experiment.holdUntilDate}"/>
         (No more than 1 year from today)
@@ -50,9 +51,9 @@
         <dt>Run Date To:</dt><dd>
         <input type="text" class="input-large date-selection" name="runDateTo" placeholder="Click icon to select date"
                value="${experiment.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateTo) : experiment.runDateTo}"/>
-         --%>
 
-    </dd>
+
+    </dd>  --%>
     </dl>
 
     <r:script>
@@ -264,7 +265,7 @@
                 };
 
                 var expMeasureTree = $("#experiment-measure-tree").dynatree({
-                    children: ${experimentMeasuresAsJsonTree},
+                    children: <%=experimentMeasuresAsJsonTree%>,
                     onActivate: function(node) {
                         $("#parent-selection-pane").show();
                         currentSelectionKey = node.data.key;
@@ -276,7 +277,7 @@
                 updateFormField(expMeasureTree);
 
                 $("#assay-measure-tree").dynatree({
-                    children: ${assayMeasuresAsJsonTree},
+                    children: <%=assayMeasuresAsJsonTree%>,
                     checkbox: true,
                     onSelect: function(flag, node) {
                         if(flag) {
