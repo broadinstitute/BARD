@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     //inline editing
-    $.fn.editable.defaults.mode = 'inline';
+    //$.fn.editable.defaults.mode = 'inline';
 
     //Set up editing for button
     $('.documentPencil').click(function (e) {
@@ -13,6 +13,7 @@ $(document).ready(function () {
 
     //edit status
     $('.status').editable({
+        mode:'inline',
         params: function (params) {
             params.version = $('#versionId').val();
             return params;
@@ -27,6 +28,7 @@ $(document).ready(function () {
 
     //edit  type
     $('.type').editable({
+        mode:'inline',
         params: function (params) {
             params.version = $('#versionId').val();
             return params;
@@ -41,6 +43,7 @@ $(document).ready(function () {
 
     //edit name
     $('#nameId').editable({
+        mode:'inline',
         inputclass: 'input-large',
         params: function (params) {
             params.version = $('#versionId').val();
@@ -56,6 +59,7 @@ $(document).ready(function () {
 
     //edit designed by
     $('.designedBy').editable({
+        mode:'inline',
         inputclass: 'input-large',
         params: function (params) {
             params.version = $('#versionId').val();
@@ -83,20 +87,6 @@ function updateSummary(response, newValue) {
     $("#shortNameId").html(shortName);
     return response.data;
 }
-//function updateEntityVersion(response, serverresponse) {
-//    if (serverresponse == "success") { //only update the version on success
-//        //update the version of the assay
-//        var version = response.getResponseHeader("version");
-//        var entityId = response.getResponseHeader("entityId");
-//
-//        //we use the entity id as the name of the class
-//        var elements = document.getElementsByClassName("" + entityId);
-//        for (var i = elements.length - 1; i >= 0; --i) {
-//            var element = elements[i];
-//            element.setAttribute("data-version", version);
-//        }
-//    }
-//}
 
 function validateInput(value) {
     if ($.trim(value) == '') {

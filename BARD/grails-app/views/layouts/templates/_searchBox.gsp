@@ -12,42 +12,20 @@
 
 <div class="search-panel">
     <div class="container-fluid">
+
+        <strong class="logo"><a href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a></strong>
+
         <div class="search-block">
-        %{--<g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="form-inline">--}%
-            <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form">
-                <div class="row-fluid" style="margin-top: 15px;">
-                    <div class="search-field input-append">
-                        <div class="text-field">
-                            <g:if test="${flash?.searchString}">
-                                <g:textField id="searchString" name="searchString" value="${flash.searchString}"/>
-                            </g:if>
-                            <g:elseif test="${params?.searchString}">
-                                <g:textField id="searchString" name="searchString" value="${params?.searchString}"/>
-                            </g:elseif>
-                            <g:else>
-                                <g:textField id="searchString" name="searchString" value=""/>
-                            </g:else>
-                        </div>
-
-                        <div class="btn-field">
-                            <button type="submit" name="search" class="btn btn-primary"
-                                    id="searchButton">Search</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row-fluid">
-                    <div class="span10">
-                        %{--<r:script> $(document).on('click', '#structureSearchLink', showJSDrawEditor)</r:script>--}%
-                        <div class="pull-right"><g:link controller="bardWebInterface" action="jsDrawEditor">
-                            <img src="${resource(dir: 'images', file: 'structureEditIcon.png')}"
-                                 alt="Draw or paste a structure"
-                                 title="Draw or paste a structure"/> Draw or paste a structure</g:link> or <a
-                                data-toggle="modal" href="#idModalDiv">list of IDs for search</a></div>
-                    </div>
-                </div>
-            </g:form>
+            <g:render template="/layouts/templates/searchBlock"/>
         </div>
     </div>
+    <nav class="nav-panel">
+        <div class="center-aligned">
+            <g:render template="/layouts/templates/loginStrip"/>
+        </div>
+        <div class="visible-desktop">
+            <g:render template="/layouts/templates/queryCart"/>
+        </div>
+    </nav>
 </div>
 <g:render template="/layouts/templates/IdSearchBox"/>

@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     //inline editing
-    $.fn.editable.defaults.mode = 'inline';
+    //$.fn.editable.defaults.mode = 'inline';
     //Set up editing for button
     $('.documentPencil').click(function (e) {
         e.stopPropagation();
@@ -12,6 +12,7 @@ $(document).ready(function () {
 
     //edit status
     $('.status').editable({
+        mode:'inline',
         params: function (params) {
             params.version = $('#versionId').val();
             return params;
@@ -26,6 +27,7 @@ $(document).ready(function () {
 
     //edit name
     $('#nameId').editable({
+        mode:'inline',
         inputclass: 'input-large',
         params: function (params) {
             params.version = $('#versionId').val();
@@ -40,6 +42,7 @@ $(document).ready(function () {
     });
     //edit description by
     $('.description').editable({
+        mode:'inline',
         inputclass: 'input-large',
         params: function (params) {
             params.version = $('#versionId').val();
@@ -55,6 +58,7 @@ $(document).ready(function () {
 
     //edit hold until date
     $('.huddate').editable({
+        mode:'inline',
         params: function (params) {
             params.version = $('#versionId').val();
             return params;
@@ -68,6 +72,7 @@ $(document).ready(function () {
     });
     //edit run from date
     $('.rfddate').editable({
+        mode:'inline',
         params: function (params) {
             params.version = $('#versionId').val();
             return params;
@@ -81,6 +86,7 @@ $(document).ready(function () {
     });
     //edit run to date
     $('.rdtdate').editable({
+        mode:'inline',
         params: function (params) {
             params.version = $('#versionId').val();
             return params;

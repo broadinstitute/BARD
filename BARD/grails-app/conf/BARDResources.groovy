@@ -181,16 +181,15 @@ modules = {
         resource url: "js/experimentalResults.js"
     }
     richtexteditor {
-        resource url: "/css/richtexteditor.css"
-        resource url: "/js/nicedit/nicEdit.js"
-        resource url: "/images/nicedit/nicEditorIcons.gif"
+       // resource url: "/css/richtexteditor.css"
+        //resource url: "/js/nicedit/nicEdit.js"
+        //resource url: "/images/nicedit/nicEditorIcons.gif"
     }
     richtexteditorForCreate {
-        dependsOn 'richtexteditor'
         resource url: "/js/cap/createDocument.js"
     }
     richtexteditorForEdit {
-        dependsOn 'richtexteditor'
+        resource url:"/css/editDocument.css"
         resource url: "/js/cap/editDocument.js"
     }
     jqueryMobile {

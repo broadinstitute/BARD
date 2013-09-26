@@ -1,37 +1,33 @@
-<div id="summaryView">
+<style>
+.insidequerycart {
+    width: 100%;
+    background: #0093d0;
+}
+.cartContents {
+    background:#ffffff;
+    color: #000000;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+}
+
+</style>
+<div id="summaryView insidequerycart">
     <div class="row-fluid">
-        <div class="span12 center-aligned">
-            <h3>Query Cart</h3>
-            <a class="trigger btn btn-mini" href="#">View/edit</a>
-            <div class="dropdown">
-                <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" role="button" data-target="#">
-                    Visualize <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu pull-right" role="menu">
-                    <li><g:link controller="molSpreadSheet">Molecular Spreadsheet</g:link></li>
-                    <li>
-                        <a href="${createLink(controller: 'queryCart', action: 'toDesktopClient')}" target="_blank">Desktop Client</a></li>
-                        %{--<a href="http://bard.nih.gov/bard/compounds/44552613?view=Record" target="_blank">Desktop Client</a></li>--}%
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="row-fluid">
-        <div class="span12">
-            <ul class="unstyled horizontal-list">
-                <g:if test="${!totalItemCount}">
-                    <li>Empty</li>
-                </g:if>
-                <g:if test="${numberOfAssays>0}">
-                    <li>${numberOfAssays} ${numberOfAssays==1?'assay definition':'assay definitions'}</li>
-                </g:if>
-                <g:if test="${numberOfCompounds>0}">
-                    <li>${numberOfCompounds} ${numberOfCompounds==1?'compound':'compounds'}</li>
-                </g:if>
-                <g:if test="${numberOfProjects>0}">
-                    <li>${numberOfProjects} ${numberOfProjects==1?'project':'projects'}</li>
-                </g:if>
-            </ul>
-        </div>
+        <span class="trigger btn btn-primary" style="color:#ffffff; background: #0093d0;">
+            QUERY CART &nbsp;
+            <span class="cartContents">
+            <g:if test="${!totalItemCount}">
+                Empty
+            </g:if>
+            <g:if test="${totalItemCount}">
+                ${totalItemCount} ${totalItemCount==1?'item':'items'}
+            </g:if>
+         </span>
     </div>
 </div>
