@@ -37,9 +37,9 @@ class TextFormatTagLibUnitSpec extends Specification {
 
         where:
         label                     | content                   | expectedResult
-        "text with no line break" | "text with no line break" | "<p>text with no line break</p>"
-        "text with line break"    | "text with\nline break"   | "<p>text with</p><p>line break</p>"
+        "text with no line break" | "text with no line break" | "<br/>text with no line break"
+        "text with line break"    | "text with\nline break"   | "<br/>text with<br/>line break"
         "null content"            | null                      | ""
-        "empty string"            | ""                        | "<p></p>"
+        "empty string"            | ""                        | "<br/>"
     }
 }
