@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     //inline editing
-    $.fn.editable.defaults.mode = 'inline';
+    //$.fn.editable.defaults.mode = 'inline';
 
 
     $('#nameId').editable('option', 'validate', function (v) {

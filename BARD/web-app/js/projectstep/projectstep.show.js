@@ -9,7 +9,7 @@ var redraw;
 
 /* only do all this when document has finished loading (needed for RaphaelJS) */
 $(document).ready(function () {
-    $.fn.editable.defaults.mode = 'inline';
+    //$.fn.editable.defaults.mode = 'inline';
     layoutGraph();
 });
 
@@ -167,6 +167,7 @@ function layoutGraph() {
         }
 
         $('.projectStageId').editable({
+            mode:'inline',
             success: function (response, newValue) {
                 refreshProjectSteps();
             }

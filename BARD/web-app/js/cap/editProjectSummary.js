@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     //inline editing
-    $.fn.editable.defaults.mode = 'inline';
+    //$.fn.editable.defaults.mode = 'inline';
     //Set up editing for button
     $('.documentPencil').click(function (e) {
         e.stopPropagation();
@@ -12,6 +12,7 @@ $(document).ready(function () {
 
     //edit status
     $('.status').editable({
+        mode:'inline',
         params: function (params) {
             params.version = $('#versionId').val();
             return params;
@@ -26,6 +27,7 @@ $(document).ready(function () {
 
     //edit name
     $('#nameId').editable({
+        mode:'inline',
         inputclass: 'input-large',
         params: function (params) {
             params.version = $('#versionId').val();
@@ -41,6 +43,7 @@ $(document).ready(function () {
 
     //edit designed by
     $('.description').editable({
+        mode:'inline',
         inputclass: 'input-large',
         params: function (params) {
             params.version = $('#versionId').val();
