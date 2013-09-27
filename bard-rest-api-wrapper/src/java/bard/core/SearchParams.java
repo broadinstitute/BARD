@@ -1,5 +1,6 @@
 package bard.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,7 +10,8 @@ public class SearchParams extends ServiceParams {
     private static final long serialVersionUID = 0xedd95256480bd363l;
 
     protected String query;
-    protected List<String[]> filters = null;
+
+    protected List<String[]> filters = new ArrayList<String[]>();
 
     public SearchParams () {
         super();
