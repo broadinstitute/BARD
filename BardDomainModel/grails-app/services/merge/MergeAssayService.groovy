@@ -232,6 +232,9 @@ class MergeAssayService {
         Map<AssayContext, AssayContext> mapping = [:]
 
         for (sourceAssay in removingAssays) {
+            if(sourceAssay.id == assayWillKeep.id) {
+                throw new RuntimeException("Source and target were the same: ${assayWillKeep}");
+            }
             for (sourceContext in sourceAssay.contexts) {
                 Collection<AssayContext> possibleDestinations = contextsByName[sourceContext.contextName]
 
@@ -387,6 +390,7 @@ class MergeAssayService {
     // assume by this point, all of the context items have already been copied from removingAssays to assayWillKeep,
     // which implies that all of the contexts have already been copied over as well.
     def handleMeasuresForMovedExperiments(def session, Assay targetAssay, List<Experiment> sourceExperiments, String modifiedBy) {
+        sourceExperiments.each { assert it.assay.id != targetAssay.id }
         //int addMeasureToExperimentInKeep = 0  //count number of measures added to experiments
 
         // create a map of measure key -> measure
