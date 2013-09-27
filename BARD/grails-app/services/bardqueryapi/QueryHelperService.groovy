@@ -178,17 +178,7 @@ class QueryHelperService {
         if (searchFilters) {
             List<String[]> filters = []
             for (SearchFilter searchFilter : searchFilters) {
-                //if the filter starts with a [, then do not quote
-                String filterValue = searchFilter.filterValue
-                Matcher matcher = FILTER_NUMBER_RANGES.matcher(filterValue);
-                if (matcher.matches() || filterValue.startsWith("[")) {
-                    filters.add([searchFilter.filterName, filterValue] as String[])
-                }
-                else {  //quote string
-                    //if string is already quoted strip it
-                    filterValue = filterValue.replaceAll("\"", "");
-                    filters.add([searchFilter.filterName, "\"" + filterValue + "\""] as String[])
-                }
+                filters.add([searchFilter.filterName, /"${searchFilter.filterValue}"/] as String[])
             }
             searchParams.setFilters(filters)
         }
