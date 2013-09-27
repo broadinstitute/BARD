@@ -230,13 +230,15 @@ class MergeAssayDefinitionService {
     Assay moveExperimentsFromAssay(Assay targetAssay,
                                    List<Experiment> experiments) {
         targetAssay.fullyValidateContextItems = false
-
         String modifiedBy = springSecurityService.principal?.username
+
+        sessionFactory.currentSession.flush()
+        mergeAssayService.handleMeasuresForMovedExperiments(sessionFactory.currentSession, targetAssay, experiments, modifiedBy)
+        sessionFactory.currentSession.flush()
+
         mergeAssayService.moveExperiments(experiments, targetAssay, modifiedBy)
         println("end handleExperiments")
-        sessionFactory.currentSession.flush()
-        // def session, Assay sourceAssay, Assay targetAssay, List<Experiment> sourceExperiments, String modifiedBy
-        mergeAssayService.handleMeasuresForMovedExperiments(sessionFactory.currentSession, targetAssay, experiments, modifiedBy)
+
         sessionFactory.currentSession.flush()
 
         return Assay.findById(targetAssay.id)
