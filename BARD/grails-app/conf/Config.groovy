@@ -305,9 +305,9 @@ if (appName) {
             println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
         }
     }
-    //if (bard.basic.auth){
+    if (bard.basic.auth){
         grails.config.locations << "classpath:bard-basic-auth-config.groovy"
-    //}
+    }
 
 }
 
