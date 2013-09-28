@@ -10,14 +10,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="logoSearchCartAndFooter"/>
+    <meta name="layout" content="basic"/>
     <title>BARD : Project : ID : ${instance?.id}</title>
     <r:require
             modules="core,bootstrap,select2,accessontology,twitterBootstrapAffix,xeditable,assayshow,richtexteditorForEdit,projectsummary,canEditWidget,projectstep,compoundOptions"/>
 </head>
 
 <body>
-
 <g:if test="${instance?.id}">
     <div class="container-fluid">
         <div class="row-fluid">

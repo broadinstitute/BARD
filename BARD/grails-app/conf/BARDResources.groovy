@@ -87,6 +87,14 @@ modules = {
         resource url: '/js/cap/assay.show.js'
         resource url: '/css/measures-dynatree.css'
     }
+    basic {
+        dependsOn 'core'
+        resource url: "/css/layout.css"
+        resource url: "/css/table.css"
+        resource url: "/css/bardHomepage/BardHeaderFooter.css"
+        resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js'
+        resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js'
+    }
     d3Library {
         resource url: "js/lib/d3.min.js"
     }

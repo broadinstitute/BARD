@@ -6,14 +6,7 @@
     <g:layoutHead/>
 
     <title>BARD: Catalog of Assay Protocols</title>
-    <r:external uri="/css/layout.css"/>
-    <r:external uri="/css/table.css"/>
-    <r:external uri="/css/bardHomepage/BardHeaderFooter.css"/>
-    <script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js"></script>
-    <script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js"></script>
-    <r:require modules="autocomplete"/>
-    <r:require module="cart"/>
-    <r:require module="idSearch"/>
+    <r:require modules="basic,bootstrap,autocomplete,cart,idSearch"/>
     <%@ page defaultCodec="none" %>
     <%@ page import="bardqueryapi.IDSearchType" %>
     <r:layoutResources/>
