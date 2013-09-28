@@ -1,4 +1,7 @@
-
+%{--<r:require modules="autocomplete, structureSearch"/>--}%
+<script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js"></script>
+<script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js"></script>
+<r:require modules="autocomplete"/>
     <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form">
         <div class="row-fluid" style="margin-top: 15px;">
             <div class="search-field input-append">

@@ -7,7 +7,6 @@
 
     <title>BARD: Catalog of Assay Protocols</title>
     <r:require modules="basic,bootstrap,autocomplete,cart,idSearch,downtime"/>
-
     <%@ page defaultCodec="none" %>
     <%@ page import="bardqueryapi.IDSearchType" %>
     <r:layoutResources/>
