@@ -33,8 +33,6 @@ class MergeAssayDefintionControllerFunctionalSpec extends BardControllerFunction
     def setupSpec() {
         String reauthenticateWithUser = TEAM_A_1_USERNAME
 
-        createTeamsInDatabase(ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_ROLE, reauthenticateWithUser)
-
         Map assayData = (Map) remote.exec({
             //Create two assays
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)

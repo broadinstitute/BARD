@@ -175,7 +175,7 @@ class PanelController {
 
 
     def index() {
-        redirect(action: "list")
+        redirect(action: "myPanels")
     }
 
     def save(PanelCommand panelCommand) {

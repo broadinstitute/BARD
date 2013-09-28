@@ -5,6 +5,7 @@ grails {
             basic.realmName = 'CAP'
             filterChain.chainMap = [
                     '/assayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/downTimeScheduler/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/panel/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/bardWebInterface/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/chemAxon/**': 'JOINED_FILTERS,-exceptionTranslationFilter',

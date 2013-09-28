@@ -95,18 +95,7 @@ $(document).ready(function () {
 });
 
 function initDnd() {
-//    $("button", ".deleteCardButton").button({
-//        icons: {
-//            primary: "ui-icon-trash"
-//        },
-//        text: false
-//    }).click(function (event) {
-//            var cardId = $(this).attr('id');
-//            var contextClass = $("#contextClass").value()
-//            showDeleteCardConfirmation(cardId, contextClass);
-//    });
 
-    //setupDeleteItemButton()
 };
 
 

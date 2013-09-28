@@ -16,13 +16,36 @@ modules = {
         resource url: '/js/persona/include.js'
         resource url: 'js/persona/signin.js'
     }
+    basic {
+        dependsOn 'core'
+        resource url: "/css/layout.css"
+        resource url: "/css/table.css"
+        resource url: "/css/bardHomepage/BardHeaderFooter.css"
+        resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js'
+        resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js'
+    }
+    bardHomepage {
+        dependsOn 'core,bootstrap,bootstrap-responsive-css'
+        resource url: '/css/bardHomepage/BardHomepage.css'
+        resource url: '/css/bardHomepage/jquery-ui-1.10.3.custom.css'
+        resource url: '/js/bardHomepage/jquery.main.js'
+        resource url: '/js/idSearchDialog.js'
+        resource url: '/js/bardHomepage/jquery-ui-1.10.3.custom.js'
+        resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js'
+        resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js'
+    }
     login {
         resource url: "css/font-awesome/css/font-awesome.css"
         resource url: "css/social-buttons.css"
     }
-    moveExperiments{
-    dependsOn 'core,bootstrap'
-        resource url:'/js/cap/moveExperiments.js'
+    downtime {
+        dependsOn 'grailsEvents'
+        resource url: '/js/cap/downtime.js'
+
+    }
+    moveExperiments {
+        dependsOn 'core,bootstrap'
+        resource url: '/js/cap/moveExperiments.js'
     }
     xeditable {
         resource url: "/js/x-editable/bootstrap-editable.js"
@@ -110,7 +133,7 @@ modules = {
         resource url: '/css/projectstep.css'
     }
 
-    //Adding version allows clients to not cache javascript
+//Adding version allows clients to not cache javascript
     search {
         resource url: "js/search.js"
         resource url: "css/facetDiv.css"
@@ -181,7 +204,7 @@ modules = {
         resource url: "js/experimentalResults.js"
     }
     richtexteditor {
-       // resource url: "/css/richtexteditor.css"
+        // resource url: "/css/richtexteditor.css"
         //resource url: "/js/nicedit/nicEdit.js"
         //resource url: "/images/nicedit/nicEditorIcons.gif"
     }
@@ -189,7 +212,7 @@ modules = {
         resource url: "/js/cap/createDocument.js"
     }
     richtexteditorForEdit {
-        resource url:"/css/editDocument.css"
+        resource url: "/css/editDocument.css"
         resource url: "/js/cap/editDocument.js"
     }
     jqueryMobile {

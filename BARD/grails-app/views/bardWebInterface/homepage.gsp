@@ -8,19 +8,7 @@
     <title>BARD</title>
     <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
           rel='stylesheet' type='text/css'>
-    <link media="all" rel="stylesheet" href="../css/bardHomepage/bootstrap.css">
-    <link media="all" rel="stylesheet" href="../css/bardHomepage/bootstrap-responsive.css">
-    <link media="all" rel="stylesheet" href="../css/bardHomepage/BardHomepage.css">
-
-    <script src="../js/bardHomepage/jquery-1.8.3.min.js"></script>
-    <script src="../js/bardHomepage/bootstrap.js"></script>
-    <script src="../js/bardHomepage/jquery.main.js"></script>
-    <script src="../js/bardHomepage/idSearchDialog.js"></script>
-    %{--<script src="js/bardHomepage/windowOnerror.js"></script>--}%
-    <link media="all" rel="stylesheet" href="../css/bardHomepage/jquery-ui-1.10.3.custom.css">
-    <script src="../js/bardHomepage/jquery-ui-1.10.3.custom.js"></script>
-    <script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js"></script>
-    <script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js"></script>
+    <r:require modules="bardHomepage,downtime,autocomplete"/>
     <!--[if lt IE 9]><link rel="stylesheet" href="../css/bardHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
     <!--[if IE]><script src="../js/bardHomepage/ie.js"></script><![endif]-->
 
@@ -31,36 +19,36 @@
                  alt="Please enable JavaScript to access the full functionality of this site."/>
         </a>
     </noscript>
-
+    <r:layoutResources/>
     %{--We have to run a small function in order to kickstart the auto complete--}%
-    <script>
-        $(document).ready(function () {
+    %{--<script>--}%
+        %{--$(document).ready(function () {--}%
 
-            //set up auto complete
-            var autoOpts = {
-                source: "/BARD/bardWebInterface/autoCompleteAssayNames",
-                minLength: 2,
-                html: true,
-                delay: 1000
-            };
+            %{--//set up auto complete--}%
+            %{--var autoOpts = {--}%
+                %{--source: "/BARD/bardWebInterface/autoCompleteAssayNames",--}%
+                %{--minLength: 2,--}%
+                %{--html: true,--}%
+                %{--delay: 1000--}%
+            %{--};--}%
 
-            $("#searchString").autocomplete(autoOpts);
-            $("#searchString").bind("autocompleteselect", function (event, ui) {
-                $("#searchString").val(ui.item.value)
-                $("#searchButton").click();
-            });
-            // make sure to close the autocomplete box when the search button or ENTER are clicked
-            $("#searchButton").click(function () {
-                $("#searchString").autocomplete("close");
-            });
-            $('#searchButton').keypress(function (eventData) {
-                if (eventData.which == 13) {
-                    $("#searchString").autocomplete("close");
-                }
-            });
+            %{--$("#searchString").autocomplete(autoOpts);--}%
+            %{--$("#searchString").bind("autocompleteselect", function (event, ui) {--}%
+                %{--$("#searchString").val(ui.item.value)--}%
+                %{--$("#searchButton").click();--}%
+            %{--});--}%
+            %{--// make sure to close the autocomplete box when the search button or ENTER are clicked--}%
+            %{--$("#searchButton").click(function () {--}%
+                %{--$("#searchString").autocomplete("close");--}%
+            %{--});--}%
+            %{--$('#searchButton').keypress(function (eventData) {--}%
+                %{--if (eventData.which == 13) {--}%
+                    %{--$("#searchString").autocomplete("close");--}%
+                %{--}--}%
+            %{--});--}%
 
-        });
-    </script>
+        %{--});--}%
+    %{--</script>--}%
 
 </head>
 
@@ -71,6 +59,9 @@
 %{--The control area at the top of the page is all contained within this header--}%
 <header class="navbar navbar-static-top" id="header">
     <div class="container-fluid">
+        <div class="row-fluid span12" id="downtimeMessage">
+
+        </div>
         <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
         <ul class="social-networks">
             <li>
@@ -85,24 +76,6 @@
                    style="background:url('../images/bardHomepage/facebook-share-icon.gif') no-repeat; width:58px; height:18px;">
                 </a>
             </li>
-            %{--<li>--}%
-            %{--<script>--}%
-            %{--//Facebook LIKE widget plugin--}%
-            %{--(function (d, s, id) {--}%
-            %{--var js, fjs = d.getElementsByTagName(s)[0];--}%
-            %{--if (d.getElementById(id)) return;--}%
-            %{--js = d.createElement(s);--}%
-            %{--js.id = id;--}%
-            %{--js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";--}%
-            %{--fjs.parentNode.insertBefore(js, fjs);--}%
-            %{--}(document, 'script', 'facebook-jssdk'));--}%
-            %{--</script>--}%
-
-            %{--<div id="fb-root"></div>--}%
-
-            %{--<div class="fb-like" data-href="https://bard.nih.gov/BARD/" data-width="auto" data-layout="button_count"--}%
-            %{--data-show-faces="false" data-send="false"></div>--}%
-            %{--</li>--}%
             <li style="width: 80px;">
                 %{--Twitter widget plugin--}%
                 <script>!function (d, s, id) {
@@ -782,6 +755,6 @@
     </div>
 </footer>
 </div>
-
+<r:layoutResources/>
 </body>
 </html>

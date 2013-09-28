@@ -1,7 +1,4 @@
 grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
-//grails.project.class.dir = "target/classes"
-//grails.project.test.class.dir = "target/test-classes"
-//grails.project.test.reports.dir = "target/test-reports"
 grails.project.work.dir = "target"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
@@ -27,6 +24,9 @@ grails.project.dependency.resolution = {
         grailsHome()
         mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
         grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
+
+        //TODO: Without adding this repos the push-event plugin won't work. Needs further investigations
+        mavenRepo "https://oss.sonatype.org/content/repositories/snapshots/"
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
@@ -101,16 +101,15 @@ grails.project.dependency.resolution = {
         build(":codenarc:0.18.1") {
             excludes "groovy-all"
         }
-        compile ":hibernate:$grailsVersion"
+
         build ":improx:0.2" // Interactive Mode Proxy; useful for IDE integration
         build ":tomcat:$grailsVersion"
 
         // compile scope
+        compile ":hibernate:$grailsVersion"
         compile ":jquery-ui:1.8.15"
         compile ":export:1.5"
-        // runtime ":resources:1.1.6"
         compile ":resources:1.2.RC2"
-        // compile ":functional-spock:0.6"
         compile ":twitter-bootstrap:2.3.0"
         compile(":cbipcrowdauthentication:0.3.4") {
             excludes('spock', 'release', 'google-collections')
@@ -123,12 +122,16 @@ grails.project.dependency.resolution = {
         compile(':webflow:2.0.0') {
             exclude 'grails-webflow'
         }
-        compile(":spring-security-acl:1.1.1")
+        compile ":spring-security-acl:1.1.1"
         compile ":remote-control:1.4"
         compile ":google-analytics:2.0"
         compile ":mail:1.0.1"
         compile ":greenmail:1.3.3"
         compile ":cache:1.0.1"
+        compile ':events-push:1.0.M7'
+        compile ":famfamfam:1.0.1"
+        compile ":spring-security-ui:0.2"
+
         // runtime scope
         runtime ":jquery:1.7.1"
 
@@ -138,8 +141,7 @@ grails.project.dependency.resolution = {
         }
         test "org.grails.plugins:geb:$gebVersion"
         test ":remote-control:1.4"
-        compile ":famfamfam:1.0.1"
-        compile ":spring-security-ui:0.2"
+
 
     }
 }
@@ -152,7 +154,7 @@ grails.plugin.location.'crowd-user-registration' = "../crowdUserRegistration"
 grails.plugin.location.'shopping-cart:0.8.2' = "../shopping-cart-0.8.2"
 
 grails.plugin.location.'bard-rest-api-wrapper' = "../bard-rest-api-wrapper"
-grails.plugin.location.'functional-spock'="../functional-spock"
+grails.plugin.location.'functional-spock' = "../functional-spock"
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
 codenarc.reports = {
     html('html') {

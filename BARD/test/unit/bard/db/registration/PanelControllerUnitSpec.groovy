@@ -433,6 +433,6 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         when:
         controller.index()
         then:
-        "/panel/list" == response.redirectedUrl
+        "/panel/myPanels" == response.redirectedUrl
     }
 }

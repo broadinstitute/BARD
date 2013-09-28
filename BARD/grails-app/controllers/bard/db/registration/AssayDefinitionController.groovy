@@ -209,7 +209,7 @@ class AssayDefinitionController {
     }
 
     def index() {
-        redirect(action: "findById")
+        redirect(action: "groupAssays")
     }
 
     def save(AssayCommand assayCommand) {
