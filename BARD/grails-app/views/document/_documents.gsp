@@ -400,24 +400,24 @@
 
                 <div class="controls">
                     <b>Document Content</b> <a href="#" class="icon-pencil documentPencil ${editable}"
-                                               data-id="other_${other.id}"
+                                               data-id="other_${otherDocument.id}"
                                                title="Click to edit other"></a> <br/>
                     <span data-type="textarea"
-                          name="${other.id}"
-                          data-pk="${other.id}"
+                          name="${otherDocument.id}"
+                          data-pk="${otherDocument.id}"
                           data-toggle="manual"
-                          class="textarea ${other.id}"
+                          class="textarea ${otherDocument.id}"
                           data-url="/BARD/document/editDocument"
-                          data-documentType="${other.documentType.id}"
+                          data-documentType="${otherDocument.documentType.id}"
                           data-documentKind="${documentKind}"
-                          data-version="${other.version}"
+                          data-version="${otherDocument.version}"
                           data-owningEntityId="${owningEntity.id}"
-                          data-document-name="${other.documentName}"
-                          data-server-response-id="otherMsg_${other.id}"
+                          data-document-name="${otherDocument.documentName}"
+                          data-server-response-id="otherMsg_${otherDocument.id}"
                           data-inputclass="input-xxlarge"
-                          id="other_${other.id}">
+                          id="other_${otherDocument.id}">
                         <g:render template="../document/docsWithLineBreaks"
-                                  model="[documentContent: other.documentContent]"/>
+                                  model="[documentContent: otherDocument.documentContent]"/>
                     </span>
                     <g:if test="${editable == 'canedit'}">
                         <g:render template="/document/deleteDocumentForm" model="[document: otherDocument]"/>
