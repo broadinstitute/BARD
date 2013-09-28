@@ -29,7 +29,7 @@ abstract class AbstractDocument {
 
     static constraints = {
         documentName(blank: false, maxSize: DOCUMENT_NAME_MAX_SIZE)
-        documentType(nullable:true, maxSize: DOCUMENT_TYPE_MAX_SIZE)
+        documentType(nullable:true)
         documentContent(nullable: true, blank: false, validator: {val, self, errors-> validContentUrl(val,self,errors)})
         dateCreated(nullable: false)
         lastUpdated(nullable: false)
