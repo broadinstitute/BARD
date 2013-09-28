@@ -213,7 +213,8 @@ class CompoundBioActivitySummaryBuilder {
                                     yNormMin: yNormMin,
                                     yNormMax: yNormMax)
                             concentrationResponseSeriesValue.yAxisLabel = concentrationResponseSeriesValue.responseUnit
-                            concentrationResponseSeriesValue.xAxisLabel = concentrationResponseSeriesValue.testConcentrationUnit
+                            final String testConcentrationUnit = concentrationResponseSeriesValue.testConcentrationUnit
+                            concentrationResponseSeriesValue.xAxisLabel = testConcentrationUnit ? "Concentration (log [${testConcentrationUnit}])" : ""
                             values << concentrationResponseSeriesValue
                         } else {//the result type is a key/value pair
                             WebQueryValue pairValue = createPairValueFromPriorityElement(priorityElement)
