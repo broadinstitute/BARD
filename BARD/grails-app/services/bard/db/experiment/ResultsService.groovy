@@ -164,44 +164,6 @@ class ResultsService {
         }
     }
 
-    static class ImportSummary {
-        def errors = []
-
-        // these are just collected for purposes of reporting the import summary at the end
-        int linesParsed = 0;
-        int resultsCreated = 0;
-        int experimentAnnotationsCreated = 0;
-        Map<String, Integer> resultsPerLabel = [:]
-        Set<Long> substanceIds = [] as Set
-
-        int resultsWithRelationships = 0;
-        int resultAnnotations = 0;
-
-        List<List> topLines = []
-
-        public int getSubstanceCount() {
-            return substanceIds.size()
-        }
-
-        void addError(int line, int column, String message) {
-            if (!tooMany()) {
-                if (line != 0) {
-                    errors << "On line ${line}, column ${column + 1}: ${message}"
-                } else {
-                    errors << message
-                }
-            }
-        }
-
-        boolean hasErrors() {
-            return errors.size() > 0
-        }
-
-        boolean tooMany() {
-            return errors.size() > MAX_ERROR_COUNT;
-        }
-    }
-
     static class Template {
         Experiment experiment;
         List<String> constantItems;
@@ -271,15 +233,6 @@ class ResultsService {
         return new Template(experiment: experiment, constantItems: constants as List, columns: columns as List)
     }
 
-    public static class InitialParse {
-        String experimentName;
-        Long experimentId;
-        List<ExperimentContext> contexts = []
-        int linesParsed;
-        List<Row> rows;
-        List<List<String>> topLines;
-    }
-
     static class LineReader {
         CSVReader reader;
         int lineNumber = 0;
@@ -309,9 +262,8 @@ class ResultsService {
         return true
     }
 
-
-    InitialParse parseConstantRegion(LineReader reader, ImportSummary errors, Collection<ItemService.Item> constantItems, boolean skipExperimentContextItems) {
-        InitialParse result = new InitialParse()
+    RowParser parseConstantRegion(LineReader reader, ImportSummary errors, Collection<ItemService.Item> constantItems, boolean skipExperimentContextItems) {
+        RowParser result = new RowParser()
         Map experimentAnnotations = [:]
 
         while (true) {
@@ -388,66 +340,6 @@ class ResultsService {
         }
 
         return result
-    }
-
-    void forEachDataRow(LineReader reader, List<String> columns, ImportSummary errors, Closure fn) {
-        int expectedColumnCount = columns.size() + FIXED_COLUMNS.size();
-
-        while (true) {
-            List<String> values = reader.readLine();
-            if (values == null)
-                break;
-
-            // verify and reshape columns
-            while (values.size() < expectedColumnCount) {
-                values.add("")
-            }
-
-            // verify there aren't too many columns
-            while (values.size() > expectedColumnCount) {
-                String value = values.remove(values.size() - 1)
-                if (value.trim().length() != 0) {
-                    errors.addError(reader.lineNumber, values.size() + 1, "Found \"${value}\" in extra column")
-                }
-            }
-
-            // now that values is guaranteed to be the right length, make the entire row isn't empty
-            boolean allEmpty = true;
-            for (cell in values) {
-                if (!cell.isEmpty()) {
-                    allEmpty = false;
-                    break;
-                }
-            }
-
-            // pass to the callback
-            if (!allEmpty)
-                fn(reader.lineNumber, values)
-
-            if (errors.tooMany())
-                break
-        }
-    }
-
-    Object[] safeParse(ImportSummary errors, List<String> values, int lineNumber, List<Closure> fns) {
-        boolean hadFailure = false;
-
-        Object[] parsed = new Object[fns.size()]
-        for (int i = 0; i < fns.size(); i++) {
-            try {
-                parsed[i] = fns[i](values[i])
-            } catch (Exception ex) {
-                errors.addError(lineNumber, i, "Could not parse \"${values[i]}\"")
-                hadFailure = true
-//                ex.printStackTrace()
-            }
-        }
-
-        if (hadFailure) {
-            return null;
-        } else {
-            return parsed;
-        }
     }
 
     List<String> parseTableHeader(LineReader reader, Template template, ImportSummary errors) {
@@ -717,7 +609,7 @@ class ResultsService {
         parentResult.resultHierarchiesForParentResult.add(resultHierarchy)
     }
 
-    InitialParse initialParse(Reader input, ImportSummary errors, Template template, boolean skipExperimentContextItems) {
+    RowParser initialParse(Reader input, ImportSummary errors, Template template, boolean skipExperimentContextItems) {
         LineReader reader = new LineReader(new BufferedReader(input))
 
         // first section
@@ -725,7 +617,7 @@ class ResultsService {
             context.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }
         })
 
-        InitialParse result = parseConstantRegion(reader, errors, potentialExperimentColumns, skipExperimentContextItems)
+        RowParser result = parseConstantRegion(reader, errors, potentialExperimentColumns, skipExperimentContextItems)
         if (errors.hasErrors())
             return
 
@@ -734,62 +626,13 @@ class ResultsService {
         if (errors.hasErrors())
             return
 
-        def parseInt = { x -> Integer.parseInt(x) }
-        def parseOptInt = { x ->
-            if (x.trim().length() > 0) {
-                return Integer.parseInt(x)
-            }
-        }
-        def parseLong = { x -> Long.parseLong(x) }
-
-        // all data rows
-        List rows = []
-        Set usedRowNumbers = [] as Set
-        forEachDataRow(reader, columns, errors) { int lineNumber, List<String> values ->
-            def parsed = safeParse(errors, values, lineNumber, [parseInt, parseLong, parseOptInt, parseOptInt])
-
-            if (parsed == null) {
-                // if we got errors parsing the fixed columns, don't proceed to the rest of the columns
-                return
-            }
-
-            Integer rowNumber = parsed[0]
-            Long sid = parsed[1]
-            Integer replicate = parsed[2]
-            Integer parentRowNumber = parsed[3]
-
-            if (sid <= 0) {
-                errors.addError(lineNumber, 0, "Invalid substance id ${sid}")
-                return
-            }
-
-            if (usedRowNumbers.contains(rowNumber)) {
-                errors.addError(lineNumber, 0, "Row number ${rowNumber} was duplicated")
-                return
-            }
-            usedRowNumbers.add(rowNumber)
-
-            Row row = new Row(lineNumber: lineNumber, rowNumber: rowNumber, replicate: replicate, parentRowNumber: parentRowNumber, sid: sid)
-
-            // parse the dynamic columns
-            for (int i = 0; i < columns.size(); i++) {
-                String cellString = values[i + FIXED_COLUMNS.size()];
-                if (cellString.isEmpty())
-                    continue
-
-                String column = columns.get(i);
-                row.cells.add(new RawCell(columnName: column, value: cellString));
-            }
-
-            rows.add(row)
-        }
-
-        result.rows = rows
-        result.linesParsed = reader.lineNumber
-        result.topLines = reader.topLines
+//        result.linesParsed = reader.lineNumber
+//        result.topLines = reader.topLines
+        result.setup(reader, columns, errors)
 
         return result
     }
+
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     ImportSummary importResults(Long id, InputStream input, ImportOptions options = null) {
         if (options == null) {
@@ -830,12 +673,45 @@ class ResultsService {
         Template template = generateMaxSchema(experiment)
         Map<Measure, Collection<ItemService.Item>> itemsByMeasure = constructItemsByMeasure(experiment)
 
-        def parsed = initialParse(new InputStreamReader(input), errors, template, options.skipExperimentContexts)
-        if (parsed != null && !errors.hasErrors()) {
-            errors.linesParsed = parsed.linesParsed
+        RowParser parser = initialParse(new InputStreamReader(input), errors, template, options.skipExperimentContexts)
+        if (parser != null && !errors.hasErrors()) {
 
-            // populate the top few lines in the summary.
-            errors.topLines = parsed.topLines
+            List<Result> allResults = []
+            while(true) {
+                List<Row> rows = parser.readNextSampleRows(errors);
+
+                errors.linesParsed = parser.linesParsed
+
+                // populate the top few lines in the summary.
+                errors.topLines = parser.topLines
+
+                if(rows == null) {
+                    break;
+                }
+
+                if(errors.hasErrors()) {
+                    break;
+                }
+
+                Collection<Result> resultsForSample = createResults(rows, experiment.experimentMeasures, errors, itemsByMeasure)
+
+                if (!errors.hasErrors()) {
+                    checkForDuplicates(errors, resultsForSample)
+                }
+
+                allResults.addAll(resultsForSample);
+            }
+
+            if (!errors.hasErrors() && allResults.size() == 0) {
+                errors.addError(0, 0, "No results were produced")
+            }
+
+            if (!errors.hasErrors()) {
+                // and persist these results to the DB
+                Collection<ExperimentContext> contexts = parser.contexts;
+
+                persist(experiment, allResults, errors, contexts, originalFilename, exportFilename, options)
+            }
 
             def missingSids = []
             if (options.validateSubstances)
@@ -843,25 +719,6 @@ class ResultsService {
 
             missingSids.each {
                 errors.addError(0, 0, "Could not find substance with id ${it}")
-            }
-
-            if (!errors.hasErrors()) {
-                def results = createResults(parsed.rows, experiment.experimentMeasures, errors, itemsByMeasure)
-
-                if (!errors.hasErrors() && results.size() == 0) {
-                    errors.addError(0, 0, "No results were produced")
-                }
-
-                if (!errors.hasErrors()) {
-                    checkForDuplicates(errors, results)
-                }
-
-                if (!errors.hasErrors()) {
-                    // and persist these results to the DB
-                    Collection<ExperimentContext> contexts = parsed.contexts;
-
-                    persist(experiment, results, errors, contexts, originalFilename, exportFilename, options)
-                }
             }
         }
 
