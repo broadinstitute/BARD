@@ -74,8 +74,6 @@ abstract class AbstractContextItem<T extends AbstractContext> {
      */
     @TypeChecked(TypeCheckingMode.SKIP)
     String deriveDisplayValue() {
-        String result = null
-
         switch(valueType) {
             case ValueType.ELEMENT:
                 return valueElement.label
