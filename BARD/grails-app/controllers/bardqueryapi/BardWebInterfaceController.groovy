@@ -10,6 +10,7 @@ import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
+import bard.db.experiment.Experiment
 import bard.db.project.Project
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
@@ -155,13 +156,20 @@ class BardWebInterfaceController {
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
+            final Long capExperimentId = tableModel.additionalProperties.capExptId as Long
+            Experiment capExperiment
+            if(capExperimentId){
+                capExperiment = Experiment.findById(capExperimentId)
+            }
+
             if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
-                render(template: 'experimentResultData', model: [tableModel: tableModel, innerBorder: false])
+                render(template: 'experimentResultData', model: [tableModel: tableModel, capExperiment: capExperiment, innerBorder: false])
                 return
             }
             //this should do a full page reload
             render(view: 'showExperiment',
                     model: [tableModel: tableModel,
+                            capExperiment: capExperiment,
                             facets: facetValues,
                             appliedFilters: getAppliedFilters(searchFilters, facetValues),
                             sidebarTitle: 'Options',

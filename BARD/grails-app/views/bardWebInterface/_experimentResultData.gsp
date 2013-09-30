@@ -8,30 +8,10 @@
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 
-<p>
-    <b>Title: ${tableModel?.additionalProperties?.experimentName} (ID: ${tableModel?.additionalProperties?.capExptId})</b>
-</p>
+<h2>Experiment: ${tableModel?.additionalProperties?.experimentName}</h2>
 
 
-<p>
-    <b>Assay ID :
-    <g:if test="${tableModel?.additionalProperties.searchString}">
-        <g:link controller="assayDefinition" action="show"
-                id="${tableModel?.additionalProperties.capAssayId}"
-                params='[searchString: "${tableModel?.additionalProperties.searchString}"]'>
-            ${tableModel?.additionalProperties.capAssayId}
-        </g:link>
-    </g:if>
-    <g:else>
-        <g:link controller="assayDefinition" action="show"
-                id="${tableModel?.additionalProperties.capAssayId}">
-            ${tableModel?.additionalProperties.capAssayId}
-
-        </g:link>
-    </g:else>
-    </b>
-    <b>Confidence Level: ${tableModel?.additionalProperties.confidenceLevel}</b>
-</p>
+<g:render template="/experiment/experimentReferences" model="[experiment: capExperiment, excludedLinks: ['bardWebInterface.showExperiment']]"  />
 
 <div class="row-fluid">
 <g:if test="${tableModel.data}">
