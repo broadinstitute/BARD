@@ -3,8 +3,9 @@
     width: 100%;
     background: #0093d0;
 }
+
 .cartContents {
-    background:#ffffff;
+    background: #ffffff;
     color: #000000;
     padding-left: 5px;
     padding-right: 5px;
@@ -17,17 +18,19 @@
 }
 
 </style>
-<div id="summaryView insidequerycart">
+
+<div id="summaryView" class="insidequerycart">
     <div class="row-fluid">
         <span class="trigger btn btn-primary" style="color:#ffffff; background: #0093d0;">
             QUERY CART &nbsp;
             <span class="cartContents">
-            <g:if test="${!totalItemCount}">
-                Empty
-            </g:if>
-            <g:if test="${totalItemCount}">
-                ${totalItemCount} ${totalItemCount==1?'item':'items'}
-            </g:if>
-         </span>
+                <g:if test="${!totalItemCount}">
+                    Empty
+                </g:if>
+                <g:if test="${totalItemCount}">
+                    ${totalItemCount} ${totalItemCount == 1 ? 'item' : 'items'}
+                </g:if>
+            </span>
+        </span>
     </div>
 </div>
