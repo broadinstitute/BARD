@@ -225,7 +225,7 @@ input:-ms-input-placeholder{color:#000;}
     text-indent: -9999px;
     overflow: hidden;
     /*background: url('../../images/bard_logo_small.png') no-repeat;*/
-    background:url('../../images/bardHomepage/logo.png') no-repeat;
+    background:url('/BARD/images/bardHomepage/logo.png') no-repeat;
 }
 
 .logo a {
