@@ -667,6 +667,29 @@ class ResultsService {
         return itemsByMeasure
     }
 
+    static class ParseTimer {
+        long prevUpdate;
+        int count;
+
+        public ParseTimer() {
+            prevUpdate = System.currentTimeMillis()
+            int count = 0;
+        }
+
+        public void updateCount(int newCount) {
+            long now = System.currentTimeMillis()
+
+            if(now - prevUpdate > (10*1000)) {
+                int delta = newCount - count
+                float speed = ((float)delta)/((now-prevUpdate)/1000.0);
+                count = newCount
+                prevUpdate = now;
+
+                log.info("Parsing lines per second: ${speed} (Current line: ${newCount})")
+            }
+        }
+    }
+
     ImportSummary importResultsWithoutSavingOriginal(Experiment experiment, InputStream input, String originalFilename, String exportFilename, ImportOptions options) {
         ImportSummary errors = new ImportSummary()
 
@@ -674,13 +697,19 @@ class ResultsService {
         Map<Measure, Collection<ItemService.Item>> itemsByMeasure = constructItemsByMeasure(experiment)
 
         RowParser parser = initialParse(new InputStreamReader(input), errors, template, options.skipExperimentContexts)
+
         if (parser != null && !errors.hasErrors()) {
 
-            List<Result> allResults = []
-            while(true) {
-                List<Row> rows = parser.readNextSampleRows(errors);
+            Collection<ExperimentContext> contexts = parser.contexts;
+            ResultPersister persister = new ResultPersister(errors, options, experiment, originalFilename, exportFilename, contexts)
+            persister.start()
 
-                errors.linesParsed = parser.linesParsed
+            ParseTimer timer = new ParseTimer();
+
+            while(true) {
+                List<Row> rows = parser.readNextSampleRows();
+                errors.linesParsed = parser.reader.lineNumber
+                timer.updateCount(errors.linesParsed)
 
                 // populate the top few lines in the summary.
                 errors.topLines = parser.topLines
@@ -699,28 +728,30 @@ class ResultsService {
                     checkForDuplicates(errors, resultsForSample)
                 }
 
-                allResults.addAll(resultsForSample);
+                if (!errors.hasErrors()) {
+                    persister.addResultsForSample(resultsForSample)
+                }
             }
 
-            if (!errors.hasErrors() && allResults.size() == 0) {
+            if (!errors.hasErrors() && errors.resultsCreated == 0) {
                 errors.addError(0, 0, "No results were produced")
             }
 
             if (!errors.hasErrors()) {
-                // and persist these results to the DB
-                Collection<ExperimentContext> contexts = parser.contexts;
-
-                persist(experiment, allResults, errors, contexts, originalFilename, exportFilename, options)
+                persister.finish()
+            } else {
+                persister.abort()
             }
 
-            def missingSids = []
-            if (options.validateSubstances)
-                missingSids = pugService.validateSubstanceIds(parsed.rows.collect { it.sid })
-
-            missingSids.each {
-                errors.addError(0, 0, "Could not find substance with id ${it}")
-            }
+//            def missingSids = []
+//            if (options.validateSubstances)
+//                missingSids = pugService.validateSubstanceIds(parsed.rows.collect { it.sid })
+//
+//            missingSids.each {
+//                errors.addError(0, 0, "Could not find substance with id ${it}")
+//            }
         }
+
 
         return errors
     }
@@ -768,42 +799,75 @@ class ResultsService {
         }
     }
 
-    private void persist(Experiment experiment, Collection<Result> results, ImportSummary errors, List<ExperimentContext> contexts, String originalFilename, String exportFilename, ImportOptions options) {
-        deleteExperimentResults(experiment, options.skipExperimentContexts)
+    class ResultPersister {
+        String originalFilename
+        String exportFilename
+        ImportSummary summary;
+        ImportOptions options
+        Experiment experiment
+        Collection<ExperimentContext> contexts;
+        Writer writer
 
-        results.each {
-            String label = it.displayLabel
-            Integer count = errors.resultsPerLabel.get(label)
-            if (count == null) {
-                count = 0
-            }
-            errors.resultsPerLabel.put(label, count + 1)
-
-            errors.substanceIds.add(it.substanceId)
-
-            if (it.resultHierarchiesForParentResult.size() > 0 || it.resultHierarchiesForResult.size() > 0)
-                errors.resultsWithRelationships++;
-
-            errors.resultAnnotations += it.resultContextItems.size()
+        public ResultPersister(ImportSummary summary, ImportOptions options, Experiment experiment, String originalFilename, String exportFilename, Collection<ExperimentContext> contexts) {
+            this.summary = summary
+            this.options = options
+            this.experiment = experiment
+            this.originalFilename = originalFilename
+            this.exportFilename = exportFilename
+            this.contexts = contexts;
         }
 
-        if(!options.skipExperimentContexts) {
-            contexts.each {
-                it.experiment = experiment
-                experiment.addToExperimentContexts(it)
+        public void start() {
+            deleteExperimentResults(experiment, options.skipExperimentContexts)
 
-                errors.experimentAnnotationsCreated += it.contextItems.size()
+            if(!options.skipExperimentContexts) {
+                contexts.each {
+                    it.experiment = experiment
+                    experiment.addToExperimentContexts(it)
+
+                    summary.experimentAnnotationsCreated += it.contextItems.size()
+                }
             }
+
+            this.writer = resultsExportService.createWriter(exportFilename)
         }
 
-        errors.resultsCreated = results.size()
+        public void addResultsForSample(Collection<Result> results) {
+            results.each {
+                String label = it.displayLabel
+                Integer count = summary.resultsPerLabel.get(label)
+                if (count == null) {
+                    count = 0
+                }
+                summary.resultsPerLabel.put(label, count + 1)
 
-        if (options.writeResultsToDb)
-            bulkResultService.insertResults(getUsername(), experiment, results)
+                summary.substanceIds.add(it.substanceId)
 
-        resultsExportService.dumpFromList(exportFilename, results)
+                if (it.resultHierarchiesForParentResult.size() > 0 || it.resultHierarchiesForResult.size() > 0)
+                    summary.resultsWithRelationships++;
 
-        addExperimentFileToDb(experiment, originalFilename, exportFilename, errors.substanceCount)
+                summary.resultAnnotations += it.resultContextItems.size()
+            }
+
+            summary.resultsCreated += results.size()
+
+            if (options.writeResultsToDb)
+                bulkResultService.insertResults(getUsername(), experiment, results)
+
+            Set<Long> sids = new HashSet(results.collect {it.substanceId} )
+            assert sids.size() == 1
+
+            resultsExportService.writeResultsForSubstance(writer, sids.first(), results as List)
+        }
+
+        public void finish() {
+            writer.close()
+            addExperimentFileToDb(experiment, originalFilename, exportFilename, summary.substanceCount)
+        }
+
+        public void abort() {
+            writer.close()
+        }
     }
 
     private addExperimentFileToDb(Experiment experiment, String originalFilename, String exportFilename, long substanceCount) {
