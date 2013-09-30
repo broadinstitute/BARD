@@ -20,9 +20,9 @@
                     <g:link controller="experiment" action="show" id="${experiment?.id}">View Experiment Details</g:link>
                 </li>
             </g:if>
-            <g:elseif test="${BooleanUtils.isFalse(excludedLinks?.contains('bardWebInterface.showExperiment')) && experiment.ncgcWarehouseId}">
+            <g:elseif test="${BooleanUtils.isFalse(excludedLinks?.contains('bardWebInterface.showExperiment')) && experiment?.ncgcWarehouseId}">
                 <li>
-                    <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.ncgcWarehouseId}">View Published Results</g:link>
+                    <g:link controller="bardWebInterface" action="showExperiment" id="${experiment?.ncgcWarehouseId}">View Published Results</g:link>
                 </li>
             </g:elseif>
             <g:else>
@@ -34,7 +34,7 @@
     <dt>Projects:</dt>
     <dd>
         <ul>
-            <g:each in="${experiment.projectExperiments}" var="projectExperiment">
+            <g:each in="${experiment?.projectExperiments}" var="projectExperiment">
                 <li><g:link controller="project" action="show"
                             id="${projectExperiment.project.id}">${projectExperiment.project.name}</g:link></li>
             </g:each>
@@ -43,7 +43,7 @@
     <dt>External references</dt>
     <dd>
         <ul>
-            <g:each in="${experiment.externalReferences}" var="xRef">
+            <g:each in="${experiment?.externalReferences}" var="xRef">
                 <li>
                     <a href="${xRef.externalSystem.systemUrl}${xRef.extAssayRef}" target="_blank">${xRef.externalSystem.systemName} ${xRef.extAssayRef}</a>
                 </li>
