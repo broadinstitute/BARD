@@ -7,6 +7,7 @@ import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
 import bard.db.experiment.PubchemImportService
 import bard.db.experiment.ResultsService
+import bard.db.experiment.results.ImportSummary
 import bard.db.model.AbstractContextOwner
 import bard.db.registration.Assay
 import bard.db.registration.AssayDefinitionService
@@ -304,7 +305,7 @@ class ExperimentController {
         ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
         def aid = Integer.parseInt(xref.extAssayRef.replace("aid=",""))
 
-        ResultsService.ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid)
+        ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid)
 
         return [experiment: experiment, results: results]
     }

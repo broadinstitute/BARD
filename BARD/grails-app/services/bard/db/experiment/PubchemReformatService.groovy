@@ -800,7 +800,7 @@ class PubchemReformatService {
                 item.attributeElement = attribute
                 item.valueMin = 0
                 item.valueMax = maxConcentration
-                item.valueDisplay = item.deriveDisplayValue()
+                item.valueDisplay = [item.valueMin, item.valueMax].join(' - ')
 
                 context.addToAssayContextItems(item)
             } else {
@@ -808,6 +808,7 @@ class PubchemReformatService {
                     AssayContextItem item = new AssayContextItem();
                     item.attributeType = AttributeType.List
                     item.attributeElement = attribute
+                    item.valueDisplay = item.deriveDisplayValue()
 
                     assignValue(item, value)
 
@@ -821,6 +822,7 @@ class PubchemReformatService {
             item.attributeType = AttributeType.Free
             item.attributeElement = freeAttribute
             context.addToAssayContextItems(item)
+            item.valueDisplay = item.deriveDisplayValue()
         }
 
         assay.addToAssayContexts(context)
