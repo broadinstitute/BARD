@@ -1,5 +1,6 @@
 package bard.db.experiment
 
+import bard.db.experiment.results.ImportSummary
 import bard.db.registration.ExternalReference
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.security.access.prepost.PreAuthorize
@@ -17,7 +18,7 @@ class PubchemImportService {
     ResultsService resultsService
 
     @PreAuthorize("hasRole('ROLE_BARD_ADMINISTRATOR')")
-    ResultsService.ImportSummary recreateMeasuresAndLoad(boolean forceConvertPubchem, int aid) {
+    ImportSummary recreateMeasuresAndLoad(boolean forceConvertPubchem, int aid) {
         String pubchemPrefix
         String pubchemFileDir
         String convertedFileDir
@@ -72,7 +73,7 @@ class PubchemImportService {
         options.validateSubstances = false
         options.writeResultsToDb = false
         options.skipExperimentContexts = true
-        ResultsService.ImportSummary results = resultsService.importResults(ref.experiment.id, new FileInputStream(capFile), options)
+        ImportSummary results = resultsService.importResults(ref.experiment.id, new FileInputStream(capFile), options)
         log.info("errors from loading ${aid}: ${results.errors.size()}")
         for(e in results.errors) {
             log.info("\t${e}")
