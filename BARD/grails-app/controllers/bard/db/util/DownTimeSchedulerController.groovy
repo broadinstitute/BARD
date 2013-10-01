@@ -23,7 +23,7 @@ class DownTimeSchedulerController {
 
     @Secured(["hasRole('ROLE_BARD_ADMINISTRATOR')"])
     def list() {
-        [downTimeSchedulerList: DownTimeScheduler.listOrderByDownTime(order: "desc")]
+        [downTimeSchedulerList: DownTimeScheduler.listOrderByDateCreated(order: "desc")]
     }
 
     @Secured(["hasRole('ROLE_BARD_ADMINISTRATOR')"])
@@ -49,7 +49,7 @@ class DownTimeSchedulerController {
      */
     def currentDownTimeInfo() {
 
-        final List<DownTimeScheduler> downTimeSchedulerList = DownTimeScheduler.listOrderByDownTime(order: "desc")
+        final List<DownTimeScheduler> downTimeSchedulerList = DownTimeScheduler.listOrderByDateCreated(order: "desc")
         String displayValue = ""
         if (downTimeSchedulerList) {
             final DownTimeScheduler downTimeScheduler = downTimeSchedulerList.get(0)
@@ -150,13 +150,10 @@ class DownTimeSchedulerCommand extends BardCommand {
         return downTimeScheduler
     }
 
-    static final DateFormat READABLE_DATE_FORMAT = new SimpleDateFormat(" 'on' EEEE',' MMMMM dd yyyy 'at about' h:mm a z", Locale.US)
-
     void copyFromCmdToDomain(DownTimeScheduler downTimeScheduler) {
         downTimeScheduler.createdBy = this.createdBy
         final Date downTime = getDownTimeAsDate()
-        String fullMessage = displayValue + READABLE_DATE_FORMAT.format(downTime)
-        downTimeScheduler.displayValue = fullMessage
+        downTimeScheduler.displayValue = displayValue
         downTimeScheduler.downTime = downTime
     }
 }

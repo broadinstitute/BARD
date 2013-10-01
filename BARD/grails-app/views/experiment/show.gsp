@@ -73,11 +73,6 @@
         <dl class="dl-horizontal">
             <dt><g:message code="experiment.id.label" default="EID"/>:</dt>
             <dd>${instance?.id}</dd>
-            <dt>Assay Definition</dt><dd><g:link controller="assayDefinition" action="show"
-                                                 id="${instance.assay.id}">${instance.assay.name}</g:link>&nbsp;</dd>
-
-
-
             <dt><g:message code="experiment.experimentStatus.label" default="Status"/>:</dt>
             <dd>
                 <span
@@ -173,23 +168,7 @@
             <dd id="modifiedById"><g:fieldValue bean="${instance}" field="modifiedBy"/></dd>
         </dl>
 
-        <p>External references</p>
-        <ul>
-            <g:each in="${instance.externalReferences}" var="xRef">
-                <li>
-                    <a href="${xRef.externalSystem.systemUrl}${xRef.extAssayRef}"
-                       target="_blank">${xRef.externalSystem.systemName} ${xRef.extAssayRef}</a>
-                </li>
-            </g:each>
-        </ul>
-
-        <p>Referenced by projects:</p>
-        <ul>
-            <g:each in="${instance.projectExperiments}" var="projectExperiment">
-                <li><g:link controller="project" action="show"
-                            id="${projectExperiment.project.id}">${projectExperiment.project.name}</g:link></li>
-            </g:each>
-        </ul>
+        <g:render template="experimentReferences" model="[experiment: instance, excludedLinks:['experiment.show']]"  />
 
         <g:link controller="results" action="configureTemplate"
                 params="${[experimentId: instance.id]}"

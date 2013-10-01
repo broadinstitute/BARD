@@ -27,7 +27,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.servlet.ModelAndView
 import querycart.CartAssay
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -157,7 +156,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         then:
         this.experimentDataFactoryService.createTableModel(_, _, _, _) >> { tableModel }
         assert response.status == 200
-        assert response.text.contains("Title: experimentName")
+        assert response.text.contains("Experiment: experimentName")
     }
 
     void "test showExperiment #label"() {
