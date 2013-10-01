@@ -6,6 +6,16 @@
     <meta name="layout" content="basic"/>
     <r:external file="css/bootstrap-plus.css"/>
     <title>Create Experiment</title>
+    <g:javascript>
+        function updateExperiment(expId){
+            var formId = '#' + expId;
+            var cancelId = "#cancel" + expId;
+            $(formId).submit(function (event){
+                $('input[type=submit]').attr('disabled','disabled');
+                $(cancelId).attr('disabled','disabled');
+            });
+        }
+    </g:javascript>
 </head>
 
 <body>
@@ -32,10 +42,10 @@
     </div>
 </div>
 
-<g:form action="update" id="${experiment.id}">
+<g:form action="update" name="${experiment.id}" id="${experiment.id}">
     <p>
-        <g:link action="show" id="${experiment?.id}" class="btn">Cancel</g:link>
-        <input type="submit" class="btn btn-primary" value="Update"/>
+        <g:link action="show" id="${experiment?.id}" elementId="cancel${experiment?.id}" class="btn">Cancel</g:link>
+        <input type="submit" class="btn btn-primary" value="Update" onclick="updateExperiment(${experiment.id});"/>
     </p>
 
     <g:render template="editFields" model="${[experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree, experiment: experiment, assay: experiment.assay]}"/>

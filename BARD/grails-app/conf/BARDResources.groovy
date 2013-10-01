@@ -38,8 +38,12 @@ modules = {
         resource url: "css/font-awesome/css/font-awesome.css"
         resource url: "css/social-buttons.css"
     }
+    dateTimePicker{
+        resource url:'/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'
+        resource url:'/js/bootstrap-datetimepicker/css/datetimepicker.css'
+    }
     downtime {
-        dependsOn 'grailsEvents'
+        dependsOn 'grailsEvents' //from the grails event push plugin
         resource url: '/js/cap/downtime.js'
 
     }
