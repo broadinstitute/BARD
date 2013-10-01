@@ -5,14 +5,12 @@ import bard.db.enums.ContextType
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
-import bard.db.experiment.PubchemImportService
-import bard.db.experiment.ResultsService
-import bard.db.experiment.results.ImportSummary
+import bard.db.experiment.AsyncResultsService
+import bard.db.experiment.results.JobStatus
 import bard.db.model.AbstractContextOwner
 import bard.db.registration.Assay
 import bard.db.registration.AssayDefinitionService
 import bard.db.registration.EditingHelper
-import bard.db.registration.ExternalReference
 import bard.db.registration.MeasureTreeService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
@@ -33,10 +31,9 @@ class ExperimentController {
     AssayDefinitionService assayDefinitionService
     MeasureTreeService measureTreeService
     SpringSecurityService springSecurityService
-    PubchemImportService pubchemImportService
     def permissionEvaluator
     CapPermissionService capPermissionService
-
+    AsyncResultsService asyncResultsService
 
     def myExperiments() {
         List<Experiment> experiments = capPermissionService.findAllObjectsForRoles(Experiment)
@@ -301,13 +298,13 @@ class ExperimentController {
     }
 
     def reloadResults(Long id) {
-        def experiment = Experiment.get(id)
-        ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
-        def aid = Integer.parseInt(xref.extAssayRef.replace("aid=",""))
+        String jobKey = asyncResultsService.doReloadResultsAsync(id)
+        redirect(action: "viewLoadStatus", params:[jobKey: jobKey, experimentId: id])
+    }
 
-        ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid)
-
-        return [experiment: experiment, results: results]
+    def viewLoadStatus(String jobKey, String experimentId) {
+        JobStatus status = asyncResultsService.getStatus(jobKey)
+        [experimentId: experimentId, status: status]
     }
 
     private Map renderEditFieldsForView(String viewName, Experiment experiment, Assay assay) {

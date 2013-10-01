@@ -57,6 +57,7 @@ class ResultsService {
         boolean validateSubstances = true;
         boolean writeResultsToDb = true;
         boolean skipExperimentContexts = false;
+        Closure statusCallback = { msg -> return }
     }
 
     static boolean isNumber(value) {
@@ -670,8 +671,9 @@ class ResultsService {
     static class ParseTimer {
         long prevUpdate;
         int count;
+        Closure statusCallback = statusCallback
 
-        public ParseTimer() {
+        public ParseTimer(Closure statusCallback) {
             prevUpdate = System.currentTimeMillis()
             int count = 0;
         }
@@ -685,7 +687,7 @@ class ResultsService {
                 count = newCount
                 prevUpdate = now;
 
-                log.info("Parsing lines per second: ${speed} (Current line: ${newCount})")
+                statusCallback("Parsing lines per second: ${speed} (Current line: ${newCount})")
             }
         }
     }
@@ -704,7 +706,7 @@ class ResultsService {
             ResultPersister persister = new ResultPersister(errors, options, experiment, originalFilename, exportFilename, contexts)
             persister.start()
 
-            ParseTimer timer = new ParseTimer();
+            ParseTimer timer = new ParseTimer(options.statusCallback);
 
             while(true) {
                 List<Row> rows = parser.readNextSampleRows();
