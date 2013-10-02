@@ -76,16 +76,15 @@ class DocumentController {
      * @param id
      * @return
      */
-//    @Deprecated
-//    def edit(String type, Long id) {
-//        DocumentCommand dc = new DocumentCommand()
-//        Class domainClass = nameToDomain[type]
-//        if (domainClass == null) {
-//            throw new RuntimeException("Not a valid value ${domainClass}")
-//        }
-//        dc.populateWithExistingDocument(domainClass, id)
-//        [document: dc]
-//    }
+    def edit(String type, Long id) {
+        DocumentCommand dc = new DocumentCommand()
+        Class domainClass = nameToDomain[type]
+        if (domainClass == null) {
+            throw new RuntimeException("Not a valid value ${domainClass}")
+        }
+        dc.populateWithExistingDocument(domainClass, id)
+        [document: dc]
+    }
 
     def editDocument(InlineEditableCommand inlineEditableCommand) {
         if (!inlineEditableCommand.validate()) {
@@ -156,16 +155,16 @@ class DocumentController {
         }
 
     }
-    //No longer used
-    // @Deprecated
-//    def update(DocumentCommand documentCommand) {
-//        Object document = documentCommand.updateExistingDocument()
-//        if (document) {
-//            redirectToOwner(document)
-//        } else {
-//            render(view: "edit", model: [document: documentCommand])
-//        }
-//    }
+
+    def update(DocumentCommand documentCommand) {
+        documentCommand.documentType = DocumentType.byId(params.documentType)
+        Object document = documentCommand.updateExistingDocument()
+        if (document) {
+            redirectToOwner(document)
+        } else {
+            render(view: "edit", model: [document: documentCommand])
+        }
+    }
 
     def delete(String type, Long id) {
         Class domainClass = nameToDomain[type]
