@@ -12,6 +12,8 @@ import grails.plugins.springsecurity.Secured
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
 import org.springframework.security.access.AccessDeniedException
+import org.springframework.validation.Errors
+import org.springframework.validation.ObjectError
 
 import javax.servlet.http.HttpServletResponse
 
@@ -207,13 +209,15 @@ class DocumentController {
 class DocumentHelper {
 
 
+    private static final String DOCUMENT_INTERNAL_SERVER_ERROR = "An internal server error occurred while you were editing this page. Please refresh your browser and try again. If you still encounter issues please report it to the BARD team (bard-users@broadinstitute.org)"
+
     def renderDocument(DocumentCommand documentCommand) {
         try {
             def document = documentCommand.updateExistingDocument()
             if (documentCommand.hasErrors()) {
-                StringBuilder b = new StringBuilder()
-                b.append(g.message(code: 'default.optimistic.locking.failure'))
-                return [status: HttpServletResponse.SC_CONFLICT, text: "${b.toString()}", contentType: 'text/plain', template: null]
+                final Errors errors = documentCommand.errors
+                final String message = errors.allErrors.collect{ObjectError objectError -> g.message(code: objectError.code)}.join('\n')
+                return [status: HttpServletResponse.SC_BAD_REQUEST, text: message, contentType: 'text/plain', template: null]
             } else {
                 response.setHeader('version', document.version.toString())
                 response.setHeader('entityId', document.id.toString())
@@ -225,7 +229,7 @@ class DocumentHelper {
             }
         } catch (Exception ee) {
             log.error(ee)
-            return [status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "An internal server error occurred while you were editing this page. Please refresh your browser and try again. If you still encounter issues please report it to the BARD team (bard-users@broadinstitute.org)", contentType: 'text/plain', template: null]
+            return [status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: DOCUMENT_INTERNAL_SERVER_ERROR, contentType: 'text/plain', template: null]
         }
     }
     /**
