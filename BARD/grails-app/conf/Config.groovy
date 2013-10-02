@@ -161,7 +161,8 @@ grails {
             authority.className = 'Role'
             authority.nameField = 'authority'
             controllerAnnotations.staticRules = [
-                    '/console/**': ['ROLE_CONSOLE_USER']
+                    '/console/**': ['ROLE_CONSOLE_USER'],
+                    '/jesque/**': ['ROLE_ADMINISTRATOR']
             ]
             ipRestrictions = [
                     '/console/**': '127.0.0.1'

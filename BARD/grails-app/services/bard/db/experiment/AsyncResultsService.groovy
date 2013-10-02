@@ -20,7 +20,6 @@ import bard.ReloadResultsJob
 class AsyncResultsService {
     // TODO Add security on urls for jesque-web plugin
     // TODO Add total # of lines
-    // TODO Add My Jobs page
     // Set up to run workers on bigbard
 
     RedisService redisService
