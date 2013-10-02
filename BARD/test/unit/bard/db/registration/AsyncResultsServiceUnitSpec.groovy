@@ -5,6 +5,7 @@ import bard.db.experiment.AsyncResultsService
 import bard.db.experiment.results.JobStatus
 import grails.plugin.jesque.JesqueService
 import grails.plugin.redis.RedisService
+import grails.plugins.springsecurity.SpringSecurityService
 import redis.clients.jedis.Jedis
 import spock.lang.Specification
 
@@ -31,17 +32,21 @@ class AsyncResultsServiceUnitSpec extends Specification {
             }
         }
         JesqueService jesqueService= Mock(JesqueService)
+        SpringSecurityService springSecurityService = Mock (SpringSecurityService)
 
+        service.springSecurityService = springSecurityService
         service.jesqueService = jesqueService
         service.redisService = redisService
 
         when:
-        String key = service.doReloadResultsAsync(1L)
+        String key = service.doReloadResultsAsync(1L, "KEY", "url")
 
         then:
         key == "KEY"
-        1 * jedis.setex("job:KEY", _, INITIAL_STATUS)
-        1 * jesqueService.enqueue("backgroundQueue", ReloadResultsJob.simpleName, ["KEY", 1]);
+        1 * jedis.setex("result-job:KEY", _, INITIAL_STATUS)
+        1 * jedis.hset("user-jobs:username", "result-job:KEY", "url")
+        1 * jesqueService.enqueue("backgroundQueue", ReloadResultsJob.simpleName, ["username", "KEY", 1]);
+        1 * springSecurityService.getPrincipal() >> [username: "username"]
     }
 
     def "test getStatus"() {
@@ -58,7 +63,7 @@ class AsyncResultsServiceUnitSpec extends Specification {
         JobStatus status = service.getStatus("KEY")
 
         then:
-        1 * jedis.get("job:KEY") >> INITIAL_STATUS
+        1 * jedis.get("result-job:KEY") >> INITIAL_STATUS
         status.status == "Started..."
     }
 }
