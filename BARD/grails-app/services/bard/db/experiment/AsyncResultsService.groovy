@@ -17,10 +17,13 @@ import bard.ReloadResultsJob
  * To change this template use File | Settings | File Templates.
  */
 class AsyncResultsService {
-    // TODO Ensure that authentication is cleared on worker thread when job is done
+    // TODO Ensure that authentication is cleared on worker thread when job is done:  Ask Dan.  He knows.
     // TODO Add exception handling to worker
     // TODO Add security on urls for jesque-web plugin
     // TODO figure out configuration issues
+    // TODO Add total # of lines
+    // TODO Add My Jobs page
+    // Set up to run workers on bigbard
 
     RedisService redisService
     JesqueService jesqueService
