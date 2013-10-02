@@ -16,11 +16,8 @@ class RowParser {
 
     List<ExperimentContext> contexts = []
 
-    int linesParsed;
-
     List<String> columns;
     ImportSummary summary;
-    List<List<String>> topLines;
 
     Set<Long> sampleIds = new java.util.HashSet()
     Long currentSampleId = null;
@@ -39,7 +36,6 @@ class RowParser {
             } catch (Exception ex) {
                 errors.addError(lineNumber, i, "Could not parse \"${values[i]}\"")
                 hadFailure = true
-//                ex.printStackTrace()
             }
         }
 

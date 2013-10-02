@@ -714,7 +714,8 @@ class ResultsService {
                 timer.updateCount(errors.linesParsed)
 
                 // populate the top few lines in the summary.
-                errors.topLines = parser.topLines
+                errors.topLines = parser.reader.topLines
+                errors.substanceCount = parser.sampleIds.size()
 
                 if(rows == null) {
                     break;
@@ -744,14 +745,6 @@ class ResultsService {
             } else {
                 persister.abort()
             }
-
-//            def missingSids = []
-//            if (options.validateSubstances)
-//                missingSids = pugService.validateSubstanceIds(parsed.rows.collect { it.sid })
-//
-//            missingSids.each {
-//                errors.addError(0, 0, "Could not find substance with id ${it}")
-//            }
         }
 
 
@@ -842,8 +835,6 @@ class ResultsService {
                     count = 0
                 }
                 summary.resultsPerLabel.put(label, count + 1)
-
-                summary.substanceIds.add(it.substanceId)
 
                 if (it.resultHierarchiesForParentResult.size() > 0 || it.resultHierarchiesForResult.size() > 0)
                     summary.resultsWithRelationships++;
