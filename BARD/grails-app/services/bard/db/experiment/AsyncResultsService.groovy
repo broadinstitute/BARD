@@ -72,7 +72,7 @@ class AsyncResultsService {
             }
 
             if(expired.size() > 0) {
-                jedis.hdel(userKey, expired)
+                jedis.hdel(userKey, expired.toArray(new String[0]))
             }
         }
 
