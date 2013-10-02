@@ -13,14 +13,19 @@ class ReloadResultsJob {
     AsyncResultsService asyncResultsService;
 
     def perform(String username, String jobKey, Long id) {
-        SpringSecurityUtils.reauthenticate(username, null)
+        try {
+            SpringSecurityUtils.doWithAuth(username) {
+                def experiment = Experiment.get(id)
+                ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
+                def aid = Integer.parseInt(xref.extAssayRef.replace("aid=",""))
 
-        def experiment = Experiment.get(id)
-        ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
-        def aid = Integer.parseInt(xref.extAssayRef.replace("aid=",""))
+                ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid, {msg -> asyncResultsService.updateStatus(jobKey, msg)})
 
-        ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid, {msg -> asyncResultsService.updateStatus(jobKey, msg)})
-
-        asyncResultsService.updateResult(jobKey, results)
+                asyncResultsService.updateResult(jobKey, results)
+            }
+        } catch (Exception ex) {
+            log.error("Exception thrown trying to execute recreate measures username: ${username}, jobKey: ${jobKey}, id: ${id}", ex)
+            asyncResultsService.updateStatus(jobKey, "An internal error occurred")
+        }
     }
 }

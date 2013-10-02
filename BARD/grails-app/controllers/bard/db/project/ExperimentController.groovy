@@ -50,8 +50,6 @@ class ExperimentController {
         render renderEditFieldsForView("edit", experiment, experiment.assay);
     }
 
-
-
     def experimentStatus() {
         List<String> sorted = []
         final Collection<ExperimentStatus> experimentStatuses = ExperimentStatus.values()
@@ -298,7 +296,9 @@ class ExperimentController {
     }
 
     def reloadResults(Long id) {
-        String jobKey = asyncResultsService.doReloadResultsAsync(id)
+        String jobKey = asyncResultsService.createJobKey()
+        String link = createLink(action: 'viewLoadStatus', params:[experimentId: id, jobKey: jobKey])
+        asyncResultsService.doReloadResultsAsync(id, jobKey, link)
         redirect(action: "viewLoadStatus", params:[jobKey: jobKey, experimentId: id])
     }
 
