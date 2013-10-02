@@ -15,7 +15,7 @@
 
     <div id="ajaxProgress" style="color:#5bb75b">Please wait ...</div>
 
-    <div id="canvas-container" style="overflow: hidden; cursor: default ; border: 2px dotted black">
+    <div id="canvas-container" style="overflow: hidden; cursor: default ; border: 2px dotted black; width: 100%; clear: left">
         <div id="canvas"><p>Click and drag on background to pan in graph</p></div>
     </div>
 
