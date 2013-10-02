@@ -17,7 +17,6 @@ class ImportSummary implements Serializable {
         int resultsCreated = 0;
         int experimentAnnotationsCreated = 0;
         Map<String, Integer> resultsPerLabel = [:]
-        transient Set<Long> substanceIds = [] as Set
         int substanceCount;
 
         int resultsWithRelationships = 0;

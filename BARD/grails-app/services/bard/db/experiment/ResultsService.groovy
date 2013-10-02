@@ -57,6 +57,7 @@ class ResultsService {
         boolean validateSubstances = true;
         boolean writeResultsToDb = true;
         boolean skipExperimentContexts = false;
+        Closure statusCallback = { msg -> return }
     }
 
     static boolean isNumber(value) {
@@ -670,8 +671,9 @@ class ResultsService {
     static class ParseTimer {
         long prevUpdate;
         int count;
+        Closure statusCallback = statusCallback
 
-        public ParseTimer() {
+        public ParseTimer(Closure statusCallback) {
             prevUpdate = System.currentTimeMillis()
             int count = 0;
         }
@@ -685,7 +687,7 @@ class ResultsService {
                 count = newCount
                 prevUpdate = now;
 
-                log.info("Parsing lines per second: ${speed} (Current line: ${newCount})")
+                statusCallback("Parsing lines per second: ${speed} (Current line: ${newCount})")
             }
         }
     }
@@ -704,7 +706,7 @@ class ResultsService {
             ResultPersister persister = new ResultPersister(errors, options, experiment, originalFilename, exportFilename, contexts)
             persister.start()
 
-            ParseTimer timer = new ParseTimer();
+            ParseTimer timer = new ParseTimer(options.statusCallback);
 
             while(true) {
                 List<Row> rows = parser.readNextSampleRows();
@@ -712,7 +714,8 @@ class ResultsService {
                 timer.updateCount(errors.linesParsed)
 
                 // populate the top few lines in the summary.
-                errors.topLines = parser.topLines
+                errors.topLines = parser.reader.topLines
+                errors.substanceCount = parser.sampleIds.size()
 
                 if(rows == null) {
                     break;
@@ -742,14 +745,6 @@ class ResultsService {
             } else {
                 persister.abort()
             }
-
-//            def missingSids = []
-//            if (options.validateSubstances)
-//                missingSids = pugService.validateSubstanceIds(parsed.rows.collect { it.sid })
-//
-//            missingSids.each {
-//                errors.addError(0, 0, "Could not find substance with id ${it}")
-//            }
         }
 
 
@@ -840,8 +835,6 @@ class ResultsService {
                     count = 0
                 }
                 summary.resultsPerLabel.put(label, count + 1)
-
-                summary.substanceIds.add(it.substanceId)
 
                 if (it.resultHierarchiesForParentResult.size() > 0 || it.resultHierarchiesForResult.size() > 0)
                     summary.resultsWithRelationships++;

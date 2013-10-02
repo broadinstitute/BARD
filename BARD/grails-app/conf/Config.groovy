@@ -1,3 +1,4 @@
+import bard.ReloadResultsJob
 import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
@@ -136,6 +137,16 @@ bard.home.page = "http://localhost:8080/${appName}"
 bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
 
 grails {
+    jesque {
+        workers {
+            workerPool {
+                workers = 1
+                queueNames = ['backgroundQueue']
+                jobTypes = [(ReloadResultsJob.simpleName):ReloadResultsJob]
+            }
+        }
+    }
+
     plugins {
         springsecurity {
             userLookup.userDomainClassName = 'Person'
@@ -150,7 +161,8 @@ grails {
             authority.className = 'Role'
             authority.nameField = 'authority'
             controllerAnnotations.staticRules = [
-                    '/console/**': ['ROLE_CONSOLE_USER']
+                    '/console/**': ['ROLE_CONSOLE_USER'],
+                    '/jesque/**': ['ROLE_ADMINISTRATOR']
             ]
             ipRestrictions = [
                     '/console/**': '127.0.0.1'

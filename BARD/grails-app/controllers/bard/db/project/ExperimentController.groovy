@@ -5,14 +5,12 @@ import bard.db.enums.ContextType
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
-import bard.db.experiment.PubchemImportService
-import bard.db.experiment.ResultsService
-import bard.db.experiment.results.ImportSummary
+import bard.db.experiment.AsyncResultsService
+import bard.db.experiment.results.JobStatus
 import bard.db.model.AbstractContextOwner
 import bard.db.registration.Assay
 import bard.db.registration.AssayDefinitionService
 import bard.db.registration.EditingHelper
-import bard.db.registration.ExternalReference
 import bard.db.registration.MeasureTreeService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
@@ -33,10 +31,9 @@ class ExperimentController {
     AssayDefinitionService assayDefinitionService
     MeasureTreeService measureTreeService
     SpringSecurityService springSecurityService
-    PubchemImportService pubchemImportService
     def permissionEvaluator
     CapPermissionService capPermissionService
-
+    AsyncResultsService asyncResultsService
 
     def myExperiments() {
         List<Experiment> experiments = capPermissionService.findAllObjectsForRoles(Experiment)
@@ -52,8 +49,6 @@ class ExperimentController {
         def experiment = Experiment.get(params.id)
         render renderEditFieldsForView("edit", experiment, experiment.assay);
     }
-
-
 
     def experimentStatus() {
         List<String> sorted = []
@@ -301,13 +296,15 @@ class ExperimentController {
     }
 
     def reloadResults(Long id) {
-        def experiment = Experiment.get(id)
-        ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
-        def aid = Integer.parseInt(xref.extAssayRef.replace("aid=",""))
+        String jobKey = asyncResultsService.createJobKey()
+        String link = createLink(action: 'viewLoadStatus', params:[experimentId: id, jobKey: jobKey])
+        asyncResultsService.doReloadResultsAsync(id, jobKey, link)
+        redirect(action: "viewLoadStatus", params:[jobKey: jobKey, experimentId: id])
+    }
 
-        ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid)
-
-        return [experiment: experiment, results: results]
+    def viewLoadStatus(String jobKey, String experimentId) {
+        JobStatus status = asyncResultsService.getStatus(jobKey)
+        [experimentId: experimentId, status: status]
     }
 
     private Map renderEditFieldsForView(String viewName, Experiment experiment, Assay assay) {
@@ -348,7 +345,5 @@ class ExperimentController {
         experiment.runDateFrom = params.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateFrom) : null
         experiment.runDateTo = params.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateTo) : null
     }
-
-
 }
 
