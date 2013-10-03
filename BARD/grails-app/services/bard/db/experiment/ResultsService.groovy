@@ -7,7 +7,6 @@ import bard.db.registration.AssayContextItem
 import bard.db.registration.AssayContextMeasure
 import bard.db.registration.AttributeType
 import bard.db.registration.ItemService
-import bard.db.registration.Measure
 import bard.db.registration.PugService
 import bard.hibernate.AuthenticatedUserRequired
 import grails.plugins.springsecurity.SpringSecurityService
@@ -198,7 +197,7 @@ class ResultsService {
         def measureItems = assayItems.findAll { it.assayContext.assayContextMeasures.size() > 0 }
         assayItems.removeAll(measureItems)
 
-        return [itemService.getLogicalItems(assayItems), experiment.experimentMeasures.collect { it.measure } as List, itemService.getLogicalItems(measureItems)]
+        return [itemService.getLogicalItems(assayItems), experiment.experimentMeasures as List, itemService.getLogicalItems(measureItems)]
     }
 
     Template generateMaxSchema(Experiment experiment) {
@@ -209,7 +208,7 @@ class ResultsService {
     /**
      * Construct list of columns that a result upload could possibly contain
      */
-    Template generateSchema(Experiment experiment, List<ItemService.Item> constantItems, List<Measure> measures, List<ItemService.Item> measureItems) {
+    Template generateSchema(Experiment experiment, List<ItemService.Item> constantItems, List<ExperimentMeasure> measures, List<ItemService.Item> measureItems) {
         Set<String> constants = [] as Set
         Set<String> columns = [] as Set
 
@@ -221,7 +220,7 @@ class ResultsService {
 
         // add all of the measurements
         for (measure in measures) {
-            String name = measure.displayLabel
+            String name = measure.measure.displayLabel
             columns.add(name)
         }
 
@@ -382,7 +381,7 @@ class ResultsService {
         return columns
     }
 
-    Collection<Result> createResults(List<Row> rows, Collection<ExperimentMeasure> experimentMeasures, ImportSummary errors, Map<Measure, Collection<ItemService.Item>> itemsByMeasure) {
+    Collection<Result> createResults(List<Row> rows, Collection<ExperimentMeasure> experimentMeasures, ImportSummary errors, Map<ExperimentMeasure, Collection<ItemService.Item>> itemsByMeasure) {
         validateParentRowsExist(rows, errors);
         if (errors.hasErrors())
             return []
@@ -429,7 +428,7 @@ class ResultsService {
         }
     }
 
-    Collection<Result> extractResultFromEachRow(ExperimentMeasure measure, Collection<Row> rows, Map<Integer, Collection<Row>> byParent, IdentityHashMap<RawCell, Row> unused, ImportSummary errors, Map<Measure, ItemService.Item> itemsByMeasure) {
+    Collection<Result> extractResultFromEachRow(ExperimentMeasure measure, Collection<Row> rows, Map<Integer, Collection<Row>> byParent, IdentityHashMap<RawCell, Row> unused, ImportSummary errors, Map<ExperimentMeasure, ItemService.Item> itemsByMeasure) {
         List<Result> results = []
 
         String label = measure.measure.displayLabel
@@ -443,7 +442,7 @@ class ResultsService {
                 unused.remove(cell)
                 String cellValue = cell.value
 
-                Result result = createResult(row.replicate, measure.measure, cellValue, row.sid, errors)
+                Result result = createResult(row.replicate, measure, cellValue, row.sid, errors)
                 if (result == null)
                     continue;
 
@@ -466,7 +465,7 @@ class ResultsService {
 
                 // likewise create each of the context items associated with this measure
                 results.add(result);
-                for (item in itemsByMeasure[measure.measure]) {
+                for (item in itemsByMeasure[measure]) {
                     RawCell itemCell = row.find(item.displayLabel)
                     if (itemCell != null) {
                         unused.remove(itemCell)
@@ -551,12 +550,12 @@ class ResultsService {
         return item
     }
 
-    Result createResult(Integer replicate, Measure measure, String valueString, Long substanceId, ImportSummary errors) {
+    Result createResult(Integer replicate, ExperimentMeasure measure, String valueString, Long substanceId, ImportSummary errors) {
         def parsed = parseAnything(valueString)
 
         if (parsed instanceof Cell) {
             Cell cell = parsed
-            Element unit = measure.resultType.unit;
+            Element unit = measure.measure.resultType.unit;
 
             Result result = new Result()
             result.qualifier = cell.qualifier
@@ -564,8 +563,8 @@ class ResultsService {
             result.valueNum = cell.value
             result.valueMin = cell.minValue
             result.valueMax = cell.maxValue
-            result.statsModifier = measure.statsModifier
-            result.resultType = measure.resultType
+            result.statsModifier = measure.measure.statsModifier
+            result.resultType = measure.measure.resultType
             result.replicateNumber = replicate
             result.substanceId = substanceId
             result.dateCreated = new Date()
@@ -657,9 +656,9 @@ class ResultsService {
         return summary;
     }
 
-    Map<Measure, Collection<ItemService.Item>> constructItemsByMeasure(Experiment experiment) {
-        Map<Measure, Collection<ItemService.Item>> itemsByMeasure = experiment.experimentMeasures.collectEntries { ExperimentMeasure em ->
-            [em.measure,
+    Map<ExperimentMeasure, Collection<ItemService.Item>> constructItemsByMeasure(Experiment experiment) {
+        Map<ExperimentMeasure, Collection<ItemService.Item>> itemsByMeasure = experiment.experimentMeasures.collectEntries { ExperimentMeasure em ->
+            [em,
                     em.measure.assayContextMeasures.collectMany { AssayContextMeasure acm ->
                         itemService.getLogicalItems(acm.assayContext.contextItems)
                     }]
@@ -696,7 +695,7 @@ class ResultsService {
         ImportSummary errors = new ImportSummary()
 
         Template template = generateMaxSchema(experiment)
-        Map<Measure, Collection<ItemService.Item>> itemsByMeasure = constructItemsByMeasure(experiment)
+        Map<ExperimentMeasure, Collection<ItemService.Item>> itemsByMeasure = constructItemsByMeasure(experiment)
 
         RowParser parser = initialParse(new InputStreamReader(input), errors, template, options.skipExperimentContexts)
 
