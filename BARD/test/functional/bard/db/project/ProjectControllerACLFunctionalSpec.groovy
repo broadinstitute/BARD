@@ -6,10 +6,11 @@ import bard.db.enums.ContextType
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
+import bard.db.people.Role
 import bard.db.registration.BardControllerFunctionalSpec
 import groovy.sql.Sql
-import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 import wslite.json.JSONObject
@@ -53,13 +54,22 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         projectData = (Map) remote.exec({
             //Build assay as TEAM_A
+
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
-            Project project = Project.build(name: "Some Name2").save(flush: true)
+            Role role = Role.findByAuthority('ROLE_TEAM_A')
+            if (!role) {
+                role = Role.build(authority: 'ROLE_TEAM_A', displayName: 'ROLE_TEAM_A').save(flush: true)
+            }
+            Role otherRole = Role.findByAuthority('ROLE_TEAM_B')
+            if (!otherRole) {
+                otherRole = Role.build(authority: 'ROLE_TEAM_B', displayName: 'ROLE_TEAM_B').save(flush: true)
+            }
+            Project project = Project.build(name: "Some Name2", ownerRole: role).save(flush: true)
             Element element = Element.findByLabel('ProjectControllerACLFunctionalSpec') ?: Element.build(label: 'ProjectControllerACLFunctionalSpec')
             StageTree.build(element: element).save(flush: true)
 
             //create assay context
-            return [id: project.id, name: project.name]
+            return [id: project.id, name: project.name, roleId: role.id, otherRoleId: otherRole.id]
         })
         projectIdList.add(projectData.id)
 
@@ -96,6 +106,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         }
     }
 
+
     def 'test create #desc'() {
         given:
         RESTClient client = getRestClient(controllerUrl, "create", team, teamPassword)
@@ -105,14 +116,55 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         then:
         assert response.statusCode == expectedHttpResponse
         where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
+        desc      | team             | teamPassword     | expectedHttpResponse
+        "ADMIN"   | ADMIN_USERNAME   | ADMIN_PASSWORD   | HttpServletResponse.SC_OK
+        "CURATOR" | CURATOR_USERNAME | CURATOR_PASSWORD | HttpServletResponse.SC_OK
     }
 
+
+    def 'test edit owner admin #desc'() {
+        Long pk = projectData.id
+        String newRole = "ROLE_TEAM_B"
+        Long version = getCurrentProjectProperties().version
+        RESTClient client = getRestClient(controllerUrl, "editOwnerRole", team, teamPassword)
+        when:
+        Response response = client.post() {
+            urlenc pk: pk, version: version, value: newRole
+        }
+        then:
+        assert response.statusCode == expectedHttpResponse
+        JSONObject jsonObject = response.json
+        assert jsonObject.get("modifiedBy")
+        assert jsonObject.get("data") == newRole
+        assert jsonObject.get("lastUpdated")
+        assert jsonObject.get("version") != null
+
+        where:
+        desc    | team           | teamPassword   | expectedHttpResponse
+        "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_OK
+    }
+
+
+
+    def 'test edit owner role, selected role not in users role list #desc'() {
+        given:
+        Long pk = projectData.id
+        String newRole = "ROLE_TEAM_B"
+        Long version = getCurrentProjectProperties().version
+        RESTClient client = getRestClient(controllerUrl, "editOwnerRole", team, teamPassword)
+        when:
+        client.post() {
+            urlenc pk: pk, version: version, value: newRole
+        }
+        then:
+        def ex = thrown(RESTClientException)
+        assert ex.response.statusCode == expectedHttpResponse
+
+        where:
+        desc      | team              | teamPassword      | expectedHttpResponse
+        "User B"  | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_BAD_REQUEST
+        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_BAD_REQUEST
+    }
 
     def 'test save #desc'() {
         given:
@@ -123,8 +175,10 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         String groupType = ProjectGroupType.PROJECT.id
         RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
         when:
+
+
         Response response = client.post() {
-            urlenc name: name, description: description, projectStatus: status, projectGroupType: groupType
+            urlenc name: name, description: description, projectStatus: status, projectGroupType: groupType, ownerRole: projectData.roleId
         }
         then:
         assert response.statusCode == expectedHttpResponse
@@ -132,10 +186,33 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         where:
         desc       | team              | teamPassword      | expectedHttpResponse
         "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FOUND
         "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
         "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
+    }
+
+
+    def 'test save, selected role not in users role list #desc'() {
+        given:
+
+        String name = "My Project Name_" + team
+        String description = "Some Description"
+        String status = ProjectStatus.DRAFT.id
+        String groupType = ProjectGroupType.PROJECT.id
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
+        when:
+
+
+        client.post() {
+            urlenc name: name, description: description, projectStatus: status, projectGroupType: groupType, ownerRole: projectData.roleId
+        }
+        then:
+        def ex = thrown(RESTClientException)
+        assert ex.response.statusCode == expectedHttpResponse
+
+        where:
+        desc      | team              | teamPassword      | expectedHttpResponse
+        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_NOT_FOUND
+        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_NOT_FOUND
     }
 
     def 'test edit Project Status #desc'() {
@@ -379,53 +456,6 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK | false
     }
 
-    def 'test findByName #desc'() {
-        given:
-        Map currentDataMap = getCurrentProjectProperties()
-        RESTClient client = getRestClient(controllerUrl, "findByName", team, teamPassword)
-        String name = currentDataMap.name
-        when:
-
-        final Response response = client.post() {
-            urlenc projectName: "${name}"
-        }
-
-        then:
-        //Response depends on the number of projects with that name.
-        // Earlier tests might have used the same name.
-        // So to make the test not fail in a non-deterministic manner we check for both a redirect and an OK
-        assert response.statusCode == HttpServletResponse.SC_OK || response.statusCode == HttpServletResponse.SC_FOUND
-
-        where:
-        desc       | team              | teamPassword
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD
-    }
-
-
-    def 'test findById #desc'() {
-        given:
-
-        RESTClient client = getRestClient(controllerUrl, "findById/${projectData.id}", team, teamPassword)
-
-        when:
-        final Response response = client.get()
-
-        then:
-        assert response.statusCode == expectedHttpResponse
-        assert response.text.contains(team)
-
-        where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
-    }
 
     def 'test reload project steps #desc'() {
         given:

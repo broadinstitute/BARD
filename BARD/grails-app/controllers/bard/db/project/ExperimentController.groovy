@@ -8,6 +8,7 @@ import bard.db.experiment.ExperimentService
 import bard.db.experiment.PubchemImportService
 import bard.db.experiment.ResultsService
 import bard.db.model.AbstractContextOwner
+import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.AssayDefinitionService
 import bard.db.registration.EditingHelper
@@ -225,7 +226,26 @@ class ExperimentController {
         }
     }
 
-
+//    def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
+//        try {
+//            final Role ownerRole = Role.findById(inlineEditableCommand.value)
+//            final Experiment experiment = Experiment.findById(inlineEditableCommand.pk)
+//            final String message = inlineEditableCommand.validateVersions(experiment.version, Experiment.class)
+//            if (message) {
+//                conflictMessage(message)
+//                return
+//            }
+//            experiment = experimentService.updateOwnerRole(inlineEditableCommand.pk, ownerRole)
+//            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.experimentStatus.id)
+//
+//        } catch (AccessDeniedException ade) {
+//            log.error(ade)
+//            render accessDeniedErrorMessage()
+//        } catch (Exception ee) {
+//            log.error(ee)
+//            editErrorMessage()
+//        }
+//    }
 
     def editExperimentStatus(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -270,7 +290,9 @@ class ExperimentController {
         Experiment experiment = new Experiment()
         experiment.assay = assay
         setEditFormParams(experiment)
+        experiment.ownerRole=assay.ownerRole
         experiment.dateCreated = new Date()
+
         if (!validateExperiment(experiment)) {
             render renderEditFieldsForView("create", experiment, assay);
          } else {

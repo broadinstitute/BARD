@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.people.Role
 import org.springframework.security.access.prepost.PreAuthorize
 
 /**
@@ -10,7 +11,14 @@ import org.springframework.security.access.prepost.PreAuthorize
  * To change this template use File | Settings | File Templates.
  */
 class PanelService {
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Panel', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Panel updatePanelOwnerRole(Long id, Role ownerRole){
+        Panel panel = Panel.findById(id)
+        panel.ownerRole = ownerRole
 
+        panel.save(flush: true)
+        return Panel.findById(id)
+    }
     /**
      *
      * @param name

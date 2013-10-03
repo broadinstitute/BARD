@@ -199,7 +199,7 @@ class DocumentController {
             Experiment experiment = document.getOwner()
             redirect(controller: "experiment", action: "show", id: experiment.id, fragment: "document-${document.id}")
         } else {
-            throw new RuntimeException("document owner ${document.getOwner} is neither an assay, project or experiment")
+            throw new RuntimeException("document owner ${document.getOwner()} is neither an assay, project or experiment")
         }
     }
 }

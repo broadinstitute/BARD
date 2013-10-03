@@ -51,8 +51,8 @@ class CapPermissionsServiceUnitSpec extends Specification {
         given:
         String username = "user"
         Permission permission = Mock(Permission)
-        Role role = Role.build(authority: "ROLE_Y", displayName: "ROLE Y")
-        Assay assay = new Assay()
+        Role role = Role.build(authority: "ROLE_TEAM_Y", displayName: "ROLE Y")
+        Assay assay = new Assay(ownerRole: role)
         service.springSecurityService = Mock(SpringSecurityService)
         use(MockedCapPermissionCategory) {
             service.addPermission(assay, role, permission)
@@ -60,7 +60,7 @@ class CapPermissionsServiceUnitSpec extends Specification {
         when:
         service.addPermission(assay)
         then:
-        1 * service.springSecurityService.getPrincipal() >> {new BardUser(username: username, owningRole:role)}
+        0 * service.springSecurityService.getPrincipal() >> {new BardUser(username: username, owningRole:role)}
 
         assert assay
 

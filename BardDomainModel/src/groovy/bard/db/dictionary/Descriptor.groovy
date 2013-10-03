@@ -39,7 +39,7 @@ abstract class Descriptor<T extends Descriptor> {
 
         parent(nullable: true)
         element()
-        elementStatus(nullable: false, maxSize: ELEMENT_STATUS_MAX_SIZE)
+        elementStatus(nullable: false)
 
         label(nullable: false, unique: true, maxSize: LABEL_MAX_SIZE)
         leaf()

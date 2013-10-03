@@ -1,18 +1,13 @@
 package bard.db.project
 
-import bard.db.enums.AssayStatus
-import bard.db.enums.AssayType
 import bard.db.enums.ProjectStatus
-import bard.db.enums.ReadyForExtraction
-import bard.db.experiment.Experiment
-import bard.db.experiment.ExperimentMeasure
-import bard.db.registration.*
+import bard.db.people.Role
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
-import registration.AssayService
+import org.junit.Before
 import spock.lang.Specification
 
 /**
@@ -22,12 +17,16 @@ import spock.lang.Specification
  * Time: 2:07 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Project])
-@Mock([Project])
+@Build([Project,Role])
+@Mock([Project,Role])
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(ProjectService)
 public class ProjectServiceUnitSpec extends Specification {
 
+    @Before
+    void setup() {
+        Project.metaClass.isDirty = { return false }
+    }
     void "test update project name"(){
         given:
         final Project project = Project.build(name: 'projectName10', description: "desc789")
@@ -36,6 +35,15 @@ public class ProjectServiceUnitSpec extends Specification {
         final Project updatedProject = service.updateProjectName(project.id, newName)
         then:
         assert newName == updatedProject.name
+    }
+    void "test update owner role"(){
+        given:
+        final Project project = Project.build(name: 'projectName10', description: "desc789", ownerRole: Role.build(authority:  "ROLE_TEAM_YY"))
+        Role newRole = Role.build(authority: "ROLE_TEAM_ZY")
+        when:
+        final Project updatedProject = service.updateOwnerRole(project.id, newRole)
+        then:
+        assert newRole == updatedProject.ownerRole
     }
     void "test update project description"(){
         given:

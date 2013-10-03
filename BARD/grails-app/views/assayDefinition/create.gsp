@@ -1,4 +1,4 @@
-<%@ page import="bard.db.enums.AssayType; bard.db.registration.*" %>
+<%@ page import="bard.db.command.BardCommand; bard.db.people.Role; bard.db.enums.AssayType; bard.db.registration.*" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
@@ -34,7 +34,23 @@
 
                 </div>
             </div>
+            <div class="control-group ${hasErrors(bean: assayCommand, field: 'ownerRole', 'error')}">
+                <label class="control-label" for="ownerRole">* <g:message code="entity.ownerRole.label"/>:</label>
 
+                <div class="controls">
+                    <g:if test="${bard.db.command.BardCommand.userRoles()}">
+                        <g:select name="ownerRole" id="ownerRole"  required="required"
+                                  from="${BardCommand.userRoles()}"
+                                  value="${assayCommand?.ownerRole}"
+                                  optionValue="displayName" optionKey="id"/>
+                    </g:if>
+                    <g:else>
+                        <p> You need to be part of a team to create Assays. Follow this <g:link controller="assayDefinition" action="teams">link</g:link> to the Teams Page</p>
+                    </g:else>
+
+
+                </div>
+            </div>
             <div class="control-group">
                 <div class="controls">
                     <g:link controller="assayDefinition" action="groupAssays"

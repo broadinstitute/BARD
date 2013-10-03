@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import acl.CapPermissionService
+import bard.db.people.Role
 import bard.db.project.InlineEditableCommand
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -22,14 +23,14 @@ import javax.servlet.http.HttpServletResponse
 
 
 @TestFor(PanelController)
-@Build([Assay, Panel, PanelAssay])
-@Mock([Assay, Panel, PanelAssay])
+@Build([Assay, Panel, PanelAssay, Role])
+@Mock([Assay, Panel, PanelAssay, Role])
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
 class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
 
     Panel panel
-
+    Role role
 
 
     @Before
@@ -37,6 +38,7 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
             return true
         }
+        this.role = Role.build(authority: "ROLE_TEAM_A")
         controller.metaClass.mixin(EditingHelper)
 
         CapPermissionService capPermissionService = Mock(CapPermissionService)
@@ -49,8 +51,12 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     }
 
     void 'test save success'() {
+        final Role role = Role.build()
         given:
-        PanelCommand panelCommand = new PanelCommand(name: "Some Name", springSecurityService: controller.springSecurityService)
+        PanelCommand panelCommand = new PanelCommand(name: "Some Name", springSecurityService: controller.springSecurityService, ownerRole: role)
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
+            return [role]
+        }
         when:
         controller.save(panelCommand)
         then:
@@ -130,6 +136,81 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         assertEditingErrorMessage()
     }
 
+    void 'test edit Panel owner role success'() {
+        given:
+        Role roleB = Role.build(authority: "ROLE_TEAM_B", displayName: "displayName");
+
+        Panel newPanel = Panel.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
+        Panel updatedPanel = Panel.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: roleB)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newPanel.id,
+                version: newPanel.version, name: newPanel.name, value: updatedPanel.ownerRole.displayName)
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
+            return [this.role,roleB]
+        }
+        when:
+        controller.editOwnerRole(inlineEditableCommand)
+        then:
+        controller.panelService.updatePanelOwnerRole(_, _) >> { return updatedPanel }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedPanel.ownerRole.displayName
+        assert responseJSON.get("lastUpdated").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+    void 'test edit Panel owner new role not in list - fail'() {
+        given:
+        Panel newPanel = Panel.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
+
+        Role notInUsersRole = Role.build(authority: "ROLE_TEAM_C", displayName: "displayName");
+        Panel updatedPanel = Panel.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: notInUsersRole)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newPanel.id,
+                version: newPanel.version, name: newPanel.name, value: updatedPanel.ownerRole.displayName)
+        when:
+        controller.editOwnerRole(inlineEditableCommand)
+        then:
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+
+    }
+    void 'test edit Panel owner role - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        Panel newPanel = Panel.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
+
+        Role roleB = Role.build(authority: "ROLE_TEAM_B", displayName: "displayName");
+        Panel updatedPanel = Panel.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: roleB)
+
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newPanel.id,
+                version: newPanel.version, name: newPanel.name, value: updatedPanel.ownerRole.displayName)
+        when:
+        controller.editPanelName(inlineEditableCommand)
+        then:
+        controller.panelService.updatePanelName(_, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
+    }
+
+    void 'test edit Panel owner role with errors'() {
+        given:
+
+        Panel newPanel = Panel.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
+
+        Role roleB = Role.build(authority: "ROLE_TEAM_B", displayName: "displayName");
+        Panel updatedPanel = Panel.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: roleB)
+
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newPanel.id,
+                version: newPanel.version, name: newPanel.name, value: updatedPanel.ownerRole.displayName)
+
+        controller.metaClass.message = { Map p -> return "foo" }
+
+        when:
+        controller.editPanelName(inlineEditableCommand)
+        then:
+        controller.panelService.updatePanelName(_, _) >> { throw new Exception("") }
+        assertEditingErrorMessage()
+    }
+
 
     void 'test edit optimistic lock failure'() {
         given:
@@ -155,24 +236,6 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         model.panelInstance == panel
     }
 
-    void 'testFindById()'() {
-
-        when:
-        params.id = "${panel.id}"
-        controller.findById()
-
-        then:
-        "/panel/show/${panel.id}" == controller.response.redirectedUrl
-    }
-
-    void 'testFindByName'() {
-        when:
-        params.name = panel.name
-        controller.findByName()
-
-        then:
-        "/panel/show/${panel.id}" == controller.response.redirectedUrl
-    }
 
     void 'test add assays'() {
         given:
@@ -217,8 +280,8 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         then:
         controller.panelService.associateAssays(_, _) >> { throw new AccessDeniedException("msg") }
         final AssociatePanelCommand associatePanelCommand = model.associatePanelCommand
-        assert associatePanelCommand.id== panel.id
-        assert associatePanelCommand.assayIds==assay.id.toString()
+        assert associatePanelCommand.id == panel.id
+        assert associatePanelCommand.assayIds == assay.id.toString()
         assert associatePanelCommand.hasErrors()
     }
 
@@ -265,8 +328,8 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         then:
         controller.panelService.associateAssay(_, _) >> { throw new AccessDeniedException("msg") }
         final AssociatePanelCommand associatePanelCommand = model.associatePanelCommand
-        assert associatePanelCommand.id== panel.id
-        assert associatePanelCommand.assayIds==assay.id.toString()
+        assert associatePanelCommand.id == panel.id
+        assert associatePanelCommand.assayIds == assay.id.toString()
         assert associatePanelCommand.hasErrors()
     }
 
@@ -359,8 +422,8 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         then:
         controller.panelService.disassociateAssay(_, _) >> { throw new AccessDeniedException("msg") }
         final AssociatePanelCommand associatePanelCommand = model.associatePanelCommand
-        assert associatePanelCommand.id== panel.id
-        assert associatePanelCommand.assayIds==assay.id.toString()
+        assert associatePanelCommand.id == panel.id
+        assert associatePanelCommand.assayIds == assay.id.toString()
         assert associatePanelCommand.hasErrors()
 
     }
@@ -417,17 +480,11 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         then:
         controller.panelService.disassociateAssays(_, _) >> { throw new AccessDeniedException("msg") }
         final AssociatePanelCommand associatePanelCommand = model.associatePanelCommand
-        assert associatePanelCommand.id== panel.id
-        assert associatePanelCommand.assayIds==assay.id.toString()
+        assert associatePanelCommand.id == panel.id
+        assert associatePanelCommand.assayIds == assay.id.toString()
         assert associatePanelCommand.hasErrors()
     }
 
-    void "test list"() {
-        when:
-        controller.list()
-        then:
-        view == "/panel/findByName"
-    }
 
     void "test index"() {
         when:

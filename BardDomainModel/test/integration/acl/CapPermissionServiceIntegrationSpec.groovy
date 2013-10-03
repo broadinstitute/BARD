@@ -43,7 +43,7 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         desc                             | username              | expectedOwner
-        'owner is integration test user' | 'integrationTestUser' | 'integrationTestUser'
+        'owner is integration test user' | 'integrationTestUser' | 'ROLE_USER'
         'owner is teamMember1'           | 'teamA_1'             | 'ROLE_TEAM_A'
         'owner is teamMember2'           | 'teamA_2'             | 'ROLE_TEAM_A'
     }

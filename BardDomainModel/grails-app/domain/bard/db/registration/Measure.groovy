@@ -44,7 +44,7 @@ class Measure {
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
-        parentChildRelationship(nullable: true,  maxSize: ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE)
+        parentChildRelationship(nullable: true)
 
     }
 

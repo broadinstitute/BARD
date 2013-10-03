@@ -8,9 +8,7 @@ import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ContextType
 import bard.db.enums.HierarchyType
-import bard.db.enums.ReadyForExtraction
 import bard.db.model.AbstractContextOwner
-import bard.db.people.Person
 import bard.db.people.Role
 import bard.db.project.InlineEditableCommand
 import bardqueryapi.IQueryService
@@ -27,7 +25,6 @@ import org.codehaus.groovy.grails.web.json.JSONArray
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.access.PermissionEvaluator
 import org.springframework.security.acls.domain.BasePermission
-import org.grails.plugins.springsecurity.service.acl.AclUtilService
 
 import javax.servlet.http.HttpServletResponse
 import java.text.DateFormat
@@ -89,6 +86,39 @@ class AssayDefinitionController {
             }
             assay = assayDefinitionService.updateAssayType(inlineEditableCommand.pk, assayType)
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayType.id)
+        }
+        catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+        }
+        catch (Exception ee) {
+            log.error(ee)
+            editErrorMessage()
+        }
+    }
+
+    def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
+        try {
+            final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value)?:Role.findByAuthority(inlineEditableCommand.value)
+            if (!ownerRole) {
+                editBadUserInputErrorMessage("Could not find a registered team with name ${inlineEditableCommand.value}")
+                return
+            }
+            Assay assay = Assay.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(assay.version, Assay.class)
+            if (message) {
+                conflictMessage(message)
+                return
+            }
+            if (!BardCommand.isRoleInUsersRoleList(ownerRole)) {
+                editBadUserInputErrorMessage("You do not have the permission to select team: ${inlineEditableCommand.value}")
+                return
+            }
+            //verify that the role is part of the users role
+
+            assay = assayDefinitionService.updateOwnerRole(inlineEditableCommand.pk, ownerRole)
+            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.ownerRole.displayName)
+
         }
         catch (AccessDeniedException ade) {
             log.error(ade)
@@ -197,6 +227,22 @@ class AssayDefinitionController {
 
     }
 
+    def roles() {
+        List<String> sorted = []
+
+        final Collection<Role> authorities = BardCommand.userRoles()
+
+
+        for (Role role : authorities) {
+            if (role.authority?.startsWith("ROLE_TEAM_")) {
+                sorted.add(role.displayName)
+            }
+        }
+        sorted.sort()
+        final JSON json = sorted as JSON
+        render text: json, contentType: 'text/json', template: null
+    }
+
     def assayTypes() {
         List<String> sorted = []
         final Collection<AssayType> assayTypes = AssayType.values()
@@ -214,7 +260,7 @@ class AssayDefinitionController {
 
     def save(AssayCommand assayCommand) {
         if (!assayCommand.validate()) {
-            render(view: "create", model: [assayCommand: assayCommand])
+            create(assayCommand)
             return
         }
         final Assay assay = assayCommand.createNewAssay()
@@ -224,23 +270,34 @@ class AssayDefinitionController {
         }
         render(view: "create", model: [assayCommand: assayCommand])
     }
-
-    def create() {
-        return [assayCommand: new AssayCommand()]
+    def create(AssayCommand assayCommand) {
+        if (!assayCommand) {
+            projectCommand: new AssayCommand()
+        }
+        [assayCommand: new AssayCommand()]
     }
+
 
     def cloneAssay(Long id) {
         Assay assay = Assay.get(id)
         try {
+            if (!BardCommand.userRoles()) {
+                throw new RuntimeException("You need to be a member of at least one team to clone any assay")
+            }
             assay = assayDefinitionService.cloneAssayForEditing(assay, springSecurityService.principal?.username)
+            //Randomly select a Role in the users role list for this assay
+
             assay = assayDefinitionService.recomputeAssayShortName(assay)
-        } catch (ValidationException ee) {
+        }
+        catch (ValidationException ee) {
             assay = Assay.get(id)
             flash.message = "Cannot clone assay definition with id \"${id}\" probably because of data migration issues. Please email the BARD team at bard-users@broadinstitute.org to fix this assay"
 
             log.error("Clone assay failed", ee);
         }
-
+        catch (Exception ee) {
+            flash.message = ee.message
+        }
         redirect(action: "show", id: assay.id)
     }
 
@@ -441,38 +498,6 @@ class AssayDefinitionController {
         redirect(action: "editMeasure", id: params.id)
     }
 
-    def findById() {
-        if (params.assayId && params.assayId.isLong()) {
-            def assayInstance = Assay.findById(params.assayId.toLong())
-            if (assayInstance?.id)
-                redirect(action: "show", id: assayInstance.id)
-            else
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.assayId])
-        }
-    }
-
-    def findByName() {
-        if (params.assayName) {
-            def assays = Assay.findAllByAssayNameIlikeOrAssayShortNameIlike("%${params.assayName}%", "%${params.assayName}%")
-            if (assays?.size() > 1) {
-                if (params.sort == null) {
-                    params.sort = "id"
-                }
-                assays.sort {
-                    a, b ->
-                        if (params.order == 'desc') {
-                            b."${params.sort}" <=> a."${params.sort}"
-                        } else {
-                            a."${params.sort}" <=> b."${params.sort}"
-                        }
-                }
-                render(view: "findByName", params: params, model: [assays: assays])
-            } else if (assays?.size() == 1)
-                redirect(action: "show", id: assays.get(0).id)
-            else
-                flash.message = message(code: 'default.not.found.property.message', args: [message(code: 'assay.label', default: 'Assay'), "name", params.assayName])
-        }
-    }
 
     def reloadCardHolder(Long assayId) {
         def assay = Assay.get(assayId)
@@ -572,10 +597,14 @@ class EditingHelper {
         render(status: HttpServletResponse.SC_BAD_REQUEST, text: message, contentType: 'text/plain', template: null)
 
     }
+    def editBadUserInputErrorMessage(String message) {
+        render(status: HttpServletResponse.SC_BAD_REQUEST, text: message, contentType: 'text/plain', template: null)
 
+    }
     def accessDeniedErrorMessage() {
         return [status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null]
     }
+
 
 }
 @InheritConstructors
@@ -586,15 +615,23 @@ class AssayCommand extends BardCommand {
     String assayVersion = "1"
     Date dateCreated = new Date()
     AssayType assayType = AssayType.REGULAR
-
+    Role ownerRole
 
     SpringSecurityService springSecurityService
 
 
-    public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['assayType', 'assayName', 'assayVersion', 'dateCreated'].asImmutable()
+    public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['ownerRole', 'assayType', 'assayName', 'assayVersion', 'dateCreated'].asImmutable()
 
     static constraints = {
-        importFrom(Assay, exclude: ['assayShortName', 'assayStatus', 'readyForExtraction', 'lastUpdated'])
+        importFrom(Assay, exclude: ['ownerRole', 'assayShortName', 'assayStatus', 'readyForExtraction', 'lastUpdated'])
+        ownerRole(nullable: false, validator: { value, command, err ->
+            /*We make it required in the command object even though it is optional in the domain.
+         We will make it required in the domain as soon as we are done back populating the data*/
+            //validate that the selected role is in the roles associated with the user
+            if (!BardCommand.isRoleInUsersRoleList(value)) {
+                err.rejectValue('ownerRole', "message.code", "You do not have the privileges to create Assays for this team : ${value.displayName}");
+            }
+        })
     }
 
     AssayCommand() {}

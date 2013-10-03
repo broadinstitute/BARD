@@ -39,9 +39,22 @@
 
             <dt><g:message code="assay.assayShortName.label" default="Fix i18n"/>:</dt>
             <dd id="shortNameId"><g:fieldValue bean="${assay}" field="assayShortName"/></dd>
+            <dt><g:message code="assay.ownerRole.label" default="Owner"/>:</dt>
+            <dd>
+                <span
+                        class="type"
+                        data-toggle="manual"
+                        data-sourceCache="false"
+                        id="ownerRoleId"
+                        data-type="select"
+                        data-value="${assay?.ownerRole?.displayName}"
+                        data-source="/BARD/assayDefinition/roles"
+                        data-pk="${assay.id}"
+                        data-url="/BARD/assayDefinition/editOwnerRole"
+                        data-original-title="Select Owner Role">${assay?.ownerRole?.displayName}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="ownerRoleId" title="Click to edit owner role"></a>
+            </dd>
 
-            <dt>Owner:</dt>
-            <dd>${assayOwner}</dd>
 
             <dt><g:message code="default.dateCreated.label"/>:</dt>
             <dd><g:formatDate date="${assay.dateCreated}" format="MM/dd/yyyy"/></dd>
@@ -60,6 +73,7 @@
                    data-original-title="Select Assay Type">${assay?.assayType?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="assayTypeId" title="Click to edit type"></a>
             </dd>
+
            <dt><g:message code="assay.assayVersion.label" default="Fix i18n"/>:</dt>
             <dd><g:fieldValue bean="${assay}" field="assayVersion"/></dd>
 

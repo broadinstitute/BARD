@@ -1,39 +1,32 @@
 package merge
 
-import spock.lang.Shared
+import bard.db.dictionary.Element
+import bard.db.enums.ExpectedValueType
+import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentContext
+import bard.db.experiment.ExperimentContextItem
+import bard.db.experiment.ExperimentMeasure
+import bard.db.registration.*
+import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
+import grails.test.mixin.TestMixin
+import grails.test.mixin.support.GrailsUnitTestMixin
+import spock.lang.Specification
+import spock.lang.Unroll
 
 import static bard.db.enums.ExpectedValueType.*
 import static bard.db.registration.AttributeType.Fixed
 import static bard.db.registration.AttributeType.Free
 
-import bard.db.enums.ExpectedValueType
-
 /**
  * Created with IntelliJ IDEA.
- * User: xiaorong
  * Date: 3/21/13
  * Time: 2:23 PM
  * To change this template use File | Settings | File Templates.
  */
-
-import bard.db.dictionary.Element
-import bard.db.experiment.Experiment
-import bard.db.experiment.ExperimentContextItem
-import bard.db.experiment.ExperimentMeasure
-import grails.buildtestdata.mixin.Build
-import grails.test.mixin.Mock
-import spock.lang.Specification
-import spock.lang.Unroll
-import bard.db.registration.Measure
-import bard.db.registration.AssayContextMeasure
-import bard.db.registration.AssayContextItem
-import bard.db.registration.AssayContext
-import bard.db.registration.Assay
-import bard.db.experiment.ExperimentContext
-import bard.db.registration.AttributeType
-
 @Build([AssayContext, AssayContextItem, AssayContextMeasure, Measure, Assay, Experiment, ExperimentMeasure, Element])
 @Mock([AssayContext, AssayContextItem, AssayContextMeasure, Measure, ExperimentMeasure, ExperimentContext, ExperimentContextItem])
+@TestMixin(GrailsUnitTestMixin)
 @Unroll
 class MergeAssayServiceUnitSpec extends Specification {
 
@@ -76,7 +69,8 @@ class MergeAssayServiceUnitSpec extends Specification {
         Experiment experimentB = Experiment.build(assay: assayB)
         Measure measureBA = Measure.build(assay: assayB, resultType: rtA)
         Measure measureBB = Measure.build(assay: assayB, resultType: rtB, statsModifier: statModifier) // having a different modifier means this is a different measurement
-
+        Assay.metaClass.isDirty =
+            { return false }
         when:
         merge(assayA, assayB)
 
@@ -106,7 +100,8 @@ class MergeAssayServiceUnitSpec extends Specification {
         Measure measureBB = Measure.build(assay: assayB, resultType: rtC)
         experimentB.addToExperimentMeasures(ExperimentMeasure.build(measure: measureBA))
         experimentB.addToExperimentMeasures(ExperimentMeasure.build(measure: measureBB))
-
+        Assay.metaClass.isDirty =
+            { return false }
         when:
         merge(assayA, assayB)
 
@@ -140,7 +135,8 @@ class MergeAssayServiceUnitSpec extends Specification {
         Element attributeElement = Element.build(label: 'text attr', expectedValueType: ExpectedValueType.FREE_TEXT)
         AssayContextItem.build(assayContext: contextB, attributeElement: attributeElement, valueDisplay: "value display")
         AssayContextMeasure link = AssayContextMeasure.build(assayContext: contextB, measure: measureBA)
-
+        Assay.metaClass.isDirty =
+            { return false }
         when:
         merge(assayA, assayB)
 
@@ -168,7 +164,8 @@ class MergeAssayServiceUnitSpec extends Specification {
         AssayContext contextB = AssayContext.build(assay: assayB)
         AssayContextItem itemB = AssayContextItem.build(assayContext: contextB, attributeType: AttributeType.Fixed, attributeElement: attribute, valueElement: valueB, valueDisplay: "value display")
         Experiment experimentB = Experiment.build(assay: assayB)
-
+        Assay.metaClass.isDirty =
+            { return false }
         when:
         merge(assayA, assayB)
 
@@ -199,7 +196,8 @@ class MergeAssayServiceUnitSpec extends Specification {
         AssayContext contextB = AssayContext.build(assay: assayB)
         AssayContextItem itemB = AssayContextItem.build(assayContext: contextB, attributeType: AttributeType.Fixed, attributeElement: attribute, valueElement: valueA, valueDisplay: "value Display")
         Experiment experimentB = Experiment.build(assay: assayB)
-
+        Assay.metaClass.isDirty =
+            { return false }
         when:
         merge(assayA, assayB)
 

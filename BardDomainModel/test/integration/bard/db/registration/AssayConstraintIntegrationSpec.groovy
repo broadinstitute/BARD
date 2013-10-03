@@ -4,6 +4,7 @@ import bard.db.BardIntegrationSpec
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
+import bard.db.people.Role
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import spock.lang.Unroll
@@ -23,7 +24,8 @@ class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
     @Before
     void doSetup() {
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
-        domainInstance = Assay.buildWithoutSave()
+        Role role = Role.build(authority:"authority")
+        domainInstance = Assay.buildWithoutSave(ownerRole:role)
     }
 
     void "test assayStatus constraints #desc assayStatus: '#valueUnderTest'"() {

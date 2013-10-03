@@ -1,10 +1,11 @@
 package bard.db.registration
 
+import bard.db.people.Role
 import groovy.sql.Sql
-import jxl.read.biff.SharedDateFormulaRecord
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import spock.lang.Shared
 import spock.lang.Unroll
+import wslite.json.JSONObject
 import wslite.rest.RESTClient
 import wslite.rest.RESTClientException
 import wslite.rest.Response
@@ -46,11 +47,19 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         panelAssayData = (Map) remote.exec({
             //Build assay as TEAM_A
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
+            Role role = Role.findByAuthority('ROLE_TEAM_A')
+            if (!role) {
+                role = Role.build(authority: 'ROLE_TEAM_A', displayName: 'ROLE_TEAM_A').save(flush: true)
+            }
+            Role otherRole = Role.findByAuthority('ROLE_TEAM_B')
+            if (!otherRole) {
+                otherRole = Role.build(authority: 'ROLE_TEAM_B', displayName: 'ROLE_TEAM_B').save(flush: true)
+            }
 
-            Assay assay = Assay.build(assayName: "Assay Name10").save(flush: true)
-            Panel panel = Panel.build(name: "Panel Name", description: "Panel Name").save(flush: true)
+            Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role).save(flush: true)
+            Panel panel = Panel.build(name: "Panel Name", description: "Panel Name", ownerRole: role).save(flush: true)
 
-            return [assayId: assay.id, panelId: panel.id, panelName: panel.name]
+            return [assayId: assay.id, panelId: panel.id, panelName: panel.name, roleId: role.id, otherRoleId: otherRole.id]
         })
         assayIdList.add(panelAssayData.assayId)
         panelIdList.add(panelAssayData.panelId)
@@ -91,22 +100,6 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
     }
 
-    def 'test list #desc'() {
-        given:
-        RESTClient client = getRestClient(controllerUrl, "list", team, teamPassword)
-
-        when:
-        final Response response = client.get()
-        then:
-        assert response.statusCode == expectedHttpResponse
-        where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
-    }
 
     def 'test show #desc'() {
         given:
@@ -130,50 +123,7 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     }
 
 
-    def 'test findById #desc'() {
-        given:
 
-        RESTClient client = getRestClient(controllerUrl, "findById/${panelAssayData.panelId}", team, teamPassword)
-
-        when:
-        final Response response = client.get()
-
-        then:
-        assert response.statusCode == expectedHttpResponse
-
-        where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
-    }
-
-
-    def 'test findByName #desc'() {
-        given:
-        Map currentDataMap = getCurrentPanelProperties()
-        RESTClient client = getRestClient(controllerUrl, "findByName", team, teamPassword)
-        String panelName = currentDataMap.panelName
-        panelNames.add(panelName)
-        when:
-
-        final Response response = client.post() {
-            urlenc name: "${panelName}"
-        }
-
-        then:
-        assert response.statusCode == expectedHttpResponse
-
-        where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
-    }
 
     def 'test save #desc'() {
         given:
@@ -181,7 +131,7 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         panelNames.add(panelName)
         when:
         def response = client.post() {
-            urlenc name: panelName, description: "Some Description"
+            urlenc name: panelName, description: "Some Description", ownerRole: panelAssayData.roleId
         }
 
         then:
@@ -190,13 +140,69 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         where:
         desc       | panelName  | team              | teamPassword      | expectedHttpResponse
         "User A_1" | "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User B"   | "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FOUND
         "User A_2" | "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
         "ADMIN"    | "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
-        "CURATOR"  | "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
 
     }
 
+    def 'test save, selected role not in users role list #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
+        panelNames.add(panelName)
+        when:
+        Response response = client.post() {
+            urlenc name: panelName, description: "Some Description", ownerRole: panelAssayData.roleId
+        }
+        then:
+
+        assert  response.statusCode == expectedHttpResponse
+
+        where:
+        desc      | panelName | team              | teamPassword      | expectedHttpResponse
+        "User B"  | "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
+        "CURATOR" | "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
+    }
+    def 'test edit owner admin #desc'() {
+        Long pk = panelAssayData.panelId
+        String newRole = "ROLE_TEAM_B"
+        Long version = getCurrentPanelProperties().version
+        RESTClient client = getRestClient(controllerUrl, "editOwnerRole", team, teamPassword)
+        when:
+        Response response = client.post() {
+            urlenc pk: pk, version: version, value: newRole
+        }
+        then:
+        assert response.statusCode == expectedHttpResponse
+        JSONObject jsonObject = response.json
+        assert jsonObject.get("modifiedBy")
+        assert jsonObject.get("data") == newRole
+        assert jsonObject.get("lastUpdated")
+        assert jsonObject.get("version") != null
+
+        where:
+        desc    | team           | teamPassword   | expectedHttpResponse
+        "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_OK
+    }
+
+    def 'test edit owner role, selected role not in users role list #desc'() {
+        given:
+        Long pk = panelAssayData.panelId
+        String newRole = "ROLE_TEAM_B"
+        Long version = getCurrentPanelProperties().version
+        RESTClient client = getRestClient(controllerUrl, "editOwnerRole", team, teamPassword)
+        when:
+        client.post() {
+            urlenc pk: pk, version: version, value: newRole
+        }
+        then:
+        def ex = thrown(RESTClientException)
+        assert ex.response.statusCode == expectedHttpResponse
+
+        where:
+        desc      | team              | teamPassword      | expectedHttpResponse
+        "User B"  | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_BAD_REQUEST
+        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_BAD_REQUEST
+    }
     def 'test addAssayToPanel #desc'() {
         given:
         RESTClient client = getRestClient(controllerUrl, "addAssayToPanel", team, teamPassword)

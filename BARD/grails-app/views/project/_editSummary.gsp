@@ -52,8 +52,23 @@
                    data-original-title="Edit Description By">${project?.description}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description" data-id="descriptionId"></a>
             </dd>
-
-            <dt>Owner:</dt><dd>${projectOwner}</dd>
+            <dt><g:message code="project.ownerRole.label" default="Owner"/>:</dt>
+            <dd>
+                <span
+                        class="description"
+                        data-toggle="manual"
+                        data-sourceCache="true"
+                        data-placeholder="Required"
+                        id="ownerRoleId"
+                        data-type="select"
+                        data-value="${project?.ownerRole?.displayName}"
+                        data-source="/BARD/assayDefinition/roles"
+                        data-pk="${project.id}"
+                        data-url="/BARD/project/editOwnerRole"
+                        data-original-title="Select Owner Role">${project?.ownerRole?.displayName}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="ownerRoleId" title="Click to edit owner role"></a>
+            </dd>
+            %{--<dt>Owner:</dt><dd>${projectOwner}</dd>--}%
             <dt><g:message code="default.dateCreated.label"/>:</dt>
             <dd><g:formatDate date="${project.dateCreated}" format="MM/dd/yyyy"/></dd>
             <dt><g:message code="default.lastUpdated.label"/>:</dt>

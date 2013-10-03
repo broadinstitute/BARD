@@ -6,12 +6,12 @@ import bard.db.dictionary.StageTree
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
+import bard.db.people.Role
 import bard.db.registration.AbstractInlineEditingControllerUnitSpec
 import bard.db.registration.Assay
 import bard.db.registration.EditingHelper
 import bard.db.registration.ExternalReference
 import bardqueryapi.IQueryService
-import bardqueryapi.QueryService
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
@@ -24,7 +24,6 @@ import grails.test.mixin.support.GrailsUnitTestMixin
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -38,8 +37,8 @@ import javax.servlet.http.HttpServletResponse
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(ProjectController)
-@Build([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
-@Mock([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
+@Build([Role, Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
+@Mock([Role, Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
 class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
@@ -50,16 +49,21 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
     @Shared StageTree stageTree2
     ProjectService projectService
     SpringSecurityService springSecurityService
-
+    Role role
+    Role otherRole
     @Before
     void setup() {
         SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
             return true
         }
+
         controller.metaClass.mixin(EditingHelper)
         controller.springSecurityService = Mock(SpringSecurityService)
         controller.capPermissionService = Mock(CapPermissionService)
-        project = Project.build()
+        this.role = Role.build(authority: "ROLE_TEAM_A")
+        this.otherRole = Role.build(authority: "ROLE_TEAM_B", displayName: "displayName");
+
+        project = Project.build(ownerRole: role)
         Element element1 = Element.build(label: "primary assay")
         Element element2 = Element.build(label: "secondary assay")
         stageTree1 = StageTree.build(element: element1)
@@ -94,6 +98,11 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
         given:
         projectCommand.springSecurityService = controller.springSecurityService
+
+        projectCommand.ownerRole = this.role
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
+            return [this.role,this.otherRole]
+        }
         when:
 
         controller.save(projectCommand)
@@ -154,6 +163,62 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assertEditingErrorMessage()
     }
 
+    void 'test edit Project owner success'() {
+        given:
+        Project newProject = Project.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
+
+
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: this.otherRole)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: updatedProject.ownerRole.displayName)
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
+            return [this.role,this.otherRole]
+        }
+        when:
+        controller.editOwnerRole(inlineEditableCommand)
+        then:
+        controller.projectService.updateOwnerRole(_, _) >> { return updatedProject }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedProject.ownerRole.displayName
+        assert responseJSON.get("lastUpdated").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit Project owner new role not in list - fail'() {
+        given:
+        Project newProject = Project.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
+
+        Role notInUsersRole = Role.build(authority: "ROLE_TEAM_C", displayName: "displayName");
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: notInUsersRole)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: updatedProject.ownerRole.displayName)
+        when:
+        controller.editOwnerRole(inlineEditableCommand)
+        then:
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+
+    }
+    void 'test edit Project owner - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        Project newProject = Project.build(version: 0, name: "My Name", ownerRole: this.role)
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: this.otherRole)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: updatedProject.ownerRole.displayName)
+
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
+            return [this.role,this.otherRole]
+        }
+        when:
+        controller.editOwnerRole(inlineEditableCommand)
+        then:
+        controller.projectService.updateOwnerRole(_, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
+    }
 
     void 'test edit Project Name success'() {
         given:
@@ -747,51 +812,6 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.text.contains(ex.displayName)
     }
 
-//    void 'test showEditSummary'() {
-//        given:
-//        views['/project/_editSummary.gsp'] = 'mock editSummary page'
-//
-//        when:
-//        params.instanceId = project.id
-//        controller.projectService = projectService
-//
-//        controller.showEditSummary(params.instanceId)
-//
-//        then:
-//        assert response.text == 'mock editSummary page'
-//    }
-
-    void 'test findById'() {
-        when:
-        params.projectId = project.id.toString()
-
-        controller.findById()
-
-        then:
-        assert response.redirectedUrl == "/project/show/${project.id}"
-    }
-
-    void 'test findByName'() {
-        when:
-        params.projectName = project.name
-
-        controller.findByName()
-
-        then:
-        assert response.redirectedUrl == "/project/show/${project.id}"
-    }
-
-    void 'test findByName with multiple matches'() {
-        given:
-        Project.build(name: project.name)
-        when:
-        params.projectName = project.name
-
-        controller.findByName()
-
-        then:
-        assert view == "/project/findByName"
-    }
 
     void 'test getProjectNames'() {
         when:

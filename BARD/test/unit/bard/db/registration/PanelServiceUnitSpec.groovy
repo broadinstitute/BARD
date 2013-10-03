@@ -25,8 +25,10 @@ public class PanelServiceUnitSpec extends Specification {
         given:
         final Panel panel = Panel.build(name: 'panelName20', capPermissionService: Mock(CapPermissionService))
         final String newPanelName = "New Panel Name"
+        Panel.metaClass.isDirty =
+            { return false }
         when:
-        final Panel updatedPanel = service.updatePanelName(newPanelName,panel.id)
+        final Panel updatedPanel = service.updatePanelName(newPanelName, panel.id)
         then:
         assert newPanelName == updatedPanel.name
     }
