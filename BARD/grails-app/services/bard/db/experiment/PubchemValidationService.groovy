@@ -113,8 +113,10 @@ class PubchemValidationService {
         RowParser parsed = resultsService.initialParse(new InputStreamReader(new ByteArrayInputStream(baos.toByteArray())), errors, template, true)
         assert !errors.hasErrors()
 
+        List rows = parsed.readNextSampleRows()
+
         Map<Measure, Collection<ItemService.Item>> itemsByMeasure = resultsService.constructItemsByMeasure(experiment)
-        Collection<Result> results = resultsService.createResults(parsed.rows, measures, errors, itemsByMeasure)
+        Collection<Result> results = resultsService.createResults(rows, measures, errors, itemsByMeasure)
         assert !errors.hasErrors()
 
         checkForDuplicates(errors, results)
