@@ -7,64 +7,25 @@
 </g:if>
 <section id="documents-description-header">
     <h4 class="subsect">Descriptions</h4>
-
     <div class="row-fluid">
-
         <g:if test="${editable == 'canedit'}">
             <g:render template="/document/addDocumentLink"
                       model="[owningEntityId: owningEntity.id, documentKind: documentKind, documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION, label: 'Add New Description']"/>
         </g:if>
         <g:each in="${owningEntity.descriptions}" var="description">
-            <div class="borderlist">
+            <div class="borderlist" id="document-${description.id}">
                 <br/>
 
                 <div id="descriptionMsg_${description.id}"></div><br/>
                 <b>Document Name:</b>
-                <span data-type="text"
-                      data-pk="${description.id}"
-                      data-toggle="manual"
-                      class="documents ${description.id}"
-                      data-url="/BARD/document/editDocumentName"
-                      data-documentType="${description.documentType.id}"
-                      data-documentKind="${documentKind}"
-                      data-version="${description.version}"
-                      data-owningEntityId="${owningEntity.id}"
-                      data-inputclass="input-xxlarge"
-                      data-document-name="${description.documentContent}"
-                      data-server-response-id="descriptionMsg_${description.id}"
-                      id="${description.id}_Name">
-                    <g:fieldValue bean="${description}" field="documentName"/>
-                </span>
-                <a href="#" class="icon-pencil documentPencil ${editable}" data-id="${description.id}_Name"
-                   title="Click to edit name">
-                </a>
+                <span><g:fieldValue bean="${description}" field="documentName"/></span>
                 <br/>
-                <div class="controls">
-                    <b>Document Content</b> <a href="#" class="icon-pencil documentPencil ${editable}"
-                                               data-id="description_${description.id}"
-                                               title="Click to edit description"></a> <br/>
-                    <span data-type="textarea"
-                          name="${description.id}"
-                          data-pk="${description.id}"
-                          data-toggle="manual"
-                          class="textarea ${description.id}"
-                          data-url="/BARD/document/editDocument"
-                          data-documentType="${description.documentType.id}"
-                          data-documentKind="${documentKind}"
-                          data-version="${description.version}"
-                          data-owningEntityId="${owningEntity.id}"
-                          data-document-name="${description.documentName}"
-                          data-server-response-id="descriptionMsg_${description.id}"
-                          data-inputclass="input-xxlarge"
-                          id="description_${description.id}">
-                        <g:render template="../document/docsWithLineBreaks"
-                                  model="[documentContent: description.documentContent]"/>
-                    </span>
-
-                    <g:if test="${editable == 'canedit'}">
-                        <g:render template="/document/deleteDocumentForm" model="[document: description]"/>
-                    </g:if>
-                </div>
+                <b>Document Content:</b>
+                <br/>
+                <g:render template="../document/docsWithLineBreaks" model="[documentContent: description.documentContent]"/>
+                <g:if test="${editable == 'canedit'}">
+                    <g:render template="/document/deleteDocumentForm" model="[document: description]"/>
+                </g:if>
             </div>
         </g:each>
     </div>
@@ -79,46 +40,14 @@
                       model="[owningEntityId: owningEntity.id, documentKind: documentKind, documentType: DocumentType.DOCUMENT_TYPE_PROTOCOL, label: 'Add New Protocol']"/>
         </g:if>
         <g:each in="${owningEntity.protocols}" var="protocol">
-            <div class="borderlist">
+            <div class="borderlist" id="document-${protocol.id}">
                 <div id="protocolMsg_${protocol.id}"></div><br/>
                 <b>Document Name:</b>
-                <span data-type="text"
-                      data-pk="${protocol.id}"
-                      class="documents ${protocol.id}"
-                      data-url="/BARD/document/editDocumentName"
-                      data-documentType="${protocol.documentType.id}"
-                      data-documentKind="${documentKind}"
-                      data-version="${protocol.version}"
-                      data-owningEntityId="${owningEntity.id}"
-                      data-inputclass="input-xxlarge"
-                      data-toggle="manual"
-                      data-document-name="${protocol.documentContent}"
-                      data-server-response-id="protocolMsg_${protocol.id}"
-                      id="${protocol.id}_Name">
-                    <g:fieldValue bean="${protocol}" field="documentName"/>
-                </span>
-                <a href="#" class="icon-pencil documentPencil ${editable}" data-id="${protocol.id}_Name"
-                   title="Click to edit name">
-                </a>
-
+                <span><g:fieldValue bean="${protocol}" field="documentName"/></span>
                 <div class="controls">
-                    <b>Document Content</b> <a href="#" class="icon-pencil documentPencil ${editable}"
-                                               data-id="protocol_${protocol.id}"
-                                               title="Click to edit protocol"></a> <br/>
-                    <span data-type="textarea"
-                          name="${protocol.id}"
-                          data-pk="${protocol.id}"
-                          data-toggle="manual"
-                          class="textarea ${protocol.id}"
-                          data-url="/BARD/document/editDocument"
-                          data-documentType="${protocol.documentType.id}"
-                          data-documentKind="${documentKind}"
-                          data-version="${protocol.version}"
-                          data-owningEntityId="${owningEntity.id}"
-                          data-document-name="${protocol.documentName}"
-                          data-server-response-id="protocolMsg_${protocol.id}"
-                          data-inputclass="input-xxlarge"
-                          id="protocol_${protocol.id}">
+                    <b>Document Content:</b>
+                    <br/>
+                    <span>
                         <g:render template="../document/docsWithLineBreaks"
                                   model="[documentContent: protocol.documentContent]"/>
                     </span>
@@ -140,54 +69,19 @@
                       model="[owningEntityId: owningEntity.id, documentKind: documentKind, documentType: DocumentType.DOCUMENT_TYPE_COMMENTS, label: 'Add New Comment']"/>
         </g:if>
         <g:each in="${owningEntity.comments}" var="comment">
-            <div class="borderlist">
+            <div class="borderlist" id="document-${comment.id}">
                 <br/>
 
                 <div id="commentsMsg_${comment.id}"></div>
                 <br/>
-                <b>Document Name:</b> <span data-type="text"
-                                            data-pk="${comment.id}"
-                                            data-server-response-id="commentsMsg_${comment.id}"
-                                            class="documents ${comment.id}"
-                                            data-url="/BARD/document/editDocumentName"
-                                            data-documentType="${comment.documentType.id}"
-                                            data-documentKind="${documentKind}"
-                                            data-version="${comment.version}"
-                                            data-owningEntityId="${owningEntity.id}"
-                                            data-inputclass="input-xxlarge"
-                                            data-toggle="manual"
-                                            data-document-name="${comment.documentContent}"
-                                            id="${comment.id}_Name">
-                <g:fieldValue bean="${comment}" field="documentName"/>
-            </span>
-                <a href="#" class="icon-pencil documentPencil ${editable}" data-id="${comment.id}_Name"
-                   title="Click to edit name">
-                </a>
-
+                <b>Document Name:</b> <span><g:fieldValue bean="${comment}" field="documentName"/></span>
                 <br/>
                 <br/>
-
                 <div class="controls">
-
-                    <b>Document Content</b> <a href="#" class="icon-pencil documentPencil ${editable}"
-                                               data-id="comment_${comment.id}"
-                                               title="Click to edit comment"></a> <br/>
-                    <span data-type="textarea"
-                          name="${comment.id}"
-                          data-pk="${comment.id}"
-                          data-toggle="manual"
-                          class="textarea ${comment.id}"
-                          data-url="/BARD/document/editDocument"
-                          data-documentType="${comment.documentType.id}"
-                          data-documentKind="${documentKind}"
-                          data-version="${comment.version}"
-                          data-owningEntityId="${owningEntity.id}"
-                          data-document-name="${comment.documentName}"
-                          data-server-response-id="commentsMsg_${comment.id}"
-                          data-inputclass="input-xxlarge"
-                          id="comment_${comment.id}">
-                        <g:render template="../document/docsWithLineBreaks"
-                                  model="[documentContent: comment.documentContent]"/>
+                    <b>Document Content</b>
+                    <br/>
+                    <span >
+                        <g:render template="../document/docsWithLineBreaks" model="[documentContent: comment.documentContent]"/>
                     </span>
                     <g:if test="${editable == 'canedit'}">
                         <g:render template="/document/deleteDocumentForm" model="[document: comment]"/>
@@ -371,51 +265,20 @@
                       model="[owningEntityId: owningEntity.id, documentKind: documentKind, documentType: DocumentType.DOCUMENT_TYPE_OTHER, label: 'Add Other']"/>
         </g:if>
         <g:each in="${owningEntity.otherDocuments}" var="otherDocument">
-            <div class="borderlist">
+            <div class="borderlist" id="document-${otherDocument.id}">
                 <br/>
 
                 <div id="otherMsg_${otherDocument.id}"></div>
                 <br/>
                 <b>Document Name:</b>
-                <span data-type="text"
-                      data-pk="${otherDocument.id}"
-                      data-server-response-id="otherMsg_${otherDocument.id}"
-                      class="documents ${otherDocument.id}"
-                      data-url="/BARD/document/editDocumentName"
-                      data-documentType="${otherDocument.documentType.id}"
-                      data-documentKind="${documentKind}"
-                      data-toggle="manual"
-                      data-version="${otherDocument.version}"
-                      data-owningEntityId="${owningEntity.id}"
-                      data-inputclass="input-xxlarge"
-                      data-document-name="${otherDocument.documentContent}"
-                      id="${otherDocument.id}_Name">
-                    <g:fieldValue bean="${otherDocument}" field="documentName"/>
-                </span>
-                <a href="#" class="icon-pencil documentPencil ${editable}" data-id="${otherDocument.id}_Name"
-                   title="Click to edit name">
-                </a>
+                <span><g:fieldValue bean="${otherDocument}" field="documentName"/></span>
                 <br/>
                 <br/>
 
                 <div class="controls">
-                    <b>Document Content</b> <a href="#" class="icon-pencil documentPencil ${editable}"
-                                               data-id="other_${otherDocument.id}"
-                                               title="Click to edit other"></a> <br/>
-                    <span data-type="textarea"
-                          name="${otherDocument.id}"
-                          data-pk="${otherDocument.id}"
-                          data-toggle="manual"
-                          class="textarea ${otherDocument.id}"
-                          data-url="/BARD/document/editDocument"
-                          data-documentType="${otherDocument.documentType.id}"
-                          data-documentKind="${documentKind}"
-                          data-version="${otherDocument.version}"
-                          data-owningEntityId="${owningEntity.id}"
-                          data-document-name="${otherDocument.documentName}"
-                          data-server-response-id="otherMsg_${otherDocument.id}"
-                          data-inputclass="input-xxlarge"
-                          id="other_${otherDocument.id}">
+                    <b>Document Content</b>
+                    <br/>
+                    <span>
                         <g:render template="../document/docsWithLineBreaks"
                                   model="[documentContent: otherDocument.documentContent]"/>
                     </span>

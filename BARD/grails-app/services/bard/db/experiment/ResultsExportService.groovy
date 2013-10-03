@@ -93,6 +93,12 @@ class ResultsExportService {
         writer.close()
     }
 
+    Writer createWriter(String filename) {
+        File absPath = archivePathService.prepareForWriting(filename)
+        Writer writer = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(absPath)));
+        return writer
+    }
+
 //    void dumpFromDb(Long experimentId) {
 //        Experiment experiment = Experiment.get(experimentId)
 //        assert experiment != null

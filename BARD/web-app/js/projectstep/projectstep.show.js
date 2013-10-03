@@ -220,7 +220,9 @@ function setupGraphScrolling() {
     var clientHeight = 0;
     var clientOffset = $("#canvas-container").offset();
 
+    /* DOM-based rendering (Uses 3D when available, falls back on margin when transform not available) */
     var render = (function(global) {
+
         var docStyle = document.documentElement.style;
 
         var engine;
@@ -246,13 +248,31 @@ function setupGraphScrolling() {
 
         var perspectiveProperty = vendorPrefix + "Perspective";
         var transformProperty = vendorPrefix + "Transform";
+        var transformOriginProperty = vendorPrefix + "TransformOrigin"
 
-        return function(left, top, zoom) {
-            content.style.marginLeft = left ? (-left/zoom) + 'px' : '';
-            content.style.marginTop = top ? (-top/zoom) + 'px' : '';
-            content.style.zoom = zoom || '';
-        };
+        if (helperElem.style[perspectiveProperty] !== undef) {
 
+            return function(left, top, zoom) {
+                content.style[transformProperty] = 'translate3d(' + (-left) + 'px,' + (-top) + 'px,0) scale(' + zoom + ')';
+                content.style[transformOriginProperty] = "0% 0% 0px"
+            };
+
+        } else if (helperElem.style[transformProperty] !== undef) {
+
+            return function(left, top, zoom) {
+                content.style[transformProperty] = 'translate(' + (-left) + 'px,' + (-top) + 'px) scale(' + zoom + ')';
+                content.style[transformOriginProperty] = "0% 0% 0px"
+            };
+
+        } else {
+
+            return function(left, top, zoom) {
+                content.style.marginLeft = left ? (-left/zoom) + 'px' : '';
+                content.style.marginTop = top ? (-top/zoom) + 'px' : '';
+                content.style.zoom = zoom || '';
+            };
+
+        }
     })(this);
 
     scroller = new Scroller(render, {

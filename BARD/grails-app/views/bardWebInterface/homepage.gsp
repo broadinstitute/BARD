@@ -159,7 +159,7 @@
                 <article class="span8">
                     <h1>Enhanced data and advanced tools to accelerate drug discovery.</h1>
 
-                    <p>Introducing BARD, the powerful new bioassay database from the NIH Molecular Libraries Program. Now with unprecedented efficiency, scientists can develop and testhypotheses on the influence of different chemical probes on biological functions.</p>
+                    <p>Introducing BARD, the powerful new bioassay database from the NIH Molecular Libraries Program. Now with unprecedented efficiency, scientists can develop and test hypotheses on the influence of different chemical probes on biological functions.</p>
                     <a href="#" class="btn btn-primary">LEARN MORE</a>
                 </article>
                 <aside class="span4"></aside>

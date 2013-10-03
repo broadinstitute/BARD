@@ -1,5 +1,6 @@
 package bard.db.experiment
 
+import bard.db.experiment.results.ImportSummary
 import bard.db.registration.ExternalReference
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.security.access.prepost.PreAuthorize
@@ -17,7 +18,9 @@ class PubchemImportService {
     ResultsService resultsService
 
     @PreAuthorize("hasRole('ROLE_BARD_ADMINISTRATOR')")
-    ResultsService.ImportSummary recreateMeasuresAndLoad(boolean forceConvertPubchem, int aid) {
+    ImportSummary recreateMeasuresAndLoad(boolean forceConvertPubchem, int aid, Closure statusCallback) {
+        statusCallback("Starting...")
+
         String pubchemPrefix
         String pubchemFileDir
         String convertedFileDir
@@ -40,6 +43,7 @@ class PubchemImportService {
             throw new RuntimeException("Skipping ${aid} because it looks like its a summary aid")
         }
 
+        statusCallback("Recreating measures...")
         def map
         try {
             map = pubchemReformatService.loadMap(aid)
@@ -63,6 +67,7 @@ class PubchemImportService {
         def capFile = "${convertedFileDir}/exp-${aid}-${ref.experiment.id}.csv"
 
         if (forceConvertPubchem || !(new File(capFile).exists())) {
+            statusCallback("Converting pubchem file...")
             log.error("Converting pubchem file ${pubchemFile} -> ${capFile}")
             try {
                 pubchemReformatService.convert(ref.experiment.id, pubchemFile, capFile)
@@ -71,12 +76,14 @@ class PubchemImportService {
             }
         }
 
+        statusCallback("Starting import...")
         // disable DB operations to speed this up for the migration process
         ResultsService.ImportOptions options = new ResultsService.ImportOptions()
         options.validateSubstances = false
         options.writeResultsToDb = false
         options.skipExperimentContexts = true
-        ResultsService.ImportSummary results = resultsService.importResults(ref.experiment.id, new FileInputStream(capFile), options)
+        options.statusCallback = statusCallback
+        ImportSummary results = resultsService.importResults(ref.experiment.id, new FileInputStream(capFile), options)
         log.info("errors from loading ${aid}: ${results.errors.size()}")
         for(e in results.errors) {
             log.info("\t${e}")

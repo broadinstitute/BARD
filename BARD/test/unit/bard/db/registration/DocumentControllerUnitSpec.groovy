@@ -20,6 +20,9 @@ import spock.lang.Unroll
 import javax.servlet.http.HttpServletResponse
 
 import static test.TestUtils.assertFieldValidationExpectations
+import static javax.servlet.http.HttpServletResponse.*
+import static bard.db.registration.DocumentHelper.DOCUMENT_INTERNAL_SERVER_ERROR
+import static bard.db.enums.DocumentType.*
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -52,7 +55,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         controller.documentService = Mock(DocumentService)
         assay = Assay.build()
         project = Project.build()
-        existingAssayDocument = AssayDocument.build(assay: assay, documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION)
+        existingAssayDocument = AssayDocument.build(assay: assay, documentType: DOCUMENT_TYPE_DESCRIPTION)
         existingAssayDocument = AssayDocument.findById(existingAssayDocument.id)
         documentCommand = mockCommandObject(DocumentCommand)
         controller.permissionEvaluator = Mock(PermissionEvaluator)
@@ -60,73 +63,29 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         assert flash.message == null
     }
 
-    void 'test render Assay Document - exception'() {
-        given:
-        Long assayId = null
-        Long documentId = existingAssayDocument.id
-        Long version = existingAssayDocument.version
-        String documentName = existingAssayDocument.documentName
-        DocumentType documentType = existingAssayDocument.documentType
-        String documentContent = existingAssayDocument.documentContent
-        Date dateCreated = existingAssayDocument.dateCreated
-        Date lastUpdated = existingAssayDocument.lastUpdated
-        String modifiedBy = existingAssayDocument.modifiedBy
-        DocumentCommand documentCommand =
-            new DocumentCommand(
-                    assayId: assayId,
-                    documentId: documentId,
-                    version: version,
-                    documentContent: documentContent,
-                    documentName: documentName,
-                    documentType: documentType,
-                    dateCreated: dateCreated,
-                    lastUpdated: lastUpdated,
-                    modifiedBy: modifiedBy
-            )
-        when:
+    void 'test render documentCommand with #desc'() {
+        given: ' a document command created from a valid Assay Document'
+        DocumentCommand documentCommand = new DocumentCommand(existingAssayDocument)
+        documentCommand.documentType = docType
+
+        when: 'a specific field is modified'
+        documentCommand."$fieldUnderTest" = value
         Map map = controller.renderDocument(documentCommand)
-        then:
-        assert map.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-        assert !map.template
-        assert map.text == "An internal server error occurred while you were editing this page. " +
-                "Please refresh your browser and try again. " +
-                "If you still encounter issues please report it to the BARD team (bard-users@broadinstitute.org)"
-        assert map.contentType == 'text/plain'
+
+        then: 'we see expected return values'
+        map == expectedMap
+
+        where:
+        desc                 | fieldUnderTest    | value            | docType                    | expectedMap
+        'missing assayId'    | 'assayId'         | null             | DOCUMENT_TYPE_PUBLICATION  | [status: SC_INTERNAL_SERVER_ERROR, template: null, text: DocumentHelper.DOCUMENT_INTERNAL_SERVER_ERROR, contentType: 'text/plain']
+        'null documentName'  | 'documentName'    | null             | DOCUMENT_TYPE_PUBLICATION  | [status: SC_BAD_REQUEST, template: null, text: 'nullable', contentType: 'text/plain']
+        'blank documentName' | 'documentName'    | ''               | DOCUMENT_TYPE_PUBLICATION  | [status: SC_BAD_REQUEST, template: null, text: 'blank', contentType: 'text/plain']
+        'blank documentName' | 'documentName'    | ' '              | DOCUMENT_TYPE_PUBLICATION  | [status: SC_BAD_REQUEST, template: null, text: 'blank', contentType: 'text/plain']
+        'ok documentName'    | 'documentName'    | 'foo'            | DOCUMENT_TYPE_PUBLICATION  | [status: SC_OK, template: null, text: 'foo', contentType: 'text/plain']
+        'bad url'            | 'documentContent' | 'a.b'            | DOCUMENT_TYPE_EXTERNAL_URL | [status: SC_BAD_REQUEST, template: null, text: 'document.invalid.url.message', contentType: 'text/plain']
+        'bad url'            | 'documentContent' | 'http://a.b foo' | DOCUMENT_TYPE_EXTERNAL_URL | [status: SC_BAD_REQUEST, template: null, text: 'document.invalid.url.message', contentType: 'text/plain']
+        'good url'           | 'documentContent' | 'http://a.com'     | DOCUMENT_TYPE_EXTERNAL_URL | [status: SC_OK, template: null, text: 'documentName', contentType: 'text/plain']
     }
-
-
-    void 'test render Assay Document - optimistic lock error'() {
-        given:
-        Long assayId = existingAssayDocument.assay.id
-        Long documentId = existingAssayDocument.id
-        Long version = existingAssayDocument.version
-        String documentName = " "
-        DocumentType documentType = existingAssayDocument.documentType
-        String documentContent = existingAssayDocument.documentContent
-        Date dateCreated = existingAssayDocument.dateCreated
-        Date lastUpdated = existingAssayDocument.lastUpdated
-        String modifiedBy = existingAssayDocument.modifiedBy
-        DocumentCommand documentCommand =
-            new DocumentCommand(
-                    assayId: assayId,
-                    documentId: documentId,
-                    version: version,
-                    documentContent: documentContent,
-                    documentName: documentName,
-                    documentType: documentType,
-                    dateCreated: dateCreated,
-                    lastUpdated: lastUpdated,
-                    modifiedBy: modifiedBy
-            )
-        when:
-        Map map = controller.renderDocument(documentCommand)
-        then:
-        assert map.status == HttpServletResponse.SC_CONFLICT
-        assert !map.template
-        assert map.text == "default.optimistic.locking.failure"
-        assert map.contentType == 'text/plain'
-    }
-
 
     void 'test render Assay Document - Success #desc'() {
         given:
@@ -162,13 +121,13 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         assert (map.template != null) == hasTemplate
         assert (map.model != null) == hasModel
         where:
-        desc                    | documentType                            | expectedStatus            | hasTemplate | hasModel
-        "Description Doc Type"  | DocumentType.DOCUMENT_TYPE_DESCRIPTION  | HttpServletResponse.SC_OK | true        | true
-        "External URL Doc Type" | DocumentType.DOCUMENT_TYPE_EXTERNAL_URL | HttpServletResponse.SC_OK | false       | false
-        "Protocol Doc Type"     | DocumentType.DOCUMENT_TYPE_PROTOCOL     | HttpServletResponse.SC_OK | true        | true
-        "Comments Doc Type"     | DocumentType.DOCUMENT_TYPE_COMMENTS     | HttpServletResponse.SC_OK | true        | true
-        "Publication Doc Type"  | DocumentType.DOCUMENT_TYPE_PUBLICATION  | HttpServletResponse.SC_OK | false       | false
-        "Other Doc Type"        | DocumentType.DOCUMENT_TYPE_OTHER        | HttpServletResponse.SC_OK | true        | true
+        desc                    | documentType               | expectedStatus | hasTemplate | hasModel
+        "Description Doc Type"  | DOCUMENT_TYPE_DESCRIPTION  | SC_OK          | true        | true
+        "External URL Doc Type" | DOCUMENT_TYPE_EXTERNAL_URL | SC_OK          | false       | false
+        "Protocol Doc Type"     | DOCUMENT_TYPE_PROTOCOL     | SC_OK          | true        | true
+        "Comments Doc Type"     | DOCUMENT_TYPE_COMMENTS     | SC_OK          | true        | true
+        "Publication Doc Type"  | DOCUMENT_TYPE_PUBLICATION  | SC_OK          | false       | false
+        "Other Doc Type"        | DOCUMENT_TYPE_OTHER        | SC_OK          | true        | true
 
     }
 
@@ -178,14 +137,14 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         String value = "New Value"
         Long version = 0
         Long owningEntityId = 1
-        params.documentType = DocumentType.DOCUMENT_TYPE_EXTERNAL_URL.id
+        params.documentType = DOCUMENT_TYPE_EXTERNAL_URL.id
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(name: name, value: value,
                     version: version, owningEntityId: owningEntityId)
         when:
         controller.editDocumentName(inlineEditableCommand)
         then:
-        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+        assert response.status == SC_BAD_REQUEST
         assert response.contentType == "text/plain;charset=utf-8"
         assert response.text == "Field is required and must not be empty"
     }
@@ -206,7 +165,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         when:
         controller.editDocumentName(inlineEditableCommand)
         then:
-        assert response.status == HttpServletResponse.SC_FORBIDDEN
+        assert response.status == SC_FORBIDDEN
         assert response.contentType == "text/plain;charset=utf-8"
         assert response.text == "editing.forbidden.message"
     }
@@ -226,7 +185,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         when:
         controller.editDocumentName(inlineEditableCommand)
         then:
-        assert response.status == HttpServletResponse.SC_OK
+        assert response.status == SC_OK
         assert response.text == "${System.getProperty("line.separator")}<br/>${value}${System.getProperty("line.separator")}"
         assert response.headers("version").get(0) == "1"
         assert response.headers("entityId").get(0) == existingAssayDocument.id.toString()
@@ -238,13 +197,13 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         String value = "New Value"
         Long version = 0
         Long owningEntityId = 1
-        params.documentType = DocumentType.DOCUMENT_TYPE_EXTERNAL_URL.id
+        params.documentType = DOCUMENT_TYPE_EXTERNAL_URL.id
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(name: name, value: value, version: version, owningEntityId: owningEntityId)
         when:
         controller.editDocument(inlineEditableCommand)
         then:
-        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+        assert response.status == SC_BAD_REQUEST
         assert response.contentType == "text/plain;charset=utf-8"
         assert response.text == "Field is required and must not be empty"
     }
@@ -266,7 +225,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         when:
         controller.editDocument(inlineEditableCommand)
         then:
-        assert response.status == HttpServletResponse.SC_FORBIDDEN
+        assert response.status == SC_FORBIDDEN
         assert response.contentType == "text/plain;charset=utf-8"
         assert response.text == "editing.forbidden.message"
 
@@ -288,7 +247,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         when:
         controller.editDocument(inlineEditableCommand)
         then:
-        assert response.status == HttpServletResponse.SC_OK
+        assert response.status == SC_OK
         assert response.text == "${System.getProperty("line.separator")}<br/>${value}${System.getProperty("line.separator")}"
         assert response.headers("version").get(0) == "1"
         assert response.headers("entityId").get(0) == existingAssayDocument.id.toString()
@@ -311,9 +270,9 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         assert documentCommand.documentType == expectedDocumentType
 
         where:
-        desc                    | documentKind                 | owningEntityId | documentType                            | expectedDocumentType                    | expectedAssayId | expectedProjectId
-        "Assay Document Type"   | DocumentKind.AssayDocument   | 10             | DocumentType.DOCUMENT_TYPE_EXTERNAL_URL | DocumentType.DOCUMENT_TYPE_EXTERNAL_URL | 10              | null
-        "Project Document Type" | DocumentKind.ProjectDocument | 10             | DocumentType.DOCUMENT_TYPE_EXTERNAL_URL | DocumentType.DOCUMENT_TYPE_EXTERNAL_URL | null            | 10
+        desc                    | documentKind                 | owningEntityId | documentType               | expectedDocumentType       | expectedAssayId | expectedProjectId
+        "Assay Document Type"   | DocumentKind.AssayDocument   | 10             | DOCUMENT_TYPE_EXTERNAL_URL | DOCUMENT_TYPE_EXTERNAL_URL | 10              | null
+        "Project Document Type" | DocumentKind.ProjectDocument | 10             | DOCUMENT_TYPE_EXTERNAL_URL | DOCUMENT_TYPE_EXTERNAL_URL | null            | 10
     }
 
     void 'test create'() {
@@ -340,7 +299,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         when:
         documentCommand.assayId = assay.id
         documentCommand.documentContent = "content"
-        documentCommand.documentType = DocumentType.DOCUMENT_TYPE_DESCRIPTION
+        documentCommand.documentType = DOCUMENT_TYPE_DESCRIPTION
         documentCommand.documentName = "name"
         controller.save(documentCommand)
 
@@ -350,7 +309,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         response.redirectedUrl == "/assayDefinition/show/${assay.id}#document-${assayDocument.id}"
         assayDocument.assay == assay
         assayDocument.documentName == "name"
-        assayDocument.documentType == DocumentType.DOCUMENT_TYPE_DESCRIPTION
+        assayDocument.documentType == DOCUMENT_TYPE_DESCRIPTION
         assayDocument.documentContent == "content"
 
     }
@@ -361,7 +320,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         when:
         documentCommand.assayId = assay.id
         documentCommand.documentContent = "content"
-        documentCommand.documentType = DocumentType.DOCUMENT_TYPE_DESCRIPTION
+        documentCommand.documentType = DOCUMENT_TYPE_DESCRIPTION
         documentCommand.documentName = "name"
         controller.save(documentCommand)
 
@@ -374,7 +333,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         when:
         documentCommand.projectId = project.id
         documentCommand.documentContent = "content"
-        documentCommand.documentType = DocumentType.DOCUMENT_TYPE_DESCRIPTION
+        documentCommand.documentType = DOCUMENT_TYPE_DESCRIPTION
         documentCommand.documentName = "name"
         controller.save(documentCommand)
 
@@ -384,7 +343,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         response.redirectedUrl == "/project/show/${project.id}#document-${projectDocument.id}"
         projectDocument.project == project
         projectDocument.documentName == "name"
-        projectDocument.documentType == DocumentType.DOCUMENT_TYPE_DESCRIPTION
+        projectDocument.documentType == DOCUMENT_TYPE_DESCRIPTION
         projectDocument.documentContent == "content"
     }
 
@@ -394,7 +353,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         when:
         documentCommand.projectId = project.id
         documentCommand.documentContent = "content"
-        documentCommand.documentType = DocumentType.DOCUMENT_TYPE_DESCRIPTION
+        documentCommand.documentType = DOCUMENT_TYPE_DESCRIPTION
         documentCommand.documentName = "name"
         controller.save(documentCommand)
 
@@ -405,7 +364,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
     void 'test save Assay Not found'() {
         when:
         documentCommand.assayId = -1
-        documentCommand.documentType = DocumentType.DOCUMENT_TYPE_PUBLICATION
+        documentCommand.documentType = DOCUMENT_TYPE_PUBLICATION
         documentCommand.documentName = "name"
         controller.save(documentCommand)
 
@@ -419,7 +378,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
     void 'test save invalid doc, null documentName'() {
         when:
         documentCommand.assayId = assay.id
-        documentCommand.documentType = DocumentType.DOCUMENT_TYPE_PUBLICATION
+        documentCommand.documentType = DOCUMENT_TYPE_PUBLICATION
         controller.save(documentCommand)
 
         then:
@@ -497,32 +456,32 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         assertFieldValidationExpectations(documentCommand, field, valid, code)
 
         where:
-        desc                        | field             | vut                                     | valid | code
-        'assayId not null valid'    | 'assayId'         | 3                                       | true  | null
+        desc                        | field             | vut                        | valid | code
+        'assayId not null valid'    | 'assayId'         | 3                          | true  | null
 
-        'documentId null valid'     | 'documentId'      | null                                    | true  | null
-        'documentId not null valid' | 'documentId'      | 3                                       | true  | null
+        'documentId null valid'     | 'documentId'      | null                       | true  | null
+        'documentId not null valid' | 'documentId'      | 3                          | true  | null
 
-        'version null valid'        | 'version'         | null                                    | true  | null
-        'version not null valid'    | 'version'         | 3                                       | true  | null
+        'version null valid'        | 'version'         | null                       | true  | null
+        'version not null valid'    | 'version'         | 3                          | true  | null
 
-        'documentType valid'        | 'documentType'    | DocumentType.DOCUMENT_TYPE_DESCRIPTION  | true  | null
-        'documentType valid'        | 'documentType'    | DocumentType.DOCUMENT_TYPE_COMMENTS     | true  | null
-        'documentType valid'        | 'documentType'    | DocumentType.DOCUMENT_TYPE_PROTOCOL     | true  | null
-        'documentType valid'        | 'documentType'    | DocumentType.DOCUMENT_TYPE_PUBLICATION  | true  | null
-        'documentType valid'        | 'documentType'    | DocumentType.DOCUMENT_TYPE_OTHER        | true  | null
-        'documentType valid'        | 'documentType'    | DocumentType.DOCUMENT_TYPE_EXTERNAL_URL | true  | null
+        'documentType valid'        | 'documentType'    | DOCUMENT_TYPE_DESCRIPTION  | true  | null
+        'documentType valid'        | 'documentType'    | DOCUMENT_TYPE_COMMENTS     | true  | null
+        'documentType valid'        | 'documentType'    | DOCUMENT_TYPE_PROTOCOL     | true  | null
+        'documentType valid'        | 'documentType'    | DOCUMENT_TYPE_PUBLICATION  | true  | null
+        'documentType valid'        | 'documentType'    | DOCUMENT_TYPE_OTHER        | true  | null
+        'documentType valid'        | 'documentType'    | DOCUMENT_TYPE_EXTERNAL_URL | true  | null
 
-        'documentName null'         | 'documentName'    | null                                    | false | 'nullable'
-        'documentName blank'        | 'documentName'    | ''                                      | false | 'blank'
-        'documentName blank'        | 'documentName'    | ' '                                     | false | 'blank'
-        'documentName valid'        | 'documentName'    | 'docName'                               | true  | null
+        'documentName null'         | 'documentName'    | null                       | false | 'nullable'
+        'documentName blank'        | 'documentName'    | ''                         | false | 'blank'
+        'documentName blank'        | 'documentName'    | ' '                        | false | 'blank'
+        'documentName valid'        | 'documentName'    | 'docName'                  | true  | null
 
-        'documentContent blank'     | 'documentContent' | ''                                      | false | 'blank'
-        'documentContent blank'     | 'documentContent' | ' '                                     | false | 'blank'
-        'documentContent null'      | 'documentContent' | null                                    | true  | null
+        'documentContent blank'     | 'documentContent' | ''                         | false | 'blank'
+        'documentContent blank'     | 'documentContent' | ' '                        | false | 'blank'
+        'documentContent null'      | 'documentContent' | null                       | true  | null
 
-        'documentContent valid'     | 'documentContent' | 'docName'                               | true  | null
+        'documentContent valid'     | 'documentContent' | 'docName'                  | true  | null
     }
 
     void 'test command object createNewDocument with #desc '() {
@@ -545,9 +504,9 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
 
         where:
 
-        desc                        | assayId      | documentName   | documentType                        | hasErrors | documentIdNull
-        'error due to documentType' | { assay.id } | null           | DocumentType.DOCUMENT_TYPE_COMMENTS | true      | true
-        'valid command object'      | { assay.id } | 'documentName' | DocumentType.DOCUMENT_TYPE_COMMENTS | false     | false
+        desc                        | assayId      | documentName   | documentType           | hasErrors | documentIdNull
+        'error due to documentType' | { assay.id } | null           | DOCUMENT_TYPE_COMMENTS | true      | true
+        'valid command object'      | { assay.id } | 'documentName' | DOCUMENT_TYPE_COMMENTS | false     | false
     }
 
     void 'test command object fromAssayDocument copied field: #field'() {
@@ -578,9 +537,9 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         assert externalURL == expectedDocumentContent
 
         where:
-        desc              | documentType                            | expectedDocumentContent
-        "External URL"    | DocumentType.DOCUMENT_TYPE_EXTERNAL_URL | "http://aaa.ccc.com"
-        "Publication URL" | DocumentType.DOCUMENT_TYPE_PUBLICATION  | "http://aaa.ccc.com"
-        "Other Documents" | DocumentType.DOCUMENT_TYPE_OTHER        | "http://aaa.ccc.com<div>  <br> </div>"
+        desc              | documentType               | expectedDocumentContent
+        "External URL"    | DOCUMENT_TYPE_EXTERNAL_URL | "http://aaa.ccc.com"
+        "Publication URL" | DOCUMENT_TYPE_PUBLICATION  | "http://aaa.ccc.com"
+        "Other Documents" | DOCUMENT_TYPE_OTHER        | "http://aaa.ccc.com<div>  <br> </div>"
     }
 }

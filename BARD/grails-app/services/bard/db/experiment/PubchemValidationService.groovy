@@ -1,7 +1,9 @@
 package bard.db.experiment
 
 import bard.db.dictionary.Element
+import bard.db.experiment.results.ImportSummary
 import bard.db.experiment.results.LogicalKey
+import bard.db.experiment.results.RowParser
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
@@ -107,8 +109,8 @@ class PubchemValidationService {
 //        println("reformatted: \"${new String(baos.toByteArray())}\"")
 
         ResultsService.Template template = resultsService.generateMaxSchema(experiment)
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
-        ResultsService.InitialParse parsed = resultsService.initialParse(new InputStreamReader(new ByteArrayInputStream(baos.toByteArray())), errors, template, true)
+        ImportSummary errors = new ImportSummary()
+        RowParser parsed = resultsService.initialParse(new InputStreamReader(new ByteArrayInputStream(baos.toByteArray())), errors, template, true)
         assert !errors.hasErrors()
 
         Map<Measure, Collection<ItemService.Item>> itemsByMeasure = resultsService.constructItemsByMeasure(experiment)
@@ -125,7 +127,7 @@ class PubchemValidationService {
         return resultsExportService.resultsToPrettyPrintString(100L, new ArrayList(results))
     }
 
-    private void checkForDuplicates(ResultsService.ImportSummary errors, Collection<Result> results) {
+    private void checkForDuplicates(ImportSummary errors, Collection<Result> results) {
         Map<LogicalKey,LogicalKey> seen = new HashMap()
         IdentityHashMap<LogicalKey,Result> mapToOriginal = new IdentityHashMap();
 

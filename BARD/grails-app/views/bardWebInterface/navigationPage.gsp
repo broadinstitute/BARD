@@ -20,7 +20,6 @@
                             <li>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     Admin
-
                                 </a>
 
                                 <ul>
@@ -82,6 +81,8 @@
                             <ul>
                                 <li class="controller"><g:link controller="experiment"
                                                                action="myExperiments">My Experiments</g:link></li>
+                                <li class="controller"><g:link controller="jobs"
+                                                               action="index">My import jobs</g:link></li>
                             </ul>
                         </li>
                         <li>

@@ -4,13 +4,16 @@ import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
 import bard.db.enums.ValueType
 import bard.db.experiment.*
+import bard.db.experiment.results.ImportSummary
 import bard.db.experiment.results.RawCell
 import bard.db.experiment.results.Row
+import bard.db.experiment.results.RowParser
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -66,7 +69,7 @@ class ResultsServiceSpec extends Specification {
             rows = [row0, row1]
         }
 
-        def errors = new ResultsService.ImportSummary()
+        def errors = new ImportSummary()
 
         def results = service.createResults(rows, [parentExperimentMeasure, childExperimentMeasure], errors, [:])
 
@@ -149,18 +152,18 @@ class ResultsServiceSpec extends Specification {
 
     void 'test parsing experiment level #desc'() {
         setup:
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
         Element attribute = Element.build(label: "column", expectedValueType: NUMERIC)
         def item = service.itemService.getLogicalItems([AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.Free, valueDisplay: null)])[0]
 
         when:
         String sample = ",Experiment ID,123\n,column," + cellString + "\n"
         BufferedReader reader = new BufferedReader(new StringReader(sample))
-        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [item], false)
+        RowParser RowParser = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [item], false)
 
         then:
-        initialParse.contexts.size() == 1
-        ExperimentContext context = initialParse.contexts.first()
+        RowParser.contexts.size() == 1
+        ExperimentContext context = RowParser.contexts.first()
         context.contextItems.size() == 1
         ExperimentContextItem contextItem = context.contextItems.first()
         contextItem.attributeElement == attribute
@@ -190,19 +193,19 @@ class ResultsServiceSpec extends Specification {
         def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, valueDisplay: trumpetElement.label, assayContext: context)
         def item = this.service.itemService.getLogicalItems([tubaItem, trumpetItem])[0]
 
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         when:
         String sample = ",Experiment ID,123\n,column,trumpet\n"
         BufferedReader reader = new BufferedReader(new StringReader(sample))
 
-        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [item], false)
+        RowParser RowParser = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [item], false)
 
         then:
         !errors.hasErrors()
 
-        initialParse.contexts.size() == 1
-        ExperimentContext expContext = initialParse.contexts.first()
+        RowParser.contexts.size() == 1
+        ExperimentContext expContext = RowParser.contexts.first()
         expContext.contextName == "instrument"
         expContext.contextItems.size() == 1
         ExperimentContextItem expItem = expContext.contextItems.first()
@@ -214,17 +217,18 @@ class ResultsServiceSpec extends Specification {
         when:
         def fixture = createSampleFile()
 
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
-        ResultsService.InitialParse result = service.initialParse(new StringReader(fixture.sample), errors, fixture.template, false)
+        ImportSummary errors = new ImportSummary()
+        RowParser parser = service.initialParse(new StringReader(fixture.sample), errors, fixture.template, false)
+        List<Row> rows = parser.readNextSampleRows()
 
         then:
-        result.experimentId == 123
-        result.rows.size() == 2
+        parser.experimentId == 123
+        rows.size() == 2
         !errors.hasErrors()
 
         when:
-        Row row0 = result.rows.get(0)
-        Row row1 = result.rows.get(1)
+        Row row0 = rows.get(0)
+        Row row1 = rows.get(1)
 
         then:
         row0.parentRowNumber == null
@@ -239,9 +243,15 @@ class ResultsServiceSpec extends Specification {
         row1.cells.size() == 1
         row1.cells.get(0).value == "5"
         row1.cells.get(0).columnName == "EC50"
+
+        when:
+        rows = parser.readNextSampleRows()
+
+        then:
+        rows == null
     }
 
-    void 'test parse failures'() {
+    void 'test parse failures #desc'() {
         when:
         def fixture = createSampleFile()
         // break apart table
@@ -255,8 +265,11 @@ class ResultsServiceSpec extends Specification {
         // reassemble
         def sample = (table.collect { it.join(",") }).join("\n")
 
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
-        ResultsService.InitialParse result = service.initialParse(new StringReader(sample), errors, fixture.template, false)
+        ImportSummary errors = new ImportSummary()
+        RowParser parser = service.initialParse(new StringReader(sample), errors, fixture.template, false)
+        if(!errors.hasErrors()) {
+            parser.readNextSampleRows();
+        }
 
         then:
         errors.errors.size() == expectedErrorCount
@@ -312,7 +325,7 @@ class ResultsServiceSpec extends Specification {
         def experimentMeasure = ExperimentMeasure.build(measure: measure)
         def row = new Row(rowNumber: 1, sid: substance.id, cells: [new RawCell(columnName: "x", value: "5")], replicate: 1)
 
-        def errors = new ResultsService.ImportSummary()
+        def errors = new ImportSummary()
 
         def results = service.createResults([row], [experimentMeasure], errors, [:])
 
@@ -344,7 +357,7 @@ class ResultsServiceSpec extends Specification {
         def iCell = new RawCell(columnName: "item", value: "<15")
         def row = new Row(rowNumber: 1, replicate: 1, sid: substance.id, cells: [mCell, iCell])
 
-        def errors = new ResultsService.ImportSummary()
+        def errors = new ImportSummary()
 
         def itemsByMeasure = [:]
         itemsByMeasure.put(measure, [item])
@@ -375,7 +388,7 @@ class ResultsServiceSpec extends Specification {
 
         when:
 
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         ResultContextItem resultContextItem = service.createResultItem(cellString, item, errors)
 
@@ -397,7 +410,7 @@ class ResultsServiceSpec extends Specification {
         when:
 
         def item = this.service.itemService.getLogicalItems([AssayContextItem.build(attributeElement: Element.build(expectedValueType: NUMERIC), attributeType: AttributeType.Free, valueDisplay: null)])[0]
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         ResultContextItem resultContextItem = service.createResultItem(cellString, item, errors)
 
@@ -421,7 +434,7 @@ class ResultsServiceSpec extends Specification {
 
     void 'test parse context item from element list'() {
         setup:
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         when:
         def tubaElement = Element.build(label: "tuba")
@@ -461,7 +474,7 @@ class ResultsServiceSpec extends Specification {
 
     void 'test parse context item from numeric value list'() {
         setup:
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         when:
         def attribute = Element.build(expectedValueType: NUMERIC)
@@ -507,7 +520,7 @@ class ResultsServiceSpec extends Specification {
 
     void 'test parse context item from free text list'() {
         setup:
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         when:
         def attribute = Element.build(expectedValueType: ELEMENT)
@@ -549,7 +562,7 @@ class ResultsServiceSpec extends Specification {
 
     void 'test different parents in dup check'() {
         setup:
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         Element childElement = Element.build();
 
@@ -579,7 +592,7 @@ class ResultsServiceSpec extends Specification {
 
     void 'test duplicate check'() {
         setup:
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         Result result1 = createResult()
         ResultContextItem item1 = createContextItem(result: result1, valueNum: 2.0)
@@ -606,7 +619,7 @@ class ResultsServiceSpec extends Specification {
     void 'test null values'() {
         setup:
         ResultsService service = new ResultsService();
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         // three nested measures
         Measure parentMeasure = Measure.build(resultType: Element.build(label: "parentCol"))
@@ -642,7 +655,7 @@ class ResultsServiceSpec extends Specification {
 
     void 'test duplicate result type names'() {
         setup:
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         // a result type is used by two different measures
         // there are two parents, which each have a child.  Both children have the same result type
