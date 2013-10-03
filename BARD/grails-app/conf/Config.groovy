@@ -138,6 +138,7 @@ bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
 
 grails {
     jesque {
+        enabled = false
         workers {
             workerPool {
                 workers = 1
