@@ -161,13 +161,21 @@ grails {
             userLookup.authorityJoinClassName = 'PersonRole'
             authority.className = 'Role'
             authority.nameField = 'authority'
+
             controllerAnnotations.staticRules = [
                     '/console/**': ['ROLE_CONSOLE_USER'],
-                    '/jesque/**': ['ROLE_ADMINISTRATOR']
+                    '/jesqueOverview/**': ['ROLE_ADMINISTRATOR'],
+                    '/jesqueQueues/**': ['ROLE_ADMINISTRATOR'],
+                    '/jesqueFailed/**': ['ROLE_ADMINISTRATOR'],
+                    '/jesqueStats/**': ['ROLE_ADMINISTRATOR'],
+                    '/jesqueWorking/**': ['ROLE_ADMINISTRATOR'],
+                    '/jesqueWorkers/**': ['ROLE_ADMINISTRATOR'],
+                    '/jesqueScheduled/**': ['ROLE_ADMINISTRATOR'],
             ]
             ipRestrictions = [
                     '/console/**': '127.0.0.1'
             ]
+
             /** authenticationEntryPoint */
             auth.loginFormUrl = '/bardLogin/auth'
             auth.forceHttps = 'false'
