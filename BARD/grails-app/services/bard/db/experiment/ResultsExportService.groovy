@@ -1,8 +1,10 @@
 package bard.db.experiment
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.ObjectReader
 import com.fasterxml.jackson.databind.SerializationFeature
 
+import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
 class ResultsExportService {
@@ -19,15 +21,15 @@ class ResultsExportService {
 
     JsonResultContextItem contextItemAsJson(ResultContextItem item) {
         return new JsonResultContextItem(itemId: item.id,
-            attribute: item.attributeElement.label,
-            attributeId: item.attributeElement.id,
-            qualifier: item.qualifier?.trim(),
-            valueNum: item.valueNum,
-            valueMin: item.valueMin,
-            valueMax: item.valueMax,
-            valueDisplay: item.valueDisplay.trim(),
-            valueElementId: item.valueElement?.id,
-            extValueId: item?.extValueId?.trim())
+                attribute: item.attributeElement.label,
+                attributeId: item.attributeElement.id,
+                qualifier: item.qualifier?.trim(),
+                valueNum: item.valueNum,
+                valueMin: item.valueMin,
+                valueMax: item.valueMax,
+                valueDisplay: item.valueDisplay.trim(),
+                valueElementId: item.valueElement?.id,
+                extValueId: item?.extValueId?.trim())
     }
 
     JsonResult convertToJson(Result result) {
@@ -44,17 +46,17 @@ class ResultsExportService {
         }
 
         return new JsonResult(resultId: result.id,
-            resultTypeId: result.resultType?.id,
-            statsModifierId: result.statsModifier?.id,
-            resultType: result.displayLabel,
-            valueNum: result.valueNum,
-            valueMin: result.valueMin,
-            valueMax: result.valueMax,
-            replicateNumber: result.replicateNumber,
-            valueDisplay: result.valueDisplay,
-            qualifier: result.qualifier?.trim(),
-            related: related,
-            contextItems: contextItems)
+                resultTypeId: result.resultType?.id,
+                statsModifierId: result.statsModifier?.id,
+                resultType: result.displayLabel,
+                valueNum: result.valueNum,
+                valueMin: result.valueMin,
+                valueMax: result.valueMax,
+                replicateNumber: result.replicateNumber,
+                valueDisplay: result.valueDisplay,
+                qualifier: result.qualifier?.trim(),
+                related: related,
+                contextItems: contextItems)
     }
 
     JsonSubstanceResults transformToJson(Long sid, List<Result> results) {
@@ -63,6 +65,27 @@ class ResultsExportService {
         List resultsAsJson = roots.collect { convertToJson(it) }
 
         return new JsonSubstanceResults(sid: sid, rootElem: resultsAsJson)
+    }
+
+    JsonSubstanceResults readResultsForSubstance(ObjectReader reader, String resultRow) {
+        JsonSubstanceResults substanceResults = reader.readValue(resultRow)
+        return substanceResults
+    }
+
+    List<JsonSubstanceResults> readResultsForSubstances(int numberOfRecords, Experiment experiment) {
+        final FileInputStream export = this.archivePathService.getEtlExport(experiment)
+        ObjectReader reader = mapper.reader(JsonSubstanceResults)
+
+        BufferedReader lineReader = new BufferedReader(new InputStreamReader(new GZIPInputStream(export)));
+
+
+        List<JsonSubstanceResults> jsonSubstanceResultsList = []
+        for (int i = 0; i < numberOfRecords; i++) {
+            JsonSubstanceResults substanceResults = readResultsForSubstance(reader, lineReader.readLine())
+            jsonSubstanceResultsList.add(substanceResults)
+        }
+        export.close()
+        return jsonSubstanceResultsList
     }
 
     void writeResultsForSubstance(Writer writer, Long sid, List<Result> results) {
