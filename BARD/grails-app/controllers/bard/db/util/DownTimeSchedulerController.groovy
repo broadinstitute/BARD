@@ -55,8 +55,7 @@ class DownTimeSchedulerController {
             final DownTimeScheduler downTimeScheduler = downTimeSchedulerList.get(0)
             displayValue = downTimeScheduler.getDisplayValueIfDownTimeGreaterThanCurrentTime()
         }
-        render(template: "downtime_notifier", model: [displayValue: displayValue])
-
+        render(text: displayValue, contentType: 'text/plain', template: null)
     }
 
     @Secured(["hasRole('ROLE_BARD_ADMINISTRATOR')"])

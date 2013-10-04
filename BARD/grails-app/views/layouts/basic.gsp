@@ -6,7 +6,7 @@
     <g:layoutHead/>
 
     <title>BARD: Catalog of Assay Protocols</title>
-    <r:require modules="basic,bootstrap,autocomplete,cart,idSearch,downtime"/>
+    <r:require modules="basic,bootstrap,autocomplete,cart,idSearch,jquerynotifier,downtime"/>
     <%@ page defaultCodec="none" %>
     <%@ page import="bardqueryapi.IDSearchType" %>
     <r:layoutResources/>
@@ -26,9 +26,16 @@
     <div class="search-panel">
 
         <div class="container-fluid">
-            <div class="row-fluid span12" id="downtimeMessage">
-                %{--Down Time messages will go here--}%
+            <div id="downtimenotify"class="row-fluid span12" style="display:none">
+                <div id="basic-template">
+                    <a class="ui-notify-cross ui-notify-close" href="#">x</a>
+                    <h1 id="downTimeTitle">#{title}</h1>
+                    <p>#{text}</p>
+                </div>
             </div>
+            %{--<div class="row-fluid span12" id="downtimeMessage">--}%
+                %{--Down Time messages will go here--}%
+            %{--</div>--}%
 
             <div class="row-fluid span12">
                 <strong class="logo"><a
