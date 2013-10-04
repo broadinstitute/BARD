@@ -175,7 +175,7 @@ class BasicContextItemCommand extends BardCommand {
             contextItem.setDictionaryValue(valueElement)
             contextItem.valueElement = valueElement
 
-        } else if(!StringUtils.isBlank(contextItem.extValueId)) {
+        } else if(!StringUtils.isBlank(extValueId)) {
             contextItem.setExternalOntologyValue(StringUtils.trimToNull(extValueId), StringUtils.trimToNull(valueDisplay))
 
         } else if(valueNum != null) {
