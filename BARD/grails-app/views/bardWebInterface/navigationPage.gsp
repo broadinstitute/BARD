@@ -1,3 +1,4 @@
+<%@ page import="bard.db.command.BardCommand" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +27,8 @@
                                     <li class="controller"><g:link
                                             controller="aclClass">ACL Management</g:link></li>
                                     <li class="controller"><g:link
-                                            controller="downTimeScheduler" action="create">Schedule Down Time</g:link></li>
+                                            controller="downTimeScheduler"
+                                            action="create">Schedule Down Time</g:link></li>
                                     <li class="controller"><g:link
                                             controller="downTimeScheduler" action="list">View Down Times</g:link></li>
                                     <li class="controller"><g:link
@@ -55,8 +57,11 @@
                             <ul>
                                 <li class="controller"><g:link controller="assayDefinition"
                                                                action="groupAssays">My Assay Definitions</g:link></li>
-                                <li class="controller"><g:link controller="assayDefinition"
-                                                               action="create">Create Assay Definition</g:link></li>
+                            %{--//You should belong to at least one team to create--}%
+                                <g:if test="${BardCommand.userRoles()}">
+                                    <li class="controller"><g:link controller="assayDefinition"
+                                                                   action="create">Create Assay Definition</g:link></li>
+                                </g:if>
                                 <li class="controller"><g:link controller="assayDefinition"
                                                                action="assayComparisonReport">Compare Assay Definitions</g:link></li>
                             </ul>
@@ -69,8 +74,11 @@
                             <ul>
                                 <li class="controller"><g:link controller="project"
                                                                action="groupProjects">My Projects</g:link></li>
-                                <li class="controller"><g:link controller="project"
-                                                               action="create">Create a New Project</g:link></li>
+                            %{--//You should belong to at least one team to create--}%
+                                <g:if test="${BardCommand.userRoles()}">
+                                    <li class="controller"><g:link controller="project"
+                                                                   action="create">Create a New Project</g:link></li>
+                                </g:if>
                             </ul>
                         </li>
                         <li>
@@ -93,8 +101,11 @@
                             <ul>
                                 <li class="controller"><g:link controller="panel"
                                                                action="myPanels">My Panels</g:link></li>
-                                <li class="controller"><g:link controller="panel"
-                                                               action="create">Create New Panel</g:link></li>
+                            %{--//You should belong to at least one team to create--}%
+                                <g:if test="${BardCommand.userRoles()}">
+                                    <li class="controller"><g:link controller="panel"
+                                                                   action="create">Create New Panel</g:link></li>
+                                </g:if>
                             </ul>
                         </li>
                     </ul>
