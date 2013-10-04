@@ -51,7 +51,7 @@ import spock.lang.Unroll
 @Mock([Element, ElementHierarchy, Project, ProjectContext, ProjectContextItem, ProjectDocument, ExternalReference, ExternalSystem, ProjectExperiment, ProjectExperimentContext, ProjectExperimentContextItem, ProjectStep,
     Experiment, ElementHierarchy, Ontology, OntologyItem, Assay, AssayContext, AssayContextMeasure, AssayDocument, AssayContextItem, Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExperimentFile])
 @Unroll
-class ReadyForExtractListenerUnitSpec extends Specification {
+class ReadyForExtractFlushListenerUnitSpec extends Specification {
     def 'test assay setting ready for extract for #description'() {
         setup:
         Assay assayx = Assay.build()
