@@ -159,7 +159,6 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         where:
         desc      | panelName | team              | teamPassword      | expectedHttpResponse
-        "User B"  | "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
         "CURATOR" | "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
     }
     def 'test edit owner admin #desc'() {
