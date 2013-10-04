@@ -9,6 +9,7 @@ import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContextOwner
+import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.EditingHelper
 import bardqueryapi.IQueryService
@@ -34,10 +35,10 @@ class ProjectController {
     CapPermissionService capPermissionService
     IQueryService queryService
 
-    def groupProjects(){
+    def groupProjects() {
         String username = springSecurityService.principal?.username
         List<Project> projects = capPermissionService.findAllObjectsForRoles(Project)
-        LinkedHashSet<Project>  uniqueProjects = new LinkedHashSet<Project>(projects)
+        LinkedHashSet<Project> uniqueProjects = new LinkedHashSet<Project>(projects)
         render(view: "groupProjects", model: [projects: uniqueProjects])
     }
 
@@ -83,6 +84,38 @@ class ProjectController {
         }
     }
 
+    def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
+        try {
+            final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value)?:Role.findByAuthority(inlineEditableCommand.value)
+            if (!ownerRole) {
+                editBadUserInputErrorMessage("Could not find a registered team with name ${inlineEditableCommand.value}")
+                return
+            }
+            Project project = Project.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(project.version, Project.class)
+            if (message) {
+                conflictMessage(message)
+                return
+            }
+
+            if (!BardCommand.isRoleInUsersRoleList(ownerRole)) {
+                editBadUserInputErrorMessage("You do not have the permission to select team: ${inlineEditableCommand.value}")
+                return
+            }
+            project = projectService.updateOwnerRole(inlineEditableCommand.pk, ownerRole)
+            generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.ownerRole.displayName)
+
+        }
+        catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+        } catch (Exception ee) {
+            log.error("error in editProjectOwnerRole", ee)
+            editErrorMessage()
+        }
+    }
+
+
     def editProjectName(InlineEditableCommand inlineEditableCommand) {
         try {
             Project project = Project.findById(inlineEditableCommand.pk)
@@ -94,13 +127,13 @@ class ProjectController {
 
             final String inputValue = inlineEditableCommand.value.trim()
             String maxSizeMessage = validateInputSize(Project.PROJECT_NAME_MAX_SIZE, inputValue.length())
-            if(maxSizeMessage){
+            if (maxSizeMessage) {
                 editExceedsLimitErrorMessage(maxSizeMessage)
                 return
             }
             project = projectService.updateProjectName(inlineEditableCommand.pk, inputValue)
 
-            if(project?.hasErrors()){
+            if (project?.hasErrors()) {
                 throw new Exception("Error while editing Project Name")
             }
             generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.name)
@@ -125,13 +158,13 @@ class ProjectController {
 
             final String inputValue = inlineEditableCommand.value.trim()
             String maxSizeMessage = validateInputSize(Project.DESCRIPTION_MAX_SIZE, inputValue.length())
-            if(maxSizeMessage){
+            if (maxSizeMessage) {
                 editExceedsLimitErrorMessage(maxSizeMessage)
                 return
             }
             project = projectService.updateProjectDescription(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
 
-            if(project?.hasErrors()){
+            if (project?.hasErrors()) {
                 throw new Exception("Error while editing Project Description")
             }
 
@@ -183,14 +216,14 @@ class ProjectController {
         }
 
         boolean editable = canEdit(permissionEvaluator, springSecurityService, projectInstance)
-        if(params.disableEdit)
+        if (params.disableEdit)
             editable = false
 
         String owner = capPermissionService.getOwner(projectInstance)
 
         Map projectMap = null;
         try {
-            if(projectInstance.ncgcWarehouseId != null) {
+            if (projectInstance.ncgcWarehouseId != null) {
                 projectMap = this.queryService.showProject(projectInstance.ncgcWarehouseId)
             }
         }
@@ -225,38 +258,6 @@ class ProjectController {
         [instance: projectInstance, pexperiment: projectExperimentRenderService.contructGraph(projectInstance)]
     }
 
-    def findById() {
-        if (params.projectId && params.projectId.isLong()) {
-            def instance = Project.findById(params.projectId)
-            if (instance)
-                redirect(action: "show", id: instance.id)
-            else
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), params.projectId])
-        }
-    }
-
-    def findByName() {
-        if (params.projectName) {
-            def projects = Project.findAllByNameIlike("%${params.projectName}%")
-            if (projects?.size() > 1) {
-                if (params.sort == null) {
-                    params.sort = "id"
-                }
-                projects.sort {
-                    a, b ->
-                        if (params.order == 'desc') {
-                            b."${params.sort}" <=> a."${params.sort}"
-                        } else {
-                            a."${params.sort}" <=> b."${params.sort}"
-                        }
-                }
-                render(view: "findByName", params: params, model: [projects: projects])
-            } else if (projects?.size() == 1)
-                redirect(action: "show", id: projects.get(0).id)
-            else
-                flash.message = message(code: 'default.not.found.property.message', args: [message(code: 'project.label', default: 'Project'), "name", params.projectName])
-        }
-    }
 
     def reloadProjectSteps(Long projectId) {
         try {
@@ -466,15 +467,23 @@ class ProjectCommand extends BardCommand {
 
     String name
     String description
-    ProjectGroupType projectGroupType=ProjectGroupType.PROJECT
-    ProjectStatus projectStatus  = ProjectStatus.DRAFT
+    ProjectGroupType projectGroupType = ProjectGroupType.PROJECT
+    ProjectStatus projectStatus = ProjectStatus.DRAFT
 
     SpringSecurityService springSecurityService
-
+    Role ownerRole
 
 
     static constraints = {
-        importFrom(Project, include: ["name", "description","groupType","projectStatus"])
+        importFrom(Project, include: ["ownerRole", "name", "description", "groupType", "projectStatus"])
+        ownerRole(nullable: false, validator: { value, command, err ->
+            /*We make it required in the command object even though it is optional in the domain.
+         We will make it required in the domain as soon as we are done back populating the data*/
+            //validate that the selected role is in the roles associated with the user
+            if (!BardCommand.isRoleInUsersRoleList(value)) {
+                err.rejectValue('ownerRole', "message.code", "You do not have the privileges to create Projects for this team : ${value.displayName}");
+            }
+        })
     }
 
     Project createProject() {
@@ -495,6 +504,7 @@ class ProjectCommand extends BardCommand {
         project.description = this.description
         project.dateCreated = new Date()
         project.projectStatus = this.projectStatus
+        project.ownerRole = this.ownerRole
 
     }
 }

@@ -18,24 +18,35 @@ import org.hibernate.Session
 import org.springframework.security.acls.domain.BasePermission
 import org.springframework.security.acls.model.NotFoundException
 import org.springframework.security.acls.model.Permission
+import org.springframework.security.core.GrantedAuthority
 import util.BardUser
 
 class CapPermissionService implements CapPermissionInterface {
 
     AclUtilService aclUtilService
     SpringSecurityService springSecurityService
+    SpringSecurityUiService springSecurityUiService
 
     void addPermission(domainObjectInstance) {
-        final BardUser bardUser = (BardUser) springSecurityService.principal
-        //  String userName = bardUser?.username
 
-        //Person person = Person.findByUserName(userName)
+        //We require that all newly created objects have an ownerRole
+        //At this time it is not a constraint in the database, but we should make it a constraint after we
+        //back populate this field in all the entities that we can create . At present these entities are
+        //Assay,Project,Panel and Experiments
+        Role role = domainObjectInstance.ownerRole
+        if (!role) {  //Use any team from the user roles, if you don;t find any throw an exception
+            final BardUser bardUser = (BardUser) springSecurityService.principal
+            //use the first team that you can find
+            final Collection<GrantedAuthority> authorities = bardUser.authorities
+            if(authorities){
+                role = (Role)authorities.get(0);
+            }
 
-        //we would use a default role so that all of our tests can pass
-        //Take this out as soon as we complete https://www.pivotaltracker.com/story/show/51238251
-        // Role newObjectRole = person?.newObjectRole ?: new Role(authority: userName)
-        //we assume that the newObjectRole should never be null. There will be a check constraint to insure that
-        addPermission(domainObjectInstance, bardUser.owningRole, BasePermission.ADMINISTRATION)
+            if (!role) {
+                throw new RuntimeException("Property ownerRole is a required field!!")
+            }
+        }
+        addPermission(domainObjectInstance, role, BasePermission.ADMINISTRATION)
     }
 
 
@@ -60,6 +71,25 @@ class CapPermissionService implements CapPermissionInterface {
                     //aclEntry
                     aclUtilService.deletePermission(domainObjectInstance, recipient, BasePermission.ADMINISTRATION)
                 }
+            }
+        }
+    }
+    void updatePermission(domainObjectInstance,Role newRole){
+        final Class<?> clazz = domainObjectInstance.getClass()
+        AclClass aclClass = AclClass.findByClassName(clazz.getName())
+        final AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByObjectIdAndAclClass(domainObjectInstance.id, aclClass)
+
+        if (aclObjectIdentity) {
+            List<AclEntry> aclEntryList = AclEntry.findAllByAclObjectIdentity(aclObjectIdentity)
+            AclSid aclSid = AclSid.findBySidAndPrincipal(newRole.authority, false)
+            if (!aclSid) {
+                aclSid= new AclSid(sid: newRole.authority, principal: false)
+                aclSid.save(flush:true)
+            }
+
+            for (AclEntry aclEntry : aclEntryList) {
+                 springSecurityUiService.updateAclEntry(aclEntry,aclObjectIdentity.id,
+                         aclSid.id,aclEntry.aceOrder,aclEntry.mask,aclEntry.granting,aclEntry.auditSuccess,aclEntry.auditFailure)
             }
         }
     }

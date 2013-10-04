@@ -150,8 +150,7 @@ class MolSpreadSheetCellUnitSpec extends Specification {
 
         assertTrue molSpreadSheetCell.validate()
         def molSpreadSheetCellType = molSpreadSheetCell.molSpreadSheetCellType
-        molSpreadSheetCell.setMolSpreadSheetCellType(null)
-        assertFalse molSpreadSheetCell.validate()
+
         molSpreadSheetCell.setMolSpreadSheetCellType(molSpreadSheetCellType)
         assertTrue molSpreadSheetCell.validate()
 

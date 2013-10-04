@@ -32,7 +32,7 @@ class ExperimentMeasure {
 
     static constraints = {
         parent(nullable: true)
-        parentChildRelationship(nullable: true, maxSize: PARENT_CHILD_RELATIONSHIP_MAX_SIZE)
+        parentChildRelationship(nullable: true)
         experiment()
         measure()
 

@@ -8,14 +8,13 @@ import bard.db.enums.hibernate.ProjectGroupTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
+import bard.db.people.Role
 import bard.db.registration.ExternalReference
 
 class Project extends AbstractContextOwner {
     public static final int PROJECT_NAME_MAX_SIZE = 256
     public static final int MODIFIED_BY_MAX_SIZE = 40
     public static final int DESCRIPTION_MAX_SIZE = 1000
-    public static final int GROUP_TYPE_MAX_SIZE = 20
-
     def capPermissionService
 
     String name
@@ -38,8 +37,11 @@ class Project extends AbstractContextOwner {
     // if this is set, then don't automatically update readyForExtraction when this entity is dirty
     // this is needed to change the value to anything except "Ready"
     boolean disableUpdateReadyForExtraction = false
+    Role ownerRole //The team that owns this object. This is used by the ACL to allow edits etc
+    static belongsTo = [ownerRole: Role]
+    boolean hasOwnerRoleChanged //Transient bit that is set to true, if the ownerRole is updated
 
-    static transients = ['disableUpdateReadyForExtraction']
+    static transients = ['hasOwnerRoleChanged', 'disableUpdateReadyForExtraction']
 
     static hasMany = [projectExperiments: ProjectExperiment,
             externalReferences: ExternalReference,
@@ -62,6 +64,7 @@ class Project extends AbstractContextOwner {
         lastUpdated(nullable: false)
         ncgcWarehouseId(nullable: true)
         dateCreated(nullable: false)
+        ownerRole(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
     /**
@@ -130,6 +133,22 @@ class Project extends AbstractContextOwner {
     def afterInsert() {
         Project.withNewSession {
             capPermissionService?.addPermission(this)
+        }
+    }
+
+    def afterUpdate() {
+        Project.withNewSession {
+            if (this.hasOwnerRoleChanged) { //update owner role if it changed
+                capPermissionService.updatePermission(this, this.ownerRole)
+            }
+
+        }
+    }
+
+    def beforeUpdate() {
+        // check if an actual change has been made and ownerRole has been changed
+        if (this.isDirty() && this.getDirtyPropertyNames().contains("ownerRole")) {
+            this.hasOwnerRoleChanged = true//set this true if the ownerRole has been updated
         }
     }
 }

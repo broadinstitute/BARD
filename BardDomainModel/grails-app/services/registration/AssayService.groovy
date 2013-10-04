@@ -4,10 +4,13 @@ import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
+import bard.db.people.Role
 import bard.db.registration.*
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.grails.plugins.springsecurity.service.acl.AclUtilService
 import org.hibernate.Query
 import org.hibernate.Session
+import org.springframework.security.core.GrantedAuthority
 
 
 class AssayService {
@@ -48,7 +51,19 @@ class AssayService {
         if (newAssay.assayType == AssayType.TEMPLATE) { //convert templates to regular
             newAssay.assayType = AssayType.REGULAR
         }
+        final Collection<Role> authorities = SpringSecurityUtils.getPrincipalAuthorities()
+        for (Role role : authorities) {
+            if (role.authority?.startsWith("ROLE_TEAM_")) {
+                Role foundRole = Role.findByAuthority(role.authority)
+                if(foundRole){
+                    newAssay.ownerRole = foundRole
+                    break
+                }
+            }
+        }
         newAssay.save(flush: true, validate: false)
+
+
 
         Map<AssayContext, AssayContext> assayContextOldToNew = cloneContexts(assay, newAssay, false)
         // clone all measures
@@ -83,6 +98,9 @@ class AssayService {
                          String assayNamePrefix = "Clone of ",
                          AssayStatus assayStatus = AssayStatus.DRAFT,
                          ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY) {
+        //find the first role that starts with Team
+
+        final Collection<GrantedAuthority> authorities = SpringSecurityUtils.principalAuthorities
 
         String assayName = assayNamePrefix + assay.assayName
         //we do not want to go over the max number of characters

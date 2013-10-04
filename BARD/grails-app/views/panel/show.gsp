@@ -107,8 +107,24 @@
                                         <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description" data-id="descriptionId"></a>
                                     </dd>
                                     <g:hiddenField name="version" id="versionId" value="${panelInstance.version}"/>
-                                    <dt>Owner:</dt>
-                                    <dd>${panelOwner}</dd>
+                                    <dt><g:message code="panel.ownerRole.label" default="Owner"/>:</dt>
+                                    <dd>
+                                        <span
+                                                class="description"
+                                                data-toggle="manual"
+                                                data-sourceCache="true"
+                                                data-placeholder="Required"
+                                                id="ownerRoleId"
+                                                data-type="select"
+                                                data-value="${panelInstance?.ownerRole?.displayName}"
+                                                data-source="/BARD/assayDefinition/roles"
+                                                data-pk="${panelInstance.id}"
+                                                data-url="/BARD/panel/editOwnerRole"
+                                                data-original-title="Select Owner Role">${panelInstance?.ownerRole?.displayName}</span>
+                                        <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="ownerRoleId" title="Click to edit owner role"></a>
+                                    </dd>
+                                    %{--<dt>Owner:</dt>--}%
+                                    %{--<dd>${panelOwner}</dd>--}%
 
                                     <dt><g:message code="default.dateCreated.label"/>:</dt>
                                     <dd><g:formatDate date="${panelInstance.dateCreated}" format="MM/dd/yyyy"/></dd>

@@ -2,6 +2,7 @@ package bard.db.registration
 
 import acl.CapPermissionService
 import bard.db.command.BardCommand
+import bard.db.people.Role
 import bard.db.project.InlineEditableCommand
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
@@ -106,9 +107,7 @@ class PanelController {
     }
 
 
-    def list() {
-        render(view: "findByName", params: params, model: [panels: Panel.findAll()])
-    }
+
 
     def editDescription(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -171,8 +170,36 @@ class PanelController {
             editErrorMessage()
         }
     }
+    def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
+        try {
+            final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value)?:Role.findByAuthority(inlineEditableCommand.value)
+            if (!ownerRole) {
+                editBadUserInputErrorMessage("Could not find a registered team with name ${inlineEditableCommand.value}")
+                return
+            }
+            Panel panel = Panel.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(panel.version, Panel.class)
+            if (message) {
+                conflictMessage(message)
+                return
+            }
+            if (!BardCommand.isRoleInUsersRoleList(ownerRole)) {
+                editBadUserInputErrorMessage("You do not have the permission to select team: ${inlineEditableCommand.value}")
+                return
+            }
+            panel = panelService.updatePanelOwnerRole(inlineEditableCommand.pk,ownerRole)
+            generateAndRenderJSONResponse(panel.version, panel.modifiedBy, "", panel.lastUpdated, panel.ownerRole.displayName)
 
-
+        }
+        catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+        }
+        catch (Exception ee) {
+            log.error(ee)
+            editErrorMessage()
+        }
+    }
 
     def index() {
         redirect(action: "myPanels")
@@ -227,40 +254,6 @@ class PanelController {
                 }
             } else
                 element ""
-        }
-    }
-
-    def findById() {
-        if (params.id && params.id.isLong()) {
-            Panel panelInstance = Panel.findById(params.id.toLong())
-            if (panelInstance?.id)
-                redirect(action: "show", id: panelInstance.id)
-            else
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'panel.label', default: 'Panel'), params.panelId])
-        }
-    }
-
-    def findByName() {
-        if (params.name) {
-            def panels = Panel.findAllByNameIlike("%${params.name}%")
-            if (panels?.size() > 1) {
-                if (params.sort == null) {
-                    params.sort = "id"
-                }
-                panels.sort {
-                    a, b ->
-                        if (params.order == 'desc') {
-                            b."${params.sort}" <=> a."${params.sort}"
-                        } else {
-                            a."${params.sort}" <=> b."${params.sort}"
-                        }
-                }
-                render(view: "findByName", params: params, model: [panels: panels])
-            } else if (panels?.size() == 1) {
-                redirect(action: "show", id: panels.get(0).id)
-            } else {
-                flash.message = message(code: 'default.not.found.property.message', args: [message(code: 'panel.label', default: 'Panel'), "name", params.name])
-            }
         }
     }
 }
@@ -327,10 +320,18 @@ class PanelCommand extends BardCommand {
     String name
     String description
     SpringSecurityService springSecurityService
-
+    Role ownerRole
 
     static constraints = {
-        importFrom(Panel, exclude: ['readyForExtraction', 'lastUpdated', 'dateCreated'])
+        importFrom(Panel, exclude: ['ownerRole', 'readyForExtraction', 'lastUpdated', 'dateCreated'])
+        ownerRole(nullable: false, validator: { value, command, err ->
+            /*We make it required in the command object even though it is optional in the domain.
+         We will make it required in the domain as soon as we are done back populating the data*/
+            //validate that the selected role is in the roles associated with the user
+            if (!BardCommand.isRoleInUsersRoleList(value)) {
+                err.rejectValue('ownerRole', "message.code", "You do not have the privileges to create Panels for this team : ${value.displayName}");
+            }
+        })
     }
 
     PanelCommand() {}
@@ -355,5 +356,6 @@ class PanelCommand extends BardCommand {
         panel.modifiedBy = springSecurityService.principal?.username
         panel.name = this.name
         panel.description = this.description
+        panel.ownerRole = this.ownerRole
     }
 }

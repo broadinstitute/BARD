@@ -9,6 +9,8 @@ import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
 import bard.db.enums.ReadyForExtraction
+import bard.db.experiment.Experiment
+import bard.db.people.Role
 import org.apache.commons.collections.CollectionUtils
 import org.springframework.security.access.prepost.PreAuthorize
 import registration.AssayService
@@ -16,6 +18,19 @@ import registration.AssayService
 class AssayDefinitionService {
     AssayService assayService
     AssayRestService assayRestService
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.project.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Assay updateOwnerRole(Long id, Role ownerRole) {
+        Assay assay = Assay.findById(id)
+        assay.ownerRole = ownerRole
+//
+//        //TODO: Update the roles of all of the experiments that belong to it
+//        for(Experiment experiment :assay.experiments){
+//           experiment.ownerRole = ownerRole
+//        }
+        assay.save(flush: true)
+        return Assay.findById(id)
+    }
 
     Map generateAssayComparisonReport(final Assay assayOne, final Assay assayTwo) {
 

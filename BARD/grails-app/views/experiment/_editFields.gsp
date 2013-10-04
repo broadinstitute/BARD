@@ -1,4 +1,4 @@
-<%@ page import="bard.db.enums.HierarchyType;java.text.SimpleDateFormat" %>
+<%@ page import="bard.db.people.Role; bard.db.enums.HierarchyType;java.text.SimpleDateFormat" %>
 
 <div class="row-fluid">
 <div id="foo" class="span12">

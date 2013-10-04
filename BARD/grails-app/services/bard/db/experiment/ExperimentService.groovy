@@ -7,6 +7,7 @@ import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.db.enums.ExperimentStatus
 import bard.db.enums.HierarchyType
 import bard.db.enums.ReadyForExtraction
+import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.Measure
 import org.apache.commons.lang.StringUtils
@@ -20,6 +21,14 @@ class ExperimentService {
 
     AssayService assayService;
     ExperimentRestService experimentRestService
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Experiment updateOwnerRole(final Long id, final Role ownerRole) {
+        Experiment experiment = Experiment.findById(id)
+        experiment.ownerRole = ownerRole
+        experiment.save(flush: true)
+        return Experiment.findById(id)
+    }
 
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Experiment updateRunFromDate(final Long id, final Date runDateFrom) {
