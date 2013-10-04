@@ -4,6 +4,7 @@ import grails.plugins.springsecurity.Secured
 import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclClass
 import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclObjectIdentity
 import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclSid
+import org.springframework.dao.DataIntegrityViolationException
 
 @Secured(["hasRole('ROLE_BARD_ADMINISTRATOR')"])
 class AclObjectIdentityController extends grails.plugins.springsecurity.ui.AclObjectIdentityController {
@@ -15,6 +16,37 @@ class AclObjectIdentityController extends grails.plugins.springsecurity.ui.AclOb
     protected Class<?> lookupAclSidClass() { AclSid }
 
     protected Class<?> lookupAclClassClass() { AclClass }
+    def create = {
+        [aclObjectIdentity: lookupClass().newInstance(params),
+                classes: lookupAclClassClass().list(), sids: lookupAclSidClass().list()]
+    }
+
+    def save = {
+        throw new RuntimeException("Save not supported. Create the entity directly")
+    }
+
+    def edit = {
+        throw new RuntimeException("Edit not supported. Edit the entity directly")
+    }
+
+    def update = {
+        throw new RuntimeException("Update not supported. Update the entity directly")
+    }
+
+    def delete = {
+        def aclObjectIdentity = findById()
+        if (!aclObjectIdentity) return
+
+        try {
+            springSecurityUiService.deleteAclObjectIdentity aclObjectIdentity
+            flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'aclObjectIdentity.label', default: 'AclObjectIdentity'), params.id])}"
+            redirect action: search
+        }
+        catch (DataIntegrityViolationException e) {
+            flash.error = "${message(code: 'default.not.deleted.message', args: [message(code: 'aclObjectIdentity.label', default: 'AclObjectIdentity'), params.id])}"
+            redirect action: edit, id: params.id
+        }
+    }
 
     def aclObjectIdentitySearch = {
 

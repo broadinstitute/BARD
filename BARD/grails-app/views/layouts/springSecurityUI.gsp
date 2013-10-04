@@ -14,32 +14,7 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon"/>
 
     <s2ui:resources module='spring-security-ui'/>
-    <%--
 
-    The 'resources' tag in SecurityUiTagLib renders these tags if you're not using the resources plugin:
-
-       <link rel="stylesheet" media="screen" href="${resource(dir:'css',file:'reset.css',plugin:'spring-security-ui')}"/>
-       <g:javascript library='jquery' plugin='jquery' />
-       <jqui:resources />
-       <link rel="stylesheet" media="screen" href="${resource(dir:'css/smoothness',file:'jquery-ui-1.8.2.custom.css',plugin:'spring-security-ui')}"/>
-       <link rel="stylesheet" media="screen" href="${resource(dir:'css',file:'jquery.jgrowl.css',plugin:'spring-security-ui')}"/>
-       <link rel="stylesheet" media="screen" href="${resource(dir:'css',file:'jquery.safari-checkbox.css',plugin:'spring-security-ui')}"/>
-       <link rel="stylesheet" media="screen" href="${resource(dir:'css',file:'date_input.css',plugin:'spring-security-ui')}"/>
-       <link rel="stylesheet" media="screen" href="${resource(dir:'css',file:'jquery.jdMenu.css',plugin:'spring-security-ui')}"/>
-       <link rel="stylesheet" media="screen" href="${resource(dir:'css',file:'jquery.jdMenu.slate.css',plugin:'spring-security-ui')}"/>
-       <link rel="stylesheet" media="screen" href="${resource(dir:'css',file:'table.css',plugin:'spring-security-ui')}"/>
-       <link rel="stylesheet" media="screen" href="${resource(dir:'css',file:'spring-security-ui.css',plugin:'spring-security-ui')}"/>
-
-    or these if you are:
-
-       <r:require module="spring-security-ui"/>
-       <r:layoutResources/>
-
-    If you need to customize the resources, replace the <s2ui:resources> tag with
-    the explicit tags above and edit those, not the taglib code.
-    --%>
-
-    <%-- tab icons --%>
     <style>
     .icon_role {
         background-image: url('${fam.icon(name: 'lock')}');
@@ -89,8 +64,7 @@
                                 <ul>
                                     <li><g:link controller="aclClass" action='search'><g:message
                                             code="spring.security.ui.search"/></g:link></li>
-                                    <li><g:link controller="aclClass" action='create'><g:message
-                                            code="spring.security.ui.create"/></g:link></li>
+
                                 </ul>
                             </li>
                             <li><g:message code="spring.security.ui.menu.aclSid"/> &raquo;
@@ -105,16 +79,14 @@
                                 <ul>
                                     <li><g:link controller="aclObjectIdentity" action='search'><g:message
                                             code="spring.security.ui.search"/></g:link></li>
-                                    <li><g:link controller="aclObjectIdentity" action='create'><g:message
-                                            code="spring.security.ui.create"/></g:link></li>
+
                                 </ul>
                             </li>
                             <li><g:message code="spring.security.ui.menu.aclEntry"/> &raquo;
                                 <ul>
                                     <li><g:link controller="aclEntry" action='search'><g:message
                                             code="spring.security.ui.search"/></g:link></li>
-                                    <li><g:link controller="aclEntry" action='create'><g:message
-                                            code="spring.security.ui.create"/></g:link></li>
+
                                 </ul>
                             </li>
                         </ul>
