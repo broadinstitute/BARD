@@ -182,6 +182,8 @@ class BasicContextItemCommand extends BardCommand {
             contextItem.setNumericValue(StringUtils.isBlank(qualifier)?"= ":qualifier, convertToBigDecimal('valueNum', valueNum, contextItem.attributeElement?.unit)?.toFloat())
         } else if(valueMin != null) {
             contextItem.setRange(convertToBigDecimal('valueMin', valueMin, contextItem.attributeElement?.unit)?.toFloat(), convertToBigDecimal('valueMax', valueMax, contextItem.attributeElement?.unit)?.toFloat())
+        } else {
+            contextItem.setFreeTextValue(valueDisplay)
         }
 
         if (contextItem instanceof AssayContextItem) {
