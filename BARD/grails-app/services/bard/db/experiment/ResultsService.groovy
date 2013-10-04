@@ -244,7 +244,7 @@ class ResultsService {
             String[] line = reader.readNext()
 
             if (line != null && topLines.size() < LINES_TO_SHOW_USER)
-                topLines.add(line)
+                topLines.add(line as List)
 
             return line;
         }
@@ -763,7 +763,6 @@ class ResultsService {
         key.valueMin = result.valueMin
         key.valueMax = result.valueMax
         key.valueDisplay = result.valueDisplay
-        key.measureId = result.measure.id
 
         key.items = result.resultContextItems.collect(new HashSet(), {
             LogicalKeyItem item = new LogicalKeyItem()
@@ -782,10 +781,27 @@ class ResultsService {
     }
 
     private void checkForDuplicates(ImportSummary errors, Collection<Result> results) {
-        Set<LogicalKey> seen = new HashSet()
+        Map<Result, LogicalKey> resultToKey = [:]
 
         for (result in results) {
             LogicalKey key = constructKey(result)
+            resultToKey[result] = key
+        }
+
+        // connect parents
+        for (result in results) {
+            LogicalKey childKey = resultToKey[result]
+            assert childKey != null
+            result.resultHierarchiesForResult.each {
+                LogicalKey parentKey = resultToKey[it.parentResult]
+                assert parentKey != null
+                childKey.parentKey = parentKey
+            }
+        }
+
+        Set<LogicalKey> seen = new HashSet()
+
+        for (key in resultToKey.values()) {
             boolean added = seen.add(key)
             if (!added) {
                 errors.addError(0, 0, "Found duplicate: ${key}")

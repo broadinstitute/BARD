@@ -584,7 +584,7 @@ class ResultsServiceSpec extends Specification {
         assert child2.resultHierarchiesForResult.size() == 1
 
         when:
-        service.checkForDuplicates(errors, [child1, child2])
+        service.checkForDuplicates(errors, [parent1, parent2, child1, child2])
 
         then:
         !errors.hasErrors()
@@ -600,6 +600,9 @@ class ResultsServiceSpec extends Specification {
         Result result2 = createResult()
         ResultContextItem item2 = createContextItem(result: result2, valueNum: 3.0)
 
+        Result result3 = new Result(substanceId: result1.substanceId, resultType: result1.resultType, measure: result1.measure)
+        ResultContextItem item3 = createContextItem(result: result3, valueNum: 2.0)
+
         List<Result> results = [result1, result2]
 
         when:
@@ -609,7 +612,7 @@ class ResultsServiceSpec extends Specification {
         !errors.hasErrors()
 
         when:
-        results.add(result1)
+        results.add(result3)
         service.checkForDuplicates(errors, results)
 
         then:

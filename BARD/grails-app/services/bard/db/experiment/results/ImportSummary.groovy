@@ -10,7 +10,7 @@ import bard.db.experiment.ResultsService
  * To change this template use File | Settings | File Templates.
  */
 class ImportSummary implements Serializable {
-        def errors = []
+        List<String> errors = []
 
         // these are just collected for purposes of reporting the import summary at the end
         int linesParsed = 0;
@@ -22,7 +22,7 @@ class ImportSummary implements Serializable {
         int resultsWithRelationships = 0;
         int resultAnnotations = 0;
 
-        List<List> topLines = []
+        List<List<String>> topLines = []
 
         void addError(int line, int column, String message) {
             if (!tooMany()) {

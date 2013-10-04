@@ -82,6 +82,10 @@ class AsyncResultsService {
         return mapper.writeValueAsString(status)
     }
 
+    JobStatus fromString(String json) {
+        return mapper.readValue(json, JobStatus.class)
+    }
+
     public void updateStatus(String jobKey, String status) {
         redisService.withRedis { Jedis jedis ->
             jedis.setex( (jobKeyPrefix+jobKey), timeoutInSeconds, asString(new JobStatus(status: status)))
@@ -100,7 +104,7 @@ class AsyncResultsService {
         redisService.withRedis { Jedis jedis ->
             String json = jedis.get((jobKeyPrefix + jobKey))
             if(json != null) {
-                status = mapper.readValue(json, JobStatus.class)
+                status = fromString(json)
             }
         }
 
