@@ -79,4 +79,50 @@ class ContextItemServiceUnitSpec extends Specification {
         item.valueType == ValueType.FREE_TEXT
         item.valueDisplay == "y"
     }
+
+    def "test create value element context item"() {
+        ContextItemService service = new ContextItemService()
+
+        Element attribute = Element.build(expectedValueType: ExpectedValueType.ELEMENT)
+        Element value = Element.build(expectedValueType: ExpectedValueType.NONE)
+        AssayContext context = AssayContext.build()
+        BasicContextItemCommand command = new BasicContextItemCommand()
+        command.context = context
+        command.contextClass = "AssayContext"
+        command.attributeElementId = attribute.id
+        command.valueElementId = value.id
+        command.valueDisplay = "y"
+
+        when:
+        boolean created = service.createAssayContextItem(context.id, command)
+
+        then:
+        created
+        AssayContextItem item = context.contextItems.first()
+        item.valueType == ValueType.ELEMENT
+        item.valueElement == value
+    }
+
+    def "test create numeric context item"() {
+        ContextItemService service = new ContextItemService()
+
+        Element attribute = Element.build(expectedValueType: ExpectedValueType.NUMERIC)
+        Element value = Element.build(expectedValueType: ExpectedValueType.NONE)
+        AssayContext context = AssayContext.build()
+        BasicContextItemCommand command = new BasicContextItemCommand()
+        command.context = context
+        command.contextClass = "AssayContext"
+        command.attributeElementId = attribute.id
+        command.valueNum = "100.0"
+
+        when:
+        boolean created = service.createAssayContextItem(context.id, command)
+
+        then:
+        created
+        AssayContextItem item = context.contextItems.first()
+        item.valueType == ValueType.NUMERIC
+        item.valueNum == 100.0
+
+    }
 }
