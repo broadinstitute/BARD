@@ -58,4 +58,25 @@ class ContextItemServiceUnitSpec extends Specification {
         item.valueDisplay == "y"
         item.extValueId == "x"
     }
+
+    def "test create free text context item"() {
+        ContextItemService service = new ContextItemService()
+
+        Element attribute = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
+        AssayContext context = AssayContext.build()
+        BasicContextItemCommand command = new BasicContextItemCommand()
+        command.context = context
+        command.contextClass = "AssayContext"
+        command.attributeElementId = attribute.id
+        command.valueDisplay = "y"
+
+        when:
+        boolean created = service.createAssayContextItem(context.id, command)
+
+        then:
+        created
+        AssayContextItem item = context.contextItems.first()
+        item.valueType == ValueType.FREE_TEXT
+        item.valueDisplay == "y"
+    }
 }
