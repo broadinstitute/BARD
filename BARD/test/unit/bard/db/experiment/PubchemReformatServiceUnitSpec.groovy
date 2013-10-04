@@ -117,7 +117,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         when:
         PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap("100", [new PubchemReformatService.ResultMapRecord(series: 5, tid: "2", resultType: "AC50")])
 
-        List rows = map.getValues([PUBCHEM_ACTIVITY_OUTCOME: "1", PUBCHEM_ACTIVITY_SCORE: "92.2", PUBCHEM_SID: "100", "2": "97.8"], "AC50", null, null)
+        List rows = map.getValues([PUBCHEM_ACTIVITY_OUTCOME: "1", PUBCHEM_ACTIVITY_SCORE: "92.2", PUBCHEM_SID: "100", "2": "97.8"], "AC50", null, null, null)
 
         then:
         rows.size() == 1
