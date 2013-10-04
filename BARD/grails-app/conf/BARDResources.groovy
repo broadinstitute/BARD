@@ -8,7 +8,7 @@ modules = {
         }
     }
     core {
-        dependsOn 'jquery, jquery-ui, jquery-theme, jquery-validation-ui, datatables, jqueryform'
+        dependsOn 'jquery, jquery-ui, jquery-theme, jquery-validation-ui, dataTables, jqueryform'
         resource url: '/css/datatables/demo_table_jui.css'
         resource url: '/js/application.js'
         resource url: "css/bard.css"
@@ -16,13 +16,35 @@ modules = {
         resource url: '/js/persona/include.js'
         resource url: 'js/persona/signin.js'
     }
-    basic {
-        dependsOn 'core'
-        resource url: "/css/layout.css"
-        resource url: "/css/table.css"
-        resource url: "/css/bardHomepage/BardHeaderFooter.css"
-        resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js'
-        resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js'
+    accessontology {
+        resource url: "/js/cap/accessOntology.js"
+    }
+    addAllItemsToCarts {
+        resource url: "js/addAllItemsToCart.js"
+    }
+    assaycards {
+        dependsOn('card')
+        resource url: '/js/cap/assay.cards.js'
+    }
+
+    assaycompare {
+        dependsOn 'core,bootstrap,bootstrapplus,card'
+        resource url: '/js/cap/assaycompare.js'
+    }
+    assayshow {
+        dependsOn 'bootstrapplus, card, sectionCounter'
+        resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
+        resource url: '/js/cap/assay.show.js'
+        resource url: '/css/measures-dynatree.css'
+    }
+    assaysummary {
+        resource url: '/js/cap/editSummary.js'
+    }
+    autocomplete {
+        resource url: "js/autocomplete.js"
+    }
+    bardHeaderFooter {
+        resource url: "css/bardHomepage/BardHeaderFooter.css"
     }
     bardHomepage {
         dependsOn 'core,bootstrap,bootstrap-responsive-css'
@@ -34,86 +56,7 @@ modules = {
         resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js'
         resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js'
     }
-    login {
-        resource url: "css/font-awesome/css/font-awesome.css"
-        resource url: "css/social-buttons.css"
-    }
-    dateTimePicker{
-        resource url:'/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'
-        resource url:'/js/bootstrap-datetimepicker/css/datetimepicker.css'
-    }
-    downtime {
-        dependsOn 'grailsEvents' //from the grails event push plugin
-        resource url: '/js/cap/downtime.js'
 
-    }
-    moveExperiments {
-        dependsOn 'core,bootstrap'
-        resource url: '/js/cap/moveExperiments.js'
-    }
-    xeditable {
-        resource url: "/js/x-editable/bootstrap-editable.js"
-        resource url: "/css/x-editable/bootstrap-editable.css"
-        resource url: "/js/x-editable/moment.js"
-        resource url: "/js/x-editable/combodate.js"
-    }
-    bootstrapplus {
-        resource url: '/css/bootstrap-plus.css'
-    }
-    card {
-        resource url: '/css/card.css'
-    }
-    contextItem {
-        dependsOn 'select2, bootstrapplus, card'
-        resource url: '/js/cap/contextItem.js'
-    }
-    newTerm {
-        resource url: '/css/newterm/newTerms.css'
-        resource url: '/js/element/newTerm.js'
-
-    }
-    datatables {
-        resource url: '/js/DataTables-1.9.3/media/js/jquery.dataTables.js'
-    }
-    grailspagination {
-        resource url: '/css/grailspagination.css'
-    }
-    tableSorter {
-        resource url: '/js/jquery-table-sorter/jquery.tablesorter.min.js'
-        resource url: '/js/jquery-table-sorter/theme.default.css'
-    }
-    dictionaryPage {
-        dependsOn("tableSorter")
-        resource url: "js/html5historyapi/history.js"
-    }
-    dynatree {
-        dependsOn 'jquery, jquery-ui'
-        resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
-        resource url: '/js/dynatree-1.2.2/skin/ui.dynatree.css'
-    }
-    showProjectAssay {
-        dependsOn("cardDisplayCSS")
-        //Polyfill for handling History
-        resource url: "js/html5historyapi/history.js"
-        resource url: "js/coreShowProjectAssay.js"
-        // Stylesheet for context card view
-    }
-    jqueryform {
-        resource url: '/js/jquery.form.js'
-    }
-    cardDisplayCSS {
-        resource url: "css/card.css"
-    }
-    assaycards {
-        dependsOn('card')
-        resource url: '/js/cap/assay.cards.js'
-    }
-    assayshow {
-        dependsOn 'bootstrapplus, card, sectionCounter'
-        resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
-        resource url: '/js/cap/assay.show.js'
-        resource url: '/css/measures-dynatree.css'
-    }
     basic {
         dependsOn 'core'
         resource url: "/css/layout.css"
@@ -122,19 +65,147 @@ modules = {
         resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js'
         resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js'
     }
+
+    bootstrapplus {
+        resource url: '/css/bootstrap-plus.css'
+    }
+    canEditWidget {
+        resource url: "/css/caneditwidget.css"
+    }
+    card {
+        resource url: '/css/card.css'
+    }
+    cardDisplayCSS {
+        resource url: "css/card.css"
+    }
+    cart {
+        resource url: "js/cart.js", disposition: 'head'
+        resource url: "css/cart.css"
+    }
+    cbas {
+        dependsOn 'bootstrap'
+        resource url: "css/cbas.css"
+    }
+
+    compoundOptions {
+        resource url: "js/compoundOptions.js"
+    }
+
+    contextItem {
+        dependsOn 'select2, bootstrapplus, card'
+        resource url: '/js/cap/contextItem.js'
+    }
+    createProject {
+        resource url: '/js/cap/createProject.js'
+    }
+
+    //D
     d3Library {
         resource url: "js/lib/d3.min.js"
     }
-    sectionCounter {
-        resource url: '/css/sectioncounter.css'
+    dataTables {
+        resource url: "js/DataTables-1.9.4/jquery.dataTables.js"
+        resource url: "css/jquery-dataTables.css"
     }
-    handlebars {
-        resource url: "/js/handlebars-1.0.rc.2/handlebars.js"
+    dateTimePicker{
+        resource url:'/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'
+        resource url:'/js/bootstrap-datetimepicker/css/datetimepicker.css'
     }
     dcLibrary {
         resource url: "js/lib/dc.js"
         resource url: "js/lib/crossfilter.js"
         resource url: "css/dc.css"
+    }
+    dictionaryPage {
+        dependsOn("tableSorter")
+        resource url: "js/html5historyapi/history.js"
+    }
+
+    downtime {
+        dependsOn 'grailsEvents' //from the grails event push plugin
+        resource url: '/js/cap/downtime.js'
+
+    }
+    dynatree {
+        dependsOn 'jquery, jquery-ui'
+        resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
+        resource url: '/js/dynatree-1.2.2/skin/ui.dynatree.css'
+    }
+
+    //E
+    experimentData {
+        //Polyfill for handling History
+        resource url: "js/html5historyapi/history.js"
+        resource url: "js/experimentalResults.js"
+    }
+    experimentsummary {
+        resource url: '/js/cap/editExperimentSummary.js'
+    }
+    //G
+    grailspagination {
+        resource url: '/css/grailspagination.css'
+    }
+    handlebars {
+        resource url: "/js/handlebars-1.0.rc.2/handlebars.js"
+    }
+    //H
+    histogram {
+        dependsOn 'bootstrap,jquery,d3Library'
+
+        resource url: "js/histogram/experimentalResultsHistogram.js"
+        resource url: "css/experimentalResultHistogram.css"
+    }
+
+    //I
+    idSearch {
+        resource url: "js/idSearchDialog.js"
+    }
+    //J
+    jqueryform {
+        resource url: '/js/jquery.form.js'
+    }
+    jqueryMobile {
+        dependsOn 'jqueryMobilePreInit'
+        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.css"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile.structure-1.3.1.css"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile.theme-1.3.1.css"
+        resource url: "css/bard-mobile.css"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.js"
+        resource url: "js/jqueryMobilePostInit.js"
+    }
+    jqueryMobilePreInit {
+        dependsOn 'jquery, jquery-ui, jquery-theme'
+        resource url: "js/jqueryMobilePreInit.js"
+    }
+    jquerynotifier{
+        dependsOn 'jquery, jquery-ui, jquery-theme'
+        resource url:'js/jquery-notifier/jquery.notify.js'
+        resource url:'js/jquery-notifier/ui.notify.css'
+    }
+    jsDrawEditor {
+        resource url: "js/jsDraw/jsDrawEditor.js"
+        resource url: "css/jsDrawEditor.css"
+    }
+    //L
+    login {
+        resource url: "css/font-awesome/css/font-awesome.css"
+        resource url: "css/social-buttons.css"
+    }
+    //m
+    molecularSpreadSheet {
+        dependsOn "dataTables"
+        resource url: "js/molecularSpreadSheet.js"
+        resource url: "css/datatables_supplemental.css"
+    }
+    moveExperiments {
+        dependsOn 'core,bootstrap'
+        resource url: '/js/cap/moveExperiments.js'
+    }
+
+    newTerm {
+        resource url: '/css/newterm/newTerms.css'
+        resource url: '/js/element/newTerm.js'
+
     }
 
     projectstep {
@@ -144,81 +215,16 @@ modules = {
         resource url: '/js/projectstep/viz.js'
         resource url: '/css/projectstep.css'
     }
-
-//Adding version allows clients to not cache javascript
-    search {
-        resource url: "js/search.js"
-        resource url: "css/facetDiv.css"
-        resource url: "css/searchResults.css"
-    }
-    idSearch {
-        resource url: "js/idSearchDialog.js"
-    }
-    canEditWidget {
-        resource url: "/css/caneditwidget.css"
-    }
-    compoundOptions {
-        resource url: "js/compoundOptions.js"
-    }
-    assaysummary {
-        resource url: '/js/cap/editSummary.js'
-    }
-    structureSearch {
-        resource url: "js/structureSearchDialog.js"
-    }
-    createProject {
-        resource url: '/js/cap/createProject.js'
-    }
-    autocomplete {
-        resource url: "js/autocomplete.js"
-    }
     projectsummary {
         dependsOn('card')
         resource url: '/js/cap/editProjectSummary.js'
     }
-    cart {
-        resource url: "js/cart.js", disposition: 'head'
-        resource url: "css/cart.css"
-    }
-    bardHeaderFooter {
-        resource url: "css/bardHomepage/BardHeaderFooter.css"
-    }
-    experimentsummary {
-        resource url: '/js/cap/editExperimentSummary.js'
-    }
+
     promiscuity {
         resource url: "js/promiscuity.js"
         resource url: "css/promiscuity.css"
     }
-    substances {
-        resource url: "js/substances.js"
-    }
-    select2 {
-        dependsOn 'jquery'
-        resource url: "/js/select2-release-3.2/select2.css"
-        resource url: "/js/select2-release-3.2/select2.js"
-    }
-    dataTables {
-        resource url: "js/DataTables-1.9.4/jquery.dataTables.js"
-        resource url: "css/jquery-dataTables.css"
-    }
-    accessontology {
-        resource url: "/js/cap/accessOntology.js"
-    }
-    molecularSpreadSheet {
-        dependsOn "dataTables"
-        resource url: "js/molecularSpreadSheet.js"
-        resource url: "css/datatables_supplemental.css"
-    }
-    experimentData {
-        //Polyfill for handling History
-        resource url: "js/html5historyapi/history.js"
-        resource url: "js/experimentalResults.js"
-    }
     richtexteditor {
-        // resource url: "/css/richtexteditor.css"
-        //resource url: "/js/nicedit/nicEdit.js"
-        //resource url: "/images/nicedit/nicEditorIcons.gif"
     }
     richtexteditorForCreate {
         resource url: "/js/cap/createDocument.js"
@@ -227,42 +233,35 @@ modules = {
         resource url: "/css/editDocument.css"
         resource url: "/js/cap/editDocument.js"
     }
-    jqueryMobile {
-        dependsOn 'jqueryMobilePreInit'
-        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.css"
-//        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.css"
-        resource url: "jquery.mobile-1.3.1/jquery.mobile.structure-1.3.1.css"
-//        resource url: "jquery.mobile-1.3.1/jquery.mobile.structure-1.3.1.min.css"
-        resource url: "jquery.mobile-1.3.1/jquery.mobile.theme-1.3.1.css"
-//        resource url: "jquery.mobile-1.3.1/jquery.mobile.theme-1.3.1.min.css"
-        resource url: "css/bard-mobile.css"
-//        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.js"
-        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.js"
-        resource url: "js/jqueryMobilePostInit.js"
+
+
+
+//Adding version allows clients to not cache javascript
+    search {
+        resource url: "js/search.js"
+        resource url: "css/facetDiv.css"
+        resource url: "css/searchResults.css"
     }
-    jqueryMobilePreInit {
-        dependsOn 'jquery, jquery-ui, jquery-theme'
-        resource url: "js/jqueryMobilePreInit.js"
+    sectionCounter {
+        resource url: '/css/sectioncounter.css'
     }
-    twitterBootstrapAffix {
-        resource url: "/css/twitterBootstrapAffix.css"
-        resource url: "/js/jquery-ui-bootstrap/bootstrap/js/twitterBootstrapAffix.js"
+    select2 {
+        dependsOn 'jquery'
+        resource url: "/js/select2-release-3.2/select2.css"
+        resource url: "/js/select2-release-3.2/select2.js"
     }
-    zyngaScroller {
-        resource url: "/js/zynga-scroller-a44d7c2/Animate.js"
-        resource url: "/js/zynga-scroller-a44d7c2/Scroller.js"
-        resource url: "/js/zynga-scroller-a44d7c2/render.js"
+    showProjectAssay {
+        dependsOn("cardDisplayCSS")
+        //Polyfill for handling History
+        resource url: "js/html5historyapi/history.js"
+        resource url: "js/coreShowProjectAssay.js"
+        // Stylesheet for context card view
     }
-    jsDrawEditor {
-        resource url: "js/jsDraw/jsDrawEditor.js"
-        resource url: "css/jsDrawEditor.css"
+    structureSearch {
+        resource url: "js/structureSearchDialog.js"
     }
-    addAllItemsToCarts {
-        resource url: "js/addAllItemsToCart.js"
-    }
-    cbas {
-        dependsOn 'bootstrap'
-        resource url: "css/cbas.css"
+    substances {
+        resource url: "js/substances.js"
     }
     sunburst {
         dependsOn 'bootstrap,jquery,d3Library,dcLibrary'
@@ -274,14 +273,24 @@ modules = {
         resource url: "js/sunburst/createASunburst.js"
         resource url: "css/sunburst.css"
     }
-    assaycompare {
-        dependsOn 'core,bootstrap,bootstrapplus,card'
-        resource url: '/js/cap/assaycompare.js'
+    tableSorter {
+        resource url: '/js/jquery-table-sorter/jquery.tablesorter.min.js'
+        resource url: '/js/jquery-table-sorter/theme.default.css'
     }
-    histogram {
-        dependsOn 'bootstrap,jquery,d3Library'
+    twitterBootstrapAffix {
+        resource url: "/css/twitterBootstrapAffix.css"
+        resource url: "/js/jquery-ui-bootstrap/bootstrap/js/twitterBootstrapAffix.js"
+    }
+    xeditable {
+        resource url: "/js/x-editable/bootstrap-editable.js"
+        resource url: "/css/x-editable/bootstrap-editable.css"
+        resource url: "/js/x-editable/moment.js"
+        resource url: "/js/x-editable/combodate.js"
+    }
 
-        resource url: "js/histogram/experimentalResultsHistogram.js"
-        resource url: "css/experimentalResultHistogram.css"
+    zyngaScroller {
+        resource url: "/js/zynga-scroller-a44d7c2/Animate.js"
+        resource url: "/js/zynga-scroller-a44d7c2/Scroller.js"
+        resource url: "/js/zynga-scroller-a44d7c2/render.js"
     }
 }
