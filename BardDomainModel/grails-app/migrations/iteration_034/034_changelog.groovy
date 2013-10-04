@@ -8,4 +8,7 @@ databaseChangeLog = {
     changeSet(author: "jasiedu", id: "iteration-034/02-add-owner-role-to-entities", dbms: "oracle", context: "standard") {
         sqlFile(path: "iteration_034/02-add-owner-role-to-entities.sql", stripComments: true)
     }
+    changeSet(author: "pmontgom", id: "iteration-034/03-add-resultmap-table", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_034/03-add-resultmap-table.sql", stripComments: true, endDelimiter: "/")
+    }
 }
