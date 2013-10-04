@@ -107,21 +107,6 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     }
 
 
-    def 'test create #desc'() {
-        given:
-        RESTClient client = getRestClient(controllerUrl, "create", team, teamPassword)
-
-        when:
-        final Response response = client.get()
-        then:
-        assert response.statusCode == expectedHttpResponse
-        where:
-        desc      | team             | teamPassword     | expectedHttpResponse
-        "ADMIN"   | ADMIN_USERNAME   | ADMIN_PASSWORD   | HttpServletResponse.SC_OK
-        "CURATOR" | CURATOR_USERNAME | CURATOR_PASSWORD | HttpServletResponse.SC_OK
-    }
-
-
     def 'test edit owner admin #desc'() {
         Long pk = projectData.id
         String newRole = "ROLE_TEAM_B"
