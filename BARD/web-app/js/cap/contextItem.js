@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
     var widgetsByContainer = {
         '#valueConstraintContainer': ['input[name="valueConstraintType"]'],
@@ -37,21 +36,26 @@ $(document).ready(function () {
         }
     }
 
-    var attributeValueType, attributeUnitId, attributeData;
-    var setupAttributeSelection = function(attributeDetailsArrivedCallback) {
-        var contCallback = function(data) {
-            // save this in variables outside this scope for later use
-            attributeValueType = data ? data.expectedValueType : '';
-            attributeUnitId = data.unitId;
-            attributeData = data;
-
-            attributeDetailsArrivedCallback(data);
-        };
-
+    /***********************************************
+     * the backingData will have the form element/descriptor
+     * [
+     *   [
+     *      "id": '',                  // id for the
+     *      "text": '',                // the label/name of the element/descriptor
+     *      "unitId": '',              // id of unit if this attribute has default units assigned, should be paired with expectedValueType:NUMERIC
+     *      "expectedValueType": '',   // ( NUMERIC || ELEMENT || EXTERNAL_ONTOLOGY || FREE_TEXT || NONE )
+     *      "externalUrl":'',          // (URL|'') for externalOntology the URL
+     *      "hasIntegratedSearch": '', // (true|false) for and externalOntology do we have an integrated search
+     *      "fullPath": ''             // fullPath of the attribute within the hierarchy
+     *   ]
+     *   ...
+     *  ]
+     * @param backingData
+     */
+    function initializeAttributeSelect2(backingData){
         $("#attributeElementId").select2({
-            minimumInputLength: 1,
-            allowClear: true,
             placeholder: "Search for attribute name",
+            allowClear: true,
             initSelection: function (element, callback) {
                 var id = $(element).val();
                 if (id !== "") {
@@ -62,39 +66,41 @@ $(document).ready(function () {
                         dataType: "json"
                     }).done(function (data) {
                             callback(data);
-                            contCallback(data);
+                            updateConstraintWidgets(data);
                         });
                 }
             },
-            ajax: {
-                url: "/BARD/ontologyJSon/getDescriptors",
-                dataType: 'json',
-                quietMillis: 100,
-                data: function (term) {
-                    return { term: term};
+            data:backingData,
+            formatResult: function(result, container, query) {
+                var markup=[];
+                window.Select2.util.markMatch(result.text, query.term, markup);
+                return markup.join("");
                 },
-                results: function (data) {
-                    return data;
-                }
+            query: function (query) {
+                var filteredData = {results: []};
+                $.each(backingData.results, function(index, value){
+                    if(value.fullPath.toUpperCase().indexOf(query.term.toUpperCase())>=0){
+                        filteredData.results.push(value);
+                    }
+                });
+                query.callback(filteredData);
             }
-        }).on("change", function (e) {
+        });
+        $("#attributeElementId").on("change", function (e) {
                 // on change of the attribute, clear all value fields
                 clearAllValueFields();
                 // hide any existing error messages, will be redisplayed when user submits with new attribute
                 hideAnyErrorMessages();
                 // based on the attribute selected only show the appropriate value widgets
-                var data = $("#attributeElementId").select2("data");
-                contCallback(data);
+            var selectedData = $("#attributeElementId").select2("data");
+            updateConstraintWidgets(selectedData);
         });
+        initialFocus();
     };
-
-    // if this is not present, we're not allowing user to enter specifications, only values
-    if($("#providedWithResults").length == 0){
-        setupAttributeSelection(onlyShowWidgetsBasedOnResponse)
-    } else {
-        setupAttributeSelection(onlyShowWidgetsBasedOnResponse)
-    }
-    initialFocus();
+    initializeAttributeSelect2({results:[]});
+    $.ajax("/BARD/ontologyJSon/getAttributeDescriptors").done(function (data) {
+        initializeAttributeSelect2(data);
+    });
 
     function clearAllValueFields() {
         $(':text').val("");
@@ -127,13 +133,6 @@ $(document).ready(function () {
         });
     }
 
-    function onlyShowWidgetsBasedOnResponse(data) {
-        var expectedValueType = data? data.expectedValueType: '';
-        var unitId = data.unitId;
-
-        updateConstraintWidgets();
-    }
-
     function showWidgets(containerSelector) {
         $(containerSelector).show();
         if(!disabledInput) {
@@ -151,16 +150,22 @@ $(document).ready(function () {
         }
     }
 
-    function onlyShowWidgetsForExpectedValueType(expectedValueType, unitId, data) {
+    function onlyShowWidgetsForExpectedValueType(data) {
         hideAllValueWidgets();
+        var expectedValueType = data.expectedValueType;
         if ('NUMERIC' === expectedValueType) {
             showWidgets('#numericValueContainer');
-            initializeUnits(unitId);
+            initializeUnits(data.unitId);
             potentiallyFocus("#valueNum")
         }
         else if ('ELEMENT' === expectedValueType) {
             showWidgets('#elementValueContainer');
-            potentiallyFocus("#valueElementId");
+            $.ajax("/BARD/ontologyJSon/getValueDescriptorsV2",{
+                data : {attributeId : data.id}
+            }).done(function (valueData) {
+                    initializeValueElementSelect2(valueData);
+                });
+
         }
         else if ('EXTERNAL_ONTOLOGY' === expectedValueType) {
             showExternalOntologyHelpText(data);
@@ -197,35 +202,44 @@ $(document).ready(function () {
         $("#externalOntologyInfo").html(html);
     }
 
-
-    $("#valueElementId").select2({
-        minimumInputLength: 1,
-        allowClear: true,
-        placeholder: "Search for value",
-        ajax: {
-            url: "/BARD/ontologyJSon/getValueDescriptors",
-            dataType: 'json',
-            quietMillis: 100,
-            data: function (term) {
-                return { term: term,
-                    attributeId: $("#attributeElementId").val()
-                };
+    function initializeValueElementSelect2(backingData){
+        $("#valueElementId").select2({
+            allowClear: true,
+            placeholder: "Search for value",
+            data: backingData,
+            initSelection: function (element, callback) {
+                var id = $(element).val();
+                if (id !== "") {
+                    $.ajax("/BARD/ontologyJSon/getElement", {
+                        data: {
+                            id: id
+                        },
+                        dataType: "json"
+                    }).done(function (data) { callback(data); });
+                }
             },
-            results: function (data) {
-                var selectData = {results: []}
-                $.each(data, function (index, val) {
-                    selectData.results.push({id: val.elementId, text: val.label})
+            formatResult: function(result, container, query) {
+                var markup=[];
+                window.Select2.util.markMatch(result.text, query.term, markup);
+                return markup.join("");
+            },
+            query: function (query) {
+                var filteredData = {results: []};
+                $.each(backingData.results, function(index, value){
+                    if(value.fullPath.toUpperCase().indexOf(query.term.toUpperCase())>=0){
+                        filteredData.results.push(value);
+                    }
                 });
-                return selectData;
+                query.callback(filteredData);
             }
-        }
-    }).on("change", function (e) {
-            $("#valueDisplay").val($("#valueElementId").select2("data").text);
-            $('button.btn-primary').focus();
-        });
-    if ($("#valueElementId").val()) {
-        $("#valueElementId").select2("data", {id: $("#valueElementId").val(), text: $("#valueElementText").val()});
+        }).on("change", function (e) {
+                $("#valueDisplay").val($("#valueElementId").select2("data").text);
+                $('button.btn-primary').focus();
+            });
+        $('#elementValueContainer').show();
+        potentiallyFocus("#valueElementId");
     }
+
 
     $("#extValueSearch").select2({
         minimumInputLength: 1,
@@ -310,34 +324,33 @@ $(document).ready(function () {
         }
     }
 
-    function showWidgetsForConstraints() {
+    function showWidgetsForConstraints(data) {
         if($("#valueConstraintFree").is(":checked")) {
-            onlyShowWidgetsForExpectedValueType("UNCONSTRAINED", null, null);
+            onlyShowWidgetsForExpectedValueType({expectedValueType:"UNCONSTRAINED"});
         } else if($("#valueConstraintRange").is(":checked")) {
-            onlyShowWidgetsForExpectedValueType("RANGE", null, null);
+            onlyShowWidgetsForExpectedValueType({expectedValueType:"RANGE"});
         } else if($("#valueConstraintList").is(":checked")) {
-            onlyShowWidgetsForExpectedValueType(attributeValueType, attributeUnitId, attributeData);
+            onlyShowWidgetsForExpectedValueType(data);
         } else {
         }
     }
 
-    function updateConstraintWidgets() {
+    function updateConstraintWidgets(data) {
         if($("#providedWithResults").is(':checked')) {
 
             $("#valueConstraintContainer").show();
 
             // hide/show radio buttons based on expected type
-            if(attributeValueType == "NUMERIC") {
+            if("NUMERIC"===data.expectedValueType) {
                 $("#valueConstraintRangeContainer").show();
             } else {
                 $("#valueConstraintRangeContainer").hide();
             }
 
-            showWidgetsForConstraints()
+            showWidgetsForConstraints(data)
         } else {
             $("#valueConstraintContainer").hide();
-
-            onlyShowWidgetsForExpectedValueType(attributeValueType, attributeUnitId, attributeData)
+            onlyShowWidgetsForExpectedValueType(data)
         }
     }
 
@@ -352,13 +365,12 @@ $(document).ready(function () {
         } else {
 
         }
-
-        updateConstraintWidgets();
+        updateConstraintWidgets($("#attributeElementId").select2('data'));
     })
 
     // set up the radio buttons so that widgets are shown based on which type of constraint
     $('input[name="valueConstraintType"]').on('change', function(e) {
-        showWidgetsForConstraints()
+        showWidgetsForConstraints($("#attributeElementId").select2('data'))
     })
 
 });
