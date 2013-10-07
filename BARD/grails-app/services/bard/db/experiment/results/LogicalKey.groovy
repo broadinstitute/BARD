@@ -25,7 +25,7 @@ public class LogicalKey {
     Float valueMax;
     Element valueElement;
     String valueDisplay;
-    long measureId;
+    LogicalKey parentKey;
 
     java.util.Set<LogicalKeyItem> items = new HashSet();
 
@@ -36,6 +36,7 @@ public class LogicalKey {
         LogicalKey that = (LogicalKey) o
 
         if (items != that.items) return false
+        if (parentKey != that.parentKey) return false
         if (qualifier != that.qualifier) return false
         if (replicateNumber != that.replicateNumber) return false
         if (resultType != that.resultType) return false
@@ -46,7 +47,6 @@ public class LogicalKey {
         if (valueMax != that.valueMax) return false
         if (valueMin != that.valueMin) return false
         if (valueNum != that.valueNum) return false
-        if (measureId != that.measureId) return false;
 
         return true
     }
@@ -54,6 +54,7 @@ public class LogicalKey {
     int hashCode() {
         int result
         result = (replicateNumber != null ? replicateNumber.hashCode() : 0)
+        result = 31 * result + (parentKey != null ? parentKey.hashCode() : 0)
         result = 31 * result + (substanceId != null ? substanceId.hashCode() : 0)
         result = 31 * result + (resultType != null ? resultType.hashCode() : 0)
         result = 31 * result + (statsModifier != null ? statsModifier.hashCode() : 0)
@@ -64,7 +65,6 @@ public class LogicalKey {
         result = 31 * result + (valueElement != null ? valueElement.hashCode() : 0)
         result = 31 * result + (valueDisplay != null ? valueDisplay.hashCode() : 0)
         result = 31 * result + (items != null ? items.hashCode() : 0)
-        result = 31 * result + measureId
         return result
     }
 
@@ -82,7 +82,7 @@ public class LogicalKey {
                 ", valueElement=" + valueElement +
                 ", valueDisplay='" + valueDisplay + '\'' +
                 ", items=" + items +
-                ", measureId=" + measureId +
+                ", parent=" + parentKey +
                 '}';
     }
 

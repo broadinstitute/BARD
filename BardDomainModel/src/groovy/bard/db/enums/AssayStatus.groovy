@@ -7,10 +7,10 @@ package bard.db.enums
  * Time: 2:36 AM
  * To change this template use File | Settings | File Templates.
  */
-public enum AssayStatus implements IEnumUserType {
-    DRAFT("Draft"),
-    APPROVED("Approved"),
-    RETIRED("Retired")
+public enum AssayStatus implements IEnumUserType,ICommonStatusIds {
+    DRAFT(DRAFT_ID),
+    APPROVED(APPROVED_ID),
+    RETIRED(RETIRED_ID)
 
     final String id;
 

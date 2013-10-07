@@ -236,8 +236,8 @@ class PubchemReformatServiceUnitSpec extends Specification {
 
         when:
         Map map = service.convertPubchemRowToMap(
-                ["85789806", "", "44483406", "1", "0", "", "", "", "-1.483", "5"],
-                ["PUBCHEM_SID", "PUBCHEM_EXT_DATASOURCE_REGID", "PUBCHEM_CID", "PUBCHEM_ACTIVITY_OUTCOME", "PUBCHEM_ACTIVITY_SCORE", "PUBCHEM_ACTIVITY_URL", "PUBCHEM_ASSAYDATA_COMMENT", "PUBCHEM_ASSAYDATA_REVOKE", "1", "2"])
+                new PubchemHeader(["PUBCHEM_SID", "PUBCHEM_EXT_DATASOURCE_REGID", "PUBCHEM_CID", "PUBCHEM_ACTIVITY_OUTCOME", "PUBCHEM_ACTIVITY_SCORE", "PUBCHEM_ACTIVITY_URL", "PUBCHEM_ASSAYDATA_COMMENT", "PUBCHEM_ASSAYDATA_REVOKE", "1", "2"]),
+                ["85789806", "", "44483406", "1", "0", "", "", "", "-1.483", "5"])
 
         then:
         map["-1"] == "Inactive"
@@ -347,5 +347,23 @@ class PubchemReformatServiceUnitSpec extends Specification {
         child.children.size() == 0
         child.contextItems.size() == 1
         child.contextItems["cell count"].size() == 2
+    }
+
+    def 'test coercing header into consistent format'() {
+        setup:
+        PubchemReformatService service = new PubchemReformatService();
+
+        when:
+        def transformed = service.transformHeaderToOriginalConvention("PUBCHEM_SID,PUBCHEM_CID,PUBCHEM_ACTIVITY_OUTCOME,PUBCHEM_ACTIVITY_SCORE,PUBCHEM_ACTIVITY_URL,PUBCHEM_ASSAYDATA_COMMENT,SOMETHING,ELSE".split(",") as List)
+
+        then:
+        transformed.join(",") == "PUBCHEM_SID,PUBCHEM_CID,PUBCHEM_ACTIVITY_OUTCOME,PUBCHEM_ACTIVITY_SCORE,PUBCHEM_ACTIVITY_URL,PUBCHEM_ASSAYDATA_COMMENT,1,2"
+
+        when:
+        def oldFormat = "PUBCHEM_SID,PUBCHEM_EXT_DATASOURCE_REGID,PUBCHEM_CID,PUBCHEM_ACTIVITY_OUTCOME,PUBCHEM_ACTIVITY_SCORE,PUBCHEM_ACTIVITY_URL,PUBCHEM_ASSAYDATA_COMMENT,PUBCHEM_ASSAYDATA_REVOKE,1,2".split(",") as List
+        transformed = service.transformHeaderToOriginalConvention(oldFormat)
+
+        then:
+        transformed == oldFormat
     }
 }

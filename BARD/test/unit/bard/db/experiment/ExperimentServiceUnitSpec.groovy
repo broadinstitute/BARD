@@ -107,7 +107,7 @@ public class ExperimentServiceUnitSpec extends Specification {
         AssayContextMeasure.build(assayContext: context, measure: measure)
         Experiment experiment = Experiment.build(assay: assay)
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(experiment: experiment, measure: measure)
-
+        Assay.metaClass.isDirty = { return false }
         when:
         service.splitExperimentsFromAssay(assay.id,[experiment])
 

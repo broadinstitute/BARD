@@ -6,7 +6,9 @@ import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
+import bard.db.people.Role
 import bard.db.project.InlineEditableCommand
+import bardqueryapi.QueryService
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
@@ -20,7 +22,6 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
@@ -30,14 +31,14 @@ import javax.servlet.http.HttpServletResponse
 
 
 @TestFor(AssayDefinitionController)
-@Build([Assay, Element, AssayContext, AssayContextMeasure, Measure])
-@Mock([Assay, Element, AssayContext, AssayContextMeasure, Measure])
+@Build([Assay, Element, AssayContext, AssayContextMeasure, Measure, Role])
+@Mock([Assay, Element, AssayContext, AssayContextMeasure, Measure, Role])
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
 class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
 
     Assay assay
-
+    Role role
     @Before
     void setup() {
         SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
@@ -54,13 +55,20 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         controller.assayDefinitionService = assayDefinitionService
         controller.contextService = Mock(ContextService)
         controller.capPermissionService = capPermissionService
-        assay = Assay.build(assayName: 'Test')
+        controller.queryService = Mock(QueryService)
+
+        this.role = Role.build(authority: "ROLE_TEAM_Y", displayName: "TEAM Y")
+        assay = Assay.build(assayName: 'Test', ownerRole: this.role)
         assert assay.validate()
     }
 
     void 'test save success'() {
         given:
-        AssayCommand assayCommand = new AssayCommand(assayName: "Some Name", assayType: AssayType.TEMPLATE, springSecurityService: controller.springSecurityService)
+        Role role = Role.build()
+        AssayCommand assayCommand = new AssayCommand(assayName: "Some Name", assayType: AssayType.TEMPLATE, springSecurityService: controller.springSecurityService, ownerRole: role)
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
+            return [role]
+        }
         when:
         controller.save(assayCommand)
         then:
@@ -73,7 +81,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         def model = controller.save(assayCommand)
         then:
-        assert response.status==200
+        assert response.status == 200
     }
 
     void 'test create assay definition success'() {
@@ -150,6 +158,15 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assert responseJSON.get("lastUpdated").asText()
         assert responseJSON.get("shortName").asText()
         assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test assayStatus only has Approved and Retired '(){
+        when:
+        controller.assayStatus()
+
+        then:
+        final String responseAsString = response.contentAsString
+        responseAsString == '["Approved","Retired"]'
     }
 
     void 'test edit Assay Status access denied'() {
@@ -300,9 +317,12 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assert controller.response.redirectedUrl.startsWith("/assayDefinition/show/")
     }
 
-    void 'test clone assay fail'() {
+    void 'test clone assay fail validation error'() {
         given:
         controller.measureTreeService.createMeasureTree(_, _) >> []
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
+            return [this.role]
+        }
         when:
         controller.cloneAssay(assay.id)
         then:
@@ -310,7 +330,16 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assert flash.message == "Cannot clone assay definition with id \"${assay.id}\" probably because of data migration issues. Please email the BARD team at bard-users@broadinstitute.org to fix this assay"
         assert controller.response.redirectedUrl.startsWith("/assayDefinition/show/")
     }
-
+    void 'test clone assay fail users role, not in role list error'() {
+        given:
+        controller.measureTreeService.createMeasureTree(_, _) >> []
+        when:
+        controller.cloneAssay(assay.id)
+        then:
+        controller.assayDefinitionService.cloneAssayForEditing(_, _) >> { throw new ValidationException("message", new GrailsMockErrors(assay)) }
+        assert flash.message == "You need to be a member of at least one team to clone any assay"
+        assert controller.response.redirectedUrl.startsWith("/assayDefinition/show/")
+    }
     void 'test show'() {
         given:
         CapPermissionService capPermissionService = Mock(CapPermissionService)
@@ -322,28 +351,11 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         def model = controller.show()
 
         then:
+        controller.queryService.findActiveVsTestedForExperiments(_) >> { [:] }
         capPermissionService.getOwner(_) >> { 'owner' }
         model.assayInstance == assay
     }
 
-    void 'testFindById()'() {
-
-        when:
-        params.assayId = "${assay.id}"
-        controller.findById()
-
-        then:
-        "/assayDefinition/show/${assay.id}" == controller.response.redirectedUrl
-    }
-
-    void 'testFindByName'() {
-        when:
-        params.assayName = assay.assayName
-        controller.findByName()
-
-        then:
-        "/assayDefinition/show/${assay.id}" == controller.response.redirectedUrl
-    }
 
     void 'test editMeasure'() {
         given:

@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-    <meta name="layout" content="logoSearchCartAndFooter"/>
+    <meta name="layout" content="basic"/>
     <title>BARD : Compound : ${compound?.name} : PubChem CID ${compound.pubChemCID}</title>
     <r:require modules="promiscuity,substances,compoundOptions"/>
 </head>

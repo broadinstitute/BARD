@@ -5,11 +5,15 @@ import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
+import bard.db.people.Role
 import grails.buildtestdata.mixin.Build
+import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.junit.Before
 import spock.lang.Specification
 
 /**
@@ -19,12 +23,16 @@ import spock.lang.Specification
  * Time: 2:07 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, Measure, Experiment, AssayContextMeasure, AssayContext, ExperimentMeasure, AssayContextItem, AssayDocument])
-@Mock([Assay, Measure, Experiment, ExperimentMeasure, AssayContext, AssayContextMeasure, AssayContextItem, AssayDocument])
+@Build([Assay, Measure, Experiment, AssayContextMeasure, AssayContext, ExperimentMeasure, AssayContextItem, AssayDocument, Role])
+@Mock([Assay, Measure, Experiment, ExperimentMeasure, AssayContext, AssayContextMeasure, AssayContextItem, AssayDocument,Role])
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(AssayDefinitionService)
 public class AssayDefinitionServiceUnitSpec extends Specification {
 
+    @Before
+    void setup() {
+        Assay.metaClass.isDirty = { return false }
+    }
     void 'test generateAssayComparisonReport'() {
         setup:
         Assay assayOne = Assay.build()
@@ -60,7 +68,15 @@ public class AssayDefinitionServiceUnitSpec extends Specification {
         then:
         assert newDesignedBy == updatedAssay.designedBy
     }
-
+    void "test update owner role"() {
+        given:
+        final Assay assay = Assay.build(assayName: 'assayName20', designedBy: "BARD", capPermissionService: Mock(CapPermissionService), ownerRole: Role.build())
+        final Role role = Role.build(authority:"ROLE_TEMA_ZZ")
+        when:
+        final Assay updatedAssay = service.updateOwnerRole(assay.id, role)
+        then:
+        assert role == updatedAssay.ownerRole
+    }
     void "test update assay name"() {
         given:
         final Assay assay = Assay.build(assayName: 'assayName20', assayStatus: AssayStatus.DRAFT, capPermissionService: Mock(CapPermissionService))

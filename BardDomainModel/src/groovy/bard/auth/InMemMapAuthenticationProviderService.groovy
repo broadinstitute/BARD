@@ -22,14 +22,14 @@ class InMemMapAuthenticationProviderService extends AbstractCrowdAuthenticationP
             assert userProps.password, "we're really expecting a password here! Please review the CbipCrowd section of Config.groovy"
             assert userProps.roles, "we're really expecting a roles list here! Please review the CbipCrowd section of Config.groovy"
 
-            final List<GrantedAuthority> grantedAuthorities = userProps.roles.collect {role -> new Role(authority: role)}
+            final List<GrantedAuthority> grantedAuthorities = userProps.roles.collect {role -> new Role(authority: role, displayName: role)}
             mockUserMap.put(userProps.username, new BardUser(username: userProps.username,
                     password: userProps.password,
                     fullName: userProps.username,
                     email: new Email(userProps.email),
                     isActive: true,
                     authorities: grantedAuthorities,
-                    owningRole: userProps.owningRole?new Role(authority: userProps.owningRole):new Role(authority: userProps.username)
+                    owningRole: userProps.owningRole?new Role(authority: userProps.owningRole, displayName: userProps.owningRole):new Role(authority: userProps.username,displayName: userProps.username)
             ))
         }
     }

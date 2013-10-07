@@ -12,10 +12,8 @@ class TextFormatTagLib {
         def text = attrs.text;
         def lines = text?.split("\n")
         for(line in lines) {
-            out << "<p>"
-//            out << line.encodeAsHTML()
+            out << "<br/>"
             out << line
-            out << "</p>"
         }
     }
 }

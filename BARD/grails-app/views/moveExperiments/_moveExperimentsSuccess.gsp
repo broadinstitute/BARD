@@ -5,7 +5,7 @@
 <div class="alert alert-success">
 
     <div class="control-group">
-        <label><h3>Successfully moved the following ${movedExperiments?.size()} experiment(s) from Assay :  ${sourceAssay?.id}</h3></label>
+        <label><h3>Successfully moved the following ${movedExperiments?.size()} experiment(s) to Assay :  ${targetAssay?.id}</h3></label>
     </div>
 
     <div class="control-group">

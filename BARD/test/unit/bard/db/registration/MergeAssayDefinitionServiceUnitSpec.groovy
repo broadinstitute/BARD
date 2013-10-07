@@ -1,11 +1,6 @@
 package bard.db.registration
 
-import acl.CapPermissionService
 import bard.db.dictionary.Element
-import bard.db.enums.AssayStatus
-import bard.db.enums.AssayType
-import bard.db.enums.ExpectedValueType
-import bard.db.enums.ValueType
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
@@ -36,56 +31,40 @@ public class MergeAssayDefinitionServiceUnitSpec extends Specification {
         given:
         final ExperimentContextItem experimentContextItem = ExperimentContextItem.build()
         final Map<Element, AssayContextItem> targetElementToAssayContextItemMap = [:]
-        final List<String> errorMessages =[]
+        final List<String> errorMessages = []
         when:
-        service.validateExperimentContextItem(experimentContextItem,targetElementToAssayContextItemMap,errorMessages)
+        service.validateExperimentContextItem(experimentContextItem, targetElementToAssayContextItemMap, errorMessages)
         then:
         assert errorMessages
-        assert errorMessages.get(0)=="Experiment Context Item : ${experimentContextItem.id}, on Experiment: ${experimentContextItem.experimentContext.experiment.id}, which is part of the Assay: ${experimentContextItem.experimentContext.experiment.assay.id} does not exist as a context item on the target assay"
+        assert errorMessages.get(0) == "Experiment Context Item : ${experimentContextItem.id}, on Experiment: ${experimentContextItem.experimentContext.experiment.id}, which is part of the Assay: ${experimentContextItem.experimentContext.experiment.assay.id} does not exist as a context item on the target assay"
     }
-    void 'test validateExperimentContextItem - assay context item has fixed attribute'() {
-        given:
-        Assay assayOne = Assay.build()
-        Element element = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
-        AssayContext contextOne = AssayContext.build(assay: assayOne, contextName: "alpha")
-        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: contextOne, attributeType: AttributeType.Fixed, valueType: ValueType.FREE_TEXT, valueDisplay: "x", attributeElement: element)
-        Measure measureOne = Measure.build(assay: assayOne)
-        AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
 
-        final ExperimentContextItem experimentContextItem = ExperimentContextItem.build(attributeElement: element)
-        final Map<Element, AssayContextItem> targetElementToAssayContextItemMap = [:]
-        targetElementToAssayContextItemMap.put(element,assayContextItem)
-        final List<String> errorMessages =[]
-        when:
-        service.validateExperimentContextItem(experimentContextItem,targetElementToAssayContextItemMap,errorMessages)
-        then:
-        assert errorMessages
-        assert errorMessages.get(0)=="Cannot validate Experiment Context Item : ${experimentContextItem.id}, on Experiment: ${experimentContextItem.experimentContext.experiment.id}, which is part of the Assay: ${experimentContextItem.experimentContext.experiment.assay.id}  because the target context item 1 has an attribute type of Fixed"
-    }
+
+
     void 'test validateConfirmMergeInputs - exceptions #desc'() {
         when:
-        service.validateConfirmMergeInputs(targetAssayId, assayIdsToMerge, assayIdType)
+        service.validateConfirmMergeInputs(targetAssayId, assayIdsToMerge, idType)
 
         then:
         RuntimeException e = thrown()
         assert e.message == expectedErrorMessage
         where:
-        desc                                | targetAssayId | assayIdsToMerge | assayIdType      | expectedErrorMessage
-        "Target Assay Id is null"           | null          | "23"            | AssayIdType.ADID | "The ID of the Assay to merge into is required and must be a number"
-        "Target Assay Ids to merge is null" | 23            | null            | AssayIdType.ADID | "Enter at least one id for an assay to merge"
-        "Assay Id Type is null"             | 23            | "23"            | null             | "Select one of ADID or AID"
+        desc                                | targetAssayId | assayIdsToMerge | idType      | expectedErrorMessage
+        "Target Assay Id is null"           | null          | "23"            | IdType.ADID | "The ID of the Assay to merge into is required and must be a number"
+        "Target Assay Ids to merge is null" | 23            | null            | IdType.ADID | "Enter at least one Assay Definition ID(ADID) to move"
+        "Assay Id Type is null"             | 23            | "23"            | null        | "Select one of Assay Definition ID or PubChem AID or Experiment ID"
     }
 
     void 'test validateConfirmMergeInputs - success'() {
         when:
-        service.validateConfirmMergeInputs(targetAssayId, assayIdsToMerge, assayIdType)
+        service.validateConfirmMergeInputs(targetAssayId, assayIdsToMerge, idType)
 
         then:
         notThrown(RuntimeException)
         where:
-        desc                   | targetAssayId | assayIdsToMerge | assayIdType
-        "AssayIdType is ADID"  | 2             | "23"            | AssayIdType.ADID
-        "Assay Id Type is AID" | 3             | "23"            | AssayIdType.AID
+        desc                   | targetAssayId | assayIdsToMerge | idType
+        "AssayIdType is ADID"  | 2             | "23"            | IdType.ADID
+        "Assay Id Type is AID" | 3             | "23"            | IdType.AID
     }
 
     void 'test convertAssaysToMerge - Merge Assay with itself as target'() {
@@ -96,14 +75,14 @@ public class MergeAssayDefinitionServiceUnitSpec extends Specification {
         Measure measureOne = Measure.build(assay: assayOne)
         AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
         when:
-        service.convertAssaysToMerge([assayOne.id], AssayIdType.ADID, assayOne)
+        service.normalizeEntitiesToMoveToExperimentIds([assayOne.id], IdType.ADID, assayOne)
 
         then:
         RuntimeException e = thrown()
-        assert e.message == "Assay with ADID ${assayOne.id} cannot be merged into itself. Please remove it from the 'Assays to merge into list'"
+        assert e.message == "Assay with Assay Definition ID ${assayOne.id} cannot be moved into itself. Please remove it from the 'Assays to move list'"
     }
 
-    void 'test convertAssaysToMerge - Assays to merge contains non-existing assays'() {
+    void 'test normalizeEntitiesToMoveToExperimentIds - Assays to move contains non-existing assays'() {
         given:
         Long nonExistingAssayId = -1
         Assay assayOne = Assay.build()
@@ -118,15 +97,16 @@ public class MergeAssayDefinitionServiceUnitSpec extends Specification {
         Measure measureTwo = Measure.build(assay: assayTwo)
         AssayContextMeasure.build(assayContext: contextTwo, measure: measureTwo)
         when:
-        service.convertAssaysToMerge([assayTwo.id, nonExistingAssayId], AssayIdType.ADID, assayOne)
+        service.normalizeEntitiesToMoveToExperimentIds([assayTwo.id, nonExistingAssayId], IdType.ADID, assayOne)
 
         then:
         RuntimeException e = thrown()
-        assert e.message == "Could not find assays with ADID ${nonExistingAssayId}"
+        assert e.message == "Could not find assays with Assay Definition ID: ${nonExistingAssayId}"
     }
 
     void 'test convertAssaysToMerge - success'() {
         setup:
+
         Assay assayOne = Assay.build()
         AssayContext contextOne = AssayContext.build(assay: assayOne, contextName: "alpha")
         AssayContextItem.build(assayContext: contextOne)
@@ -134,17 +114,18 @@ public class MergeAssayDefinitionServiceUnitSpec extends Specification {
         AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
 
         Assay assayTwo = Assay.build()
+        Experiment experiment = Experiment.build(assay: assayTwo)
         AssayContext contextTwo = AssayContext.build(assay: assayTwo, contextName: "alpha2")
         AssayContextItem.build(assayContext: contextTwo)
         Measure measureTwo = Measure.build(assay: assayTwo)
         AssayContextMeasure.build(assayContext: contextTwo, measure: measureTwo)
 
         when:
-        List<Long> assaysToMerge = service.convertAssaysToMerge([assayTwo.id], AssayIdType.ADID, assayOne)
+        List<Long> assaysToMerge = service.normalizeEntitiesToMoveToExperimentIds([assayTwo.id], IdType.ADID, assayOne)
 
         then:
         assert assaysToMerge
-        assert assaysToMerge.get(0) == assayTwo.id
+        assert assaysToMerge.get(0) == experiment.id
     }
 
 }

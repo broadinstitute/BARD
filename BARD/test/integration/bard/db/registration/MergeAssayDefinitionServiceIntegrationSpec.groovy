@@ -1,18 +1,12 @@
 package bard.db.registration
 
 import bard.db.audit.BardContextUtils
-import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
-import bard.db.enums.AssayType
 import bard.db.experiment.Experiment
-import bard.db.experiment.ExperimentContext
-import bard.db.experiment.ExperimentContextItem
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import org.grails.plugins.springsecurity.service.acl.AclUtilService
 import org.hibernate.SessionFactory
 import org.junit.Before
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 /**
@@ -38,7 +32,7 @@ class MergeAssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         given:
         final Assay assay = Assay.build(assayName: 'assay1', capPermissionService: null)
         when:
-        final Assay updatedAssay = mergeAssayDefinitionService.findAssayByAssayIdType(assay.id, AssayIdType.ADID)
+        final Assay updatedAssay = mergeAssayDefinitionService.findEntityByIdType(assay.id, IdType.ADID)
         then:
         assert assay.id == updatedAssay.id
     }
@@ -51,10 +45,10 @@ class MergeAssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         final Experiment experiment = Experiment.build(experimentName: experimentsAlias, assay: assay, capPermissionService: null)
         ExternalReference.build(extAssayRef: "aid=${id}", experiment: experiment)
         when:
-        final Assay updatedAssay = mergeAssayDefinitionService.findAssayByAssayIdType(id, AssayIdType.AID)
+        final Experiment updatedExperiment = mergeAssayDefinitionService.findEntityByIdType(id, IdType.AID)
         then:
-        assert updatedAssay
-        assert assay.id == updatedAssay.id
+        assert updatedExperiment
+        assert experiment.id == updatedExperiment.id
     }
 
 

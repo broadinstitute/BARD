@@ -34,8 +34,6 @@ class MoveExperimentsControllerFunctionalSpec extends BardControllerFunctionalSp
     def setupSpec() {
         String reauthenticateWithUser = TEAM_A_1_USERNAME
 
-        createTeamsInDatabase(ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_ROLE, reauthenticateWithUser)
-
         Map assayData = (Map) remote.exec({
             //Create two assays
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
@@ -174,9 +172,9 @@ class MoveExperimentsControllerFunctionalSpec extends BardControllerFunctionalSp
 
 
 
-    def 'test selectAssays - exceptions #desc'() {
+    def 'test confirmMoveExperiments - exceptions #desc'() {
         given:
-        RESTClient client = getRestClient(controllerUrl, "selectAssays", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "confirmMoveExperiments", team, teamPassword)
 
         when:
         client.post() {
@@ -194,9 +192,9 @@ class MoveExperimentsControllerFunctionalSpec extends BardControllerFunctionalSp
 
     }
 
-    def 'test selectAssays - forbidden  #desc'() {
+    def 'test confirmMoveExperiments - forbidden  #desc'() {
         given:
-        RESTClient client = getRestClient(controllerUrl, "selectAssays", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "confirmMoveExperiments", team, teamPassword)
 
         when:
         client.get()
@@ -213,13 +211,13 @@ class MoveExperimentsControllerFunctionalSpec extends BardControllerFunctionalSp
 
     }
 
-    def 'test selectAssays #desc'() {
+    def 'test confirmMoveExperiments #desc'() {
         given:
-        RESTClient client = getRestClient(controllerUrl, "selectAssays", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "confirmMoveExperiments", team, teamPassword)
 
         when:
         def response = client.post() {
-            urlenc targetAssayId: targetAssay, sourceAssayId: sourceAssay
+            urlenc targetAssayId: targetAssay, sourceEntityIds: sourceAssay, idType : IdType.ADID
         }
         then:
         assert response.statusCode == expectedHttpResponse
@@ -232,11 +230,11 @@ class MoveExperimentsControllerFunctionalSpec extends BardControllerFunctionalSp
 
     def 'test move Selected Experiments #desc'() {
         given:
-        RESTClient client = getRestClient(controllerUrl, "selectAssays", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "confirmMoveExperiments", team, teamPassword)
 
         when:
         def response = client.post() {
-            urlenc targetAssayId: targetAssay, sourceAssayId: sourceAssay
+            urlenc targetAssayId: targetAssay, sourceEntityIds: sourceAssay, idType : IdType.ADID
         }
         then:
         assert response.statusCode == expectedHttpResponse
@@ -248,7 +246,7 @@ class MoveExperimentsControllerFunctionalSpec extends BardControllerFunctionalSp
 
     def 'test move Selected Experiments - forbidden  #desc'() {
         given:
-        RESTClient client = getRestClient(controllerUrl, "selectAssays", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "confirmMoveExperiments", team, teamPassword)
 
         when:
         client.get()

@@ -49,6 +49,11 @@
             <div class="pull-left">
                 <g:if test="${assayInstance?.id}">
                     <h4>View Assay Definition (ADID: ${assayInstance?.id})</h4>
+                    <g:if test="${assayInstance.ncgcWarehouseId}">
+                        <g:saveToCartButton id="${assayInstance?.id}"
+                                            name="${bardqueryapi.JavaScriptUtility.cleanup(assayInstance?.assayName)}"
+                                            type="${querycart.QueryItemType.AssayDefinition}"/>
+                    </g:if>
                 </g:if>
             </div>
         </div>
@@ -92,8 +97,10 @@
                 </li>
             </ul>
         </li>
-        <li><a href="#panels-header"><i class="icon-chevron-right"></i>Panels</a></li>
-        <li><a href="#measures-header"><i class="icon-chevron-right"></i>Measures</a></li>
+        <g:if test="${assayInstance.panelAssays}">
+            <li><a href="#panels-header"><i class="icon-chevron-right"></i>Panels</a></li>
+        </g:if>
+    %{--<li><a href="#measures-header"><i class="icon-chevron-right"></i>Measures</a></li>--}%
         <li><a href="#documents-header"><i class="icon-chevron-right"></i>Documents</a>
             <ul class="nav nav-list bs-docs-sidenav" style="padding-left: 0; margin: 0;">
                 <li><a href="#documents-description-header"><i class="icon-chevron-right"></i>Descriptions</a>
@@ -115,8 +122,10 @@
 
     <div class="row-fluid">
         <div id="msg" class="alert hide"></div>
+
         <div id="showSummary">
-            <g:render template='editSummary' model="['assay': assayInstance, canedit: editable, assayOwner: assayOwner]"/>
+            <g:render template='editSummary'
+                      model="['assay': assayInstance, canedit: editable, assayOwner: assayOwner]"/>
         </div>
     </div>
 </section>
@@ -152,8 +161,9 @@
 </section>
 <br/>
 <section id="assay-protocol-header">
-    <h3 class="sect">Assay Protocol <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
-            class="icon-question-sign"></i></g:link></h3>
+    <h3 class="sect">Assay Protocol <g:link target="dictionary" controller="element"
+                                            action="showTopLevelHierarchyHelp"><i
+                class="icon-question-sign"></i></g:link></h3>
 
     <div class="row-fluid">
         <div id="cardHolderAssayProtocol" class="span12">
@@ -178,8 +188,9 @@
 <br/>
 <section id="assay-design-header">
 
-    <h4 class="subsect">Assay Design <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
-            class="icon-question-sign"></i></g:link></h4>
+    <h4 class="subsect">Assay Design <g:link target="dictionary" controller="element"
+                                             action="showTopLevelHierarchyHelp"><i
+                class="icon-question-sign"></i></g:link></h4>
 
 
     <div class="row-fluid">
@@ -204,8 +215,9 @@
     </div>
     <section id="assay-readout-header">
 
-        <h4 class="subsect">Assay Readout <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
-                class="icon-question-sign"></i></g:link></h4>
+        <h4 class="subsect">Assay Readout <g:link target="dictionary" controller="element"
+                                                  action="showTopLevelHierarchyHelp"><i
+                    class="icon-question-sign"></i></g:link></h4>
 
 
         <div class="row-fluid">
@@ -232,8 +244,9 @@
     <br/>
     <section id="assay-components-header">
 
-        <h4 class="subsect">Assay Components <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
-                class="icon-question-sign"></i></g:link></h4>
+        <h4 class="subsect">Assay Components <g:link target="dictionary" controller="element"
+                                                     action="showTopLevelHierarchyHelp"><i
+                    class="icon-question-sign"></i></g:link></h4>
 
 
         <div class="row-fluid">
@@ -294,12 +307,13 @@
 
 
     <div class="row-fluid">
-        <g:render template="showExperiments" model="['assay': assayInstance]"/>
+        <g:render template="showExperiments"
+                  model="['assay': assayInstance, 'experimentsActiveVsTested': experimentsActiveVsTested]"/>
     </div>
     <section id="experimental-variables-header">
 
         <h4 class="subsect">Experimental Variables <g:link target="dictionary" controller="element"
-                                           action="showTopLevelHierarchyHelp"><i
+                                                           action="showTopLevelHierarchyHelp"><i
                     class="icon-question-sign"></i></g:link></h4>
 
         <div class="row-fluid">
@@ -325,33 +339,35 @@
         </g:if>
     </section>
 </section>
+<g:if test="${assayInstance.panelAssays}">
+    <br/>
+
+    <br/>
+    <section id="panels-header">
+
+        <h3 class="sect">Panels</h3>
+
+
+        <div class="row-fluid">
+            <g:render template="panelsView"
+                      model="['panelInstances': assayInstance.panelAssays, assay: assayInstance, editable: editable]"/>
+        </div>
+    </section>
+</g:if>
 <br/>
 
-<br/>
-<section id="panels-header">
+%{--<br/>--}%
+%{--<section id="measures-header">--}%
 
-    <h3 class="sect">Panels</h3>
-
-
-    <div class="row-fluid">
-        <g:render template="panelsView"
-                  model="['panelInstances': assayInstance.panelAssays, assay: assayInstance, editable: editable]"/>
-    </div>
-</section>
-<br/>
-
-<br/>
-<section id="measures-header">
-
-    <h3 class="sect">Measures<g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
-            class="icon-question-sign"></i></g:link></h3>
+%{--<h3 class="sect">Measures<g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i--}%
+%{--class="icon-question-sign"></i></g:link></h3>--}%
 
 
-    <div class="row-fluid">
-        <g:render template="measuresView"
-                  model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson, editable: editable]"/>
-    </div>
-</section>
+%{--<div class="row-fluid">--}%
+%{--<g:render template="measuresView"--}%
+%{--model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson, editable: editable]"/>--}%
+%{--</div>--}%
+%{--</section>--}%
 <br/>
 <g:render template="/document/documents"
           model="[documentKind: DocumentKind.AssayDocument, owningEntity: assayInstance, canedit: editable, sectionNumber: '6.']"/>

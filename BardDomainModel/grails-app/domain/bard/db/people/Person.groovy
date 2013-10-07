@@ -42,9 +42,22 @@ class Person {
             return PersonRole.findAllByPerson(this).collect { it.role } as Set
         }
     }
-    String getRolesAsList(){
+
+    boolean isAdmin() {
+        final Set<Role> foundRoles = getRoles()
+        boolean  foundAdmin = false
+        foundRoles.collect {
+            if (it.authority == "ROLE_BARD_ADMINISTRATOR") {
+                foundAdmin = true
+                return
+            }
+        }
+        return foundAdmin
+    }
+
+    String getRolesAsList() {
         List<String> displayNames = []
-        for(Role role:getRoles()){
+        for (Role role : getRoles()) {
             displayNames.add(role.displayName)
         }
         return displayNames.join(",")

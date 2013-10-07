@@ -11,7 +11,7 @@
             <g:each var="projectAdapter" in="${projectAdapters}">
                 <li>
                 %{--<h3>--}%
-                    <g:link action="showProject" id="${projectAdapter.id}"
+                    <g:link controller="project" action="show" id="${projectAdapter.capProjectId}"
                             params='[searchString: "${searchString}"]'>${projectAdapter.name} <small>(Project ID: ${projectAdapter.capProjectId})</small></g:link>
                 %{--</h3>--}%
                     <g:if test="${projectAdapter?.getNumberOfExperiments()}">

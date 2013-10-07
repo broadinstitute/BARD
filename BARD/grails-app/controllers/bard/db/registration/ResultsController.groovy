@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.experiment.Experiment
 import bard.db.experiment.ResultsService
+import bard.db.experiment.results.ImportSummary
 import grails.plugins.springsecurity.Secured
 import grails.util.GrailsWebUtil
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
@@ -75,7 +76,7 @@ class ResultsController {
         Experiment experiment = Experiment.get(params.experimentId)
         MultipartFile f = request.getFile('resultsFile')
 
-        ResultsService.ImportSummary summary = resultsService.importResults(experiment.id, f.inputStream)
+        ImportSummary summary = resultsService.importResults(experiment.id, f.inputStream)
 
         [summary: summary, experiment: experiment]
     }

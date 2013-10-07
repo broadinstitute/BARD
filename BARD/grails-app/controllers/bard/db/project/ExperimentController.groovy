@@ -5,13 +5,13 @@ import bard.db.enums.ContextType
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
-import bard.db.experiment.PubchemImportService
-import bard.db.experiment.ResultsService
+import bard.db.experiment.AsyncResultsService
+import bard.db.experiment.results.JobStatus
 import bard.db.model.AbstractContextOwner
+import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.AssayDefinitionService
 import bard.db.registration.EditingHelper
-import bard.db.registration.ExternalReference
 import bard.db.registration.MeasureTreeService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
@@ -32,10 +32,15 @@ class ExperimentController {
     AssayDefinitionService assayDefinitionService
     MeasureTreeService measureTreeService
     SpringSecurityService springSecurityService
-    PubchemImportService pubchemImportService
     def permissionEvaluator
     CapPermissionService capPermissionService
+    AsyncResultsService asyncResultsService
 
+    def myExperiments() {
+        List<Experiment> experiments = capPermissionService.findAllObjectsForRoles(Experiment)
+        Set<Experiment> uniqueExperiments = new HashSet<Experiment>(experiments)
+        [experiments: uniqueExperiments]
+    }
     def create() {
         def assay = Assay.get(params.assayId)
         render renderEditFieldsForView("create", new Experiment(), assay);
@@ -46,18 +51,21 @@ class ExperimentController {
         render renderEditFieldsForView("edit", experiment, experiment.assay);
     }
 
-
-
+    /**
+     * Draft is excluded as End users cannot set a status back to Draft
+     * @return  list of strings representing available status options
+     */
     def experimentStatus() {
         List<String> sorted = []
         final Collection<ExperimentStatus> experimentStatuses = ExperimentStatus.values()
         for (ExperimentStatus experimentStatus : experimentStatuses) {
-            sorted.add(experimentStatus.id)
+            if (experimentStatus != ExperimentStatus.DRAFT) {
+                sorted.add(experimentStatus.id)
+            }
         }
         sorted.sort()
         final JSON json = sorted as JSON
         render text: json, contentType: 'text/json', template: null
-
     }
 
     def show() {
@@ -219,7 +227,26 @@ class ExperimentController {
         }
     }
 
-
+//    def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
+//        try {
+//            final Role ownerRole = Role.findById(inlineEditableCommand.value)
+//            final Experiment experiment = Experiment.findById(inlineEditableCommand.pk)
+//            final String message = inlineEditableCommand.validateVersions(experiment.version, Experiment.class)
+//            if (message) {
+//                conflictMessage(message)
+//                return
+//            }
+//            experiment = experimentService.updateOwnerRole(inlineEditableCommand.pk, ownerRole)
+//            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.experimentStatus.id)
+//
+//        } catch (AccessDeniedException ade) {
+//            log.error(ade)
+//            render accessDeniedErrorMessage()
+//        } catch (Exception ee) {
+//            log.error(ee)
+//            editErrorMessage()
+//        }
+//    }
 
     def editExperimentStatus(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -264,7 +291,9 @@ class ExperimentController {
         Experiment experiment = new Experiment()
         experiment.assay = assay
         setEditFormParams(experiment)
+        experiment.ownerRole=assay.ownerRole
         experiment.dateCreated = new Date()
+
         if (!validateExperiment(experiment)) {
             render renderEditFieldsForView("create", experiment, assay);
          } else {
@@ -294,13 +323,15 @@ class ExperimentController {
     }
 
     def reloadResults(Long id) {
-        def experiment = Experiment.get(id)
-        ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
-        def aid = Integer.parseInt(xref.extAssayRef.replace("aid=",""))
+        String jobKey = asyncResultsService.createJobKey()
+        String link = createLink(action: 'viewLoadStatus', params:[experimentId: id, jobKey: jobKey])
+        asyncResultsService.doReloadResultsAsync(id, jobKey, link)
+        redirect(action: "viewLoadStatus", params:[jobKey: jobKey, experimentId: id])
+    }
 
-        ResultsService.ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid)
-
-        return [experiment: experiment, results: results]
+    def viewLoadStatus(String jobKey, String experimentId) {
+        JobStatus status = asyncResultsService.getStatus(jobKey)
+        [experimentId: experimentId, status: status]
     }
 
     private Map renderEditFieldsForView(String viewName, Experiment experiment, Assay assay) {
@@ -341,7 +372,5 @@ class ExperimentController {
         experiment.runDateFrom = params.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateFrom) : null
         experiment.runDateTo = params.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateTo) : null
     }
-
-
 }
 

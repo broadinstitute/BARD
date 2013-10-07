@@ -25,7 +25,7 @@ class MolSpreadSheetCell {
     }
     static constraints = {
         activity(nullable: false)
-        molSpreadSheetCellType(blank: false)
+        molSpreadSheetCellType(nullable: true)
         strInternalValue(nullable: true)
         intInternalValue(nullable: false)
         supplementalInternalValue(nullable: true)

@@ -7,6 +7,7 @@ import bard.db.enums.ExperimentStatus
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
+import bard.db.people.Role
 import bard.db.project.ProjectExperiment
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
@@ -32,7 +33,7 @@ class Experiment extends AbstractContextOwner {
     Date lastUpdated = new Date()
     String modifiedBy
     Long id;
-
+    Long ncgcWarehouseId;
     Integer confidenceLevel = 1
 
     List<ExperimentContext> experimentContexts = []
@@ -47,7 +48,7 @@ class Experiment extends AbstractContextOwner {
     boolean disableUpdateReadyForExtraction = false
 
     static transients = ['experimentContextItems','disableUpdateReadyForExtraction']
-
+    Role ownerRole //The team that owns this object. This is used by the ACL to allow edits etc
     List<ExperimentContextItem> getExperimentContextItems() {
         Set<ExperimentContextItem> experimentContextItems = new HashSet<ExperimentContextItem>()
         for (ExperimentContext experimentContext : this.experimentContexts) {
@@ -55,6 +56,7 @@ class Experiment extends AbstractContextOwner {
         }
         return experimentContextItems as List<ExperimentContextItem>
     }
+    static belongsTo = [ownerRole: Role]
     static hasMany = [experimentContexts: ExperimentContext,
             experimentMeasures: ExperimentMeasure,
             externalReferences: ExternalReference,
@@ -83,6 +85,9 @@ class Experiment extends AbstractContextOwner {
         dateCreated(nullable: false)
         lastUpdated(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+
+        ncgcWarehouseId(nullable: true)
+        ownerRole(nullable:true)
     }
 
     String getDisplayName() {

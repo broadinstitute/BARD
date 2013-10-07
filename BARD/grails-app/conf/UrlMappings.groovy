@@ -3,15 +3,15 @@ import org.springframework.security.acls.model.NotFoundException
 
 class UrlMappings {
 
-	static mappings = {
-		"/$controller/$action?/$id?"{
-			constraints {
-				// apply constraints here
-			}
-		}
+    static mappings = {
+        "/$controller/$action?/$id?" {
+            constraints {
+                // apply constraints here
+            }
+        }
 
         "/bbgrid/$id?"(controller: "grid") {
-            action = [GET:"list", POST: "save", DELETE: "delete", PUT: "edit"]
+            action = [GET: "list", POST: "save", DELETE: "delete", PUT: "edit"]
         }
 
         "/"(controller: 'bardWebInterface', action: 'redirectToIndex')
@@ -25,5 +25,5 @@ class UrlMappings {
 
         "500"(controller: "errors", action: "error403",
                 exception: NotFoundException)
-	}
+    }
 }

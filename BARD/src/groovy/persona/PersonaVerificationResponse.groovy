@@ -1,5 +1,10 @@
 package persona
-
+/**
+ * Most of the code is borrowed from https://github.com/phjardas/spring-security-persona
+ *
+ * and modified slightly for BARD
+ *
+ */
 public class PersonaVerificationResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String STATUS_OK = "okay";

@@ -6,20 +6,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BARD</title>
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic' rel='stylesheet' type='text/css'>
-    <link media="all" rel="stylesheet" href="../css/bardHomepage/bootstrap.css">
-    <link media="all" rel="stylesheet" href="../css/bardHomepage/bootstrap-responsive.css">
-    <link media="all" rel="stylesheet" href="../css/bardHomepage/BardHomepage.css">
-
-    <script src="../js/bardHomepage/jquery-1.8.3.min.js"></script>
-    <script src="../js/bardHomepage/bootstrap.js"></script>
-    <script src="../js/bardHomepage/jquery.main.js"></script>
-    <script src="../js/bardHomepage/idSearchDialog.js"></script>
-    %{--<script src="js/bardHomepage/windowOnerror.js"></script>--}%
-    <link media="all" rel="stylesheet" href="../css/bardHomepage/jquery-ui-1.10.3.custom.css">
-    <script src="../js/bardHomepage/jquery-ui-1.10.3.custom.js"></script>
-    <script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js"></script>
-    <script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
+          rel='stylesheet' type='text/css'>
+    <r:require modules="bardHomepage,downtime,autocomplete"/>
     <!--[if lt IE 9]><link rel="stylesheet" href="../css/bardHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
     <!--[if IE]><script src="../js/bardHomepage/ie.js"></script><![endif]-->
 
@@ -30,53 +19,104 @@
                  alt="Please enable JavaScript to access the full functionality of this site."/>
         </a>
     </noscript>
-
+    <r:layoutResources/>
     %{--We have to run a small function in order to kickstart the auto complete--}%
-    <script>
-        $(document).ready(function () {
+    %{--<script>--}%
+        %{--$(document).ready(function () {--}%
 
-            //set up auto complete
-            var autoOpts = {
-                source:"/BARD/bardWebInterface/autoCompleteAssayNames",
-                minLength:2,
-                html: true,
-                delay:1000
-            };
+            %{--//set up auto complete--}%
+            %{--var autoOpts = {--}%
+                %{--source: "/BARD/bardWebInterface/autoCompleteAssayNames",--}%
+                %{--minLength: 2,--}%
+                %{--html: true,--}%
+                %{--delay: 1000--}%
+            %{--};--}%
 
-            $("#searchString").autocomplete(autoOpts);
-            $("#searchString").bind("autocompleteselect", function (event, ui) {
-                $("#searchString").val(ui.item.value)
-                $("#searchButton").click();
-            });
-            // make sure to close the autocomplete box when the search button or ENTER are clicked
-            $("#searchButton").click(function () {
-                $("#searchString").autocomplete("close");
-            });
-            $('#searchButton').keypress(function(eventData) {
-                if(eventData.which == 13) {
-                    $("#searchString").autocomplete("close");
-                }
-            });
+            %{--$("#searchString").autocomplete(autoOpts);--}%
+            %{--$("#searchString").bind("autocompleteselect", function (event, ui) {--}%
+                %{--$("#searchString").val(ui.item.value)--}%
+                %{--$("#searchButton").click();--}%
+            %{--});--}%
+            %{--// make sure to close the autocomplete box when the search button or ENTER are clicked--}%
+            %{--$("#searchButton").click(function () {--}%
+                %{--$("#searchString").autocomplete("close");--}%
+            %{--});--}%
+            %{--$('#searchButton').keypress(function (eventData) {--}%
+                %{--if (eventData.which == 13) {--}%
+                    %{--$("#searchString").autocomplete("close");--}%
+                %{--}--}%
+            %{--});--}%
 
-        });
-
-    </script>
-
+        %{--});--}%
+    %{--</script>--}%
 
 </head>
 
 <body>
-
 
 <div id="wrapper">
 
 %{--The control area at the top of the page is all contained within this header--}%
 <header class="navbar navbar-static-top" id="header">
     <div class="container-fluid">
+        <div class="row-fluid span12" id="downtimeMessage">
+
+        </div>
         <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
         <ul class="social-networks">
-            <li><a href="#" title="Share">Share</a></li>
-            <li><a href="#" title="Google" class="google">Google</a></li>
+            <li>
+                %{--Facebook widget plugin--}%
+                <a href="#"
+                   onclick="
+                       window.open(
+                               'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href),
+                               'facebook-share-dialog',
+                               'width=626,height=436');
+                       return false;"
+                   style="background:url('../images/bardHomepage/facebook-share-icon.gif') no-repeat; width:58px; height:18px;">
+                </a>
+            </li>
+            <li style="width: 80px;">
+                %{--Twitter widget plugin--}%
+                <script>!function (d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                    if (!d.getElementById(id)) {
+                        js = d.createElement(s);
+                        js.id = id;
+                        js.src = p + '://platform.twitter.com/widgets.js';
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }
+                }(document, 'script', 'twitter-wjs');
+                </script>
+
+                <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://bard.nih.gov/BARD/"
+                   data-text="BARD">Tweet</a>
+            </li>
+            <li>
+                %{--LinkedIn widget plugin--}%
+                <script src="//platform.linkedin.com/in.js" type="text/javascript">
+                    lang: en_US
+                </script>
+                <script type="IN/Share" data-url="https://bard.nih.gov/BARD/" data-counter="right"></script>
+            </li>
+            <li>
+                %{--Google Plus widget plugin--}%
+
+                <!-- Place this tag where you want the +1 button to render. -->
+                <div class="g-plusone"></div>
+
+                <!-- Place this tag after the last +1 button tag. -->
+                <script type="text/javascript">
+                    (function () {
+                        var po = document.createElement('script');
+                        po.type = 'text/javascript';
+                        po.async = true;
+                        po.src = 'https://apis.google.com/js/plusone.js';
+                        var s = document.getElementsByTagName('script')[0];
+                        s.parentNode.insertBefore(po, s);
+                    })();
+                </script>
+            </li>
         </ul>
         <nav class="nav-panel">
             <ul class="nav">
@@ -98,7 +138,7 @@
                         <li><a href="#">Contact us</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Submissions</a></li>
+                <li><a href="/BARD/bardWebInterface/navigationPage">Submissions</a></li>
             </ul>
             <g:if test="${false}">
                 <ul class="login-nav">
@@ -119,7 +159,7 @@
                 <article class="span8">
                     <h1>Enhanced data and advanced tools to accelerate drug discovery.</h1>
 
-                    <p>Introducing BARD, the powerful new bioassay database from the NIH Molecular Libraries Program. Now with unprecedented efficiency, scientists can develop and testhypotheses on the influence of different chemical probes on biological functions.</p>
+                    <p>Introducing BARD, the powerful new bioassay database from the NIH Molecular Libraries Program. Now with unprecedented efficiency, scientists can develop and test hypotheses on the influence of different chemical probes on biological functions.</p>
                     <a href="#" class="btn btn-primary">LEARN MORE</a>
                 </article>
                 <aside class="span4"></aside>
@@ -130,28 +170,31 @@
 
 <g:if test="${true}">
 %{--Block to hold the main search textblock--}%
-<div class="search-panel">
-    <div class="container-fluid">
+    <div class="search-panel">
+        <div class="container-fluid">
 
-        <div class="head-holder">
-            <h2>SEARCH BARD</h2>
+            <div class="head-holder">
+                <h2>SEARCH BARD</h2>
 
-            <p>Search assay, project and experiment data or <a
-                    href="#">learn about BARD’s innovative search features.</a></p>
-        </div>
+                <p>Search assay, project and experiment data or <a
+                        href="#">learn about BARD’s innovative search features.</a></p>
+            </div>
 
-        <div class="search-block">
+            <div class="search-block">
 
-
-                <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form">
+                <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm"
+                        class="search-form">
                     <fieldset>
                         <div class="search-field input-append">
                             <div class="text-field">
-                                <g:textField id="searchString" name="searchString" placeholder="Search by Chemistry, Biology, Structure and More" value="${flash.searchString}"/>
+                                <g:textField id="searchString" name="searchString"
+                                             placeholder="Search by Chemistry, Biology, Structure and More"
+                                             value="${flash.searchString}"/>
                             </div>
 
                             <div class="btn-field">
-                                <button name="search" class="btn btn-primary"  id="searchButton" type="submit">Search <span
+                                <button name="search" class="btn btn-primary" id="searchButton"
+                                        type="submit">Search <span
                                         class="hidden-phone">BARD</span>
                                 </button>
                             </div>
@@ -161,59 +204,60 @@
 
 
 
-        <div class="links-holder">
-            <a href="#">Advanced Search</a>
-            <a href="#" class="download-link hidden-phone">Download the BARD Desktop Client</a>
+                <div class="links-holder">
+                    <a href="#">Advanced Search</a>
+                    <a href="#" class="download-link hidden-phone">Download the BARD Desktop Client</a>
+                </div>
+
+            </div>
+
         </div>
-
-
-
-        </div>
-
     </div>
-</div>
-    </g:if>
+</g:if>
 
 %{--carousel news panel. This will need dynamic content--}%
 <g:if test="${true}">
-<section class="news-panel">
-    <div class="container-fluid">
-        <div class="news-row">
-            <h1>BARD NEWS</h1>
+    <section class="news-panel">
+        <div class="container-fluid">
+            <div class="news-row">
+                <h1>BARD NEWS</h1>
 
-            <div class="news-holder">
-                <div class="news-gallery slide" id="news-gallery" data-interval="false">
-                    <a href="#news-gallery" class="btn-prev" data-slide="prev">Previous</a>
-                    <a href="#news-gallery" class="btn-next" data-slide="next">Next</a>
+                <div class="news-holder">
+                    <div class="news-gallery slide" id="news-gallery" data-interval="false">
+                        <a href="#news-gallery" class="btn-prev" data-slide="prev">Previous</a>
+                        <a href="#news-gallery" class="btn-next" data-slide="next">Next</a>
 
-                    <div class="carousel-inner">
-                        <div class="item active">
-                            <strong class="ttl">Webcast <time datetime="2013-08-16T08:20">AUG 26 2013 @ 8:20 pm</time>
-                            </strong>
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <strong class="ttl">Presentation<time
+                                        datetime="2013-08-16T08:20">SEP 20 2013 @ 1:00 pm</time>
+                                </strong>
 
-                            <p><a href="#">Bard news to go here when we have it.</a></p>
-                        </div>
+                                <p><a href="#">Steve Brudz reviews BARD in keynote at CBBO</a></p>
+                            </div>
 
-                        <div class="item">
-                            <strong class="ttl">Webcast <time datetime="2013-08-17T08:20">AUG 27 2013 @ 8:20 pm</time>
-                            </strong>
+                            <div class="item">
+                                <strong class="ttl">Presentation<time
+                                        datetime="2013-08-17T08:20">SEP 08 2013 @ 9:00 am</time>
+                                </strong>
 
-                            <p><a href="#">Bard news to go here when we have it, too.</a></p>
-                        </div>
+                                <p><a href="#">Session at ACS meeting devoted to Bard</a></p>
+                            </div>
 
-                        <div class="item">
-                            <strong class="ttl">Webcast <time datetime="2013-08-18T08:20">AUG 28 2013 @ 8:20 pm</time>
-                            </strong>
+                            <div class="item">
+                                <strong class="ttl">Demonstration<time
+                                        datetime="2013-08-18T08:20">SEP 24 2013 @ 2:00 pm</time>
+                                </strong>
 
-                            <p><a href="#">More Bard news, as it becomes available.</a></p>
+                                <p><a href="#">Next regularly scheduled BARD iteration demo.</a></p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-    </g:if>
+    </section>
+</g:if>
 
 %{--This is the main carousel, with three big pictures and associated buttons--}%
 <div class="articles-gallery slide" id="articles-gallery" data-interval="false">
@@ -280,7 +324,8 @@
 
 <g:if test="${true}">
 %{--The BARD is  growing line sits on its own above the blocks--}%
-<section class="tabs-section"> %{--This section tag binds 'Bard is growing', the blocks, and the tab information together  --}%
+<section
+        class="tabs-section">%{--This section tag binds 'Bard is growing', the blocks, and the tab information together  --}%
 <div class="container-fluid">
     <div class="page-header">
         <h1>BARD Is Growing <small>Statistics &amp; Recent Submissions</small></h1>
@@ -710,6 +755,6 @@
     </div>
 </footer>
 </div>
-
+<r:layoutResources/>
 </body>
 </html>

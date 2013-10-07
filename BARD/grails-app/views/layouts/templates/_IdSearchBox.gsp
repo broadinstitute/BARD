@@ -30,7 +30,7 @@
 
             <div>
                 <a href="#" class="btn" data-dismiss="modal" id="closeButton2">Close</a>
-                <a href="#" id="idSearchButton" class="btn btn-primary" data-dismiss="modal">Search</a>
+                <a href="#" class="idSearchButton btn btn-primary" data-dismiss="modal">Search</a>
             </div>
         </g:form>
     </div>

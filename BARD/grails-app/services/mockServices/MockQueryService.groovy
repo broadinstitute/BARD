@@ -19,11 +19,17 @@ import bardqueryapi.QueryHelperService
 import bardqueryapi.SearchFilter
 import bardqueryapi.TableModel
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.apache.commons.lang3.tuple.Pair
 import spock.lang.Shared
 import bard.core.interfaces.*
 
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
+
+    Map<Long, Pair<Long, Long>> findActiveVsTestedForExperiments(final List<Long> capExperimentIds) {
+        return [:]
+    }
+
     @Shared
     ObjectMapper objectMapper = new ObjectMapper()
 

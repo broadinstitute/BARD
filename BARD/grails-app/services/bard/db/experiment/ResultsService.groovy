@@ -7,7 +7,6 @@ import bard.db.registration.AssayContextItem
 import bard.db.registration.AssayContextMeasure
 import bard.db.registration.AttributeType
 import bard.db.registration.ItemService
-import bard.db.registration.Measure
 import bard.db.registration.PugService
 import bard.hibernate.AuthenticatedUserRequired
 import grails.plugins.springsecurity.SpringSecurityService
@@ -57,6 +56,7 @@ class ResultsService {
         boolean validateSubstances = true;
         boolean writeResultsToDb = true;
         boolean skipExperimentContexts = false;
+        Closure statusCallback = { msg -> return }
     }
 
     static boolean isNumber(value) {
@@ -164,44 +164,6 @@ class ResultsService {
         }
     }
 
-    static class ImportSummary {
-        def errors = []
-
-        // these are just collected for purposes of reporting the import summary at the end
-        int linesParsed = 0;
-        int resultsCreated = 0;
-        int experimentAnnotationsCreated = 0;
-        Map<String, Integer> resultsPerLabel = [:]
-        Set<Long> substanceIds = [] as Set
-
-        int resultsWithRelationships = 0;
-        int resultAnnotations = 0;
-
-        List<List> topLines = []
-
-        public int getSubstanceCount() {
-            return substanceIds.size()
-        }
-
-        void addError(int line, int column, String message) {
-            if (!tooMany()) {
-                if (line != 0) {
-                    errors << "On line ${line}, column ${column + 1}: ${message}"
-                } else {
-                    errors << message
-                }
-            }
-        }
-
-        boolean hasErrors() {
-            return errors.size() > 0
-        }
-
-        boolean tooMany() {
-            return errors.size() > MAX_ERROR_COUNT;
-        }
-    }
-
     static class Template {
         Experiment experiment;
         List<String> constantItems;
@@ -235,7 +197,7 @@ class ResultsService {
         def measureItems = assayItems.findAll { it.assayContext.assayContextMeasures.size() > 0 }
         assayItems.removeAll(measureItems)
 
-        return [itemService.getLogicalItems(assayItems), experiment.experimentMeasures.collect { it.measure } as List, itemService.getLogicalItems(measureItems)]
+        return [itemService.getLogicalItems(assayItems), experiment.experimentMeasures as List, itemService.getLogicalItems(measureItems)]
     }
 
     Template generateMaxSchema(Experiment experiment) {
@@ -246,7 +208,7 @@ class ResultsService {
     /**
      * Construct list of columns that a result upload could possibly contain
      */
-    Template generateSchema(Experiment experiment, List<ItemService.Item> constantItems, List<Measure> measures, List<ItemService.Item> measureItems) {
+    Template generateSchema(Experiment experiment, List<ItemService.Item> constantItems, List<ExperimentMeasure> measures, List<ItemService.Item> measureItems) {
         Set<String> constants = [] as Set
         Set<String> columns = [] as Set
 
@@ -258,7 +220,7 @@ class ResultsService {
 
         // add all of the measurements
         for (measure in measures) {
-            String name = measure.displayLabel
+            String name = measure.measure.displayLabel
             columns.add(name)
         }
 
@@ -269,15 +231,6 @@ class ResultsService {
         }
 
         return new Template(experiment: experiment, constantItems: constants as List, columns: columns as List)
-    }
-
-    public static class InitialParse {
-        String experimentName;
-        Long experimentId;
-        List<ExperimentContext> contexts = []
-        int linesParsed;
-        List<Row> rows;
-        List<List<String>> topLines;
     }
 
     static class LineReader {
@@ -291,7 +244,7 @@ class ResultsService {
             String[] line = reader.readNext()
 
             if (line != null && topLines.size() < LINES_TO_SHOW_USER)
-                topLines.add(line)
+                topLines.add(line as List)
 
             return line;
         }
@@ -309,9 +262,8 @@ class ResultsService {
         return true
     }
 
-
-    InitialParse parseConstantRegion(LineReader reader, ImportSummary errors, Collection<ItemService.Item> constantItems, boolean skipExperimentContextItems) {
-        InitialParse result = new InitialParse()
+    RowParser parseConstantRegion(LineReader reader, ImportSummary errors, Collection<ItemService.Item> constantItems, boolean skipExperimentContextItems) {
+        RowParser result = new RowParser()
         Map experimentAnnotations = [:]
 
         while (true) {
@@ -390,66 +342,6 @@ class ResultsService {
         return result
     }
 
-    void forEachDataRow(LineReader reader, List<String> columns, ImportSummary errors, Closure fn) {
-        int expectedColumnCount = columns.size() + FIXED_COLUMNS.size();
-
-        while (true) {
-            List<String> values = reader.readLine();
-            if (values == null)
-                break;
-
-            // verify and reshape columns
-            while (values.size() < expectedColumnCount) {
-                values.add("")
-            }
-
-            // verify there aren't too many columns
-            while (values.size() > expectedColumnCount) {
-                String value = values.remove(values.size() - 1)
-                if (value.trim().length() != 0) {
-                    errors.addError(reader.lineNumber, values.size() + 1, "Found \"${value}\" in extra column")
-                }
-            }
-
-            // now that values is guaranteed to be the right length, make the entire row isn't empty
-            boolean allEmpty = true;
-            for (cell in values) {
-                if (!cell.isEmpty()) {
-                    allEmpty = false;
-                    break;
-                }
-            }
-
-            // pass to the callback
-            if (!allEmpty)
-                fn(reader.lineNumber, values)
-
-            if (errors.tooMany())
-                break
-        }
-    }
-
-    Object[] safeParse(ImportSummary errors, List<String> values, int lineNumber, List<Closure> fns) {
-        boolean hadFailure = false;
-
-        Object[] parsed = new Object[fns.size()]
-        for (int i = 0; i < fns.size(); i++) {
-            try {
-                parsed[i] = fns[i](values[i])
-            } catch (Exception ex) {
-                errors.addError(lineNumber, i, "Could not parse \"${values[i]}\"")
-                hadFailure = true
-//                ex.printStackTrace()
-            }
-        }
-
-        if (hadFailure) {
-            return null;
-        } else {
-            return parsed;
-        }
-    }
-
     List<String> parseTableHeader(LineReader reader, Template template, ImportSummary errors) {
         List<String> columnNames = reader.readLine()
 
@@ -489,7 +381,7 @@ class ResultsService {
         return columns
     }
 
-    Collection<Result> createResults(List<Row> rows, Collection<ExperimentMeasure> experimentMeasures, ImportSummary errors, Map<Measure, Collection<ItemService.Item>> itemsByMeasure) {
+    Collection<Result> createResults(List<Row> rows, Collection<ExperimentMeasure> experimentMeasures, ImportSummary errors, Map<ExperimentMeasure, Collection<ItemService.Item>> itemsByMeasure) {
         validateParentRowsExist(rows, errors);
         if (errors.hasErrors())
             return []
@@ -536,7 +428,7 @@ class ResultsService {
         }
     }
 
-    Collection<Result> extractResultFromEachRow(ExperimentMeasure measure, Collection<Row> rows, Map<Integer, Collection<Row>> byParent, IdentityHashMap<RawCell, Row> unused, ImportSummary errors, Map<Measure, ItemService.Item> itemsByMeasure) {
+    Collection<Result> extractResultFromEachRow(ExperimentMeasure measure, Collection<Row> rows, Map<Integer, Collection<Row>> byParent, IdentityHashMap<RawCell, Row> unused, ImportSummary errors, Map<ExperimentMeasure, ItemService.Item> itemsByMeasure) {
         List<Result> results = []
 
         String label = measure.measure.displayLabel
@@ -550,7 +442,7 @@ class ResultsService {
                 unused.remove(cell)
                 String cellValue = cell.value
 
-                Result result = createResult(row.replicate, measure.measure, cellValue, row.sid, errors)
+                Result result = createResult(row.replicate, measure, cellValue, row.sid, errors)
                 if (result == null)
                     continue;
 
@@ -573,7 +465,7 @@ class ResultsService {
 
                 // likewise create each of the context items associated with this measure
                 results.add(result);
-                for (item in itemsByMeasure[measure.measure]) {
+                for (item in itemsByMeasure[measure]) {
                     RawCell itemCell = row.find(item.displayLabel)
                     if (itemCell != null) {
                         unused.remove(itemCell)
@@ -658,12 +550,12 @@ class ResultsService {
         return item
     }
 
-    Result createResult(Integer replicate, Measure measure, String valueString, Long substanceId, ImportSummary errors) {
+    Result createResult(Integer replicate, ExperimentMeasure measure, String valueString, Long substanceId, ImportSummary errors) {
         def parsed = parseAnything(valueString)
 
         if (parsed instanceof Cell) {
             Cell cell = parsed
-            Element unit = measure.resultType.unit;
+            Element unit = measure.measure.resultType.unit;
 
             Result result = new Result()
             result.qualifier = cell.qualifier
@@ -671,8 +563,8 @@ class ResultsService {
             result.valueNum = cell.value
             result.valueMin = cell.minValue
             result.valueMax = cell.maxValue
-            result.statsModifier = measure.statsModifier
-            result.resultType = measure.resultType
+            result.statsModifier = measure.measure.statsModifier
+            result.resultType = measure.measure.resultType
             result.replicateNumber = replicate
             result.substanceId = substanceId
             result.dateCreated = new Date()
@@ -717,7 +609,7 @@ class ResultsService {
         parentResult.resultHierarchiesForParentResult.add(resultHierarchy)
     }
 
-    InitialParse initialParse(Reader input, ImportSummary errors, Template template, boolean skipExperimentContextItems) {
+    RowParser initialParse(Reader input, ImportSummary errors, Template template, boolean skipExperimentContextItems) {
         LineReader reader = new LineReader(new BufferedReader(input))
 
         // first section
@@ -725,7 +617,7 @@ class ResultsService {
             context.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }
         })
 
-        InitialParse result = parseConstantRegion(reader, errors, potentialExperimentColumns, skipExperimentContextItems)
+        RowParser result = parseConstantRegion(reader, errors, potentialExperimentColumns, skipExperimentContextItems)
         if (errors.hasErrors())
             return
 
@@ -734,62 +626,13 @@ class ResultsService {
         if (errors.hasErrors())
             return
 
-        def parseInt = { x -> Integer.parseInt(x) }
-        def parseOptInt = { x ->
-            if (x.trim().length() > 0) {
-                return Integer.parseInt(x)
-            }
-        }
-        def parseLong = { x -> Long.parseLong(x) }
-
-        // all data rows
-        List rows = []
-        Set usedRowNumbers = [] as Set
-        forEachDataRow(reader, columns, errors) { int lineNumber, List<String> values ->
-            def parsed = safeParse(errors, values, lineNumber, [parseInt, parseLong, parseOptInt, parseOptInt])
-
-            if (parsed == null) {
-                // if we got errors parsing the fixed columns, don't proceed to the rest of the columns
-                return
-            }
-
-            Integer rowNumber = parsed[0]
-            Long sid = parsed[1]
-            Integer replicate = parsed[2]
-            Integer parentRowNumber = parsed[3]
-
-            if (sid <= 0) {
-                errors.addError(lineNumber, 0, "Invalid substance id ${sid}")
-                return
-            }
-
-            if (usedRowNumbers.contains(rowNumber)) {
-                errors.addError(lineNumber, 0, "Row number ${rowNumber} was duplicated")
-                return
-            }
-            usedRowNumbers.add(rowNumber)
-
-            Row row = new Row(lineNumber: lineNumber, rowNumber: rowNumber, replicate: replicate, parentRowNumber: parentRowNumber, sid: sid)
-
-            // parse the dynamic columns
-            for (int i = 0; i < columns.size(); i++) {
-                String cellString = values[i + FIXED_COLUMNS.size()];
-                if (cellString.isEmpty())
-                    continue
-
-                String column = columns.get(i);
-                row.cells.add(new RawCell(columnName: column, value: cellString));
-            }
-
-            rows.add(row)
-        }
-
-        result.rows = rows
-        result.linesParsed = reader.lineNumber
-        result.topLines = reader.topLines
+//        result.linesParsed = reader.lineNumber
+//        result.topLines = reader.topLines
+        result.setup(reader, columns, errors)
 
         return result
     }
+
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     ImportSummary importResults(Long id, InputStream input, ImportOptions options = null) {
         if (options == null) {
@@ -813,9 +656,9 @@ class ResultsService {
         return summary;
     }
 
-    Map<Measure, Collection<ItemService.Item>> constructItemsByMeasure(Experiment experiment) {
-        Map<Measure, Collection<ItemService.Item>> itemsByMeasure = experiment.experimentMeasures.collectEntries { ExperimentMeasure em ->
-            [em.measure,
+    Map<ExperimentMeasure, Collection<ItemService.Item>> constructItemsByMeasure(Experiment experiment) {
+        Map<ExperimentMeasure, Collection<ItemService.Item>> itemsByMeasure = experiment.experimentMeasures.collectEntries { ExperimentMeasure em ->
+            [em,
                     em.measure.assayContextMeasures.collectMany { AssayContextMeasure acm ->
                         itemService.getLogicalItems(acm.assayContext.contextItems)
                     }]
@@ -824,46 +667,85 @@ class ResultsService {
         return itemsByMeasure
     }
 
+    static class ParseTimer {
+        long prevUpdate;
+        int count;
+        Closure statusCallback = statusCallback
+
+        public ParseTimer(Closure statusCallback) {
+            prevUpdate = System.currentTimeMillis()
+            int count = 0;
+        }
+
+        public void updateCount(int newCount) {
+            long now = System.currentTimeMillis()
+
+            if(now - prevUpdate > (10*1000)) {
+                int delta = newCount - count
+                float speed = ((float)delta)/((now-prevUpdate)/1000.0);
+                count = newCount
+                prevUpdate = now;
+
+                statusCallback("Parsing lines per second: ${speed} (Current line: ${newCount})")
+            }
+        }
+    }
+
     ImportSummary importResultsWithoutSavingOriginal(Experiment experiment, InputStream input, String originalFilename, String exportFilename, ImportOptions options) {
         ImportSummary errors = new ImportSummary()
 
         Template template = generateMaxSchema(experiment)
-        Map<Measure, Collection<ItemService.Item>> itemsByMeasure = constructItemsByMeasure(experiment)
+        Map<ExperimentMeasure, Collection<ItemService.Item>> itemsByMeasure = constructItemsByMeasure(experiment)
 
-        def parsed = initialParse(new InputStreamReader(input), errors, template, options.skipExperimentContexts)
-        if (parsed != null && !errors.hasErrors()) {
-            errors.linesParsed = parsed.linesParsed
+        RowParser parser = initialParse(new InputStreamReader(input), errors, template, options.skipExperimentContexts)
 
-            // populate the top few lines in the summary.
-            errors.topLines = parsed.topLines
+        if (parser != null && !errors.hasErrors()) {
 
-            def missingSids = []
-            if (options.validateSubstances)
-                missingSids = pugService.validateSubstanceIds(parsed.rows.collect { it.sid })
+            Collection<ExperimentContext> contexts = parser.contexts;
+            ResultPersister persister = new ResultPersister(errors, options, experiment, originalFilename, exportFilename, contexts)
+            persister.start()
 
-            missingSids.each {
-                errors.addError(0, 0, "Could not find substance with id ${it}")
+            ParseTimer timer = new ParseTimer(options.statusCallback);
+
+            while(true) {
+                List<Row> rows = parser.readNextSampleRows();
+                errors.linesParsed = parser.reader.lineNumber
+                timer.updateCount(errors.linesParsed)
+
+                // populate the top few lines in the summary.
+                errors.topLines = parser.reader.topLines
+                errors.substanceCount = parser.sampleIds.size()
+
+                if(rows == null) {
+                    break;
+                }
+
+                if(errors.hasErrors()) {
+                    break;
+                }
+
+                Collection<Result> resultsForSample = createResults(rows, experiment.experimentMeasures, errors, itemsByMeasure)
+
+                if (!errors.hasErrors()) {
+                    checkForDuplicates(errors, resultsForSample)
+                }
+
+                if (!errors.hasErrors()) {
+                    persister.addResultsForSample(resultsForSample)
+                }
+            }
+
+            if (!errors.hasErrors() && errors.resultsCreated == 0) {
+                errors.addError(0, 0, "No results were produced")
             }
 
             if (!errors.hasErrors()) {
-                def results = createResults(parsed.rows, experiment.experimentMeasures, errors, itemsByMeasure)
-
-                if (!errors.hasErrors() && results.size() == 0) {
-                    errors.addError(0, 0, "No results were produced")
-                }
-
-                if (!errors.hasErrors()) {
-                    checkForDuplicates(errors, results)
-                }
-
-                if (!errors.hasErrors()) {
-                    // and persist these results to the DB
-                    Collection<ExperimentContext> contexts = parsed.contexts;
-
-                    persist(experiment, results, errors, contexts, originalFilename, exportFilename, options)
-                }
+                persister.finish()
+            } else {
+                persister.abort()
             }
         }
+
 
         return errors
     }
@@ -881,7 +763,6 @@ class ResultsService {
         key.valueMin = result.valueMin
         key.valueMax = result.valueMax
         key.valueDisplay = result.valueDisplay
-        key.measureId = result.measure.id
 
         key.items = result.resultContextItems.collect(new HashSet(), {
             LogicalKeyItem item = new LogicalKeyItem()
@@ -900,10 +781,27 @@ class ResultsService {
     }
 
     private void checkForDuplicates(ImportSummary errors, Collection<Result> results) {
-        Set<LogicalKey> seen = new HashSet()
+        Map<Result, LogicalKey> resultToKey = [:]
 
         for (result in results) {
             LogicalKey key = constructKey(result)
+            resultToKey[result] = key
+        }
+
+        // connect parents
+        for (result in results) {
+            LogicalKey childKey = resultToKey[result]
+            assert childKey != null
+            result.resultHierarchiesForResult.each {
+                LogicalKey parentKey = resultToKey[it.parentResult]
+                assert parentKey != null
+                childKey.parentKey = parentKey
+            }
+        }
+
+        Set<LogicalKey> seen = new HashSet()
+
+        for (key in resultToKey.values()) {
             boolean added = seen.add(key)
             if (!added) {
                 errors.addError(0, 0, "Found duplicate: ${key}")
@@ -911,42 +809,73 @@ class ResultsService {
         }
     }
 
-    private void persist(Experiment experiment, Collection<Result> results, ImportSummary errors, List<ExperimentContext> contexts, String originalFilename, String exportFilename, ImportOptions options) {
-        deleteExperimentResults(experiment, options.skipExperimentContexts)
+    class ResultPersister {
+        String originalFilename
+        String exportFilename
+        ImportSummary summary;
+        ImportOptions options
+        Experiment experiment
+        Collection<ExperimentContext> contexts;
+        Writer writer
 
-        results.each {
-            String label = it.displayLabel
-            Integer count = errors.resultsPerLabel.get(label)
-            if (count == null) {
-                count = 0
-            }
-            errors.resultsPerLabel.put(label, count + 1)
-
-            errors.substanceIds.add(it.substanceId)
-
-            if (it.resultHierarchiesForParentResult.size() > 0 || it.resultHierarchiesForResult.size() > 0)
-                errors.resultsWithRelationships++;
-
-            errors.resultAnnotations += it.resultContextItems.size()
+        public ResultPersister(ImportSummary summary, ImportOptions options, Experiment experiment, String originalFilename, String exportFilename, Collection<ExperimentContext> contexts) {
+            this.summary = summary
+            this.options = options
+            this.experiment = experiment
+            this.originalFilename = originalFilename
+            this.exportFilename = exportFilename
+            this.contexts = contexts;
         }
 
-        if(!options.skipExperimentContexts) {
-            contexts.each {
-                it.experiment = experiment
-                experiment.addToExperimentContexts(it)
+        public void start() {
+            deleteExperimentResults(experiment, options.skipExperimentContexts)
 
-                errors.experimentAnnotationsCreated += it.contextItems.size()
+            if(!options.skipExperimentContexts) {
+                contexts.each {
+                    it.experiment = experiment
+                    experiment.addToExperimentContexts(it)
+
+                    summary.experimentAnnotationsCreated += it.contextItems.size()
+                }
             }
+
+            this.writer = resultsExportService.createWriter(exportFilename)
         }
 
-        errors.resultsCreated = results.size()
+        public void addResultsForSample(Collection<Result> results) {
+            results.each {
+                String label = it.displayLabel
+                Integer count = summary.resultsPerLabel.get(label)
+                if (count == null) {
+                    count = 0
+                }
+                summary.resultsPerLabel.put(label, count + 1)
 
-        if (options.writeResultsToDb)
-            bulkResultService.insertResults(getUsername(), experiment, results)
+                if (it.resultHierarchiesForParentResult.size() > 0 || it.resultHierarchiesForResult.size() > 0)
+                    summary.resultsWithRelationships++;
 
-        resultsExportService.dumpFromList(exportFilename, results)
+                summary.resultAnnotations += it.resultContextItems.size()
+            }
 
-        addExperimentFileToDb(experiment, originalFilename, exportFilename, errors.substanceCount)
+            summary.resultsCreated += results.size()
+
+            if (options.writeResultsToDb)
+                bulkResultService.insertResults(getUsername(), experiment, results)
+
+            Set<Long> sids = new HashSet(results.collect {it.substanceId} )
+            assert sids.size() == 1
+
+            resultsExportService.writeResultsForSubstance(writer, sids.first(), results as List)
+        }
+
+        public void finish() {
+            writer.close()
+            addExperimentFileToDb(experiment, originalFilename, exportFilename, summary.substanceCount)
+        }
+
+        public void abort() {
+            writer.close()
+        }
     }
 
     private addExperimentFileToDb(Experiment experiment, String originalFilename, String exportFilename, long substanceCount) {

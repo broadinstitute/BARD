@@ -10,7 +10,14 @@ import org.hibernate.Session
 import org.springframework.security.access.prepost.PreAuthorize
 
 class ProjectService {
+    @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Project updateOwnerRole(Long id, Role ownerRole) {
+        Project project = Project.findById(id)
+        project.ownerRole = ownerRole
 
+        project.save(flush: true)
+        return Project.findById(id)
+    }
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Project updateProjectStatus(Long id, ProjectStatus newProjectStatus) {
         Project project = Project.findById(id)

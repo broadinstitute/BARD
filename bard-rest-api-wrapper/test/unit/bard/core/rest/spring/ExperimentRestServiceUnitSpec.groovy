@@ -340,13 +340,12 @@ class ExperimentRestServiceUnitSpec extends Specification {
         then:
         assert url == expectedURL
         where:
-        label                                   | params                                                                                      | expectedURL
-        "Params+Skip+Top"                       | new SearchParams(query: "query", skip: 2, top: 5)                                           | "http://ncgc/search/experiments/?q=query&skip=2&top=5&expand=true"
-        "Params+Skip+Top+Filters"               | new SearchParams(query: "query", skip: 2, top: 5, filters: [["num_expt", "6"] as String[]]) | "http://ncgc/search/experiments/?q=query&filter=fq(num_expt:6),&skip=2&top=5&expand=true"
-        "Params with no Skip and Top"           | new SearchParams(query: "query")                                                            | "http://ncgc/search/experiments/?q=query"
-        "Params with no Skip and Top + filters" | new SearchParams(query: "query", filters: [["num_expt", "6"] as String[]])                  | "http://ncgc/search/experiments/?q=query&filter=fq(num_expt:6),"
-
-
+        label                                   | params                                                                                                                                  | expectedURL
+        "Params+Skip+Top"                       | new SearchParams(query: "query", skip: 2, top: 5)                                                                                       | 'http://ncgc/search/experiments/?q=query&skip=2&top=5&expand=true'
+        "Params+Skip+Top+Filters"               | new SearchParams(query: "query", skip: 2, top: 5, filters: [["num_expt", "6"] as String[]])                                             | 'http://ncgc/search/experiments/?q=query&filter=fq(num_expt:6),&skip=2&top=5&expand=true'
+        "Params with no Skip and Top"           | new SearchParams(query: "query")                                                                                                        | 'http://ncgc/search/experiments/?q=query'
+        "Params with no Skip and Top + filters" | new SearchParams(query: "query", filters: [["num_expt", '"6"'] as String[]])                                                              | 'http://ncgc/search/experiments/?q=query&filter=fq(num_expt:%226%22),'
+        "Params with no Skip and Top + filters" | new SearchParams(query: "query", filters: [["kegg_disease_names", '"Glycerol kinase deficiency (GKD),Hyperglycerolemia"'] as String[]]) | 'http://ncgc/search/experiments/?q=query&filter=fq(kegg_disease_names:%22Glycerol+kinase+deficiency+%28GKD%29%2CHyperglycerolemia%22),'
     }
 
     void "buildFilters #label"() {

@@ -347,6 +347,15 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         assertAccesDeniedErrorMessage()
     }
 
+    void 'test experimentStatus only has Approved and Retired '(){
+        when:
+        controller.experimentStatus()
+
+        then:
+        final String responseAsString = response.contentAsString
+        responseAsString == '["Approved","Retired"]'
+    }
+
     void 'test edit Experiment Status with errors'() {
         given:
         Experiment newExperiment = Experiment.build(version: 0, experimentStatus: ExperimentStatus.APPROVED)

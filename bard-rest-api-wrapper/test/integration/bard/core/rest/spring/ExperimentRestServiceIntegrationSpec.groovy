@@ -3,10 +3,10 @@ package bard.core.rest.spring
 import bard.core.SearchParams
 import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.experiment.*
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Shared
 import spock.lang.Unroll
-import bard.core.rest.spring.experiment.*
 
 /**
  * Tests for ProjectRestService
@@ -16,9 +16,7 @@ import bard.core.rest.spring.experiment.*
 class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     ExperimentRestService experimentRestService
     CompoundRestService compoundRestService
-    AssayRestService assayRestService
-    ProjectRestService projectRestService
-    ETagRestService eTagRestService
+
     @Shared
     List<Long> TEST_CIDS = [6019589, 53347993]
     @Shared
@@ -30,6 +28,23 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     @Shared
     List<Long> TEST_EID_LONG_LIST = [1, 2, 3, 4, 5, 6, 7, 8]
 
+
+
+    void "searchExperimentsByCapIds #label"() {
+        given:
+        SearchParams searchParams = new SearchParams(skip: 0, top: 10)
+        List<Long> capIds = [1011, 5957, 88888888]
+        when:
+        ExperimentSearchResult experimentSearchResult = experimentRestService.searchExperimentsByCapIds(capIds, searchParams, false)
+        then:
+        assert (experimentSearchResult != null) == true
+        final List<ExperimentSearch> experiments = experimentSearchResult.experiments
+        assert 2 == experiments.size()
+        for (ExperimentSearch experimentSearch : experiments) {
+            assert experimentSearch.getCapExptId()
+            assert experimentSearch.getBardAssayId()
+        }
+    }
 
     void "test histogramDataByEID "() {
         when:
@@ -48,13 +63,13 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "test activitiesByCIDsAndEIDs "() {
         when: "generate activities directly via post"
-        final ExperimentData experimentDataNoCompounds = experimentRestService.activitiesByCIDsAndEIDs(TEST_CIDS.findAll{it ==null},TEST_EIDS)
-        final ExperimentData experimentDataNoExperiments = experimentRestService.activitiesByCIDsAndEIDs(TEST_CIDS.findAll{it ==null},TEST_EIDS)
-        final ExperimentData experimentDataNoMatchingData = experimentRestService.activitiesByCIDsAndEIDs([1L,2L],[2500000L,2500001L])
+        final ExperimentData experimentDataNoCompounds = experimentRestService.activitiesByCIDsAndEIDs(TEST_CIDS.findAll { it == null }, TEST_EIDS)
+        final ExperimentData experimentDataNoExperiments = experimentRestService.activitiesByCIDsAndEIDs(TEST_CIDS.findAll { it == null }, TEST_EIDS)
+        final ExperimentData experimentDataNoMatchingData = experimentRestService.activitiesByCIDsAndEIDs([1L, 2L], [2500000L, 2500001L])
 
         then:
-        assert experimentDataNoCompounds==null
-        assert experimentDataNoExperiments==null
+        assert experimentDataNoCompounds == null
+        assert experimentDataNoExperiments == null
         assert experimentDataNoMatchingData.activities == null
 
 
@@ -63,46 +78,46 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "test activitiesByCIDsAndEIDs with varying parameters"() {
         when: "generate activities directly via post"
-        final ExperimentData experimentData = experimentRestService.activitiesByCIDsAndEIDs(cids,eids)
+        final ExperimentData experimentData = experimentRestService.activitiesByCIDsAndEIDs(cids, eids)
 
         then:
-        experimentData.activities.size()>minNumOfReturnValues
-        experimentData.activities.size()<=maxNumOfReturnValues
+        experimentData.activities.size() > minNumOfReturnValues
+        experimentData.activities.size() <= maxNumOfReturnValues
 
         where:
-        cids                                        |   eids                                    |   minNumOfReturnValues    |   maxNumOfReturnValues
-        TEST_CIDS                                   |   TEST_EIDS                               |   1                       |   100
-        TEST_CIDS.findAll{it ==TEST_CIDS[0]}        |   TEST_EIDS                               |   0                       |   1
-        TEST_CIDS                                   |   TEST_EIDS.findAll{it ==TEST_EIDS[0]}    |   0                       |   1
-        TEST_CIDS.findAll{it ==TEST_CIDS[0]}        |   TEST_EIDS.findAll{it ==TEST_EIDS[0]}    |   0                       |   1
+        cids                                     | eids                                     | minNumOfReturnValues | maxNumOfReturnValues
+        TEST_CIDS                                | TEST_EIDS                                | 1                    | 100
+        TEST_CIDS.findAll { it == TEST_CIDS[0] } | TEST_EIDS                                | 0                    | 1
+        TEST_CIDS                                | TEST_EIDS.findAll { it == TEST_EIDS[0] } | 0                    | 1
+        TEST_CIDS.findAll { it == TEST_CIDS[0] } | TEST_EIDS.findAll { it == TEST_EIDS[0] } | 0                    | 1
     }
 
 
 
     void "test activitiesBySIDsAndEIDs"() {
         when: "generate activities directly via post"
-        final ExperimentData experimentData = experimentRestService.activitiesBySIDsAndEIDs(TEST_SIDS,TEST_EIDS)
+        final ExperimentData experimentData = experimentRestService.activitiesBySIDsAndEIDs(TEST_SIDS, TEST_EIDS)
 
         then:
-        assert experimentData.activities.size()>0
+        assert experimentData.activities.size() > 0
     }
 
 
 
     void "test activitiesBySIDsAndEIDs with varying parameters"() {
         when: "generate activities directly via post"
-        final ExperimentData experimentData = experimentRestService.activitiesBySIDsAndEIDs(sids,eids)
+        final ExperimentData experimentData = experimentRestService.activitiesBySIDsAndEIDs(sids, eids)
 
         then:
-        experimentData.activities.size()>minNumOfReturnValues
-        experimentData.activities.size()<=maxNumOfReturnValues
+        experimentData.activities.size() > minNumOfReturnValues
+        experimentData.activities.size() <= maxNumOfReturnValues
 
         where:
-        sids                                        |   eids                                    |   minNumOfReturnValues    |   maxNumOfReturnValues
-        TEST_SIDS                                   |   TEST_EIDS                               |   1                       |   100
-        TEST_SIDS.findAll{it ==TEST_SIDS[0]}        |   TEST_EIDS                               |   0                       |   1
-        TEST_SIDS                                   |   TEST_EIDS.findAll{it ==TEST_EIDS[0]}    |   0                       |   1
-        TEST_SIDS.findAll{it ==TEST_SIDS[0]}        |   TEST_EIDS.findAll{it ==TEST_EIDS[0]}    |   0                       |   1
+        sids                                     | eids                                     | minNumOfReturnValues | maxNumOfReturnValues
+        TEST_SIDS                                | TEST_EIDS                                | 1                    | 100
+        TEST_SIDS.findAll { it == TEST_SIDS[0] } | TEST_EIDS                                | 0                    | 1
+        TEST_SIDS                                | TEST_EIDS.findAll { it == TEST_EIDS[0] } | 0                    | 1
+        TEST_SIDS.findAll { it == TEST_SIDS[0] } | TEST_EIDS.findAll { it == TEST_EIDS[0] } | 0                    | 1
     }
 
 
