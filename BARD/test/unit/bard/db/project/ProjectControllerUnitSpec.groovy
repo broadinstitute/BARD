@@ -323,8 +323,15 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
         then:
         assert response.text
+    }
 
+    void 'test projectStatus only has Approved and Retired '(){
+        when:
+        controller.projectStatus()
 
+        then:
+        final String responseAsString = response.contentAsString
+        responseAsString == '["Approved","Retired"]'
     }
 
     void 'test reloadProjectSteps'() {
