@@ -51,16 +51,21 @@ class ExperimentController {
         render renderEditFieldsForView("edit", experiment, experiment.assay);
     }
 
+    /**
+     * Draft is excluded as End users cannot set a status back to Draft
+     * @return  list of strings representing available status options
+     */
     def experimentStatus() {
         List<String> sorted = []
         final Collection<ExperimentStatus> experimentStatuses = ExperimentStatus.values()
         for (ExperimentStatus experimentStatus : experimentStatuses) {
-            sorted.add(experimentStatus.id)
+            if (experimentStatus != ExperimentStatus.DRAFT) {
+                sorted.add(experimentStatus.id)
+            }
         }
         sorted.sort()
         final JSON json = sorted as JSON
         render text: json, contentType: 'text/json', template: null
-
     }
 
     def show() {

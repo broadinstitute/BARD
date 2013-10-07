@@ -160,6 +160,15 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assert response.contentType == "text/json;charset=utf-8"
     }
 
+    void 'test assayStatus only has Approved and Retired '(){
+        when:
+        controller.assayStatus()
+
+        then:
+        final String responseAsString = response.contentAsString
+        responseAsString == '["Approved","Retired"]'
+    }
+
     void 'test edit Assay Status access denied'() {
         given:
         accessDeniedRoleMock()
