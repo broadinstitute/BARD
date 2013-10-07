@@ -215,11 +215,17 @@ class AssayDefinitionController {
         }
     }
 
+    /**
+     * Draft is excluded as End users cannot set a status back to Draft
+     * @return  list of strings representing available status options
+     */
     def assayStatus() {
         List<String> sorted = []
         final Collection<AssayStatus> assayStatuses = AssayStatus.values()
         for (AssayStatus assayStatus : assayStatuses) {
-            sorted.add(assayStatus.id)
+            if (assayStatus != AssayStatus.DRAFT) {
+                sorted.add(assayStatus.id)
+            }
         }
         sorted.sort()
         final JSON json = sorted as JSON

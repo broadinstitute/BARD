@@ -12,6 +12,7 @@ import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
 import bard.db.registration.AssayContextMeasure
+import bard.db.registration.AttributeType
 import bard.db.registration.Measure
 import bard.db.registration.MergeAssayDefinitionService
 import grails.buildtestdata.mixin.Build
@@ -19,6 +20,7 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -123,6 +125,29 @@ class ContextItemServiceUnitSpec extends Specification {
         AssayContextItem item = context.contextItems.first()
         item.valueType == ValueType.NUMERIC
         item.valueNum == 100.0
+
+    }
+
+    def "test create free context item"() {
+        ContextItemService service = new ContextItemService()
+
+        Element attribute = Element.build(expectedValueType: ExpectedValueType.ELEMENT)
+        AssayContext context = AssayContext.build()
+        BasicContextItemCommand command = new BasicContextItemCommand()
+        command.context = context
+        command.contextClass = "AssayContext"
+        command.attributeElementId = attribute.id
+        command.valueConstraintType = "Free"
+        command.providedWithResults = true
+
+        when:
+        boolean created = service.createAssayContextItem(context.id, command)
+
+        then:
+        created
+        AssayContextItem item = context.contextItems.first()
+        item.valueType == ValueType.NONE
+        item.attributeType == AttributeType.Free
 
     }
 }

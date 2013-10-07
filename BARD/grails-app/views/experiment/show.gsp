@@ -243,7 +243,7 @@
     <div class="row-fluid">
         <div id="measure-tree"></div>
         <r:script>
-            $("#measure-tree").dynatree({children: ${measuresAsJsonTree} })
+            $("#measure-tree").dynatree({children: <%= measuresAsJsonTree %> })
         </r:script>
     </div>
 </section>

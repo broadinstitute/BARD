@@ -512,40 +512,6 @@ class BardWebInterfaceController {
                     errorMessage)
         }
     }
-/**
- *
- * @param assayProtocolId
- */
-    def showAssay(Integer assayProtocolId) {
-        Integer assayId = assayProtocolId ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
-        if (isHTTPBadRequest(assayId, "Assay Id is required", bardUtilitiesService.username)) {
-            return
-        }
-        try {
-            Map assayMap = this.queryService.showAssay(assayId)
-            AssayAdapter assayAdapter = assayMap.assayAdapter
-            if (assayAdapter) {
-                render(view: "showAssay", model: [
-                        assayAdapter: assayAdapter,
-                        experiments: assayMap.experiments,
-                        projects: assayMap.projects, searchString: params.searchString
-                ]
-                )
-            } else {
-                throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Could not find Assay Id ${assayId}")
-            }
-        }
-        catch (HttpClientErrorException httpClientErrorException) {
-            String message = "Could not find Assay with ID ${assayId}"
-            handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
-        }
-        catch (Exception exp) {
-            final String errorMessage = "Search For Assay Id ${assayId}:\n${exp.message}"
-            log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username), exp)
-            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(), errorMessage)
-        }
-
-    }
 
 //================= Free Text Searches ======================================================
 /**
