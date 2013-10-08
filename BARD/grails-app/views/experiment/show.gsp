@@ -219,10 +219,6 @@
                 })
             </r:script>
         </div>
-        <g:if test="${instance.experimentFiles}">
-            <g:link action="previewResults" controller="bardWebInterface" id="${instance.id}"
-                    class="btn">Preview Results</g:link>
-        </g:if>
 
 </section>
 <br/>
@@ -270,7 +266,7 @@
                     <script>
                         /* Retrieve JSON data to build a histogram */
                         $(document).ready(function () {
-                            d3.json("/BARD/bardWebInterface/retrieveExperimentResultsSummary/${instance.ncgcWarehouseId}", function (error, dataFromServer) {
+                            d3.json("/BARD/bardWebInterface/retrieveExperimentResultsSummary/${instance.id}", function (error, dataFromServer) {
                                 if (!(dataFromServer === undefined)) {
                                     for (var i = 0; i < dataFromServer.length; i++) {
                                         if (!(dataFromServer[i] === undefined)) {
@@ -284,7 +280,7 @@
 
                     <div id="histogramHere" class="span12"></div>
                     <g:link controller="bardWebInterface" action="showExperiment"
-                            id="${instance.ncgcWarehouseId}">View all results for this experiment</g:link>
+                            id="${instance.id}">View all results for this experiment</g:link>
                 </g:if>
                 <g:elseif test="${!instance.experimentFiles}">
                     <p>No results uploaded for this experiment</p>

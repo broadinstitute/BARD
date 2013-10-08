@@ -17,9 +17,9 @@
                     <g:link controller="experiment" action="show" id="${experiment?.id}">View Experiment Details</g:link>
                 </li>
             </g:if>
-            <g:elseif test="${BooleanUtils.isFalse(excludedLinks?.contains('bardWebInterface.showExperiment')) && experiment?.ncgcWarehouseId}">
+            <g:elseif test="${BooleanUtils.isFalse(excludedLinks?.contains('bardWebInterface.showExperiment')) && experiment?.id}">
                 <li>
-                    <g:link controller="bardWebInterface" action="showExperiment" id="${experiment?.ncgcWarehouseId}">View Published Results</g:link>
+                    <g:link controller="bardWebInterface" action="showExperiment" id="${experiment?.id}">View Published Results</g:link>
                 </li>
             </g:elseif>
             <g:else>

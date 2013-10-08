@@ -35,7 +35,7 @@ class CompoundBioActivitySummaryTagLib {
 
     def experimentDescription = { attrs, body ->
 
-        out << generateShortNameHTML(attrs.name, attrs.bardExptId, attrs.eid, 'showExperiment')
+        out << generateShortNameHTML(attrs.name, attrs.capExptId, attrs.eid, 'showExperiment')
     }
 
     def curvePlot = { attrs, body ->

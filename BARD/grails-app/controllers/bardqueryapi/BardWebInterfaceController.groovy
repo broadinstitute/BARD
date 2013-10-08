@@ -26,7 +26,7 @@ import org.springframework.web.client.HttpClientErrorException
 import javax.servlet.http.HttpServletResponse
 /**
  *
- * TODO: Refactor into individual classes. Class is too big. We need to have different controllers for each entityß
+ * TODO: Refactor into individual classes. Class is too big. We need to have different controllers for each entity
  *
  *
  *
@@ -121,10 +121,22 @@ class BardWebInterfaceController {
         if (isHTTPBadRequest(id, 'Experiment ID is a required Field', bardUtilitiesService.username)) {
             return
         }
+        Experiment experiment = Experiment.get(id)
+        if(!experiment){
+            response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                    "Could not find Experiment with EID: ${id}")
+            return
+        }
+        if(!experiment.ncgcWarehouseId){
+            response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                    "Could not find Experiment with EID: ${id} in warehouse")
+            return
+        }
         try {
+            //Convert from CAP ID to NCGC Id
 
             Map<String, Integer> searchParams = handleSearchParams()
-            SpreadSheetInput spreadSheetInput = new SpreadSheetInput(eids: [id])
+            SpreadSheetInput spreadSheetInput = new SpreadSheetInput(eids: [experiment.ncgcWarehouseId])
 
             //If this is the first time we are loading the page, we want the 'Normalize Y-Axis' and 'Active filters to be checked-off by default so we would normalize the Y-axis as a default and also for actives-only.
             Boolean noFiltersFromPage
@@ -192,12 +204,12 @@ class BardWebInterfaceController {
                             totalNumOfCmpds: totalNumOfCmpds])
         }
         catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request
-            String message = "Experiment with ID ${id} does not exists"
+            String message = "Experiment with EID ${id} does not exists"
             handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
         }
         catch (Exception ee) {
 
-            String message = "Problem finding Experiment ${id}"
+            String message = "Problem finding Experiment with EID ${id}"
             log.error(message + getUserIpAddress(bardUtilitiesService.username), ee)
 
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -206,7 +218,8 @@ class BardWebInterfaceController {
     }
 
     def retrieveExperimentResultsSummary(Long id, SearchCommand searchCommand) {
-        render experimentRestService.histogramDataByEID(id)
+        Experiment experiment = Experiment.get(id)
+        render experimentRestService.histogramDataByEID(experiment.ncgcWarehouseId)
     }
 
     def probe(String probeId) {
@@ -612,6 +625,7 @@ class BardWebInterfaceController {
      */
     def showCompoundBioActivitySummary(Long id, SearchCommand searchCommand) {
 
+
         if (isHTTPBadRequest(id, 'Compound ID is a required Field', bardUtilitiesService.username)) {
             return
         }
@@ -624,7 +638,7 @@ class BardWebInterfaceController {
             smiles = compoundAdapter?.compound?.smiles
         }
         catch (HttpClientErrorException httpClientErrorException) {
-            String message = "Could not find Compound with CID ${cid}"
+            String message = "Could not find Compound with CID ${id}"
             handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
         }
         catch (Exception exp) {

@@ -26,23 +26,23 @@
                     <td>
                         <g:if test="${searchString}">
                             <g:link controller="bardWebInterface" action="showExperiment"
-                                    id="${experiment.bardExptId}"
+                                    id="${experiment.capExptId}"
                                     params='[searchString: "${searchString}"]'>${experiment.capExptId}</g:link>
                         </g:if>
                         <g:else>
                             <g:link controller="bardWebInterface" action="showExperiment"
-                                    id="${experiment.bardExptId}">${experiment.capExptId}</g:link>
+                                    id="${experiment.capExptId}">${experiment.capExptId}</g:link>
                         </g:else>
                     </td>
                     <td style="line-height: 150%">
                         <g:if test="${searchString}">
                             <g:link controller="bardWebInterface" action="showExperiment"
-                                    id="${experiment.bardExptId}"
+                                    id="${experiment.capExptId}"
                                     params='[searchString: "${searchString}"]'>${experiment.name}</g:link>
                         </g:if>
                         <g:else>
                             <g:link controller="bardWebInterface" action="showExperiment"
-                                    id="${experiment.bardExptId}">${experiment.name}</g:link>
+                                    id="${experiment.capExptId}">${experiment.name}</g:link>
                         </g:else>
                     </td>
                     <td>
