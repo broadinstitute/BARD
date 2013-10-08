@@ -8,9 +8,6 @@
                         id="${experiment?.assay?.id}">${experiment?.assay?.name}</g:link></li>
         </ul>
     </dd>
-    <g:if test="">
-
-    </g:if>
 
     <dt>Experiment Links:</dt>
     <dd>

@@ -11,6 +11,7 @@ import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
 import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentService
 import bard.db.project.Project
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
@@ -49,6 +50,7 @@ class BardWebInterfaceController {
     QueryProjectExperimentRenderService queryProjectExperimentRenderService
     RingManagerService ringManagerService
     List<SearchFilter> filters = []
+    ExperimentService experimentService
 
     //An AfterInterceptor to handle mobile-view routing.
 //    def afterInterceptor = [action: this.&handleMobile]
@@ -71,6 +73,20 @@ class BardWebInterfaceController {
         return false
     }
 
+    def previewResults(Long id){
+        Experiment experiment = Experiment.get(id)
+        if(!experiment.experimentFiles){
+            flash.message ="Experiment does not have result files"
+            redirect(action: "show")
+            return
+        }
+        final TableModel tableModel = experimentService.previewResults(id)
+        //this should do a full page reload
+        render(view: 'showExperimentalResultsPreview',
+                model: [tableModel: tableModel,
+                        capExperiment: experiment,
+                        totalNumOfCmpds: 0])
+    }
 
     def index() {
         render( view: 'homepage', model: {})

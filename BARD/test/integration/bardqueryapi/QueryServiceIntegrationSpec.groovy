@@ -99,8 +99,8 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         then: "The Compound is found"
         assert compoundAdapter
         assert compoundAdapter.compound
-        assert cid == compoundAdapter.pubChemCID
-        assert expectedSmiles == compoundAdapter.structureSMILES
+        assert cid == compoundAdapter.id
+        assert expectedSmiles == compoundAdapter.smiles
         where:
         label                       | cid    | expectedSmiles
         "Return a Compound Adapter" | 658342 | "C(CN1CCCCC1)N2C(N=CC3=CC=CS3)=NC4=CC=CC=C24"

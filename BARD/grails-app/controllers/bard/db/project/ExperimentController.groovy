@@ -13,6 +13,7 @@ import bard.db.registration.Assay
 import bard.db.registration.AssayDefinitionService
 import bard.db.registration.EditingHelper
 import bard.db.registration.MeasureTreeService
+import bardqueryapi.TableModel
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
@@ -35,6 +36,7 @@ class ExperimentController {
     def permissionEvaluator
     CapPermissionService capPermissionService
     AsyncResultsService asyncResultsService
+
 
     def myExperiments() {
         List<Experiment> experiments = capPermissionService.findAllObjectsForRoles(Experiment)

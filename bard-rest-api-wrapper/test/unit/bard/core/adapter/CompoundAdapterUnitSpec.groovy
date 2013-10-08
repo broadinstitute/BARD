@@ -216,17 +216,13 @@ class CompoundAdapterUnitSpec extends Specification {
         assert !compoundAdapter.getProbeId()
         assert !compoundAdapter.isProbe()
         assert compoundAdapter.getId() == 2722
-        assert compoundAdapter.getPubChemCID() == 2722
-        assert compoundAdapter.getStructureSMILES() == "OC1=C(Cl)C=C(Cl)C2=C1N=CC=C2"
-        assert !compoundAdapter.getStructureMOL()
-        assert !compoundAdapter.formula()
+        assert compoundAdapter.id == 2722
+        assert compoundAdapter.smiles == "OC1=C(Cl)C=C(Cl)C2=C1N=CC=C2"
         assert compoundAdapter.mwt() == 214.048
         assert compoundAdapter.exactMass() == 212.975
         assert compoundAdapter.hbondDonor() == 1
         assert compoundAdapter.hbondAcceptor() == 2
         assert compoundAdapter.rotatable() == 0
-        assert !compoundAdapter.definedStereo()
-        assert !compoundAdapter.stereocenters()
 
         assert compoundAdapter.TPSA() == 33.1
         assert compoundAdapter.logP() == 3.5

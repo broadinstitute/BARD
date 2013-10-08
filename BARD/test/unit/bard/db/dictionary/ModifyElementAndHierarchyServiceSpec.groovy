@@ -22,9 +22,6 @@ class ModifyElementAndHierarchyServiceSpec extends Specification {
         service.springSecurityService.getPrincipal() >> ['username':'dlahr']
     }
 
-    def cleanup() {
-    }
-
     void "test renameElement same name"() {
         setup:
         Element element = Element.build()
