@@ -113,7 +113,7 @@ class PreviewResultsSummaryBuilder {
      * @param jsonResults
      * @return
      */
-    static Map convertToDoseResponse(List<JsonResult> jsonResults) {
+    protected Map convertToDoseResponse(List<JsonResult> jsonResults) {
 
         List<Double> concentrations = []
         List<Double> activities = []
@@ -171,21 +171,9 @@ class PreviewResultsSummaryBuilder {
         ]
 
     }
-    /**
-     *
-     * extract the units from a given string. Assume that the units are space separated from the value
-     *
-     */
-    protected static String parseUnits(String displayValue) {
-        final String[] split = displayValue.trim().split(" ")
-        if (split.length > 1) {
-            return split[1].trim()
-        }
-        return ""
 
-    }
 
-    protected static ConcentrationResponseSeriesValue handleHighPriorityElements(final JsonResult jsonResult, List<WebQueryValue> childElements = [], Double yNormMin = null,
+    protected ConcentrationResponseSeriesValue handleHighPriorityElements(final JsonResult jsonResult, List<WebQueryValue> childElements = [], Double yNormMin = null,
                                                                                  Double yNormMax = null) {
         final Long dictionaryId = jsonResult.resultTypeId
         Pair<StringValue, StringValue> title =
@@ -227,7 +215,7 @@ class PreviewResultsSummaryBuilder {
 
     }
 
-    protected static void processJsonResults(final JsonResult jsonResult, List<WebQueryValue> childElements = [], List<WebQueryValue> values = [],  Double yNormMin = null,
+    protected void processJsonResults(final JsonResult jsonResult, List<WebQueryValue> childElements = [], List<WebQueryValue> values = [],  Double yNormMin = null,
                                              Double yNormMax = null) {
 
         final Long dictionaryId = jsonResult.resultTypeId
@@ -240,7 +228,7 @@ class PreviewResultsSummaryBuilder {
         }
     }
 
-    protected static PairValue handleEfficacyMeasures(final JsonResult jsonResult) {
+    protected PairValue handleEfficacyMeasures(final JsonResult jsonResult) {
         final Long dictionaryId = jsonResult.resultTypeId
 
         Pair<StringValue, StringValue> pair =
@@ -254,7 +242,7 @@ class PreviewResultsSummaryBuilder {
 
     }
 
-    protected static List<WebQueryValue> contextItemsToChildElements(List<JsonResultContextItem> jsonResultContextItems) {
+    protected List<WebQueryValue> contextItemsToChildElements(List<JsonResultContextItem> jsonResultContextItems) {
         List<WebQueryValue> childElements = []
         for (JsonResultContextItem jsonResultContextItem : jsonResultContextItems) {
             childElements << new StringValue(value: jsonResultContextItem.attribute + ":" + jsonResultContextItem.valueDisplay)
@@ -268,7 +256,7 @@ class PreviewResultsSummaryBuilder {
      * @param outcomeFacetMap a pass-through collection to generate facets that match the different priority-element types (i.e., result-types) we have in the experiment data.
      * @return
      */
-    static Map convertCapExperimentResultsToValues(List<JsonResult> rootElements,
+    public Map convertCapExperimentResultsToValues(List<JsonResult> rootElements,
                                                    Double yNormMin = null,
                                                    Double yNormMax = null) {
 
@@ -301,8 +289,20 @@ class PreviewResultsSummaryBuilder {
         final List<WebQueryValue> sortedValues = sortWebQueryValues(values)
         return [experimentalvalues: sortedValues, outcome: outcome, childElements: childElements]
     }
+    /**
+     *
+     * extract the units from a given string. Assume that the units are space separated from the value
+     *
+     */
+    protected String parseUnits(String displayValue) {
+        final String[] split = displayValue.trim().split(" ")
+        if (split.length > 1) {
+            return split[1].trim()
+        }
+        return ""
 
-    protected static List<WebQueryValue> sortWebQueryValues(List<WebQueryValue> unsortedValues) {
+    }
+    protected List<WebQueryValue> sortWebQueryValues(List<WebQueryValue> unsortedValues) {
         return unsortedValues.sort { WebQueryValue valueInst ->
             //Sort based on the WebQueryValue specific type
             switch (valueInst.class.simpleName) {
@@ -315,7 +315,7 @@ class PreviewResultsSummaryBuilder {
                 case PairValue.class.simpleName:
                     return 3
                     break;
-                case java.lang.StringValue.class.simpleName:
+                case StringValue.class.simpleName:
                     return 4
                     break;
                 default:

@@ -2,8 +2,6 @@ package bard.db.experiment
 
 import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
-import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
-import bardqueryapi.compoundBioActivitySummary.PreviewResultsSummaryBuilder
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.ObjectReader
 import grails.buildtestdata.mixin.Build
@@ -131,7 +129,6 @@ class ResultsExportServiceSpec extends Specification {
         final List<JsonResult> elem = substanceResults.rootElem
         assert !elem.isEmpty()
         final JsonResult jsonResult = substanceResults.rootElem.get(0)
-        PreviewResultsSummaryBuilder.convertToDoseResponse(elem)
         assert jsonResult
 
     }

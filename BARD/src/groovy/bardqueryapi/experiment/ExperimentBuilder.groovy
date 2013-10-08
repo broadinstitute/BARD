@@ -76,8 +76,8 @@ class ExperimentBuilder {
             rowData.add(new StringValue(value: 'Not Available'))
             rowData.add(new StringValue(value: 'Not Available'))
         }
-
-        Map m = PreviewResultsSummaryBuilder.convertCapExperimentResultsToValues(substanceResults.rootElem, yNormMin, yNormMax)
+        PreviewResultsSummaryBuilder previewResultsSummaryBuilder = new PreviewResultsSummaryBuilder()
+        Map m = previewResultsSummaryBuilder.convertCapExperimentResultsToValues(substanceResults.rootElem, yNormMin, yNormMax)
         StringValue outcome = m.outcome
         rowData.add(outcome)
 
