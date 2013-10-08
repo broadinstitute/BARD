@@ -1,6 +1,5 @@
 package bardqueryapi
 
-import bard.core.SearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
@@ -9,19 +8,13 @@ import bard.core.interfaces.AssayRole
 import bard.core.interfaces.AssayType
 import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.experiment.Activity
-import bard.core.rest.spring.experiment.ExperimentSearch
-import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.db.audit.BardContextUtils
 import bard.db.dictionary.BardDescriptor
-import bard.db.experiment.Experiment
 import grails.plugin.spock.IntegrationSpec
 import grails.plugins.springsecurity.SpringSecurityService
-import org.apache.commons.lang3.tuple.ImmutablePair
-import org.apache.commons.lang3.tuple.Pair
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.SessionFactory
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -99,8 +92,8 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         then: "The Compound is found"
         assert compoundAdapter
         assert compoundAdapter.compound
-        assert cid == compoundAdapter.pubChemCID
-        assert expectedSmiles == compoundAdapter.structureSMILES
+        assert cid == compoundAdapter.id
+        assert expectedSmiles == compoundAdapter.smiles
         where:
         label                       | cid    | expectedSmiles
         "Return a Compound Adapter" | 658342 | "C(CN1CCCCC1)N2C(N=CC3=CC=CS3)=NC4=CC=CC=C24"

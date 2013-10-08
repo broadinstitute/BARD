@@ -6,7 +6,6 @@ import bard.db.experiment.Experiment
 import bard.db.registration.*
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 import wslite.rest.RESTClient

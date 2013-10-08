@@ -20,9 +20,6 @@ class BuildElementPathsServiceSpec extends Specification {
         service = new BuildElementPathsService()
     }
 
-    def cleanup() {
-    }
-
     void "buildElement with 0 parents"() {
         setup:
         Element element = Element.build()

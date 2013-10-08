@@ -41,10 +41,6 @@ class ContextItemControllerUnitSpec extends Specification {
         controller.permissionEvaluator = Mock(PermissionEvaluator)
         controller.springSecurityService = Mock(SpringSecurityService)
     }
-
-    def cleanup() {
-    }
-   // contextItemService.updateAssayContextItem((Assay) owner, this)
     void 'test update - Project Context Item -Success'() {
         SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
             return true

@@ -21,9 +21,6 @@ class TextFormatTagLibUnitSpec extends Specification {
         // Setup logic here
     }
 
-    void cleanup() {
-        // Tear down logic here
-    }
 
     def "test renderWithBreaks #label"() {
         given:
