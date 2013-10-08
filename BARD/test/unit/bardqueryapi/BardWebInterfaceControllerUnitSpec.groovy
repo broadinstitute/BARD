@@ -1007,47 +1007,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
-    void "test showAssay with Exception"() {
-        given:
-        Integer adid = 872
-        when:
-        request.method = 'GET'
-        controller.showAssay(adid)
-        then:
-        queryService.showAssay(_) >> { throw exceptionType }
-        assert response.status == statusCode
-        where:
-        label                                | exceptionType                                      | statusCode
-        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
-        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-    }
-
-
-    void "test showAssay #label"() {
-
-        when:
-        request.method = 'GET'
-        controller.showAssay(adid)
-
-        then:
-        queryService.showAssay(_) >> { assayAdapter }
-
-        expectedAssayView == view
-        if (adid && assayAdapter) {
-            assert model.assayAdapter
-            adid == model.assayAdapter.assay.id
-            name == model.assayAdapter.name
-        }
-        assert response.status == statusCode
-        where:
-        label                      | adid   | name   | assayAdapter                                                       | expectedAssayView             | statusCode
-        "Return an assayAdapter"   | 485349 | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showAssay" | HttpServletResponse.SC_OK
-        "A null AssayAdapter"      | null   | "Test" | [assayAdapter: null, experiments: []]                              | null                          | HttpServletResponse.SC_BAD_REQUEST
-        "Assay ADID is null"       | null   | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | null                          | HttpServletResponse.SC_BAD_REQUEST
-        "Assay Adapter is null"    | null   | "Test" | null                                                               | null                          | HttpServletResponse.SC_BAD_REQUEST
-        "Returns an Empty Adapter" | 1234   | "Test" | [:]                                                                | null                          | HttpServletResponse.SC_NOT_FOUND
-
-    }
 
     void "test autocomplete #label"() {
         when:

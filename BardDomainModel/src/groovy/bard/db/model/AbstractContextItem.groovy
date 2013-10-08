@@ -80,7 +80,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
             case ValueType.NUMERIC:
                 return [qualifier?.trim(), valueNum, attributeElement.unit?.abbreviation ?: attributeElement.unit?.label].findAll().join(' ')
             case ValueType.RANGE:
-                return [valueMin, valueMax].findAll().join(' - ')
+                return [[valueMin, valueMax].join(' - '), attributeElement.unit?.abbreviation ?: attributeElement.unit?.label].findAll().join(' ')
             case ValueType.NONE:
                 return null;
             case ValueType.FREE_TEXT:
