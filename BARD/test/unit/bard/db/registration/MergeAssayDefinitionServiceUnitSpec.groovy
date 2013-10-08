@@ -27,6 +27,20 @@ import spock.lang.Unroll
 @Unroll
 public class MergeAssayDefinitionServiceUnitSpec extends Specification {
 
+    void 'test convert String To Id List #desc'() {
+        when:
+        List<Long> convertedValues = MergeAssayDefinitionService.convertStringToIdList(valuesUnderTest)
+        then:
+        assert expectedData == convertedValues
+        where:
+        desc                                      | valuesUnderTest         | expectedData
+        "Numbers not separated by spaces"         | "12345"                 | [new Long(12345)]
+        "Numbers separated by one space"          | "123 45 67"             | [new Long(123), new Long(45), new Long(67)]
+        "Numbers separated by one or more spaces" | "12 3 4   5 6   7"      | [new Long(12), new Long(3), new Long(4), new Long(5), new Long(6), new Long(7)]
+        "Numbers separated by new lines"          | "12\n3\n \n4   5 6   7" | [new Long(12), new Long(3), new Long(4), new Long(5), new Long(6), new Long(7)]
+
+    }
+
     void 'test validateExperimentContextItem - no assay context item in map'() {
         given:
         final ExperimentContextItem experimentContextItem = ExperimentContextItem.build()

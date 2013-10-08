@@ -32,6 +32,10 @@
             <td>QA Status of Projects</td>
             <td><g:link controller="projectStatus" action="index">List, modify, change QA status of projects</g:link></td>
         </tr>
+        <tr>
+            <td>AID's in CAP Production</td>
+            <td><g:link controller="aidInProd" action="index">List AID's that currently exist in CAP Production</g:link> </td>
+        </tr>
     </table>
 </body>
 </html>
