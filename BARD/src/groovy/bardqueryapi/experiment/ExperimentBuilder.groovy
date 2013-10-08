@@ -131,11 +131,15 @@ class ExperimentBuilder {
 
         //CID
         Long cid = activity.cid
-        def grailsApplicationTagLib = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
-        String linkValue = grailsApplicationTagLib.createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: cid.toString()])
-        LinkValue cidValue = new LinkValue(value: linkValue, text: cid.toString())
+        if (cid) {
+            def grailsApplicationTagLib = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+            String linkValue = grailsApplicationTagLib.createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: cid.toString()])
+            LinkValue cidValue = new LinkValue(value: linkValue, text: cid.toString())
 
-        rowData.add(cidValue)
+            rowData.add(cidValue)
+        } else {
+            rowData.add(new StringValue(value: 'No CID exists'))
+        }
 
         //Structure image
         final CompoundAdapter compoundAdapter = compoundAdapterMap.get(cid)
