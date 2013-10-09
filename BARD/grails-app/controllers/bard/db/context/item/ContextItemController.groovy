@@ -85,8 +85,14 @@ class ContextItemController {
 
         basicContextItemCommand.delete()
 
-        redirect(controller: basicContextItemCommand.ownerController, action: "editContext",
-                params: [id:basicContextItemCommand.contextOwnerId,groupBySection: basicContextItemCommand.context?.contextType.id])
+        if(request.getHeader('referer').contains('/contextItem/')){
+            redirect(action: 'create', params: params)
+        }
+        else{
+            redirect(controller: basicContextItemCommand.ownerController, action: "editContext",
+                    params: [id:basicContextItemCommand.contextOwnerId,groupBySection: basicContextItemCommand.context?.contextType.id])
+        }
+
     }
 
     def updatePreferredName(InlineEditableCommand inlineEditableCommand) {
