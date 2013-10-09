@@ -85,7 +85,7 @@ class ContextItemController {
 
         basicContextItemCommand.delete()
 
-        if(request.getHeader('referer').contains('/contextItem/')){
+        if(request.getHeader('referer')?.contains('/contextItem/')){
             redirect(action: 'create', params: params)
         }
         else{
