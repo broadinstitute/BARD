@@ -72,9 +72,7 @@ $(document).ready(function () {
             },
             data:backingData,
             formatResult: function(result, container, query) {
-                var markup=[];
-                window.Select2.util.markMatch(result.text, query.term, markup);
-                return markup.join("");
+                return itemSelect2Format(result, container, query);
                 },
             query: function (query) {
                 var filteredData = {results: []};
@@ -101,7 +99,14 @@ $(document).ready(function () {
     $.ajax("/BARD/ontologyJSon/getAttributeDescriptors").done(function (data) {
         initializeAttributeSelect2(data);
     });
-
+    function itemSelect2Format(result, container, query){
+        var markup=[];
+        window.Select2.util.markMatch(result.parentFullPath, query.term, markup);
+        markup.push('> <b>');
+        window.Select2.util.markMatch(result.text, query.term, markup);
+        markup.push('</b>');
+        return markup.join("");
+    }
     function clearAllValueFields() {
         $(':text').val("");
         $("#valueElementId").select2("data", {results: []});
@@ -219,9 +224,7 @@ $(document).ready(function () {
                 }
             },
             formatResult: function(result, container, query) {
-                var markup=[];
-                window.Select2.util.markMatch(result.text, query.term, markup);
-                return markup.join("");
+                return itemSelect2Format(result, container, query);
             },
             query: function (query) {
                 var filteredData = {results: []};

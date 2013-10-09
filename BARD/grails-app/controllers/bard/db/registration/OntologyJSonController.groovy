@@ -60,23 +60,27 @@ class OntologyJSonController {
     /**
      * @return List of elements to be used as attributes for ContextItems
      */
-//    @Cacheable("contextItemAttributeDescriptors")
+    //@Cacheable("contextItemAttributeDescriptors")
     def getAttributeDescriptors() {
 
-//        List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForAttributes()
+        List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForAttributes()
 //        Map groupByParentFullPath = descriptors.groupBy { it.parent.fullPath}
 //        List<Map> attributes = []
 //        groupByParentFullPath.each{parentFullPath,children->
 //            attributes << [text:parentFullPath, children : children.collect { Descriptor descriptor -> asMapForSelect2(descriptor)}]
 //        }
-//        List<Map> attributes = descriptors.collect { Descriptor descriptor ->
-//            asMapForSelect2(descriptor)
-//        }
-        BardDescriptor bard = BardDescriptor.findByLabel('BARD')
+        List<Map> attributes = descriptors.collect { Descriptor descriptor ->
+            asMapForSelect2(descriptor, true)
+        }
 
-
-        Map map = ['results': [asMapForSelect2(bard,true)]]
+        Map map = ['results': attributes]
         render map as JSON
+
+//        BardDescriptor bard = BardDescriptor.findByLabel('BARD')
+//
+//
+//        Map map = ['results': [asMapForSelect2(bard,true)]]
+//        render map as JSON
 
     }
 
@@ -105,14 +109,15 @@ class OntologyJSonController {
             map.remove('id')
         }
         map.put('fullPath', descriptor.fullPath)
+        map.put('parentFullPath', descriptor.parent.fullPath)
 
-        List nonRetiredChildren = descriptor.children.findAll{BardDescriptor child -> child.element.elementStatus != ElementStatus.Retired }.sort{it.label}
-        if(nonRetiredChildren){
-            map.children = []
-            for(BardDescriptor child in nonRetiredChildren){
-                map.children << asMapForSelect2(child, removeIdForExpectedValueTypeNone)
-            }
-        }
+//        List nonRetiredChildren = descriptor.children.findAll{BardDescriptor child -> child.element.elementStatus != ElementStatus.Retired }.sort{it.label}
+//        if(nonRetiredChildren){
+//            map.children = []
+//            for(BardDescriptor child in nonRetiredChildren){
+//                map.children << asMapForSelect2(child, removeIdForExpectedValueTypeNone)
+//            }
+//        }
 
         return map
     }
