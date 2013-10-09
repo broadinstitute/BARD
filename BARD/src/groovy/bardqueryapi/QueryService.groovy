@@ -41,6 +41,7 @@ class QueryService implements IQueryService {
     ProjectRestService projectRestService
     SubstanceRestService substanceRestService
     ExperimentRestService experimentRestService
+    ExperimentBuilder experimentBuilder
 //    GOOntologyService goOntologyService
 
     //========================================================== Free Text Searches ================================
@@ -333,7 +334,7 @@ class QueryService implements IQueryService {
         Integer top = searchParams.top
         Integer skip = searchParams.skip
         Map m = findExperimentDataById(experimentId, top, skip, filterTypes)
-        ExperimentBuilder experimentBuilder = new ExperimentBuilder()
+//        ExperimentBuilder experimentBuilder = new ExperimentBuilder()
         return experimentBuilder.buildModel(m)
 
     }

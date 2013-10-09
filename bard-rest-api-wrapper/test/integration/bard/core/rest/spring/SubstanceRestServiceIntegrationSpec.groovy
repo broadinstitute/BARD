@@ -8,6 +8,7 @@ import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.substances.Substance
 import bard.core.rest.spring.substances.SubstanceResult
 import grails.plugin.spock.IntegrationSpec
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
 import bard.core.rest.spring.util.SubstanceSearchType
 import spock.lang.Shared
@@ -43,6 +44,30 @@ class SubstanceRestServiceIntegrationSpec extends IntegrationSpec {
         assert substance.getResourcePath() == "/substances/26726047"
 
     }
+//    @IgnoreRest
+//    void "getSubstanceById sid2 - 6820697"() {
+//
+//        when:
+//        final Substance substance = substanceRestService.getSubstanceById(sid)
+//        then:
+//        assert substance
+//        assert substance.getId() == sid
+//        assert substance.getSid() == substance.getId()
+//        assert substance.getCid() == expectedCID
+//        assert substance.getDepRegId()
+//        assert substance.getSourceName()
+//        assert substance.getSmiles()
+//        assert substance.getDeposited()
+//        assert substance.getUpdated()
+//        assert substance.getResourcePath()
+//        where:
+//
+//        desc | sid      | expectedCID
+//        ""   | 26726047  | 647652
+//        ""   | 152255054 | 647652
+//        ""   | 136367216 | 647652
+//
+//    }
 
     void "getResourceContext"() {
 

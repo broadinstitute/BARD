@@ -26,7 +26,7 @@
     <div class="row-fluid">
         <div class="span10 offset1">
             <h3>Current context:</h3>
-            <g:render template="show" model="${[context: instance.context]}"/>
+                <g:render template="edit" model="${[context: instance.context]}"/>
         </div>
     </div>
 </div>

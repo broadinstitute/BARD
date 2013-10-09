@@ -12,7 +12,7 @@ import bard.db.registration.AssayContext
  */
 abstract class AbstractContextOwner {
 
-    abstract List getContexts()
+    abstract List<? extends AbstractContext> getContexts()
 
     public static class ContextGroup {
         String key;

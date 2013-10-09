@@ -15,9 +15,12 @@ import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
-import org.springframework.security.access.AccessDeniedException
 
 import javax.servlet.http.HttpServletResponse
+
+import org.springframework.security.access.AccessDeniedException
+
+import static org.codehaus.groovy.grails.web.servlet.HttpHeaders.REFERER
 
 @Mixin(EditingHelper)
 @Secured(['isAuthenticated()'])
@@ -85,8 +88,14 @@ class ContextItemController {
 
         basicContextItemCommand.delete()
 
-        redirect(controller: basicContextItemCommand.ownerController, action: "editContext",
-                params: [id:basicContextItemCommand.contextOwnerId,groupBySection: basicContextItemCommand.context?.contextType.id])
+        if(request.getHeader(REFERER)?.contains('/contextItem/')){
+            redirect(action: 'create', params: params)
+        }
+        else{
+            redirect(controller: basicContextItemCommand.ownerController, action: "editContext",
+                    params: [id:basicContextItemCommand.contextOwnerId,groupBySection: basicContextItemCommand.context?.contextType.id])
+        }
+
     }
 
     def updatePreferredName(InlineEditableCommand inlineEditableCommand) {
