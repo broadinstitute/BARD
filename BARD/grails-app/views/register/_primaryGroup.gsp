@@ -1,3 +1,4 @@
+<%@ page import="bard.db.people.Role" %>
 <div class="control-group  fieldcontain ${hasErrors(bean: command, field: 'primaryGroup', 'error')} required">
     <label class="control-label" for="primaryGroup"><g:message
             code="register.primarygroup.label"

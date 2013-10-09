@@ -28,7 +28,7 @@ class Result {
     Date lastUpdated
     String modifiedBy
     Long id;
-    transient ExperimentMeasure experimentMeasure
+    transient ExperimentMeasure measure
 
     Set<ResultContextItem> resultContextItems = [] as Set<ResultContextItem>
     Set<ResultHierarchy> resultHierarchiesForResult = [] as Set<ResultHierarchy>

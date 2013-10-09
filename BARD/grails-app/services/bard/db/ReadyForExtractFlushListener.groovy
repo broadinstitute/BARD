@@ -4,6 +4,9 @@ import bard.db.dictionary.Element
 import bard.db.dictionary.ElementHierarchy
 import bard.db.dictionary.Ontology
 import bard.db.dictionary.OntologyItem
+import bard.db.enums.AssayStatus as AS
+import bard.db.enums.ExperimentStatus as ES
+import bard.db.enums.ProjectStatus as PS
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.*
 import bard.db.project.*
@@ -50,7 +53,10 @@ class ReadyForExtractFlushListener implements FlushEventListener, PostInsertEven
         boolean needExtraFlush = false;
         Collection dirtyExtractables = dirty.collectMany(new HashSet()) { getObjectsImpactedByChange(it) }
         for (entity in dirtyExtractables) {
-            if (entity instanceof Project || entity instanceof Assay || entity instanceof Element || entity instanceof Experiment) {
+            if ((entity instanceof Project && entity.projectStatus?.getId() != PS.DRAFT_ID) ||
+                    (entity instanceof Assay && entity.assayStatus?.getId() != AS.DRAFT_ID) ||
+                    (entity instanceof Experiment && entity.experimentStatus?.getId() != ES.DRAFT_ID) ||
+                    (entity instanceof Element)) {
                 if (entity.readyForExtraction != ReadyForExtraction.READY) {
                     if (!entity.disableUpdateReadyForExtraction) {
                         entity.readyForExtraction = ReadyForExtraction.READY
@@ -138,15 +144,16 @@ class ReadyForExtractFlushListener implements FlushEventListener, PostInsertEven
             return ((AssayContext) entity).assay
         } else if (entity instanceof AssayContextItem) {
             return (((AssayContextItem) entity).assayContext.assay)
+        } else if (entity instanceof AssayContextMeasure) {
+            return (((AssayContextMeasure) entity).assayContext.assay)
         } else if (entity instanceof AssayDocument) {
             return (((AssayDocument) entity).assay)
         }
         //these update Panel status
-        else if(entity instanceof Panel){
-            return (Panel)entity
-        }
-        else if(entity instanceof PanelAssay){
-            return ((PanelAssay)entity).panel
+        else if (entity instanceof Panel) {
+            return (Panel) entity
+        } else if (entity instanceof PanelAssay) {
+            return ((PanelAssay) entity).panel
         }
         // these classes update experiment's status
         else if (entity instanceof Experiment) {
@@ -157,8 +164,6 @@ class ReadyForExtractFlushListener implements FlushEventListener, PostInsertEven
             return (((ExperimentContextItem) entity).context.experiment)
         } else if (entity instanceof ExperimentMeasure) {
             return (((ExperimentMeasure) entity).experiment)
-        } else if (entity instanceof AssayContextExperimentMeasure) {
-            return (((AssayContextExperimentMeasure) entity).experimentMeasure.experiment)
         } else if (entity instanceof ExperimentFile) {
             return (((ExperimentFile) entity).experiment)
         }

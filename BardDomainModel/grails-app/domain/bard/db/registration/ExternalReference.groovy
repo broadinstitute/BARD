@@ -17,7 +17,18 @@ class ExternalReference implements Serializable {
     Date dateCreated
     Date lastUpdated
     String modifiedBy
+    static transients = ['aid']
 
+    String getAid() {
+        String aid = ""
+        if (extAssayRef) {
+
+            if (extAssayRef.startsWith("aid=")) { //anything after aid=
+                aid = extAssayRef.substring(4, extAssayRef.length())
+            }
+        }
+        return aid
+    }
     static belongsTo = [project:Project, experiment:Experiment]
 
     static mapping = {

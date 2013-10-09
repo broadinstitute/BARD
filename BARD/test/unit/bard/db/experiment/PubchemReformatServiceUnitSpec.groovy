@@ -9,6 +9,7 @@ import bard.db.registration.AttributeType
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import org.apache.commons.io.IOUtils
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 import static bard.db.enums.ExpectedValueType.NUMERIC
@@ -153,16 +154,12 @@ class PubchemReformatServiceUnitSpec extends Specification {
         // and finally the experiment with the two measures, and one context item
         Assay assay = Assay.build()
         AssayContext context = AssayContext.build(assay: assay)
-        AssayContextItem.build(assayContext: context, attributeType: AttributeType.Free, attributeElement: Element.build(label: "concentration", expectedValueType: NUMERIC))
+        AssayContextItem.build(assayContext: context, attributeType: AttributeType.Free, attributeElement: Element.build(label: "concentration", expectedValueType: NUMERIC), valueDisplay: null)
         Experiment experiment = Experiment.build(assay: assay)
-        ExperimentMeasure childMeasure = ExperimentMeasure.build(experiment: experiment, resultType: Element.build(label: "child"))
-
-
-        AssayContextExperimentMeasure.build(assayContext: context, experimentMeasure: childMeasure)
-
 
         ExperimentMeasure parentExpMeasure = ExperimentMeasure.build(experiment: experiment, resultType: Element.build(label: "parent"))
-        ExperimentMeasure childExpMeasure = ExperimentMeasure.build(experiment: experiment, parent: parentExpMeasure)
+        ExperimentMeasure childExpMeasure = ExperimentMeasure.build(experiment: experiment, resultType: Element.build(label: "child"), parent: parentExpMeasure)
+        AssayContextExperimentMeasure.build(assayContext: context, experimentMeasure: childExpMeasure)
 
         when:
         service.convert(experiment, "out/PubchemReformatServiceUnitSpec-in.txt", "out/PubchemReformatServiceUnitSpec-out.txt", map);
@@ -241,8 +238,8 @@ class PubchemReformatServiceUnitSpec extends Specification {
 
         when:
         Map map = service.convertPubchemRowToMap(
-                ["85789806", "", "44483406", "1", "0", "", "", "", "-1.483", "5"],
-                ["PUBCHEM_SID", "PUBCHEM_EXT_DATASOURCE_REGID", "PUBCHEM_CID", "PUBCHEM_ACTIVITY_OUTCOME", "PUBCHEM_ACTIVITY_SCORE", "PUBCHEM_ACTIVITY_URL", "PUBCHEM_ASSAYDATA_COMMENT", "PUBCHEM_ASSAYDATA_REVOKE", "1", "2"])
+                new PubchemHeader(["PUBCHEM_SID", "PUBCHEM_EXT_DATASOURCE_REGID", "PUBCHEM_CID", "PUBCHEM_ACTIVITY_OUTCOME", "PUBCHEM_ACTIVITY_SCORE", "PUBCHEM_ACTIVITY_URL", "PUBCHEM_ASSAYDATA_COMMENT", "PUBCHEM_ASSAYDATA_REVOKE", "1", "2"]),
+                ["85789806", "", "44483406", "1", "0", "", "", "", "-1.483", "5"])
 
         then:
         map["-1"] == "Inactive"
@@ -353,5 +350,23 @@ class PubchemReformatServiceUnitSpec extends Specification {
         child.children.size() == 0
         child.contextItems.size() == 1
         child.contextItems["cell count"].size() == 2
+    }
+
+    def 'test coercing header into consistent format'() {
+        setup:
+        PubchemReformatService service = new PubchemReformatService();
+
+        when:
+        def transformed = service.transformHeaderToOriginalConvention("PUBCHEM_SID,PUBCHEM_CID,PUBCHEM_ACTIVITY_OUTCOME,PUBCHEM_ACTIVITY_SCORE,PUBCHEM_ACTIVITY_URL,PUBCHEM_ASSAYDATA_COMMENT,SOMETHING,ELSE".split(",") as List)
+
+        then:
+        transformed.join(",") == "PUBCHEM_SID,PUBCHEM_CID,PUBCHEM_ACTIVITY_OUTCOME,PUBCHEM_ACTIVITY_SCORE,PUBCHEM_ACTIVITY_URL,PUBCHEM_ASSAYDATA_COMMENT,1,2"
+
+        when:
+        def oldFormat = "PUBCHEM_SID,PUBCHEM_EXT_DATASOURCE_REGID,PUBCHEM_CID,PUBCHEM_ACTIVITY_OUTCOME,PUBCHEM_ACTIVITY_SCORE,PUBCHEM_ACTIVITY_URL,PUBCHEM_ASSAYDATA_COMMENT,PUBCHEM_ASSAYDATA_REVOKE,1,2".split(",") as List
+        transformed = service.transformHeaderToOriginalConvention(oldFormat)
+
+        then:
+        transformed == oldFormat
     }
 }

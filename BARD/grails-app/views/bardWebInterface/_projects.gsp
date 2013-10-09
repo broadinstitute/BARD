@@ -23,19 +23,19 @@
             <li>
                 <h3>
                     <g:if test="${searchString}">
-                        <g:link action="showProject" id="${projectAdapter.id}"
+                        <g:link controller="project" action="show" id="${projectAdapter.capProjectId}"
                                 params='[searchString: "${searchString}"]'>${projectAdapter.name} <small>(Project ID: ${projectAdapter.capProjectId})</small></g:link>
                     </g:if>
                     <g:else>
-                        <g:link action="showProject"
-                                id="${projectAdapter.id}">${projectAdapter.name} <small>(Project ID: ${projectAdapter.capProjectId})</small></g:link>
+                        <g:link controller="project" action="show"
+                                id="${projectAdapter.capProjectId}">${projectAdapter.name} <small>(Project ID: ${projectAdapter.capProjectId})</small></g:link>
                     </g:else>
 
                 </h3>
                 <g:if test="${projectAdapter.hasProbes()}">
                     <span class="badge badge-info">Probe</span>
                 </g:if>
-                <g:saveToCartButton id="${projectAdapter.id}"
+                <g:saveToCartButton id="${projectAdapter.capProjectId}"
                                     name="${JavaScriptUtility.cleanup(projectAdapter.name)}"
                                     type="${querycart.QueryItemType.Project}"/>
                 <g:if test="${projectAdapter.highlight}">
@@ -49,7 +49,7 @@
                         <dt>Number Of Experiments:</dt>
                         <dd>
                             <span class="badge badge-info">
-                                <a href="/BARD/bardWebInterface/showProject/${projectAdapter.id}#experiments-info"
+                                <a href="/BARD/project/show/${projectAdapter.capProjectId}#experiments-info"
                                    style="color: white; text-decoration: underline">
                                     ${projectAdapter.getNumberOfExperiments()}
                                 </a>

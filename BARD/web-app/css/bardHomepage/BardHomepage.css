@@ -89,7 +89,7 @@ li{line-height:inherit;}
 	height:62px;
 	text-indent:-9999px;
 	overflow:hidden;
-	background:url('../../images/bardHomepage/logo.png') no-repeat;
+	background:url('/BARD/images/bardHomepage/logo.png') no-repeat;
 }
 .logo a{
 	display:block;

@@ -93,10 +93,10 @@ public class AssayServiceUnitSpec extends Specification {
         AssayContext context = AssayContext.build(assay: assay, contextName: "alpha")
         AssayContextItem contextItem = AssayContextItem.build(assayContext: context)
         AssayDocument.build(assay: assay)
-        Experiment experiment = Experiment.build()
-        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(experiment: experiment)
-        AssayContextExperimentMeasure.build(assayContext: context, experimentMeasure: experimentMeasure)
-
+        Measure measure = Measure.build(assay: assay)
+        AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: context, measure: measure)
+        Assay.metaClass.isDirty =
+            { return false }
         when:
         Assay newAssay = service.cloneAssayForEditing(assay, assay.designedBy);
 

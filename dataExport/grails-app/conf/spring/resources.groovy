@@ -1,5 +1,4 @@
 import dataexport.registration.MediaTypesDTO
-import dataexport.dictionary.DictionaryExportHelperService
 
 // Place your Spring DSL code here
 beans = {

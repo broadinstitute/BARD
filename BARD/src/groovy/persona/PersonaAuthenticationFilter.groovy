@@ -9,6 +9,13 @@ import org.springframework.util.StringUtils
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+/**
+ * Most of the code is borrowed from https://github.com/phjardas/spring-security-persona
+ *
+ * and modified slightly for BARD
+ *
+ */
+
 public class PersonaAuthenticationFilter extends
         AbstractAuthenticationProcessingFilter {
     public PersonaAuthenticationFilter() {

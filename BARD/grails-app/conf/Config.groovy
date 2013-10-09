@@ -1,3 +1,4 @@
+import bard.ReloadResultsJob
 import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
@@ -127,8 +128,8 @@ environments {
     }
 }
 
-rememberme.key = 'bard_web_client_crowd_remember_me'
-rememberme.cookieName = 'bard_web_client_crowd_remember_me_cookie'
+rememberme.key = 'bard_crowd_remember_me_2'
+rememberme.cookieName = 'bard_crowd_remember_me_cookie_2'
 
 bard.home.page = "http://localhost:8080/${appName}"
 
@@ -136,14 +137,45 @@ bard.home.page = "http://localhost:8080/${appName}"
 bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
 
 grails {
+    jesque {
+        enabled = false
+        workers {
+            workerPool {
+                workers = 1
+                queueNames = ['backgroundQueue']
+                jobTypes = [(ReloadResultsJob.simpleName):ReloadResultsJob]
+            }
+        }
+    }
+
     plugins {
         springsecurity {
+            userLookup.userDomainClassName = 'Person'
+            userLookup.usernamePropertyName = 'userName'
+            userLookup.enabledPropertyName = 'enabled'
+            userLookup.passwordPropertyName = 'password'
+            userLookup.authoritiesPropertyName = 'authorities'
+            userLookup.accountExpiredPropertyName = 'accountExpired'
+            userLookup.accountLockedPropertyName = 'accountLocked'
+            userLookup.passwordExpiredPropertyName = 'passwordExpired'
+            userLookup.authorityJoinClassName = 'PersonRole'
+            authority.className = 'Role'
+            authority.nameField = 'authority'
+
             controllerAnnotations.staticRules = [
-                    '/console/**': ['ROLE_CONSOLE_USER']
+                    '/console/**': ['ROLE_CONSOLE_USER'],
+                    '/jesqueOverview/**': ['ROLE_ADMINISTRATOR'],
+                    '/jesqueQueues/**': ['ROLE_ADMINISTRATOR'],
+                    '/jesqueFailed/**': ['ROLE_ADMINISTRATOR'],
+                    '/jesqueStats/**': ['ROLE_ADMINISTRATOR'],
+                    '/jesqueWorking/**': ['ROLE_ADMINISTRATOR'],
+                    '/jesqueWorkers/**': ['ROLE_ADMINISTRATOR'],
+                    '/jesqueScheduled/**': ['ROLE_ADMINISTRATOR'],
             ]
             ipRestrictions = [
                     '/console/**': '127.0.0.1'
             ]
+
             /** authenticationEntryPoint */
             auth.loginFormUrl = '/bardLogin/auth'
             auth.forceHttps = 'false'
@@ -205,7 +237,7 @@ CbipCrowd {
     register.url = 'https://crowd.somewhere.com/crowd/'
     application.username = 'bard'
     application.password = 'ChangeMe'
-    applicationSpecificRoles = ['ROLE_TEAM_A', 'ROLE_TEAM_B', 'ROLE_Bard', 'ROLE_MOBILE', 'ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'ROLE_CURATOR', 'CURATOR', "ROLE_BARD_ADMINISTRATOR", "ROLE_TEAM_BROAD"]
+    applicationSpecificRoles = ['ROLE_Bard', 'ROLE_MOBILE', 'ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'ROLE_CURATOR', "ROLE_BARD_ADMINISTRATOR", "ROLE_TEAM_BROAD"]
     mockUsers {
         integrationTestUser {
             roles = ['ROLE_USER', 'ROLE_CURATOR', 'ROLE_BARD_ADMINISTRATOR']
@@ -215,24 +247,28 @@ CbipCrowd {
         }
         curator {
             roles = ['ROLE_CURATOR']
+            owningRole = 'ROLE_CURATOR'
             username = 'curator'
             password = 'curator'
             email = 'curator@nowhere.com'
         }
         teamA_1 {
             roles = ['ROLE_TEAM_A']
+            owningRole = 'ROLE_TEAM_A'
             username = 'teamA_1'
             password = 'teamA_1'
             email = 'team1@nowhere.com'
         }
         teamA_2 {
             roles = ['ROLE_TEAM_A']
+            owningRole = 'ROLE_TEAM_A'
             username = 'teamA_2'
             password = 'teamA_2'
             email = 'teamA2@nowhere.com'
         }
         teamB_1 {
             roles = ['ROLE_TEAM_B']
+            owningRole = 'ROLE_TEAM_B'
             username = 'teamB_1'
             password = 'teamB_2'
             email = 'team2@nowhere.com'
@@ -249,6 +285,14 @@ grails.mail.default.subject = "Error From BARD Web Query"
 
 //TODO Replace with the analytics ID
 google.analytics.webPropertyID = "UA-xxxxxx-x"
+
+/**
+ * Whether to include basic auth or not. Headless functional tests, requires basic auth so
+* So run with -Dbard.basic.auth=true
+ *
+ * Note that the default is false
+ */
+bard.basic.auth = System.properties.getProperty('bard.basic.auth') ?: false
 
 /**
  * Loads external config files from the .grails subfolder in the user's home directory
@@ -282,11 +326,10 @@ if (appName) {
             println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
         }
     }
-    switch (Environment.current) {
-        case Environment.TEST:
-            grails.config.locations << "classpath:Config-for-test.groovy"
-            break
+    if (bard.basic.auth){
+        grails.config.locations << "classpath:bard-basic-auth-config.groovy"
     }
+
 }
 
 if (System.getProperty("migrationContextsToRun") != null) {
@@ -329,7 +372,7 @@ log4j = {
     }
     // stdout is a default console appender ss
     root {
-        info('outputFile', 'stdout')
+        warn('outputFile', 'stdout')
     }
     error('org.codehaus.groovy.grails.web.servlet',  //  controllers
             'org.codehaus.groovy.grails.web.pages', //  GSP
@@ -429,5 +472,3 @@ jqueryValidationUi {
 
 grails.plugins.twitterbootstrap.fixtaglib = true
 grails.spring.disable.aspectj.autoweaving = true
-//grails.plugins.springsecurity.twitter.consumerKey=null
-//grails.plugins.springsecurity.twitter.consumerSecret=null

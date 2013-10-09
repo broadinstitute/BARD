@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
+    <r:require modules="core,bootstrap"/>
     <meta name="layout" content="basic"/>
     <title>BARD hierarchy top level concept definitions</title>
-    <r:require modules="bootstrap"/>
+
 </head>
 
 <body>

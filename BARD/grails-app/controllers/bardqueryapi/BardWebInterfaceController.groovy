@@ -1,17 +1,17 @@
 package bardqueryapi
-
 import bard.core.IntValue
 import bard.core.SearchParams
 import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
-import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
+import bard.db.experiment.Experiment
+import bard.db.project.Project
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import molspreadsheet.CompoundSummaryCategorizer
@@ -23,7 +23,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
-
 /**
  *
  * TODO: Refactor into individual classes. Class is too big. We need to have different controllers for each entityß
@@ -52,7 +51,7 @@ class BardWebInterfaceController {
     List<SearchFilter> filters = []
 
     //An AfterInterceptor to handle mobile-view routing.
-    def afterInterceptor = [action: this.&handleMobile]
+//    def afterInterceptor = [action: this.&handleMobile]
 
 
     protected handleMobile(model, modelAndView) {
@@ -68,7 +67,8 @@ class BardWebInterfaceController {
     }
 
     Boolean isMobile() {
-        return mobileService.detect(request)
+//        return mobileService.detect(request)
+        return false
     }
 
 
@@ -78,6 +78,10 @@ class BardWebInterfaceController {
 
     def redirectToIndex(){
         redirect( controller: 'bardWebInterface', action:'index' )
+    }
+
+    def navigationPage(){
+        render( view: 'navigationPage', model: {})
     }
 
 
@@ -152,13 +156,20 @@ class BardWebInterfaceController {
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
+            final Long capExperimentId = tableModel.additionalProperties.capExptId as Long
+            Experiment capExperiment
+            if(capExperimentId){
+                capExperiment = Experiment.findById(capExperimentId)
+            }
+
             if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
-                render(template: 'experimentResultData', model: [tableModel: tableModel, innerBorder: false])
+                render(template: 'experimentResultData', model: [tableModel: tableModel, capExperiment: capExperiment, innerBorder: false])
                 return
             }
             //this should do a full page reload
             render(view: 'showExperiment',
                     model: [tableModel: tableModel,
+                            capExperiment: capExperiment,
                             facets: facetValues,
                             appliedFilters: getAppliedFilters(searchFilters, facetValues),
                             sidebarTitle: 'Options',
@@ -189,7 +200,8 @@ class BardWebInterfaceController {
         try {
             CompoundAdapter compoundAdapter = queryService.findProbe(probeId)
             if (compoundAdapter && compoundAdapter.bardProjectId != -1) {
-                render(template: 'probes', model: [projectId: compoundAdapter.bardProjectId])
+                Project project = Project.findByNcgcWarehouseId(compoundAdapter.bardProjectId)
+                render(template: 'probes', model: [projectId: project.id])
             } else {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND)
             }
@@ -499,40 +511,6 @@ class BardWebInterfaceController {
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     errorMessage)
         }
-    }
-/**
- *
- * @param assayProtocolId
- */
-    def showAssay(Integer assayProtocolId) {
-        Integer assayId = assayProtocolId ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
-        if (isHTTPBadRequest(assayId, "Assay Id is required", bardUtilitiesService.username)) {
-            return
-        }
-        try {
-            Map assayMap = this.queryService.showAssay(assayId)
-            AssayAdapter assayAdapter = assayMap.assayAdapter
-            if (assayAdapter) {
-                render(view: "showAssay", model: [
-                        assayAdapter: assayAdapter,
-                        experiments: assayMap.experiments,
-                        projects: assayMap.projects, searchString: params.searchString
-                ]
-                )
-            } else {
-                throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Could not find Assay Id ${assayId}")
-            }
-        }
-        catch (HttpClientErrorException httpClientErrorException) {
-            String message = "Could not find Assay with ID ${assayId}"
-            handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
-        }
-        catch (Exception exp) {
-            final String errorMessage = "Search For Assay Id ${assayId}:\n${exp.message}"
-            log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username), exp)
-            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(), errorMessage)
-        }
-
     }
 
 //================= Free Text Searches ======================================================

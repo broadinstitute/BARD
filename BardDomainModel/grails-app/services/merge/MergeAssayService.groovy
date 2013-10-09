@@ -226,6 +226,9 @@ class MergeAssayService {
         Map<AssayContext, AssayContext> mapping = [:]
 
         for (sourceAssay in removingAssays) {
+            if(sourceAssay.id == assayWillKeep.id) {
+                throw new RuntimeException("Source and target were the same: ${assayWillKeep}");
+            }
             for (sourceContext in sourceAssay.contexts) {
                 Collection<AssayContext> possibleDestinations = contextsByName[sourceContext.contextName]
 
@@ -382,33 +385,45 @@ class MergeAssayService {
     // assume by this point, all of the context items have already been copied from removingAssays to assayWillKeep,
     // which implies that all of the contexts have already been copied over as well.
     def handleMeasuresForMovedExperiments(def session, Assay sourceAssay, Assay targetAssay, List<Experiment> sourceExperiments, String modifiedBy) {
+        handleMeasuresForMovedExperiments(session,targetAssay,sourceExperiments,modifiedBy)
+    }
+    // Measures:  keep the measures that are the unique set of all the measures in the duplicate set of removingAssays.
+    // a measure is uniquely identified by the full path leading up to it as well as its result type and stats modifier
+    // assume by this point, all of the context items have already been copied from removingAssays to assayWillKeep,
+    // which implies that all of the contexts have already been copied over as well.
+    def handleMeasuresForMovedExperiments(def session, Assay targetAssay, List<Experiment> sourceExperiments, String modifiedBy) {
+        sourceExperiments.each { assert it.assay.id != targetAssay.id }
         //int addMeasureToExperimentInKeep = 0  //count number of measures added to experiments
 
         // create a map of measure key -> measure
-//        Map<String, Measure> measureByKey = targetAssay.measures.collectEntries { [constructMeasureKey(it), it] }
-//
-//        Set<Measure> measuresFromExperimentsToMove = [] as HashSet<Measure>
-//        //get measures associated with experiments to move
-//        for (Experiment experiment : sourceExperiments) {
-//            List<Measure> tempMeasures = experiment.experimentMeasures.collect { it.measure }
-//            if (tempMeasures) {
-//                measuresFromExperimentsToMove.addAll(tempMeasures)
-//            }
-//        }
-//
-//        List<Measure> measures = measuresFromExperimentsToMove as List<Measure>
-//
-//        // count number of measures added to assay
-//        //addMissingMeasuresToTargetAssay(session, modifiedBy, targetAssay, measures, measureByKey)
-//
-//        // copy over assayContextMeasures
-//        copyOverContextMeasures([sourceAssay],targetAssay,measures,measureByKey)
-//
-//        // update experiment measures
-//        updateExperiments(targetAssay,measureByKey)
-//
-//        //println("Total candidate measure: ${measures.size()}, added to assay ${addMeasureToKeep}, add to experiment ${addMeasureToExperimentInKeep}")
-//        finishHandlingMeasures(targetAssay,measures)
+        Map<String, Measure> measureByKey = targetAssay.measures.collectEntries { [constructMeasureKey(it), it] }
+
+        Set<Measure> measuresFromExperimentsToMove = [] as HashSet<Measure>
+        //get measures associated with experiments to move
+        Set<Assay> sourceAssays = [] as HashSet<Assay>
+        for (Experiment experiment : sourceExperiments) {
+            sourceAssays.add(experiment.assay)
+            List<Measure> tempMeasures = experiment.experimentMeasures.collect { it.measure }
+            if (tempMeasures) {
+                measuresFromExperimentsToMove.addAll(tempMeasures)
+            }
+        }
+
+        List<Measure> measures = measuresFromExperimentsToMove as List<Measure>
+
+        // count number of measures added to assay
+        addMissingMeasuresToTargetAssay(session, modifiedBy, targetAssay, measures, measureByKey)
+
+
+
+        // copy over assayContextMeasures
+        copyOverContextMeasures(sourceAssays as List<Assay>,targetAssay,measures,measureByKey)
+
+        // update experiment measures
+        updateExperiments(targetAssay,measureByKey)
+
+        //println("Total candidate measure: ${measures.size()}, added to assay ${addMeasureToKeep}, add to experiment ${addMeasureToExperimentInKeep}")
+        finishHandlingMeasures(targetAssay,measures)
     }
 
     // Measures:  keep the measures that are the unique set of all the measures in the duplicate set of removingAssays.

@@ -175,13 +175,15 @@ class BasicContextItemCommand extends BardCommand {
             contextItem.setDictionaryValue(valueElement)
             contextItem.valueElement = valueElement
 
-        } else if(!StringUtils.isBlank(contextItem.extValueId)) {
+        } else if(!StringUtils.isBlank(extValueId)) {
             contextItem.setExternalOntologyValue(StringUtils.trimToNull(extValueId), StringUtils.trimToNull(valueDisplay))
 
         } else if(valueNum != null) {
             contextItem.setNumericValue(StringUtils.isBlank(qualifier)?"= ":qualifier, convertToBigDecimal('valueNum', valueNum, contextItem.attributeElement?.unit)?.toFloat())
         } else if(valueMin != null) {
             contextItem.setRange(convertToBigDecimal('valueMin', valueMin, contextItem.attributeElement?.unit)?.toFloat(), convertToBigDecimal('valueMax', valueMax, contextItem.attributeElement?.unit)?.toFloat())
+        } else {
+            contextItem.setFreeTextValue(valueDisplay)
         }
 
         if (contextItem instanceof AssayContextItem) {
@@ -189,6 +191,9 @@ class BasicContextItemCommand extends BardCommand {
 
             if (providedWithResults && valueConstraintType != null) {
                 assayContextItem.attributeType = Enum.valueOf(AttributeType, valueConstraintType)
+                if(assayContextItem.attributeType == AttributeType.Free) {
+                    assayContextItem.setNoneValue()
+                }
             } else {
                 assayContextItem.attributeType = AttributeType.Fixed;
             }

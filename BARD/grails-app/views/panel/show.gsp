@@ -3,7 +3,7 @@
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,assaysummary,canEditWidget"/>
+            modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,projectsummary,canEditWidget"/>
     <meta name="layout" content="basic"/>
     <title>Panel</title>
 </head>
@@ -93,9 +93,9 @@
                                     </dd>
                                     <dt><g:message code="panel.description.label" default="Description"/>:</dt>
                                     <dd>
-                                        <span
-                                                class="panelDescriptionY"
+                                        <span class="description"
                                                 id="descriptionId"
+                                                data-type="text"
                                                 data-toggle="manual"
                                                 data-type="text"
                                                 data-value="${panelInstance?.description}"
@@ -104,13 +104,27 @@
                                                 data-placeholder="Required"
                                                 data-inputclass="input-xxlarge"
                                                 data-original-title="Edit Panel Description">${panelInstance?.description}</span>
-                                        <a href="#" class="icon-pencil documentPencil ${editable}"
-                                           title="Click to edit Description"
-                                           data-id="descriptionId"></a>
+                                        <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description" data-id="descriptionId"></a>
                                     </dd>
-
-                                    <dt>Owner:</dt>
-                                    <dd>${panelOwner}</dd>
+                                    <g:hiddenField name="version" id="versionId" value="${panelInstance.version}"/>
+                                    <dt><g:message code="panel.ownerRole.label" default="Owner"/>:</dt>
+                                    <dd>
+                                        <span
+                                                class="description"
+                                                data-toggle="manual"
+                                                data-sourceCache="true"
+                                                data-placeholder="Required"
+                                                id="ownerRoleId"
+                                                data-type="select"
+                                                data-value="${panelInstance?.ownerRole?.displayName}"
+                                                data-source="/BARD/assayDefinition/roles"
+                                                data-pk="${panelInstance.id}"
+                                                data-url="/BARD/panel/editOwnerRole"
+                                                data-original-title="Select Owner Role">${panelInstance?.ownerRole?.displayName}</span>
+                                        <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="ownerRoleId" title="Click to edit owner role"></a>
+                                    </dd>
+                                    %{--<dt>Owner:</dt>--}%
+                                    %{--<dd>${panelOwner}</dd>--}%
 
                                     <dt><g:message code="default.dateCreated.label"/>:</dt>
                                     <dd><g:formatDate date="${panelInstance.dateCreated}" format="MM/dd/yyyy"/></dd>

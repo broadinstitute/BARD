@@ -31,14 +31,14 @@ class ElementController {
         }
     }
 
-    def getChildrenAsJson(long elementId) {
-        List elementHierarchyTree = elementService.getChildNodes(elementId)
+    def getChildrenAsJson(long elementId, boolean doNotShowRetired) {
+        List elementHierarchyTree = elementService.getChildNodes(elementId, doNotShowRetired)
         JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
         render elementHierarchyAsJsonTree
     }
 
-    def buildTopLevelHierarchyTree() {
-        List elementHierarchyTree = elementService.createElementHierarchyTree()
+    def buildTopLevelHierarchyTree(boolean doNotShowRetired) {
+        List elementHierarchyTree = elementService.createElementHierarchyTree(doNotShowRetired)
         JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
         render elementHierarchyAsJsonTree
     }

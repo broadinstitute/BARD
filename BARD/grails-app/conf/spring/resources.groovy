@@ -1,4 +1,6 @@
 import acl.CapPermissionService
+import acl.SpringSecurityUiService
+import bard.auth.InMemMapAuthenticationProviderService
 import bard.core.helper.LoggerService
 import bard.core.rest.spring.*
 import bard.core.util.ExternalUrlDTO
@@ -21,6 +23,12 @@ beans = {
 
 
     customPropertyEditorRegistrar(RoleEditorRegistrar)
+    springSecurityUiService(SpringSecurityUiService) {
+        messageSource = ref('messageSource')
+        springSecurityService = ref('springSecurityService')
+        grailsApplication = grailsApplication
+
+    }
     /**
      * setting timeouts for connections established by the restTemplate
      *
@@ -29,7 +37,7 @@ beans = {
      */
     simpleClientHttpRequestFactory(SimpleClientHttpRequestFactory) {
         connectTimeout = 5 * 1000 // in milliseconds
-        readTimeout = 25 * 1000 // in milliseconds
+        readTimeout = 40 * 1000 // in milliseconds
     }
 
     restTemplate(RestTemplate, ref('simpleClientHttpRequestFactory'))
@@ -96,15 +104,15 @@ beans = {
         case Environment.PRODUCTION:
             //don't use in memory map in production
             userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService) {
-                crowdAuthenticationProviders = [ref('bardAuthorizationProviderService'),ref('personaAuthenticationProvider')]
+                crowdAuthenticationProviders = [ref('bardAuthorizationProviderService'), ref('personaAuthenticationProvider')]
             }
             break
         default:
-            inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService) {
+            inMemMapAuthenticationProviderService(InMemMapAuthenticationProviderService) {
                 grailsApplication = application
             }
             userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService) {
-                crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('bardAuthorizationProviderService'),ref('personaAuthenticationProvider')]
+                crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('bardAuthorizationProviderService'), ref('personaAuthenticationProvider')]
             }
     }
 

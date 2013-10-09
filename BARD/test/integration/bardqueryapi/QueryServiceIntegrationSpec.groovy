@@ -1,18 +1,27 @@
 package bardqueryapi
 
+import bard.core.SearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.interfaces.AssayCategory
 import bard.core.interfaces.AssayRole
 import bard.core.interfaces.AssayType
+import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.experiment.Activity
+import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.util.StructureSearchParams
+import bard.db.audit.BardContextUtils
 import bard.db.dictionary.BardDescriptor
+import bard.db.experiment.Experiment
 import grails.plugin.spock.IntegrationSpec
 import grails.plugins.springsecurity.SpringSecurityService
+import org.apache.commons.lang3.tuple.ImmutablePair
+import org.apache.commons.lang3.tuple.Pair
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.SessionFactory
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -21,9 +30,12 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     QueryService queryService
     SpringSecurityService springSecurityService
+    SessionFactory sessionFactory
+    ExperimentRestService experimentRestService
 
     @Shared
     List<Long> PIDS = [2]
+
 
     void "test findExperimentDataById #label"() {
 
@@ -366,16 +378,20 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         //"Search with a list of project ids" | PIDS
     }
 
+
+
     void "test assay-format and assay-type in #methodName #label"() {
         given:
-        springSecurityService.reauthenticate('integrationTestUser')
+
+        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
+        SpringSecurityUtils.reauthenticate('integrationTestUser', null)
         BardDescriptor parent
         for (String nodeLabel in expectedPath.split('/')) {
             Map buildMap = [label: nodeLabel]
             if (parent) {
                 buildMap.put('parent', parent)
             }
-            parent = BardDescriptor.findByLabel(nodeLabel)?: BardDescriptor.build(buildMap)
+            parent = BardDescriptor.findByLabel(nodeLabel) ?: BardDescriptor.build(buildMap)
         }
 
         when:

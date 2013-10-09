@@ -1,11 +1,14 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.ValueType
 import bard.db.experiment.Experiment
+import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractContextItemConstraintUnitSpec
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import org.junit.Before
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import static bard.db.enums.ExpectedValueType.*
@@ -339,5 +342,23 @@ class AssayContextItemConstraintUnitSpec extends AbstractContextItemConstraintUn
         desc   | valueUnderTest
         'null' | null
 
+    }
+
+    void "test range display value"() {
+        given:
+        Element attributeElement = Element.build(expectedValueType: NUMERIC)
+        Element unitElement = Element.build(abbreviation: 'abbr')
+        AssayContextItem instance = AssayContextItem.build()
+        domainInstance = instance
+
+        when:
+        instance.attributeElement = attributeElement
+        instance.attributeElement.unit = unitElement
+        instance.attributeType = AttributeType.Range
+        instance.setRange(0, 100)
+
+        then:
+        instance.validate()
+        instance.deriveDisplayValue() == "0.0 - 100.0 abbr"
     }
 }

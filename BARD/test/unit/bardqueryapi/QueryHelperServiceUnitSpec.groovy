@@ -79,7 +79,7 @@ class QueryHelperServiceUnitSpec extends Specification {
         when:
         Map map = service.extractExperimentDetails(activities, normalizeYAxis)
         then:
-        d.dictionaryRestService.findDictionaryElementById(_) >> {dictionaryElement}
+        d.dictionaryRestService.findDictionaryElementById(_) >> { dictionaryElement }
         assert expectedMap == map
 
         where:
@@ -316,51 +316,25 @@ class QueryHelperServiceUnitSpec extends Specification {
     }
 
     void "test applySearchFiltersToSearchParams #label"() {
+        given:
+        final SearchParams searchParams = new SearchParams()
+
         when:
         service.applySearchFiltersToSearchParams(searchParams, searchFilters)
+        final List<String[]> filters = searchParams.filters
 
         then:
-        searchParams.filters.size() == searchFilters.size()
-        List<String[]> filters = searchParams.filters
-        for (String[] filter : filters) {
-            assert filter[1].startsWith("\"")
-        }
+        filters.size() == searchFilters.size()
+        searchParams.filters?.collect { it[0] } == expectedFilterNames
+        searchParams.filters?.collect { it[1] } == expectedFilterValues
 
         where:
-        label                     | searchParams       | searchFilters
-        "Multiple Search Filters" | new SearchParams() | [new SearchFilter("name1", "value1"), new SearchFilter("name2", "value2")]
-        "Single Search Filter"    | new SearchParams() | [new SearchFilter("name1", "value1")]
-
-    }
-
-    void "test applySearchFiltersToSearchParams with filter ranges #label"() {
-        when:
-        service.applySearchFiltersToSearchParams(searchParams, searchFilters)
-
-
-        then:
-        searchParams.filters.size() == searchFilters.size()
-        List<String[]> filters = searchParams.filters
-        for (String[] filter : filters) {
-            assert !filter[1].startsWith("\"")
-        }
-        where:
-        label                              | searchParams       | searchFilters
-        "Search Filter with number ranges" | new SearchParams() | [new SearchFilter("name1", "[* To 100]")]
-        "Search Filter with number ranges" | new SearchParams() | [new SearchFilter("name1", "100")]
-
-    }
-
-    void "test applySearchFiltersToSearchParams No Filters"() {
-        when:
-        service.applySearchFiltersToSearchParams(searchParams, searchFilters)
-
-        then:
-        assert !searchParams.filters
-
-        where:
-        label               | searchParams       | searchFilters
-        "No Search Filters" | new SearchParams() | []
+        label                     | searchFilters                                                              | expectedFilterNames | expectedFilterValues
+        "no filters"              | []                                                                         | []                  | []
+        "Single Search Filter"    | [new SearchFilter("name1", "value1")]                                      | ['name1']           | ['"value1"']
+        "Multiple Search Filters" | [new SearchFilter("name1", "value1"), new SearchFilter("name2", "value2")] | ['name1', 'name2']  | ['"value1"', '"value2"']
+        "Single number Filter"    | [new SearchFilter("name1", "100")]                                         | ['name1']           | ['"100"']
+        "Single range Filter"     | [new SearchFilter("name1", "[* To 100]")]                                  | ['name1']           | ['"[* To 100]"']
     }
 
     void "test constructSearchParams #label"() {
@@ -374,8 +348,7 @@ class QueryHelperServiceUnitSpec extends Specification {
         searchParams.query == searchString
         if (searchFilters.size() > 0) {
             searchParams.filters.size() == searchFilters.size()
-        }
-        else {
+        } else {
             assert !searchParams.filters
         }
 

@@ -29,7 +29,7 @@ class ProjectExperimentsTagLibSpec extends Specification {
         String trimmedResults = actualResults.stripMargin().replaceAll("\\n","").replaceAll(">\\s+",">").replaceAll("\\s+<","<")
 
         then:
-        assert trimmedResults.contains('<td><a href="/bardWebInterface/showExperiment/2">Experiment2</a></td><td>Not Specified</td><td>500000</td><td>0</td><td rowspan="2"><a href="/bardWebInterface/showAssay/1">0</a></td><td rowspan="2"><a href="/bardWebInterface/showAssay/1">Assay1</a></td></tr>')
+        assert trimmedResults.contains("<table class=\"table\"><thead><tr><th rowspan=\"2\">EID</th><th rowspan=\"2\">Experiment Name</th><th rowspan=\"2\">Role</th><th colspan=\"2\"># Compounds</th><th rowspan=\"2\">ADID</th>")
 
     }
 }

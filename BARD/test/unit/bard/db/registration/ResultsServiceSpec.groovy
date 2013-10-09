@@ -4,13 +4,16 @@ import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
 import bard.db.enums.ValueType
 import bard.db.experiment.*
+import bard.db.experiment.results.ImportSummary
 import bard.db.experiment.results.RawCell
 import bard.db.experiment.results.Row
+import bard.db.experiment.results.RowParser
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -24,7 +27,6 @@ import static bard.db.enums.ExpectedValueType.*
 @Mock([Assay, AssayContext, AssayContextItem, AssayContextExperimentMeasure, Element, Substance, Experiment, ExperimentMeasure])
 @TestFor(ResultsService)
 @Unroll
-//TODO: Rework
 class ResultsServiceSpec extends Specification {
 
     void setup() {
@@ -47,12 +49,12 @@ class ResultsServiceSpec extends Specification {
         def parentCell = new RawCell(columnName: "parent", value: "1")
 
         def childResultType = Element.build(label: "child")
-        def childMeasure = ExperimentMeasure.build(resultType: childResultType)
+        def childMeasure = ExperimentMeasure.build(resultType: childResultType, parent: parentExperimentMeasure, parentChildRelationship: HierarchyType.CALCULATED_FROM)
         def childCell = new RawCell(columnName: "child", value: "1")
 
-        //ExperimentMeasure parentExperimentMeasure = ExperimentMeasure.build(parent: parentMeasure)
-        ExperimentMeasure childExperimentMeasure = ExperimentMeasure.build(parent: parentExperimentMeasure, childMeasures: [childMeasure] as Set<ExperimentMeasure>, parentChildRelationship: HierarchyType.CALCULATED_FROM)
-        parentExperimentMeasure.childMeasures.add(childExperimentMeasure)
+//        //ExperimentMeasure parentExperimentMeasure = ExperimentMeasure.build(parent: parentMeasure)
+//        ExperimentMeasure childExperimentMeasure = ExperimentMeasure.build(parent: parentExperimentMeasure, childMeasures: [childMeasure] as Set<ExperimentMeasure>, parentChildRelationship: HierarchyType.CALCULATED_FROM)
+//        parentExperimentMeasure.childMeasures.add(childExperimentMeasure)
 
         List<Row> rows;
         if (onSameLine) {
@@ -64,9 +66,9 @@ class ResultsServiceSpec extends Specification {
             rows = [row0, row1]
         }
 
-        def errors = new ResultsService.ImportSummary()
+        def errors = new ImportSummary()
 
-        def results = service.createResults(rows, [parentExperimentMeasure, childExperimentMeasure], errors, [:])
+        def results = service.createResults(rows, [parentExperimentMeasure, childMeasure], errors, [:])
 
         then:
         !errors.hasErrors()
@@ -106,10 +108,10 @@ class ResultsServiceSpec extends Specification {
         AssayContext assayContext = AssayContext.build(assay: assay)
         AssayContext measureContext = AssayContext.build(assay: assay)
 
-        AssayContextItem.build(assayContext: assayContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "cell line", expectedValueType: FREE_TEXT))
+        AssayContextItem.build(assayContext: assayContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "cell line", expectedValueType: FREE_TEXT),valueDisplay: null)
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(resultType: Element.build(label: "ec50"))
         AssayContextExperimentMeasure assayContextExperimentMeasure = AssayContextExperimentMeasure.build(assayContext: measureContext, experimentMeasure: experimentMeasure)
-        AssayContextItem.build(assayContext: measureContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "hill slope", expectedValueType: NUMERIC))
+        AssayContextItem.build(assayContext: measureContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "hill slope", expectedValueType: NUMERIC),valueDisplay: null)
         measureContext.assayContextExperimentMeasures = [assayContextExperimentMeasure] as Set
 
         assay.assayContexts = [assayContext, measureContext]
@@ -149,18 +151,18 @@ class ResultsServiceSpec extends Specification {
 
     void 'test parsing experiment level #desc'() {
         setup:
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
         Element attribute = Element.build(label: "column", expectedValueType: NUMERIC)
         def item = service.itemService.getLogicalItems([AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.Free, valueDisplay: null)])[0]
 
         when:
         String sample = ",Experiment ID,123\n,column," + cellString + "\n"
         BufferedReader reader = new BufferedReader(new StringReader(sample))
-        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [item], false)
+        RowParser RowParser = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [item], false)
 
         then:
-        initialParse.contexts.size() == 1
-        ExperimentContext context = initialParse.contexts.first()
+        RowParser.contexts.size() == 1
+        ExperimentContext context = RowParser.contexts.first()
         context.contextItems.size() == 1
         ExperimentContextItem contextItem = context.contextItems.first()
         contextItem.attributeElement == attribute
@@ -190,19 +192,19 @@ class ResultsServiceSpec extends Specification {
         def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, valueDisplay: trumpetElement.label, assayContext: context)
         def item = this.service.itemService.getLogicalItems([tubaItem, trumpetItem])[0]
 
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         when:
         String sample = ",Experiment ID,123\n,column,trumpet\n"
         BufferedReader reader = new BufferedReader(new StringReader(sample))
 
-        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [item], false)
+        RowParser RowParser = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [item], false)
 
         then:
         !errors.hasErrors()
 
-        initialParse.contexts.size() == 1
-        ExperimentContext expContext = initialParse.contexts.first()
+        RowParser.contexts.size() == 1
+        ExperimentContext expContext = RowParser.contexts.first()
         expContext.contextName == "instrument"
         expContext.contextItems.size() == 1
         ExperimentContextItem expItem = expContext.contextItems.first()
@@ -214,17 +216,18 @@ class ResultsServiceSpec extends Specification {
         when:
         def fixture = createSampleFile()
 
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
-        ResultsService.InitialParse result = service.initialParse(new StringReader(fixture.sample), errors, fixture.template, false)
+        ImportSummary errors = new ImportSummary()
+        RowParser parser = service.initialParse(new StringReader(fixture.sample), errors, fixture.template, false)
+        List<Row> rows = parser.readNextSampleRows()
 
         then:
-        result.experimentId == 123
-        result.rows.size() == 2
+        parser.experimentId == 123
+        rows.size() == 2
         !errors.hasErrors()
 
         when:
-        Row row0 = result.rows.get(0)
-        Row row1 = result.rows.get(1)
+        Row row0 = rows.get(0)
+        Row row1 = rows.get(1)
 
         then:
         row0.parentRowNumber == null
@@ -239,9 +242,15 @@ class ResultsServiceSpec extends Specification {
         row1.cells.size() == 1
         row1.cells.get(0).value == "5"
         row1.cells.get(0).columnName == "EC50"
+
+        when:
+        rows = parser.readNextSampleRows()
+
+        then:
+        rows == null
     }
 
-    void 'test parse failures'() {
+    void 'test parse failures #desc'() {
         when:
         def fixture = createSampleFile()
         // break apart table
@@ -255,8 +264,11 @@ class ResultsServiceSpec extends Specification {
         // reassemble
         def sample = (table.collect { it.join(",") }).join("\n")
 
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
-        ResultsService.InitialParse result = service.initialParse(new StringReader(sample), errors, fixture.template, false)
+        ImportSummary errors = new ImportSummary()
+        RowParser parser = service.initialParse(new StringReader(sample), errors, fixture.template, false)
+        if(!errors.hasErrors()) {
+            parser.readNextSampleRows();
+        }
 
         then:
         errors.errors.size() == expectedErrorCount
@@ -275,7 +287,7 @@ class ResultsServiceSpec extends Specification {
 
     void 'test parsing cell containing #cellString'() {
         when:
-        ExperimentMeasure measure = ExperimentMeasure.build(resultType: Element.build())
+        ExperimentMeasure measure = ExperimentMeasure.build()
         Result result = service.createResult(null, measure, cellString, 1, null)
 
         then:
@@ -311,7 +323,7 @@ class ResultsServiceSpec extends Specification {
         def experimentMeasure = ExperimentMeasure.build(resultType: resultType)
         def row = new Row(rowNumber: 1, sid: substance.id, cells: [new RawCell(columnName: "x", value: "5")], replicate: 1)
 
-        def errors = new ResultsService.ImportSummary()
+        def errors = new ImportSummary()
 
         def results = service.createResults([row], [experimentMeasure], errors, [:])
 
@@ -342,7 +354,7 @@ class ResultsServiceSpec extends Specification {
         def iCell = new RawCell(columnName: "item", value: "<15")
         def row = new Row(rowNumber: 1, replicate: 1, sid: substance.id, cells: [mCell, iCell])
 
-        def errors = new ResultsService.ImportSummary()
+        def errors = new ImportSummary()
 
         def itemsByMeasure = [:]
         itemsByMeasure.put(experimentMeasure, [item])
@@ -373,7 +385,7 @@ class ResultsServiceSpec extends Specification {
 
         when:
 
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         ResultContextItem resultContextItem = service.createResultItem(cellString, item, errors)
 
@@ -395,7 +407,7 @@ class ResultsServiceSpec extends Specification {
         when:
 
         def item = this.service.itemService.getLogicalItems([AssayContextItem.build(attributeElement: Element.build(expectedValueType: NUMERIC), attributeType: AttributeType.Free, valueDisplay: null)])[0]
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         ResultContextItem resultContextItem = service.createResultItem(cellString, item, errors)
 
@@ -419,7 +431,7 @@ class ResultsServiceSpec extends Specification {
 
     void 'test parse context item from element list'() {
         setup:
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         when:
         def tubaElement = Element.build(label: "tuba")
@@ -459,7 +471,7 @@ class ResultsServiceSpec extends Specification {
 
     void 'test parse context item from numeric value list'() {
         setup:
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         when:
         def attribute = Element.build(expectedValueType: NUMERIC)
@@ -505,7 +517,7 @@ class ResultsServiceSpec extends Specification {
 
     void 'test parse context item from free text list'() {
         setup:
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         when:
         def attribute = Element.build(expectedValueType: ELEMENT)
@@ -535,7 +547,7 @@ class ResultsServiceSpec extends Specification {
     }
 
     Result createResult() {
-        return new Result(substanceId: 100, resultType: Element.build(), experimentMeasure: ExperimentMeasure.build())
+        return new Result(substanceId: 100, resultType: Element.build(), measure: ExperimentMeasure.build())
     }
 
     ResultContextItem createContextItem(params) {
@@ -547,7 +559,7 @@ class ResultsServiceSpec extends Specification {
 
     void 'test different parents in dup check'() {
         setup:
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         Element childElement = Element.build();
 
@@ -555,8 +567,8 @@ class ResultsServiceSpec extends Specification {
         Result parent2 = createResult()
         ExperimentMeasure measure1 = ExperimentMeasure.build()
         ExperimentMeasure measure2 = ExperimentMeasure.build()
-        Result child1 = new Result(substanceId: 100, resultType: childElement, experimentMeasure: measure1)
-        Result child2 = new Result(substanceId: 100, resultType: childElement, experimentMeasure: measure2)
+        Result child1 = new Result(substanceId: 100, resultType: childElement, measure: measure1)
+        Result child2 = new Result(substanceId: 100, resultType: childElement, measure: measure2)
 
         ResultHierarchy link1 = new ResultHierarchy(result: child1, parentResult: parent1)
         ResultHierarchy link2 = new ResultHierarchy(result: child2, parentResult: parent2)
@@ -569,7 +581,7 @@ class ResultsServiceSpec extends Specification {
         assert child2.resultHierarchiesForResult.size() == 1
 
         when:
-        service.checkForDuplicates(errors, [child1, child2])
+        service.checkForDuplicates(errors, [parent1, parent2, child1, child2])
 
         then:
         !errors.hasErrors()
@@ -577,13 +589,16 @@ class ResultsServiceSpec extends Specification {
 
     void 'test duplicate check'() {
         setup:
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         Result result1 = createResult()
         ResultContextItem item1 = createContextItem(result: result1, valueNum: 2.0)
 
         Result result2 = createResult()
         ResultContextItem item2 = createContextItem(result: result2, valueNum: 3.0)
+
+        Result result3 = new Result(substanceId: result1.substanceId, resultType: result1.resultType, measure: result1.measure)
+        ResultContextItem item3 = createContextItem(result: result3, valueNum: 2.0)
 
         List<Result> results = [result1, result2]
 
@@ -594,7 +609,7 @@ class ResultsServiceSpec extends Specification {
         !errors.hasErrors()
 
         when:
-        results.add(result1)
+        results.add(result3)
         service.checkForDuplicates(errors, results)
 
         then:
@@ -604,7 +619,7 @@ class ResultsServiceSpec extends Specification {
     void 'test null values'() {
         setup:
         ResultsService service = new ResultsService();
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         // three nested measures
         Measure parentMeasure = Measure.build(resultType: Element.build(label: "parentCol"))
@@ -640,19 +655,16 @@ class ResultsServiceSpec extends Specification {
 
     void 'test duplicate result type names'() {
         setup:
-        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ImportSummary errors = new ImportSummary()
 
         // a result type is used by two different measures
         // there are two parents, which each have a child.  Both children have the same result type
         ExperimentMeasure parent1Measure = ExperimentMeasure.build(resultType: Element.build(label: "parent1"))
         ExperimentMeasure parent2Measure = ExperimentMeasure.build(resultType: Element.build(label: "parent2"))
+
         Element duplicatedResultType = Element.build(label: "childCol")
-        ExperimentMeasure child1Measure = ExperimentMeasure.build(resultType: duplicatedResultType)
-        ExperimentMeasure child2Measure = ExperimentMeasure.build(resultType: duplicatedResultType)
-        //ExperimentMeasure parent1ExpMeasure = ExperimentMeasure.build(: parent1Measure)
-        //ExperimentMeasure parent2ExpMeasure = ExperimentMeasure.build(measure: parent2Measure)
-        ExperimentMeasure.build(childMeasures: [child1Measure] as Set, parent: parent1Measure)
-        ExperimentMeasure.build(childMeasures: [child2Measure] as Set, parent: parent2Measure)
+        ExperimentMeasure child1Measure = ExperimentMeasure.build(resultType: duplicatedResultType, parent: parent1Measure)
+        ExperimentMeasure child2Measure = ExperimentMeasure.build(resultType: duplicatedResultType, parent: parent2Measure)
 
         when:
         Collection<Result> results = service.extractResultFromEachRow(parent1Measure, [makeRow(["parent1": "1", "childCol": "2"])], [:], new IdentityHashMap(), errors, [:])

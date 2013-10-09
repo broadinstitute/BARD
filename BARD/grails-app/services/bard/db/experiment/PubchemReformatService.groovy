@@ -33,12 +33,14 @@ class PubchemReformatService {
     }
 
     final static Map<String, String> pubchemOutcomeTranslation = new HashMap();
+    final static Set<String> pubchemOutcomeValues = new HashSet();
     static {
         pubchemOutcomeTranslation.put("1", "Inactive");
         pubchemOutcomeTranslation.put("2", "Active");
         pubchemOutcomeTranslation.put("3", "Inconclusive");
         pubchemOutcomeTranslation.put("4", "Unspecified");
         pubchemOutcomeTranslation.put("5", "Probe");
+        pubchemOutcomeValues.addAll(pubchemOutcomeTranslation.values())
     }
 
     static class ResultMapContextColumn {
@@ -417,21 +419,22 @@ class PubchemReformatService {
         }
     }
 
-    public Map convertPubchemRowToMap(List<String> row, List<String> header) {
-        String outcome = row[3]
-        if (!StringUtils.isBlank(outcome)) {
-            outcome = pubchemOutcomeTranslation[row[3]];
+    public Map convertPubchemRowToMap(PubchemHeader header, List<String> row) {
+        String outcome = row[header.outcomeColumn]
+        if (!StringUtils.isBlank(outcome) && !pubchemOutcomeValues.contains(outcome)) {
+            String origOutcome = outcome
+            outcome = pubchemOutcomeTranslation[origOutcome];
             if (outcome == null) {
-                throw new RuntimeException("Did not know the name of a pubchem outcome: ${row[3]}");
+                throw new RuntimeException("Did not know the name of a pubchem outcome: ${origOutcome}");
             }
         }
-        String activity = row[4]
+        String activity = row[header.activityColumn]
 
         Map pubchemRow = [:]
         pubchemRow["-1"] = outcome
         pubchemRow["0"] = activity
-        for (int i = 0; i < header.size(); i++) {
-            pubchemRow[header[i]] = row[i]
+        for (int i = 0; i < header.headers.size(); i++) {
+            pubchemRow[header.headers[i]] = row[i]
         }
         return pubchemRow;
     }
@@ -454,34 +457,48 @@ class PubchemReformatService {
         CapCsvWriter writer = new CapCsvWriter(experiment.id, expItems, dynamicColumns, new FileWriter(outputFilename))
         CSVReader reader = new CSVReader(new FileReader(pubchemFilename))
 
-        List<String> header = reader.readNext()
+        PubchemHeader header = new PubchemHeader(transformHeaderToOriginalConvention(reader.readNext() as List))
+
         Pattern numberPattern = Pattern.compile("\\d+")
-        for (int i = 0; i < header.size(); i++) {
-            if (numberPattern.matcher(header[i]).matches() && !map.hasTid(header[i])) {
-                throw new MissingColumnsException("Result map of ${map.aid} missing tid ${header[i]}")
+        for (tid in header.tids) {
+            if (!map.hasTid(tid)) {
+                throw new MissingColumnsException("Result map of ${map.aid} missing tid ${tid}")
             }
         }
 
         Collection<ExperimentMeasure> rootMeasures = experiment.experimentMeasures.findAll { it.parent == null }
-
-//        println("----------------------------")
-//        println("all measures: ${experiment.experimentMeasures.size()}")
-//        for(m in rootMeasures)
-//            println("measure ${m.measure.resultType.label} children: ${m.childMeasures.collect {it.measure.resultType.label}}")
 
         while (true) {
             List<String> row = reader.readNext()
             if (row == null)
                 break
 
-            Long substanceId = Long.parseLong(row[0])
-            Map pubchemRow = convertPubchemRowToMap(row, header);
+            Long substanceId = Long.parseLong(row[header.sidColumn])
+            Map pubchemRow = convertPubchemRowToMap(header, row);
 
             naMissingValues(pubchemRow, map)
             convertRow(rootMeasures, substanceId, pubchemRow, map, writer, null, null)
         }
 
         writer.close()
+    }
+
+    // the original format of pubchem results where to have some extra columns, and then have each TID column only identified by a number.  At some point (around May) they appear
+    // to have switched to a format where the tid names are listed instead of the numbers.   This method attempts to change those labels to numbers so the rest of the
+    // pubchem conversion can work as before.
+    List<String> transformHeaderToOriginalConvention(List<String> header) {
+        String headerLine = header.join(",")
+        if(headerLine.startsWith("PUBCHEM_SID,PUBCHEM_CID,PUBCHEM_ACTIVITY_OUTCOME,PUBCHEM_ACTIVITY_SCORE,PUBCHEM_ACTIVITY_URL,PUBCHEM_ASSAYDATA_COMMENT")) {
+            List<String> tids = []
+            for(int i=0;i<header.size()-6;i++) {
+                tids << (1+i).toString()
+            }
+            return header.subList(0,6) + tids
+        } else if (headerLine.startsWith("PUBCHEM_SID,PUBCHEM_EXT_DATASOURCE_REGID,PUBCHEM_CID,PUBCHEM_ACTIVITY_OUTCOME,PUBCHEM_ACTIVITY_SCORE,PUBCHEM_ACTIVITY_URL,PUBCHEM_ASSAYDATA_COMMENT,PUBCHEM_ASSAYDATA_REVOKE")) {
+            return header
+        } else {
+            throw new RuntimeException("Did not understand recognize header format: ${header}")
+        }
     }
 
     void convert(Long expId, String pubchemFilename, String outputFilename) {
@@ -654,20 +671,16 @@ class PubchemReformatService {
     }
 
     // recreate experiment measures on an already existing experiment/assay
-    //TODO: Rework
     void recreateMeasures(Experiment experiment, Collection<MappedStub> newMeasures) {
-        throw new RuntimeException(" recreateMeasures Requires rework");
-        /*
         Assay assay = experiment.assay
-
-        Map<String, Measure> measureByKey = [:]
-        for (measure in assay.measures) {
+        Map<String, ExperimentMeasure> measureByKey = [:]
+        for (measure in experiment.experimentMeasures) {
             measureByKey[makeMeasureKey(measure)] = measure
             //println("existing measure: ${measure.resultType.label}")
         }
 
         // first, make sure all of the measures we want exist
-        verifyOrCreateMeasures(newMeasures, measureByKey, assay)
+        verifyOrCreateMeasures(newMeasures, measureByKey, experiment)
 
         ExperimentMeasure.withSession { s -> s.flush() }
 
@@ -681,14 +694,12 @@ class PubchemReformatService {
 
         // now, create the experiment measures anew
         createExperimentMeasures(experiment, measureByKey, newMeasures, null)
-        */
     }
-    //TODO: rework
-    private void verifyOrCreateMeasures(Collection<MappedStub> newMeasures, LinkedHashMap<String, ExperimentMeasure> measureByKey, Assay assay) {
+
+    private void verifyOrCreateMeasures(Collection<MappedStub> newMeasures, LinkedHashMap<String, ExperimentMeasure> measureByKey, Experiment experiment) {
         //println("verifyOrCreate: ${newMeasures.collect { [it.resultType.label, it.statsModifier?.label] } }")
 
-        throw new RuntimeException(" verifyOrCreateMeasures Requires rework");
-            /*for (newMeasure in newMeasures) {
+        for (newMeasure in newMeasures) {
             String newMeasureKey = makeMeasureKey(newMeasure)
 
             // find the context items which are variable
@@ -716,27 +727,27 @@ class PubchemReformatService {
             } else {
                 //println("creating new measure for ${newMeasure.resultType.label}")
                 // create a new measure on this assay
-                Measure measure = new Measure()
-                assay.addToMeasures(measure)
+                ExperimentMeasure measure = new ExperimentMeasure()
+                experiment.addToExperimentMeasures(measure)
                 measure.statsModifier = newMeasure.statsModifier
                 measure.resultType = newMeasure.resultType
 
                 if (newMeasure.parent != null) {
-                    measure.parentMeasure = measureByKey[makeMeasureKey(newMeasure.parent)]
+                    measure.parent = measureByKey[makeMeasureKey(newMeasure.parent)]
                     measure.parentChildRelationship = newMeasure.parentChildRelationship
                 }
 
                 measure.save(failOnError: true)
 
                 if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
-                    createAssayContextForResultType(assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, measure)
+                    createAssayContextForResultType(experiment.assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, measure)
                 }
 
                 measureByKey[newMeasureKey] = measure
             }
 
-            verifyOrCreateMeasures(newMeasure.children, measureByKey, assay)
-        }  */
+            verifyOrCreateMeasures(newMeasure.children, measureByKey, experiment)
+        }
     }
 
     void createExperimentMeasures(Experiment experiment, Map<String, ExperimentMeasure> measureByKey, Collection<MappedStub> newMeasures, ExperimentMeasure parentExperimentMeasure) {
@@ -780,7 +791,7 @@ class PubchemReformatService {
                 item.attributeElement = attribute
                 item.valueMin = 0
                 item.valueMax = maxConcentration
-                item.valueDisplay = item.deriveDisplayValue()
+                item.valueDisplay = [item.valueMin, item.valueMax].join(' - ')
 
                 assayContext.addToAssayContextItems(item)
             } else {
@@ -788,6 +799,7 @@ class PubchemReformatService {
                     AssayContextItem item = new AssayContextItem();
                     item.attributeType = AttributeType.List
                     item.attributeElement = attribute
+                    item.valueDisplay = item.deriveDisplayValue()
 
                     assignValue(item, value)
 
@@ -800,7 +812,8 @@ class PubchemReformatService {
             AssayContextItem item = new AssayContextItem();
             item.attributeType = AttributeType.Free
             item.attributeElement = freeAttribute
-            assayContext.addToAssayContextItems(item)
+            context.addToAssayContextItems(item)
+            item.valueDisplay = item.deriveDisplayValue()
         }
 
         assay.addToAssayContexts(assayContext)
@@ -840,3 +853,25 @@ class PubchemReformatService {
     }
 }
 
+class PubchemHeader {
+    List<String> headers;
+    int sidColumn;
+    int outcomeColumn;
+    int activityColumn;
+    List<String> tids;
+
+    public PubchemHeader(List<String> headers) {
+        this.headers = headers
+        sidColumn = headers.indexOf("PUBCHEM_SID")
+        outcomeColumn = headers.indexOf("PUBCHEM_ACTIVITY_OUTCOME")
+        activityColumn = headers.indexOf("PUBCHEM_ACTIVITY_SCORE")
+
+        tids = []
+        Pattern numberPattern = Pattern.compile("\\d+")
+        for (int i = 0; i < headers.size(); i++) {
+            if (numberPattern.matcher(headers[i]).matches()) {
+                tids.add(headers[i])
+            }
+        }
+    }
+}

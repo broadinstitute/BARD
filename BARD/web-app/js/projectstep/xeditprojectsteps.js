@@ -9,10 +9,11 @@ var redraw;
 //
 //};
 $(document).ready(function () {
-    $.fn.editable.defaults.mode = 'inline';
+  //  $.fn.editable.defaults.mode = 'inline';
 
     initProjectFunction();
     $('#projectStageId').editable({
+        mode:'inline',
         success: function (response, newValue) {
             refreshProjectSteps();
         }

@@ -42,7 +42,7 @@ $(document).ready(function () {
             $(document).trigger("idSearchBoxEvent", currentSearch);
         }
     });
-    $('#idSearchButton').click(function () {
+    $('.idSearchButton').click(function () {
         var idSearchTypeSelected = $('input:radio[name=idSearchType]:checked').val();
         var ids = $('#idSearchString').val()
         //construct the query into a form that we want

@@ -6,10 +6,11 @@
  * To change this template use File | Settings | File Templates.
  */
 $(document).ready(function () {
-    $.fn.editable.defaults.mode = 'inline';
+    // $.fn.editable.defaults.mode = 'inline';
 
     //set up editing for documents
     $('.documents').editable({
+        mode: 'inline',
         params: function (params) {
             var version = $(this).attr('data-version');
             var owningEntityId = $(this).attr('data-owningEntityId');
@@ -27,39 +28,28 @@ $(document).ready(function () {
         }
 
     });
-
-
-    var textareas = $("textarea");
-    for (var i = 0; i < textareas.length; i++) {
-        var currentId = textareas[i].id
-        var editableProperty = $("#" + currentId).attr('data-editable')
-
-
-        new nicEditor({fullPanel: true,
-            iconsPath: '/BARD/images/nicedit/nicEditorIcons.gif',
-            onSave: function (content, id, instance) {
-                var documentId = instance.e.id
-
-
-                var documentContent = content;
-                var version = $('#' + documentId).attr('data-version');
-                var owningEntityId = $('#' + documentId).attr('data-owningEntityId');
-                var documentName = $('#' + documentId).attr('data-document-name');
-                var documentType = $('#' + documentId).attr('data-documentType');
-                var documentKind = $('#' + documentId).attr('data-documentKind');
-                //this is used to find the div to output success/error messages
-                var msgId = $('#' + documentId).attr('data-server-response-id');
-                var entityId = documentId.replace("textarea_", "");
-                editDocument(entityId, documentKind, owningEntityId, documentContent, documentName, documentType, version, msgId)
-
-            } }).panelInstance(currentId);
-        if (editableProperty == 'cannotedit') {
-            //disable document editing
-            $('.nicEdit-main').attr('contenteditable', 'false');
-            $('.nicEdit-panel').hide();
+    //Handle textarea
+    $('.textarea').editable({
+        placement: 'top',
+        showbuttons: 'bottom',
+        rows:25,
+        params: function (params) {
+            var version = $(this).attr('data-version');
+            var owningEntityId = $(this).attr('data-owningEntityId');
+            params.version = version;
+            params.owningEntityId = owningEntityId;
+            params.documentName = $(this).attr('data-document-name');
+            params.documentType = $(this).attr('data-documentType');
+            params.documentKind = $(this).attr('data-documentKind');
+            return params;
+        },
+        ajaxOptions: {
+            complete: function (response, serverMessage) {
+                updateEntityVersion(response, serverMessage);
+            }
         }
 
-    }
+    });
 });
 /**
  *

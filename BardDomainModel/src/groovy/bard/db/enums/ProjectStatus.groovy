@@ -7,10 +7,10 @@ package bard.db.enums
  * Time: 4:44 PM
  * To change this template use File | Settings | File Templates.
  */
-enum ProjectStatus implements IEnumUserType{
-    DRAFT("Draft"),
-    APPROVED("Approved"),
-    RETIRED("Retired")
+enum ProjectStatus implements IEnumUserType, ICommonStatusIds{
+    DRAFT(DRAFT_ID),
+    APPROVED(APPROVED_ID),
+    RETIRED(RETIRED_ID)
 
     final String id;
 

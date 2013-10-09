@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="logoSearchCartAndFooter"/>
+    <meta name="layout" content="basic"/>
     <title>BARD : Compound Bio-Activity Summary: ${tableModel?.additionalProperties?.id}</title>
     <r:require modules="experimentData, cbas, core"/>
     <script src="http://d3js.org/d3.v3.min.js"></script>

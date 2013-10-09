@@ -4,7 +4,7 @@
     <ul>
         <g:each in="${summary.errors}" var="error">
             <li>
-                ${error.encodeAsHTML()}
+                ${error}
             </li>
         </g:each>
     </ul>

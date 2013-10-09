@@ -565,5 +565,10 @@ databaseChangeLog = {
     changeSet(author: "jasiedu", id: "iteration-033/03-add-description-to-panel", dbms: "oracle", context: "standard") {
         sqlFile(path: "iteration_033/03-add-description-to-panel.sql", stripComments: true)
     }
+    changeSet(author: "jasiedu", id: "iteration-033/05-add-experiment-ncgc-warehouse-id", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_033/05-add-experiment-ncgc-warehouse-id.sql", stripComments: true)
+    }
+    changeSet(author: "jasiedu", id: "iteration-033/06-modify-shoppable-column-name", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_033/06-modify-shoppable-name-column.sql", stripComments: true)
+    }
 }
-

@@ -4,6 +4,7 @@ import bard.db.BardIntegrationSpec
 import bard.db.audit.BardContextUtils
 import bard.db.dictionary.Element
 import bard.db.enums.ExpectedValueType
+import bard.db.people.Role
 import grails.plugin.spock.IntegrationSpec
 import org.hibernate.Session
 import org.hibernate.SessionFactory
@@ -27,7 +28,13 @@ class AssayContextIntegrationSpec extends BardIntegrationSpec {
     void doSetup() {
         session = sessionFactory.currentSession
         textAttribute = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
-        assayContext = AssayContext.buildWithoutSave()
+        Role role = Role.findByAuthority("authority")
+        if (!role) {
+            role = Role.build(authority: "authority")
+        }
+
+        Assay assay = Assay.build(ownerRole: role).save(flush: true)
+        assayContext =AssayContext.buildWithoutSave(assay: assay)
         assert assayContext.assay.save()
     }
 
