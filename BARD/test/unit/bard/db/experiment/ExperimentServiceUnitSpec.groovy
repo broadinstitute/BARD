@@ -4,6 +4,8 @@ import bard.db.dictionary.Element
 import bard.db.enums.ExperimentStatus
 import bard.db.enums.HierarchyType
 import bard.db.registration.*
+import bardqueryapi.TableModel
+import bardqueryapi.experiment.ExperimentBuilder
 import grails.buildtestdata.mixin.Build
 import grails.converters.JSON
 import grails.test.mixin.Mock
@@ -26,6 +28,19 @@ import spock.lang.Specification
 @TestFor(ExperimentService)
 public class ExperimentServiceUnitSpec extends Specification {
 
+    void 'test preview experiment'() {
+        given:
+        service.experimentBuilder = Mock(ExperimentBuilder)
+        service.resultsExportService=Mock(ResultsExportService)
+        Experiment experiment = Experiment.build()
+        when:
+        TableModel createdTableModel = service.previewResults(experiment.id)
+        then:
+        service.resultsExportService.readResultsForSubstances(_) >> {[new JsonSubstanceResults()]}
+        service.experimentBuilder.buildModelForPreview(_,_) >> {new TableModel()}
+        assert createdTableModel
+    }
+
     void 'test create experiment'() {
         given:
         mockDomain(Experiment)
@@ -38,7 +53,20 @@ public class ExperimentServiceUnitSpec extends Specification {
         experiment.experimentName == "name"
         experiment.description == "desc"
         experiment.assay == assay
-        experiment.experimentMeasures.size() == 0
+        experiment.experimentMeasures.size() == 2
+
+        when:
+        ExperimentMeasure parentExpMeasure = experiment.experimentMeasures.find { it.parent == null }
+
+        then:
+        parentExpMeasure != null
+
+        when:
+        ExperimentMeasure childExpMeasure = experiment.experimentMeasures.find { it.parent == parentExpMeasure }
+
+        then:
+        childExpMeasure != null
+        childExpMeasure.parentChildRelationship == HierarchyType.SUPPORTED_BY
     }
     //TODO: Rework
 //    @Ignore
@@ -84,6 +112,49 @@ public class ExperimentServiceUnitSpec extends Specification {
 //        experiment.experimentMeasures.size() == 2
 //        (experiment.experimentMeasures.findAll { it.parent == null}).size() == 1
 //    }
+
+    void 'update measures'() {
+        given:
+        mockDomain(ExperimentMeasure);
+
+        when:
+        Measure measure = Measure.build()
+        Experiment experiment = Experiment.build()
+        ExperimentMeasure parent = ExperimentMeasure.build(experiment: experiment)
+        ExperimentMeasure child = ExperimentMeasure.build(parent: parent, experiment: experiment)
+        experiment.setExperimentMeasures([parent, child] as Set)
+
+        then:
+        ExperimentMeasure.findAll().size() == 2
+
+        when: "we drop a child"
+        service.updateMeasures(experiment.id, JSON.parse("[{\"id\": ${parent.id}, \"parentId\": null, \"measureId\": ${parent.measure.id}}]"))
+
+        then:
+        experiment.experimentMeasures.size() == 1
+        ExperimentMeasure.findAll().size() == 1
+
+        when: "we add a child"
+        service.updateMeasures(experiment.id, JSON.parse("[{\"id\": ${parent.id}, \"parentId\": null, \"measureId\": ${parent.measure.id}}, {\"id\": \"new-1\", \"parentId\": ${parent.id}, \"measureId\": ${measure.id}}]"))
+
+        then:
+        experiment.experimentMeasures.size() == 2
+        (experiment.experimentMeasures.findAll { it.parent == null }).size() == 1
+
+        when: "we drop child and create element at top level"
+        service.updateMeasures(experiment.id, JSON.parse("[{\"id\": ${parent.id}, \"parentId\": null, \"measureId\": ${parent.measure.id}}, {\"id\": \"new-2\", \"parentId\": null, \"measureId\": ${measure.id}}]"))
+
+        then:
+        experiment.experimentMeasures.size() == 2
+        (experiment.experimentMeasures.findAll { it.parent == null }).size() == 2
+
+        when: "we drop everything and recreate parent child"
+        service.updateMeasures(experiment.id, JSON.parse("[{\"id\": \"new-1\", \"parentId\": null, \"measureId\": ${parent.measure.id}}, {\"id\": \"new-2\", \"parentId\": \"new-1\", \"measureId\": ${measure.id}}]"))
+
+        then:
+        experiment.experimentMeasures.size() == 2
+        (experiment.experimentMeasures.findAll { it.parent == null }).size() == 1
+    }
 
     void 'test splitting experiment from assay'() {
         given:

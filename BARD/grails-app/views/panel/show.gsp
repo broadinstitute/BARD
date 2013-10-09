@@ -3,7 +3,7 @@
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,projectsummary,canEditWidget"/>
+            modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,projectsummary,canEditWidget,tableSorter"/>
     <meta name="layout" content="basic"/>
     <title>Panel</title>
 </head>
@@ -94,17 +94,18 @@
                                     <dt><g:message code="panel.description.label" default="Description"/>:</dt>
                                     <dd>
                                         <span class="description"
-                                                id="descriptionId"
-                                                data-type="text"
-                                                data-toggle="manual"
-                                                data-type="text"
-                                                data-value="${panelInstance?.description}"
-                                                data-pk="${panelInstance.id}"
-                                                data-url="/BARD/panel/editDescription"
-                                                data-placeholder="Required"
-                                                data-inputclass="input-xxlarge"
-                                                data-original-title="Edit Panel Description">${panelInstance?.description}</span>
-                                        <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description" data-id="descriptionId"></a>
+                                              id="descriptionId"
+                                              data-type="text"
+                                              data-toggle="manual"
+                                              data-type="text"
+                                              data-value="${panelInstance?.description}"
+                                              data-pk="${panelInstance.id}"
+                                              data-url="/BARD/panel/editDescription"
+                                              data-placeholder="Required"
+                                              data-inputclass="input-xxlarge"
+                                              data-original-title="Edit Panel Description">${panelInstance?.description}</span>
+                                        <a href="#" class="icon-pencil documentPencil ${editable}"
+                                           title="Click to edit Description" data-id="descriptionId"></a>
                                     </dd>
                                     <g:hiddenField name="version" id="versionId" value="${panelInstance.version}"/>
                                     <dt><g:message code="panel.ownerRole.label" default="Owner"/>:</dt>
@@ -121,7 +122,8 @@
                                                 data-pk="${panelInstance.id}"
                                                 data-url="/BARD/panel/editOwnerRole"
                                                 data-original-title="Select Owner Role">${panelInstance?.ownerRole?.displayName}</span>
-                                        <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="ownerRoleId" title="Click to edit owner role"></a>
+                                        <a href="#" class="icon-pencil documentPencil ${editable}" data-id="ownerRoleId"
+                                           title="Click to edit owner role"></a>
                                     </dd>
                                     %{--<dt>Owner:</dt>--}%
                                     %{--<dd>${panelOwner}</dd>--}%
@@ -141,15 +143,27 @@
                         </div>
 
                         <div>
+                            <script type="text/javascript">
+                                $(document).ready(function () {
+                                    $("#panelTable").tablesorter({
+                                        headers: {
+                                            0: { sorter: "digit"  }
+                                        },
+                                        widgets: ['zebra']
+                                    });
+                                });
+                            </script>
+
+
                             <g:if test="${panelInstance.panelAssays}">
                                 <h3>Associated Assay Definitions</h3>
-                                <table class="table table-striped table-hover table-bordered">
-                                   <thead>
-                                   <tr>
-                                       <th>ADID</th><th>Assay Name</th><th></th></thead>
-                                   </tr>
-                                   </thead>
-                                <tbody>
+                                <table id="panelTable" class="tablesorter table table-striped table-hover table-bordered">
+                                  <thead>
+                                  <tr>
+                                      <th>ADID</th><th>Assay Name</th><th></th></thead>
+                                  </tr>
+                                  </thead>
+                               <tbody>
                                 <g:each in="${panelInstance.panelAssays}" var="panelAssay">
                                     <tr>
                                         <td><g:link controller="assayDefinition" action="show"
@@ -162,6 +176,7 @@
                                                         onclick="return confirm('Are you sure you wish to remove this Assay Definition from this Panel?');"><i
                                                         class="icon-trash"></i>Remove From Panel</g:link>
                                             </g:if>
+                                        </td>
                                     </tr>
                                 </g:each>
                                 </tbody>
@@ -169,7 +184,8 @@
                             </g:if>
                             <g:if test="${editable == 'canedit'}">
                                 <g:link controller="panel" action="addAssays" params="${[id: panelInstance.id]}"
-                                        class="btn"><i class="icon-plus"></i>Add Assay Definitions To This Panel</g:link>
+                                        class="btn"><i
+                                        class="icon-plus"></i>Add Assay Definitions To This Panel</g:link>
 
                                 <g:link controller="panel" action="deletePanel" params="${[id: panelInstance.id]}"
                                         class="btn" title="Delete Panel"

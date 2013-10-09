@@ -13,7 +13,6 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
 

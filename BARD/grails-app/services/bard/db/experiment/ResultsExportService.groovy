@@ -72,17 +72,25 @@ class ResultsExportService {
         return substanceResults
     }
 
-    List<JsonSubstanceResults> readResultsForSubstances(int numberOfRecords, Experiment experiment) {
+    List<JsonSubstanceResults> readResultsForSubstances(Experiment experiment, int numberOfRecords = 10) {
         final FileInputStream export = this.archivePathService.getEtlExport(experiment)
         ObjectReader reader = mapper.reader(JsonSubstanceResults)
 
         BufferedReader lineReader = new BufferedReader(new InputStreamReader(new GZIPInputStream(export)));
 
-
         List<JsonSubstanceResults> jsonSubstanceResultsList = []
-        for (int i = 0; i < numberOfRecords; i++) {
-            JsonSubstanceResults substanceResults = readResultsForSubstance(reader, lineReader.readLine())
-            jsonSubstanceResultsList.add(substanceResults)
+        int counter = numberOfRecords
+        String line = null
+        while ((line = lineReader.readLine()) != null) {
+            if(counter == 0){ //terminate either when we finish reading file or the of records to preview is exceeded
+                break
+            }
+            if (line?.trim()) {
+                JsonSubstanceResults substanceResults = readResultsForSubstance(reader, line.trim())
+                jsonSubstanceResultsList.add(substanceResults)
+                counter--
+            }
+
         }
         export.close()
         return jsonSubstanceResultsList

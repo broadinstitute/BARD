@@ -5,7 +5,14 @@ import au.com.bytecode.opencsv.CSVWriter
 import bard.db.dictionary.Element
 import bard.db.enums.ContextType
 import bard.db.enums.HierarchyType
-import bard.db.registration.*
+import bard.db.enums.ValueType
+import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.AssayContextItem
+import bard.db.registration.AssayContextMeasure
+import bard.db.registration.AttributeType
+import bard.db.registration.ExternalReference
+import bard.db.registration.Measure
 import groovy.sql.Sql
 import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.commons.GrailsApplication
@@ -788,6 +795,7 @@ class PubchemReformatService {
 
                 AssayContextItem item = new AssayContextItem();
                 item.attributeType = AttributeType.Range
+                item.valueType = ValueType.RANGE
                 item.attributeElement = attribute
                 item.valueMin = 0
                 item.valueMax = maxConcentration

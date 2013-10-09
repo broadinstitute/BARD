@@ -7,29 +7,37 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
+<g:if test="${preview}">
+    <h2 style="background-color:green;">PREVIEW OF Experiment: ${tableModel?.additionalProperties?.experimentName}</h2>
+</g:if>
+<g:else>
+    <h2>Experiment: ${tableModel?.additionalProperties?.experimentName}</h2>
+</g:else>
 
-<h2>Experiment: ${tableModel?.additionalProperties?.experimentName}</h2>
 
 
-<g:render template="/experiment/experimentReferences" model="[experiment: capExperiment, excludedLinks: ['bardWebInterface.showExperiment']]"  />
+
+<g:render template="/experiment/experimentReferences"
+          model="[experiment: capExperiment, excludedLinks: ['bardWebInterface.showExperiment']]"/>
 
 <div class="row-fluid">
 <g:if test="${tableModel.data}">
-
-    <script>
-        /* Retrieve JSON data to build a histogram */
-        $(document).ready( function () {
-            d3.json("/BARD/bardWebInterface/retrieveExperimentResultsSummary/${tableModel?.additionalProperties?.bardExptId}", function (error, dataFromServer) {
-                if (!(dataFromServer === undefined)) {
-                    for (var i = 0; i < dataFromServer.length; i++) {
-                        if (!(dataFromServer[i] === undefined)) {
-                            drawHistogram(d3.select('#histogramHere'), dataFromServer[i]);
+    <g:if test="${!preview}">
+        <script>
+            /* Retrieve JSON data to build a histogram */
+            $(document).ready(function () {
+                d3.json("/BARD/bardWebInterface/retrieveExperimentResultsSummary/${tableModel?.additionalProperties?.capExptId}", function (error, dataFromServer) {
+                    if (!(dataFromServer === undefined)) {
+                        for (var i = 0; i < dataFromServer.length; i++) {
+                            if (!(dataFromServer[i] === undefined)) {
+                                drawHistogram(d3.select('#histogramHere'), dataFromServer[i]);
+                            }
                         }
                     }
-                }
+                });
             });
-        });
-    </script>
+        </script>
+    </g:if>
 
     <div class="row-fluid ">
         <div id="histogramHere" class="span12"></div>

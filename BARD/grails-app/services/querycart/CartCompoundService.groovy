@@ -15,7 +15,7 @@ class CartCompoundService {
         CompoundAdapter compoundAdapter = compoundAdapters ? compoundAdapters.first() : null
         if (compoundAdapter) {
             cartCompound = new CartCompound()
-            cartCompound.smiles = compoundAdapter.structureSMILES
+            cartCompound.smiles = compoundAdapter.smiles
             cartCompound.name = compoundAdapter.name
             cartCompound.externalId = compoundAdapter.id
             cartCompound.numAssayActive = compoundAdapter.numberOfActiveAssays

@@ -392,7 +392,7 @@ class MolecularSpreadSheetService {
                     rowCount++,
                     compoundAdapter.id,
                     compoundAdapter.name,
-                    compoundAdapter.structureSMILES,
+                    compoundAdapter.smiles,
                     dataMap, compoundAdapter.numberOfActiveAssays, compoundAdapter.numberOfAssays
             )
         }
@@ -410,8 +410,8 @@ class MolecularSpreadSheetService {
         List<CompoundAdapter> compoundAdaptersList = compoundAdapterMap.compoundAdapters
         int rowCount = 0
         for (CompoundAdapter compoundAdapter : compoundAdaptersList) {
-            String smiles = compoundAdapter.structureSMILES
-            Long cid = compoundAdapter.pubChemCID
+            String smiles = compoundAdapter.smiles
+            Long cid = compoundAdapter.id
             String name = compoundAdapter.name
             final int numberOfActiveAssays = compoundAdapter.numberOfActiveAssays
             final int numberOfAssays = compoundAdapter.numberOfAssays

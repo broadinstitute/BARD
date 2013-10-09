@@ -797,14 +797,14 @@ protection of diseased and normal cells, respectively. This assay will summarize
 
     private void constructMockCompoundAdapter() {
         MockCompoundAdapter compoundAdapter = new MockCompoundAdapter()
-        compoundAdapter.pubChemCID = 2722
+        compoundAdapter.id = 2722
         compoundAdapter.structureSMILES = "OC1=C(Cl)C=C(Cl)C2=C1N=CC=C2"
         compoundAdapter.name = "5,7-dichloroquinolin-8-ol"
         mockCompoundAdapterMap.put(compoundAdapter.pubChemCID, compoundAdapter)
 
 
         compoundAdapter = new MockCompoundAdapter()
-        compoundAdapter.pubChemCID = 16760208
+        compoundAdapter.id = 16760208
         compoundAdapter.name = "(2R,3S,5R)-5-(6-amino-2-chloropurin-9-yl)-4-fluoro-2-(hydroxymethyl)oxolan-3-ol"
         compoundAdapter.structureSMILES = "NC1=NC(Cl)=NC2=C1N=CN2[C@@H]1O[C@H](CO)[C@H](O)C1F"
         mockCompoundAdapterMap.put(compoundAdapter.pubChemCID, compoundAdapter)
@@ -812,7 +812,7 @@ protection of diseased and normal cells, respectively. This assay will summarize
 
 
         compoundAdapter = new MockCompoundAdapter()
-        compoundAdapter.pubChemCID = 354624
+        compoundAdapter.id = 354624
         compoundAdapter.structureSMILES = "NC1=NC(Cl)=NC2=C1N=CN2C1OC(CO)C(O)C1F"
         compoundAdapter.name = "5-(6-amino-2-chloropurin-9-yl)-4-fluoro-2-(hydroxymethyl)oxolan-3-ol"
         mockCompoundAdapterMap.put(compoundAdapter.pubChemCID, compoundAdapter)

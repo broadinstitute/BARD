@@ -23,7 +23,7 @@ import bard.core.rest.spring.compounds.*
 import java.util.concurrent.Executors
 
 class CompoundRestService extends AbstractRestService {
-    def transactional=false
+    def transactional = false
     ExecutorService executorService = Executors.newCachedThreadPool()
 
     public String getResourceContext() {
@@ -51,7 +51,7 @@ class CompoundRestService extends AbstractRestService {
         String urlToCompounds = getResource() + RestApiConstants.PROBEID + RestApiConstants.FORWARD_SLASH + mlNumber
         final URL url = new URL(urlToCompounds)
         final List<Compound> compounds = getForObject(url.toURI(), List.class) as List<Compound>
-        if(compounds){
+        if (compounds) {
             return compounds.get(0)
         }
         return null
@@ -222,7 +222,7 @@ class CompoundRestService extends AbstractRestService {
 
 
     public CompoundSummary getSummaryForCompoundFROM_PREVIOUS_VERSION(final Long cid) {
-      //  final String resource = buildQueryForCompoundSummary(cid)
+        //  final String resource = buildQueryForCompoundSummary(cid)
         final URL url = new URL("http://bard.nih.gov/api/v12/compounds/2382353/summary?expand=true")
         final CompoundSummary compoundSummary = (CompoundSummary) getForObject(url.toURI(), CompoundSummary.class)
         return compoundSummary
@@ -250,7 +250,26 @@ class CompoundRestService extends AbstractRestService {
         final List<FutureTask<Object>> results = executorService.invokeAll(tasks, 50, TimeUnit.SECONDS)
         return handleCompoundByIdFutures(results)
     }
+    /**
+     *
+     * @param compound
+     * @return {@link bard.core.rest.spring.compounds.Compound}
+     */
+    public Compound getCompoundBySid(Long sid) {
 
+        //lets also get the annotations and the sids
+        final String url = buildURLToGetSid(sid)
+        try {
+            final List<Compound> compounds = getForObject(url, List.class) as List<Compound>
+            if (compounds) {
+                return compounds.get(0)
+            }
+            return null;
+        } catch (Exception e) {
+            log.error("Could not find sid ${sid}", e)
+            throw new RestApiException(e)
+        }
+    }
     /**
      *
      * @param list of cids
@@ -285,6 +304,38 @@ class CompoundRestService extends AbstractRestService {
 
     /**
      *
+     * @param list of cids
+     * @return {@link CompoundResult}
+     */
+    public CompoundResult searchCompoundsBySids(final List<Long> sids) {
+        if (sids) {
+            final Map<String, Long> etags = [:]
+            final MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+            map.add("sids", sids.join(","));
+
+            final HttpHeaders headers = new HttpHeaders();
+            addETagsToHTTPHeader(headers, etags)
+            final HttpEntity entity = new HttpEntity(map, headers);
+            final String url = buildURLToPostSids()
+            final HttpEntity<List> exchange = postExchange(url, entity, List.class) as HttpEntity<List>
+            final List<Compound> compounds = exchange.getBody()
+            headers = exchange.getHeaders()
+            extractETagsFromResponseHeader(headers, 0, etags)
+            int nhits = compounds.size();
+
+            final CompoundResult compoundSearchResult = new CompoundResult()
+            compoundSearchResult.setCompounds(compounds)
+            compoundSearchResult.setEtags(etags)
+            final MetaData metaData = new MetaData()
+            metaData.nhit = nhits
+            compoundSearchResult.setMetaData(metaData)
+            return compoundSearchResult;
+        }
+        return null
+    }
+
+    /**
+     *
      * @param searchParams
      * @return {@link CompoundResult}
      */
@@ -297,7 +348,6 @@ class CompoundRestService extends AbstractRestService {
         final CompoundResult compoundSearchResult = (CompoundResult) getForObject(url.toURI(), CompoundResult.class)
         return compoundSearchResult;
     }
-
 
     /**
      * this Should probably take a Compound as an arg, instead of a Long
@@ -477,7 +527,7 @@ class CompoundRestService extends AbstractRestService {
         }
     }
 
-    def findAnnotations = {Long cid ->
+    def findAnnotations = { Long cid ->
         final String resource = getResource(cid.toString() + RestApiConstants.ANNOTATIONS)
         final URL url = new URL(resource)
         final CompoundAnnotations annotations = (CompoundAnnotations) getForObject(url.toURI(), CompoundAnnotations.class)
@@ -506,11 +556,11 @@ class CompoundRestService extends AbstractRestService {
      * @return
      */
 
-    def getStructureCount = {StructureSearchParams params ->
+    def getStructureCount = { StructureSearchParams params ->
         String resource = buildStructureSearchURL(params, true)
         return this.getResourceCount(resource)
     }
-    def doStructureSearch = {StructureSearchParams structureSearchParams, Map<String, Long> etags ->
+    def doStructureSearch = { StructureSearchParams structureSearchParams, Map<String, Long> etags ->
         final StructureSearchParams clonedParams = new StructureSearchParams(structureSearchParams)
 
         if (!clonedParams.getSkip()) {

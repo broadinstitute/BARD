@@ -157,7 +157,20 @@ abstract class AbstractRestService {
         url.append(RestApiConstants.QUESTION_MARK).append(RestApiConstants.EXPAND_TRUE)
         return url.toString()
     }
-
+    public String buildURLToPostSids() {
+        StringBuilder url = new StringBuilder(getResource())
+        url.append(RestApiConstants.SID)
+        url.append(RestApiConstants.QUESTION_MARK).append(RestApiConstants.EXPAND_TRUE)
+        return url.toString()
+    }
+    public String buildURLToGetSid(Long sid) {
+        StringBuilder url = new StringBuilder(getResource())
+        url.append(RestApiConstants.SID)
+        url.append(RestApiConstants.FORWARD_SLASH)
+        url.append(sid)
+        url.append(RestApiConstants.QUESTION_MARK).append(RestApiConstants.EXPAND_TRUE)
+        return url.toString()
+    }
     protected String getResource(final String resource) {
         return new StringBuilder(getResource()).append(resource).toString();
     }

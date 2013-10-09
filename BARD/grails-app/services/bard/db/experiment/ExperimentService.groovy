@@ -9,6 +9,9 @@ import bard.db.enums.HierarchyType
 import bard.db.enums.ReadyForExtraction
 import bard.db.people.Role
 import bard.db.registration.Assay
+import bard.db.registration.Measure
+import bardqueryapi.TableModel
+import bardqueryapi.experiment.ExperimentBuilder
 import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -20,6 +23,16 @@ class ExperimentService {
 
     AssayService assayService;
     ExperimentRestService experimentRestService
+    ResultsExportService resultsExportService
+    ExperimentBuilder experimentBuilder
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    TableModel previewResults(final Long id) {
+        Experiment experiment = Experiment.findById(id)
+        List<JsonSubstanceResults> results = resultsExportService.readResultsForSubstances(experiment)
+        return experimentBuilder.buildModelForPreview(experiment,results)
+    }
+
 
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Experiment updateOwnerRole(final Long id, final Role ownerRole) {
