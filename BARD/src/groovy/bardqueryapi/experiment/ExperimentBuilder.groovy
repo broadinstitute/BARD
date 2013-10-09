@@ -292,42 +292,6 @@ class ExperimentBuilder {
 
         return tableModel
     }
-//    public TableModel buildModelForPreview_old(Experiment experiment, List<JsonSubstanceResults> jsonSubstanceResultList) {
-//        final TableModel tableModel = new TableModel()
-//        int numberOfActives = 0 //loop through and extract from the the list
-//        tableModel.additionalProperties.put("experimentName", experiment?.experimentName)
-//        tableModel.additionalProperties.put("bardExptId", experiment?.ncgcWarehouseId)
-//        tableModel.additionalProperties.put("capExptId", experiment.id)
-//        tableModel.additionalProperties.put("bardAssayId", experiment.assay.ncgcWarehouseId)
-//        tableModel.additionalProperties.put("capAssayId", experiment.assay.id)
-//        tableModel.additionalProperties.put("actives", numberOfActives)
-//        tableModel.additionalProperties.put("confidenceLevel", experiment?.confidenceLevel)
-//
-//
-//
-//        final boolean hasPlot = true //TODO: refactor to be dynamic. Tell from the number of points returned by after processing
-//        final boolean hasChildElements = false
-//        Double yNormMin = null
-//        Double yNormMax = null
-//        tableModel.setColumnHeaders(buildHeader(hasPlot, hasChildElements))
-//
-//        for (JsonSubstanceResults jsonSubstanceResults : jsonSubstanceResultList) {
-//            Long sid = jsonSubstanceResults.getSid()
-//            CompoundAdapter compoundAdapter = null
-//            try {
-//                final Compound compound = this.compoundRestService.getCompoundBySid(sid)
-//                compoundAdapter = new CompoundAdapter(compound)
-//            } catch (Exception ee) {
-//                log.error(ee)
-//            }
-//            final List<WebQueryValue> rowData = addRowForResultsPreviewOld(jsonSubstanceResults, yNormMin, yNormMax, compoundAdapter)
-//            tableModel.addRowData(rowData)
-//        }
-//        tableModel.additionalProperties.put("total", tableModel.rowCount)
-//
-//
-//        return tableModel
-//    }
 }
 
 

@@ -2,6 +2,8 @@ package bardqueryapi.compoundBioActivitySummary
 
 import bard.core.rest.spring.experiment.ActivityConcentrationMap
 import bard.core.rest.spring.experiment.CurveFitParameters
+import bard.db.dictionary.Element
+import bard.db.dictionary.ResultTypeTree
 import bard.db.experiment.JsonResult
 import bard.db.experiment.JsonResultContextItem
 import bardqueryapi.*
@@ -20,33 +22,9 @@ import org.apache.log4j.Logger
  *
  */
 class PreviewResultsSummaryBuilder {
-
+    private Map<Long, ResultTypeTree> resultTypeTreeMap = [:]
     static final Logger log = Logger.getLogger(PreviewResultsSummaryBuilder.class)
-    /*
-    Curve fit parameters
-       919	Published	Hill coefficient
-       920	Published	Hill s0
-       921	Published	Hill sinf
-       953	Published	log CC50
-       958	Published	log MIC
-       960	Published	log AC50
-       962	Published	log EC50
-       968	Published	log IC50
-       1355	Published	log GI50
-       1385	Published	log TGI
-       */
-    private static List<Long> FIT_PARAM_DICT_ELEM = [
-            new Long(919),
-            new Long(920),
-            new Long(921),
-            new Long(953),
-            new Long(958),
-            new Long(960),
-            new Long(962),
-            new Long(968),
-            new Long(1355),
-            new Long(1385)
-    ]
+
     /**
      * So called high priority elements
      */
@@ -71,43 +49,75 @@ class PreviewResultsSummaryBuilder {
             new Long(1378),
             new Long(1387)
     ]
-    //Percent measures
-    private static List<Long> EFFICACY_PERCENT_MEASURES = [
-            new Long(982),
-            new Long(986),
-            new Long(991),
-            new Long(992),
-            new Long(994),
-            new Long(996),
-            new Long(998),
-            new Long(1004),
-            new Long(1005),
-            new Long(1006),
-            new Long(1007),
-            new Long(1008),
-            new Long(1009),
-            new Long(1010),
-            new Long(1011),
-            new Long(1012),
-            new Long(1013),
-            new Long(1014),
-            new Long(1016),
-            new Long(1322),
-            new Long(1324),
-            new Long(1330),
-            new Long(1340),
-            new Long(1359),
-            new Long(1361),
-            new Long(1415),
-            new Long(1416),
-            new Long(1417),
-            new Long(1448),
-            new Long(1483),
-            new Long(1484),
-            new Long(1485),
-            new Long(1486),
-            new Long(1487)
-    ]
+
+
+    protected boolean isCurveFitParameter(final Long resultTypeId) {
+        ResultTypeTree resultTypeTree = addOrFindResultTypeTree(resultTypeId)
+        if (resultTypeTree) {
+            if (resultTypeTree.fullPath.contains("concentration endpoint") ||
+                    resultTypeTree.fullPath.contains("concentration-response curve")) {
+                return true
+            }
+        }
+        return false
+    }
+
+    protected ResultTypeTree addOrFindResultTypeTree(final Long resultTypeId) {
+        ResultTypeTree resultTypeTree = this.resultTypeTreeMap.get(resultTypeId)
+        if (!resultTypeTree) {
+            Element element = Element.get(resultTypeId)
+            if (element) {
+                resultTypeTree = ResultTypeTree.findByElementAndLeaf(element, true)
+                this.resultTypeTreeMap.put(resultTypeId, resultTypeTree)
+            }
+        }
+        return resultTypeTree
+    }
+    /**
+     * Here we only look for things with 'percent response' in its path.
+     * NOTE that this is not a scaleable solution at all.
+     *
+     * We are thinking of changing the model so that the jsonresult object contains enough information for
+     * us to not have to resort to this hack. However, this should work for most cases, since most pubchem assays
+     * fits this hack
+     * @param resultTypeIdToLabelMap
+     * @param resultTypeId
+     * @return
+     */
+    protected boolean isPercentResponse(Long resultTypeId) {
+        ResultTypeTree resultTypeTree = addOrFindResultTypeTree(resultTypeId)
+        if (resultTypeTree) {
+            if (resultTypeTree.fullPath.toUpperCase().contains("RESPONSE ENDPOINT") &&
+                    resultTypeTree.fullPath.toUpperCase().contains("PERCENT RESPONSE")) {
+                return true
+            }
+        }
+        return false
+    }
+    /**
+     * Set the curve fit parameters
+     * Note that if we were to add a parameter that is not accounted for here, it will
+     * we can likely not fit the curve
+     * @param curveFitParameters
+     * @param resultTypeTree
+     * @param jsonResult
+     */
+    protected void setCurveFitParameters(CurveFitParameters curveFitParameters, ResultTypeTree resultTypeTree, JsonResult jsonResult) {
+        switch (resultTypeTree.label.toUpperCase()) {
+            case "HILL COEFFICIENT":
+                curveFitParameters.setHillCoef(jsonResult.valueNum)
+                break
+            case "HILL S0":
+                curveFitParameters.setS0(jsonResult.valueNum)
+                break
+            case "HILL SINF":
+                curveFitParameters.setSInf(jsonResult.valueNum)
+                break
+            default: //We call everything else logEc50. Need to fix this. This is actually the slope
+                curveFitParameters.setLogEc50(jsonResult.valueNum)
+                break
+        }
+    }
     /**
      * Convert the list of jsonResults to Dose Response Curve values
      * @param jsonResults
@@ -123,22 +133,8 @@ class PreviewResultsSummaryBuilder {
         String concentrationUnits = ""
         for (JsonResult jsonResult : jsonResults) {
             final Long resultTypeId = jsonResult.resultTypeId
-
-            if (FIT_PARAM_DICT_ELEM.contains(resultTypeId)) {  //TODO: refactor read from Result_Type_Tree
-                switch (resultTypeId) {
-                    case 919:
-                        curveFitParameters.setHillCoef(jsonResult.valueNum)
-                        break
-                    case 920:
-                        curveFitParameters.setS0(jsonResult.valueNum)
-                        break
-                    case 921:
-                        curveFitParameters.setSInf(jsonResult.valueNum)
-                        break
-                    default:
-                        curveFitParameters.setLogEc50(jsonResult.valueNum)
-                        break
-                }
+            if (isCurveFitParameter(resultTypeId)) {
+                setCurveFitParameters(curveFitParameters, resultTypeTreeMap.get(resultTypeId), jsonResult)
             } else if (jsonResult.valueNum && jsonResult.contextItems) {
                 final float activity = jsonResult.valueNum
                 final List<JsonResultContextItem> items = jsonResult.getContextItems()
@@ -174,10 +170,10 @@ class PreviewResultsSummaryBuilder {
 
 
     protected ConcentrationResponseSeriesValue handleHighPriorityElements(final JsonResult jsonResult, List<WebQueryValue> childElements = [], Double yNormMin = null,
-                                                                                 Double yNormMax = null) {
+                                                                          Double yNormMax = null) {
         final Long dictionaryId = jsonResult.resultTypeId
         Pair<StringValue, StringValue> title =
-            new ImmutablePair<StringValue, StringValue>(new StringValue(value: jsonResult.resultType), new StringValue(value: jsonResult.valueDisplay))
+            new ImmutablePair<StringValue, StringValue>(new StringValue(value: jsonResult.resultType), new StringValue(value: jsonResult.valueNum))
         LinkValue dictionaryElement
 
         if (dictionaryId) {
@@ -215,13 +211,13 @@ class PreviewResultsSummaryBuilder {
 
     }
 
-    protected void processJsonResults(final JsonResult jsonResult, List<WebQueryValue> childElements = [], List<WebQueryValue> values = [],  Double yNormMin = null,
-                                             Double yNormMax = null) {
+    protected void processJsonResults(final JsonResult jsonResult, List<WebQueryValue> childElements = [], List<WebQueryValue> values = [], Double yNormMin = null,
+                                      Double yNormMax = null) {
 
-        final Long dictionaryId = jsonResult.resultTypeId
-        if (HIGH_PRIORITY_DICT_ELEM.contains(dictionaryId)) { //TODO: refactor to read from Result_Type_Tree . We need the elements that could contain dose curves
+        final Long resultTypeId = jsonResult.resultTypeId
+        if (HIGH_PRIORITY_DICT_ELEM.contains(resultTypeId)) { //TODO: refactor to read from Result_Type_Tree . We need the elements that could contain dose curves
             values << handleHighPriorityElements(jsonResult, childElements, yNormMin, yNormMax)
-        } else if (EFFICACY_PERCENT_MEASURES.contains(dictionaryId)) {
+        } else if (isPercentResponse(resultTypeId)) {
             values << handleEfficacyMeasures(jsonResult)
         } else {  //everything else is a child element
             childElements << new StringValue(value: jsonResult.resultType + ":" + jsonResult.valueDisplay)
@@ -279,7 +275,7 @@ class PreviewResultsSummaryBuilder {
                     }
                 }
             } else {
-                processJsonResults(jsonResult, childElements, values,  yNormMin, yNormMax)
+                processJsonResults(jsonResult, childElements, values, yNormMin, yNormMax)
                 if (jsonResult.contextItems) {
                     childElements << contextItemsToChildElements(jsonResult.contextItems)
                 }
@@ -302,6 +298,7 @@ class PreviewResultsSummaryBuilder {
         return ""
 
     }
+
     protected List<WebQueryValue> sortWebQueryValues(List<WebQueryValue> unsortedValues) {
         return unsortedValues.sort { WebQueryValue valueInst ->
             //Sort based on the WebQueryValue specific type
