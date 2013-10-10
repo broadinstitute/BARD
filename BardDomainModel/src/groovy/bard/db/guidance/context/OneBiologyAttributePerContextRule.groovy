@@ -2,7 +2,7 @@ package bard.db.guidance.context
 
 import bard.db.guidance.DefaultGuidanceImpl
 import bard.db.guidance.Guidance
-import bard.db.guidance.GuidanceReporter
+import bard.db.guidance.GuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 
@@ -13,7 +13,7 @@ import bard.db.model.AbstractContextItem
  * Time: 2:57 PM
  * For any given Biology Context, there should be
  */
-class OneBiologyAttributePerContextRule implements GuidanceReporter {
+class OneBiologyAttributePerContextRule implements GuidanceRule {
 
     private static String BIOLOGY_LABEL = 'biology'
     private static final String ONE_BIOLOGY_ATTRIBUTE = "A Context should only have a single biology attribute."
