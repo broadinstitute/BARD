@@ -87,7 +87,7 @@ class OntologyJSonController {
     private Map asMapForSelect2(Element element) {
         boolean hasIntegratedSearch = false;
         if (StringUtils.isNotBlank(element.externalURL)) {
-            hasIntegratedSearch = true//ontologyDataAccessService.externalOntologyHasIntegratedSearch(element.externalURL)
+            hasIntegratedSearch = ontologyDataAccessService.externalOntologyHasIntegratedSearch(element.externalURL)
         }
         [
                 "id": element.id,
@@ -109,7 +109,7 @@ class OntologyJSonController {
             map.remove('id')
         }
         map.put('fullPath', descriptor.fullPath)
-        map.put('parentFullPath', descriptor.parent.fullPath)
+        map.put('parentFullPath', descriptor.parent?.fullPath)
 
 //        List nonRetiredChildren = descriptor.children.findAll{BardDescriptor child -> child.element.elementStatus != ElementStatus.Retired }.sort{it.label}
 //        if(nonRetiredChildren){

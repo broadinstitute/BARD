@@ -102,9 +102,9 @@ class OntologyJsonControllerUnitSpec extends Specification {
         resultMap.toString() == expectedMap.toString()
 
         where:
-        desc                | serviceReturnValue                                                                                                                    | expectedMap
+        desc                       | serviceReturnValue                                                                                                                    | expectedMap
         'no BardDescriptors found' | { [] }                                                                                                                                | [results: []]
-        '1 BardDescriptor found'   | { [BardDescriptor.build([fullPath: 'somePath', element: Element.build(label: 'l1', expectedValueType: ExpectedValueType.NUMERIC)])] } | [results: [[id: '1', text: 'somePath', expectedValueType: ExpectedValueType.NUMERIC, hasIntegratedSearch: false, externalUrl: null, unitId: null]]]
+        '1 BardDescriptor found'   | { [BardDescriptor.build([fullPath: 'somePath', element: Element.build(label: 'l1', expectedValueType: ExpectedValueType.NUMERIC)])] } | [results:[[id:1, text:'l1', expectedValueType:ExpectedValueType.NUMERIC, parentFullPath:null, fullPath:'somePath', hasIntegratedSearch:false, externalUrl:null, unitId:null]]]
     }
 
     void "test getValueDescriptorsV2 #desc"() {
@@ -125,9 +125,9 @@ class OntologyJsonControllerUnitSpec extends Specification {
         resultMap.toString() == expectedMap.toString()
 
         where:
-        desc                | serviceReturnValue                               | expectedMap
+        desc                       | serviceReturnValue                               | expectedMap
         'no BardDescriptors found' | { [] }                                           | [results: []]
-        '1 BardDescriptor found'   | { [BardDescriptor.build(fullPath: 'somePath')] } | [results: [[id: '1', text: 'somePath']]]
+        '1 BardDescriptor found'   | { [BardDescriptor.build(fullPath: 'somePath')] } | [results:[[id:1, text:'label1', expectedValueType:ExpectedValueType.NONE, parentFullPath:null, fullPath:'somePath', hasIntegratedSearch:false, externalUrl:null, unitId:null]]]
     }
 
     void "test findExternalItemsByTerm #desc "() {
