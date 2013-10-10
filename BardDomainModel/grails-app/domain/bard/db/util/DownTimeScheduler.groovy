@@ -38,7 +38,7 @@ class DownTimeScheduler {
      * @return
      */
     String getDisplayValueIfDownTimeGreaterThanCurrentTime() {
-        final long downTime = downTimeAsLong
+        final long downTime = getDownTimeAsLong()
         if (downTime > System.currentTimeMillis()) { //means there is a scheduled down time
             return displayValue
         }
