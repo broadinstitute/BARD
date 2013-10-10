@@ -3,7 +3,12 @@ package bard.db.model
 import bard.db.dictionary.Descriptor
 import bard.db.dictionary.Element
 import bard.db.enums.ContextType
+import bard.db.guidance.Guidance
 import bard.db.registration.AssayContextItem
+import bard.db.guidance.GuidanceReporter
+import bard.db.guidance.context.BiologyShouldHaveOneSupportingReferencePerContextRule
+import bard.db.guidance.context.OneBiologyAttributePerContextRule
+import bard.db.guidance.context.item.ValidBiologyValueGuidanceRule
 import org.apache.commons.lang.StringUtils
 
 /**
@@ -13,9 +18,20 @@ import org.apache.commons.lang.StringUtils
  * Time: 11:33 AM
  * To change this template use File | Settings | File Templates.
  */
-abstract class AbstractContext{
+abstract class AbstractContext implements GuidanceReporter{
     private static final int CONTEXT_NAME_MAX_SIZE = 128
     private static final int MODIFIED_BY_MAX_SIZE = 40
+
+    /**
+     * these labels or portions of labels are pulled out of the ontology and are an order of preference for sorting and naming of cards
+     */
+    private static final List<String> KEY_LABELS = ['assay component role', 'assay component type', 'detection', 'assay readout', 'wavelength', 'number']
+
+    private static final Map<String, String> KEY_LABEL_NAME_MAP = ['assay component role': 'label',
+            'assay component type': 'label', 'detection': 'detection method',
+            'assay readout': 'assay readout', 'wavelength': 'fluorescence/luminescence',
+            'number': 'result detail']
+
 
     private static final String BIOLOGY_LABEL = 'biology'
     private static final String PROBE_REPORT_LABEL = 'probe report'
@@ -42,7 +58,6 @@ abstract class AbstractContext{
      *
      * @return
      */
-    /*
     Descriptor getPreferredDescriptor() {
         Descriptor preferredDescriptor
         List<Descriptor> preferredDescriptors = getContextItems().collect { it.attributeElement.ontologyBreadcrumb.preferedDescriptor }
@@ -59,7 +74,7 @@ abstract class AbstractContext{
         }
         return preferredDescriptor
     }
-    */
+    
 
     String getPreferredName() {
         return this.contextName;
@@ -69,7 +84,7 @@ abstract class AbstractContext{
         this.contextName = name;
     }
 
-    abstract List getContextItems()
+    abstract List<? extends AbstractContextItem> getContextItems()
 
     abstract AbstractContextOwner getOwner()
 
@@ -100,4 +115,13 @@ abstract class AbstractContext{
      * @return the SubClass of the Item this Context is expecting
      */
     abstract Class<? extends AbstractContextItem> getItemSubClass()
+
+    @Override
+    List<Guidance> getGuidance() {
+        List<Guidance> guidanceList = []
+        guidanceList.add(new OneBiologyAttributePerContextRule(this).getGuidance())
+        guidanceList.add(new ValidBiologyValueGuidanceRule(this).getGuidance())
+        guidanceList.add(new BiologyShouldHaveOneSupportingReferencePerContextRule(this).getGuidance())
+        guidanceList.flatten()
+    }
 }
