@@ -35,7 +35,7 @@ class CompoundBioActivitySummaryTagLib {
 
     def experimentDescription = { attrs, body ->
 
-        out << generateShortNameHTML(attrs.name, attrs.bardExptId, attrs.eid, 'showExperiment')
+        out << generateShortNameHTML(attrs.name, attrs.capExptId, attrs.eid, 'show')
     }
 
     def curvePlot = { attrs, body ->
@@ -106,7 +106,7 @@ class CompoundBioActivitySummaryTagLib {
         out << "</tbody></table>"
     }
 
-    String generateShortNameHTML(String name, Long bardId, Long capId, String action, String controller = "bardWebInterface") {
+    String generateShortNameHTML(String name, Long bardId, Long capId, String action, String controller = "experiment") {
         String[] nameWords = name.split()
         StringBuilder sb = new StringBuilder()
 

@@ -77,9 +77,9 @@
                                 class="icon-info-sign"></i><span>Please note:</span>
                             <span>there is/are
                             <g:generateLinksList
-                                    controller="bardWebInterface"
-                                    action="showExperiment"
-                                    ids="${tableModel.additionalProperties.experimentWithSinglePointDataOnly*.value*.bardExptId}"/>
+                                    controller="experiment"
+                                    action="show"
+                                    ids="${tableModel.additionalProperties.experimentWithSinglePointDataOnly*.value*.capExptId}"/>
                             experiment(s) with single-point data only</span>
                         </p>
                     </g:if>
@@ -88,9 +88,9 @@
                                 class="icon-info-sign"></i><span>Please note:</span>
                             <span>there is/are
                             <g:generateLinksList
-                                    controller="bardWebInterface"
-                                    action="showExperiment"
-                                    ids="${tableModel.additionalProperties.experimentsWithoutResultData*.value*.bardExptId}"/>
+                                    controller="experiment"
+                                    action="show"
+                                    ids="${tableModel.additionalProperties.experimentsWithoutResultData*.value*.capExptId}"/>
                             experiment(s) with no data</span>
                         </p>
                     </g:if>

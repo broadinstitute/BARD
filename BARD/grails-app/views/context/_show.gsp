@@ -16,27 +16,30 @@
         </g:if>
     </g:if>
     <div class="row-fluid">
-
-        <g:render template="/context/biology"
-                  model="[contextOwner: contextOwner, biology: contextOwner.groupBiology(), subTemplate: 'show', renderEmptyGroups: false]"/>
-        <div id="cardHolder" class="span12">
+        <g:if test="${contextOwner.groupBiology()?.value}">
+            <g:render template="/context/biology"
+                      model="[contextOwner: contextOwner, biology: contextOwner.groupBiology(), subTemplate: 'show', renderEmptyGroups: false]"/>
+        </g:if>
+        <g:if test="${contextOwner.groupAssayProtocol()?.value}">
+            <div id="cardHolder" class="span12">
+                <g:render template="/context/currentCard"
+                          model="[contextOwner: contextOwner, currentCard: contextOwner.groupAssayProtocol(), subTemplate: 'show', renderEmptyGroups: false]"/>
+            </div>
+        </g:if>
+        <g:if test="${contextOwner.groupAssayDesign()?.value}">
             <g:render template="/context/currentCard"
-                      model="[contextOwner: contextOwner, currentCard: contextOwner.groupAssayProtocol(), subTemplate: 'show', renderEmptyGroups: false]"/>
-        </div>
+                      model="[contextOwner: contextOwner, currentCard: contextOwner.groupAssayDesign(), subTemplate: 'show', renderEmptyGroups: false]"/>
+        </g:if>
+        <g:if test="${contextOwner.groupAssayReadout()?.value}">
+            <g:render template="/context/currentCard"
+                      model="[contextOwner: contextOwner, currentCard: contextOwner.groupAssayReadout(), subTemplate: 'show', renderEmptyGroups: false]"/>
+        </g:if>
+        <g:if test="${contextOwner.groupAssayComponents()?.value}">
+            <g:render template="/context/currentCard"
+                      model="[contextOwner: contextOwner, currentCard: contextOwner.groupAssayComponents(), subTemplate: 'show', renderEmptyGroups: false]"/>
+        </g:if>
 
-
-        <g:render template="/context/currentCard"
-                  model="[contextOwner: contextOwner, currentCard: contextOwner.groupAssayDesign(), subTemplate: 'show', renderEmptyGroups: false]"/>
-
-
-        <g:render template="/context/currentCard"
-                  model="[contextOwner: contextOwner, currentCard: contextOwner.groupAssayReadout(), subTemplate: 'show', renderEmptyGroups: false]"/>
-
-        <g:render template="/context/currentCard"
-                  model="[contextOwner: contextOwner, currentCard: contextOwner.groupAssayComponents(), subTemplate: 'show', renderEmptyGroups: false]"/>
-
-
-        <g:if test="${contextOwner.groupUnclassified()}">
+        <g:if test="${contextOwner.groupUnclassified()?.value}">
             <div id="cardHolder" class="span12">
                 <g:render template="/context/currentCard"
                           model="[contextOwner: contextOwner, currentCard: contextOwner.groupUnclassified(), subTemplate: 'show', renderEmptyGroups: false]"/>

@@ -185,11 +185,17 @@ class ProjectController {
         render projects.collect { it.name } as JSON
     }
 
+    /**
+     * Draft is excluded as End users cannot set a status back to Draft
+     * @return  list of strings representing available status options
+     */
     def projectStatus() {
         List<String> sorted = []
         final Collection<ProjectStatus> projectStatuses = ProjectStatus.values()
         for (ProjectStatus projectStatus : projectStatuses) {
-            sorted.add(projectStatus.id)
+            if(projectStatus != ProjectStatus.DRAFT){
+                sorted.add(projectStatus.id)
+            }
         }
         sorted.sort()
         final JSON json = sorted as JSON

@@ -20,12 +20,12 @@
         <g:each in="${experiments}" var="experiment" status="i">
             <tr>
                 <td>
-                    <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.bardExptId}"
+                    <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.capExptId}"
                             params='${ searchString ? '[searchString: ${searchString}]' : ""}'>
                         ${experiment.capExptId}</g:link>
                 </td>
                 <td>
-                    <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.bardExptId}"
+                    <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.capExptId}"
                             params='${ searchString ? '[searchString: ${searchString}]' : ""}'>
                         ${experiment.name}</g:link>
                 </td>

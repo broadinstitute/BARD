@@ -12,6 +12,8 @@ class BardDescriptor extends Descriptor<BardDescriptor> {
 
     Set<BardDescriptor> children = [] as Set<BardDescriptor>
 
+    static hasMany = [children: BardDescriptor]
+
     static mapping = {
         table('BARD_TREE')
         id(column: 'NODE_ID', generator: 'assigned')
@@ -22,8 +24,6 @@ class BardDescriptor extends Descriptor<BardDescriptor> {
         fullPath(column: 'FULL_PATH')
 
     }
-
-    static hasMany = [children: BardDescriptor]
 
     String getDisplayPath() {
         if (fullPath.startsWith(ROOT_PREFIX)) {

@@ -2,9 +2,7 @@
 <section id="documents-header">
 <div class="page-header">
 <h3 class="sect">Documents</h3>
-<g:if test="${editable == 'canedit'}">
-    %{--<h5>Use the 'save icon' to persist any changes you make on the Rich Text Editor</h5>--}%
-</g:if>
+
 <section id="documents-description-header">
     <h4 class="subsect">Descriptions</h4>
     <div class="row-fluid">

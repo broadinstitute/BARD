@@ -54,6 +54,7 @@ class DownTimeSchedulerController {
         if (downTimeSchedulerList) {
             final DownTimeScheduler downTimeScheduler = downTimeSchedulerList.get(0)
             displayValue = downTimeScheduler.getDisplayValueIfDownTimeGreaterThanCurrentTime()
+            log.info("Display downtime to user ${displayValue}")
         }
         render(text: displayValue, contentType: 'text/plain', template: null)
     }

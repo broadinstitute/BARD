@@ -42,9 +42,6 @@ class ContextItemControllerUnitSpec extends Specification {
         controller.springSecurityService = Mock(SpringSecurityService)
     }
 
-    def cleanup() {
-    }
-   // contextItemService.updateAssayContextItem((Assay) owner, this)
     void 'test update - Project Context Item -Success'() {
         SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
             return true
@@ -61,7 +58,8 @@ class ContextItemControllerUnitSpec extends Specification {
         then:
         assert view == "/contextItem/edit"
         assert model.instance
-   }
+    }
+
     void 'test create - Project Context'() {
         given:
         SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
@@ -209,21 +207,30 @@ class ContextItemControllerUnitSpec extends Specification {
 
     }
 
-    void "test delete"() {
+    void "test delete #desc"() {
         given:
         ProjectContext projectContext = ProjectContext.build(contextType: ContextType.UNCLASSIFIED)
-        ProjectContextItem contextItem = ProjectContextItem.build(context:projectContext)
+        ProjectContextItem contextItem = ProjectContextItem.build(context: projectContext)
 
         BasicContextItemCommand basicContextItemCommand = new BasicContextItemCommand(
                 contextOwnerId: projectContext.owner.id,
-                context:projectContext,
+                context: projectContext,
                 contextId: projectContext.id,
                 contextItem: contextItem,
                 contextItemId: contextItem.id)
-        basicContextItemCommand.contextItemService=Mock(ContextItemService)
+        basicContextItemCommand.contextItemService = Mock(ContextItemService)
+
+        request.addHeader('referer', refererUrl)
+
         when:
         controller.delete(basicContextItemCommand)
         then:
-        assert response.redirectedUrl == "/project/editContext/${projectContext.owner.id}?groupBySection=Unclassified"
+        assert response.redirectedUrl.startsWith(expectedRedirect)
+
+        where:
+        desc                                                         | refererUrl              | expectedRedirect
+        'delete on editContext page, gets redirected to editContext' | "/project/editContext/" | "/project/editContext/"
+        'delete on contextItem page, gets redirected to contextItem' | "/contextItem/"         | "/contextItem/"
+        'delete with no referer, gets redirected to editContext'     | ""                      | "/project/editContext/"
     }
 }

@@ -12,6 +12,7 @@ public interface RestApiConstants {
     final String CUTOFF = AMPERSAND + "cutoff=";
     final String FILTER = "filter=";
     final String ACTIVE = "active";
+    final String SID="sid";
 
     final String FILTER_QUESTION = QUESTION_MARK + FILTER;
 

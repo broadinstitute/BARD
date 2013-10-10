@@ -5,8 +5,6 @@ import bard.db.enums.HierarchyType
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import org.apache.commons.collections.CollectionUtils
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll

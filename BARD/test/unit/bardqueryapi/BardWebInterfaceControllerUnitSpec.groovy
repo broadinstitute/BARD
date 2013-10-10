@@ -11,6 +11,9 @@ import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.compounds.PromiscuityScaffold
 import bard.core.rest.spring.project.Project
+import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentFile
+import bard.db.experiment.ExperimentService
 import bardwebquery.CompoundOptionsTagLib
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.buildtestdata.mixin.Build
@@ -22,11 +25,11 @@ import grails.test.mixin.support.GrailsUnitTestMixin
 import molspreadsheet.MolecularSpreadSheetService
 import org.apache.http.HttpException
 import org.json.JSONArray
-import spock.lang.Ignore
 import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.servlet.ModelAndView
 import querycart.CartAssay
+import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -36,10 +39,10 @@ import javax.servlet.http.HttpServletResponse
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
-@TestMixin([GrailsUnitTestMixin,DomainClassUnitTestMixin])
+@TestMixin([GrailsUnitTestMixin, DomainClassUnitTestMixin])
 @TestFor(BardWebInterfaceController)
-@Build([bard.db.project.Project])
-@Mock([bard.db.project.Project,CompoundOptionsTagLib])
+@Build([bard.db.project.Project, Experiment, ExperimentFile])
+@Mock([bard.db.project.Project, CompoundOptionsTagLib, Experiment, ExperimentFile])
 @Unroll
 class BardWebInterfaceControllerUnitSpec extends Specification {
     MolecularSpreadSheetService molecularSpreadSheetService
@@ -49,6 +52,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     MobileService mobileService
     BardUtilitiesService bardUtilitiesService
     QueryProjectExperimentRenderService queryProjectExperimentRenderService
+    ExperimentService experimentService
     @Shared List<SearchFilter> searchFilters = [new SearchFilter(filterName: 'group1', filterValue: 'facet1'), new SearchFilter(filterName: 'group2', filterValue: 'facet2')]
     @Shared Value facet1 = new IntValue(source: new DataSource(), id: 'group1', value: null, children: [new IntValue(source: new DataSource(), id: 'facet1', value: 1)])
     @Shared Value facet3 = new IntValue(source: new DataSource(), id: 'group3', value: null, children: [new IntValue(source: new DataSource(), id: 'facet3', value: 1)])
@@ -58,7 +62,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     void setup() {
         controller.metaClass.mixin(InetAddressUtil)
         bardUtilitiesService = Mock(BardUtilitiesService)
+
         queryProjectExperimentRenderService = Mock(QueryProjectExperimentRenderService)
+
+        experimentService = Mock(ExperimentService)
+        controller.experimentService = experimentService
         controller.metaClass.mixin(SearchHelper)
         controller.bardUtilitiesService = bardUtilitiesService
         controller.queryProjectExperimentRenderService = queryProjectExperimentRenderService
@@ -110,7 +118,21 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == 200
     }
 
+    void "test find preview results #label"() {
+        given:
+        Experiment experiment = instance.call()
+        when:
+        controller.previewResults(experiment.id)
+        then:
+        experimentService.previewResults(experiment.id) >> { new TableModel() }
+        assert response.status == statusCode
 
+        where:
+        label                  | instance                                                        | statusCode
+        "No Experiment File"   | { Experiment.build() }                                          | HttpServletResponse.SC_FOUND
+        "With Experiment File" | { Experiment.build(experimentFiles: [ExperimentFile.build()]) } | HttpServletResponse.SC_OK
+
+    }
 
     void "test find substance Ids #label"() {
         when:
@@ -146,10 +168,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     void "test showExperiment with Ajax"() {
         given:
+        Experiment experiment = Experiment.build(ncgcWarehouseId: 3)
         TableModel tableModel = new TableModel()
         tableModel.additionalProperties.put("experimentName", "experimentName")
 
-        params.id = "222"
+        params.id = experiment.id
         request.addHeader("X-Requested-With", "XMLHttpRequest")
         when:
         controller.showExperiment()
@@ -159,21 +182,38 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.text.contains("Experiment: experimentName")
     }
 
+    void "test showExperiment with Ajax, no ncgc warehouse id"() {
+        given:
+        Experiment experiment = Experiment.build()
+        TableModel tableModel = new TableModel()
+        tableModel.additionalProperties.put("experimentName", "experimentName")
+
+        params.id = experiment.id
+        request.addHeader("X-Requested-With", "XMLHttpRequest")
+        when:
+        controller.showExperiment()
+        then:
+        this.experimentDataFactoryService.createTableModel(_, _, _, _) >> { tableModel }
+        assert response.status == 404
+    }
+
     void "test showExperiment #label"() {
+        given:
+
         when:
         SearchCommand searchCommand = new SearchCommand()
         searchCommand.filters << new SearchFilter(filterName: 'plot_axis', filterValue: normalizeAxis)
 
-        controller.showExperiment(eid, searchCommand)
+        controller.showExperiment(eid.call()?.id, searchCommand)
         then:
         _ * this.experimentDataFactoryService.createTableModel(_, _, _, _) >> { webQueryTableModel }
         assert response.status == statusCode
 
         where:
-        label                              | eid  | statusCode                         | webQueryTableModel | normalizeAxis
-        "Empty Null EID - Bad Request"     | null | HttpServletResponse.SC_BAD_REQUEST | null               | 'Normalize Y-Axis'
-        "Good request with normalization"  | 234  | HttpServletResponse.SC_OK          | new TableModel()   | 'Normalize Y-Axis'
-        "Good request with denormaliztion" | 234  | HttpServletResponse.SC_OK          | new TableModel()   | null
+        label                              | eid                                      | statusCode                         | webQueryTableModel | normalizeAxis
+        "Empty Null EID - Bad Request"     | { null }                                 | HttpServletResponse.SC_BAD_REQUEST | null               | 'Normalize Y-Axis'
+        "Good request with normalization"  | { Experiment.build(ncgcWarehouseId: 3) } | HttpServletResponse.SC_OK          | new TableModel()   | 'Normalize Y-Axis'
+        "Good request with denormaliztion" | { Experiment.build(ncgcWarehouseId: 3) } | HttpServletResponse.SC_OK          | new TableModel()   | null
 
     }
 
@@ -223,7 +263,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         where:
         label                                | exceptionType                                      | statusCode
         "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
-        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_NOT_FOUND
     }
 
     void "test promiscuity action #label"() {
@@ -362,12 +402,12 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
 
         where:
-        label                                                 | searchString | withMobile | resultsMap                                                                                  | expectedView
-        "With Search String and Compound Adapters"            | "search"     | false      | [compoundAdapters: [buildCompoundAdapter(1234)], facets: [], nhits: 1, appliedFilters: [:]] | ""
+        label                                      | searchString | withMobile | resultsMap                                                                                  | expectedView
+        "With Search String and Compound Adapters" | "search"     | false      | [compoundAdapters: [buildCompoundAdapter(1234)], facets: [], nhits: 1, appliedFilters: [:]] | ""
 //        "With Search String and Compound Adapters and Mobile" | "search"     | true       | [compoundAdapters: [buildCompoundAdapter(1234)], facets: [], nhits: 1, appliedFilters: [:]] | 'name="totalCompounds" id="totalCompounds"'
-        "With Search String, no Compound Adapters"            | "search"     | false      | [facets: [], nhits: 0, appliedFilters: [:]]                                                 | ""
+        "With Search String, no Compound Adapters" | "search" | false | [facets: [], nhits: 0, appliedFilters: [:]] | ""
 //        "With Search String, no Compound Adapters and Mobile" | "search"     | true       | [facets: [], nhits: 0, appliedFilters: [:]]                                                 | 'name="totalCompounds" id="totalCompounds"'
-        "With no Search String"                               | ""           | false      | [compoundAdapters: [buildCompoundAdapter(1234)], facets: [], nhits: 1, appliedFilters: [:]] | ""
+        "With no Search String" | "" | false | [compoundAdapters: [buildCompoundAdapter(1234)], facets: [], nhits: 1, appliedFilters: [:]] | ""
 
     }
 
@@ -994,7 +1034,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
         if (cid && compoundAdapter) {
             assert model.compound
-            expectedCID == model.compound.getPubChemCID()
+            expectedCID == model.compound.id
         }
         response.status == statusCode
 
@@ -1184,20 +1224,21 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     }
 
     void "test showCompoundBioActivitySummary #label"() {
+
         when:
         SearchCommand searchCommand = new SearchCommand()
         searchCommand.filters << new SearchFilter(filterName: 'plot_axis', filterValue: normalizeAxis)
 
-        controller.showExperiment(eid, searchCommand)
+        controller.showExperiment(eid.call()?.id, searchCommand)
         then:
         _ * this.experimentDataFactoryService.createTableModel(_, _, _, _) >> { webQueryTableModel }
         assert response.status == statusCode
 
         where:
-        label                              | eid  | statusCode                         | webQueryTableModel | normalizeAxis
-        "Empty Null EID - Bad Request"     | null | HttpServletResponse.SC_BAD_REQUEST | null               | 'Normalize Y-Axis'
-        "Good request with normalization"  | 234  | HttpServletResponse.SC_OK          | new TableModel()   | 'Normalize Y-Axis'
-        "Good request with denormaliztion" | 234  | HttpServletResponse.SC_OK          | new TableModel()   | null
+        label                              | eid                                      | statusCode                         | webQueryTableModel | normalizeAxis
+        "Empty Null EID - Bad Request"     | { null }                                 | HttpServletResponse.SC_BAD_REQUEST | null               | 'Normalize Y-Axis'
+        "Good request with normalization"  | { Experiment.build(ncgcWarehouseId: 3) } | HttpServletResponse.SC_OK          | new TableModel()   | 'Normalize Y-Axis'
+        "Good request with denormaliztion" | { Experiment.build(ncgcWarehouseId: 3) } | HttpServletResponse.SC_OK          | new TableModel()   | null
 
     }
 

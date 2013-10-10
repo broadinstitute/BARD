@@ -1,11 +1,7 @@
 package bard.db.registration
 
-import bard.db.dictionary.Element
-import bard.db.enums.HierarchyType
-import bard.db.experiment.Experiment
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 import wslite.rest.RESTClient

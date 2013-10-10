@@ -135,6 +135,7 @@ grails.project.dependency.resolution = {
         compile ":jesque:0.6.2"
         compile ":jesque-web:0.4.0"
 
+        compile ":spring-security-core:1.2.7.3"
         // runtime scope
         runtime ":jquery:1.7.1"
 

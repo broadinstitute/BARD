@@ -13,6 +13,7 @@ import bard.db.registration.Assay
 import bard.db.registration.AssayDefinitionService
 import bard.db.registration.EditingHelper
 import bard.db.registration.MeasureTreeService
+import bardqueryapi.TableModel
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
@@ -36,6 +37,7 @@ class ExperimentController {
     CapPermissionService capPermissionService
     AsyncResultsService asyncResultsService
 
+
     def myExperiments() {
         List<Experiment> experiments = capPermissionService.findAllObjectsForRoles(Experiment)
         Set<Experiment> uniqueExperiments = new HashSet<Experiment>(experiments)
@@ -51,16 +53,21 @@ class ExperimentController {
         render renderEditFieldsForView("edit", experiment, experiment.assay);
     }
 
+    /**
+     * Draft is excluded as End users cannot set a status back to Draft
+     * @return  list of strings representing available status options
+     */
     def experimentStatus() {
         List<String> sorted = []
         final Collection<ExperimentStatus> experimentStatuses = ExperimentStatus.values()
         for (ExperimentStatus experimentStatus : experimentStatuses) {
-            sorted.add(experimentStatus.id)
+            if (experimentStatus != ExperimentStatus.DRAFT) {
+                sorted.add(experimentStatus.id)
+            }
         }
         sorted.sort()
         final JSON json = sorted as JSON
         render text: json, contentType: 'text/json', template: null
-
     }
 
     def show() {
