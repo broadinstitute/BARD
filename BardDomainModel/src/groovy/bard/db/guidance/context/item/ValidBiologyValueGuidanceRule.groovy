@@ -2,7 +2,7 @@ package bard.db.guidance.context.item
 
 import bard.db.guidance.DefaultGuidanceImpl
 import bard.db.guidance.Guidance
-import bard.db.guidance.GuidanceReporter
+import bard.db.guidance.GuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import org.apache.commons.lang3.BooleanUtils
@@ -14,7 +14,7 @@ import org.apache.commons.lang3.BooleanUtils
  * Time: 4:49 PM
  * To change this template use File | Settings | File Templates.
  */
-class ValidBiologyValueGuidanceRule implements GuidanceReporter {
+class ValidBiologyValueGuidanceRule implements GuidanceRule{
 
     private static final List<String> VALID_BIOLOGY_VALUES = ['biological process',
             'molecular interaction',

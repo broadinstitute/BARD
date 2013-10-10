@@ -7,14 +7,14 @@ import bard.db.enums.ReadyForExtraction
 import bard.db.enums.hibernate.ProjectGroupTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.guidance.Guidance
-import bard.db.guidance.GuidanceReporter
-import bard.db.guidance.assay.MinimumOfOneBiologyGuidanceRule
+import bard.db.guidance.GuidanceAware
+import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
 import bard.db.registration.ExternalReference
 
-class Project extends AbstractContextOwner  implements GuidanceReporter{
+class Project extends AbstractContextOwner  implements GuidanceAware{
     public static final int PROJECT_NAME_MAX_SIZE = 256
     public static final int MODIFIED_BY_MAX_SIZE = 40
     public static final int DESCRIPTION_MAX_SIZE = 1000
