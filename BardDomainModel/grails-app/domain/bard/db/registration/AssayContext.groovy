@@ -4,7 +4,6 @@ import bard.db.guidance.Guidance
 import bard.db.guidance.GuidanceAware
 import bard.db.guidance.context.BiologyShouldHaveOneSupportingReferencePerContextRule
 import bard.db.guidance.context.OneBiologyAttributePerContextRule
-import bard.db.guidance.context.item.ValidBiologyValueGuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractContextOwner
@@ -78,7 +77,6 @@ class AssayContext extends AbstractContext implements GuidanceAware {
     List<Guidance> getGuidance() {
         List<Guidance> guidanceList = []
         guidanceList.add(new OneBiologyAttributePerContextRule(this).getGuidance())
-        guidanceList.add(new ValidBiologyValueGuidanceRule(this).getGuidance())
         guidanceList.add(new BiologyShouldHaveOneSupportingReferencePerContextRule(this).getGuidance())
         guidanceList.flatten()
     }

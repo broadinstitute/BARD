@@ -12,7 +12,6 @@ import spock.lang.Unroll
 import static bard.db.guidance.context.BiologyShouldHaveOneSupportingReferencePerContextRule.BIOLOGICAL_PROCESS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG
 import static bard.db.guidance.context.BiologyShouldHaveOneSupportingReferencePerContextRule.MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG
 import static bard.db.guidance.context.OneBiologyAttributePerContextRule.ONE_BIOLOGY_ATTRIBUTE
-import static bard.db.guidance.context.item.ValidBiologyValueGuidanceRule.VALID_BIOLOGY_VALUE_MESSAGE
 
 /**
  * Created with IntelliJ IDEA.
