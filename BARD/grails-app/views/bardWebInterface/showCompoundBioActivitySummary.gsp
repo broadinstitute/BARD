@@ -79,7 +79,7 @@
                             <g:generateLinksList
                                     controller="bardWebInterface"
                                     action="showExperiment"
-                                    ids="${tableModel.additionalProperties.experimentWithSinglePointDataOnly*.value*.bardExptId}"/>
+                                    ids="${tableModel.additionalProperties.experimentWithSinglePointDataOnly*.value*.capExptId}"/>
                             experiment(s) with single-point data only</span>
                         </p>
                     </g:if>
@@ -90,7 +90,7 @@
                             <g:generateLinksList
                                     controller="bardWebInterface"
                                     action="showExperiment"
-                                    ids="${tableModel.additionalProperties.experimentsWithoutResultData*.value*.bardExptId}"/>
+                                    ids="${tableModel.additionalProperties.experimentsWithoutResultData*.value*.capExptId}"/>
                             experiment(s) with no data</span>
                         </p>
                     </g:if>

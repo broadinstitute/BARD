@@ -1,6 +1,6 @@
 package bard
 
-import clover.org.apache.commons.lang.exception.ExceptionUtils
+import org.apache.commons.lang.exception.ExceptionUtils
 import grails.plugins.springsecurity.Secured
 import grails.util.Environment
 

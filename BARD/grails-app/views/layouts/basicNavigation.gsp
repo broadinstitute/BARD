@@ -60,10 +60,7 @@
                             <ul class="dropdown-menu">
                                 <li class="controller"><g:link controller="assayDefinition"
                                                                action="groupAssays">My Assay Definitions</g:link></li>
-                                <li class="controller"><g:link controller="assayDefinition"
-                                                               action="findById">Search by Assay Definition ID</g:link></li>
-                                <li class="controller"><g:link controller="assayDefinition"
-                                                               action="findByName">Search by Assay Definition Name</g:link></li>
+                                %{--//You should belong to at least one team to create--}%
                                 <li class="controller"><g:link controller="assayDefinition"
                                                                action="create">Create Assay Definition</g:link></li>
                                 <li class="controller"><g:link controller="assayDefinition"
@@ -78,10 +75,7 @@
                             <ul class="dropdown-menu">
                                 <li class="controller"><g:link controller="project"
                                                                action="groupProjects">My Projects</g:link></li>
-                                <li class="controller"><g:link controller="project"
-                                                               action="findById">Search by Project ID</g:link></li>
-                                <li class="controller"><g:link controller="project"
-                                                               action="findByName">Search by Project Name</g:link></li>
+                                %{--//You should belong to at least one team to create--}%
                                 <li class="controller"><g:link controller="project"
                                                                action="create">Create a New Project</g:link></li>
                             </ul>
@@ -95,10 +89,7 @@
                                 <li class="controller"><g:link controller="panel"
                                                                action="myPanels">My Panels</g:link></li>
 
-                                <li class="controller"><g:link controller="panel"
-                                                               action="findById">Search by Panel ID</g:link></li>
-                                <li class="controller"><g:link controller="panel"
-                                                               action="findByName">Search by Panel Name</g:link></li>
+                                %{--//You should belong to at least one team to create--}%
                                 <li class="controller"><g:link controller="panel"
                                                                action="create">Create New Panel</g:link></li>
                             </ul>

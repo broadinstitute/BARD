@@ -3,6 +3,8 @@ package bard.db.experiment
 import bard.db.enums.ExperimentStatus
 import bard.db.enums.HierarchyType
 import bard.db.registration.*
+import bardqueryapi.TableModel
+import bardqueryapi.experiment.ExperimentBuilder
 import grails.buildtestdata.mixin.Build
 import grails.converters.JSON
 import grails.test.mixin.Mock
@@ -25,6 +27,19 @@ import spock.lang.Specification
 @TestFor(ExperimentService)
 public class ExperimentServiceUnitSpec extends Specification {
 
+    void 'test preview experiment'() {
+        given:
+        service.experimentBuilder = Mock(ExperimentBuilder)
+        service.resultsExportService=Mock(ResultsExportService)
+        Experiment experiment = Experiment.build()
+        when:
+        TableModel createdTableModel = service.previewResults(experiment.id)
+        then:
+        service.resultsExportService.readResultsForSubstances(_) >> {[new JsonSubstanceResults()]}
+        service.experimentBuilder.buildModelForPreview(_,_) >> {new TableModel()}
+        assert createdTableModel
+    }
+
     void 'test create experiment'() {
         given:
         mockDomain(Experiment)
@@ -42,7 +57,7 @@ public class ExperimentServiceUnitSpec extends Specification {
         experiment.experimentMeasures.size() == 2
 
         when:
-        ExperimentMeasure parentExpMeasure = experiment.experimentMeasures.find { it.parent == null}
+        ExperimentMeasure parentExpMeasure = experiment.experimentMeasures.find { it.parent == null }
 
         then:
         parentExpMeasure != null
@@ -81,21 +96,21 @@ public class ExperimentServiceUnitSpec extends Specification {
 
         then:
         experiment.experimentMeasures.size() == 2
-        (experiment.experimentMeasures.findAll { it.parent == null}).size() == 1
+        (experiment.experimentMeasures.findAll { it.parent == null }).size() == 1
 
         when: "we drop child and create element at top level"
         service.updateMeasures(experiment.id, JSON.parse("[{\"id\": ${parent.id}, \"parentId\": null, \"measureId\": ${parent.measure.id}}, {\"id\": \"new-2\", \"parentId\": null, \"measureId\": ${measure.id}}]"))
 
         then:
         experiment.experimentMeasures.size() == 2
-        (experiment.experimentMeasures.findAll { it.parent == null}).size() == 2
+        (experiment.experimentMeasures.findAll { it.parent == null }).size() == 2
 
         when: "we drop everything and recreate parent child"
         service.updateMeasures(experiment.id, JSON.parse("[{\"id\": \"new-1\", \"parentId\": null, \"measureId\": ${parent.measure.id}}, {\"id\": \"new-2\", \"parentId\": \"new-1\", \"measureId\": ${measure.id}}]"))
 
         then:
         experiment.experimentMeasures.size() == 2
-        (experiment.experimentMeasures.findAll { it.parent == null}).size() == 1
+        (experiment.experimentMeasures.findAll { it.parent == null }).size() == 1
     }
 
     void 'test splitting experiment from assay'() {
@@ -109,7 +124,7 @@ public class ExperimentServiceUnitSpec extends Specification {
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(experiment: experiment, measure: measure)
         Assay.metaClass.isDirty = { return false }
         when:
-        service.splitExperimentsFromAssay(assay.id,[experiment])
+        service.splitExperimentsFromAssay(assay.id, [experiment])
 
         then:
         experiment.assay != assay // the assay is different
@@ -128,7 +143,8 @@ public class ExperimentServiceUnitSpec extends Specification {
         experimentMeasure.measure.assayContextMeasures.first().assayContext == newAssay.assayContexts.first()
         experimentMeasure.measure.assayContextMeasures.first().measure == experimentMeasure.measure
     }
-    void "test update Experiment Status"(){
+
+    void "test update Experiment Status"() {
         given:
         final Experiment experiment = Experiment.build(experimentName: 'experimentName20', experimentStatus: ExperimentStatus.DRAFT)
         final ExperimentStatus newExperimentStatus = ExperimentStatus.APPROVED
@@ -137,6 +153,7 @@ public class ExperimentServiceUnitSpec extends Specification {
         then:
         assert newExperimentStatus == updatedExperiment.experimentStatus
     }
+
     void "test update Run From Date"() {
         given:
         final Experiment experiment = Experiment.build(experimentName: 'experimentName20')
@@ -146,6 +163,7 @@ public class ExperimentServiceUnitSpec extends Specification {
         then:
         assert runFromDate == updatedExperiment.runDateFrom
     }
+
     void "test update Run To Date"() {
         given:
         final Experiment experiment = Experiment.build(experimentName: 'experimentName20')
@@ -155,6 +173,7 @@ public class ExperimentServiceUnitSpec extends Specification {
         then:
         assert runToDate == updatedExperiment.runDateTo
     }
+
     void "test update hold until Date"() {
         given:
         final Experiment experiment = Experiment.build(experimentName: 'experimentName20')
@@ -164,6 +183,7 @@ public class ExperimentServiceUnitSpec extends Specification {
         then:
         assert holdUntilDate == updatedExperiment.holdUntilDate
     }
+
     void "test update description"() {
         given:
         final Experiment experiment = Experiment.build(experimentName: 'experimentName20', description: "description1")
@@ -173,6 +193,7 @@ public class ExperimentServiceUnitSpec extends Specification {
         then:
         assert newDescription == updatedExperiment.description
     }
+
     void "test update experiment name"() {
         given:
         final Experiment experiment = Experiment.build(experimentName: 'experimentName20', description: "description1111")

@@ -10,8 +10,7 @@ class CompoundBioActivitySummaryTagLib {
     BiologyRestService biologyRestService
 
     def assayDescription = { attrs, body ->
-
-        out << generateShortNameHTML(attrs.assayAdapter?.title, attrs.assayAdapter?.bardAssayId, attrs.assayAdapter?.capAssayId, 'showAssay')
+        out << generateShortNameHTML(attrs.assayAdapter?.title, attrs.assayAdapter?.bardAssayId, attrs.assayAdapter?.capAssayId, 'show', 'assayDefinition')
         out << "<p><b>Designed by:</b>${attrs.assayAdapter?.designedBy}</p>"
         List<BiologyEntity> biologyEntities = biologyRestService.convertBiologyId(attrs.assayAdapter?.biologyIds as List<Long>)
         String biology = biologyEntities.collect {BiologyEntity biologyEntity ->
@@ -36,7 +35,7 @@ class CompoundBioActivitySummaryTagLib {
 
     def experimentDescription = { attrs, body ->
 
-        out << generateShortNameHTML(attrs.name, attrs.bardExptId, attrs.eid, 'showExperiment')
+        out << generateShortNameHTML(attrs.name, attrs.capExptId, attrs.eid, 'showExperiment')
     }
 
     def curvePlot = { attrs, body ->

@@ -4,16 +4,10 @@ import bard.db.context.item.BasicContextItemCommand
 import bard.db.dictionary.Element
 import bard.db.enums.ExpectedValueType
 import bard.db.enums.ValueType
-import bard.db.experiment.Experiment
-import bard.db.experiment.ExperimentContext
-import bard.db.experiment.ExperimentContextItem
-import bard.db.experiment.ExperimentMeasure
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
-import bard.db.registration.AssayContextMeasure
-import bard.db.registration.Measure
-import bard.db.registration.MergeAssayDefinitionService
+import bard.db.registration.AttributeType
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
@@ -21,7 +15,6 @@ import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
 import spock.lang.Specification
 import spock.lang.Unroll
-
 
 /**
  * Created with IntelliJ IDEA.
@@ -123,6 +116,29 @@ class ContextItemServiceUnitSpec extends Specification {
         AssayContextItem item = context.contextItems.first()
         item.valueType == ValueType.NUMERIC
         item.valueNum == 100.0
+
+    }
+
+    def "test create free context item"() {
+        ContextItemService service = new ContextItemService()
+
+        Element attribute = Element.build(expectedValueType: ExpectedValueType.ELEMENT)
+        AssayContext context = AssayContext.build()
+        BasicContextItemCommand command = new BasicContextItemCommand()
+        command.context = context
+        command.contextClass = "AssayContext"
+        command.attributeElementId = attribute.id
+        command.valueConstraintType = "Free"
+        command.providedWithResults = true
+
+        when:
+        boolean created = service.createAssayContextItem(context.id, command)
+
+        then:
+        created
+        AssayContextItem item = context.contextItems.first()
+        item.valueType == ValueType.NONE
+        item.attributeType == AttributeType.Free
 
     }
 }

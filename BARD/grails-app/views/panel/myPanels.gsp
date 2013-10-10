@@ -14,7 +14,7 @@
             $(document).ready(function () {
                 $("#myPanels").tablesorter({
                     headers: {
-                        0:  { sorter: "digit"  },
+                        0: { sorter: "digit"  },
                         3: { sorter: "shortDate"  }
                     },
                     widgets: ['zebra']
@@ -37,7 +37,10 @@
                     <tr>
                         <td><g:link controller="panel" id="${panel.id}"
                                     action="show">${panel.id}</g:link></td>
-                        <td style="line-height: 150%"><p>${panel.name}</p></td>
+                        <td>
+                            <g:link controller="panel" id="${panel.id}"
+                                    action="show">${panel.name}</g:link>
+                        </td>
                         <td style="line-height: 150%"><p>${panel.description}</p></td>
                         <td><g:formatDate date="${panel.dateCreated}" format="MM/dd/yyyy"/></td>
                     </tr>

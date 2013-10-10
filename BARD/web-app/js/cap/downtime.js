@@ -15,19 +15,17 @@
 //    }, {});
 //});
 $(document).ready(function () {
-
+    $("#downtimenotify").notify({
+        speed: 500,
+        expires: false
+    });
     /*
      Register a grailsEvents handler for this window, constructor can take a root URL,
      a path to event-bus servlet and options. There are sensible defaults for each argument
      */
-    //TODO: Remove hard coded localhost
-    var responseLocation = '#downtimeMessage';
     var grailsEvents = new grails.Events("/BARD");
-    //grailsEvents.send('saveTodo', data); //will send data to server topic 'saveTodo'
     grailsEvents.on('downTime', function (data) {
-        var constructedResponse = '<div class="alert-message block-message warning"><a class="close" href="#">×</a><p style="color:red"><strong>' + data + '</strong></p></div>'
-        $(responseLocation).html(constructedResponse);
-        console.log(data)
+        buildDownTimeDiv(data);
     }, {});
 
 
@@ -35,9 +33,19 @@ $(document).ready(function () {
         type: 'GET',
         url: '/BARD/downTimeScheduler/currentDownTimeInfo',
         success: function (data) {
-             $(responseLocation).html(data);
+            if (data) {   //If there is data then insert it. Otherwise do nothing.
+                buildDownTimeDiv(data);
+            }
+
         }
     });
     //make an ajax call to find the current scheduled downtime
+
+    function buildDownTimeDiv(data) {
+        $("#downtimenotify").notify("create", {
+            title: "Down Time Notification!!",
+            text: data
+        });
+    }
 
 });

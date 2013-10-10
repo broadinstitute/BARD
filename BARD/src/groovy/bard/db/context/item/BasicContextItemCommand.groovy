@@ -191,6 +191,9 @@ class BasicContextItemCommand extends BardCommand {
 
             if (providedWithResults && valueConstraintType != null) {
                 assayContextItem.attributeType = Enum.valueOf(AttributeType, valueConstraintType)
+                if(assayContextItem.attributeType == AttributeType.Free) {
+                    assayContextItem.setNoneValue()
+                }
             } else {
                 assayContextItem.attributeType = AttributeType.Fixed;
             }

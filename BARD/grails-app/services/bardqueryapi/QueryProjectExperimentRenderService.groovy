@@ -156,7 +156,7 @@ class QueryProjectExperimentRenderService {
         final String stageLabel = experimentTypes.get(projectExperiment.bardExptId)
         Map projectExperimentAttributes = [
                 'eid': projectExperiment.capExptId,
-                'bardExptId': projectExperiment.bardExptId,
+                'capExptId': projectExperiment.capExptId,
                 'stage': stageLabel,
                 'assay': projectExperiment.capAssayId,
                 'bardAssay': projectExperiment.bardAssayId,

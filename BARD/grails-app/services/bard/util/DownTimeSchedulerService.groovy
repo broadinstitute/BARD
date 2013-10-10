@@ -9,7 +9,7 @@ class DownTimeSchedulerService {
     @Listener(namespace = 'browser')
     def downTimeScheduler(String message) {
         log.info(message)
-
+        //broadcast
         event(topic: 'downTime', data: message)
     }
 }
