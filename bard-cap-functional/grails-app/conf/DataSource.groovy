@@ -1,9 +1,9 @@
 dataSource {
-	pooled = true
-	driverClassName = "oracle.jdbc.OracleDriver"
-	url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
-	username = "bard_qa_cap"
-	password = "Ze3eqe2T"
+//	pooled = true
+//	driverClassName = "oracle.jdbc.OracleDriver"
+//	url = "jdbc:oracle:thin:@barddev:1521:barddev"
+//	username = "bard_qa_cap"
+//	password = "Ze3eqe2T"
 }
 hibernate {
 	cache.use_second_level_cache = true
@@ -12,13 +12,13 @@ hibernate {
 }
 // environment specific settings
 environments {
-	development {
+/*	development {
 		dataSource {
 			//            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
 			//            url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
 			dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
 			driverClassName = "oracle.jdbc.OracleDriver"
-			url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
+			url = "jdbc:oracle:thin:@barddev:1521:barddev"
 			username = "bard_qa_cap"
 			password = "Ze3eqe2T"
 		}
@@ -29,12 +29,12 @@ environments {
 			//            url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
 			dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
 			driverClassName = "oracle.jdbc.OracleDriver"
-			url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
+			url = "jdbc:oracle:thin:@barddev:1521:barddev"
 			username = "bard_qa_cap"
 			password = "Ze3eqe2T"
 		}
 	}
-	production {
+*/	production {
 		dataSource {
 			dbCreate = "update"
 			url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000"

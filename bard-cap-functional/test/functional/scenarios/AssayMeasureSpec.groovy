@@ -5,7 +5,11 @@ import spock.lang.Stepwise
 import pages.ViewAssayDefinitionPage
 //import pages.EditAssayContextPage
 import db.Assay
-
+/**
+ * @author Muhammad.Rafique
+ * Date Created: 13/02/07
+ * Last Updated: 13/10/07
+ */
 @Stepwise
 @Ignore
 class AssayMeasureSpec extends BardFunctionalSpec {

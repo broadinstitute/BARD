@@ -1,7 +1,11 @@
 package db
 
-import common.ProjectQueries;
 
+/**
+ * @author Muhammad.Rafique
+  * Date Created: 13/02/07
+ * Date Updated: 13/10/07
+ */
 class Project extends DatabaseConnectivity {
 
 	/**
@@ -46,25 +50,26 @@ class Project extends DatabaseConnectivity {
 	 * @param contextGroup
 	 * @return list of project context cards of specific group
 	 */
-	public static def getProjectContext(def contextGroup, def projectId) {
+	public static def getProjectContext(def contextType, def projectId) {
 		def contextCards = []
 		def sql = getSql()
-		sql.eachRow(ProjectQueries.PROJECT_CONTEXTS, [projectId, contextGroup]) { row ->
+		sql.eachRow(ProjectQueries.PROJECT_CONTEXTS, [projectId, contextType]) { row ->
 			contextCards.add(row.ContextName)
 		}
 		return contextCards
 	}
+	
 	/**
 	 * @param projectId
 	 * @param contextGroup
 	 * @param contextName
 	 * @return list of project context items present in a specific project context card
 	 */
-	public static def getProjectContextItem(def projectId, def contextGroup, def contextName) {
+	public static def getProjectContextItem(def projectId, def contextType, def contextName) {
 		def contextITemMap = [:]
 		def contextItemsList = []
 		def sql = getSql()
-		sql.eachRow(ProjectQueries.PROJECT_CONTEXT_ITEMS, [projectId, contextGroup, contextName]) { row ->
+		sql.eachRow(ProjectQueries.PROJECT_CONTEXT_ITEMS, [projectId, contextType, contextName]) { row ->
 			contextITemMap = ['attributeLabel':row.AttributeLabel, 'valueDisplay':row.ValueDisplay]
 			contextItemsList.add(contextITemMap)
 		}

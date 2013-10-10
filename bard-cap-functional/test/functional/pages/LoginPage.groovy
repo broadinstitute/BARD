@@ -1,35 +1,32 @@
 package pages
 
-import grails.plugin.remotecontrol.RemoteControl
 
 /**
- * Created by IntelliJ IDEA.
- * User: jlev
- * Date: 10/17/11
- * Time: 4:21 PM
- * To change this template use File | Settings | File Templates.
+ * @author Muhammad.Rafique
+ * Date Created: 13/02/11
+ * Date Updated: 13/10/07
  */
 class LoginPage extends ScaffoldPage {
-	static url = getAppUrl()+"login/auth"
-	//	static url = "login/auth"
-	static at = { $("button#submit") }
+	//	static url = getAppUrl()+"login/auth"
+	static url = "bardLogin/auth"
+	static at = { $("h2.form-signin-heading").text().equalsIgnoreCase("Please sign in") }
 
 	static content = {
 		loginForm { $("form#loginForm") }
-		errorMessage { $("div.ui-state-error.ui-corner-all p strong") }
-		signIn { $("button#submit") }
+		errorMessage { $("div.login_message") }
+		signIn { $("button", type:"submit") }
 	}
 
 	HomePage logIn(String username, String password) {
 		if (!isLoggedInAsUser(username)) {
-			if(isLoggedIn()) {                  // logged in as someone else
-				logout()
-				waitFor(5, 0.5){$(id: "username")}
-			}
+//			if(isLoggedIn()) {                  // logged in as someone else
+//				logout()
+//				waitFor(5, 0.5){$(id: "username")}
+//			}
 			logInNoValidation(username, password)
 		}
 
-		assert isLoggedInAsUser(username), "Not logged in as $username"
+//		assert isLoggedInAsUser(username), "Not logged in as $username"
 
 		return new HomePage()
 	}
@@ -40,8 +37,8 @@ class LoginPage extends ScaffoldPage {
 		signIn.click()
 	}
 
-	static String getAppUrl() {
-		RemoteControl remotec = new RemoteControl()
-		return remotec {ctx.grailsApplication.config.grails.serverURL}
-	}
+//	static String getAppUrl() {
+//		RemoteControl remotec = new RemoteControl()
+//		return remotec {ctx.grailsApplication.config.grails.serverURL}
+//	}
 }

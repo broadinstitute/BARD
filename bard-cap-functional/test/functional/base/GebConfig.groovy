@@ -5,6 +5,8 @@
 
 
 //import org.codehaus.groovy.grails.commons.ConfigurationHolder;
+import grails.util.Holders;
+
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxProfile
@@ -27,7 +29,7 @@ driver = {
 	driver.javascriptEnabled = true
 	driver
 }
-
+baseUrl = Holders.config.grails.serverURL
 environments {
 
 	// run as grails -Dgeb.env=chrome test-app
@@ -39,7 +41,7 @@ environments {
 		// see http://code.google.com/p/selenium/issues/detail?id=2681
 		DesiredCapabilities capabilities = new DesiredCapabilities()
 		capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"))
-
+		capabilities.setCapability("chrome.switches", Arrays.asList("--start-maximized"))
 		driver = { new ChromeDriver(capabilities) }
 	}
 

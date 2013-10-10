@@ -1,23 +1,27 @@
 package base
 
+import java.sql.Date;
+
 import geb.spock.GebReportingSpec
-import grails.plugin.remotecontrol.RemoteControl
+import grails.util.Holders
 import pages.HomePage
 import pages.LoginPage
 import spock.lang.Shared
 /**
  * Created by GGTS.
  * User: mrafique
- * Date: 13/02/06
+ * Date Created: 13/02/06
+ * Date Updated: 13/02/13
  */
 abstract class BardFunctionalSpec extends GebReportingSpec {
 	@Shared protected Map<String, Map> usernameUserPropsMap = [:]
 	def setupSpec() {
-		RemoteControl remote = new RemoteControl()
+//		RemoteControl remote = new RemoteControl()
 //		 String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
 
 		// def mockUsers = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers }
-		def mockUsers = remote { ctx.grailsApplication.config.mockUsers }
+//		def mockUsers = remote { ctx.grailsApplication.config.mockUsers }
+		def mockUsers = Holders.config.mockUsers
 		//Map userProps =[:]
 		mockUsers.each {user ->
 			Map userProps = user.value

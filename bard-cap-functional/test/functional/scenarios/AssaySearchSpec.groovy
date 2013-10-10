@@ -2,6 +2,7 @@ package scenarios
 import pages.CapSearchPage
 import pages.HomePage
 import pages.ViewAssayDefinitionPage
+import spock.lang.Ignore
 import base.BardFunctionalSpec
 
 import common.TestDataReader
@@ -9,7 +10,12 @@ import common.Constants.NavigateTo
 import common.Constants.SearchBy
 
 import db.Assay
-
+/**
+ * @author Muhammad.Rafique
+ * Date Created: 13/02/07
+ * Last Updated: 13/10/07
+ */
+@Ignore
 class AssaySearchSpec extends BardFunctionalSpec {
 	def testData = TestDataReader.getTestData()
 	String AssayId = testData.AssayId

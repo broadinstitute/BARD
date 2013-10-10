@@ -7,13 +7,18 @@ import modules.ErrorInlineModule
 
 import common.Constants.DocumentAs
 
+/**
+ * @author Muhammad.Rafique
+ * Date Created: 13/02/07
+ * Date Updated: 13/10/07
+ */
 class DocumentPage extends CommonFunctionalPage{
 	static url=""
-	static at = { }
+	static at = { $("input#documentType") }
 
 	static content = {
 		documentName { $("input#documentName") }
-		documentContent { $("div.nicEdit-main") }
+		documentContent { $("#documentContent") }
 		documentURL { $("input#documentContent", type:"url") }
 		cancelBtn { module ButtonsModule, $("div.control-group"), buttonName:"Cancel" }
 		createBtn { module ButtonsModule, $("div.control-group"), buttonName:"Create" }

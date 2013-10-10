@@ -1,19 +1,18 @@
 package pages
 
 import modules.AddLinkExperimentModule
-import modules.BardCapHeaderModule
 import modules.ButtonsModule
-import modules.DocumentSectionModule
-import modules.EditIconModule
-import modules.EditableFormModule
-import modules.ErrorInlineModule
-import modules.SummaryModule
-
 import common.Constants
+import common.TestData;
 
+/**
+ * @author Muhammad.Rafique
+ * Date Created: 13/02/07
+ * Last Updated: 13/10/10
+ */
 class ViewProjectDefinitionPage extends CapScaffoldPage{
-	static url=""
-	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	$("h4").text().contains("View Project")} }
+	static url="project/show/"+TestData.projectId
+	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	$("h2").text().contains("Project")} }
 
 	static content = {
 //		contextHeader { $("#contexts-header") }

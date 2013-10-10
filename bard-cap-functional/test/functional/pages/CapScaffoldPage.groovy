@@ -8,6 +8,11 @@ import modules.EditableFormModule
 import modules.ErrorInlineModule
 import modules.SummaryModule
 
+/**
+ * @author Muhammad.Rafique
+ * Date Created: 13/02/07
+ * Date Updated: 13/10/07
+ */
 class CapScaffoldPage extends CommonFunctionalPage {
 	static content = {
 		summaryHeader { $("#summary-header") }
@@ -142,7 +147,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 			}else{
 				fillInputField(editValue)
 			}
-			ajaxRequestCompleted()
+//			ajaxRequestCompleted()
 		}
 	}
 

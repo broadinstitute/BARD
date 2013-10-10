@@ -110,9 +110,9 @@ log4j = {
  * Home directory in Windows is usually: C:\Users\<username>\.grails
  * In Unix, this is usually ~\.grails
  *
- * dataExport-commons-config.groovy is used to holed generic, non envrironment-specific configurations such as external api credentials, etc.
+ * dataExport-commons-config.groovy is used to holed generic, non environment-specific configurations such as external api credentials, etc.
  */
-if (appName) {
+/*if (appName) {
 	grails.config.locations = []
 
 	// If the developer specifies a directory for the external config files at the command line, use it.
@@ -139,4 +139,4 @@ if (appName) {
 			println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
 		}
 	}
-}
+}*/

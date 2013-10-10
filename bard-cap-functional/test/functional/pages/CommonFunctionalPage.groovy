@@ -75,5 +75,7 @@ public class CommonFunctionalPage extends Page {
 		assert navigationMenu.dropdownMenu(menuName)
 		navigationMenu.dropdownMenu(menuName).click()
 	}
-
+	void waitForPageToLoad() {
+		waitFor(15, 0.5) { title.contains("BARD: Catalog of Assay Protocols") }
+	}
 }

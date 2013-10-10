@@ -1,8 +1,15 @@
 package pages
 
+
 import geb.Page
 import geb.navigator.Navigator
 
+/**
+ * @author Muhammad.Rafique
+ * Date Created: 13/02/07
+ * Date Updated: 13/10/07
+ *
+ */
 class ScaffoldPage extends CommonFunctionalPage {
     static content = {
         heading { $("h1") }
@@ -36,7 +43,7 @@ class ScaffoldPage extends CommonFunctionalPage {
         return false
     }
     void waitForPageToLoad() {
-        waitFor(5, 0.5) { title.contains("BARD") }
+        waitFor(5, 0.5) { title.contains("BioAssay Research Database") }
     }
 
 }

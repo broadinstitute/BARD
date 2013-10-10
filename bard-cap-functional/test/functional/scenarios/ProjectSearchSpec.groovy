@@ -11,7 +11,13 @@ import common.Constants.SearchBy
 import common.TestDataReader;
 
 import db.Project
+/**
+ * @author Muhammad.Rafique
+ * Date Created: 13/02/07
+ * Last Updated: 13/10/07
+ */
 
+@Ignore
 class ProjectSearchSpec extends BardFunctionalSpec{
 	def testData = TestDataReader.getTestData()
 	String projectId = testData.ProjectID

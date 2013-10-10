@@ -1,6 +1,5 @@
 package db
 
-import common.AssayQueries;
 
 class Assay extends DatabaseConnectivity {
 
@@ -46,10 +45,10 @@ class Assay extends DatabaseConnectivity {
 	 * @param contextGroup
 	 * @return list of assay context cards of specific group
 	 */
-	public static def getAssayContext(def contextGroup, def assayId, def oldGroup) {
+	public static def getAssayContext(def contextType, def assayId) {
 		def contextCards = []
 		def sql = getSql()
-		sql.eachRow(AssayQueries.ASSAY_CONTEXTS, [assayId, contextGroup, oldGroup]) { row ->
+		sql.eachRow(AssayQueries.ASSAY_CONTEXTS, [assayId, contextType]) { row ->
 			contextCards.add(row.ContextName)
 		}
 		return contextCards
@@ -60,11 +59,11 @@ class Assay extends DatabaseConnectivity {
 	 * @param contextName
 	 * @return list of assay context items present in a specific assay context card
 	 */
-	public static def getAssayContextItem(def assayId, def contextGroup, def contextName) {
+	public static def getAssayContextItem(def assayId, def contextType, def contextName) {
 		def contextITemMap = [:]
 		def contextItemsList = []
 		def sql = getSql()
-		sql.eachRow(AssayQueries.ASSAY_CONTEXT_ITEMS, [assayId, contextGroup, contextName]) { row ->
+		sql.eachRow(AssayQueries.ASSAY_CONTEXT_ITEMS, [assayId, contextType, contextName]) { row ->
 			contextITemMap = ['attributeLabel':row.AttributeLabel, 'valueDisplay':row.ValueDisplay.toString()]
 			contextItemsList.add(contextITemMap)
 		}

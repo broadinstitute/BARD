@@ -11,9 +11,14 @@ import common.Constants
 import common.Constants.ContextItem
 import common.Constants.ExpectedValueType
 
+/**
+ * @author Muhammad.Rafique
+  * Date Created: 13/02/07
+ * Date Updated: 13/10/07
+ */
 class ContextItemPage extends CapScaffoldPage{
 	static url=""
-	//	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { $("h4").text().contains("Add a New Item") } }
+	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { $("h2").text().contains("Item") } }
 	static content = {
 		cardTable{ contextTitle -> module CardsHolderModule, $("div.card.roundedBorder.card-table-container").find("table.table.table-hover"), contextCard:contextTitle }
 		formLoading { module LoadingModule}
