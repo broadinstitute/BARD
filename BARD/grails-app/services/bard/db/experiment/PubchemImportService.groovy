@@ -55,14 +55,18 @@ class PubchemImportService {
             throw new RuntimeException("Skipping ${aid} -> ${ref.experiment.id} because we're missing resultmapping")
         }
 
-        try {
-            pubchemReformatService.recreateMeasures(ref.experiment, map)
-        } catch (Exception ex) {
-            throw new RuntimeException("Exception while creating measures", ex)
+        for(eid in eids) {
+            Experiment experiment = Experiment.get(eid)
+            try {
+                pubchemReformatService.recreateMeasures(experiment, map)
+            } catch (Exception ex) {
+                throw new RuntimeException("Exception while creating measures", ex)
+            }
         }
 
         refs = ExternalReference.findAllByExtAssayRef("aid=${aid}")
 
+        ImportSummary firstResults = null
         for(eid in eids) {
             def pubchemFile = "${pubchemFileDir}/${aid}.csv"
             def capFile = "${convertedFileDir}/exp-${aid}-${eid}.csv"
@@ -85,6 +89,9 @@ class PubchemImportService {
             options.skipExperimentContexts = true
             options.statusCallback = statusCallback
             ImportSummary results = resultsService.importResults(eid, new FileInputStream(capFile), options)
+            if(firstResults == null)
+                firstResults = results
+
             log.info("errors from loading ${aid}: ${results.errors.size()}")
             for(e in results.errors) {
                 log.info("\t${e}")
@@ -98,6 +105,6 @@ class PubchemImportService {
             }
         }
 
-        return results;
+        return firstResults;
     }
 }
