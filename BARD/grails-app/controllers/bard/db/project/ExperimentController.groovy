@@ -1,6 +1,7 @@
 package bard.db.project
 
 import acl.CapPermissionService
+import bard.db.command.BardCommand
 import bard.db.enums.ContextType
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
@@ -43,6 +44,7 @@ class ExperimentController {
         Set<Experiment> uniqueExperiments = new HashSet<Experiment>(experiments)
         [experiments: uniqueExperiments]
     }
+
     def create() {
         def assay = Assay.get(params.assayId)
         render renderEditFieldsForView("create", new Experiment(), assay);
@@ -55,7 +57,7 @@ class ExperimentController {
 
     /**
      * Draft is excluded as End users cannot set a status back to Draft
-     * @return  list of strings representing available status options
+     * @return list of strings representing available status options
      */
     def experimentStatus() {
         List<String> sorted = []
@@ -177,13 +179,13 @@ class ExperimentController {
 
             final String inputValue = inlineEditableCommand.value.trim()
             String maxSizeMessage = validateInputSize(Experiment.DESCRIPTION_MAX_SIZE, inputValue.length())
-            if(maxSizeMessage){
+            if (maxSizeMessage) {
                 editExceedsLimitErrorMessage(maxSizeMessage)
                 return
             }
             experiment = experimentService.updateExperimentDescription(inlineEditableCommand.pk, inputValue)
 
-            if(experiment?.hasErrors()){
+            if (experiment?.hasErrors()) {
                 throw new Exception("Error while editing Experiment Description")
             }
 
@@ -193,6 +195,37 @@ class ExperimentController {
             log.error(ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
+            log.error(ee)
+            editErrorMessage()
+        }
+    }
+
+    def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
+        try {
+            final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value) ?: Role.findByAuthority(inlineEditableCommand.value)
+            if (!ownerRole) {
+                editBadUserInputErrorMessage("Could not find a registered team with name ${inlineEditableCommand.value}")
+                return
+            }
+            Experiment experiment = Experiment.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(experiment.version, Experiment.class)
+            if (message) {
+                conflictMessage(message)
+                return
+            }
+            if (!BardCommand.isRoleInUsersRoleList(ownerRole)) {
+                editBadUserInputErrorMessage("You do not have the permission to select team: ${inlineEditableCommand.value}")
+                return
+            }
+            experiment = experimentService.updateOwnerRole(inlineEditableCommand.pk, ownerRole)
+            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.ownerRole.displayName)
+
+        }
+        catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+        }
+        catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
         }
@@ -209,12 +242,12 @@ class ExperimentController {
 
             final String inputValue = inlineEditableCommand.value.trim()
             String maxSizeMessage = validateInputSize(Experiment.DESCRIPTION_MAX_SIZE, inputValue.length())
-            if(maxSizeMessage){
+            if (maxSizeMessage) {
                 editExceedsLimitErrorMessage(maxSizeMessage)
                 return
             }
             experiment = experimentService.updateExperimentName(inlineEditableCommand.pk, inputValue)
-            if(experiment?.hasErrors()){
+            if (experiment?.hasErrors()) {
                 throw new Exception("Error while editing Experiment Name")
             }
 
@@ -293,12 +326,12 @@ class ExperimentController {
         Experiment experiment = new Experiment()
         experiment.assay = assay
         setEditFormParams(experiment)
-        experiment.ownerRole=assay.ownerRole
+        experiment.ownerRole = assay.ownerRole
         experiment.dateCreated = new Date()
 
         if (!validateExperiment(experiment)) {
             render renderEditFieldsForView("create", experiment, assay);
-         } else {
+        } else {
             if (!experiment.save(flush: true)) {
                 render renderEditFieldsForView("create", experiment, assay);
             } else {
@@ -311,7 +344,7 @@ class ExperimentController {
     def update() {
         def experiment = Experiment.get(params.id)
         try {
-             experimentService.updateMeasures(experiment.id, JSON.parse(params.experimentTree))
+            experimentService.updateMeasures(experiment.id, JSON.parse(params.experimentTree))
         } catch (AccessDeniedException ade) {
             log.error("Access denied on update measure", ade)
             render accessDeniedErrorMessage()
@@ -326,9 +359,9 @@ class ExperimentController {
 
     def reloadResults(Long id) {
         String jobKey = asyncResultsService.createJobKey()
-        String link = createLink(action: 'viewLoadStatus', params:[experimentId: id, jobKey: jobKey])
+        String link = createLink(action: 'viewLoadStatus', params: [experimentId: id, jobKey: jobKey])
         asyncResultsService.doReloadResultsAsync(id, jobKey, link)
-        redirect(action: "viewLoadStatus", params:[jobKey: jobKey, experimentId: id])
+        redirect(action: "viewLoadStatus", params: [jobKey: jobKey, experimentId: id])
     }
 
     def viewLoadStatus(String jobKey, String experimentId) {
@@ -342,6 +375,7 @@ class ExperimentController {
 
         return [view: viewName, model: [experiment: experiment, assay: assay, experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree]]
     }
+
     private boolean validateExperiment(Experiment experiment) {
         println "Validating Experiment dates"
 

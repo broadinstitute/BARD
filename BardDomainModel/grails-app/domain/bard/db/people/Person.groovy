@@ -38,7 +38,7 @@ class Person {
 
     Set<Role> getRoles() {
 
-        PersonRole.withTransaction {  //see http://jira.grails.org/browse/GRAILS-8450
+        PersonRole.withNewSession {  //see http://jira.grails.org/browse/GRAILS-8450
             return PersonRole.findAllByPerson(this).collect { it.role } as Set
         }
     }
