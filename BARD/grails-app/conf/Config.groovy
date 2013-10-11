@@ -224,6 +224,10 @@ switch (Environment.current) {
 //prevent session fixation attacks
 grails.plugins.springsecurity.useSessionFixationPrevention = true
 
+security.acl.authority.changeOwnership = 'ROLE_BARD_ADMINISTRATOR'
+security.acl.authority.modifyAuditingDetails = 'ROLE_BARD_ADMINISTRATOR'
+security.acl.authority.changeAclDetails = 'ROLE_BARD_ADMINISTRATOR'
+
 //grails.plugins.springsecurity.rejectIfNoRule = true
 
 //Persona configs
