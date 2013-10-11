@@ -4,8 +4,8 @@
 <r:require module="export"/>
 <html>
 <head>
-    <meta name="layout" content="logoSearchCartAndFooter"/>
-    <title>BioAssay Research Database: Molecular spreadsheet</title>
+    <meta name="layout" content="basic"/>
+    <title>Molecular spreadsheet</title>
     <r:require modules="molecularSpreadSheet,promiscuity,compoundOptions"/>
 </head>
 
