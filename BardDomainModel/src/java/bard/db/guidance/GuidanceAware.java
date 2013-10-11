@@ -12,13 +12,16 @@ import java.util.List;
  * These are meant to allow for offering guidance but not applying hard constraints that would prevent the user from
  * saving and entity.
  * <p/>
+ *
+ * <p>GuidanceAware object should enlist GuidanceRules to assemble a list of Guidance objects to present to the user</p>
+ *
  * The thought is that through guidance we can strongly suggest how users structure their data in a very flexible
  * data structure.
  */
-public interface GuidanceReporter {
+public interface GuidanceAware {
 
     /**
      * @return a list of Guidance objects containing messages for the end user
      */
-    List<Guidance> getGuidance();
+    public List<Guidance> getGuidance();
 }
