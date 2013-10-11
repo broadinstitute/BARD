@@ -1,6 +1,6 @@
 package bard.util
 
-import grails.events.Listener
+//import grails.events.Listener
 
 //TODO: Add ACL Only ADMINS should call this class
 class DownTimeSchedulerService {
