@@ -737,7 +737,7 @@
                 <div class="span3 by">
                     <strong class="logo-by"><a href="#" title="Powered by ChemAxon">Powered by ChemAxon</a></strong>
 
-                    <p>&copy; 2013 BARD Lorem Ipsum Dolor</p>
+                    <p>&copy; 2013 BARD</p>
                 </div>
             </div>
         </div>
