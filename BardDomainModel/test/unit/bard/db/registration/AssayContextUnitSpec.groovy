@@ -59,7 +59,7 @@ class AssayContextUnitSpec extends AbstractContextUnitSpec<AssayContext> {
 
         where:
         desc                                                                     | attributeElementMaps                                                                   | valueElementMaps                                               | expectedGuidanceMessages
-        "1 biology attribute with invalid value"                                 | [[label: 'biology']]                                                                   | [[label: 'foo']]                                               | [VALID_BIOLOGY_VALUE_MESSAGE]
+//        "1 biology attribute with invalid value"                                 | [[label: 'biology']]                                                                   | [[label: 'foo']]                                               | [VALID_BIOLOGY_VALUE_MESSAGE]
         "2 biology attributes no good"                                           | [[label: 'biology'], [label: 'biology']]                                               | [[label: 'biological process'], [label: 'biological process']] | [ONE_BIOLOGY_ATTRIBUTE, BIOLOGICAL_PROCESS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
         "no biology attribute ok"                                                | []                                                                                     | []                                                             | []
 

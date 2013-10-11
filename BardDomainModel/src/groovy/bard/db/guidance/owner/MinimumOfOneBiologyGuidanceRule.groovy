@@ -1,13 +1,10 @@
 package bard.db.guidance.owner
-
 import bard.db.guidance.DefaultGuidanceImpl
 import bard.db.guidance.Guidance
 import bard.db.guidance.GuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractContextOwner
-import groovy.transform.TypeChecked
-
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
@@ -27,7 +24,7 @@ class MinimumOfOneBiologyGuidanceRule implements GuidanceRule {
     }
 
     @Override
-    @TypeChecked
+//    @TypeChecked
     List<Guidance> getGuidance() {
         final List<Guidance> guidance = []
         List<AbstractContextItem> itemsWithAttributeOfBiology = []
