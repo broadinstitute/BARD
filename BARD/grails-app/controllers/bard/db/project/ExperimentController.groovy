@@ -1,28 +1,28 @@
 package bard.db.project
 
 import acl.CapPermissionService
+import bard.db.command.BardCommand
 import bard.db.enums.ContextType
 import bard.db.enums.ExperimentStatus
+import bard.db.experiment.AsyncResultsService
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
-import bard.db.experiment.AsyncResultsService
 import bard.db.experiment.results.JobStatus
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
 import bard.db.registration.Assay
-import bard.db.registration.AssayDefinitionService
 import bard.db.registration.EditingHelper
 import bard.db.registration.MeasureTreeService
-import bardqueryapi.TableModel
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
+import grails.validation.Validateable
+import groovy.transform.InheritConstructors
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.access.AccessDeniedException
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-
 
 @Mixin([EditingHelper])
 @Secured(['isAuthenticated()'])
@@ -30,7 +30,7 @@ class ExperimentController {
     static final DateFormat inlineDateFormater = new SimpleDateFormat("yyyy-MM-dd")
 
     ExperimentService experimentService
-    AssayDefinitionService assayDefinitionService
+
     MeasureTreeService measureTreeService
     SpringSecurityService springSecurityService
     def permissionEvaluator
@@ -43,6 +43,7 @@ class ExperimentController {
         Set<Experiment> uniqueExperiments = new HashSet<Experiment>(experiments)
         [experiments: uniqueExperiments]
     }
+
     def create() {
         def assay = Assay.get(params.assayId)
         render renderEditFieldsForView("create", new Experiment(), assay);
@@ -55,7 +56,7 @@ class ExperimentController {
 
     /**
      * Draft is excluded as End users cannot set a status back to Draft
-     * @return  list of strings representing available status options
+     * @return list of strings representing available status options
      */
     def experimentStatus() {
         List<String> sorted = []
@@ -83,12 +84,14 @@ class ExperimentController {
         boolean editable = canEdit(permissionEvaluator, springSecurityService, experimentInstance)
         boolean isAdmin = SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
         String owner = capPermissionService.getOwner(experimentInstance)
-        [instance: experimentInstance,
+        [
+                instance: experimentInstance,
                 experimentOwner: owner,
                 measuresAsJsonTree: measuresAsJsonTree,
                 assayMeasuresAsJsonTree: assayMeasuresAsJsonTree,
                 editable: editable ? 'canedit' : 'cannotedit',
-                isAdmin: isAdmin]
+                isAdmin: isAdmin
+        ]
     }
 
     def editHoldUntilDate(InlineEditableCommand inlineEditableCommand) {
@@ -177,13 +180,13 @@ class ExperimentController {
 
             final String inputValue = inlineEditableCommand.value.trim()
             String maxSizeMessage = validateInputSize(Experiment.DESCRIPTION_MAX_SIZE, inputValue.length())
-            if(maxSizeMessage){
+            if (maxSizeMessage) {
                 editExceedsLimitErrorMessage(maxSizeMessage)
                 return
             }
             experiment = experimentService.updateExperimentDescription(inlineEditableCommand.pk, inputValue)
 
-            if(experiment?.hasErrors()){
+            if (experiment?.hasErrors()) {
                 throw new Exception("Error while editing Experiment Description")
             }
 
@@ -209,12 +212,12 @@ class ExperimentController {
 
             final String inputValue = inlineEditableCommand.value.trim()
             String maxSizeMessage = validateInputSize(Experiment.DESCRIPTION_MAX_SIZE, inputValue.length())
-            if(maxSizeMessage){
+            if (maxSizeMessage) {
                 editExceedsLimitErrorMessage(maxSizeMessage)
                 return
             }
             experiment = experimentService.updateExperimentName(inlineEditableCommand.pk, inputValue)
-            if(experiment?.hasErrors()){
+            if (experiment?.hasErrors()) {
                 throw new Exception("Error while editing Experiment Name")
             }
 
@@ -229,26 +232,26 @@ class ExperimentController {
         }
     }
 
-//    def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
-//        try {
-//            final Role ownerRole = Role.findById(inlineEditableCommand.value)
-//            final Experiment experiment = Experiment.findById(inlineEditableCommand.pk)
-//            final String message = inlineEditableCommand.validateVersions(experiment.version, Experiment.class)
-//            if (message) {
-//                conflictMessage(message)
-//                return
-//            }
-//            experiment = experimentService.updateOwnerRole(inlineEditableCommand.pk, ownerRole)
-//            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.experimentStatus.id)
-//
-//        } catch (AccessDeniedException ade) {
-//            log.error(ade)
-//            render accessDeniedErrorMessage()
-//        } catch (Exception ee) {
-//            log.error(ee)
-//            editErrorMessage()
-//        }
-//    }
+    def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
+        try {
+            final Role ownerRole = Role.findById(inlineEditableCommand.value)
+            final Experiment experiment = Experiment.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(experiment.version, Experiment.class)
+            if (message) {
+                conflictMessage(message)
+                return
+            }
+            experiment = experimentService.updateOwnerRole(inlineEditableCommand.pk, ownerRole)
+            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.owner)
+
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+        } catch (Exception ee) {
+            log.error(ee)
+            editErrorMessage()
+        }
+    }
 
     def editExperimentStatus(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -283,35 +286,26 @@ class ExperimentController {
         render view: '../project/editContext', model: [instance: instance, contexts: [contextGroup]]
     }
 
-    def save() {
-        def assay = Assay.get(params.assayId)
-        boolean editable = canEdit(permissionEvaluator, springSecurityService, assay)
-        if (!editable) {
-            render accessDeniedErrorMessage();
+    def save(ExperimentCommand experimentCommand) {
+        if (!experimentCommand.validate()) {
+            create(experimentCommand)
             return
         }
-        Experiment experiment = new Experiment()
-        experiment.assay = assay
-        setEditFormParams(experiment)
-        experiment.ownerRole=assay.ownerRole
-        experiment.dateCreated = new Date()
+
+        Experiment experiment = experimentCommand.createNewExperiment()
 
         if (!validateExperiment(experiment)) {
-            render renderEditFieldsForView("create", experiment, assay);
-         } else {
-            if (!experiment.save(flush: true)) {
-                render renderEditFieldsForView("create", experiment, assay);
-            } else {
-                experimentService.updateMeasures(experiment.id, JSON.parse(params.experimentTree))
-                redirect(action: "show", id: experiment.id)
-            }
+            render renderEditFieldsForView("create", experiment, experimentCommand.assay);
+        } else {
+            experimentService.updateMeasures(experiment.id, JSON.parse(params.experimentTree))
+            redirect(action: "show", id: experiment.id)
         }
     }
 
     def update() {
         def experiment = Experiment.get(params.id)
         try {
-             experimentService.updateMeasures(experiment.id, JSON.parse(params.experimentTree))
+            experimentService.updateMeasures(experiment.id, JSON.parse(params.experimentTree))
         } catch (AccessDeniedException ade) {
             log.error("Access denied on update measure", ade)
             render accessDeniedErrorMessage()
@@ -326,9 +320,9 @@ class ExperimentController {
 
     def reloadResults(Long id) {
         String jobKey = asyncResultsService.createJobKey()
-        String link = createLink(action: 'viewLoadStatus', params:[experimentId: id, jobKey: jobKey])
+        String link = createLink(action: 'viewLoadStatus', params: [experimentId: id, jobKey: jobKey])
         asyncResultsService.doReloadResultsAsync(id, jobKey, link)
-        redirect(action: "viewLoadStatus", params:[jobKey: jobKey, experimentId: id])
+        redirect(action: "viewLoadStatus", params: [jobKey: jobKey, experimentId: id])
     }
 
     def viewLoadStatus(String jobKey, String experimentId) {
@@ -342,6 +336,7 @@ class ExperimentController {
 
         return [view: viewName, model: [experiment: experiment, assay: assay, experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree]]
     }
+
     private boolean validateExperiment(Experiment experiment) {
         println "Validating Experiment dates"
 
@@ -368,11 +363,70 @@ class ExperimentController {
         return !experiment.hasErrors()
     }
 
-    private def setEditFormParams(Experiment experiment) {
-        experiment.properties["experimentName", "description", "experimentStatus"] = params
-        experiment.holdUntilDate = params.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").parse(params.holdUntilDate) : null
-        experiment.runDateFrom = params.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateFrom) : null
-        experiment.runDateTo = params.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateTo) : null
+}
+@InheritConstructors
+@Validateable
+class ExperimentCommand extends BardCommand {
+    Long assayId
+    String experimentName
+    String description
+    Role ownerRole
+    Date dateCreated = new Date()
+    String holdUntilDate
+    String runDateFrom
+    String runDateTo
+    CapPermissionService capPermissionService
+    SpringSecurityService springSecurityService
+
+    public Assay getAssay(){
+       return Assay.get(this.assayId)
+    }
+    public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['experimentName', 'description', 'dateCreated'].asImmutable()
+
+    static constraints = {
+        importFrom(Experiment, exclude: ['assay','runDateTo', 'runDateFrom', 'readyForExtraction', 'lastUpdated'])
+        assayId(nullable: false, validator: {value, command, err ->
+           if(!Assay.get(value)){
+               err.rejectValue('assayId', "message.code", "Could not find ADID : ${value}");
+           }
+        })
+        ownerRole(nullable: false, validator: { value, command, err ->
+            /*We make it required in the command object even though it is optional in the domain.
+         We will make it required in the domain as soon as we are done back populating the data*/
+            //validate that the selected role is in the roles associated with the user
+            if (!BardCommand.isRoleInUsersRoleList(value)) {
+                err.rejectValue('ownerRole', "message.code", "You do not have the privileges to create Assays for this team : ${value.displayName}");
+            }
+        })
+    }
+
+    ExperimentCommand() {}
+
+
+
+    Experiment createNewExperiment() {
+        Experiment experimentToReturn = null
+        if (validate()) {
+            Experiment tempExperiment = new Experiment()
+            copyFromCmdToDomain(tempExperiment)
+            if (attemptSave(tempExperiment)) {
+                experimentToReturn = tempExperiment
+                capPermissionService.addPermission(experimentToReturn, this.ownerRole)
+            }
+        }
+        return experimentToReturn
+    }
+
+
+    void copyFromCmdToDomain(Experiment experiment) {
+        experiment.modifiedBy = springSecurityService.principal?.username
+        experiment.holdUntilDate = holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").parse(holdUntilDate) : null
+        experiment.runDateFrom = runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").parse(runDateFrom) : null
+        experiment.runDateTo = runDateTo ? new SimpleDateFormat("MM/dd/yyyy").parse(runDateTo) : null
+        experiment.assay = getAssay()
+        for (String field in PROPS_FROM_CMD_TO_DOMAIN) {
+            experiment[(field)] = this[(field)]
+        }
     }
 }
 

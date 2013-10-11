@@ -86,7 +86,7 @@ class ProjectController {
 
     def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
         try {
-            final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value)?:Role.findByAuthority(inlineEditableCommand.value)
+            final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value) ?: Role.findByAuthority(inlineEditableCommand.value)
             if (!ownerRole) {
                 editBadUserInputErrorMessage("Could not find a registered team with name ${inlineEditableCommand.value}")
                 return
@@ -103,7 +103,7 @@ class ProjectController {
                 return
             }
             project = projectService.updateOwnerRole(inlineEditableCommand.pk, ownerRole)
-            generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.ownerRole.displayName)
+            generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, ownerRole.displayName)
 
         }
         catch (AccessDeniedException ade) {
@@ -187,13 +187,13 @@ class ProjectController {
 
     /**
      * Draft is excluded as End users cannot set a status back to Draft
-     * @return  list of strings representing available status options
+     * @return list of strings representing available status options
      */
     def projectStatus() {
         List<String> sorted = []
         final Collection<ProjectStatus> projectStatuses = ProjectStatus.values()
         for (ProjectStatus projectStatus : projectStatuses) {
-            if(projectStatus != ProjectStatus.DRAFT){
+            if (projectStatus != ProjectStatus.DRAFT) {
                 sorted.add(projectStatus.id)
             }
         }
@@ -475,13 +475,13 @@ class ProjectCommand extends BardCommand {
     String description
     ProjectGroupType projectGroupType = ProjectGroupType.PROJECT
     ProjectStatus projectStatus = ProjectStatus.DRAFT
-
+    CapPermissionService capPermissionService
     SpringSecurityService springSecurityService
     Role ownerRole
 
 
     static constraints = {
-        importFrom(Project, include: ["ownerRole", "name", "description", "groupType", "projectStatus"])
+        importFrom(Project, include: ["name", "description", "groupType", "projectStatus"])
         ownerRole(nullable: false, validator: { value, command, err ->
             /*We make it required in the command object even though it is optional in the domain.
          We will make it required in the domain as soon as we are done back populating the data*/
@@ -498,6 +498,7 @@ class ProjectCommand extends BardCommand {
             Project project = new Project()
             copyFromCmdToDomain(project)
             project.save(flush: true)
+            capPermissionService.addPermission(project, this.ownerRole)
             return project
         }
         return null
@@ -510,8 +511,6 @@ class ProjectCommand extends BardCommand {
         project.description = this.description
         project.dateCreated = new Date()
         project.projectStatus = this.projectStatus
-        project.ownerRole = this.ownerRole
-
     }
 }
 @InheritConstructors

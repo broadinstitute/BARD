@@ -39,7 +39,7 @@
 
             <dt><g:message code="assay.assayShortName.label" default="Fix i18n"/>:</dt>
             <dd id="shortNameId"><g:fieldValue bean="${assay}" field="assayShortName"/></dd>
-            <dt><g:message code="assay.ownerRole.label" default="Owner"/>:</dt>
+            <dt><g:message code="assay.owner.label" default="Owner"/>:</dt>
             <dd>
                 <span
                         class="type"
@@ -47,11 +47,11 @@
                         data-sourceCache="false"
                         id="ownerRoleId"
                         data-type="select"
-                        data-value="${assay?.ownerRole?.displayName}"
+                        data-value="${assay?.owner}"
                         data-source="/BARD/assayDefinition/roles"
                         data-pk="${assay.id}"
                         data-url="/BARD/assayDefinition/editOwnerRole"
-                        data-original-title="Select Owner Role">${assay?.ownerRole?.displayName}</span>
+                        data-original-title="Select Owner Role">${assay?.owner}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="ownerRoleId" title="Click to edit owner role"></a>
             </dd>
 

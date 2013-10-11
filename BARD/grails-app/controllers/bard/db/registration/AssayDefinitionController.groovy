@@ -99,7 +99,7 @@ class AssayDefinitionController {
 
     def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
         try {
-            final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value)?:Role.findByAuthority(inlineEditableCommand.value)
+            final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value) ?: Role.findByAuthority(inlineEditableCommand.value)
             if (!ownerRole) {
                 editBadUserInputErrorMessage("Could not find a registered team with name ${inlineEditableCommand.value}")
                 return
@@ -117,7 +117,7 @@ class AssayDefinitionController {
             //verify that the role is part of the users role
 
             assay = assayDefinitionService.updateOwnerRole(inlineEditableCommand.pk, ownerRole)
-            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.ownerRole.displayName)
+            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, ownerRole.displayName)
 
         }
         catch (AccessDeniedException ade) {
@@ -217,7 +217,7 @@ class AssayDefinitionController {
 
     /**
      * Draft is excluded as End users cannot set a status back to Draft
-     * @return  list of strings representing available status options
+     * @return list of strings representing available status options
      */
     def assayStatus() {
         List<String> sorted = []
@@ -276,6 +276,7 @@ class AssayDefinitionController {
         }
         render(view: "create", model: [assayCommand: assayCommand])
     }
+
     def create(AssayCommand assayCommand) {
         if (!assayCommand) {
             projectCommand: new AssayCommand()
@@ -603,10 +604,12 @@ class EditingHelper {
         render(status: HttpServletResponse.SC_BAD_REQUEST, text: message, contentType: 'text/plain', template: null)
 
     }
+
     def editBadUserInputErrorMessage(String message) {
         render(status: HttpServletResponse.SC_BAD_REQUEST, text: message, contentType: 'text/plain', template: null)
 
     }
+
     def accessDeniedErrorMessage() {
         return [status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null]
     }
@@ -623,13 +626,15 @@ class AssayCommand extends BardCommand {
     AssayType assayType = AssayType.REGULAR
     Role ownerRole
 
+    CapPermissionService capPermissionService
+
     SpringSecurityService springSecurityService
 
 
-    public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['ownerRole', 'assayType', 'assayName', 'assayVersion', 'dateCreated'].asImmutable()
+    public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['assayType', 'assayName', 'assayVersion', 'dateCreated'].asImmutable()
 
     static constraints = {
-        importFrom(Assay, exclude: ['ownerRole', 'assayShortName', 'assayStatus', 'readyForExtraction', 'lastUpdated'])
+        importFrom(Assay, exclude: ['assayShortName', 'assayStatus', 'readyForExtraction', 'lastUpdated'])
         ownerRole(nullable: false, validator: { value, command, err ->
             /*We make it required in the command object even though it is optional in the domain.
          We will make it required in the domain as soon as we are done back populating the data*/
@@ -651,6 +656,7 @@ class AssayCommand extends BardCommand {
             copyFromCmdToDomain(tempAssay)
             if (attemptSave(tempAssay)) {
                 assayToReturn = tempAssay
+                capPermissionService.addPermission(assayToReturn, this.ownerRole)
             }
         }
         return assayToReturn

@@ -4,11 +4,14 @@ import acl.CapPermissionService
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
+import bard.db.people.Role
+import bard.db.project.ExperimentCommand
 import bard.db.project.ExperimentController
 import bard.db.project.InlineEditableCommand
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
+import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
@@ -27,7 +30,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @TestFor(ExperimentController)
 @TestMixin(DomainClassUnitTestMixin)
-@Build([Assay, Experiment])
+@Build([Assay, Experiment, Role])
 class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     @Before
     void setup() {
@@ -37,10 +40,8 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         controller.metaClass.mixin(EditingHelper)
 
         ExperimentService experimentService = Mock(ExperimentService)
-        AssayDefinitionService assayDefinitionService = Mock(AssayDefinitionService)
         controller.capPermissionService = Mock(CapPermissionService)
         controller.experimentService = experimentService
-        controller.assayDefinitionService = assayDefinitionService
     }
 
     void 'test edit optimistic lock failure'() {
@@ -347,7 +348,7 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         assertAccesDeniedErrorMessage()
     }
 
-    void 'test experimentStatus only has Approved and Retired '(){
+    void 'test experimentStatus only has Approved and Retired '() {
         when:
         controller.experimentStatus()
 
@@ -383,19 +384,24 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         response.status == 200
     }
 
+
     def 'test save'() {
         setup:
+        Role role = Role.build(authority: "ROLE_TEAM_A", displayName: "Display")
         Assay assay = Assay.build()
         ExperimentService experimentService = Mock(ExperimentService)
         controller.experimentService = experimentService
-
-        when:
-        params.assayId = assay.id
-        params.experimentName = "name"
-        params.description = "desc"
         params.experimentTree = "[]"
-        params.experimentStatus = 'DRAFT'
-        controller.save()
+        ExperimentCommand experimentCommand =
+            new ExperimentCommand(assayId: assay.id, experimentName: "name", description: "desc", ownerRole: role)
+        experimentCommand.capPermissionService = Mock(CapPermissionService)
+        experimentCommand.springSecurityService = Mock(SpringSecurityService)
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
+            return [role]
+        }
+        when:
+
+        controller.save(experimentCommand)
 
         then:
         1 * experimentService.updateMeasures(_, _)

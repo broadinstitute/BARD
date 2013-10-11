@@ -117,11 +117,11 @@
                                                 data-placeholder="Required"
                                                 id="ownerRoleId"
                                                 data-type="select"
-                                                data-value="${panelInstance?.ownerRole?.displayName}"
+                                                data-value="${panelInstance?.owner}"
                                                 data-source="/BARD/assayDefinition/roles"
                                                 data-pk="${panelInstance.id}"
                                                 data-url="/BARD/panel/editOwnerRole"
-                                                data-original-title="Select Owner Role">${panelInstance?.ownerRole?.displayName}</span>
+                                                data-original-title="Select Owner Role">${panelInstance?.owner}</span>
                                         <a href="#" class="icon-pencil documentPencil ${editable}" data-id="ownerRoleId"
                                            title="Click to edit owner role"></a>
                                     </dd>

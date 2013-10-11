@@ -24,15 +24,16 @@ import spock.lang.Specification
  * To change this template use File | Settings | File Templates.
  */
 @Build([Assay, Measure, Experiment, AssayContextMeasure, AssayContext, ExperimentMeasure, AssayContextItem, AssayDocument, Role])
-@Mock([Assay, Measure, Experiment, ExperimentMeasure, AssayContext, AssayContextMeasure, AssayContextItem, AssayDocument,Role])
+@Mock([Assay, Measure, Experiment, ExperimentMeasure, AssayContext, AssayContextMeasure, AssayContextItem, AssayDocument, Role])
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(AssayDefinitionService)
 public class AssayDefinitionServiceUnitSpec extends Specification {
 
     @Before
     void setup() {
-        Assay.metaClass.isDirty = { return false }
+        service.capPermissionService = Mock(CapPermissionService)
     }
+
     void 'test generateAssayComparisonReport'() {
         setup:
         Assay assayOne = Assay.build()
@@ -68,15 +69,18 @@ public class AssayDefinitionServiceUnitSpec extends Specification {
         then:
         assert newDesignedBy == updatedAssay.designedBy
     }
+
     void "test update owner role"() {
         given:
-        final Assay assay = Assay.build(assayName: 'assayName20', designedBy: "BARD", capPermissionService: Mock(CapPermissionService), ownerRole: Role.build())
-        final Role role = Role.build(authority:"ROLE_TEMA_ZZ")
+        final Assay assay = Assay.build(assayName: 'assayName20', designedBy: "BARD", capPermissionService: Mock(CapPermissionService))
+        final Role role = Role.build(authority: "ROLE_TEAM_ZZ", displayName: "ROLE TEAM ZZ")
         when:
-        final Assay updatedAssay = service.updateOwnerRole(assay.id, role)
+        service.updateOwnerRole(assay.id, role)
         then:
-        assert role == updatedAssay.ownerRole
+        1 * service.capPermissionService.updatePermission(_, _) >> {}
+
     }
+
     void "test update assay name"() {
         given:
         final Assay assay = Assay.build(assayName: 'assayName20', assayStatus: AssayStatus.DRAFT, capPermissionService: Mock(CapPermissionService))

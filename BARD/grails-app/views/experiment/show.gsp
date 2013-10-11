@@ -128,7 +128,21 @@
                    data-id="descriptionId"></a>
             </dd>
 
-            <dt>Owner:</dt><dd>${experimentOwner}</dd>
+            <dt><g:message code="experiment.ownerRole.label" default="Owner"/>:</dt>
+            <dd>
+                <span
+                        class="type"
+                        data-toggle="manual"
+                        data-sourceCache="false"
+                        id="ownerRoleId"
+                        data-type="select"
+                        data-value="${instance?.owner}"
+                        data-source="/BARD/assayDefinition/roles"
+                        data-pk="${instance.id}"
+                        data-url="/BARD/experiment/editOwnerRole"
+                        data-original-title="Select Owner Role">${instance?.owner}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="ownerRoleId" title="Click to edit owner role"></a>
+            </dd>
 
             <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
             <dd>

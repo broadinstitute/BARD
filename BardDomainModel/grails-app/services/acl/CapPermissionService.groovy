@@ -26,29 +26,34 @@ class CapPermissionService implements CapPermissionInterface {
     AclUtilService aclUtilService
     SpringSecurityService springSecurityService
     SpringSecurityUiService springSecurityUiService
-
+    @Deprecated
+    //Call addPermission(domainObjectInstance,Role) instead
     void addPermission(domainObjectInstance) {
 
-        //We require that all newly created objects have an ownerRole
-        //At this time it is not a constraint in the database, but we should make it a constraint after we
-        //back populate this field in all the entities that we can create . At present these entities are
-        //Assay,Project,Panel and Experiments
-        Role role = domainObjectInstance.ownerRole
-        if (!role) {  //Use any team from the user roles, if you don;t find any throw an exception
-            final BardUser bardUser = (BardUser) springSecurityService.principal
-            //use the first team that you can find
-            final Collection<GrantedAuthority> authorities = bardUser.authorities
-            if(authorities){
-                role = (Role)authorities.get(0);
-            }
+        new RuntimeException('Call addPermission(domainObjectInstance,Role) instead')
 
-            if (!role) {
-                throw new RuntimeException("Property ownerRole is a required field!!")
-            }
-        }
+//        //We require that all newly created objects have an ownerRole
+//        //At this time it is not a constraint in the database, but we should make it a constraint after we
+//        //back populate this field in all the entities that we can create . At present these entities are
+//        //Assay,Project,Panel and Experiments
+//        Role role = domainObjectInstance.ownerRole
+//        if (!role) {  //Use any team from the user roles, if you don;t find any throw an exception
+//            final BardUser bardUser = (BardUser) springSecurityService.principal
+//            //use the first team that you can find
+//            final Collection<GrantedAuthority> authorities = bardUser.authorities
+//            if(authorities){
+//                role = (Role)authorities.get(0);
+//            }
+//
+//            if (!role) {
+//                throw new RuntimeException("Property ownerRole is a required field!!")
+//            }
+//        }
+//        addPermission(domainObjectInstance, role, BasePermission.ADMINISTRATION)
+    }
+    void addPermission(domainObjectInstance,role) {
         addPermission(domainObjectInstance, role, BasePermission.ADMINISTRATION)
     }
-
 
 
     void addPermission(domainObjectInstance, Role role, Permission permission) {

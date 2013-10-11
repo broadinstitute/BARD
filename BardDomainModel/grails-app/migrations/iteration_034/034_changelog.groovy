@@ -11,4 +11,7 @@ databaseChangeLog = {
     changeSet(author: "pmontgom", id: "iteration-034/03-add-resultmap-table", dbms: "oracle", context: "standard") {
         sqlFile(path: "iteration_034/03-add-resultmap-table.sql", stripComments: true, endDelimiter: "/")
     }
+    changeSet(author: "jasiedu", id: "iteration-034/04-remove-owner-role-from-entities", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_034/04-remove-owner-role-from-entities.sql", stripComments: true, endDelimiter: "/")
+    }
 }
