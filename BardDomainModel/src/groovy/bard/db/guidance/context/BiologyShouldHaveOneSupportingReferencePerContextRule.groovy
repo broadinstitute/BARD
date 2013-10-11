@@ -2,7 +2,8 @@ package bard.db.guidance.context
 
 import bard.db.guidance.DefaultGuidanceImpl
 import bard.db.guidance.Guidance
-import bard.db.guidance.GuidanceReporter
+import bard.db.guidance.GuidanceAware
+import bard.db.guidance.GuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 
@@ -17,7 +18,7 @@ import bard.db.model.AbstractContextItem
  *   So biological process should try and reference specific biological process term
  *   or a molecular target should try and reference a specifc molecular target term
  */
-class BiologyShouldHaveOneSupportingReferencePerContextRule implements GuidanceReporter {
+class BiologyShouldHaveOneSupportingReferencePerContextRule implements GuidanceRule {
 
     private static final String BIOLOGY_LABEL = 'biology'
     private static final List<String> BIOLOGICAL_PROCESS_LABELS = ['biological process']

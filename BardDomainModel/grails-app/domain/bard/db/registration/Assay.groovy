@@ -9,13 +9,13 @@ import bard.db.enums.hibernate.AssayTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.experiment.Experiment
 import bard.db.guidance.Guidance
-import bard.db.guidance.GuidanceReporter
-import bard.db.guidance.assay.MinimumOfOneBiologyGuidanceRule
+import bard.db.guidance.GuidanceAware
+import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
 
-class  Assay extends AbstractContextOwner implements GuidanceReporter{
+class  Assay extends AbstractContextOwner implements GuidanceAware{
     public static final int ASSAY_NAME_MAX_SIZE = 1000
     private static final int ASSAY_VERSION_MAX_SIZE = 10
     public static final int DESIGNED_BY_MAX_SIZE = 100

@@ -26,26 +26,25 @@ $(document).ready(function () {
     var grailsEvents = new grails.Events("/BARD");
     grailsEvents.on('downTime', function (data) {
         buildDownTimeDiv(data);
-    }, {});
+    });
 
 
     $.ajax({
         type: 'GET',
         url: '/BARD/downTimeScheduler/currentDownTimeInfo',
         success: function (data) {
-            if (data) {   //If there is data then insert it. Otherwise do nothing.
-                buildDownTimeDiv(data);
-            }
-
+            buildDownTimeDiv(data);
         }
     });
     //make an ajax call to find the current scheduled downtime
 
     function buildDownTimeDiv(data) {
-        $("#downtimenotify").notify("create", {
-            title: "Down Time Notification!!",
-            text: data
-        });
+        if (data) {
+            $("#downtimenotify").notify("create", {
+                title: "Down Time Notification!!",
+                text: data
+            });
+        }
     }
 
 });

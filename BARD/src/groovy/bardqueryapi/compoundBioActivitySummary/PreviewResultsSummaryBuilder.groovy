@@ -14,7 +14,8 @@ import org.apache.log4j.Logger
 /**
  * TODO: START WARNING!!!!!
  * NOTE THAT THIS CLASS SHOULD BE REFACTORED TO READ THE RESULT TYPE HIERARCHY
- * FROM THE RESULT_TYPE_TREE IN CAP. RIGHT NOW THE DICTIONARY IDs ARE HARD-CODED AND IF THAT CHANGES THIS FUNCTIONALITY WILL BREAK
+ * FROM THE RESULT_TYPE_TREE IN CAP.
+ * RIGHT NOW SOME OF THE DICTIONARY IDs ARE HARD-CODED AND IF THAT CHANGES THIS FUNCTIONALITY WILL BREAK
  * ALSO NEWLY ADDED RESULT TYPES MAY NOT BE ACCOUNTED FOR. END WARNING!!!!!
  *
  * Created with IntelliJ IDEA.
@@ -22,7 +23,9 @@ import org.apache.log4j.Logger
  *
  */
 class PreviewResultsSummaryBuilder {
-    private Map<Long, ResultTypeTree> resultTypeTreeMap = [:]
+    //Local cache, for mapping result type ids to the ResultType tree. We should consider making it application wide
+
+    private Map<Long, ResultTypeTree> resultTypeTreeCache = [:]
     static final Logger log = Logger.getLogger(PreviewResultsSummaryBuilder.class)
 
     /**
@@ -50,42 +53,68 @@ class PreviewResultsSummaryBuilder {
             new Long(1387)
     ]
 
-
+    /**
+     * Whether this result type represents a dose response curve parameter
+     * @param resultTypeId
+     * @return true/false
+     *
+     *  We assume that if you have a concentration-response curve or concentration end point in your path
+     *  you are a curve fit parameter. This is not always true for concentration endpoint (for e.g logEC50),
+     *  but in that case the context in which it is being used helps
+     */
     protected boolean isCurveFitParameter(final Long resultTypeId) {
-        ResultTypeTree resultTypeTree = addOrFindResultTypeTree(resultTypeId)
+        ResultTypeTree resultTypeTree = addOrFindResultTypeTreeToCache(resultTypeId)
         if (resultTypeTree) {
-            if (resultTypeTree.fullPath.contains("concentration endpoint") ||
-                    resultTypeTree.fullPath.contains("concentration-response curve")) {
+            if (resultTypeTree.fullPath.toUpperCase().contains("CONCENTRATION ENDPOINT") ||
+                    resultTypeTree.fullPath.toUpperCase().contains("CONCENTRATION-RESPONSE CURVE")) {
                 return true
             }
         }
         return false
     }
-
-    protected ResultTypeTree addOrFindResultTypeTree(final Long resultTypeId) {
-        ResultTypeTree resultTypeTree = this.resultTypeTreeMap.get(resultTypeId)
+    /**
+     * Lets find the ResultTypeTree from the cache, if it does not exists lets get it from the database
+     * and add it to the local cache
+     * @param resultTypeId
+     * @return
+     */
+    protected ResultTypeTree addOrFindResultTypeTreeToCache(final Long resultTypeId) {
+        ResultTypeTree resultTypeTree = this.resultTypeTreeCache.get(resultTypeId)
         if (!resultTypeTree) {
             Element element = Element.get(resultTypeId)
             if (element) {
                 resultTypeTree = ResultTypeTree.findByElementAndLeaf(element, true)
-                this.resultTypeTreeMap.put(resultTypeId, resultTypeTree)
+                this.resultTypeTreeCache.put(resultTypeId, resultTypeTree)
             }
         }
         return resultTypeTree
     }
     /**
-     * Here we only look for things with 'percent response' in its path.
+     * If this resultTypeId references a pubchem outcome.
+     * @param resultTypeId
+     * @return true/false
+     */
+    protected boolean isPubChemOutcome(Long resultTypeId) {
+        ResultTypeTree resultTypeTree = addOrFindResultTypeTreeToCache(resultTypeId)
+        if (resultTypeTree) {
+            if (resultTypeTree.label.toUpperCase().contains("PUBCHEM OUTCOME")) {
+                return true
+            }
+        }
+        return false
+    }
+    /**
+     * Here we only look for things with 'percent response' or 'percent endpoint' in its path.
      * NOTE that this is not a scaleable solution at all.
      *
      * We are thinking of changing the model so that the jsonresult object contains enough information for
      * us to not have to resort to this hack. However, this should work for most cases, since most pubchem assays
      * fits this hack
-     * @param resultTypeIdToLabelMap
      * @param resultTypeId
-     * @return
+     * @return true/false
      */
     protected boolean isPercentResponse(Long resultTypeId) {
-        ResultTypeTree resultTypeTree = addOrFindResultTypeTree(resultTypeId)
+        ResultTypeTree resultTypeTree = addOrFindResultTypeTreeToCache(resultTypeId)
         if (resultTypeTree) {
             if (resultTypeTree.fullPath.toUpperCase().contains("RESPONSE ENDPOINT") &&
                     resultTypeTree.fullPath.toUpperCase().contains("PERCENT RESPONSE")) {
@@ -119,7 +148,7 @@ class PreviewResultsSummaryBuilder {
         }
     }
     /**
-     * Convert the list of jsonResults to Dose Response Curve values
+     * Convert the list of jsonResults to Dose Response Curve points
      * @param jsonResults
      * @return
      */
@@ -134,7 +163,7 @@ class PreviewResultsSummaryBuilder {
         for (JsonResult jsonResult : jsonResults) {
             final Long resultTypeId = jsonResult.resultTypeId
             if (isCurveFitParameter(resultTypeId)) {
-                setCurveFitParameters(curveFitParameters, resultTypeTreeMap.get(resultTypeId), jsonResult)
+                setCurveFitParameters(curveFitParameters, resultTypeTreeCache.get(resultTypeId), jsonResult)
             } else if (jsonResult.valueNum && jsonResult.contextItems) {
                 final float activity = jsonResult.valueNum
                 final List<JsonResultContextItem> items = jsonResult.getContextItems()
@@ -169,8 +198,8 @@ class PreviewResultsSummaryBuilder {
     }
 
 
-    protected ConcentrationResponseSeriesValue handleHighPriorityElements(final JsonResult jsonResult, List<WebQueryValue> childElements = [], Double yNormMin = null,
-                                                                          Double yNormMax = null) {
+    protected ConcentrationResponseSeriesValue handleConcentrationResponsePoints(final JsonResult jsonResult, List<WebQueryValue> childElements = [], Double yNormMin = null,
+                                                                                 Double yNormMax = null) {
         final Long dictionaryId = jsonResult.resultTypeId
         Pair<StringValue, StringValue> title =
             new ImmutablePair<StringValue, StringValue>(new StringValue(value: jsonResult.resultType), new StringValue(value: jsonResult.valueNum))
@@ -216,7 +245,7 @@ class PreviewResultsSummaryBuilder {
 
         final Long resultTypeId = jsonResult.resultTypeId
         if (HIGH_PRIORITY_DICT_ELEM.contains(resultTypeId)) { //TODO: refactor to read from Result_Type_Tree . We need the elements that could contain dose curves
-            values << handleHighPriorityElements(jsonResult, childElements, yNormMin, yNormMax)
+            values << handleConcentrationResponsePoints(jsonResult, childElements, yNormMin, yNormMax)
         } else if (isPercentResponse(resultTypeId)) {
             values << handleEfficacyMeasures(jsonResult)
         } else {  //everything else is a child element
@@ -235,7 +264,6 @@ class PreviewResultsSummaryBuilder {
             dictionaryElement = new LinkValue(value: "/BARD/dictionaryTerms/#${jsonResult.resultTypeId}")
         }
         return new PairValue(value: pair, dictionaryElement: dictionaryElement)
-
     }
 
     protected List<WebQueryValue> contextItemsToChildElements(List<JsonResultContextItem> jsonResultContextItems) {
@@ -246,26 +274,24 @@ class PreviewResultsSummaryBuilder {
         return childElements
     }
     /**
-     * Map an experiment (exptData) into a list of table-model 'Values'.
-     * The main result data is in the experiment's priority elements.
-     * @param exptData
-     * @param outcomeFacetMap a pass-through collection to generate facets that match the different priority-element types (i.e., result-types) we have in the experiment data.
+     *
+     * @param rootElements
+     * @param yNormMin
+     * @param yNormMax
      * @return
      */
-    public Map convertCapExperimentResultsToValues(List<JsonResult> rootElements,
-                                                   Double yNormMin = null,
-                                                   Double yNormMax = null) {
-
-
+    public Map convertExperimentResultsToTableModelCellsAndRows(List<JsonResult> rootElements,
+                                                                Double yNormMin = null,
+                                                                Double yNormMax = null) {
         List<WebQueryValue> values = []
         List<WebQueryValue> childElements = []
 
         StringValue outcome = null
 
         for (JsonResult jsonResult : rootElements) {
-
-            final long dictionaryId = jsonResult.resultTypeId
-            if (dictionaryId == 896) { //this is the outcome result type. TODO: refactor, read from database
+            final long resultTypeId = jsonResult.resultTypeId
+            if (isPubChemOutcome(resultTypeId)) { //what we actually need is everything at the root of the measures tree
+                // that is not a Concentration/response endpoint so that we can display it in a column
                 outcome = new StringValue(value: jsonResult.valueDisplay)
 
                 for (JsonResult relatedElements : jsonResult.related) {
@@ -281,7 +307,6 @@ class PreviewResultsSummaryBuilder {
                 }
             }
         }
-
         final List<WebQueryValue> sortedValues = sortWebQueryValues(values)
         return [experimentalvalues: sortedValues, outcome: outcome, childElements: childElements]
     }
