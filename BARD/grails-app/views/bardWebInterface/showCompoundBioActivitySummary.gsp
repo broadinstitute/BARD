@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta name="layout" content="basic"/>
-    <title>BARD : Compound Bio-Activity Summary: ${tableModel?.additionalProperties?.id}</title>
+    <title>CID ${tableModel?.additionalProperties?.id}: Compound Bio-Activity Summary</title>
     <r:require modules="experimentData, cbas, core"/>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <r:script>

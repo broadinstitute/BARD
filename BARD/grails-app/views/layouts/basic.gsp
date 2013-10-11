@@ -3,12 +3,15 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>BARD: <g:layoutTitle default="BioAssay Research Database"/></title>
+    <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
     <g:layoutHead/>
 
-    <title>BARD: Catalog of Assay Protocols</title>
     <r:require modules="basic,bootstrap,autocomplete,cart,idSearch,jquerynotifier,downtime"/>
     <%@ page import="bardqueryapi.IDSearchType" %>
     <r:layoutResources/>
+    <ga:trackPageview />
+
 
 </head>
 

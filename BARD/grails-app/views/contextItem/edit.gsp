@@ -4,7 +4,7 @@
 <head>
     <r:require modules="core,bootstrap,contextItem,handlebars"/>
     <meta name="layout" content="basic"/>
-    <title>Edit ContextItem</title>
+    <title>Edit Context Item</title>
 
 </head>
 

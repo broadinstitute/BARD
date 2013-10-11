@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="layout" content="basic"/>
-    <title>BARD : Preview Experiment Result : ${tableModel.additionalProperties.capExptId}</title>
+    <title>EID ${tableModel.additionalProperties.capExptId}: Preview of Experimental Results</title>
     <r:require modules="experimentData, histogram, bootstrap, compoundOptions, cbas"/>
 
 </head>

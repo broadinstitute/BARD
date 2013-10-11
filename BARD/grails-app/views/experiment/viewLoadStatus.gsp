@@ -5,7 +5,7 @@
     <r:require modules="core,bootstrap"/>
     <meta name="layout" content="basic"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>Show Experiment</title>
+    <title>Loading Experiment</title>
 </head>
 
 <body>

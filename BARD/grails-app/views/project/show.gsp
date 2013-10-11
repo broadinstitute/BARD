@@ -11,7 +11,7 @@
 <html>
 <head>
     <meta name="layout" content="basic"/>
-    <title>BARD : Project : ID : ${instance?.id}</title>
+    <title>PID ${instance?.id}: ${instance?.name}</title>
     <r:require
             modules="core,bootstrap,select2,accessontology,twitterBootstrapAffix,xeditable,assayshow,richtexteditorForEdit,projectsummary,canEditWidget,projectstep,compoundOptions"/>
 </head>

@@ -4,7 +4,7 @@
 <head>
     <r:require modules="core,bootstrap,contextItem,handlebars"/>
     <meta name="layout" content="basic"/>
-    <title>Create Assay Document</title>
+    <title>Create Context Item</title>
 </head>
 
 <body>

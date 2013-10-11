@@ -4,7 +4,7 @@
 <head>
     <r:require modules="core,bootstrap,twitterBootstrapAffix"/>
     <meta name="layout" content="basic"/>
-    <title>People</title>
+    <title>Edit ${personCommand?.username}</title>
 </head>
 
 <body>
