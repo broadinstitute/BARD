@@ -440,8 +440,7 @@ class PubchemReformatService {
         }
     }
 
-    public Map convertPubchemRowToMap(PubchemHeader header, List<String> row) {
-        String outcome = row[header.outcomeColumn]
+    protected mapOutcomeToString(String outcome) {
         if (!StringUtils.isBlank(outcome) && !pubchemOutcomeValues.contains(outcome)) {
             String origOutcome = outcome
             outcome = pubchemOutcomeTranslation[origOutcome];
@@ -449,13 +448,23 @@ class PubchemReformatService {
                 throw new RuntimeException("Did not know the name of a pubchem outcome: ${origOutcome}");
             }
         }
+        return outcome
+    }
+
+    public Map convertPubchemRowToMap(PubchemHeader header, List<String> row, String outcomeTidOverride) {
         String activity = row[header.activityColumn]
 
         Map pubchemRow = [:]
-        pubchemRow["-1"] = outcome
+        pubchemRow["-1"] = mapOutcomeToString(row[header.outcomeColumn])
         pubchemRow["0"] = activity
         for (int i = 0; i < header.headers.size(); i++) {
-            pubchemRow[header.headers[i]] = row[i]
+            String tid = header.headers[i]
+            String value = row[i]
+            if(tid.equals(outcomeTidOverride)) {
+                pubchemRow["-1"] = mapOutcomeToString(value)
+            } else {
+                pubchemRow[tid] = value
+            }
         }
         return pubchemRow;
     }
@@ -488,13 +497,21 @@ class PubchemReformatService {
 
         Collection<ExperimentMeasure> rootMeasures = experiment.experimentMeasures.findAll { it.parent == null }
 
+        String overrideOutcomeTid = null;
+        // check to see if this experiment has an outcome specific to it.
+        map.allRecords.each {
+            if (it.resultType == "PubChem outcome" && it.eid == experiment.id) {
+                overrideOutcomeTid = it.tid
+            }
+        }
+
         while (true) {
             List<String> row = reader.readNext()
             if (row == null)
                 break
 
             Long substanceId = Long.parseLong(row[header.sidColumn])
-            Map pubchemRow = convertPubchemRowToMap(header, row);
+            Map pubchemRow = convertPubchemRowToMap(header, row, overrideOutcomeTid);
 
             naMissingValues(pubchemRow, map)
             convertRow(rootMeasures, substanceId, pubchemRow, map, writer, null, null, experiment.id)

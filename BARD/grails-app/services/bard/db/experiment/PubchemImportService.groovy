@@ -73,7 +73,7 @@ class PubchemImportService {
 
             if (forceConvertPubchem || !(new File(capFile).exists())) {
                 statusCallback("Converting pubchem file...")
-                log.error("Converting pubchem file ${pubchemFile} -> ${capFile}")
+                log.warn("Converting pubchem file ${pubchemFile} -> ${capFile}")
                 try {
                     pubchemReformatService.convert(eid, pubchemFile, capFile)
                 } catch (Exception ex) {

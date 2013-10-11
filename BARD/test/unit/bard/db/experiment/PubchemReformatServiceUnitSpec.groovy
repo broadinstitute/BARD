@@ -237,7 +237,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         when:
         Map map = service.convertPubchemRowToMap(
                 new PubchemHeader(["PUBCHEM_SID", "PUBCHEM_EXT_DATASOURCE_REGID", "PUBCHEM_CID", "PUBCHEM_ACTIVITY_OUTCOME", "PUBCHEM_ACTIVITY_SCORE", "PUBCHEM_ACTIVITY_URL", "PUBCHEM_ASSAYDATA_COMMENT", "PUBCHEM_ASSAYDATA_REVOKE", "1", "2"]),
-                ["85789806", "", "44483406", "1", "0", "", "", "", "-1.483", "5"])
+                ["85789806", "", "44483406", "1", "0", "", "", "", "-1.483", "5"], null)
 
         then:
         map["-1"] == "Inactive"
