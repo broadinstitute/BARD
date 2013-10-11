@@ -19,7 +19,13 @@ class AssayContextConstraintIntegrationSpec extends AbstractContextConstraintInt
 
     @Before
     void doSetup() {
-        Assay assay = Assay.build().save(flush: true)
+        Role role = Role.findByAuthority("authority")
+        if (!role) {
+            role = Role.build(authority: "authority")
+        }
+
+
+        Assay assay = Assay.build(ownerRole: role).save(flush: true)
         domainInstance = AssayContext.buildWithoutSave(assay: assay)
     }
 
@@ -42,9 +48,9 @@ class AssayContextConstraintIntegrationSpec extends AbstractContextConstraintInt
          * build methods to the domains so, defering running it by nesting in a closure
          */
         where:
-        desc             | valueUnderTest    | valid | errorCode
-        'null not valid' | { null }          | false | 'nullable'
-        'valid assay'    | { Assay.build() } | true  | null
+        desc             | valueUnderTest                           | valid | errorCode
+        'null not valid' | { null }                                 | false | 'nullable'
+        'valid assay'    | { Assay.build(ownerRole: Role.build()) } | true  | null
 
     }
 

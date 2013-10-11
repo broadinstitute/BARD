@@ -63,7 +63,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             if (!otherRole) {
                 otherRole = Role.build(authority: 'ROLE_TEAM_B', displayName: 'ROLE_TEAM_B').save(flush: true)
             }
-            Project project = Project.build(name: "Some Name2").save(flush: true)
+            Project project = Project.build(name: "Some Name2", ownerRole: role).save(flush: true)
             Element element = Element.findByLabel('ProjectControllerACLFunctionalSpec') ?: Element.build(label: 'ProjectControllerACLFunctionalSpec')
             StageTree.build(element: element).save(flush: true)
 

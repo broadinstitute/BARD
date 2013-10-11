@@ -1,6 +1,5 @@
 package bard.db.project
 
-import acl.CapPermissionService
 import bard.db.enums.ProjectStatus
 import bard.db.people.Role
 import grails.buildtestdata.mixin.Build
@@ -18,21 +17,17 @@ import spock.lang.Specification
  * Time: 2:07 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Project, Role])
-@Mock([Project, Role])
+@Build([Project,Role])
+@Mock([Project,Role])
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(ProjectService)
 public class ProjectServiceUnitSpec extends Specification {
-    CapPermissionService capPermissionService
 
     @Before
     void setup() {
-        capPermissionService = Mock(CapPermissionService)
-        service.capPermissionService = capPermissionService
-
+        Project.metaClass.isDirty = { return false }
     }
-
-    void "test update project name"() {
+    void "test update project name"(){
         given:
         final Project project = Project.build(name: 'projectName10', description: "desc789")
         final String newName = "desc9099"
@@ -41,19 +36,16 @@ public class ProjectServiceUnitSpec extends Specification {
         then:
         assert newName == updatedProject.name
     }
-
-    void "test update owner role"() {
+    void "test update owner role"(){
         given:
-
-        final Project project = Project.build(name: 'projectName10', description: "desc789")
-        Role newRole = Role.build(authority: "ROLE_TEAM_ZY", displayName: "ROLE TEAM ZY")
+        final Project project = Project.build(name: 'projectName10', description: "desc789", ownerRole: Role.build(authority:  "ROLE_TEAM_YY"))
+        Role newRole = Role.build(authority: "ROLE_TEAM_ZY")
         when:
         final Project updatedProject = service.updateOwnerRole(project.id, newRole)
         then:
-        1* service.capPermissionService.updatePermission(_,_)>>{}
-       }
-
-    void "test update project description"() {
+        assert newRole == updatedProject.ownerRole
+    }
+    void "test update project description"(){
         given:
         final Project project = Project.build(name: 'projectName10', description: "desc789")
         final String newDescription = "desc9099"
@@ -62,7 +54,6 @@ public class ProjectServiceUnitSpec extends Specification {
         then:
         assert newDescription == updatedProject.description
     }
-
     void "test update project status"() {
         given:
         final Project project = Project.build(name: 'projectName10', projectStatus: ProjectStatus.DRAFT)

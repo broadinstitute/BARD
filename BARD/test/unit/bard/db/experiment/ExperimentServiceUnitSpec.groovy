@@ -40,6 +40,35 @@ public class ExperimentServiceUnitSpec extends Specification {
         assert createdTableModel
     }
 
+    void 'test create experiment'() {
+        given:
+        mockDomain(Experiment)
+        Measure parent = Measure.build()
+        Measure child = Measure.build(parentMeasure: parent)
+        Assay assay = Assay.build(measures: [parent, child] as Set)
+
+        when:
+        Experiment experiment = service.createNewExperiment(assay.id, "name", "desc")
+
+        then:
+        experiment.experimentName == "name"
+        experiment.description == "desc"
+        experiment.assay == assay
+        experiment.experimentMeasures.size() == 2
+
+        when:
+        ExperimentMeasure parentExpMeasure = experiment.experimentMeasures.find { it.parent == null }
+
+        then:
+        parentExpMeasure != null
+
+        when:
+        ExperimentMeasure childExpMeasure = experiment.experimentMeasures.find { it.parent == parentExpMeasure }
+
+        then:
+        childExpMeasure != null
+        childExpMeasure.parentChildRelationship == HierarchyType.SUPPORTED_BY
+    }
 
     void 'update measures'() {
         given:

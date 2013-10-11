@@ -57,7 +57,6 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
             return [role]
         }
-        panelCommand.capPermissionService = Mock(CapPermissionService)
         when:
         controller.save(panelCommand)
         then:
@@ -141,10 +140,10 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         given:
         Role roleB = Role.build(authority: "ROLE_TEAM_B", displayName: "displayName");
 
-        Panel newPanel = Panel.build(version: 0, name: "My Name")  //no designer
-        Panel updatedPanel = Panel.build(name: "My New Name", version: 1, lastUpdated: new Date())
+        Panel newPanel = Panel.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
+        Panel updatedPanel = Panel.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: roleB)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newPanel.id,
-                version: newPanel.version, name: newPanel.name, value: roleB.displayName)
+                version: newPanel.version, name: newPanel.name, value: updatedPanel.ownerRole.displayName)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
             return [this.role,roleB]
         }
@@ -157,18 +156,18 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
 
         assert responseJSON.get("version").asText() == "0"
-        assert responseJSON.get("data").asText() == roleB.displayName
+        assert responseJSON.get("data").asText() == updatedPanel.ownerRole.displayName
         assert responseJSON.get("lastUpdated").asText()
         assert response.contentType == "text/json;charset=utf-8"
     }
     void 'test edit Panel owner new role not in list - fail'() {
         given:
-        Panel newPanel = Panel.build(version: 0, name: "My Name")  //no designer
+        Panel newPanel = Panel.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
 
         Role notInUsersRole = Role.build(authority: "ROLE_TEAM_C", displayName: "displayName");
-        Panel updatedPanel = Panel.build(name: "My New Name", version: 1, lastUpdated: new Date())
+        Panel updatedPanel = Panel.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: notInUsersRole)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newPanel.id,
-                version: newPanel.version, name: newPanel.name, value: notInUsersRole.displayName)
+                version: newPanel.version, name: newPanel.name, value: updatedPanel.ownerRole.displayName)
         when:
         controller.editOwnerRole(inlineEditableCommand)
         then:
@@ -178,13 +177,13 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     void 'test edit Panel owner role - access denied'() {
         given:
         accessDeniedRoleMock()
-        Panel newPanel = Panel.build(version: 0, name: "My Name")  //no designer
+        Panel newPanel = Panel.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
 
         Role roleB = Role.build(authority: "ROLE_TEAM_B", displayName: "displayName");
-        Panel updatedPanel = Panel.build(name: "My New Name", version: 1, lastUpdated: new Date())
+        Panel updatedPanel = Panel.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: roleB)
 
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newPanel.id,
-                version: newPanel.version, name: newPanel.name, value: roleB.displayName)
+                version: newPanel.version, name: newPanel.name, value: updatedPanel.ownerRole.displayName)
         when:
         controller.editPanelName(inlineEditableCommand)
         then:
@@ -195,13 +194,13 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     void 'test edit Panel owner role with errors'() {
         given:
 
-        Panel newPanel = Panel.build(version: 0, name: "My Name")  //no designer
+        Panel newPanel = Panel.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
 
         Role roleB = Role.build(authority: "ROLE_TEAM_B", displayName: "displayName");
-        Panel updatedPanel = Panel.build(name: "My New Name", version: 1, lastUpdated: new Date())
+        Panel updatedPanel = Panel.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: roleB)
 
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newPanel.id,
-                version: newPanel.version, name: newPanel.name, value: roleB.displayName)
+                version: newPanel.version, name: newPanel.name, value: updatedPanel.ownerRole.displayName)
 
         controller.metaClass.message = { Map p -> return "foo" }
 

@@ -51,7 +51,6 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
     SpringSecurityService springSecurityService
     Role role
     Role otherRole
-
     @Before
     void setup() {
         SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
@@ -64,7 +63,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         this.role = Role.build(authority: "ROLE_TEAM_A")
         this.otherRole = Role.build(authority: "ROLE_TEAM_B", displayName: "displayName");
 
-        project = Project.build()
+        project = Project.build(ownerRole: role)
         Element element1 = Element.build(label: "primary assay")
         Element element2 = Element.build(label: "secondary assay")
         stageTree1 = StageTree.build(element: element1)
@@ -99,11 +98,10 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
         given:
         projectCommand.springSecurityService = controller.springSecurityService
-        projectCommand.capPermissionService =controller.capPermissionService
 
         projectCommand.ownerRole = this.role
-        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
-            return [this.role, this.otherRole]
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
+            return [this.role,this.otherRole]
         }
         when:
 
@@ -167,14 +165,14 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test edit Project owner success'() {
         given:
-        Project newProject = Project.build(version: 0, name: "My Name")  //no designer
+        Project newProject = Project.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
 
 
-        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date())
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: this.otherRole)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
-                version: newProject.version, name: newProject.name, value: this.otherRole.displayName)
-        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
-            return [this.role, this.otherRole]
+                version: newProject.version, name: newProject.name, value: updatedProject.ownerRole.displayName)
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
+            return [this.role,this.otherRole]
         }
         when:
         controller.editOwnerRole(inlineEditableCommand)
@@ -185,36 +183,35 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
 
         assert responseJSON.get("version").asText() == "0"
-        assert responseJSON.get("data").asText() == this.otherRole.displayName
+        assert responseJSON.get("data").asText() == updatedProject.ownerRole.displayName
         assert responseJSON.get("lastUpdated").asText()
         assert response.contentType == "text/json;charset=utf-8"
     }
 
     void 'test edit Project owner new role not in list - fail'() {
         given:
-        Project newProject = Project.build(version: 0, name: "My Name")  //no designer
+        Project newProject = Project.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
 
         Role notInUsersRole = Role.build(authority: "ROLE_TEAM_C", displayName: "displayName");
-        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date())
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: notInUsersRole)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
-                version: newProject.version, name: newProject.name, value: this.otherRole.displayName)
+                version: newProject.version, name: newProject.name, value: updatedProject.ownerRole.displayName)
         when:
         controller.editOwnerRole(inlineEditableCommand)
         then:
         assert response.status == HttpServletResponse.SC_BAD_REQUEST
 
     }
-
     void 'test edit Project owner - access denied'() {
         given:
         accessDeniedRoleMock()
-        Project newProject = Project.build(version: 0, name: "My Name")
-        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date())
+        Project newProject = Project.build(version: 0, name: "My Name", ownerRole: this.role)
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: this.otherRole)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
-                version: newProject.version, name: newProject.name, value: this.otherRole.displayName)
+                version: newProject.version, name: newProject.name, value: updatedProject.ownerRole.displayName)
 
-        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
-            return [this.role, this.otherRole]
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
+            return [this.role,this.otherRole]
         }
         when:
         controller.editOwnerRole(inlineEditableCommand)
@@ -328,7 +325,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.text
     }
 
-    void 'test projectStatus only has Approved and Retired '() {
+    void 'test projectStatus only has Approved and Retired '(){
         when:
         controller.projectStatus()
 

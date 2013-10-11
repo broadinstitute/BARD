@@ -13,7 +13,7 @@ import bard.db.guidance.GuidanceAware
 import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
-
+import bard.db.people.Role
 
 class  Assay extends AbstractContextOwner implements GuidanceAware{
     public static final int ASSAY_NAME_MAX_SIZE = 1000
@@ -54,12 +54,13 @@ class  Assay extends AbstractContextOwner implements GuidanceAware{
     Set<AssayDocument> assayDocuments = [] as Set<AssayDocument>
     Set<PanelAssay> panelAssays = [] as Set
 
+    Role ownerRole //The team that owns this object. This is used by the ACL to allow edits etc
 
     // if this is set, then don't automatically update readyForExtraction when this entity is dirty
     // this is needed to change the value to anything except "Ready"
     boolean disableUpdateReadyForExtraction = false
 
-
+    static belongsTo = [ownerRole: Role]
     static hasMany = [
             experiments: Experiment,
             measures: Measure,
@@ -82,6 +83,7 @@ class  Assay extends AbstractContextOwner implements GuidanceAware{
         assayType(nullable: false)
         dateCreated(nullable: false)
         lastUpdated(nullable: false)
+        ownerRole(nullable:true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
@@ -92,13 +94,38 @@ class  Assay extends AbstractContextOwner implements GuidanceAware{
         assayType(type: AssayTypeEnumUserType)
         assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true', cascade: 'all-delete-orphan')
     }
-    static transients = ['fullyValidateContextItems', 'assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions', "disableUpdateReadyForExtraction"]
+    boolean hasOwnerRoleChanged //Transient bit that is set to true, if the ownerRole is updated
+    static transients = ['hasOwnerRoleChanged','fullyValidateContextItems', 'assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions', "disableUpdateReadyForExtraction"]
 
-
-    String getOwner() {
+    def afterInsert() {
         Assay.withNewSession {
-            return capPermissionService?.getOwner(this)
+            capPermissionService?.addPermission(this)
         }
+    }
+    def afterUpdate(){
+        Assay.withNewSession {
+            if(this.hasOwnerRoleChanged){ //update owner role if it changed
+                capPermissionService.updatePermission(this,this.ownerRole)
+
+                //TODO: update the permission on all the child experiments
+                for(Experiment experiment: this.experiments){
+                    capPermissionService.updatePermission(experiment,this.ownerRole)
+                }
+            }
+
+        }
+    }
+
+    def beforeUpdate()
+    {
+        // check if an actual change has been made and ownerRole has been changed
+        if(this.isDirty() && this.getDirtyPropertyNames().contains("ownerRole"))
+        {
+            this.hasOwnerRoleChanged = true//set this true if the ownerRole has been updated
+         }
+    }
+    String getOwner() {
+       return this.ownerRole?.displayName
     }
 
     List<AssayDocument> getPublications() {

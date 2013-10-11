@@ -15,14 +15,14 @@ CapPermissionService capPermissionService = ctx.capPermissionService
 List<String> notFound = []
 try {
     SpringSecurityUtils.reauthenticate('integrationTestUser', null)
-    final List<Assay> assays = []
+    final List<Assay> assays = Assay.findAllByOwnerRoleIsNull()
     for (Assay assay : assays) {
         String roleDisplayName = capPermissionService.getOwner(assay)
         Role role = Role.findByDisplayName(roleDisplayName)
         if (!role) {
             notFound.add("Could not find Role with display name ${roleDisplayName} and assay id ${assay.id}")
         } else {
-
+            assay.ownerRole = role
            
         }
 

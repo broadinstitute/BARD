@@ -58,7 +58,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         controller.queryService = Mock(QueryService)
 
         this.role = Role.build(authority: "ROLE_TEAM_Y", displayName: "TEAM Y")
-        assay = Assay.build(assayName: 'Test')
+        assay = Assay.build(assayName: 'Test', ownerRole: this.role)
         assert assay.validate()
     }
 
@@ -69,12 +69,9 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
             return [role]
         }
-        assayCommand.capPermissionService = controller.capPermissionService
         when:
-
         controller.save(assayCommand)
         then:
-        controller.capPermissionService.addPermission(_,_)>>{}
         assert controller.response.redirectedUrl.startsWith("/assayDefinition/show/")
     }
 

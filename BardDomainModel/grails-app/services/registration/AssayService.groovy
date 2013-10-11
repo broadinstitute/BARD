@@ -51,6 +51,16 @@ class AssayService {
         if (newAssay.assayType == AssayType.TEMPLATE) { //convert templates to regular
             newAssay.assayType = AssayType.REGULAR
         }
+        final Collection<Role> authorities = SpringSecurityUtils.getPrincipalAuthorities()
+        for (Role role : authorities) {
+            if (role.authority?.startsWith("ROLE_TEAM_")) {
+                Role foundRole = Role.findByAuthority(role.authority)
+                if(foundRole){
+                    newAssay.ownerRole = foundRole
+                    break
+                }
+            }
+        }
         newAssay.save(flush: true, validate: false)
 
 

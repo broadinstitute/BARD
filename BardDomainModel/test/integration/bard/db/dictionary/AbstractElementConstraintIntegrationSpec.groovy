@@ -2,6 +2,7 @@ package bard.db.dictionary
 
 import bard.db.BardIntegrationSpec
 import bard.db.enums.ReadyForExtraction
+import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
 import spock.lang.Shared
 import spock.lang.Unroll

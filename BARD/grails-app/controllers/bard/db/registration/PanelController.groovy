@@ -188,7 +188,7 @@ class PanelController {
                 return
             }
             panel = panelService.updatePanelOwnerRole(inlineEditableCommand.pk,ownerRole)
-            generateAndRenderJSONResponse(panel.version, panel.modifiedBy, "", panel.lastUpdated,ownerRole.displayName)
+            generateAndRenderJSONResponse(panel.version, panel.modifiedBy, "", panel.lastUpdated, panel.ownerRole.displayName)
 
         }
         catch (AccessDeniedException ade) {
@@ -264,7 +264,6 @@ class AssociatePanelCommand extends BardCommand {
     Long id
     String assayIds
     def PermissionEvaluator
-
     SpringSecurityService springSecurityService
 
     AssociatePanelCommand() {}
@@ -322,7 +321,7 @@ class PanelCommand extends BardCommand {
     String description
     SpringSecurityService springSecurityService
     Role ownerRole
-    CapPermissionService  capPermissionService
+
     static constraints = {
         importFrom(Panel, exclude: ['ownerRole', 'readyForExtraction', 'lastUpdated', 'dateCreated'])
         ownerRole(nullable: false, validator: { value, command, err ->
@@ -346,7 +345,6 @@ class PanelCommand extends BardCommand {
             copyFromCmdToDomain(tempPanel)
             if (attemptSave(tempPanel)) {
                 panelToReturn = tempPanel
-                capPermissionService.addPermission(panelToReturn,this.ownerRole)
             }
         }
         return panelToReturn
@@ -358,5 +356,6 @@ class PanelCommand extends BardCommand {
         panel.modifiedBy = springSecurityService.principal?.username
         panel.name = this.name
         panel.description = this.description
+        panel.ownerRole = this.ownerRole
     }
 }

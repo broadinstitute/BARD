@@ -61,11 +61,11 @@
                         data-placeholder="Required"
                         id="ownerRoleId"
                         data-type="select"
-                        data-value="${project?.owner}"
+                        data-value="${project?.ownerRole?.displayName}"
                         data-source="/BARD/assayDefinition/roles"
                         data-pk="${project.id}"
                         data-url="/BARD/project/editOwnerRole"
-                        data-original-title="Select Owner Role">${project?.owner}</span>
+                        data-original-title="Select Owner Role">${project?.ownerRole?.displayName}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="ownerRoleId" title="Click to edit owner role"></a>
             </dd>
             %{--<dt>Owner:</dt><dd>${projectOwner}</dd>--}%

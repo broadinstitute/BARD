@@ -30,17 +30,17 @@ class MinimumOfOneBiologyGuidanceRule implements GuidanceRule {
     @TypeChecked
     List<Guidance> getGuidance() {
         final List<Guidance> guidance = []
-//        List<AbstractContextItem> itemsWithAttributeOfBiology = []
-//        for (AbstractContext context in owner.contexts) {
-//            for (AbstractContextItem item in context.contextItems) {
-//                if (item.attributeElement.label == BIOLOGY_LABEL) {
-//                    itemsWithAttributeOfBiology.add(item)
-//                }
-//            }
-//        }
-//        if (itemsWithAttributeOfBiology.isEmpty()) {
-//            guidance.add(new DefaultGuidanceImpl(ONE_BIOLOGY_ATTRIBUTE_REQUIRED))
-//        }
+        List<AbstractContextItem> itemsWithAttributeOfBiology = []
+        for (AbstractContext context in owner.contexts) {
+            for (AbstractContextItem item in context.contextItems) {
+                if (item.attributeElement.label == BIOLOGY_LABEL) {
+                    itemsWithAttributeOfBiology.add(item)
+                }
+            }
+        }
+        if (itemsWithAttributeOfBiology.isEmpty()) {
+            guidance.add(new DefaultGuidanceImpl(ONE_BIOLOGY_ATTRIBUTE_REQUIRED))
+        }
         guidance
     }
 }

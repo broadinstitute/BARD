@@ -11,6 +11,7 @@ import bard.db.guidance.GuidanceAware
 import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
+import bard.db.people.Role
 import bard.db.registration.ExternalReference
 
 class Project extends AbstractContextOwner  implements GuidanceAware{
@@ -39,8 +40,11 @@ class Project extends AbstractContextOwner  implements GuidanceAware{
     // if this is set, then don't automatically update readyForExtraction when this entity is dirty
     // this is needed to change the value to anything except "Ready"
     boolean disableUpdateReadyForExtraction = false
+    Role ownerRole //The team that owns this object. This is used by the ACL to allow edits etc
+    static belongsTo = [ownerRole: Role]
+    boolean hasOwnerRoleChanged //Transient bit that is set to true, if the ownerRole is updated
 
-    static transients = ['disableUpdateReadyForExtraction']
+    static transients = ['hasOwnerRoleChanged', 'disableUpdateReadyForExtraction']
 
     static hasMany = [projectExperiments: ProjectExperiment,
             externalReferences: ExternalReference,
@@ -63,6 +67,7 @@ class Project extends AbstractContextOwner  implements GuidanceAware{
         lastUpdated(nullable: false)
         ncgcWarehouseId(nullable: true)
         dateCreated(nullable: false)
+        ownerRole(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
     /**
@@ -127,15 +132,33 @@ class Project extends AbstractContextOwner  implements GuidanceAware{
         addToContexts(context)
         return context
     }
+
+    def afterInsert() {
+        Project.withNewSession {
+            capPermissionService?.addPermission(this)
+        }
+    }
+
+    def afterUpdate() {
+        Project.withNewSession {
+            if (this.hasOwnerRoleChanged) { //update owner role if it changed
+                capPermissionService.updatePermission(this, this.ownerRole)
+            }
+
+        }
+    }
+
+    def beforeUpdate() {
+        // check if an actual change has been made and ownerRole has been changed
+        if (this.isDirty() && this.getDirtyPropertyNames().contains("ownerRole")) {
+            this.hasOwnerRoleChanged = true//set this true if the ownerRole has been updated
+        }
+    }
+
     @Override
     List<Guidance> getGuidance() {
         final List<Guidance> guidanceList = []
         guidanceList.addAll(new MinimumOfOneBiologyGuidanceRule(this).getGuidance())
         guidanceList
-    }
-    String getOwner() {
-        Project.withNewSession {
-            return capPermissionService?.getOwner(this)
-        }
     }
 }
