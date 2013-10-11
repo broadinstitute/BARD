@@ -1,4 +1,5 @@
 import bard.ReloadResultsJob
+import bard.util.BardCacheUtilsService
 import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
@@ -59,10 +60,12 @@ grails.cache.clearAtStartup = true
 grails.cache.config = {
     cache {
         name 'dictionaryElements'
-        eternal false
-        overflowToDisk true
-        maxElementsInMemory 10000
-        maxElementsOnDisk 10000000
+    }
+    cache {
+        name(BardCacheUtilsService.CONTEXT_ITEM_ATTRIBUTE_DESCRIPTORS)
+    }
+    cache {
+        name(BardCacheUtilsService.CONTEXT_ITEM_VALUE_DESCRIPTORS)
     }
 }
 grails.mime.types = [

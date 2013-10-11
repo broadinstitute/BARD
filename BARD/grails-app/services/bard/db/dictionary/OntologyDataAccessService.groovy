@@ -84,12 +84,6 @@ class OntologyDataAccessService {
                 this.cachedElements.putIfAbsent(root.treeName, sortedList)
             }
         }
-        //reload all database trees
-        if (reloadCache) {
-            Element.withSession { session ->
-                session.createSQLQuery("""BEGIN Manage_Ontology.make_trees(); END;""").executeUpdate()
-            }
-        }
     }
 
     public List<ElementSummary> getElementsFromTree(String treeName, String label) {

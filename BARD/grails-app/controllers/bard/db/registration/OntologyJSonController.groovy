@@ -59,34 +59,39 @@ class OntologyJSonController {
     }
     /**
      * @return List of elements to be used as attributes for ContextItems
+     *
+     * note: this cache will need to be cleared if the element hierarchy is changed or a new element is added
      */
-    //@Cacheable("contextItemAttributeDescriptors")
+    @Cacheable(value = "contextItemAttributeDescriptors")
     def getAttributeDescriptors() {
-
-        List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForAttributes()
-//        Map groupByParentFullPath = descriptors.groupBy { it.parent.fullPath}
-//        List<Map> attributes = []
-//        groupByParentFullPath.each{parentFullPath,children->
-//            attributes << [text:parentFullPath, children : children.collect { Descriptor descriptor -> asMapForSelect2(descriptor)}]
-//        }
-        List<Map> attributes = descriptors.collect { Descriptor descriptor ->
+        final List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForAttributes()
+        final List<Map> attributes = descriptors.collect { Descriptor descriptor ->
             asMapForSelect2(descriptor, true)
         }
-
-        Map map = ['results': attributes]
+        final Map map = ['results': attributes]
         render map as JSON
-
-//        BardDescriptor bard = BardDescriptor.findByLabel('BARD')
-//
-//
-//        Map map = ['results': [asMapForSelect2(bard,true)]]
-//        render map as JSON
-
+    }
+    /**
+     *
+     * @param attributeId
+     * @return all the eligible descriptors that can be used for values based on the attributeId
+     *
+     * note: this cache will need to be cleared if the element hierarchy is changed or a new element is added
+     */
+    @Cacheable(value = "contextItemValueDescriptors")
+    def getValueDescriptorsV2(Long attributeId) {
+        final List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForValues(attributeId)
+        final List<Map> values = descriptors.collect{   Descriptor descriptor->
+            asMapForSelect2(descriptor, false)
+        }
+        final Map map = ['results': values]
+        render map as JSON
     }
 
     private Map asMapForSelect2(Element element) {
         boolean hasIntegratedSearch = false;
         if (StringUtils.isNotBlank(element.externalURL)) {
+            println(element)
             hasIntegratedSearch = ontologyDataAccessService.externalOntologyHasIntegratedSearch(element.externalURL)
         }
         [
@@ -100,16 +105,12 @@ class OntologyJSonController {
     }
 
     private Map asMapForSelect2(Descriptor descriptor, boolean removeIdForExpectedValueTypeNone) {
-        boolean hasIntegratedSearch = false;
-        if (StringUtils.isNotBlank(descriptor.externalURL)) {
-            hasIntegratedSearch = true // ontologyDataAccessService.externalOntologyHasIntegratedSearch(descriptor.externalURL)
-        }
         Map map = asMapForSelect2(descriptor.element)
         if(removeIdForExpectedValueTypeNone && descriptor.element.expectedValueType == ExpectedValueType.NONE){
             map.remove('id')
         }
-        map.put('fullPath', descriptor.fullPath)
-        map.put('parentFullPath', descriptor.parent?.fullPath)
+        map.put('fullPath', descriptor.fullPath.replace('BARD> ', ''))
+        map.put('parentFullPath', descriptor.parent?.fullPath?.replace('BARD> ', ''))
 
 //        List nonRetiredChildren = descriptor.children.findAll{BardDescriptor child -> child.element.elementStatus != ElementStatus.Retired }.sort{it.label}
 //        if(nonRetiredChildren){
@@ -122,34 +123,7 @@ class OntologyJSonController {
         return map
     }
 
-    def getValueDescriptors() {
-        if (params?.term && params?.attributeId) {
-            List<Element> elements = ontologyDataAccessService.getElementsForValues(params.attributeId.toLong(), params.term)
-            List attributes = new ArrayList()
-            for (Element element in elements) {
-                def unit = element?.unit?.abbreviation
-                unit = unit ?: (element?.unit?.label ?: "")
-                def item = [
-                        "label": element.label,
-                        "value": element.label,
-                        "elementId": element.id,
-                        "unit": unit
-                ]
-                attributes.add(item)
-            }
-            render attributes as JSON
-        }
-    }
 
-//    @Cacheable("contextItemValueDescriptors")
-    def getValueDescriptorsV2(Long attributeId) {
-        List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForValues(attributeId)
-        List<Map> values = descriptors.collect{   Descriptor descriptor->
-            asMapForSelect2(descriptor, false)
-        }
-        Map map = ['results': values]
-        render map as JSON
-    }
 
     def getAllUnits() {
         List<Element> elements = ontologyDataAccessService.getAllUnits()

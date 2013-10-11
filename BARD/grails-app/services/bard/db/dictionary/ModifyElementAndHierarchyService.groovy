@@ -1,6 +1,7 @@
 package bard.db.dictionary
 
 import bard.hibernate.AuthenticatedUserRequired
+import bard.util.BardCacheUtilsService
 import grails.plugins.springsecurity.SpringSecurityService
 
 /**
@@ -11,7 +12,7 @@ class ModifyElementAndHierarchyService {
     String relationshipType
 
     SpringSecurityService springSecurityService
-    ElementService elementService
+    BardCacheUtilsService bardCacheUtilsService
 
     /**
      * @param relationshipType    relationshipType to be used when finding and modifying ElementHierarchy's
@@ -32,11 +33,11 @@ class ModifyElementAndHierarchyService {
 
         if (newElementAndPath.element.label != newElementAndPath.newElementLabel) {
             renameElement(newElementAndPath.element, newElementAndPath.newElementLabel)
-            elementService.reloadCache()
+            bardCacheUtilsService.refreshDueToNonDictionaryEntry()
         }
 
         if(updateHierarchyIfNeeded(newElementAndPath)){  //reload the cache if this returned true
-            elementService.reloadCache()
+            bardCacheUtilsService.refreshDueToNonDictionaryEntry()
         }
     }
 
