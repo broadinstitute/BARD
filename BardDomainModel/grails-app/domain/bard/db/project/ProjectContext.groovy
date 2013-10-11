@@ -1,10 +1,12 @@
 package bard.db.project
 
+import bard.db.guidance.Guidance
+import bard.db.guidance.GuidanceAware
+import bard.db.guidance.context.BiologyShouldHaveOneSupportingReferencePerContextRule
+import bard.db.guidance.context.OneBiologyAttributePerContextRule
 import bard.db.model.AbstractContext
-import bard.db.dictionary.Descriptor
 import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractContextOwner
-import org.apache.commons.lang.StringUtils
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,7 +15,7 @@ import org.apache.commons.lang.StringUtils
  * Time: 1:58 PM
  * To change this template use File | Settings | File Templates.
  */
-class ProjectContext extends AbstractContext{
+class ProjectContext extends AbstractContext implements GuidanceAware{
     Project project
     List<ProjectContextItem> contextItems = []
 
@@ -44,5 +46,13 @@ class ProjectContext extends AbstractContext{
     @Override
     Class<? extends AbstractContextItem> getItemSubClass() {
         return ProjectContextItem
+    }
+
+    @Override
+    List<Guidance> getGuidance() {
+        List<Guidance> guidanceList = []
+        guidanceList.add(new OneBiologyAttributePerContextRule(this).getGuidance())
+        guidanceList.add(new BiologyShouldHaveOneSupportingReferencePerContextRule(this).getGuidance())
+        guidanceList.flatten()
     }
 }

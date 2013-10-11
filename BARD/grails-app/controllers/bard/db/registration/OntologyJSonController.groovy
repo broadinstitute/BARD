@@ -1,10 +1,15 @@
 package bard.db.registration
 
+import bard.db.dictionary.BardDescriptor
+import bard.db.dictionary.Descriptor
 import bard.db.dictionary.Element
+import bard.db.dictionary.ElementStatus
 import bard.db.dictionary.OntologyDataAccessService
+import bard.db.enums.ExpectedValueType
 import bard.validation.ext.ExternalItem
 import bard.validation.ext.ExternalOntologyException
 import grails.converters.JSON
+import grails.plugin.cache.Cacheable
 import org.apache.commons.lang.StringUtils
 
 class OntologyJSonController {
@@ -39,7 +44,9 @@ class OntologyJSonController {
 
         render asMapForSelect2(element) as JSON
     }
-
+    /**
+     * @return List of elements to be used as attributes for ContextItems
+     */
     def getDescriptors() {
         if (params?.term) {
             List<Element> elements = ontologyDataAccessService.getElementsForAttributes(params.term)
@@ -49,6 +56,32 @@ class OntologyJSonController {
             Map map = ['results': attributes]
             render map as JSON
         }
+    }
+    /**
+     * @return List of elements to be used as attributes for ContextItems
+     */
+    //@Cacheable("contextItemAttributeDescriptors")
+    def getAttributeDescriptors() {
+
+        List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForAttributes()
+//        Map groupByParentFullPath = descriptors.groupBy { it.parent.fullPath}
+//        List<Map> attributes = []
+//        groupByParentFullPath.each{parentFullPath,children->
+//            attributes << [text:parentFullPath, children : children.collect { Descriptor descriptor -> asMapForSelect2(descriptor)}]
+//        }
+        List<Map> attributes = descriptors.collect { Descriptor descriptor ->
+            asMapForSelect2(descriptor, true)
+        }
+
+        Map map = ['results': attributes]
+        render map as JSON
+
+//        BardDescriptor bard = BardDescriptor.findByLabel('BARD')
+//
+//
+//        Map map = ['results': [asMapForSelect2(bard,true)]]
+//        render map as JSON
+
     }
 
     private Map asMapForSelect2(Element element) {
@@ -64,6 +97,29 @@ class OntologyJSonController {
                 "externalUrl": element.externalURL,
                 "hasIntegratedSearch": hasIntegratedSearch
         ]
+    }
+
+    private Map asMapForSelect2(Descriptor descriptor, boolean removeIdForExpectedValueTypeNone) {
+        boolean hasIntegratedSearch = false;
+        if (StringUtils.isNotBlank(descriptor.externalURL)) {
+            hasIntegratedSearch = true // ontologyDataAccessService.externalOntologyHasIntegratedSearch(descriptor.externalURL)
+        }
+        Map map = asMapForSelect2(descriptor.element)
+        if(removeIdForExpectedValueTypeNone && descriptor.element.expectedValueType == ExpectedValueType.NONE){
+            map.remove('id')
+        }
+        map.put('fullPath', descriptor.fullPath)
+        map.put('parentFullPath', descriptor.parent?.fullPath)
+
+//        List nonRetiredChildren = descriptor.children.findAll{BardDescriptor child -> child.element.elementStatus != ElementStatus.Retired }.sort{it.label}
+//        if(nonRetiredChildren){
+//            map.children = []
+//            for(BardDescriptor child in nonRetiredChildren){
+//                map.children << asMapForSelect2(child, removeIdForExpectedValueTypeNone)
+//            }
+//        }
+
+        return map
     }
 
     def getValueDescriptors() {
@@ -83,6 +139,16 @@ class OntologyJSonController {
             }
             render attributes as JSON
         }
+    }
+
+//    @Cacheable("contextItemValueDescriptors")
+    def getValueDescriptorsV2(Long attributeId) {
+        List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForValues(attributeId)
+        List<Map> values = descriptors.collect{   Descriptor descriptor->
+            asMapForSelect2(descriptor, false)
+        }
+        Map map = ['results': values]
+        render map as JSON
     }
 
     def getAllUnits() {

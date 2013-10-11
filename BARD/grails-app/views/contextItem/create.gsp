@@ -15,20 +15,18 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span9">
-        <div class="row-fluid">
-            <div class="span6 offset2 alert alert-info">
-                <p>Start typing to select an attribute from the BARD dictionary.  Based on the selection, additional values will be requested.</p>
-            </div>
+    <div class="row-fluid">
+        <div class="span10 offset1 alert alert-info">
+            <p>Start typing to select an attribute from the BARD dictionary.  Based on the selection, additional values will be requested.</p>
         </div>
+    </div>
 
-        <g:render template="form" model="${[instance: instance, action: 'Save']}"/>
+    <g:render template="form" model="${[instance: instance, action: 'Save']}"/>
 
-        <div class="row-fluid">
-            <div class="span6 offset2">
-                <h3>Current context:</h3>
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <h3>Current context:</h3>
                 <g:render template="edit" model="${[context: instance.context]}"/>
-            </div>
         </div>
     </div>
 </div>
