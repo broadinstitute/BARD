@@ -1,5 +1,6 @@
 package bard.db.experiment
 
+import acl.CapPermissionService
 import bard.core.SearchParams
 import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.experiment.ExperimentSearch
@@ -25,7 +26,7 @@ class ExperimentService {
     ExperimentRestService experimentRestService
     ResultsExportService resultsExportService
     ExperimentBuilder experimentBuilder
-
+    CapPermissionService capPermissionService
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     TableModel previewResults(final Long id) {
         Experiment experiment = Experiment.findById(id)
@@ -39,6 +40,8 @@ class ExperimentService {
         Experiment experiment = Experiment.findById(id)
         experiment.ownerRole = ownerRole
         experiment.save(flush: true)
+
+        capPermissionService.updatePermission(experiment,ownerRole)
         return Experiment.findById(id)
     }
 
@@ -173,7 +176,7 @@ class ExperimentService {
         println("Added ${experiment.experimentMeasures.size()} measures to tree")
     }
 
-    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+
     Experiment createNewExperiment(Long id, String experimentName, String description) {
         Assay assay = Assay.findById(id)
         Experiment experiment = new Experiment(assay: assay, experimentName: experimentName, description: description, dateCreated: new Date())

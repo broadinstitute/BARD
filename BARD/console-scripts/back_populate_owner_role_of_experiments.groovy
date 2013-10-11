@@ -1,6 +1,6 @@
 import acl.CapPermissionService
+import bard.db.experiment.Experiment
 import bard.db.people.Role
-import bard.db.registration.Panel
 import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.Session
@@ -15,14 +15,14 @@ CapPermissionService capPermissionService = ctx.capPermissionService
 List<String> notFound = []
 try {
     SpringSecurityUtils.reauthenticate('integrationTestUser', null)
-    final List<Panel> panels = Panel.findAllByOwnerRoleIsNull()
-    for (Panel panel : panels) {
-        String roleDisplayName = capPermissionService.getOwner(panel)
+    final List<Experiment> experiments = Experiment.findAllByOwnerRoleIsNull()
+    for (Experiment experiment : experiments) {
+        String roleDisplayName = capPermissionService.getOwner(experiment)
         Role role = Role.findByDisplayName(roleDisplayName)
         if (!role) {
-            notFound.add("Could not find Role with display name ${roleDisplayName} and panels id ${panel.id}")
+            notFound.add("Could not find Role with display name ${roleDisplayName} and experiment id ${experiment.id}")
         } else {
-            panel.ownerRole = role
+            experiment.ownerRole = role
            
         }
 

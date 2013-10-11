@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import acl.CapPermissionService
 import bard.db.people.Role
 import org.springframework.security.access.prepost.PreAuthorize
 
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize
  * To change this template use File | Settings | File Templates.
  */
 class PanelService {
+    CapPermissionService capPermissionService
     @PreAuthorize("hasPermission(#id, 'bard.db.registration.Panel', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Panel updatePanelOwnerRole(Long id, Role ownerRole){
         Panel panel = Panel.findById(id)
@@ -18,6 +20,8 @@ class PanelService {
 
         panel.save(flush: true)
         return Panel.findById(id)
+
+        capPermissionService.updatePermission(panel, ownerRole)
     }
     /**
      *

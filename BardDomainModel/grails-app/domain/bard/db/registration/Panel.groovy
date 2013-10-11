@@ -56,29 +56,11 @@ class Panel {
         }
     }
 
-    boolean hasOwnerRoleChanged //Transient bit that is set to true, if the ownerRole is updated
-    static transients = ['hasOwnerRoleChanged']
-
-
-    def afterUpdate(){
-        Panel.withNewSession {
-            if(this.hasOwnerRoleChanged){ //update owner role if it changed
-                capPermissionService.updatePermission(this,this.ownerRole)
-            }
-
-        }
-    }
-
-    def beforeUpdate()
-    {
-        // check if an actual change has been made and ownerRole has been changed
-        if(this.isDirty() && this.getDirtyPropertyNames().contains("ownerRole"))
-        {
-            this.hasOwnerRoleChanged = true//set this true if the ownerRole has been updated
-        }
-    }
     String getOwner() {
-        return this.ownerRole?.displayName
+
+        final String objectOwner = this.ownerRole?.displayName
+
+        return objectOwner
     }
 
 }

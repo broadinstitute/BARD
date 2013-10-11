@@ -1,7 +1,7 @@
 import acl.CapPermissionService
 import bard.db.people.Role
 import bard.db.project.Project
-import clover.org.apache.commons.lang.StringUtils
+import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.Session
 import org.hibernate.SessionFactory
@@ -23,11 +23,11 @@ try {
             notFound.add("Could not find Role with display name ${roleDisplayName} and project id ${project.id}")
         } else {
             project.ownerRole = role
-           
+
         }
 
     }
-     tx.commit()
+    tx.commit()
 }
 catch (Exception e) {
     println(e)
@@ -37,6 +37,6 @@ finally {
     // tx.commit();
     // tx.rollback()
 }
-if(notFound){
- println StringUtils.join(notFound,"\n");
+if (notFound) {
+    println StringUtils.join(notFound, "\n");
 }
