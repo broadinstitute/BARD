@@ -33,7 +33,7 @@
                 </div>
             </div>
             %{--<div class="row-fluid span12" id="downtimeMessage">--}%
-                %{--Down Time messages will go here--}%
+            %{--Down Time messages will go here--}%
             %{--</div>--}%
 
             <div class="row-fluid span12">
@@ -73,7 +73,7 @@
         </div>
 
         <div class="modal-body">
-            <textarea class="field span12" id="idSearchString" name="idSearchString" rows="15"></textarea>
+            <textarea class="field span9" id="idSearchString" name="idSearchString" rows="15"></textarea>
         </div>
 
         <div class="modal-footer">
