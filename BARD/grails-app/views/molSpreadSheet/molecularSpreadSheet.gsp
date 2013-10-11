@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta name="layout" content="basic"/>
-    <title>Molecular spreadsheet</title>
+    <title>Molecular Spreadsheet</title>
     <r:require modules="molecularSpreadSheet,promiscuity,compoundOptions"/>
 </head>
 
