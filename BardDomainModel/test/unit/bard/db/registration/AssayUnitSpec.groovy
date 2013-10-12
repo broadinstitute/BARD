@@ -40,7 +40,7 @@ class AssayUnitSpec extends Specification {
     }
 
 
-    def 'test guidance that biology is defined'() {
+   /* def 'test guidance that biology is defined'() {
         given:
         final Assay assay = Assay.build()
         List<Map> itemMaps = attributeElementMaps.call()
@@ -67,5 +67,5 @@ class AssayUnitSpec extends Specification {
         'biology required'       | { [[label: 'biology']] }                     | []
         'more than 1 biology ok' | { [[label: 'biology'], [label: 'biology']] } | []
 
-    }
+    } */
 }
