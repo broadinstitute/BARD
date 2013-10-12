@@ -19,9 +19,9 @@ class PanelService {
         panel.ownerRole = ownerRole
 
         panel.save(flush: true)
-        return Panel.findById(id)
 
         capPermissionService.updatePermission(panel, ownerRole)
+        return Panel.findById(id)
     }
     /**
      *
