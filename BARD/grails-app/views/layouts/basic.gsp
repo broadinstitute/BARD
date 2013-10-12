@@ -35,10 +35,6 @@
                     <p>#{text}</p>
                 </div>
             </div>
-            %{--<div class="row-fluid span12" id="downtimeMessage">--}%
-            %{--Down Time messages will go here--}%
-            %{--</div>--}%
-
             <div class="row-fluid span12">
                 <strong class="logo"><a
                         href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a>
@@ -120,7 +116,7 @@
         <div class="span12">
             <div class="spinner-container">
                 <div id="spinner" class="spinner" style="display:none; color: blue;"><g:message code="spinner.alt"
-                                                                                                default="Loading&hellip;"/></div>
+                                                                                                default=""/></div>
             </div>
             <g:layoutBody/>
         </div>

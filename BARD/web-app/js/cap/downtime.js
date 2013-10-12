@@ -44,6 +44,8 @@ function execPoll() {
         url: '/BARD/downTimeScheduler/currentDownTimeInfo',
         success: function (data) {
             if (data) {
+                //Clear it out if it already exist
+                $("#downtimenotify").html("");
                 $("#downtimenotify").notify("create", {
                     title: "Down Time Notification!!",
                     text: data
