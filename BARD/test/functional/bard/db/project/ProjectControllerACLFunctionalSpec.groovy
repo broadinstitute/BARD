@@ -106,49 +106,6 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     }
 
 
-    def 'test edit owner admin #desc'() {
-        Long pk = projectData.id
-        String newRole = "ROLE_TEAM_B"
-        Long version = getCurrentProjectProperties().version
-        RESTClient client = getRestClient(controllerUrl, "editOwnerRole", team, teamPassword)
-        when:
-        Response response = client.post() {
-            urlenc pk: pk, version: version, value: newRole
-        }
-        then:
-        assert response.statusCode == expectedHttpResponse
-        JSONObject jsonObject = response.json
-        assert jsonObject.get("modifiedBy")
-        assert jsonObject.get("data") == newRole
-        assert jsonObject.get("lastUpdated")
-        assert jsonObject.get("version") != null
-
-        where:
-        desc    | team           | teamPassword   | expectedHttpResponse
-        "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_OK
-    }
-
-
-
-    def 'test edit owner role, selected role not in users role list #desc'() {
-        given:
-        Long pk = projectData.id
-        String newRole = "ROLE_TEAM_B"
-        Long version = getCurrentProjectProperties().version
-        RESTClient client = getRestClient(controllerUrl, "editOwnerRole", team, teamPassword)
-        when:
-        client.post() {
-            urlenc pk: pk, version: version, value: newRole
-        }
-        then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
-
-        where:
-        desc      | team              | teamPassword      | expectedHttpResponse
-        "User B"  | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_BAD_REQUEST
-        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_BAD_REQUEST
-    }
 
     def 'test save #desc'() {
         given:
@@ -777,13 +734,56 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
 
     }
-    // def editSummary(Long instanceId, String projectName, String description, String projectStatus) {
+    def 'test edit owner admin #desc'() {
+        Long pk = projectData.id
+        String newRole = "ROLE_TEAM_B"
+        Long version = getCurrentProjectProperties().version
+        RESTClient client = getRestClient(controllerUrl, "editOwnerRole", team, teamPassword)
+        when:
+        Response response = client.post() {
+            urlenc pk: pk, version: version, value: newRole
+        }
+        then:
+        assert response.statusCode == expectedHttpResponse
+        JSONObject jsonObject = response.json
+        assert jsonObject.get("modifiedBy")
+        assert jsonObject.get("data") == newRole
+        assert jsonObject.get("lastUpdated")
+        assert jsonObject.get("version") != null
+
+        where:
+        desc    | team           | teamPassword   | expectedHttpResponse
+        "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_OK
+    }
+
+
+
+    def 'test edit owner role, selected role not in users role list #desc'() {
+        given:
+        Long pk = projectData.id
+        String newRole = "ROLE_TEAM_B"
+        Long version = getCurrentProjectProperties().version
+        RESTClient client = getRestClient(controllerUrl, "editOwnerRole", team, teamPassword)
+        when:
+        client.post() {
+            urlenc pk: pk, version: version, value: newRole
+        }
+        then:
+        def ex = thrown(RESTClientException)
+        assert ex.response.statusCode == expectedHttpResponse
+
+        where:
+        desc      | team              | teamPassword      | expectedHttpResponse
+        "User B"  | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_BAD_REQUEST
+        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_BAD_REQUEST
+    }
 
     String createUnAssociatedExperiment() {
         String reauthenticateWithUser = TEAM_A_1_USERNAME
 
         return (String) remote.exec({
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
+
             Experiment experiment = Experiment.build(experimentName: reauthenticateWithUser + System.currentTimeMillis()).save(flush: true)
             return experiment.id + "-" + experiment.experimentName
         })

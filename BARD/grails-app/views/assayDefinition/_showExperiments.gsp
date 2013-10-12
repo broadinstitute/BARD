@@ -68,9 +68,7 @@
     </g:if>
     <br/>
     <g:if test="${assayInstance.allowsNewExperiments()}">
-        <g:if test="${editable == 'canedit'}">
             <g:link controller="experiment" action="create" params="${[assayId: assayInstance.id]}"
                     class="btn"><i class="icon-plus"></i>Create Experiment</g:link>
-        </g:if>
     </g:if>
 </div>

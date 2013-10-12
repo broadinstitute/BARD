@@ -122,7 +122,7 @@ modules = {
     }
 
     downtime {
-        dependsOn 'grailsEvents' //from the grails event push plugin
+        //dependsOn 'grailsEvents' //from the grails event push plugin
         resource url: '/js/cap/downtime.js'
 
     }
