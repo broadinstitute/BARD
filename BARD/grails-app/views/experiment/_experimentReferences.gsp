@@ -8,26 +8,6 @@
                         id="${experiment?.assay?.id}">${experiment?.assay?.name}</g:link></li>
         </ul>
     </dd>
-
-    <dt>Experiment Links:</dt>
-    <dd>
-        <ul>
-            <g:if test="${excludedLinks?.contains('experiment.show') == false}" >
-                <li>
-                    <g:link controller="experiment" action="show" id="${experiment?.id}">View Experiment Details</g:link>
-                </li>
-            </g:if>
-            <g:elseif test="${BooleanUtils.isFalse(excludedLinks?.contains('bardWebInterface.showExperiment')) && experiment?.id}">
-                <li>
-                    <g:link controller="bardWebInterface" action="showExperiment" id="${experiment?.id}">View Published Results</g:link>
-                </li>
-            </g:elseif>
-            <g:else>
-                Results have not yet been published for this experiment.
-            </g:else>
-            %{--TODO add link to preview results when we have that page--}%
-        </ul>
-    </dd>
     <dt>Projects:</dt>
     <dd>
         <ul>
@@ -42,7 +22,8 @@
         <ul>
             <g:each in="${experiment?.externalReferences}" var="xRef">
                 <li>
-                    <a href="${xRef.externalSystem.systemUrl}${xRef.extAssayRef}" target="_blank">${xRef.externalSystem.systemName} ${xRef.extAssayRef}</a>
+                    <a href="${xRef.externalSystem.systemUrl}${xRef.extAssayRef}"
+                       target="_blank">${xRef.externalSystem.systemName} ${xRef.extAssayRef}</a>
                 </li>
             </g:each>
         </ul>
