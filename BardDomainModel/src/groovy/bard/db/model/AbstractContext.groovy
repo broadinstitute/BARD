@@ -3,6 +3,8 @@ package bard.db.model
 import bard.db.dictionary.Descriptor
 import bard.db.dictionary.Element
 import bard.db.enums.ContextType
+import bard.db.guidance.Guidance
+import bard.db.guidance.GuidanceAware
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,7 +13,7 @@ import bard.db.enums.ContextType
  * Time: 11:33 AM
  * To change this template use File | Settings | File Templates.
  */
-abstract class AbstractContext {
+abstract class AbstractContext implements GuidanceAware {
     private static final int CONTEXT_NAME_MAX_SIZE = 128
     private static final int MODIFIED_BY_MAX_SIZE = 40
 
@@ -67,7 +69,7 @@ abstract class AbstractContext {
         }
         return preferredDescriptor
     }
-    
+
 
     String getPreferredName() {
         return this.contextName;
@@ -90,16 +92,14 @@ abstract class AbstractContext {
      * @return an Element that represents a defining Attribute and currently serves to classify this context as pertaining to a particular type.
      * Not many of these are defined at this point, only biology and probe report
      */
-    Element getDataExportContextType(){
+    Element getDataExportContextType() {
         final Element biology = Element.findByLabel(BIOLOGY_LABEL)
         final Element probeReport = Element.findByLabel(PROBE_REPORT_LABEL)
-        if(getContextItems().find{AbstractContextItem item-> item.attributeElement == biology}){
+        if (getContextItems().find { AbstractContextItem item -> item.attributeElement == biology }) {
             return biology
-        }
-        else if ( getContextItems().find{AbstractContextItem item-> item.attributeElement == probeReport}){
+        } else if (getContextItems().find { AbstractContextItem item -> item.attributeElement == probeReport }) {
             return probeReport
-        }
-        else {
+        } else {
             return null
         }
     }
@@ -108,5 +108,10 @@ abstract class AbstractContext {
      * @return the SubClass of the Item this Context is expecting
      */
     abstract Class<? extends AbstractContextItem> getItemSubClass()
+
+    @Override
+    List<Guidance> getGuidance() {
+        []
+    }
 
 }
