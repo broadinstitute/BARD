@@ -8,6 +8,18 @@
                         id="${experiment?.assay?.id}">${experiment?.assay?.name}</g:link></li>
         </ul>
     </dd>
+
+    <dt>Experiment Links:</dt>
+    <dd>
+        <ul>
+            <g:if test="${excludedLinks?.contains('experiment.show') == false}">
+                <li>
+                    <g:link controller="experiment" action="show"
+                            id="${experiment?.id}">View Experiment Details</g:link>
+                </li>
+            </g:if>
+        </ul>
+    </dd>
     <dt>Projects:</dt>
     <dd>
         <ul>
