@@ -18,17 +18,15 @@ import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.assays.Assay
 
 class AssayRestService extends AbstractRestService {
-    def transactional=false
+    def transactional = false
 
-     public ExpandedAssayResult getTopAssays(long top){
-         final long count = getResourceCount()
-         final long skip = count-top
-         String urlString = addTopAndSkip(getResource(),true,top,skip)
-
-         final URL url = new URL(urlString)
-         final ExpandedAssayResult expandedAssayResult = (ExpandedAssayResult) getForObject(url.toURI(), ExpandedAssayResult.class)
-         return expandedAssayResult
-     }
+    public List<Assay> findRecentlyAdded(long top) {
+        String recentURL = "${RestApiConstants.RECENT}${top}${RestApiConstants.QUESTION_MARK}expand=true"
+        final String urlString = getResource(recentURL)
+        final URL url = new URL(urlString)
+        final List<Assay> assays = (List) getForObject(url.toURI(), List.class)
+        return assays
+    }
     /**
      *
      * @param searchParams

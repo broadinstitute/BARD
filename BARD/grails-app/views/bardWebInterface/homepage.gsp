@@ -318,7 +318,7 @@
             <g:experimentCount/>
         </li>
         <li>
-            <g:compoundCount/>
+            <g:substanceCount/>
         </li>
         <li>
             <g:probeCount/>
@@ -339,7 +339,7 @@
         <div class="carousel-inner">
             <div class="item active">
                 <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedProjects.projects}" var="project">
+                    <g:each status="i" in="${recentlyAddedProjects}" var="project">
                         <g:if test="${i < 3}">
                             <article class="span4">
                                 <time datetime="2013-10-16">${project.updated}</time>
@@ -358,7 +358,7 @@
 
             <div class="item">
                 <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedProjects.projects}" var="project">
+                    <g:each status="i" in="${recentlyAddedProjects}" var="project">
                         <g:if test="${i >= 3}">
                             <article class="span4">
                                 <time datetime="2013-10-16">${project.updated}</time>
@@ -388,14 +388,14 @@
         <div class="carousel-inner">
             <div class="item active">
                 <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedAssays.assays}" var="assay">
+                    <g:each status="i" in="${recentlyAddedAssays}" var="assay">
                         <g:if test="${i < 3}">
                             <article class="span4">
                                 <time datetime="2013-10-16">${assay.updated}</time>
 
                                 <h2>
                                     <g:link controller="assayDefinition" action="show"
-                                            id="${assay.capAssayId}">${assay.name}</g:link>
+                                            id="${assay.capAssayId}">${assay.title}</g:link>
                                 </h2>
 
                                 <p>${assay.designedBy}</p>
@@ -407,14 +407,14 @@
 
             <div class="item">
                 <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedAssays.assays}" var="assay">
+                    <g:each status="i" in="${recentlyAddedAssays}" var="assay">
                         <g:if test="${i >= 3}">
                             <article class="span4">
                                 <time datetime="2013-10-16">${assay.updated}</time>
 
                                 <h2>
                                     <g:link controller="assayDefinition" action="show"
-                                            id="${assay.capAssayId}">${assay.name}</g:link>
+                                            id="${assay.capAssayId}">${assay.title}</g:link>
                                 </h2>
 
                                 <p>${assay.designedBy}</p>
@@ -437,7 +437,7 @@
             <div class="item active">
                 <div class="row-fluid">
 
-                    <g:each status="i" in="${recentlyAddedExperiments.experiments}" var="experiment">
+                    <g:each status="i" in="${recentlyAddedExperiments}" var="experiment">
                         <g:if test="${i < 3}">
                             <article class="span4">
                                 <time datetime="2013-10-16">${experiment.updated}</time>
@@ -456,7 +456,7 @@
 
             <div class="item">
                 <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedExperiments.experiments}" var="experiment">
+                    <g:each status="i" in="${recentlyAddedExperiments}" var="experiment">
                         <g:if test="${i >= 3}">
                             <article class="span4">
                                 <time datetime="2013-10-16">${experiment.updated}</time>
@@ -477,7 +477,7 @@
 </div>
 
 %{--Contents of the "Compounds" tab (of our row of five content boxes) --}%
-<div class="tab-pane" id="tab-compounds">
+<div class="tab-pane" id="tab-substances">
     <div class="items-gallery slide" id="items-gallery-4" data-interval="false">
         <a href="#items-gallery-4" class="btn-prev" data-slide="prev">Previous</a>
         <a href="#items-gallery-4" class="btn-next" data-slide="next">Previous</a>
@@ -485,17 +485,18 @@
         <div class="carousel-inner">
             <div class="item active">
                 <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedCompounds.compounds}" var="compound">
+                    <g:each status="i" in="${recentlyAddedSubstances}" var="substance">
                         <g:if test="${i < 3}">
                             <article class="span4">
-                                %{--<time datetime="2013-10-16">${compound.}</time>--}%
+                                <time datetime="2013-10-16">${substance.updated}</time>
 
                                 <h2>
-                                    <g:link controller="bardWebInterface" action="showCompound"
-                                            id="${compound.id}">${compound.name}</g:link>
+                                    <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${substance.sid}">
+                                        <img src="${resource(dir: 'images', file: 'pubchem.png')}" alt="PubChem"/>
+                                        ${substance.sid}</a>
                                 </h2>
 
-                                <p>CID: ${compound.id}</p>
+                                %{--<p>SMILES: ${substance.smiles}</p>--}%
                             </article>
                         </g:if>
                     </g:each>
@@ -504,17 +505,18 @@
 
             <div class="item">
                 <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedCompounds.compounds}" var="compound">
+                    <g:each status="i" in="${recentlyAddedSubstances}" var="substance">
                         <g:if test="${i >= 3}">
                             <article class="span4">
-                                %{--<time datetime="2013-10-16">${compound.}</time>--}%
+                                <time datetime="2013-10-16">${substance.updated}</time>
 
                                 <h2>
-                                    <g:link controller="bardWebInterface" action="showCompound"
-                                            id="${compound.id}">${compound.name}</g:link>
+                                    <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${substance.sid}">
+                                        <img src="${resource(dir: 'images', file: 'pubchem.png')}" alt="PubChem"/>
+                                        ${substance.sid}</a>
                                 </h2>
 
-                                <p>CID: ${compound.id}</p>
+                                %{--<p>SMILES: ${substance.smiles}</p>--}%
                             </article>
                         </g:if>
                     </g:each>

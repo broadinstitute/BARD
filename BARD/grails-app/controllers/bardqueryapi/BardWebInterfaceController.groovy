@@ -4,13 +4,12 @@ import bard.core.IntValue
 import bard.core.SearchParams
 import bard.core.Value
 import bard.core.adapter.CompoundAdapter
-import bard.core.rest.spring.assays.ExpandedAssayResult
+import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.Promiscuity
-import bard.core.rest.spring.experiment.ExperimentSearchResult
-import bard.core.rest.spring.project.ProjectResult
+import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.substances.Substance
 import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
@@ -93,19 +92,20 @@ class BardWebInterfaceController {
 
     def index() {
         //Add model
-        final ExpandedAssayResult recentlyAddedAssays = queryService.findRecentlyAddedAssays(6)
-        final CompoundResult recentlyAddedCompounds = queryService.findRecentlyAddedCompounds(6)
-        final ExperimentSearchResult recentlyAddedExperiments = queryService.findRecentlyAddedExperiments(6)
-        final ProjectResult recentlyAddedProjects = queryService.findRecentlyAddedProjects(6)
+        final List<Assay> recentlyAddedAssays = queryService.findRecentlyAddedAssays(6)
+        final List<bard.core.rest.spring.project.Project> recentlyAddedProjects = queryService.findRecentlyAddedProjects(6)
+
+        final List<Substance> recentlyAddedSubstances = queryService.findRecentlyAddedSubstances(6)
+        final List<ExperimentSearch> recentlyAddedExperiments = queryService.findRecentlyAddedExperiments(6)
         final List<Compound> recentlyAddedProbes = queryService.findRecentlyAddedProbes(6)
 
         render(view: 'homepage', model:
                 [
                         recentlyAddedAssays: recentlyAddedAssays,
-                        recentlyAddedCompounds: recentlyAddedCompounds,
+                        recentlyAddedSubstances: recentlyAddedSubstances,
                         recentlyAddedProjects: recentlyAddedProjects,
                         recentlyAddedExperiments: recentlyAddedExperiments,
-                        recentlyAddedProbes:recentlyAddedProbes
+                        recentlyAddedProbes: recentlyAddedProbes
                 ]
         )
     }

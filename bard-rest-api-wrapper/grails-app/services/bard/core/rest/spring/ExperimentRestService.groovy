@@ -3,6 +3,7 @@ package bard.core.rest.spring
 import bard.core.SearchParams
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.compounds.CompoundResult
+import bard.core.rest.spring.experiment.*
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.MetaData
 import bard.core.util.FilterTypes
@@ -11,7 +12,6 @@ import org.springframework.http.HttpHeaders
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.HttpClientErrorException
-import bard.core.rest.spring.experiment.*
 
 class ExperimentRestService extends AbstractRestService {
     def transactional = false
@@ -19,16 +19,14 @@ class ExperimentRestService extends AbstractRestService {
     public String getResourceContext() {
         return RestApiConstants.EXPERIMENTS_RESOURCE;
     }
-
-    public ExperimentSearchResult getTopExperiments(long top) {
-        final long count = getResourceCount()
-        final long skip = count - top
-        String urlString = addTopAndSkip(getResource(), true, top, skip)
-
+    public List<ExperimentSearch> findRecentlyAdded(long top) {
+        String recentURL = "${RestApiConstants.RECENT}${top}${RestApiConstants.QUESTION_MARK}expand=true"
+        final String urlString = getResource(recentURL)
         final URL url = new URL(urlString)
-        final ExperimentSearchResult experimentSearchResult = (ExperimentSearchResult) getForObject(url.toURI(), ExperimentSearchResult.class)
-        return experimentSearchResult
+        final List<ExperimentSearch> experiments = (List) getForObject(url.toURI(), List.class)
+        return experiments
     }
+
     //Why is this returning a string and not a java object?
     //Everytime we do this it makes it harder for CACHE because we either
     //have to generate the same JSON or change the client sode code

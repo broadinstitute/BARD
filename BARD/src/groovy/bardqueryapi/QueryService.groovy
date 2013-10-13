@@ -13,6 +13,7 @@ import bard.core.rest.spring.experiment.*
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
+import bard.core.rest.spring.substances.Substance
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
 import bard.db.dictionary.BardDescriptor
@@ -726,25 +727,26 @@ class QueryService implements IQueryService {
 
     }
 
-    ExpandedAssayResult findRecentlyAddedAssays(int numberOfAssays = 6) {
-        final ExpandedAssayResult expandedAssayResult = assayRestService.getTopAssays(numberOfAssays)
-        return expandedAssayResult
+    List<Assay> findRecentlyAddedAssays(int numberOfAssays = 6) {
+        final List<Assay> assays = assayRestService.findRecentlyAdded(numberOfAssays)
+        return assays
     }
 
-    ExperimentSearchResult findRecentlyAddedExperiments(int numberOfExperiments = 6) {
-        final ExperimentSearchResult experiments = experimentRestService.getTopExperiments(numberOfExperiments)
+    List<ExperimentSearch> findRecentlyAddedExperiments(int numberOfExperiments = 6) {
+        final List<ExperimentSearch> experiments = experimentRestService.findRecentlyAdded(numberOfExperiments)
         return experiments
     }
 
-    ProjectResult findRecentlyAddedProjects(int numberOfProjects = 6) {
-        final ProjectResult projects = projectRestService.getTopProjects(numberOfProjects)
+    List<Project> findRecentlyAddedProjects(int numberOfProjects = 6) {
+        final List<Project> projects = projectRestService.findRecentlyAdded(numberOfProjects)
         return projects
     }
 
-    CompoundResult findRecentlyAddedCompounds(int numberOfCompounds = 6) {
-        final CompoundResult compounds = compoundRestService.findRecentlyAddedCompounds(numberOfCompounds)
-        return compounds
+    List<Substance> findRecentlyAddedSubstances(int numberOfSubstances = 6) {
+        final List<Substance> substances = substanceRestService.findRecentlyAdded(6)
+        return substances
     }
+
     List<Compound> findRecentlyAddedProbes(int numberOfProbes = 6) {
         final CompoundResult compoundResult = compoundRestService.findCompoundsByETag(PROBE_ETAG_ID)
         final List<Compound> compounds = compoundResult.compounds

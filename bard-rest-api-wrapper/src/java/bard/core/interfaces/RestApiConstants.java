@@ -1,6 +1,7 @@
 package bard.core.interfaces;
 
 public interface RestApiConstants {
+    final String RECENT="recent/";
     final String QUESTION_MARK = "?";
     final String AMPERSAND = "&";
     final String STEPS = "/steps";

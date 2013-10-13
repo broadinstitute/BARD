@@ -29,12 +29,11 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     List<Long> CAP_ADIDS = [5168, 5981, 5982]
     String FREE_TEXT_SEARCH_STRING = "dna repair"
 
-
     void "get the last #label assays"() {
         when:
-        ExpandedAssayResult assayResult = assayRestService.getTopAssays(numberOfAssays)
+        List<Assay> assayResult = assayRestService.findRecentlyAdded(numberOfAssays)
         then:
-        assert assayResult.getAssays().size() == numberOfAssays
+        assert assayResult.size() == numberOfAssays
         where:
 
         label | numberOfAssays

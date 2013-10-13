@@ -14,16 +14,14 @@ import org.springframework.util.MultiValueMap
 class SubstanceRestService extends AbstractRestService {
     def transactional = false
 
-
-    public SubstanceResult getTopSubstances(long top) {
-        final long count = getResourceCount()
-        final long skip = count - top
-        String urlString = addTopAndSkip(getResource(), true, top, skip)
+    public List<Substance> findRecentlyAdded(long top) {
+        String urlString = getResource("${RestApiConstants.RECENT}${top}${RestApiConstants.QUESTION_MARK}expand=true")
 
         final URL url = new URL(urlString)
-        final SubstanceResult substanceResult = (SubstanceResult) getForObject(url.toURI(), SubstanceResult.class)
-        return substanceResult
+        final List<Substance> substances = (List) getForObject(url.toURI(), List.class)
+        return substances
     }
+
 
     public String getResourceContext() {
         return RestApiConstants.SUBSTANCES_RESOURCE

@@ -29,9 +29,9 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "get the last #label projects"() {
         when:
-        ProjectResult projectResult = projectRestService.getTopProjects(numberOfProjects)
+        List<Project> projectResult = projectRestService.findRecentlyAdded(numberOfProjects)
         then:
-        assert projectResult.getProjects().size() == numberOfProjects
+        assert projectResult.size() == numberOfProjects
         where:
 
         label | numberOfProjects

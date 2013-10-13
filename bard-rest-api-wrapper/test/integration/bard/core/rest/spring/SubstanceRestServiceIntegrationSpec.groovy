@@ -9,6 +9,7 @@ import bard.core.rest.spring.substances.Substance
 import bard.core.rest.spring.substances.SubstanceResult
 import bard.core.rest.spring.util.SubstanceSearchType
 import grails.plugin.spock.IntegrationSpec
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -21,8 +22,18 @@ class SubstanceRestServiceIntegrationSpec extends IntegrationSpec {
     List<Long> EIDS_FOR_TESTING = [1, 2]
     @Shared
     Long CID_FOR_TESTING = 2382353
+    @IgnoreRest
+    void "get the last #label substances"() {
+        when:
+        List<Substance> substances = substanceRestService.findRecentlyAdded(numberOfSubstances)
+        then:
+        assert substances.size() == numberOfSubstances
+        where:
 
-
+        label | numberOfSubstances
+        "10"  | 10
+        "5"   | 5
+    }
     void "getSubstanceById sid - 6820697"() {
         given:
         Long sid = 26726047
