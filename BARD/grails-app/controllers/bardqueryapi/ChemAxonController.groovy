@@ -44,7 +44,7 @@ class ChemAxonController {
         try {
             CompoundAdapter compoundAdapter = cid ? this.queryService.showCompound(cid) : null
             if (compoundAdapter) {
-                String smiles = compoundAdapter.structureSMILES
+                String smiles = compoundAdapter.smiles
                 generateStructureImageFromSmiles(smiles, width, height)
             }
         } catch (Exception ee) {

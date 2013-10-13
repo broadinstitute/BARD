@@ -8,7 +8,6 @@ import bard.db.enums.HierarchyType
 import bard.db.people.Role
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 import wslite.json.JSONArray

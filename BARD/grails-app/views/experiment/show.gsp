@@ -1,12 +1,12 @@
-<%@ page import="bard.db.enums.ContextType; bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
+<%@ page import="bard.db.enums.ExperimentStatus; bard.db.enums.ContextType; bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,twitterBootstrapAffix,dynatree,xeditable,experimentsummary,canEditWidget,richtexteditorForEdit, sectionCounter, card"/>
+            modules="core,bootstrap,twitterBootstrapAffix,dynatree,xeditable,experimentsummary,canEditWidget,richtexteditorForEdit, sectionCounter, card,histogram"/>
     <meta name="layout" content="basic"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>Show Experiment</title>
+    <title>EID ${instance?.id}: ${instance?.experimentName}</title>
 </head>
 
 <body>
@@ -47,7 +47,13 @@
     <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar">
         <li><a href="#summary-header"><i class="icon-chevron-right"></i>Overview</a></li>
         <li><a href="#contexts-header"><i class="icon-chevron-right"></i>Contexts</a></li>
-        <li><a href="#measures-header"><i class="icon-chevron-right"></i>Measures</a></li>
+        <li><a href="#results-header"><i class="icon-chevron-right"></i>Results</a>
+            <ul class="nav nav-list bs-docs-sidenav" style="padding-left: 0; margin: 0;">
+                <li><a href="#measures-header"><i class="icon-chevron-right"></i>Measures</a></li>
+                <li><a href="#results-summary-header"><i class="icon-chevron-right"></i>Result Summary</a></li>
+            </ul>
+        </li>
+
         <li><a href="#documents-header"><i class="icon-chevron-right"></i>Documents</a>
             <ul class="nav nav-list bs-docs-sidenav" style="padding-left: 0; margin: 0;">
                 <li><a href="#documents-description-header"><i class="icon-chevron-right"></i>Descriptions</a>
@@ -121,8 +127,22 @@
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description"
                    data-id="descriptionId"></a>
             </dd>
-
-            <dt>Owner:</dt><dd>${experimentOwner}</dd>
+            <dt><g:message code="experiment.ownerRole.label" default="Owner"/>:</dt>
+            <dd>
+                <span
+                        class="status"
+                        data-toggle="manual"
+                        data-sourceCache="false"
+                        id="ownerRoleId"
+                        data-type="select"
+                        data-value="${instance?.owner}"
+                        data-source="/BARD/assayDefinition/roles"
+                        data-pk="${instance.id}"
+                        data-url="/BARD/experiment/editOwnerRole"
+                        data-placeholder="Required"
+                        data-original-title="Select Owner Role">${instance?.owner}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="ownerRoleId" title="Click to edit owner role"></a>
+            </dd>
 
             <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
             <dd>
@@ -168,7 +188,8 @@
             <dd id="modifiedById"><g:fieldValue bean="${instance}" field="modifiedBy"/></dd>
         </dl>
 
-        <g:render template="experimentReferences" model="[experiment: instance, excludedLinks:['experiment.show']]"  />
+        <g:render template="experimentReferences"
+                  model="[experiment: instance, excludedLinks: ['experiment.show']]"/>
 
         <g:link controller="results" action="configureTemplate"
                 params="${[experimentId: instance.id]}"
@@ -212,6 +233,7 @@
                 })
             </r:script>
         </div>
+
 </section>
 <br/>
 <section id="contexts-header">
@@ -236,18 +258,66 @@
     </div>
 </section>
 <br/>
-<section id="measures-header">
+<section id="results-header">
+    <div class="page-header">
+        <h3 class="sect">Results</h3>
+        <section id="measures-header">
+            <h4 class="subsect">Measures</h4>
 
-    <h3 class="sect">Measures</h3>
+            <div class="row-fluid">
+                <div id="measure-tree"></div>
+                <r:script>
+            $("#measure-tree").dynatree({children: <%=measuresAsJsonTree%> })
+                </r:script>
 
-    <div class="row-fluid">
-        <div id="measure-tree"></div>
-        <r:script>
-            $("#measure-tree").dynatree({children: <%= measuresAsJsonTree %> })
-        </r:script>
+            </div>
+        </section>
+        <section id="results-summary-header">
+            <h4 class="subsect">Result Summary</h4>
+
+            <div class="row-fluid">
+                <g:if test="${instance.ncgcWarehouseId && instance.experimentFiles}">
+                    <script>
+                        /* Retrieve JSON data to build a histogram */
+                        $(document).ready(function () {
+                            d3.json("/BARD/bardWebInterface/retrieveExperimentResultsSummary/${instance.id}", function (error, dataFromServer) {
+                                if (!(dataFromServer === undefined)) {
+                                    for (var i = 0; i < dataFromServer.length; i++) {
+                                        if (!(dataFromServer[i] === undefined)) {
+                                            drawHistogram(d3.select('#histogramHere'), dataFromServer[i]);
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    </script>
+
+                    <div id="histogramHere" class="span12"></div>
+                    <g:link controller="bardWebInterface" action="showExperiment"
+                            id="${instance.id}">View all results for this experiment</g:link>
+                </g:if>
+                <g:elseif test="${!instance.experimentFiles}">
+                    <p>No results uploaded for this experiment</p>
+                </g:elseif>
+                <g:else>
+                    <g:if test="${instance.experimentStatus == ExperimentStatus.APPROVED}">
+                        <p>Results for this experiment aren't available for querying because this experiment is waiting to be loaded to the warehouse.</p>
+                    </g:if>
+                    <g:elseif test="${instance.experimentStatus == ExperimentStatus.RETIRED}">
+                        <p>Results for this experiment aren't available for querying because this experiment has a Retired status</p>
+                    </g:elseif>
+                    <g:else>
+                        <p>Results for this experiment aren't available for querying because this experiment has a Draft status and needs to be approved</p>
+                    </g:else>
+                    <g:link controller="bardWebInterface" action="previewResults"
+                            id="${instance.id}">Preview results</g:link>
+                </g:else>
+
+            </div>
+        </section>
     </div>
 </section>
-
+<br/>
 
 <g:render template="/document/documents"
           model="[documentKind: DocumentKind.ExperimentDocument, owningEntity: instance, canedit: editable, sectionNumber: '4.']"/>

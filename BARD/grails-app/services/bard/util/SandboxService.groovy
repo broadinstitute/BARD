@@ -1,9 +1,7 @@
 package bard.util
 
-import clover.org.apache.commons.lang.exception.ExceptionUtils
-import grails.plugins.springsecurity.Secured
+import org.apache.commons.lang.exception.ExceptionUtils
 import org.apache.commons.lang3.StringUtils
-import org.codehaus.groovy.control.CompilerConfiguration
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern

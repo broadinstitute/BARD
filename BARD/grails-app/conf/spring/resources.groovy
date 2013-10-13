@@ -9,6 +9,7 @@ import bard.hibernate.ModifiedByListener
 import bard.person.RoleEditorRegistrar
 import bardqueryapi.ETagsService
 import bardqueryapi.QueryService
+import bardqueryapi.experiment.ExperimentBuilder
 import grails.util.Environment
 import mockServices.MockQueryService
 import org.codehaus.groovy.grails.orm.hibernate.HibernateEventListeners
@@ -137,12 +138,17 @@ beans = {
 
     loggerService(LoggerService)
 
+
     compoundRestService(CompoundRestService) {
         externalUrlDTO = ref('externalUrlDTO')
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
 
+    experimentBuilder(ExperimentBuilder) {
+        grailsApplication = grailsApplication
+        compoundRestService=ref('compoundRestService')
+    }
     experimentRestService(ExperimentRestService) {
         externalUrlDTO = ref('externalUrlDTO')
         restTemplate = ref('restTemplate')
@@ -194,6 +200,7 @@ beans = {
                 assayRestService = ref('assayRestService')
                 substanceRestService = ref('substanceRestService')
                 experimentRestService = ref('experimentRestService')
+                experimentBuilder=ref('experimentBuilder')
             }
             eTagsService(ETagsService) {
                 compoundRestService = ref('compoundRestService')

@@ -6,12 +6,15 @@ import bard.db.enums.ProjectStatus
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.hibernate.ProjectGroupTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
+import bard.db.guidance.Guidance
+import bard.db.guidance.GuidanceAware
+import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
 import bard.db.registration.ExternalReference
 
-class Project extends AbstractContextOwner {
+class Project extends AbstractContextOwner implements GuidanceAware {
     public static final int PROJECT_NAME_MAX_SIZE = 256
     public static final int MODIFIED_BY_MAX_SIZE = 40
     public static final int DESCRIPTION_MAX_SIZE = 1000
@@ -39,9 +42,9 @@ class Project extends AbstractContextOwner {
     boolean disableUpdateReadyForExtraction = false
     Role ownerRole //The team that owns this object. This is used by the ACL to allow edits etc
     static belongsTo = [ownerRole: Role]
-    boolean hasOwnerRoleChanged //Transient bit that is set to true, if the ownerRole is updated
 
-    static transients = ['hasOwnerRoleChanged', 'disableUpdateReadyForExtraction']
+
+    static transients = [ 'disableUpdateReadyForExtraction']
 
     static hasMany = [projectExperiments: ProjectExperiment,
             externalReferences: ExternalReference,
@@ -136,19 +139,19 @@ class Project extends AbstractContextOwner {
         }
     }
 
-    def afterUpdate() {
-        Project.withNewSession {
-            if (this.hasOwnerRoleChanged) { //update owner role if it changed
-                capPermissionService.updatePermission(this, this.ownerRole)
-            }
 
-        }
+
+    String getOwner() {
+        final String objectOwner = this.ownerRole?.displayName
+        return objectOwner
     }
 
-    def beforeUpdate() {
-        // check if an actual change has been made and ownerRole has been changed
-        if (this.isDirty() && this.getDirtyPropertyNames().contains("ownerRole")) {
-            this.hasOwnerRoleChanged = true//set this true if the ownerRole has been updated
-        }
+
+
+    @Override
+    List<Guidance> getGuidance() {
+        final List<Guidance> guidanceList = []
+        guidanceList.addAll(new MinimumOfOneBiologyGuidanceRule(this).getGuidance())
+        guidanceList
     }
 }

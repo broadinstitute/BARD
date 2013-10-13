@@ -27,7 +27,7 @@
                    $(".measure-detail-card").hide();
                    $("#measure-details-"+node.data.key).show();
                  },
-                 children: ${measureTreeAsJson}
+                 children: <%=measureTreeAsJson%>
                     });
                 </r:script>
             </div>

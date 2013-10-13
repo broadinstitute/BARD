@@ -20,14 +20,7 @@
             <g:each in="${assayInstance.experiments}" var="experiment">
                 <tr>
                     <td>
-                        <g:if test="${experiment.ncgcWarehouseId}">
-                            <g:link controller="bardWebInterface" action="showExperiment"
-                                    id="${experiment.ncgcWarehouseId}">${experiment.id}</g:link>
-                        </g:if>
-                        <g:else>
-                            ${experiment.id}
-                        %{--TODO: Mark as not in warehouse--}%
-                        </g:else>
+                        <g:link controller="experiment" action="show" id="${experiment.id}">${experiment.id}</g:link>
                     </td>
                     <td style="line-height: 150%"><p>${experiment.experimentName}</p></td>
                     <td>
@@ -75,9 +68,7 @@
     </g:if>
     <br/>
     <g:if test="${assayInstance.allowsNewExperiments()}">
-        <g:if test="${editable == 'canedit'}">
             <g:link controller="experiment" action="create" params="${[assayId: assayInstance.id]}"
                     class="btn"><i class="icon-plus"></i>Create Experiment</g:link>
-        </g:if>
     </g:if>
 </div>

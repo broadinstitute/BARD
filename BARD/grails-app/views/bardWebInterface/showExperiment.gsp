@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="layout" content="basic"/>
-    <title>BARD : Experiment Result : ${tableModel.additionalProperties.capExptId}</title>
+    <title>EID ${tableModel.additionalProperties.capExptId}: Experimental Results</title>
     <r:require modules="experimentData, histogram, bootstrap, compoundOptions, cbas"/>
 
 </head>
@@ -20,15 +20,16 @@
     <g:if test="${tableModel?.data}">
         <div id="experimentalResults">
             <g:render template='experimentResultData'
-                      model='[tableModel: tableModel, innerBorder: true, totalNumOfCmpds: totalNumOfCmpds]'/>
+                      model='[tableModel: tableModel, innerBorder: true, totalNumOfCmpds: totalNumOfCmpds, preview:preview]'/>
         </div>
-        </div>
+
     </g:if>
     <g:else>
         <p class="text-info"><i
                 class="icon-warning-sign"></i> No results found for this experiment ${tableModel?.additionalProperties?.id}
         </p>
     </g:else>
+</div>
 </div>
 </body>
 </html>

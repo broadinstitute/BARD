@@ -11,6 +11,7 @@ import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 import bard.core.rest.spring.compounds.*
@@ -244,6 +245,35 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         label                         | cids
         "Search with a list of CIDs"  | [2722, 119, 137, 185, 187, 190, 191, 224, 240, 499]
         "Search with a single of CID" | [2722]
+
+    }
+
+    void "test get Compound by sid"() {
+        when: "We call the get method of the the RESTCompoundService"
+        Compound compound = this.compoundRestService.getCompoundBySid(sid)
+        then: "We expect to get back a list of 10 results"
+        assertCompound(compound)
+        assert compound.cid == expectedCID
+
+        where:
+        label                         | sid       | expectedCID
+        "Search with a single of SID" | 152255054 | 66575055
+
+    }
+
+    void "test search Compounds, #label"() {
+        when: "We call the get method of the the RESTCompoundService"
+        CompoundResult compoundResult = this.compoundRestService.searchCompoundsBySids(sids)
+        then: "We expect to get back a list of 10 results"
+        assert compoundResult.numberOfHits == sids.size()
+        assert compoundResult.etag
+        assert compoundResult.etags
+        assertCompounds(compoundResult.compounds)
+
+        where:
+        label                         | sids
+        "Search with a list of SIDs"  | [152255054, 136367216]
+        "Search with a single of SID" | [152255054]
 
     }
     /**

@@ -1,5 +1,6 @@
 package bard.db.project
 
+import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
@@ -10,14 +11,19 @@ import org.hibernate.Session
 import org.springframework.security.access.prepost.PreAuthorize
 
 class ProjectService {
+    CapPermissionService capPermissionService
+
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Project updateOwnerRole(Long id, Role ownerRole) {
         Project project = Project.findById(id)
         project.ownerRole = ownerRole
 
         project.save(flush: true)
+
+        capPermissionService.updatePermission(project, ownerRole)
         return Project.findById(id)
     }
+
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Project updateProjectStatus(Long id, ProjectStatus newProjectStatus) {
         Project project = Project.findById(id)
@@ -131,7 +137,7 @@ class ProjectService {
      * @param project
      */
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void removeEdgeFromProject(Experiment fromExperiment, Experiment toExperiment,Long id) {
+    void removeEdgeFromProject(Experiment fromExperiment, Experiment toExperiment, Long id) {
         Project project = Project.findById(id)
         def fromProjectExperiment = ProjectExperiment.findByExperimentAndProject(fromExperiment, project)
         def toProjectExperiment = ProjectExperiment.findByExperimentAndProject(toExperiment, project)

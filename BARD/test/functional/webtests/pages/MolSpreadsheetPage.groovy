@@ -13,7 +13,7 @@ class MolSpreadsheetPage extends HomePage {
     static url = "molSpreadSheet/molecularSpreadSheet"
 
     static at =  {
-        title.contains("Molecular spreadsheet")
+        title.contains("Molecular Spreadsheet")
     }
 
     static content = {

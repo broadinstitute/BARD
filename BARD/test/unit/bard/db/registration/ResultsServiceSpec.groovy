@@ -13,14 +13,10 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static bard.db.enums.ExpectedValueType.ELEMENT
-import static bard.db.enums.ExpectedValueType.EXTERNAL_ONTOLOGY
-import static bard.db.enums.ExpectedValueType.FREE_TEXT
-import static bard.db.enums.ExpectedValueType.NUMERIC
+import static bard.db.enums.ExpectedValueType.*
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions

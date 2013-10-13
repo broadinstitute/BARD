@@ -1,4 +1,4 @@
-<%@ page import="bard.db.people.Role; bard.db.enums.HierarchyType;java.text.SimpleDateFormat" %>
+<%@ page import="bard.db.command.BardCommand; bard.db.people.Role; bard.db.enums.HierarchyType;java.text.SimpleDateFormat" %>
 
 <div class="row-fluid">
 <div id="foo" class="span12">
@@ -17,13 +17,19 @@
             <input class="input-xxlarge" type="text" name="experimentName"
                    value="${fieldValue(bean: experiment, field: "experimentName")}"/>
         </dd>
-
+        <dt>Owner:</dt>
+        <dd>
+            <g:select name="ownerRole" id="ownerRole" required="required"
+                      from="${BardCommand.userRoles()}"
+                      value="${experiment?.ownerRole}"
+                      optionValue="displayName" optionKey="id"/>
+        </dd>
         <dt>Hold until Date:</dt>
         <dd>
-        <input type="text" class="input-large date-selection" id="holdUntilDate" name="holdUntilDate"
-               placeholder="Click icon to select date"
-               value="${experiment.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.holdUntilDate) : experiment.holdUntilDate}"/>
-        (No more than 1 year from today)
+            <input type="text" class="input-large date-selection" id="holdUntilDate" name="holdUntilDate"
+                   placeholder="Click icon to select date"
+                   value="${experiment.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.holdUntilDate) : experiment.holdUntilDate}"/>
+            (No more than 1 year from today)
         </dd>
 
         <%--

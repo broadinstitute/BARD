@@ -233,7 +233,7 @@ class PanelController {
         }
 
         boolean editable = canEdit(permissionEvaluator, springSecurityService, panelInstance)
-        String owner = capPermissionService.getOwner(panelInstance)
+        String owner = panelInstance.getOwner()
         return [panelInstance: panelInstance, panelOwner: owner, editable: editable ? 'canedit' : 'cannotedit']
     }
 

@@ -2,11 +2,9 @@ package bard.db.people
 
 import bard.PersonController
 import bard.db.audit.BardContextUtils
-import bard.db.context.item.ContextItemController
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.SessionFactory
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 /**

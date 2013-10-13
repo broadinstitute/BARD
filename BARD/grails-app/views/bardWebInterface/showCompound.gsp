@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta name="layout" content="basic"/>
-    <title>BARD : Compound : ${compound?.name} : PubChem CID ${compound.pubChemCID}</title>
+    <title>CID ${compound.id}: ${compound?.name}</title>
     <r:require modules="promiscuity,substances,compoundOptions"/>
 </head>
 
@@ -17,16 +17,16 @@
             <g:elseif test="${compound.isProbe()}">
                 <span class="badge badge-info">Probe</span>
             </g:elseif>
-            <small>(PubChem CID: ${compound?.pubChemCID})</small></h1>
-        <g:saveToCartButton id="${compound.pubChemCID}"
+            <small>(PubChem CID: ${compound?.id})</small></h1>
+        <g:saveToCartButton id="${compound.id}"
                             name="${JavaScriptUtility.cleanup(compound.name)}"
                             type="${querycart.QueryItemType.Compound}"
-                            smiles="${compound.getStructureSMILES()}"
+                            smiles="${compound.smiles}"
                             numActive="${compound.numberOfActiveAssays}"
                             numAssays="${compound.numberOfAssays}"/>
-        <span style="padding-left: 30px; padding-right: 10px; float: right;"><g:link controller="bardWebInterface" action="bigSunburst" id="${compound.pubChemCID}"
+        <span style="padding-left: 30px; padding-right: 10px; float: right;"><g:link controller="bardWebInterface" action="bigSunburst" id="${compound.id}"
         >Linked Hierarchy Visualization</g:link></span>
-        <span style="padding-left: 30px; padding-right: 30px; float: right;"><g:link controller="bardWebInterface" action="showCompoundBioActivitySummary" id="${compound.pubChemCID}"
+        <span style="padding-left: 30px; padding-right: 30px; float: right;"><g:link controller="bardWebInterface" action="showCompoundBioActivitySummary" id="${compound.id}"
                 >Bio-activity Summary</g:link></span>
 
     </div>
@@ -69,7 +69,7 @@
                             </g:if>
                             <g:if test="${compound?.getProbeCid()}">
                                 <li><a href="${compound.getProbeCid().getUrl()}"
-                                       target="_blank">View Probe by CID (${compound.pubChemCID}) in PubChem</a></li>
+                                       target="_blank">View Probe by CID (${compound.id}) in PubChem</a></li>
 
                             </g:if>
                             <g:if test="${compound?.getProbeSid()}">
@@ -88,7 +88,7 @@
                 <dd>${compound?.getSynonyms()?.collect {it}?.join(', ')}</dd>
             </g:if>
             <dt>SMILES:</dt>
-            <dd>${compound?.getStructureSMILES()}</dd>
+            <dd>${compound?.getSmiles()}</dd>
             <g:if test="${compound?.getRegistryNumbers()}">
                 <dt>CAS Registry Numbers:</dt>
                 <dd>${compound?.getRegistryNumbers()?.collect {it}?.join(', ')}</dd>
@@ -152,9 +152,9 @@
         <ul class="thumbnails">
             <li>
                 <g:compoundOptions
-                        sid="${compound?.pubChemCID}"
-                        cid="${compound?.pubChemCID}"
-                        smiles="${compound?.structureSMILES}"
+                        sid="${compound?.id}"
+                        cid="${compound?.id}"
+                        smiles="${compound?.smiles}"
                         name="${bardqueryapi.JavaScriptUtility.cleanup(compound?.name)}"
                         numActive="${compound?.numberOfActiveAssays}"
                         numAssays="${compound?.numberOfAssays}"
@@ -168,8 +168,8 @@
         <h4>Scaffold Promiscuity Analysis</h4>
 
         <div class="promiscuity"
-             href="${createLink(controller: 'bardWebInterface', action: 'promiscuity', params: [cid: compound.pubChemCID])}"
-             id="${compound.pubChemCID}_prom"></div>
+             href="${createLink(controller: 'bardWebInterface', action: 'promiscuity', params: [cid: compound.id])}"
+             id="${compound.id}_prom"></div>
     </div>
 </div>
 
@@ -262,7 +262,7 @@
         <div class="span12">
             <h3>Compound Spectra</h3>
             <img src="${compound?.getOtherAnnotationValue('CompoundSpectra').get(0)}"
-                 alt="Compound spectra for ${compound.pubChemCID}">
+                 alt="Compound spectra for ${compound.id}">
         </div>
     </div>
 </g:if>

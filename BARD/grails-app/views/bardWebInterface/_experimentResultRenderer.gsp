@@ -89,7 +89,7 @@
                                         <th class="cbasOutterTableCell" colspan="${resultSize}">
                                             <g:experimentDescription name="${experiment.name}"
                                                                      eid="${experiment.capExptId}"
-                                                                     bardExptId="${experiment.bardExptId}"/>
+                                                                     capExptId="${experiment.capExptId}"/>
                                         </th>
                                     </tr>
                                     </thead>

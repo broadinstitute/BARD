@@ -80,13 +80,13 @@ class CapPermissionService implements CapPermissionInterface {
         final AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByObjectIdAndAclClass(domainObjectInstance.id, aclClass)
 
         if (aclObjectIdentity) {
-            List<AclEntry> aclEntryList = AclEntry.findAllByAclObjectIdentity(aclObjectIdentity)
+
             AclSid aclSid = AclSid.findBySidAndPrincipal(newRole.authority, false)
             if (!aclSid) {
                 aclSid= new AclSid(sid: newRole.authority, principal: false)
                 aclSid.save(flush:true)
             }
-
+            List<AclEntry> aclEntryList = AclEntry.findAllByAclObjectIdentity(aclObjectIdentity)
             for (AclEntry aclEntry : aclEntryList) {
                  springSecurityUiService.updateAclEntry(aclEntry,aclObjectIdentity.id,
                          aclSid.id,aclEntry.aceOrder,aclEntry.mask,aclEntry.granting,aclEntry.auditSuccess,aclEntry.auditFailure)

@@ -3,8 +3,8 @@ package bard.db.model
 import bard.db.dictionary.Descriptor
 import bard.db.dictionary.Element
 import bard.db.enums.ContextType
-import bard.db.registration.AssayContextItem
-import org.apache.commons.lang.StringUtils
+import bard.db.guidance.Guidance
+import bard.db.guidance.GuidanceAware
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,9 +13,20 @@ import org.apache.commons.lang.StringUtils
  * Time: 11:33 AM
  * To change this template use File | Settings | File Templates.
  */
-abstract class AbstractContext{
+abstract class AbstractContext implements GuidanceAware {
     private static final int CONTEXT_NAME_MAX_SIZE = 128
     private static final int MODIFIED_BY_MAX_SIZE = 40
+
+    /**
+     * these labels or portions of labels are pulled out of the ontology and are an order of preference for sorting and naming of cards
+     */
+    private static final List<String> KEY_LABELS = ['assay component role', 'assay component type', 'detection', 'assay readout', 'wavelength', 'number']
+
+    private static final Map<String, String> KEY_LABEL_NAME_MAP = ['assay component role': 'label',
+            'assay component type': 'label', 'detection': 'detection method',
+            'assay readout': 'assay readout', 'wavelength': 'fluorescence/luminescence',
+            'number': 'result detail']
+
 
     private static final String BIOLOGY_LABEL = 'biology'
     private static final String PROBE_REPORT_LABEL = 'probe report'
@@ -42,7 +53,6 @@ abstract class AbstractContext{
      *
      * @return
      */
-    /*
     Descriptor getPreferredDescriptor() {
         Descriptor preferredDescriptor
         List<Descriptor> preferredDescriptors = getContextItems().collect { it.attributeElement.ontologyBreadcrumb.preferedDescriptor }
@@ -59,7 +69,7 @@ abstract class AbstractContext{
         }
         return preferredDescriptor
     }
-    */
+
 
     String getPreferredName() {
         return this.contextName;
@@ -69,7 +79,7 @@ abstract class AbstractContext{
         this.contextName = name;
     }
 
-    abstract List getContextItems()
+    abstract List<? extends AbstractContextItem> getContextItems()
 
     abstract AbstractContextOwner getOwner()
 
@@ -82,16 +92,14 @@ abstract class AbstractContext{
      * @return an Element that represents a defining Attribute and currently serves to classify this context as pertaining to a particular type.
      * Not many of these are defined at this point, only biology and probe report
      */
-    Element getDataExportContextType(){
+    Element getDataExportContextType() {
         final Element biology = Element.findByLabel(BIOLOGY_LABEL)
         final Element probeReport = Element.findByLabel(PROBE_REPORT_LABEL)
-        if(getContextItems().find{AbstractContextItem item-> item.attributeElement == biology}){
+        if (getContextItems().find { AbstractContextItem item -> item.attributeElement == biology }) {
             return biology
-        }
-        else if ( getContextItems().find{AbstractContextItem item-> item.attributeElement == probeReport}){
+        } else if (getContextItems().find { AbstractContextItem item -> item.attributeElement == probeReport }) {
             return probeReport
-        }
-        else {
+        } else {
             return null
         }
     }
@@ -100,4 +108,10 @@ abstract class AbstractContext{
      * @return the SubClass of the Item this Context is expecting
      */
     abstract Class<? extends AbstractContextItem> getItemSubClass()
+
+    @Override
+    List<Guidance> getGuidance() {
+        []
+    }
+
 }

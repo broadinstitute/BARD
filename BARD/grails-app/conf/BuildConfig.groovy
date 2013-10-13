@@ -26,7 +26,7 @@ grails.project.dependency.resolution = {
         grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
 
         //TODO: Without adding this repos the push-event plugin won't work. Needs further investigations
-        mavenRepo "https://oss.sonatype.org/content/repositories/snapshots/"
+       // mavenRepo "https://oss.sonatype.org/content/repositories/snapshots/"
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
@@ -128,13 +128,14 @@ grails.project.dependency.resolution = {
         compile ":mail:1.0.1"
         compile ":greenmail:1.3.3"
         compile ":cache:1.0.1"
-        compile ':events-push:1.0.M7'
+       // compile ':events-push:1.0.M7'
         compile ":famfamfam:1.0.1"
         compile ":spring-security-ui:0.2"
 
         compile ":jesque:0.6.2"
         compile ":jesque-web:0.4.0"
 
+        compile ":spring-security-core:1.2.7.3"
         // runtime scope
         runtime ":jquery:1.7.1"
 

@@ -70,6 +70,7 @@ class PubchemReformatService {
         String statsModifier
 
         String qualifierTid
+        Long eid
 
         Set<ResultMapContextColumn> contextItemColumns = [] as Set;
         Map<String, String> staticContextItems = [:];
@@ -85,6 +86,7 @@ class PubchemReformatService {
                     ", qualifierTid='" + qualifierTid + '\'' +
                     ", contextItemColumns=" + contextItemColumns +
                     ", staticContextItems=" + staticContextItems +
+                    ", eid="+eid +
                     '}';
         }
     }
@@ -173,6 +175,10 @@ class PubchemReformatService {
             allRecords.sort { Integer.parseInt(it.tid) }
         }
 
+        Collection<Long> getPanelEids() {
+            return ((allRecords.findAll {it.eid != null}).collect { it.eid } as Set)
+        }
+
         Collection<ResultMapRecord> getChildRecords(String tid) {
             return recordsByParentTid.get(tid);
         }
@@ -188,7 +194,7 @@ class PubchemReformatService {
         /**
          * construct a list of CAP result rows for the given resultType, statsModifier and the parentTid
          */
-        List<Map<String, String>> getValues(Map<String, String> pubchemRow, String resultType, String statsModifier, String parentTid) {
+        List<Map<String, String>> getValues(Map<String, String> pubchemRow, String resultType, String statsModifier, String parentTid, Long eidToInclude) {
             List<Map<String, String>> rows = []
             String label = makeLabel(resultType, statsModifier)
             Collection<ResultMapRecord> records = records.get(label).findAll { it.parentTid == parentTid }
@@ -196,6 +202,10 @@ class PubchemReformatService {
             // each record represents a column in the pubchem file
             // loop through all the child columns of the given parent (parentTid)
             for (record in records) {
+                if(record.eid != null && record.eid != eidToInclude) {
+                    continue;
+                }
+
                 Map<String, String> kvs = ["Replicate #": record.series?.toString(), "TID": record.tid]
 
                 // get the value for the current column (record) in the current row (pubchemRow)
@@ -288,18 +298,18 @@ class PubchemReformatService {
         }
     }
 
-    void convertRow(Collection<ExperimentMeasure> measures, Long substanceId, Map<String, String> pubchemRow, ResultMap map, CapCsvWriter writer, Integer parentRow, String parentTid) {
+    void convertRow(Collection<ExperimentMeasure> measures, Long substanceId, Map<String, String> pubchemRow, ResultMap map, CapCsvWriter writer, Integer parentRow, String parentTid, Long eidToInclude) {
         //println("convertRow: ${measures.collect { it.measure.resultType.label } }, ${parentRow}, ${parentTid}")
         for (expMeasure in measures) {
             String resultType = expMeasure.measure.resultType.label
             String statsModifier = expMeasure.measure.statsModifier?.label
 
-            List rows = map.getValues(pubchemRow, resultType, statsModifier, parentTid)
+            List rows = map.getValues(pubchemRow, resultType, statsModifier, parentTid, eidToInclude)
 //            println("Rows: ${rows}")
             for (row in rows) {
                 int rowNumber = writer.addRow(substanceId, parentRow, row["Replicate #"], row)
 
-                convertRow(expMeasure.childMeasures, substanceId, pubchemRow, map, writer, rowNumber, row["TID"])
+                convertRow(expMeasure.childMeasures, substanceId, pubchemRow, map, writer, rowNumber, row["TID"], eidToInclude)
             }
         }
     }
@@ -353,7 +363,8 @@ class PubchemReformatService {
                         resultType: row.RESULTTYPE,
                         parentChildRelationship: row.RELATIONSHIP,
                         statsModifier: row.STATS_MODIFIER,
-                        qualifierTid: row.QUALIFIERTID)
+                        qualifierTid: row.QUALIFIERTID,
+                        eid: row.PANELNO)
                 records.add(record)
 
                 if (record.qualifierTid != null)
@@ -429,8 +440,7 @@ class PubchemReformatService {
         }
     }
 
-    public Map convertPubchemRowToMap(PubchemHeader header, List<String> row) {
-        String outcome = row[header.outcomeColumn]
+    protected mapOutcomeToString(String outcome) {
         if (!StringUtils.isBlank(outcome) && !pubchemOutcomeValues.contains(outcome)) {
             String origOutcome = outcome
             outcome = pubchemOutcomeTranslation[origOutcome];
@@ -438,13 +448,23 @@ class PubchemReformatService {
                 throw new RuntimeException("Did not know the name of a pubchem outcome: ${origOutcome}");
             }
         }
+        return outcome
+    }
+
+    public Map convertPubchemRowToMap(PubchemHeader header, List<String> row, String outcomeTidOverride) {
         String activity = row[header.activityColumn]
 
         Map pubchemRow = [:]
-        pubchemRow["-1"] = outcome
+        pubchemRow["-1"] = mapOutcomeToString(row[header.outcomeColumn])
         pubchemRow["0"] = activity
         for (int i = 0; i < header.headers.size(); i++) {
-            pubchemRow[header.headers[i]] = row[i]
+            String tid = header.headers[i]
+            String value = row[i]
+            if(tid.equals(outcomeTidOverride)) {
+                pubchemRow["-1"] = mapOutcomeToString(value)
+            } else {
+                pubchemRow[tid] = value
+            }
         }
         return pubchemRow;
     }
@@ -469,7 +489,6 @@ class PubchemReformatService {
 
         PubchemHeader header = new PubchemHeader(transformHeaderToOriginalConvention(reader.readNext() as List))
 
-        Pattern numberPattern = Pattern.compile("\\d+")
         for (tid in header.tids) {
             if (!map.hasTid(tid)) {
                 throw new MissingColumnsException("Result map of ${map.aid} missing tid ${tid}")
@@ -478,16 +497,24 @@ class PubchemReformatService {
 
         Collection<ExperimentMeasure> rootMeasures = experiment.experimentMeasures.findAll { it.parent == null }
 
+        String overrideOutcomeTid = null;
+        // check to see if this experiment has an outcome specific to it.
+        map.allRecords.each {
+            if (it.resultType == "PubChem outcome" && it.eid == experiment.id) {
+                overrideOutcomeTid = it.tid
+            }
+        }
+
         while (true) {
             List<String> row = reader.readNext()
             if (row == null)
                 break
 
             Long substanceId = Long.parseLong(row[header.sidColumn])
-            Map pubchemRow = convertPubchemRowToMap(header, row);
+            Map pubchemRow = convertPubchemRowToMap(header, row, overrideOutcomeTid);
 
             naMissingValues(pubchemRow, map)
-            convertRow(rootMeasures, substanceId, pubchemRow, map, writer, null, null)
+            convertRow(rootMeasures, substanceId, pubchemRow, map, writer, null, null, experiment.id)
         }
 
         writer.close()

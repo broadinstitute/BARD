@@ -2,7 +2,7 @@
     <head>
         <r:require modules="core,bootstrap,dynatree,jqueryform,newTerm"/>
         <meta name="layout" content="basic"/>
-        <title>Propose new term</title>
+        <title>Propose New Term</title>
     </head>
 
     <body>

@@ -1,5 +1,6 @@
 package bard.db.experiment
 
+import acl.CapPermissionService
 import bard.core.SearchParams
 import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.experiment.ExperimentSearch
@@ -10,6 +11,8 @@ import bard.db.enums.ReadyForExtraction
 import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.Measure
+import bardqueryapi.TableModel
+import bardqueryapi.experiment.ExperimentBuilder
 import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -21,12 +24,24 @@ class ExperimentService {
 
     AssayService assayService;
     ExperimentRestService experimentRestService
+    ResultsExportService resultsExportService
+    ExperimentBuilder experimentBuilder
+    CapPermissionService capPermissionService
+    @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    TableModel previewResults(final Long id) {
+        Experiment experiment = Experiment.findById(id)
+        List<JsonSubstanceResults> results = resultsExportService.readResultsForSubstances(experiment)
+        return experimentBuilder.buildModelForPreview(experiment,results)
+    }
+
 
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Experiment updateOwnerRole(final Long id, final Role ownerRole) {
         Experiment experiment = Experiment.findById(id)
         experiment.ownerRole = ownerRole
         experiment.save(flush: true)
+
+        capPermissionService.updatePermission(experiment,ownerRole)
         return Experiment.findById(id)
     }
 
@@ -161,7 +176,7 @@ class ExperimentService {
         println("Added ${experiment.experimentMeasures.size()} measures to tree")
     }
 
-    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+
     Experiment createNewExperiment(Long id, String experimentName, String description) {
         Assay assay = Assay.findById(id)
         Experiment experiment = new Experiment(assay: assay, experimentName: experimentName, description: description, dateCreated: new Date())

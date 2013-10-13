@@ -3,7 +3,7 @@
 <head>
     <r:require modules="core,bootstrap"/>
     <meta name="layout" content="basic"/>
-    <title>BARD hierarchy top level concept definitions</title>
+    <title>BARD Hierarchy Top-Level Concept Definitions</title>
 
 </head>
 

@@ -5,8 +5,7 @@
 <!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
 <head>
-    <title>Linked Hierarchies</title>
-    <title>BARD : Compound Bio-Activity Summary</title>
+    <title>BARD: CID ${cid}: Linked Hierarchy Visualization</title>
     <r:require modules="sunburst"/>
     <r:layoutResources/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

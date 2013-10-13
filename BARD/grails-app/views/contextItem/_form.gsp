@@ -26,7 +26,7 @@
                 code="contextItem.attributeElementId.label"/>:</label>
 
         <div class="controls">
-            <g:hiddenField class="span8" id="attributeElementId" name="attributeElementId"
+            <g:hiddenField id="attributeElementId" name="attributeElementId" class="span11"
                            value="${instance?.attributeElementId}" disabled="${disabledInput}"/>
             <span class="help-inline"><g:fieldError field="attributeElementId" bean="${instance}"/></span>
 
@@ -68,7 +68,7 @@
     <div id="elementValueContainer" style="display: none;">
         <g:if test="${disabledInput == false}">
             <div class="row-fluid">
-                <div class="span6 offset2 alert alert-info">
+                <div class="span10 offset1 alert alert-info">
                     <p>This attribute expects a value from the dictionary, start typing to select a value.</p>
                     <p>If you cannot find an existing value, please add a value to the dictionary.
                     <g:link controller="element" action="addTerm" target="proposeTerm" class="btn">Propose a New Dictionary Term</g:link></p>
@@ -81,7 +81,7 @@
                     code="contextItem.valueElementId.label"/>:</label>
 
             <div class="controls">
-                <g:hiddenField class="span8 valueField" id="valueElementId" name="valueElementId"
+                <g:hiddenField class="span11 valueField" id="valueElementId" name="valueElementId"
                                value="${instance?.valueElementId}" disabled="${disabledInput}"/>
 
                 <span class="help-inline"><g:fieldError field="valueElementId" bean="${instance}"/></span>
@@ -98,7 +98,7 @@
                 <label class="control-label" for="extValueId"><g:message code="contextItem.extValueSearch.label"/>:</label>
                 <div class="controls">
                     <g:hiddenField
-                            class="span8 valueField" id="extValueSearch" name="extValueSearch" value="${instance?.extValueId}"
+                            class="span11 valueField" id="extValueSearch" name="extValueSearch" value="${instance?.extValueId}"
                             />
                 </div>
             </div>
@@ -112,7 +112,7 @@
             <div class="controls">
 
                 <g:textField
-                        class="span8 valueField" id="extValueId" name="extValueId" value="${instance?.extValueId}"
+                        class="span11 valueField" id="extValueId" name="extValueId" value="${instance?.extValueId}"
                         disabled="${disabledInput}"/>
                 <span class="help-inline"><g:fieldError field="extValueId" bean="${instance}"/></span>
             </div>
@@ -186,7 +186,7 @@
                     code="contextItem.valueDisplay.label"/>:</label>
 
             <div class="controls">
-                <g:textField class="span8 valueField" id="valueDisplay" name="valueDisplay"
+                <g:textField class="valueField" id="valueDisplay" name="valueDisplay"
                              value="${instance?.valueDisplay}"
                              disabled="${disabledInput}"/>
                 <span class="help-inline"><g:fieldError field="valueDisplay" bean="${instance}"/></span>

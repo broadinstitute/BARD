@@ -225,7 +225,7 @@ class ProjectController {
         if (params.disableEdit)
             editable = false
 
-        String owner = capPermissionService.getOwner(projectInstance)
+        String owner = projectInstance.getOwner()
 
         Map projectMap = null;
         try {

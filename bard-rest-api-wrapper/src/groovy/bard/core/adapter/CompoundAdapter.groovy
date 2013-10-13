@@ -101,12 +101,20 @@ public class CompoundAdapter implements CompoundAdapterInterface {
     }
 
     public Long getId() {
-        return this.getPubChemCID()
+        return this.compound.cid
     }
 
     @Deprecated //use getId instead
     public Long getPubChemCID() {
         return this.compound.cid
+    }
+    /**
+     *
+     * @return
+     */
+    //use this.compound.getSmiles() instead
+    public String getSmiles() {
+        return this.compound.smiles
     }
     /**
      *

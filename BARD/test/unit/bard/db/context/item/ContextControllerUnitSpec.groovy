@@ -31,9 +31,6 @@ class ContextControllerUnitSpec extends Specification {
         controller.contextService = Mock(ContextService)
     }
 
-    def cleanup() {
-    }
-
     void 'test createCard- Bad Request'() {
         given:
         String contextClass = "ProjectContext"

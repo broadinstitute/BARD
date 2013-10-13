@@ -180,7 +180,7 @@
                         $("#measureMessage").addClass("alert alert-error");
                         $("#measureMessage").html("Error during move." + response.responseText);
                     });
-
+              }
             $("#measure-tree").dynatree({
                 onActivate: function(node) {
                     $(".measure-detail-card").hide();
@@ -210,7 +210,7 @@
                       },
                     onDrop: measureNodeDropped
                     },
-                children: ${measuresTreeAsJson}
+                children: <%=measuresTreeAsJson%>
         });
     </r:script>
 </div>

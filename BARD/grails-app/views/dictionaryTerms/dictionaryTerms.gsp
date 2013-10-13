@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Title: Dictionary Terms and Description</title>
+    <title>BARD: Dictionary Terms and Description</title>
     <r:require modules="bootstrap,dictionaryPage"/>
     <r:layoutResources/>
     <script type="text/javascript">

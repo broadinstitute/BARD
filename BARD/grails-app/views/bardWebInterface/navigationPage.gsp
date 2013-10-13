@@ -5,7 +5,7 @@
     <r:require
             modules="core,bootstrap"/>
     <meta name="layout" content="basic"/>
-    <title>BARD: Catalog of Assay Protocols</title>
+    <title>My Submissions</title>
 </head>
 
 <body>
