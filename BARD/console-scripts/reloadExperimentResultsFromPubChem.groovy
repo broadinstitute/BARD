@@ -21,7 +21,7 @@ outFile.withWriter { writer ->
     writer.writeLine("EIDs: ${eids.join(', ')}")
     println("EIDs: ${eids.join(', ')}")
 
-    SpringSecurityUtils.reauthenticate("gwalzer", "user")
+    SpringSecurityUtils.reauthenticate("gwalzer", null)
     StopWatch sw = new StopWatch()
     sw.start()
     println("started reloading experiment results")
