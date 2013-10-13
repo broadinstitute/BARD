@@ -18,6 +18,16 @@ import bard.core.rest.spring.project.ProjectStep
 
 class ProjectRestService extends AbstractRestService {
     def transactional=false
+
+    public ProjectResult getTopProjects(long top){
+        final long count = getResourceCount()
+        final long skip = count-top
+        String urlString = addTopAndSkip(getResource(),true,top,skip)
+
+        final URL url = new URL(urlString)
+        final ProjectResult projectResult = (ProjectResult) getForObject(url.toURI(), ProjectResult.class)
+        return projectResult
+    }
     public String getResourceContext() {
         return RestApiConstants.PROJECTS_RESOURCE
     }

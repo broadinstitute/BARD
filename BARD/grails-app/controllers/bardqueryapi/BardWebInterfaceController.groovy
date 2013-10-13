@@ -1,19 +1,22 @@
 package bardqueryapi
+
 import bard.core.IntValue
 import bard.core.SearchParams
 import bard.core.Value
-import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
-import bard.core.rest.spring.ExperimentRestService
+import bard.core.rest.spring.assays.ExpandedAssayResult
+import bard.core.rest.spring.compounds.Compound
+import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.Promiscuity
+import bard.core.rest.spring.experiment.ExperimentSearchResult
+import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
 import bard.db.project.Project
-import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import molspreadsheet.CompoundSummaryCategorizer
 import molspreadsheet.LinkedVisHierData
@@ -24,6 +27,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
+
 /**
  *
  * TODO: Refactor into individual classes. Class is too big. We need to have different controllers for each entity
@@ -45,7 +49,6 @@ class BardWebInterfaceController {
     IQueryService queryService
     MolecularSpreadSheetService molecularSpreadSheetService
     MobileService mobileService
-    ExperimentRestService experimentRestService
     ExperimentDataFactoryService experimentDataFactoryService
     QueryProjectExperimentRenderService queryProjectExperimentRenderService
     RingManagerService ringManagerService
@@ -73,10 +76,10 @@ class BardWebInterfaceController {
         return false
     }
 
-    def previewResults(Long id){
+    def previewResults(Long id) {
         Experiment experiment = Experiment.get(id)
-        if(!experiment.experimentFiles){
-            flash.message ="Experiment does not have result files"
+        if (!experiment.experimentFiles) {
+            flash.message = "Experiment does not have result files"
             redirect(action: "show")
             return
         }
@@ -89,15 +92,30 @@ class BardWebInterfaceController {
     }
 
     def index() {
-        render( view: 'homepage', model: {})
+        //Add model
+        final ExpandedAssayResult recentlyAddedAssays = queryService.findRecentlyAddedAssays(6)
+        final CompoundResult recentlyAddedCompounds = queryService.findRecentlyAddedCompounds(6)
+        final ExperimentSearchResult recentlyAddedExperiments = queryService.findRecentlyAddedExperiments(6)
+        final ProjectResult recentlyAddedProjects = queryService.findRecentlyAddedProjects(6)
+        final List<Compound> recentlyAddedProbes = queryService.findRecentlyAddedProbes(6)
+
+        render(view: 'homepage', model:
+                [
+                        recentlyAddedAssays: recentlyAddedAssays,
+                        recentlyAddedCompounds: recentlyAddedCompounds,
+                        recentlyAddedProjects: recentlyAddedProjects,
+                        recentlyAddedExperiments: recentlyAddedExperiments,
+                        recentlyAddedProbes:recentlyAddedProbes
+                ]
+        )
     }
 
-    def redirectToIndex(){
-        redirect( controller: 'bardWebInterface', action:'index' )
+    def redirectToIndex() {
+        redirect(controller: 'bardWebInterface', action: 'index')
     }
 
-    def navigationPage(){
-        render( view: 'navigationPage', model: {})
+    def navigationPage() {
+        render(view: 'navigationPage', model: {})
     }
 
 
@@ -122,12 +140,12 @@ class BardWebInterfaceController {
             return
         }
         Experiment experiment = Experiment.get(id)
-        if(!experiment){
+        if (!experiment) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND,
                     "Could not find Experiment with EID: ${id}")
             return
         }
-        if(!experiment.ncgcWarehouseId){
+        if (!experiment.ncgcWarehouseId) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND,
                     "Could not find Experiment with EID: ${id} in warehouse")
             return
@@ -186,7 +204,7 @@ class BardWebInterfaceController {
 
             final Long capExperimentId = tableModel.additionalProperties.capExptId as Long
             Experiment capExperiment
-            if(capExperimentId){
+            if (capExperimentId) {
                 capExperiment = Experiment.findById(capExperimentId)
             }
 
@@ -219,7 +237,7 @@ class BardWebInterfaceController {
 
     def retrieveExperimentResultsSummary(Long id, SearchCommand searchCommand) {
         Experiment experiment = Experiment.get(id)
-        render experimentRestService.histogramDataByEID(experiment.ncgcWarehouseId)
+        render queryService.histogramDataByEID(experiment.ncgcWarehouseId)
     }
 
     def probe(String probeId) {

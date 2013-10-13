@@ -26,6 +26,17 @@ class CompoundRestService extends AbstractRestService {
     def transactional = false
     ExecutorService executorService = Executors.newCachedThreadPool()
 
+
+    public CompoundResult findRecentlyAddedCompounds(long top) {
+        final long count = getResourceCount()
+        final long skip = count - top
+        String urlString = addTopAndSkip(getResource(), true, top, skip)
+
+        final URL url = new URL(urlString)
+        final CompoundResult compoundResult = (CompoundResult) getForObject(url.toURI(), CompoundResult.class)
+        return compoundResult
+    }
+
     public String getResourceContext() {
         return RestApiConstants.COMPOUNDS_RESOURCE;
     }

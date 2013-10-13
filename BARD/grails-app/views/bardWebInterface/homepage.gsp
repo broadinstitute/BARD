@@ -20,35 +20,6 @@
         </a>
     </noscript>
     <r:layoutResources/>
-    %{--We have to run a small function in order to kickstart the auto complete--}%
-    %{--<script>--}%
-        %{--$(document).ready(function () {--}%
-
-            %{--//set up auto complete--}%
-            %{--var autoOpts = {--}%
-                %{--source: "/BARD/bardWebInterface/autoCompleteAssayNames",--}%
-                %{--minLength: 2,--}%
-                %{--html: true,--}%
-                %{--delay: 1000--}%
-            %{--};--}%
-
-            %{--$("#searchString").autocomplete(autoOpts);--}%
-            %{--$("#searchString").bind("autocompleteselect", function (event, ui) {--}%
-                %{--$("#searchString").val(ui.item.value)--}%
-                %{--$("#searchButton").click();--}%
-            %{--});--}%
-            %{--// make sure to close the autocomplete box when the search button or ENTER are clicked--}%
-            %{--$("#searchButton").click(function () {--}%
-                %{--$("#searchString").autocomplete("close");--}%
-            %{--});--}%
-            %{--$('#searchButton').keypress(function (eventData) {--}%
-                %{--if (eventData.which == 13) {--}%
-                    %{--$("#searchString").autocomplete("close");--}%
-                %{--}--}%
-            %{--});--}%
-
-        %{--});--}%
-    %{--</script>--}%
 
 </head>
 
@@ -338,34 +309,19 @@
 <div class="tabs-list-holder">
     <ul class="tabs-list">
         <li>
-            <a href="#tab-projects" data-toggle="tab">
-                <span><strong class="number">127</strong> Projects</span>
-                <i class="arrow"></i>
-            </a>
+            <g:projectCount/>
         </li>
         <li class="active">
-            <a href="#tab-definitions" data-toggle="tab">
-                <span><strong class="number">857</strong> Assay Definitions</span>
-                <i class="arrow"></i>
-            </a>
+            <g:assayCount/>
         </li>
         <li>
-            <a href="#tab-experiments" data-toggle="tab">
-                <span><strong class="number">1,204</strong> Experiments</span>
-                <i class="arrow"></i>
-            </a>
+            <g:experimentCount/>
         </li>
         <li>
-            <a href="#tab-compounds" data-toggle="tab">
-                <span><strong class="number">573,062</strong> Tested Compounds</span>
-                <i class="arrow"></i>
-            </a>
+            <g:compoundCount/>
         </li>
         <li>
-            <a href="#tab-probes" data-toggle="tab">
-                <span><strong class="number">135</strong> ML Probes</span>
-                <i class="arrow"></i>
-            </a>
+            <g:probeCount/>
         </li>
     </ul>
 </div>
@@ -383,56 +339,39 @@
         <div class="carousel-inner">
             <div class="item active">
                 <div class="row-fluid">
-                    <article class="span4">
-                        <time datetime="2013-10-16">10.16.13</time>
+                    <g:each status="i" in="${recentlyAddedProjects.projects}" var="project">
+                        <g:if test="${i < 3}">
+                            <article class="span4">
+                                <time datetime="2013-10-16">${project.updated}</time>
 
-                        <h2><a href="#">Universal chemical assay for the detection and determination of siderophores.</a>
-                        </h2>
+                                <h2>
+                                    <g:link controller="project" action="show"
+                                            id="${project.capProjectId}">${project.name}</g:link>
+                                </h2>
 
-                        <p>Schwyn B, Neilands JB.</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">10.16.13</time>
-
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
-
-                        <p>Sanford P. Markey</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">10.16.13</time>
-
-                        <h2><a href="#">Universal chemical assay for the detection and determination of siderophores.</a>
-                        </h2>
-
-                        <p>Schwyn B, Neilands JB.</p>
-                    </article>
+                                %{--<p>Schwyn B, Neilands JB.</p>--}%
+                            </article>
+                        </g:if>
+                    </g:each>
                 </div>
             </div>
 
             <div class="item">
                 <div class="row-fluid">
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
+                    <g:each status="i" in="${recentlyAddedProjects.projects}" var="project">
+                        <g:if test="${i >= 3}">
+                            <article class="span4">
+                                <time datetime="2013-10-16">${project.updated}</time>
 
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
+                                <h2>
+                                    <g:link controller="project" action="show"
+                                            id="${project.capProjectId}">${project.name}</g:link>
+                                </h2>
 
-                        <p>Sanford P. Markey</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
-
-                        <h2><a href="#">Universal chemical assay for the detection and determination of siderophores.</a>
-                        </h2>
-
-                        <p>Schwyn B, Neilands JB.</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
-
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
-
-                        <p>Sanford P. Markey</p>
-                    </article>
+                                %{--<p>Schwyn B, Neilands JB.</p>--}%
+                            </article>
+                        </g:if>
+                    </g:each>
                 </div>
             </div>
         </div>
@@ -449,55 +388,39 @@
         <div class="carousel-inner">
             <div class="item active">
                 <div class="row-fluid">
-                    <article class="span4">
-                        <time datetime="2013-10-16">10.16.13</time>
+                    <g:each status="i" in="${recentlyAddedAssays.assays}" var="assay">
+                        <g:if test="${i < 3}">
+                            <article class="span4">
+                                <time datetime="2013-10-16">${assay.updated}</time>
 
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
+                                <h2>
+                                    <g:link controller="assayDefinition" action="show"
+                                            id="${assay.capAssayId}">${assay.name}</g:link>
+                                </h2>
 
-                        <p>Sanford P. Markey</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">10.16.13</time>
-
-                        <h2><a href="#">Universal chemical assay for the detection and determination of siderophores.</a>
-                        </h2>
-
-                        <p>Schwyn B, Neilands JB.</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">10.16.13</time>
-
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
-
-                        <p>Sanford P. Markey</p>
-                    </article>
+                                <p>${assay.designedBy}</p>
+                            </article>
+                        </g:if>
+                    </g:each>
                 </div>
             </div>
 
             <div class="item">
                 <div class="row-fluid">
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
+                    <g:each status="i" in="${recentlyAddedAssays.assays}" var="assay">
+                        <g:if test="${i >= 3}">
+                            <article class="span4">
+                                <time datetime="2013-10-16">${assay.updated}</time>
 
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
+                                <h2>
+                                    <g:link controller="assayDefinition" action="show"
+                                            id="${assay.capAssayId}">${assay.name}</g:link>
+                                </h2>
 
-                        <p>Sanford P. Markey</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
-
-                        <h2><a href="#">Universal chemical assay for the detection and determination of siderophores.</a>
-                        </h2>
-
-                        <p>Schwyn B, Neilands JB.</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
-
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
-
-                        <p>Sanford P. Markey</p>
-                    </article>
+                                <p>${assay.designedBy}</p>
+                            </article>
+                        </g:if>
+                    </g:each>
                 </div>
             </div>
         </div>
@@ -513,54 +436,40 @@
         <div class="carousel-inner">
             <div class="item active">
                 <div class="row-fluid">
-                    <article class="span4">
-                        <time datetime="2013-10-16">10.16.13</time>
 
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
+                    <g:each status="i" in="${recentlyAddedExperiments.experiments}" var="experiment">
+                        <g:if test="${i < 3}">
+                            <article class="span4">
+                                <time datetime="2013-10-16">${experiment.updated}</time>
 
-                        <p>Sanford P. Markey</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">10.16.13</time>
+                                <h2>
+                                    <g:link controller="experiment" action="show"
+                                            id="${experiment.capExptId}">${experiment.name}</g:link>
+                                </h2>
 
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
-
-                        <p>Sanford P. Markey</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">10.16.13</time>
-
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
-
-                        <p>Sanford P. Markey</p>
-                    </article>
+                                <p></p>
+                            </article>
+                        </g:if>
+                    </g:each>
                 </div>
             </div>
 
             <div class="item">
                 <div class="row-fluid">
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
+                    <g:each status="i" in="${recentlyAddedExperiments.experiments}" var="experiment">
+                        <g:if test="${i >= 3}">
+                            <article class="span4">
+                                <time datetime="2013-10-16">${experiment.updated}</time>
 
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
+                                <h2>
+                                    <g:link controller="experiment" action="show"
+                                            id="${experiment.capExptId}">${experiment.name}</g:link>
+                                </h2>
 
-                        <p>Sanford P. Markey</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
-
-                        <h2><a href="#">Universal chemical assay for the detection and determination of siderophores.</a>
-                        </h2>
-
-                        <p>Schwyn B, Neilands JB.</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
-
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
-
-                        <p>Sanford P. Markey</p>
-                    </article>
+                                <p></p>
+                            </article>
+                        </g:if>
+                    </g:each>
                 </div>
             </div>
         </div>
@@ -576,57 +485,39 @@
         <div class="carousel-inner">
             <div class="item active">
                 <div class="row-fluid">
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
+                    <g:each status="i" in="${recentlyAddedCompounds.compounds}" var="compound">
+                        <g:if test="${i < 3}">
+                            <article class="span4">
+                                %{--<time datetime="2013-10-16">${compound.}</time>--}%
 
-                        <h2><a href="#">Universal chemical assay for the detection and determination of siderophores.</a>
-                        </h2>
+                                <h2>
+                                    <g:link controller="bardWebInterface" action="showCompound"
+                                            id="${compound.id}">${compound.name}</g:link>
+                                </h2>
 
-                        <p>Schwyn B, Neilands JB.</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
-
-                        <h2><a href="#">Universal chemical assay for the detection and determination of siderophores.</a>
-                        </h2>
-
-                        <p>Schwyn B, Neilands JB.</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
-
-                        <h2><a href="#">Universal chemical assay for the detection and determination of siderophores.</a>
-                        </h2>
-
-                        <p>Schwyn B, Neilands JB.</p>
-                    </article>
+                                <p>CID: ${compound.id}</p>
+                            </article>
+                        </g:if>
+                    </g:each>
                 </div>
             </div>
 
             <div class="item">
                 <div class="row-fluid">
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
+                    <g:each status="i" in="${recentlyAddedCompounds.compounds}" var="compound">
+                        <g:if test="${i >= 3}">
+                            <article class="span4">
+                                %{--<time datetime="2013-10-16">${compound.}</time>--}%
 
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
+                                <h2>
+                                    <g:link controller="bardWebInterface" action="showCompound"
+                                            id="${compound.id}">${compound.name}</g:link>
+                                </h2>
 
-                        <p>Sanford P. Markey</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
-
-                        <h2><a href="#">Universal chemical assay for the detection and determination of siderophores.</a>
-                        </h2>
-
-                        <p>Schwyn B, Neilands JB.</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
-
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
-
-                        <p>Sanford P. Markey</p>
-                    </article>
+                                <p>CID: ${compound.id}</p>
+                            </article>
+                        </g:if>
+                    </g:each>
                 </div>
             </div>
         </div>
@@ -642,55 +533,39 @@
         <div class="carousel-inner">
             <div class="item active">
                 <div class="row-fluid">
-                    <article class="span4">
-                        <time datetime="2013-10-16">10.16.13</time>
+                    <g:each status="i" in="${recentlyAddedProbes}" var="compound">
+                        <g:if test="${i < 3}">
+                            <article class="span4">
+                                %{--<time datetime="2013-10-16">${compound.}</time>--}%
 
-                        <h2><a href="#">Universal chemical assay for the detection and determination of siderophores.</a>
-                        </h2>
+                                <h2>
+                                    <g:link controller="bardWebInterface" action="showCompound"
+                                            id="${compound.id}">${compound.name}</g:link>
+                                </h2>
 
-                        <p>Schwyn B, Neilands JB.</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">10.16.13</time>
-
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
-
-                        <p>Sanford P. Markey</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">10.16.13</time>
-
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
-
-                        <p>Sanford P. Markey</p>
-                    </article>
+                                <p>CID: ${compound.id}</p>
+                            </article>
+                        </g:if>
+                    </g:each>
                 </div>
             </div>
 
             <div class="item">
                 <div class="row-fluid">
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
+                    <g:each status="i" in="${recentlyAddedProbes}" var="compound">
+                        <g:if test="${i >= 3}">
+                            <article class="span4">
+                                %{--<time datetime="2013-10-16">${compound.}</time>--}%
 
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
+                                <h2>
+                                    <g:link controller="bardWebInterface" action="showCompound"
+                                            id="${compound.id}">${compound.name}</g:link>
+                                </h2>
 
-                        <p>Sanford P. Markey</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
-
-                        <h2><a href="#">Universal chemical assay for the detection and determination of siderophores.</a>
-                        </h2>
-
-                        <p>Schwyn B, Neilands JB.</p>
-                    </article>
-                    <article class="span4">
-                        <time datetime="2013-10-16">11.16.13</time>
-
-                        <h2><a href="#">Chemical Assay of Drugs and Drug  Metabolites</a></h2>
-
-                        <p>Sanford P. Markey</p>
-                    </article>
+                                <p>CID: ${compound.id}</p>
+                            </article>
+                        </g:if>
+                    </g:each>
                 </div>
             </div>
         </div>

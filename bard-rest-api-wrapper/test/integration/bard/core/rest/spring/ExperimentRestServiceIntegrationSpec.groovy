@@ -29,6 +29,17 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     List<Long> TEST_EID_LONG_LIST = [1, 2, 3, 4, 5, 6, 7, 8]
 
 
+    void "get the last #label assays"() {
+        when:
+        ExperimentSearchResult assayResult = experimentRestService.getTopExperiments(numberOfAssays)
+        then:
+        assert assayResult.getExperiments().size() == numberOfAssays
+        where:
+
+        label | numberOfAssays
+        "10"  | 10
+        "5"   | 5
+    }
 
     void "searchExperimentsByCapIds #label"() {
         given:

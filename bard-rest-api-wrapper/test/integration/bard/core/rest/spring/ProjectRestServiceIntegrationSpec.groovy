@@ -1,4 +1,5 @@
 package bard.core.rest.spring
+
 import bard.core.SearchParams
 import bard.core.SuggestParams
 import bard.core.rest.helper.RESTTestHelper
@@ -11,6 +12,7 @@ import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Unroll
+
 /**
  * Tests for ProjectRestService
  */
@@ -23,6 +25,19 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
     @Shared
     List<Long> CAP_PIDS = [3]
 
+
+
+    void "get the last #label projects"() {
+        when:
+        ProjectResult projectResult = projectRestService.getTopProjects(numberOfProjects)
+        then:
+        assert projectResult.getProjects().size() == numberOfProjects
+        where:
+
+        label | numberOfProjects
+        "10"  | 10
+        "5"   | 5
+    }
     void "searchProjectsByCapIds #label"() {
         when:
         ProjectResult projectResult = projectRestService.searchProjectsByCapIds(capIds, searchParams)

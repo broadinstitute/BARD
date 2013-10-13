@@ -19,6 +19,16 @@ import bard.core.rest.spring.assays.Assay
 
 class AssayRestService extends AbstractRestService {
     def transactional=false
+
+     public ExpandedAssayResult getTopAssays(long top){
+         final long count = getResourceCount()
+         final long skip = count-top
+         String urlString = addTopAndSkip(getResource(),true,top,skip)
+
+         final URL url = new URL(urlString)
+         final ExpandedAssayResult expandedAssayResult = (ExpandedAssayResult) getForObject(url.toURI(), ExpandedAssayResult.class)
+         return expandedAssayResult
+     }
     /**
      *
      * @param searchParams

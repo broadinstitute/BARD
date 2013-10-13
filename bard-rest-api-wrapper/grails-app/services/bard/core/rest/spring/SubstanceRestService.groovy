@@ -12,7 +12,19 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
 class SubstanceRestService extends AbstractRestService {
-    def transactional=false
+    def transactional = false
+
+
+    public SubstanceResult getTopSubstances(long top) {
+        final long count = getResourceCount()
+        final long skip = count - top
+        String urlString = addTopAndSkip(getResource(), true, top, skip)
+
+        final URL url = new URL(urlString)
+        final SubstanceResult substanceResult = (SubstanceResult) getForObject(url.toURI(), SubstanceResult.class)
+        return substanceResult
+    }
+
     public String getResourceContext() {
         return RestApiConstants.SUBSTANCES_RESOURCE
     }
@@ -104,7 +116,7 @@ class SubstanceRestService extends AbstractRestService {
         final URL url = new URL(resource.toString())
         List<String> sidUrls = getForObject(url.toURI(), String[].class) as List<String>
         if (sidUrls) {
-            return sidUrls.collect {String s -> new Long(s.substring(s.lastIndexOf("/") + 1).trim())}
+            return sidUrls.collect { String s -> new Long(s.substring(s.lastIndexOf("/") + 1).trim()) }
         }
         return []
     }
@@ -172,7 +184,7 @@ class SubstanceRestService extends AbstractRestService {
      */
     public SubstanceResult findSubstances(final SubstanceSearchType substanceSearchType, final SearchParams searchParams) {
         final String urlString = buildURLForSearch(substanceSearchType, searchParams)
-        final SubstanceResult substanceResult = (SubstanceResult) getForObject(urlString, SubstanceResult.class,[:])
+        final SubstanceResult substanceResult = (SubstanceResult) getForObject(urlString, SubstanceResult.class, [:])
         return substanceResult
     }
 

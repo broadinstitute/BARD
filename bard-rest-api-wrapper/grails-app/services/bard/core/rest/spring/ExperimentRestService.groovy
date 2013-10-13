@@ -14,17 +14,29 @@ import org.springframework.web.client.HttpClientErrorException
 import bard.core.rest.spring.experiment.*
 
 class ExperimentRestService extends AbstractRestService {
-    def transactional=false
+    def transactional = false
+
     public String getResourceContext() {
         return RestApiConstants.EXPERIMENTS_RESOURCE;
     }
 
+    public ExperimentSearchResult getTopExperiments(long top) {
+        final long count = getResourceCount()
+        final long skip = count - top
+        String urlString = addTopAndSkip(getResource(), true, top, skip)
 
+        final URL url = new URL(urlString)
+        final ExperimentSearchResult experimentSearchResult = (ExperimentSearchResult) getForObject(url.toURI(), ExperimentSearchResult.class)
+        return experimentSearchResult
+    }
+    //Why is this returning a string and not a java object?
+    //Everytime we do this it makes it harder for CACHE because we either
+    //have to generate the same JSON or change the client sode code
     public String histogramDataByEID(final Long eid) {
         if (eid) {
             final String urlString = buildURLToExperimentHistogramData(eid)
             final URL url = new URL(urlString)
-            final String histogramJson = (String)this.getForObject(url.toURI(), String.class)
+            final String histogramJson = (String) this.getForObject(url.toURI(), String.class)
             return histogramJson
         }
         return null
@@ -61,6 +73,7 @@ class ExperimentRestService extends AbstractRestService {
         }
         return null
     }
+
     public ExperimentData activitiesBySIDs(final List<Long> sids, final SearchParams searchParams) {
         if (sids) {
             MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
@@ -95,9 +108,9 @@ class ExperimentRestService extends AbstractRestService {
             new StringBuilder(this.externalUrlDTO.ncgcUrl).append(RestApiConstants.EXPERIMENTS_RESOURCE)
 
         resource.append(RestApiConstants.FORWARD_SLASH).append(eid).append(RestApiConstants.RESULT_TYPES)
-          .append(RestApiConstants.QUESTION_MARK).append(RestApiConstants.EXPAND_TRUE).append(RestApiConstants.AMPERSAND)
-          .append(RestApiConstants.COLLAPSE_RESULTS).append(RestApiConstants.MAXIMUM_NUMBER_OF_HISTOGRAM_BARS)
-         return resource.toString()
+                .append(RestApiConstants.QUESTION_MARK).append(RestApiConstants.EXPAND_TRUE).append(RestApiConstants.AMPERSAND)
+                .append(RestApiConstants.COLLAPSE_RESULTS).append(RestApiConstants.MAXIMUM_NUMBER_OF_HISTOGRAM_BARS)
+        return resource.toString()
 
     }
 
@@ -137,8 +150,6 @@ class ExperimentRestService extends AbstractRestService {
 
     }
 
-
-
     /**
      *
      * @param eid
@@ -147,7 +158,7 @@ class ExperimentRestService extends AbstractRestService {
     public ExperimentShow getExperimentById(Long eid) {
         final String url = buildEntityURL() + "?expand={expand}"
         final Map map = [id: eid, expand: "true"]
-        final ExperimentShow experimentShow = (ExperimentShow)this.getForObject(url, ExperimentShow.class, map)
+        final ExperimentShow experimentShow = (ExperimentShow) this.getForObject(url, ExperimentShow.class, map)
         return experimentShow;
     }
     /**
@@ -166,7 +177,7 @@ class ExperimentRestService extends AbstractRestService {
             HttpEntity<List> entity = new HttpEntity<List>(map, headers);
             final String url = this.buildURLToPostIds()
 
-            final HttpEntity<List> exchange = postExchange(url,entity,ExperimentSearch[].class) as HttpEntity<List>
+            final HttpEntity<List> exchange = postExchange(url, entity, ExperimentSearch[].class) as HttpEntity<List>
             final List<ExperimentSearch> experiments = exchange.getBody()
             headers = exchange.getHeaders()
             this.extractETagsFromResponseHeader(headers, 0, etags)
@@ -221,7 +232,7 @@ class ExperimentRestService extends AbstractRestService {
      * @param expandedSearch
      * @return
      */
-    public ExperimentSearchResult searchExperimentsByCapIds(final List<Long> capIds, final SearchParams searchParams, final boolean expandedSearch=true) {
+    public ExperimentSearchResult searchExperimentsByCapIds(final List<Long> capIds, final SearchParams searchParams, final boolean expandedSearch = true) {
         if (capIds) {
             final Map<String, Long> etags = [:]
             final long skip = searchParams.getSkip()
@@ -230,7 +241,7 @@ class ExperimentRestService extends AbstractRestService {
 
 
             final String urlString = buildSearchByCapIdURLs(capIds, searchParams, "capExptId:")
-            urlString.replaceAll("true",expandedSearch.toString())
+            urlString.replaceAll("true", expandedSearch.toString())
             final URL url = new URL(urlString)
             final HttpEntity<ExperimentSearchResult> exchange = getExchange(url.toURI(), entity, ExperimentSearchResult.class) as HttpEntity<ExperimentSearchResult>
             final ExperimentSearchResult experimentSearchResult = exchange.getBody()
@@ -245,19 +256,19 @@ class ExperimentRestService extends AbstractRestService {
 
     }
 
-    public ExperimentData activitiesByCIDsAndEIDs(final List<Long> cids,final List<Long> eids, int maximumValues = 500 ) {
-        final SearchParams searchParams = new SearchParams( skip:  0, top: maximumValues)
+    public ExperimentData activitiesByCIDsAndEIDs(final List<Long> cids, final List<Long> eids, int maximumValues = 500) {
+        final SearchParams searchParams = new SearchParams(skip: 0, top: maximumValues)
         if ((cids) && (eids)) {
             MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
             map.add("cids", cids.join(","));
             map.add("eids", eids.join(","));
             final String urlString = buildURLToExperimentData(searchParams)
             final URL url = new URL(urlString)
-            List<Activity> activities  = null
+            List<Activity> activities = null
             try {
                 activities = this.postForObject(url.toURI(), Activity[].class, map) as List<Activity>;
             } catch (HttpClientErrorException hce) {
-                println  hce.toString()
+                println hce.toString()
                 // the NCGC rest API uses a 404 error to indicate no data found. This is a legitimate condition,
                 // not an error, so we can swallow the HTTP client exception in this case
             }
@@ -268,8 +279,8 @@ class ExperimentRestService extends AbstractRestService {
         return null
     }
 
-    public ExperimentData activitiesBySIDsAndEIDs(final List<Long> sids,final List<Long> eids, int maximumValues = 500 ) {
-        final SearchParams searchParams = new SearchParams(  skip:  0, top: maximumValues)
+    public ExperimentData activitiesBySIDsAndEIDs(final List<Long> sids, final List<Long> eids, int maximumValues = 500) {
+        final SearchParams searchParams = new SearchParams(skip: 0, top: maximumValues)
         if ((sids) && (eids)) {
             MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
             map.add("sids", sids.join(","));
@@ -305,7 +316,7 @@ class ExperimentRestService extends AbstractRestService {
                 currentActivities = (getForObject(url.toURI(), Activity[].class)) as List<Activity>
 
             } else {
-                final ExperimentData currentExperimentData = (ExperimentData)this.getForObject(url.toURI(), ExperimentData.class)
+                final ExperimentData currentExperimentData = (ExperimentData) this.getForObject(url.toURI(), ExperimentData.class)
                 currentActivities = currentExperimentData.activities
             }
             if (currentActivities) {
@@ -343,7 +354,7 @@ class ExperimentRestService extends AbstractRestService {
             final List<Activity> activities = (this.getForObject(url.toURI(), Activity[].class)) as List<Activity>
             experimentData.setActivities(activities)
         } else {
-            experimentData = (ExperimentData)this.getForObject(url.toURI(), ExperimentData.class)
+            experimentData = (ExperimentData) this.getForObject(url.toURI(), ExperimentData.class)
         }
         return experimentData
     }
@@ -380,7 +391,7 @@ class ExperimentRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        CompoundResult compoundResult = (CompoundResult)this.getForObject(url.toURI(), CompoundResult.class)
+        CompoundResult compoundResult = (CompoundResult) this.getForObject(url.toURI(), CompoundResult.class)
         return compoundResult
     }
 
@@ -392,17 +403,17 @@ class ExperimentRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        final ProjectResult projectResult = (ProjectResult)this.getForObject(url.toURI(), ProjectResult.class)
+        final ProjectResult projectResult = (ProjectResult) this.getForObject(url.toURI(), ProjectResult.class)
         return projectResult
     }
     //TODO: Right now this returns the default number of compounds, which is 500
     public List<Long> compoundsForExperiment(Long experimentId) {
         String resource = this.getResource(experimentId.toString()) + RestApiConstants.COMPOUNDS_RESOURCE;
         final URL url = new URL(resource)
-        Map<String, Object> response = (Map)this.getForObject(url.toURI(), Map.class)
+        Map<String, Object> response = (Map) this.getForObject(url.toURI(), Map.class)
         List<String> compoundURLs = (List<String>) response.get("collection")
         if (compoundURLs) {
-            return compoundURLs.collect {String s -> new Long(s.substring(s.lastIndexOf("/") + 1).trim())}
+            return compoundURLs.collect { String s -> new Long(s.substring(s.lastIndexOf("/") + 1).trim()) }
         }
         return []
     }

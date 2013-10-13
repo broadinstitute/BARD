@@ -1,6 +1,11 @@
 package bardqueryapi
 
 import bard.core.adapter.CompoundAdapter
+import bard.core.rest.spring.assays.ExpandedAssayResult
+import bard.core.rest.spring.compounds.Compound
+import bard.core.rest.spring.compounds.CompoundResult
+import bard.core.rest.spring.experiment.ExperimentSearchResult
+import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.util.FilterTypes
@@ -10,7 +15,30 @@ import org.apache.commons.lang3.tuple.Pair
 public interface IQueryService {
     Map<Long, Pair<Long, Long>> findActiveVsTestedForExperiments(final List<Long> capExperimentIds);
 
-        /**
+    String histogramDataByEID(int ncgcWarehouseId);
+
+    long numberOfAssays()
+
+    long numberOfProjects()
+
+    long numberOfExperiments()
+
+    long numberOfCompounds()
+
+    long numberOfSubstances()
+
+    int numberOfProbes()
+
+    List<Compound> findRecentlyAddedProbes(int numberOfProbes)
+
+    ExpandedAssayResult findRecentlyAddedAssays(int numberOfAssays)
+
+    ExperimentSearchResult findRecentlyAddedExperiments(int numberOfExperiments)
+
+    ProjectResult findRecentlyAddedProjects(int numberOfProjects)
+
+    CompoundResult findRecentlyAddedCompounds(int numberOfCompounds)
+    /**
      *
      * @param cid
      * @return {@link bard.core.rest.spring.compounds.CompoundSummary}
