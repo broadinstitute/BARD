@@ -11,16 +11,16 @@ class Role implements GrantedAuthority {
     String modifiedBy
     String displayName
 
-    boolean equals(other) {
+    boolean equals(Role other) {
         if (!(other instanceof Role)) {
             return false
         }
-        return other?.id == this?.id
+        return other?.authority == this?.authority
     }
 
     int hashCode() {
         def builder = new HashCodeBuilder()
-        return builder.append(this.id).toHashCode()
+        return builder.append(this.authority).toHashCode()
     }
 
     static List<Role> getTeamRoles() {
