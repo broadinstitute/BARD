@@ -31,7 +31,8 @@ $(document).ready(function () {
     $('#idModalDiv').modal({
         show:false
     });
-    $('#idModalDiv').css('width', 'auto') //Disable the default width=560px from bootstrap.css
+    $('#idModalDiv').css('width', 'auto'); //Disable the default width=560px from bootstrap.css
+//    $('#idModalDiv').css('left', '40%');
     $("#idModalDiv").draggable({
         handle:".modal-header"
     });
