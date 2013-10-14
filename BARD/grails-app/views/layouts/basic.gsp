@@ -82,9 +82,7 @@
                                   values="${IDSearchType.values()}"
                                   value="${IDSearchType.ALL}"
                                   labels="${IDSearchType.values().label}">
-                        <label class="radio inline">
-                            ${it.radio} ${it.label}
-                        </label>
+                        <label class="radio inline"><%=it.radio%>${it.label}</label>
                     </g:radioGroup>
                 </div>
 
