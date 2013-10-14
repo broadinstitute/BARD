@@ -2,10 +2,10 @@ $(document).ready(function () {
     var widgetsByContainer = {
         '#valueConstraintContainer': ['input[name="valueConstraintType"]'],
         '#elementValueContainer': [null, '#valueElementId'],
-        '#externalOntologyValueContainer': ['#extValueId','#extValueSearch'],
+        '#externalOntologyValueContainer': ['#extValueId', '#extValueSearch'],
         '#numericValueContainer': ['#qualifier,#valueNum,#valueNumUnitId'],
         '#numericRangeValueContainer': ['#valueMin,#valueMax']
-    //    '#freeTextValueContainer': ['#valueDisplay']
+        //    '#freeTextValueContainer': ['#valueDisplay']
     };
 
     var disabledInput = $("#disabledInput").attr("value") == "true";
@@ -21,16 +21,17 @@ $(document).ready(function () {
             $("#attributeElementId").select2("open");
         }
     }
-    function potentiallyFocus(elementId){
+
+    function potentiallyFocus(elementId) {
         if ($("#attributeElementId").is(':disabled')) {
             // do nothing we're in review mode
         }
         else {
             var valueElement = $(elementId);
-            if(valueElement.data('select2')){
+            if (valueElement.data('select2')) {
                 valueElement.select2("open");
             }
-            else{
+            else {
                 valueElement.focus();
             }
         }
@@ -52,7 +53,7 @@ $(document).ready(function () {
      *  ]
      * @param backingData
      */
-    function initializeAttributeSelect2(backingData){
+    function initializeAttributeSelect2(backingData) {
         $("#attributeElementId").select2({
             placeholder: "Search for attribute name",
             allowClear: true,
@@ -70,14 +71,14 @@ $(document).ready(function () {
                         });
                 }
             },
-            data:backingData,
-            formatResult: function(result, container, query) {
+            data: backingData,
+            formatResult: function (result, container, query) {
                 return itemSelect2Format(result, container, query);
-                },
+            },
             query: function (query) {
                 var filteredData = {results: []};
-                $.each(backingData.results, function(index, value){
-                    if(value.fullPath.toUpperCase().indexOf(query.term.toUpperCase())>=0){
+                $.each(backingData.results, function (index, value) {
+                    if (value.fullPath.toUpperCase().indexOf(query.term.toUpperCase()) >= 0) {
                         filteredData.results.push(value);
                     }
                 });
@@ -85,22 +86,22 @@ $(document).ready(function () {
             }
         });
         $("#attributeElementId").on("change", function (e) {
-                // on change of the attribute, clear all value fields
-                clearAllValueFields();
-                // hide any existing error messages, will be redisplayed when user submits with new attribute
-                hideAnyErrorMessages();
-                // based on the attribute selected only show the appropriate value widgets
+            // on change of the attribute, clear all value fields
+            clearAllValueFields();
+            // hide any existing error messages, will be redisplayed when user submits with new attribute
+            hideAnyErrorMessages();
+            // based on the attribute selected only show the appropriate value widgets
             var selectedData = $("#attributeElementId").select2("data");
             updateConstraintWidgets(selectedData);
         });
         initialFocus();
     };
-    initializeAttributeSelect2({results:[]});
+    initializeAttributeSelect2({results: []});
     $.ajax("/BARD/ontologyJSon/getAttributeDescriptors").done(function (data) {
         initializeAttributeSelect2(data);
     });
-    function itemSelect2Format(result, container, query){
-        var markup=[];
+    function itemSelect2Format(result, container, query) {
+        var markup = [];
         window.Select2.util.markMatch(result.parentFullPath, query.term, markup);
         markup.push('> ');
         markup.push('<b>');
@@ -108,12 +109,14 @@ $(document).ready(function () {
         markup.push('</b>');
         return markup.join("");
     }
+
     function clearAllValueFields() {
         $(':text').val("");
         $("#valueElementId").select2("data", {results: []});
         $("#extValueSearch").select2("data", {results: []});
         $("#valueNumUnitId").select2("data", {results: []});
     }
+
     function hideAnyErrorMessages() {
         $('.help-inline').hide();
         $('.help-block').hide();
@@ -124,16 +127,16 @@ $(document).ready(function () {
     function hideAllValueWidgets() {
         var containers = $("[id$=ValueContainer]");
         containers.hide();
-        containers.each( function(index, element) {
-            var selectors = widgetsByContainer["#"+element.id]
-            if(selectors) {
+        containers.each(function (index, element) {
+            var selectors = widgetsByContainer["#" + element.id]
+            if (selectors) {
                 var normalInputSelector = selectors[0];
                 var select2Selector = selectors[1];
 
-                if(normalInputSelector)
+                if (normalInputSelector)
                     $(normalInputSelector).attr("disabled", "disabled");
 
-                if(select2Selector)
+                if (select2Selector)
                     $(select2Selector).select2("enable", false);
             }
         });
@@ -141,16 +144,16 @@ $(document).ready(function () {
 
     function showWidgets(containerSelector) {
         $(containerSelector).show();
-        if(!disabledInput) {
+        if (!disabledInput) {
             var selectors = widgetsByContainer[containerSelector];
-            if(selectors) {
+            if (selectors) {
                 var inputSelector = selectors[0];
                 var select2Selector = selectors[1];
 
-                if(inputSelector)
+                if (inputSelector)
                     $(inputSelector).removeAttr("disabled");
 
-                if(select2Selector)
+                if (select2Selector)
                     $(select2Selector).select2("enable", true);
             }
         }
@@ -166,8 +169,8 @@ $(document).ready(function () {
         }
         else if ('ELEMENT' === expectedValueType) {
             showWidgets('#elementValueContainer');
-            $.ajax("/BARD/ontologyJSon/getValueDescriptorsV2",{
-                data : {attributeId : data.id}
+            $.ajax("/BARD/ontologyJSon/getValueDescriptorsV2", {
+                data: {attributeId: data.id}
             }).done(function (valueData) {
                     initializeValueElementSelect2(valueData);
                 });
@@ -195,20 +198,20 @@ $(document).ready(function () {
         }
     }
 
-    function showExternalOntologyHelpText(data){
+    function showExternalOntologyHelpText(data) {
         var source;
-        if(data.hasIntegratedSearch){
+        if (data.hasIntegratedSearch) {
             source = $('#externalOntologyIntegratedSearchTemplate').html();
         }
         else {
             source = $('#externalOntologyNoIntegratedSearchTemplate').html();
         }
         var template = Handlebars.compile(source);
-        var html = template({attributeLabel : data.text, attributeExternalUrl : data.externalUrl});
+        var html = template({attributeLabel: data.text, attributeExternalUrl: data.externalUrl});
         $("#externalOntologyInfo").html(html);
     }
 
-    function initializeValueElementSelect2(backingData){
+    function initializeValueElementSelect2(backingData) {
         $("#valueElementId").select2({
             allowClear: true,
             placeholder: "Search for value",
@@ -221,16 +224,18 @@ $(document).ready(function () {
                             id: id
                         },
                         dataType: "json"
-                    }).done(function (data) { callback(data); });
+                    }).done(function (data) {
+                            callback(data);
+                        });
                 }
             },
-            formatResult: function(result, container, query) {
+            formatResult: function (result, container, query) {
                 return itemSelect2Format(result, container, query);
             },
             query: function (query) {
                 var filteredData = {results: []};
-                $.each(backingData.results, function(index, value){
-                    if(value.fullPath.toUpperCase().indexOf(query.term.toUpperCase())>=0){
+                $.each(backingData.results, function (index, value) {
+                    if (value.fullPath.toUpperCase().indexOf(query.term.toUpperCase()) >= 0) {
                         filteredData.results.push(value);
                     }
                 });
@@ -329,23 +334,23 @@ $(document).ready(function () {
     }
 
     function showWidgetsForConstraints(data) {
-        if($("#valueConstraintFree").is(":checked")) {
-            onlyShowWidgetsForExpectedValueType({expectedValueType:"UNCONSTRAINED"});
-        } else if($("#valueConstraintRange").is(":checked")) {
-            onlyShowWidgetsForExpectedValueType({expectedValueType:"RANGE"});
-        } else if($("#valueConstraintList").is(":checked")) {
+        if ($("#valueConstraintFree").is(":checked")) {
+            onlyShowWidgetsForExpectedValueType({expectedValueType: "UNCONSTRAINED"});
+        } else if ($("#valueConstraintRange").is(":checked")) {
+            onlyShowWidgetsForExpectedValueType({expectedValueType: "RANGE"});
+        } else if ($("#valueConstraintList").is(":checked")) {
             onlyShowWidgetsForExpectedValueType(data);
         } else {
         }
     }
 
     function updateConstraintWidgets(data) {
-        if($("#providedWithResults").is(':checked')) {
+        if ($("#providedWithResults").is(':checked')) {
 
             $("#valueConstraintContainer").show();
 
             // hide/show radio buttons based on expected type
-            if("NUMERIC"===data.expectedValueType) {
+            if ("NUMERIC" === data.expectedValueType) {
                 $("#valueConstraintRangeContainer").show();
             } else {
                 $("#valueConstraintRangeContainer").hide();
@@ -360,11 +365,11 @@ $(document).ready(function () {
 
     // set up "Value to be provided as part of result upload" checkbox to show the radio buttons
     // for type constraint if checked
-    $('#providedWithResults').on('change', function(e){
+    $('#providedWithResults').on('change', function (e) {
         var buttons = $('input:radio[name=valueConstraintType]');
         buttons.prop('checked', false);
 
-        if($("#providedWithResults").is(':checked')) {
+        if ($("#providedWithResults").is(':checked')) {
             $('#valueConstraintFree').prop('checked', true);
         } else {
 
@@ -373,11 +378,15 @@ $(document).ready(function () {
     })
 
     // set up the radio buttons so that widgets are shown based on which type of constraint
-    $('input[name="valueConstraintType"]').on('change', function(e) {
+    $('input[name="valueConstraintType"]').on('change', function (e) {
         showWidgetsForConstraints($("#attributeElementId").select2('data'))
     })
 
+
+//    Update the propose-a-new-term button link to include the elementId
+    $('#proposeANewTermButton').on("hover click", function () {
+        var currentHref = $(this).attr('href').split('?')[0];
+        var attributeElementId = $('#attributeElementId').attr('value');
+        $(this).attr('href', currentHref + '?attributeElementId=' + attributeElementId)
+    });
 });
-
-
-

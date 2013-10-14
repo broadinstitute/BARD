@@ -15,7 +15,7 @@
     </label>
 
     <div class="controls">
-        <g:textField id="parentLabel" name="parentLabel" readonly="true"  maxlength="${bard.db.dictionary.Element.LABEL_MAX_SIZE}" value="${termCommand?.parentLabel}"/>
+        <g:textField id="parentLabel" name="parentLabel" maxlength="${bard.db.dictionary.Element.LABEL_MAX_SIZE}" value="${termCommand?.parentLabel}"/>
         <span class="help-inline"><g:fieldError field="parentLabel" bean="${termCommand}"/></span>
     </div>
 </div>

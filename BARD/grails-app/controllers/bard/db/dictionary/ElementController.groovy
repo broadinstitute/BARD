@@ -47,7 +47,8 @@ class ElementController {
 
     def addTerm() {
         flash.message = ''
-        render(view: 'addTerm', model: [termCommand: new TermCommand()])
+        Element parentElement = Element.findById(params.attributeElementId)
+        render(view: 'addTerm', model: [termCommand: new TermCommand(parentLabel: parentElement?.label, parentDescription: parentElement?.description)])
     }
 
     def saveTerm(TermCommand termCommand) {
