@@ -1,8 +1,9 @@
 package bard.db.people
 
+import org.apache.commons.lang.builder.HashCodeBuilder
 import org.springframework.security.core.GrantedAuthority
 
-class Role implements GrantedAuthority{
+class Role implements GrantedAuthority {
 
     String authority
     Date dateCreated = new Date()
@@ -10,11 +11,22 @@ class Role implements GrantedAuthority{
     String modifiedBy
     String displayName
 
+    boolean equals(other) {
+        if (!(other instanceof Role)) {
+            return false
+        }
+        return other?.id == this?.id
+    }
+
+    int hashCode() {
+        def builder = new HashCodeBuilder()
+        return builder.append(this.id).toHashCode()
+    }
 
     static List<Role> getTeamRoles() {
         List<Role> selectedRoles = []
-        for(Role role:Role.list()){
-            if(role.authority.startsWith("ROLE_TEAM_")){
+        for (Role role : Role.list()) {
+            if (role.authority.startsWith("ROLE_TEAM_")) {
                 selectedRoles.add(role)
             }
         }
