@@ -1,6 +1,6 @@
 <html>
     <head>
-        <r:require modules="core,bootstrap,dynatree,jqueryform,newTerm"/>
+        <r:require modules="core,bootstrap,dynatree,jqueryform,newTerm, contextItem"/>
         <meta name="layout" content="basic"/>
         <title>Propose New Term</title>
     </head>

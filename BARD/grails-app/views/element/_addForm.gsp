@@ -2,7 +2,7 @@
     <g:form class="form-horizontal" action="saveTerm" id="saveTerm" name="saveTerm">
         <g:hiddenField name="currentElementId" id="currentElementId"
                        value="${currentElement ? currentElement.id : ''}"/>
-        <g:render template="addTermForm"/>
+        <g:render template="addTermForm1st"/>
         <div class="control-group">
             <label>
                 <h4>5. Choose to save your proposed term.</h4>

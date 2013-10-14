@@ -17,12 +17,14 @@ class ElementController {
     BardCacheUtilsService bardCacheUtilsService
     ModifyElementAndHierarchyService modifyElementAndHierarchyService
 
-    def index(){
-        redirect(uri:'/')
+    def index() {
+        redirect(uri: '/')
     }
-    def showTopLevelHierarchyHelp(){
-        render(view:'showTopLevelHierarchyHelp')
+
+    def showTopLevelHierarchyHelp() {
+        render(view: 'showTopLevelHierarchyHelp')
     }
+
     def list() {
         Map parameterMap = generatePaths()
 
@@ -48,7 +50,7 @@ class ElementController {
     def addTerm() {
         flash.message = ''
         Element parentElement = Element.findById(params.attributeElementId)
-        render(view: 'addTerm', model: [termCommand: new TermCommand(parentLabel: parentElement?.label, parentDescription: parentElement?.description)])
+        render(view: 'addTerm', model: [termCommand: new TermCommand(parentElementId: parentElement.id, parentLabel: parentElement?.label, parentDescription: parentElement?.description)])
     }
 
     def saveTerm(TermCommand termCommand) {
@@ -78,6 +80,7 @@ class ElementController {
         }
         render(view: 'addTerm', model: [termCommand: termCommand, currentElement: currentElement])
     }
+
     @Secured(["hasRole('ROLE_CURATOR')"])
     def edit() {
         Map parameterMap = generatePaths()
@@ -104,6 +107,7 @@ class ElementController {
 
         return result
     }
+
     @Secured(["hasRole('ROLE_CURATOR')"])
     def update(ElementEditCommand elementEditCommand) {
         String errorMessage = null
@@ -221,6 +225,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
 @Validateable
 class TermCommand extends BardCommand {
     BuildElementPathsService buildElementPathsService
+    Long parentElementId
     String parentLabel
     String parentDescription
     String label

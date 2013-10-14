@@ -68,6 +68,7 @@ $(document).ready(function () {
                     }).done(function (data) {
                             callback(data);
                             updateConstraintWidgets(data);
+                            updateDescriptionField(this);
                         });
                 }
             },
@@ -93,6 +94,8 @@ $(document).ready(function () {
             // based on the attribute selected only show the appropriate value widgets
             var selectedData = $("#attributeElementId").select2("data");
             updateConstraintWidgets(selectedData);
+            // Update the 'description' field is available
+            updateDescriptionField(this);
         });
         initialFocus();
     };
@@ -389,4 +392,16 @@ $(document).ready(function () {
         var attributeElementId = $('#attributeElementId').attr('value');
         $(this).attr('href', currentHref + '?attributeElementId=' + attributeElementId)
     });
+
+    function updateDescriptionField(attributeElement) {
+        attributeElementId = $(attributeElement).attr('value');
+        $.ajax("/BARD/ontologyJSon/getElement", {
+            data: {
+                id: attributeElementId
+            },
+            dataType: "json"
+        }).done(function (data) {
+                $('#parentDescription').attr('value', data.description)
+            });
+    }
 });

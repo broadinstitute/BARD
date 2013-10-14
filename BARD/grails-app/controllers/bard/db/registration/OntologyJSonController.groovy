@@ -100,7 +100,8 @@ class OntologyJSonController {
                 "unitId": element.unit?.id,
                 "expectedValueType": element.expectedValueType.name(),
                 "externalUrl": element.externalURL,
-                "hasIntegratedSearch": hasIntegratedSearch
+                "hasIntegratedSearch": hasIntegratedSearch,
+                "description": element.description
         ]
     }
 
