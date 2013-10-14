@@ -5,7 +5,7 @@
     <r:require
             modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,projectsummary,canEditWidget,tableSorter"/>
     <meta name="layout" content="basic"/>
-    <title>Panel</title>
+    <title>Panel ID ${panelInstance?.id}</title>
 </head>
 
 <body>

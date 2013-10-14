@@ -102,7 +102,8 @@ $(document).ready(function () {
     function itemSelect2Format(result, container, query){
         var markup=[];
         window.Select2.util.markMatch(result.parentFullPath, query.term, markup);
-        markup.push('> <b>');
+        markup.push('> ');
+        markup.push('<b>');
         window.Select2.util.markMatch(result.text, query.term, markup);
         markup.push('</b>');
         return markup.join("");

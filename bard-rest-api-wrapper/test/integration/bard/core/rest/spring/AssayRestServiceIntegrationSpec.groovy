@@ -3,14 +3,15 @@ package bard.core.rest.spring
 import bard.core.SearchParams
 import bard.core.SuggestParams
 import bard.core.rest.helper.RESTTestHelper
+import bard.core.rest.spring.assays.*
 import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.Target
 import bard.core.rest.spring.util.TargetClassification
 import grails.plugin.spock.IntegrationSpec
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
-import bard.core.rest.spring.assays.*
 
 import static org.junit.Assert.assertTrue
 
@@ -28,7 +29,17 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     List<Long> CAP_ADIDS = [5168, 5981, 5982]
     String FREE_TEXT_SEARCH_STRING = "dna repair"
 
+    void "get the last #label assays"() {
+        when:
+        List<Assay> assayResult = assayRestService.findRecentlyAdded(numberOfAssays)
+        then:
+        assert assayResult.size() == numberOfAssays
+        where:
 
+        label | numberOfAssays
+        "10"  | 10
+        "5"   | 5
+    }
 
 
     void "searchAssaysByCapIds #label"() {

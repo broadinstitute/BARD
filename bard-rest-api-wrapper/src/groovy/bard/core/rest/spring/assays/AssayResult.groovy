@@ -8,6 +8,7 @@ import bard.core.rest.spring.util.NameDescription
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AssayResult extends SearchResult {
+
     private List<Assay> assays = new ArrayList<Assay>();
 
     @JsonProperty("collection")

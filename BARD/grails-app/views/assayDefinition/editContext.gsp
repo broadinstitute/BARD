@@ -3,7 +3,7 @@
 <head>
     <r:require modules="core,bootstrap,select2,card,bootstrapplus,xeditable"/>
     <meta name="layout" content="basic"/>
-    <title>Edit ${assayInstance?.getDomainClass()?.getNaturalName()} Context</title>
+    <title>ADID ${assayInstance?.id}: Edit ${assayInstance?.getDomainClass()?.getNaturalName()} Context</title>
 </head>
 
 <body>

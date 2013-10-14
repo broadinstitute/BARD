@@ -1,7 +1,7 @@
 import acl.CapPermissionService
 import bard.db.people.Role
 import bard.db.registration.Panel
-import clover.org.apache.commons.lang.StringUtils
+import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.Session
 import org.hibernate.SessionFactory

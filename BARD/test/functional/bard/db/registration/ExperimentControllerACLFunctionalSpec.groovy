@@ -47,9 +47,19 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         experimentData = (Map) remote.exec({
             //Build assay as TEAM_A
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
-            Assay assay = Assay.build(assayName: "Assay Name10").save(flush: true)
-            Experiment experiment = Experiment.build(assay: assay).save(flush: true)
-            return [id: experiment.id, experimentName: experiment.experimentName, assayName: assay.assayName, assayId: assay.id]
+
+            Role role = Role.findByAuthority('ROLE_TEAM_A')
+            if (!role) {
+                role = Role.build(authority: 'ROLE_TEAM_A', displayName: 'ROLE_TEAM_A').save(flush: true)
+            }
+            Role otherRole = Role.findByAuthority('ROLE_TEAM_B')
+            if (!otherRole) {
+                otherRole = Role.build(authority: 'ROLE_TEAM_B', displayName: 'ROLE_TEAM_B').save(flush: true)
+            }
+            Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role).save(flush: true)
+            Experiment experiment = Experiment.build(assay: assay, ownerRole:role).save(flush: true)
+
+            return [id: experiment.id, experimentName: experiment.experimentName, assayName: assay.assayName, assayId: assay.id, roleId: role.id, otherRoleId: otherRole.id]
         })
         assayIdList.add(experimentData.assayId)
 
@@ -74,6 +84,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
 
             sql.execute("DELETE FROM ASSAY_CONTEXT WHERE ASSAY_ID=${assayId}")
             sql.execute("DELETE FROM MEASURE WHERE ASSAY_ID=${assayId}")
+            sql.execute("DELETE FROM EXPERIMENT WHERE ASSAY_ID=${assayId}")
             sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${assayId}")
         }
 
@@ -99,24 +110,6 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
     }
 
-    def 'test edit #desc'() {
-        given:
-        RESTClient client = getRestClient(controllerUrl, "edit", team, teamPassword)
-        Long id = experimentData.id
-        when:
-        def response = client.post() {
-            urlenc id: id
-        }
-        then:
-        assert response.statusCode == expectedHttpResponse
-        where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
-    }
 
     def 'test experimentStatus #desc'() {
         given:
@@ -468,7 +461,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         when:
 
         def response = client.post() {
-            urlenc assayId: assayId
+            urlenc assayId: assayId, ownerRole: experimentData.roleId, experimentName : team ,experimentTree:"[]"
         }
 
         then:
@@ -476,28 +469,11 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
 
         where:
         desc                | team              | teamPassword      | expectedHttpResponse
-        "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
+        "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
+        "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
+        "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
     }
 
-    def 'test save - unauthorized #desc'() {
-        given:
-        long assayId = experimentData.assayId
-        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
-        when:
-        client.post() {
-            urlenc assayId: assayId
-        }
-        then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
-
-        where:
-        desc                  | team              | teamPassword      | expectedHttpResponse
-        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
-    }
 
     def 'test update #desc'() {
         given:

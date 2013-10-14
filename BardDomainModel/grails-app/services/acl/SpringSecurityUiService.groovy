@@ -139,7 +139,7 @@ class SpringSecurityUiService {
 			aclEntry.sid = retrieveAclClass('AclSid', sidId)
 		}
 
-		aclEntry.save()
+		aclEntry.save(flush:true)
 		return !aclEntry.hasErrors()
 	}
 

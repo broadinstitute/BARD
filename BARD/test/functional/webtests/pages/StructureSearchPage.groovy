@@ -8,7 +8,7 @@ class StructureSearchPage extends ScaffoldPage {
     static url = "/bardWebInterface/jsDrawEditor"
 
     static at = {
-        assert title ==~ /BioAssay Research Database/
+        assert title ==~ /BARD/
 
         // Make sure all of the structure search types are there
         RemoteControl remote = new RemoteControl()

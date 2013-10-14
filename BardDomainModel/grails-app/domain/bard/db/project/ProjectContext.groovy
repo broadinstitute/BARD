@@ -1,7 +1,6 @@
 package bard.db.project
 
 import bard.db.guidance.Guidance
-import bard.db.guidance.GuidanceAware
 import bard.db.guidance.context.BiologyShouldHaveOneSupportingReferencePerContextRule
 import bard.db.guidance.context.OneBiologyAttributePerContextRule
 import bard.db.model.AbstractContext
@@ -15,7 +14,7 @@ import bard.db.model.AbstractContextOwner
  * Time: 1:58 PM
  * To change this template use File | Settings | File Templates.
  */
-class ProjectContext extends AbstractContext implements GuidanceAware{
+class ProjectContext extends AbstractContext {
     Project project
     List<ProjectContextItem> contextItems = []
 
@@ -50,7 +49,7 @@ class ProjectContext extends AbstractContext implements GuidanceAware{
 
     @Override
     List<Guidance> getGuidance() {
-        List<Guidance> guidanceList = []
+        List<Guidance> guidanceList = super.getGuidance()
         guidanceList.add(new OneBiologyAttributePerContextRule(this).getGuidance())
         guidanceList.add(new BiologyShouldHaveOneSupportingReferencePerContextRule(this).getGuidance())
         guidanceList.flatten()

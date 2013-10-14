@@ -1,7 +1,8 @@
 import acl.CapPermissionService
+import bard.db.enums.ExperimentStatus
+import bard.db.experiment.Experiment
 import bard.db.people.Role
-import bard.db.registration.Assay
-import clover.org.apache.commons.lang.StringUtils
+import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.Session
 import org.hibernate.SessionFactory
@@ -15,14 +16,14 @@ CapPermissionService capPermissionService = ctx.capPermissionService
 List<String> notFound = []
 try {
     SpringSecurityUtils.reauthenticate('integrationTestUser', null)
-    final List<Assay> assays = Assay.findAllByOwnerRoleIsNull()
-    for (Assay assay : assays) {
-        String roleDisplayName = capPermissionService.getOwner(assay)
+    final List<Experiment> experiments = Experiment.findAllByOwnerRoleIsNullAndExperimentStatusNotInList([ExperimentStatus.RETIRED])
+    for (Experiment experiment : experiments) {
+        String roleDisplayName = capPermissionService.getOwner(experiment)
         Role role = Role.findByDisplayName(roleDisplayName)
         if (!role) {
-            notFound.add("Could not find Role with display name ${roleDisplayName} and assay id ${assay.id}")
+            notFound.add("Could not find Role with display name ${roleDisplayName} and experiment id ${experiment.id}")
         } else {
-            assay.ownerRole = role
+            experiment.ownerRole = role
            
         }
 

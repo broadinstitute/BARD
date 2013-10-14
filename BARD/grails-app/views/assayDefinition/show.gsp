@@ -5,7 +5,7 @@
     <r:require
             modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,assaysummary,canEditWidget"/>
     <meta name="layout" content="basic"/>
-    <title>Assay Definition</title>
+    <title>ADID ${assayInstance?.id}: ${assayInstance?.assayName}</title>
 </head>
 
 <body>

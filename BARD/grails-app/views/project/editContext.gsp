@@ -4,7 +4,7 @@
 <head>
     <r:require modules="core,bootstrap,select2,card,bootstrapplus,xeditable"/>
     <meta name="layout" content="basic"/>
-    <title>Edit ${instance?.getDomainClass()?.getNaturalName()} Context</title>
+    <title>PID ${instance?.id}: Edit ${instance?.getDomainClass()?.getNaturalName()} Context</title>
 </head>
 
 <body>

@@ -51,6 +51,7 @@ modules = {
         resource url: '/css/bardHomepage/BardHomepage.css'
         resource url: '/css/bardHomepage/jquery-ui-1.10.3.custom.css'
         resource url: '/js/bardHomepage/jquery.main.js'
+        resource url: '/js/errorReporting.js'
         resource url: '/js/idSearchDialog.js'
         resource url: '/js/bardHomepage/jquery-ui-1.10.3.custom.js'
         resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js'
@@ -107,9 +108,9 @@ modules = {
         resource url: "js/DataTables-1.9.4/jquery.dataTables.js"
         resource url: "css/jquery-dataTables.css"
     }
-    dateTimePicker{
-        resource url:'/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'
-        resource url:'/js/bootstrap-datetimepicker/css/datetimepicker.css'
+    dateTimePicker {
+        resource url: '/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'
+        resource url: '/js/bootstrap-datetimepicker/css/datetimepicker.css'
     }
     dcLibrary {
         resource url: "js/lib/dc.js"
@@ -122,7 +123,7 @@ modules = {
     }
 
     downtime {
-        dependsOn 'grailsEvents' //from the grails event push plugin
+        //dependsOn 'grailsEvents' //from the grails event push plugin
         resource url: '/js/cap/downtime.js'
 
     }
@@ -177,10 +178,10 @@ modules = {
         dependsOn 'jquery, jquery-ui, jquery-theme'
         resource url: "js/jqueryMobilePreInit.js"
     }
-    jquerynotifier{
+    jquerynotifier {
         dependsOn 'jquery, jquery-ui, jquery-theme'
-        resource url:'js/jquery-notifier/jquery.notify.js'
-        resource url:'js/jquery-notifier/ui.notify.css'
+        resource url: 'js/jquery-notifier/jquery.notify.js'
+        resource url: 'js/jquery-notifier/ui.notify.css'
     }
     jsDrawEditor {
         resource url: "js/jsDraw/jsDrawEditor.js"
@@ -233,8 +234,6 @@ modules = {
         resource url: "/css/editDocument.css"
         resource url: "/js/cap/editDocument.js"
     }
-
-
 
 //Adding version allows clients to not cache javascript
     search {

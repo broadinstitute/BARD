@@ -4,17 +4,22 @@ import acl.CapPermissionService
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
+import bard.db.people.Role
+import bard.db.project.ExperimentCommand
 import bard.db.project.ExperimentController
 import bard.db.project.InlineEditableCommand
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
+import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
+import org.junit.Ignore
 import org.springframework.security.access.AccessDeniedException
+import spock.lang.IgnoreRest
 
 import javax.servlet.http.HttpServletResponse
 
@@ -27,7 +32,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @TestFor(ExperimentController)
 @TestMixin(DomainClassUnitTestMixin)
-@Build([Assay, Experiment])
+@Build([Assay, Experiment,Role])
 class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     @Before
     void setup() {
@@ -368,6 +373,75 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         controller.experimentService.updateExperimentStatus(_, _) >> { throw new Exception("") }
         assertEditingErrorMessage()
     }
+    void 'test edit owner Role success'() {
+        given:
+        final Role oldRole = Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE TEAM A")
+        final Role newRole = Role.build(authority: "ROLE_TEAM_B", displayName: "ROLE TEAM B")
+
+        Experiment newExperiment = Experiment.build(version: 0, ownerRole: oldRole)  //no designer
+        Experiment updatedExperiment =
+            Experiment.build(experimentName: "My New Name", version: 1, lastUpdated: new Date(),
+                   ownerRole: newRole)
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: newExperiment.id,
+                    version: newExperiment.version, name: newExperiment.experimentName,
+                    value: newRole.displayName)
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
+            return [newRole]
+        }
+        when:
+        controller.editOwnerRole(inlineEditableCommand)
+        then:
+        controller.experimentService.updateOwnerRole(_, _) >> { return updatedExperiment }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedExperiment.ownerRole.displayName
+        assert responseJSON.get("lastUpdated").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit Owner Role - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        final Role oldRole = Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE TEAM A")
+        final Role newRole = Role.build(authority: "ROLE_TEAM_B", displayName: "ROLE TEAM B")
+        Experiment newExperiment = Experiment.build(version: 0, ownerRole: oldRole)  //no designer
+
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: newExperiment.id,
+                    version: newExperiment.version, name: newExperiment.experimentName,
+                    value: newRole.displayName)
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
+            return [newRole]
+        }
+        when:
+        controller.editOwnerRole(inlineEditableCommand)
+        then:
+        controller.experimentService.updateOwnerRole(_, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
+    }
+
+
+    void 'test edit Experiment owner role with errors'() {
+
+        given:
+        final Role newRole = Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE TEAM A")
+        Experiment newExperiment = Experiment.build(version: 0, ownerRole: newRole)
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: newExperiment.id, version: newExperiment.version, name: newExperiment.experimentName, value: newRole.displayName)
+        controller.metaClass.message = { Map p -> return "foo" }
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
+            return [newRole]
+        }
+        when:
+        controller.editOwnerRole(inlineEditableCommand)
+        then:
+        controller.experimentService.updateOwnerRole(_, _) >> { throw new Exception("") }
+        assertEditingErrorMessage()
+    }
 
     def 'test create'() {
         setup:
@@ -383,19 +457,23 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         response.status == 200
     }
 
+
     def 'test save'() {
         setup:
+        Role role = Role.build(authority: "ROLE_TEAM_A", displayName: "Display")
         Assay assay = Assay.build()
         ExperimentService experimentService = Mock(ExperimentService)
         controller.experimentService = experimentService
-
-        when:
-        params.assayId = assay.id
-        params.experimentName = "name"
-        params.description = "desc"
         params.experimentTree = "[]"
-        params.experimentStatus = 'DRAFT'
-        controller.save()
+        ExperimentCommand experimentCommand =
+            new ExperimentCommand(assayId: assay.id, experimentName: "name", description: "desc", ownerRole: role)
+         experimentCommand.springSecurityService = Mock(SpringSecurityService)
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
+            return [role]
+        }
+        when:
+
+        controller.save(experimentCommand)
 
         then:
         1 * experimentService.updateMeasures(_, _)
@@ -403,6 +481,7 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         def experiment = Experiment.getAll().first()
         assert response.redirectedUrl == "/experiment/show/${experiment.id}"
     }
+
 
     def 'test show'() {
         setup:

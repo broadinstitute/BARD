@@ -1,6 +1,7 @@
 package bard.db.dictionary
 
 import bard.db.command.BardCommand
+import bard.util.BardCacheUtilsService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.validation.Validateable
@@ -13,6 +14,7 @@ class ElementController {
     private static final String errorMessageKey = "errorMessageKey"
     ElementService elementService
     BuildElementPathsService buildElementPathsService
+    BardCacheUtilsService bardCacheUtilsService
     ModifyElementAndHierarchyService modifyElementAndHierarchyService
 
     def index(){
@@ -65,6 +67,7 @@ class ElementController {
                 } else {
                     termCommand = new TermCommand()
                     flash.message = "Proposed term ${currentElement?.label} has been saved"
+                    bardCacheUtilsService.refreshDueToNewDictionaryEntry()
                 }
             }
         }

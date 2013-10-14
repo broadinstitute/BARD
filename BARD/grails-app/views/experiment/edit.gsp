@@ -5,7 +5,7 @@
     <r:require modules="core,bootstrap"/>
     <meta name="layout" content="basic"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>Create Experiment</title>
+    <title>EID ${experiment?.id}: ${experiment?.experimentName}</title>
     <g:javascript>
         function updateExperiment(expId){
             var formId = '#' + expId;

@@ -6,7 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix,dynatree,xeditable,experimentsummary,canEditWidget,richtexteditorForEdit, sectionCounter, card,histogram"/>
     <meta name="layout" content="basic"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>Show Experiment</title>
+    <title>EID ${instance?.id}: ${instance?.experimentName}</title>
 </head>
 
 <body>
@@ -127,8 +127,22 @@
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description"
                    data-id="descriptionId"></a>
             </dd>
-
-            <dt>Owner:</dt><dd>${experimentOwner}</dd>
+            <dt><g:message code="experiment.ownerRole.label" default="Owner"/>:</dt>
+            <dd>
+                <span
+                        class="status"
+                        data-toggle="manual"
+                        data-sourceCache="false"
+                        id="ownerRoleId"
+                        data-type="select"
+                        data-value="${instance?.owner}"
+                        data-source="/BARD/assayDefinition/roles"
+                        data-pk="${instance.id}"
+                        data-url="/BARD/experiment/editOwnerRole"
+                        data-placeholder="Required"
+                        data-original-title="Select Owner Role">${instance?.owner}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="ownerRoleId" title="Click to edit owner role"></a>
+            </dd>
 
             <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
             <dd>

@@ -1,6 +1,7 @@
 package bard.db.dictionary
 
 import bard.db.enums.AddChildMethod
+import bard.util.BardCacheUtilsService
 import grails.buildtestdata.mixin.Build
 import grails.converters.JSON
 import grails.test.mixin.TestFor
@@ -27,6 +28,7 @@ class ElementControllerUnitSpec extends Specification {
 
     def setup() {
         this.controller.elementService = Mock(ElementService.class)
+        this.controller.bardCacheUtilsService = Mock(BardCacheUtilsService.class)
         this.parentElement = Element.build(label: 'parent label with spaces')
     }
 

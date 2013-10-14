@@ -3,12 +3,15 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>BARD: <g:layoutTitle default="BioAssay Research Database"/></title>
+    <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
     <g:layoutHead/>
 
-    <title>BARD: Catalog of Assay Protocols</title>
     <r:require modules="basic,bootstrap,autocomplete,cart,idSearch,jquerynotifier,downtime"/>
     <%@ page import="bardqueryapi.IDSearchType" %>
     <r:layoutResources/>
+    <ga:trackPageview />
+
 
 </head>
 
@@ -32,10 +35,6 @@
                     <p>#{text}</p>
                 </div>
             </div>
-            %{--<div class="row-fluid span12" id="downtimeMessage">--}%
-            %{--Down Time messages will go here--}%
-            %{--</div>--}%
-
             <div class="row-fluid span12">
                 <strong class="logo"><a
                         href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a>
@@ -115,7 +114,7 @@
         <div class="span12">
             <div class="spinner-container">
                 <div id="spinner" class="spinner" style="display:none; color: blue;"><g:message code="spinner.alt"
-                                                                                                default="Loading&hellip;"/></div>
+                                                                                                default=""/></div>
             </div>
             <g:layoutBody/>
         </div>
