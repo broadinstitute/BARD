@@ -1,5 +1,6 @@
 $(document).ready(function () {
-    createHierarchyTree();
+    createHierarchyTree("#element-hierarchy-tree", "BARD Hierarchy Tree", "BARD");
+    createHierarchyTree("#dictionary-element-hierarchy-tree", "BARD Dictionary Tree", "BARD Dictionary");
 });
 
 function reloadTree(){
@@ -23,17 +24,17 @@ function reloadTree(){
     $("#saveTerm")[0].reset();
 }
 
-function createHierarchyTree()  {
+function createHierarchyTree(treeElementName, treeTitle, treeRoot)  {
     var doNotShowRetired = $("#doNotShowRetiredTerms").is(':checked');
 
-    $("#element-hierarchy-tree").dynatree
+    $(treeElementName).dynatree
     (
         {
-            title: "BARD Hierarchy Tree",
+            title: treeTitle,
             autoFocus: false,
             initAjax: {
                 url: "/BARD/element/buildTopLevelHierarchyTree",
-                data: {doNotShowRetired: doNotShowRetired}
+                data: {doNotShowRetired: doNotShowRetired, treeRoot: treeRoot}
             },
             onActivate: function (node) {
                 $("#attributeElementId").select2("data", {id: node.data.elementId, text: node.data.title});
@@ -41,20 +42,10 @@ function createHierarchyTree()  {
 
                 if (node.data.childMethod == 'DIRECT') {
                     //make fields writable
-//                    $("#termLabelId").attr("readonly", false);
-//                    $("#termDescriptionId").attr("readonly", false);
-//                    $("#abbrvId").attr("readonly", false);
-//                    $("#synonymsId").attr("readonly", false);
-//                    $("#curationNotesId").attr("readonly", false);
                     $("#nextBtn").attr("disabled", false);
                 }
                 else {
                     //make all fields readonly
-//                    $("#termLabelId").attr("readonly", true);
-//                    $("#termDescriptionId").attr("readonly", true);
-//                    $("#abbrvId").attr("readonly", true);
-//                    $("#synonymsId").attr("readonly", true);
-//                    $("#curationNotesId").attr("readonly", true);
                     $("#nextBtn").attr("disabled", true);
 
                 }
@@ -120,6 +111,7 @@ function selectCurrentElement() {
     var currentElementId = $("#currentElementId").val();
     if (currentElementId) {
         $("#element-hierarchy-tree").dynatree("getTree").activateKey(currentElementId);
+        $("#dictionar-element-hierarchy-tree").dynatree("getTree").activateKey(currentElementId);
     }
 }
 

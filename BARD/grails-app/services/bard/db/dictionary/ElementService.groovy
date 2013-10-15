@@ -87,8 +87,8 @@ class ElementService {
      * @param full = will render the full tree otherwise it will lazily render it
      * @return list of hierarchy
      */
-    public List createElementHierarchyTree(boolean doNotShowRetired) {
-        Element element = Element.findByLabel("BARD")//find the ROOT OF THE BARD TREE
+    public List createElementHierarchyTree(boolean doNotShowRetired, String treeRoot) {
+        Element element = Element.findByLabel(treeRoot)//find the ROOT OF THE TREE ("BARD" or "BARD Dictionary")
         return getChildNodes(element.id, doNotShowRetired)
     }
 }

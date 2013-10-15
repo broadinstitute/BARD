@@ -44,8 +44,8 @@ class ElementController {
         render elementHierarchyAsJsonTree
     }
 
-    def buildTopLevelHierarchyTree(boolean doNotShowRetired) {
-        List elementHierarchyTree = elementService.createElementHierarchyTree(doNotShowRetired)
+    def buildTopLevelHierarchyTree(boolean doNotShowRetired, String treeRoot) {
+        List elementHierarchyTree = elementService.createElementHierarchyTree(doNotShowRetired, treeRoot)
         JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
         render elementHierarchyAsJsonTree
     }
