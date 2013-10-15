@@ -91,8 +91,6 @@ class CrowdRegisterUserService {
             if (response.statusCode < 300 && response.statusCode > 199) {
                 //this is a positive response so add user to group
                 addUserToGroup(registrationUser)
-                //create the role if it does not exists
-                //Insert into person table with the newObjectRole
             } else {
                 throw new RuntimeException("Error with status code ${response.statusCode}")
             }

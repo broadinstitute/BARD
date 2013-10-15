@@ -65,7 +65,7 @@ beans = {
     }
 
     httpClient(wslite.http.HTTPClient) {
-        connectTimeout = 5000
+        connectTimeout = 60000
         readTimeout = 10000
         useCaches = false
         followRedirects = false

@@ -65,7 +65,6 @@ class PersonCommand extends BardCommand {
     String username
     String email
     String displayName
-    Role primaryGroup
     List<Role> roles = []
     Long version
     //We turn this off to allow user sign ups, since we want only admins to assign primary groups
@@ -97,14 +96,6 @@ class PersonCommand extends BardCommand {
                     }
                 }
         displayName blank: false, nullable: false
-        primaryGroup nullable: true, validator: { value, command ->
-            if (command.validate) {
-                if (!value) {
-                    return 'registerCommand.primaryGroup.nullable'
-                }
-            }
-        }
-
     }
 
     Person createNewPerson() {
@@ -122,17 +113,9 @@ class PersonCommand extends BardCommand {
     }
 
     void addPersonRoles(Person person) {
-        if (!this.primaryGroup) {
-            return
-        }
-        if (!PersonRole.findAllByPersonAndRole(person, this.primaryGroup)) {
 
-            PersonRole.create(person, person.newObjectRole, springSecurityService.principal?.username, true)
-        }
         for (Role role : this.roles) {
-            if (role != primaryGroup) {
-                PersonRole.create(person, Role.findByAuthority(role.authority), springSecurityService.principal?.username, true)
-            }
+            PersonRole.create(person, Role.findByAuthority(role.authority), springSecurityService.principal?.username, true)
         }
     }
 
@@ -148,7 +131,7 @@ class PersonCommand extends BardCommand {
             copyFromCmdToDomain(person)
             person = person.save(flush: true)
 
-            roles.add(this.primaryGroup)
+
             //delete all the roles,then add them again
             PersonRole.removeAll(person)
             person = person.save(flush: true)
@@ -163,16 +146,12 @@ class PersonCommand extends BardCommand {
         person.userName = this.username
         person.emailAddress = this.email
         person.fullName = this.displayName
-        if (this.primaryGroup) {
-            person.newObjectRole = Role.findByAuthority(primaryGroup.authority)
-        }
     }
 
     void copyFromDomainToCmd(Person person) {
         this.username = person.userName
         this.email = person.emailAddress
         this.displayName = person.fullName
-        this.primaryGroup = person.newObjectRole
         this.roles = person.roles as List<Role>
         this.version = person.version
     }

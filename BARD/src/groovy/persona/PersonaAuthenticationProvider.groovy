@@ -72,7 +72,7 @@ public class PersonaAuthenticationProvider extends BardAuthorizationProviderServ
 
             person = Person.findByUserNameIlike(email)
             bardUser = new BardUser(username: person.userName, fullName: person.fullName, email: new Email(person.emailAddress), isActive: true,
-                    authorities: person.roles, owningRole: person.newObjectRole ?: new Role(authority: person.userName));
+                    authorities: person.roles);
         }
         return bardUser
     }
@@ -83,7 +83,7 @@ public class PersonaAuthenticationProvider extends BardAuthorizationProviderServ
 
             Person person = Person.findByUserNameIlike(userName);
             return new BardUser(username: person.userName, fullName: person.fullName, email: new Email(person.emailAddress), isActive: true,
-                    authorities: person.roles, owningRole: person.newObjectRole ?: new Role(authority: person.userName));
+                    authorities: person.roles);
 
         } catch (Exception ee) {
             throw new UsernameNotFoundException(ee.getMessage());

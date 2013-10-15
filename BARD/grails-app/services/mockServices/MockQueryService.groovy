@@ -5,12 +5,15 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-
+import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundSummary
 
 import bard.core.rest.spring.compounds.Promiscuity
-
+import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectStep
+import bard.core.rest.spring.substances.Substance
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
 import bardqueryapi.GroupByTypes
@@ -28,6 +31,54 @@ class MockQueryService implements IQueryService {
 
     Map<Long, Pair<Long, Long>> findActiveVsTestedForExperiments(final List<Long> capExperimentIds) {
         return [:]
+    }
+
+    String histogramDataByEID(long ncgcWarehouseId) {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    long numberOfAssays() {
+        return 0  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    long numberOfProjects() {
+        return 0  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    long numberOfExperiments() {
+        return 0  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    long numberOfCompounds() {
+        return 0  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    long numberOfSubstances() {
+        return 0  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    int numberOfProbes() {
+        return 0  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    List<Compound> findRecentlyAddedProbes(int numberOfProbes) {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    List<Assay> findRecentlyAddedAssays(int numberOfAssays) {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    List<ExperimentSearch> findRecentlyAddedExperiments(int numberOfExperiments) {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    List<Project> findRecentlyAddedProjects(int numberOfProjects) {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    List<Substance> findRecentlyAddedSubstances(int numberOfSubstances) {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Shared
