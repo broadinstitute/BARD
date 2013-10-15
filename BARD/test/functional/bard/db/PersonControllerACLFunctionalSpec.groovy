@@ -41,6 +41,7 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             return [id: person.id, roleId: role.id]
         })
     }
+
     static void createPersonInDatabase(String teamuserName, String teamEmail, String teamRole, String reAuthenticateWith) {
         assert teamuserName != null
 
@@ -49,11 +50,11 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             Person person = Person.findByUserName(teamuserName)
             Role role = Role.findByAuthority(teamRole)
             if (!role) {
-                role = Role.build(authority: teamRole, displayName:teamRole).save(flush: true)
+                role = Role.build(authority: teamRole, displayName: teamRole).save(flush: true)
             }
             if (!person) {
                 person = Person.build(userName: teamuserName, emailAddress: teamEmail,
-                        dateCreated: new Date(), newObjectRole: role).save(flush: true)
+                        dateCreated: new Date()).save(flush: true)
             }
             PersonRole personRole = PersonRole.findByPersonAndRole(person, role)
             if (!personRole) {
@@ -62,6 +63,7 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             return true
         })
     }
+
     def cleanupSpec() {
 
         Sql sql = Sql.newInstance(dburl, dbusername,
@@ -85,7 +87,7 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Long roleId = personId.roleId
         when:
         client.post() {
-            urlenc username: username, email: email, displayName: displayName, primaryGroup: roleId
+            urlenc username: username, email: email, displayName: displayName
         }
         then:
         def ex = thrown(RESTClientException)
@@ -104,13 +106,12 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         String username = m.usename
         String email = m.email
         String displayName = m.displayName
-        Long primaryGroup = m.newObjectRoleId
         Long version = m.version
         RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
 
         when:
         client.post() {
-            urlenc username: username, email: email, displayName: displayName, primaryGroup: primaryGroup, version: version
+            urlenc username: username, email: email, displayName: displayName, version: version
         }
         then:
         def ex = thrown(RESTClientException)
@@ -129,13 +130,12 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         String username = m.username
         String email = m.email
         String displayName = m.displayName
-        Long primaryGroup = m.newObjectRoleId
         Long version = m.version
         RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
 
         when:
         final Response response = client.post() {
-            urlenc username: username, email: email, displayName: displayName, primaryGroup: primaryGroup, version: version
+            urlenc username: username, email: email, displayName: displayName,version: version
         }
         then:
         assert response.statusCode == expectedHttpResponse
@@ -154,7 +154,7 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         personUserNames.add(username)
         when:
         final Response response = client.post() {
-            urlenc username: username, email: email, displayName: displayName, primaryGroup: roleId
+            urlenc username: username, email: email, displayName: displayName
         }
         then:
         assert response.statusCode == expectedHttpResponse
@@ -255,7 +255,7 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         long id = personId.id
         Map currentDataMap = (Map) remote.exec({
             Person person = Person.findById(id)
-            return [username: person.userName, version: person.version, email: person.emailAddress, newObjectRoleId: person.newObjectRole.id]
+            return [username: person.userName, version: person.version, email: person.emailAddress]
         })
         return currentDataMap
     }

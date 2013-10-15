@@ -25,7 +25,6 @@ import org.springframework.web.client.HttpClientErrorException
 import javax.servlet.http.HttpServletResponse
 
 @Mixin(EditingHelper)
-@Secured(['isAuthenticated()'])
 class ProjectController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     ProjectExperimentRenderService projectExperimentRenderService
@@ -35,20 +34,21 @@ class ProjectController {
     CapPermissionService capPermissionService
     IQueryService queryService
 
+    @Secured(['isAuthenticated()'])
     def groupProjects() {
         String username = springSecurityService.principal?.username
         List<Project> projects = capPermissionService.findAllObjectsForRoles(Project)
         LinkedHashSet<Project> uniqueProjects = new LinkedHashSet<Project>(projects)
         render(view: "groupProjects", model: [projects: uniqueProjects])
     }
-
+    @Secured(['isAuthenticated()'])
     def create(ProjectCommand projectCommand) {
         if (!projectCommand) {
             projectCommand: new ProjectCommand()
         }
         [projectCommand: projectCommand]
     }
-
+    @Secured(['isAuthenticated()'])
     def save(ProjectCommand projectCommand) {
         if (!projectCommand.validate()) {
             create(projectCommand)
@@ -62,7 +62,7 @@ class ProjectController {
         create(projectCommand)
     }
 
-
+    @Secured(['isAuthenticated()'])
     def editProjectStatus(InlineEditableCommand inlineEditableCommand) {
         try {
             final ProjectStatus projectStatus = ProjectStatus.byId(inlineEditableCommand.value)
@@ -83,7 +83,7 @@ class ProjectController {
             editErrorMessage()
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
         try {
             final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value)?:Role.findByAuthority(inlineEditableCommand.value)
@@ -115,7 +115,7 @@ class ProjectController {
         }
     }
 
-
+    @Secured(['isAuthenticated()'])
     def editProjectName(InlineEditableCommand inlineEditableCommand) {
         try {
             Project project = Project.findById(inlineEditableCommand.pk)
@@ -146,7 +146,7 @@ class ProjectController {
             editErrorMessage()
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def editDescription(InlineEditableCommand inlineEditableCommand) {
         try {
             Project project = Project.findById(inlineEditableCommand.pk)
@@ -264,7 +264,7 @@ class ProjectController {
         [instance: projectInstance, pexperiment: projectExperimentRenderService.contructGraph(projectInstance)]
     }
 
-
+    @Secured(['isAuthenticated()'])
     def reloadProjectSteps(Long projectId) {
         try {
             Project project = Project.findById(projectId)
@@ -274,7 +274,7 @@ class ProjectController {
             render 'serviceError:' + e.message
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def removeExperimentFromProject(Long experimentId, Long projectId) {
         def experiment = Experiment.findById(experimentId)
         try {
@@ -288,7 +288,7 @@ class ProjectController {
             render 'serviceError:' + e.message
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def removeEdgeFromProject(Long fromExperimentId, Long toExperimentId, Long projectId) {
         def fromExperiment = Experiment.findById(fromExperimentId)
         def toExperiment = Experiment.findById(toExperimentId)
@@ -304,7 +304,7 @@ class ProjectController {
             render 'serviceError:' + e.message
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def linkExperiment(Long fromExperimentId, Long toExperimentId, Long projectId) {
         if (fromExperimentId == null || toExperimentId == null) {
             render status: HttpServletResponse.SC_BAD_REQUEST, text: "Both 'From Experiment ID' and 'To Experiment ID' are required"
@@ -326,7 +326,7 @@ class ProjectController {
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: e.message
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def associateExperimentsToProject() {
         // get all values regardless none, single, or multiple, ajax seemed serialized array and passed [] at the end of the param name.
         Set<String> selectedExperiments = request.getParameterValues('selectedExperiments[]') as Set<String>
@@ -357,7 +357,7 @@ class ProjectController {
             }
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def editSummary(Long instanceId, String projectName, String description, String projectStatus) {
         Project projectInstance = Project.findById(instanceId)
         boolean editable = canEdit(permissionEvaluator, springSecurityService, projectInstance)
@@ -383,7 +383,7 @@ class ProjectController {
         final JSON json = sorted as JSON
         render text: json, contentType: 'text/json', template: null
     }
-
+    @Secured(['isAuthenticated()'])
     def editContext(Long id, String groupBySection) {
         Project instance = Project.get(id)
         if (!instance) {
@@ -395,7 +395,7 @@ class ProjectController {
         AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(ContextType.byId(groupBySection?.decodeURL()))
         [instance: instance, contexts: [contextGroup]]
     }
-
+    @Secured(['isAuthenticated()'])
     def updateProjectStage(InlineEditableCommand inlineEditableCommand) {
         //pass in the project experiment
         try {
@@ -426,7 +426,7 @@ class ProjectController {
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "An internal Server error happend while you were performing this task. Contact the BARD team to help resove this issue", contentType: 'text/plain', template: null
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def showEditSummary(Long instanceId) {
         def instance = Project.findById(instanceId)
         render(template: "editSummary", model: [project: instance])

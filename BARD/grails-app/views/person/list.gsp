@@ -31,11 +31,7 @@
                     <input type="text" placeholder="Username" name="username" value="${personCommand.username}">
                     <input type="text" placeholder="Full name" name="displayName" value="${personCommand.displayName}">
                     <input type="email" placeholder="Email address" name="email" value="${personCommand.email}">
-                    Primary group:
-                    <g:select required="" id="primaryGroup" name="primaryGroup.id" from="${Role.teamRoles}"
-                              optionKey="id"
-                              optionValue="displayName" noSelection="${['': '']}"
-                              value="${personCommand?.primaryGroup?.id}"/>
+
                     Roles:
                     <g:select id="roles" size="${Role.list().size()}"
                               name="roles" from="${Role.list()}"
@@ -60,8 +56,6 @@
                         <g:sortableColumn property="emailAddress"
                                           title="Email"/>
 
-                        <g:sortableColumn property="newObjectRole"
-                                          title="Primary Group"/>
 
                         <th>Roles</th></tr>
                     </thead>
@@ -71,7 +65,6 @@
                             <td><g:link action="edit" id="${person.id}">${person.fullName}</g:link></td>
                             <td><g:link action="edit" id="${person.id}">${person.userName}</g:link></td>
                             <td>${person.emailAddress}</td>
-                            <td>${person?.newObjectRole?.displayName}</td>
                             <td>${person.rolesAsList}</td>
                         </tr>
                     </g:each>

@@ -1,12 +1,10 @@
 package bardqueryapi
 
 import curverendering.DoseCurveRenderingService
-import grails.plugins.springsecurity.Secured
 
 import javax.servlet.http.HttpServletResponse
 
 @Mixin(InetAddressUtil)
-@Secured(['isAuthenticated()'])
 class DoseResponseCurveController {
 
     DoseCurveRenderingService doseCurveRenderingService
@@ -71,7 +69,6 @@ class DoseResponseCurveController {
                 byte[] bytes = this.doseCurveRenderingService.createDoseCurves(drcCurveCommand)
                 response.contentType = 'image/png'
                 response.outputStream.setBytes(bytes)
-                return
             } else {
                 flash.message = 'Points required in order to draw a Dose Response Curve'
                 log.error(flash.message + getUserIpAddress(bardUtilitiesService.username))
