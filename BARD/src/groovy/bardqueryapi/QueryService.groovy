@@ -188,7 +188,7 @@ class QueryService implements IQueryService {
         return activeVTestedMap
     }
 
-    String histogramDataByEID(int ncgcWarehouseId) {
+    String histogramDataByEID(long ncgcWarehouseId) {
         return experimentRestService.histogramDataByEID(ncgcWarehouseId)
     }
 /**

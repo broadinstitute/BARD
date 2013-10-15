@@ -15,7 +15,7 @@ import org.apache.commons.lang3.tuple.Pair
 public interface IQueryService {
     Map<Long, Pair<Long, Long>> findActiveVsTestedForExperiments(final List<Long> capExperimentIds);
 
-    String histogramDataByEID(int ncgcWarehouseId);
+    String histogramDataByEID(long ncgcWarehouseId);
 
     long numberOfAssays()
 
