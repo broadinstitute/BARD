@@ -17,7 +17,16 @@ import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.project.ProjectStep
 
 class ProjectRestService extends AbstractRestService {
-    def transactional=false
+    def transactional = false
+
+    public List<Project> findRecentlyAdded(long top) {
+        String urlString = getResource("${RestApiConstants.RECENT}${top}${RestApiConstants.QUESTION_MARK}expand=true")
+
+        final URL url = new URL(urlString)
+        final List<Project> projectResult = (List) getForObject(url.toURI(), List.class)
+        return projectResult
+    }
+
     public String getResourceContext() {
         return RestApiConstants.PROJECTS_RESOURCE
     }

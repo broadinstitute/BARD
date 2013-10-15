@@ -1,16 +1,44 @@
 package bardqueryapi
 
-import bard.core.adapter.CompoundAdapter
-import bard.core.rest.spring.util.StructureSearchParams
-import bard.core.rest.spring.compounds.CompoundSummary
-import bard.core.util.FilterTypes
 import bard.core.SearchParams
+import bard.core.adapter.CompoundAdapter
+import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.compounds.Compound
+import bard.core.rest.spring.compounds.CompoundSummary
+import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.substances.Substance
+import bard.core.rest.spring.util.StructureSearchParams
+import bard.core.util.FilterTypes
 import org.apache.commons.lang3.tuple.Pair
 
 public interface IQueryService {
     Map<Long, Pair<Long, Long>> findActiveVsTestedForExperiments(final List<Long> capExperimentIds);
 
-        /**
+    String histogramDataByEID(long ncgcWarehouseId);
+
+    long numberOfAssays()
+
+    long numberOfProjects()
+
+    long numberOfExperiments()
+
+    long numberOfCompounds()
+
+    long numberOfSubstances()
+
+    int numberOfProbes()
+
+    List<Compound> findRecentlyAddedProbes(int numberOfProbes)
+
+    List<Assay> findRecentlyAddedAssays(int numberOfAssays)
+
+    List<ExperimentSearch> findRecentlyAddedExperiments(int numberOfExperiments)
+
+    List<Project> findRecentlyAddedProjects(int numberOfProjects)
+
+    List<Substance> findRecentlyAddedSubstances(int numberOfSubstances)
+    /**
      *
      * @param cid
      * @return {@link bard.core.rest.spring.compounds.CompoundSummary}

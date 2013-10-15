@@ -389,12 +389,13 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
 
         where:
-        desc       | team              | teamPassword      | expectedHttpResponse      | buttonExist
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK | true
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK | false
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK | true
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK | true
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK | false
+        desc                 | team              | teamPassword      | expectedHttpResponse      | buttonExist
+        "Not Logged in User" | null              | null              | HttpServletResponse.SC_OK | false
+        "User A_1"           | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK | true
+        "User B"             | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK | false
+        "User A_2"           | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK | true
+        "ADMIN"              | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK | true
+        "CURATOR"            | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK | false
     }
 
 
@@ -734,6 +735,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
 
     }
+
     def 'test edit owner admin #desc'() {
         Long pk = projectData.id
         String newRole = "ROLE_TEAM_B"

@@ -6,11 +6,10 @@ import bard.db.people.Role
 
 class PersonService {
 
-    Person update(Person person, String userName, String fullName, String emailAddress, Role newObjectRole, Collection<Role> roles) {
+    Person update(Person person, String userName, String fullName, String emailAddress,Collection<Role> roles) {
         person.userName = userName
         person.fullName = fullName
         person.emailAddress = emailAddress
-        person.newObjectRole = newObjectRole
 
         def oldRoles = PersonRole.findAllByPerson(person)
         def newRoles = new HashSet(roles)

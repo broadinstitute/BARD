@@ -9,7 +9,6 @@ import javax.imageio.ImageIO
 
 
 @Mixin(InetAddressUtil)
-@Secured(['isAuthenticated()'])
 class ChemAxonController {
     ChemAxonService chemAxonService
     IQueryService queryService

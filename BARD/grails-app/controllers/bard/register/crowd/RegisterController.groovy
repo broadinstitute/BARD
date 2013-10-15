@@ -226,7 +226,7 @@ class RegisterController {
                     new PersonCommand(username: crowdRegistrationUser.name,
                             email: crowdRegistrationUser.email,
                             displayName: crowdRegistrationUser.display_name,
-                            primaryGroup: null, roles: [], version: 0, validate: false)
+                            roles: [], version: 0, validate: false)
                 final Person person = personCommand.createNewPerson()
                 if (!person) {
                     render(view: "registerMessage", model: [errorMessage: "Failed to create user"])
@@ -268,17 +268,10 @@ class ResetPasswordCommand {
     }
 }
 class RegisterCommand extends SignupCommand {
-
-
-    Role primaryGroup
     static constraints = {
         importFrom(SignupCommand)
 
-        primaryGroup nullable: false, validator: { value, command ->
-            if (!Role.findByAuthority(value?.authority)) {
-                return "Role with id ${value.authority} does not exist"
-            }
-        }
+
     }
 
     Person createNewPerson() {
@@ -288,9 +281,6 @@ class RegisterCommand extends SignupCommand {
             copyFromCmdToDomain(person)
             if (attemptSave(person)) {
                 personToReturn = person
-                if (!PersonRole.findByPersonAndRole(person, person.newObjectRole)) {
-                    PersonRole.create(person, person.newObjectRole, springSecurityService.principal?.username, true)
-                }
             }
 
         }
@@ -301,7 +291,6 @@ class RegisterCommand extends SignupCommand {
         person.userName = this.username
         person.emailAddress = this.email
         person.fullName = this.displayName
-        person.newObjectRole = primaryGroup
     }
 
 }

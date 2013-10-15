@@ -15,7 +15,7 @@ class DownTimeScheduler {
     Date dateCreated = new Date()
     Date lastUpdated = new Date()
 
-    static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.US)
+    static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US)
 
     static transients = ['downTimeAsLong', 'downTimeAsString', 'displayValueIfGreaterThanCurrentTime']
     static mapping = {

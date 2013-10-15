@@ -18,7 +18,15 @@ import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.assays.Assay
 
 class AssayRestService extends AbstractRestService {
-    def transactional=false
+    def transactional = false
+
+    public List<Assay> findRecentlyAdded(long top) {
+        String recentURL = "${RestApiConstants.RECENT}${top}${RestApiConstants.QUESTION_MARK}expand=true"
+        final String urlString = getResource(recentURL)
+        final URL url = new URL(urlString)
+        final List<Assay> assays = (List) getForObject(url.toURI(), List.class)
+        return assays
+    }
     /**
      *
      * @param searchParams

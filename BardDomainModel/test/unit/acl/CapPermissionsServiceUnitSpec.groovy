@@ -60,7 +60,7 @@ class CapPermissionsServiceUnitSpec extends Specification {
         when:
         service.addPermission(assay)
         then:
-        0 * service.springSecurityService.getPrincipal() >> {new BardUser(username: username, owningRole:role)}
+        0 * service.springSecurityService.getPrincipal() >> {new BardUser(username: username)}
 
         assert assay
 
