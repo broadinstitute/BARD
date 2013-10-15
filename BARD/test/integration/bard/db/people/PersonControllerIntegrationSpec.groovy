@@ -43,7 +43,6 @@ class PersonControllerIntegrationSpec extends IntegrationSpec {
         model.personCommand != null
         model.personCommand.username == null
         model.personCommand.email == null
-        model.personCommand.primaryGroup == null
 
         and: 'verify the view'
         controller.modelAndView.viewName.endsWith('list')
@@ -68,7 +67,6 @@ class PersonControllerIntegrationSpec extends IntegrationSpec {
         model.personCommand != null
         model.personCommand.username == person.userName
         model.personCommand.email == person.emailAddress
-        model.personCommand.primaryGroup == person.newObjectRole
 
         and: 'verify the view'
         controller.modelAndView.viewName.endsWith('edit')

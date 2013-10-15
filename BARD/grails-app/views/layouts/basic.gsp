@@ -129,7 +129,7 @@
 
                         <div class="span5 bard-footer-versioninfo muted">
                             <div>
-                                <b>Version:</b> ${grailsApplication.metadata['app.version']} <b>branch:</b> ${grailsApplication?.metadata['git.branch.name']} <b>revision:</b> ${grailsApplication?.metadata['git.branch.version']}
+                                <b>Created:</b> ${grailsApplication.metadata['war.created']} <b>branch:</b> ${grailsApplication?.metadata['git.branch.name']} <b>revision:</b> ${grailsApplication?.metadata['git.branch.version']}
                             </div>
                         </div>
 

@@ -52,16 +52,6 @@
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label class="control-label" for="primaryGroup">Primary group</label>
-
-                        <div class="controls">
-                            <g:select required="" id="primaryGroup" name="primaryGroup.id" from="${Role.teamRoles}"
-                                      optionKey="id"
-                                      optionValue="displayName" noSelection="${['': '']}"
-                                      value="${personCommand?.primaryGroup?.id}"/>
-                        </div>
-                    </div>
 
                     <div class="control-group">
                         <label class="control-label" for="roles">Roles</label>

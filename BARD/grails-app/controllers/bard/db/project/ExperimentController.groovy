@@ -26,7 +26,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 
 @Mixin([EditingHelper])
-@Secured(['isAuthenticated()'])
+
 class ExperimentController {
     static final DateFormat inlineDateFormater = new SimpleDateFormat("yyyy-MM-dd")
 
@@ -38,18 +38,18 @@ class ExperimentController {
     CapPermissionService capPermissionService
     AsyncResultsService asyncResultsService
 
-
+    @Secured(['isAuthenticated()'])
     def myExperiments() {
         List<Experiment> experiments = capPermissionService.findAllObjectsForRoles(Experiment)
         Set<Experiment> uniqueExperiments = new HashSet<Experiment>(experiments)
         [experiments: uniqueExperiments]
     }
-
+    @Secured(['isAuthenticated()'])
     def create() {
         def assay = Assay.get(params.assayId)
         render renderEditFieldsForView("create", new Experiment(), assay);
     }
-
+    @Secured(['isAuthenticated()'])
     def edit() {
         def experiment = Experiment.get(params.id)
         render renderEditFieldsForView("edit", experiment, experiment.assay);
@@ -92,7 +92,7 @@ class ExperimentController {
                 editable: editable ? 'canedit' : 'cannotedit',
                 isAdmin: isAdmin]
     }
-
+    @Secured(['isAuthenticated()'])
     def editHoldUntilDate(InlineEditableCommand inlineEditableCommand) {
         try {
             Experiment experiment = Experiment.findById(inlineEditableCommand.pk)
@@ -117,7 +117,7 @@ class ExperimentController {
             editErrorMessage()
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def editRunFromDate(InlineEditableCommand inlineEditableCommand) {
         try {
             Experiment experiment = Experiment.findById(inlineEditableCommand.pk)
@@ -142,7 +142,7 @@ class ExperimentController {
             editErrorMessage()
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def editRunToDate(InlineEditableCommand inlineEditableCommand) {
         try {
             Experiment experiment = Experiment.findById(inlineEditableCommand.pk)
@@ -167,7 +167,7 @@ class ExperimentController {
             editErrorMessage()
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def editDescription(InlineEditableCommand inlineEditableCommand) {
         try {
             Experiment experiment = Experiment.findById(inlineEditableCommand.pk)
@@ -199,7 +199,7 @@ class ExperimentController {
             editErrorMessage()
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
         try {
             final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value) ?: Role.findByAuthority(inlineEditableCommand.value)
@@ -230,7 +230,7 @@ class ExperimentController {
             editErrorMessage()
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def editExperimentName(InlineEditableCommand inlineEditableCommand) {
         try {
             Experiment experiment = Experiment.findById(inlineEditableCommand.pk)
@@ -262,7 +262,7 @@ class ExperimentController {
         }
     }
 
-
+    @Secured(['isAuthenticated()'])
     def editExperimentStatus(InlineEditableCommand inlineEditableCommand) {
         try {
             final ExperimentStatus experimentStatus = ExperimentStatus.byId(inlineEditableCommand.value)
@@ -283,7 +283,7 @@ class ExperimentController {
             editErrorMessage()
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def editContext(Long id, String groupBySection) {
         Experiment instance = Experiment.get(id)
         if (!instance) {
@@ -296,7 +296,7 @@ class ExperimentController {
         render view: '../project/editContext', model: [instance: instance, contexts: [contextGroup]]
     }
 
-
+    @Secured(['isAuthenticated()'])
     def save(ExperimentCommand experimentCommand) {
         if (!experimentCommand.validate()) {
             create(experimentCommand)
@@ -315,6 +315,7 @@ class ExperimentController {
             redirect(action: "show", id: experiment.id)
         }
     }
+    @Secured(['isAuthenticated()'])
     def update() {
         def experiment = Experiment.get(params.id)
         try {
@@ -330,14 +331,14 @@ class ExperimentController {
             redirect(action: "show", id: experiment.id)
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def reloadResults(Long id) {
         String jobKey = asyncResultsService.createJobKey()
         String link = createLink(action: 'viewLoadStatus', params: [experimentId: id, jobKey: jobKey])
         asyncResultsService.doReloadResultsAsync(id, jobKey, link)
         redirect(action: "viewLoadStatus", params: [jobKey: jobKey, experimentId: id])
     }
-
+    @Secured(['isAuthenticated()'])
     def viewLoadStatus(String jobKey, String experimentId) {
         JobStatus status = asyncResultsService.getStatus(jobKey)
         [experimentId: experimentId, status: status]

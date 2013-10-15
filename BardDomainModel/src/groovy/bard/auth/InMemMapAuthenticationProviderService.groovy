@@ -28,8 +28,7 @@ class InMemMapAuthenticationProviderService extends AbstractCrowdAuthenticationP
                     fullName: userProps.username,
                     email: new Email(userProps.email),
                     isActive: true,
-                    authorities: grantedAuthorities,
-                    owningRole: userProps.owningRole?new Role(authority: userProps.owningRole, displayName: userProps.owningRole):new Role(authority: userProps.username,displayName: userProps.username)
+                    authorities: grantedAuthorities
             ))
         }
     }

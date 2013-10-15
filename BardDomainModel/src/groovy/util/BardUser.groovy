@@ -17,7 +17,6 @@ import org.springframework.security.core.authority.GrantedAuthorityImpl
  * To change this template use File | Settings | File Templates.
  */
 class BardUser extends CbipUser {
-    Role owningRole //the role that owns the object associated with this user
 
     BardUser() {
 
@@ -36,6 +35,5 @@ class BardUser extends CbipUser {
         this.authorities = person.roles
         this.isActive = person.isAccountLocked()?false:true
         this.username = person.userName
-        this.owningRole=person.newObjectRole?:new Role(this.username)
-    }
+     }
 }
