@@ -1,6 +1,6 @@
 <html>
     <head>
-        <r:require modules="core,bootstrap,dynatree,jqueryform,newTerm, contextItem"/>
+        <r:require modules="core,bootstrap,dynatree,jqueryform,newTerm,contextItem"/>
         <meta name="layout" content="basic"/>
         <title>Propose New Term</title>
     </head>
@@ -9,10 +9,6 @@
         <div class="row-fluid">
             <div id="addTermForm">
                 <g:render template="addForm"/>
-            </div>
-
-            <div id="addTermTree">
-                <g:render template="termTree"/>
             </div>
         </div>
     </body>

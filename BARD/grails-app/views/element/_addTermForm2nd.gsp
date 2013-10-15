@@ -2,6 +2,26 @@
 <g:render template="/common/message"/>
 <g:render template="/common/errors" model="['errors': termCommand?.errors?.allErrors]"/>
 <h3>Propose New Term (page 2 of 2)</h3>
+<div class="control-group ${hasErrors(bean: termCommand, field: 'parentLabel', 'error')} required">
+    <label class="control-label" for="parentLabel">
+        <strong><g:message code="termCommand.parentLabel.label"/></strong>
+    </label>
+
+    <div class="controls">
+        <g:textField id="parentLabel" name="parentLabel" maxlength="${bard.db.dictionary.Element.LABEL_MAX_SIZE}" value="${termCommand?.parentLabel}" class="lowercase" onblur="trimText(this)" disabled="true"/>
+        <span class="help-inline"><g:fieldError field="parentLabel" bean="${termCommand}"/></span>
+    </div>
+</div>
+<div class="control-group ${hasErrors(bean: termCommand, field: 'parentDescription', 'error')} required">
+    <label class="control-label" for="parentDescription">
+        <strong><g:message code="termCommand.parentDescription.label"/></strong>
+    </label>
+
+    <div class="controls">
+        <g:textField id="parentDescription" name="parentDescription" maxlength="${bard.db.dictionary.Element.LABEL_MAX_SIZE}" value="${termCommand?.parentDescription}" class="lowercase" onblur="trimText(this)" disabled="true"/>
+        <span class="help-inline"><g:fieldError field="parentDescription" bean="${termCommand}"/></span>
+    </div>
+</div>
 <div class="control-group">
     <label>
         <h4>2. Enter the name of your term and a definition for it. (both are required)</h4>

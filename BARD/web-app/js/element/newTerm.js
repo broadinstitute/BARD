@@ -36,26 +36,26 @@ function createHierarchyTree()  {
                 data: {doNotShowRetired: doNotShowRetired}
             },
             onActivate: function (node) {
-                $("#parentLabel").val(node.data.title);
+                $("#attributeElementId").select2("data", {id: node.data.elementId, text: node.data.title});
                 $("#parentDescription").val(node.data.description);
 
                 if (node.data.childMethod == 'DIRECT') {
                     //make fields writable
-                    $("#termLabelId").attr("readonly", false);
-                    $("#termDescriptionId").attr("readonly", false);
-                    $("#abbrvId").attr("readonly", false);
-                    $("#synonymsId").attr("readonly", false);
-                    $("#curationNotesId").attr("readonly", false);
-                    $("#saveBtn").attr("disabled", false);
+//                    $("#termLabelId").attr("readonly", false);
+//                    $("#termDescriptionId").attr("readonly", false);
+//                    $("#abbrvId").attr("readonly", false);
+//                    $("#synonymsId").attr("readonly", false);
+//                    $("#curationNotesId").attr("readonly", false);
+                    $("#nextBtn").attr("disabled", false);
                 }
                 else {
                     //make all fields readonly
-                    $("#termLabelId").attr("readonly", true);
-                    $("#termDescriptionId").attr("readonly", true);
-                    $("#abbrvId").attr("readonly", true);
-                    $("#synonymsId").attr("readonly", true);
-                    $("#curationNotesId").attr("readonly", true);
-                    $("#saveBtn").attr("disabled", true);
+//                    $("#termLabelId").attr("readonly", true);
+//                    $("#termDescriptionId").attr("readonly", true);
+//                    $("#abbrvId").attr("readonly", true);
+//                    $("#synonymsId").attr("readonly", true);
+//                    $("#curationNotesId").attr("readonly", true);
+                    $("#nextBtn").attr("disabled", true);
 
                 }
             },

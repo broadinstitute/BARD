@@ -68,7 +68,8 @@ $(document).ready(function () {
                     }).done(function (data) {
                             callback(data);
                             updateConstraintWidgets(data);
-                            updateDescriptionField(this);
+                            updateDescriptionField();
+                            validateAddToChildren();
                         });
                 }
             },
@@ -95,7 +96,8 @@ $(document).ready(function () {
             var selectedData = $("#attributeElementId").select2("data");
             updateConstraintWidgets(selectedData);
             // Update the 'description' field is available
-            updateDescriptionField(this);
+            updateDescriptionField();
+            validateAddToChildren();
         });
         initialFocus();
     };
@@ -393,8 +395,8 @@ $(document).ready(function () {
         $(this).attr('href', currentHref + '?attributeElementId=' + attributeElementId)
     });
 
-    function updateDescriptionField(attributeElement) {
-        attributeElementId = $(attributeElement).attr('value');
+    function updateDescriptionField() {
+        var attributeElementId = $("#attributeElementId").attr('value');
         $.ajax("/BARD/ontologyJSon/getElement", {
             data: {
                 id: attributeElementId
@@ -402,6 +404,22 @@ $(document).ready(function () {
             dataType: "json"
         }).done(function (data) {
                 $('#parentDescription').attr('value', data.description)
+            });
+    }
+
+    //Validate that the element can be used as a parent-element for a newly proposed element (element.addChildMethod==DIRECT)
+    function validateAddToChildren() {
+        var attributeElementId = $("#attributeElementId").attr('value');
+
+        $.ajax("/BARD/ontologyJSon/getElement", {
+            data: {
+                id: attributeElementId
+            },
+            dataType: "json"
+        }).done(function (data) {
+                if ("DIRECT" === data.addChildMethod) {
+                    $('#nextBtn').attr("disabled", false);//enable the NEXT button with a successfull selection
+                }
             });
     }
 });

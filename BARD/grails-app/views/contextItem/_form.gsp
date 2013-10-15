@@ -78,7 +78,8 @@
                 <p>This attribute expects a value from the dictionary, start typing to select a value.</p>
 
                 <p>If you cannot find an existing value, please add a value to the dictionary.
-                    <a href="${createLink(controller: "element", action: "addTerm")}" target="proposeTerm" class="btn"
+                    <a href="${createLink(controller: "element", action: "selectParent")}" target="proposeTerm"
+                       class="btn"
                        id="proposeANewTermButton">Propose a New Dictionary Term</a></p>
             </div>
         </div>

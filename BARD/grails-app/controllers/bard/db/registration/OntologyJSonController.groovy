@@ -101,7 +101,8 @@ class OntologyJSonController {
                 "expectedValueType": element.expectedValueType.name(),
                 "externalUrl": element.externalURL,
                 "hasIntegratedSearch": hasIntegratedSearch,
-                "description": element.description
+                "description": element.description,
+                "addChildMethod": element.addChildMethod.name()
         ]
     }
 
