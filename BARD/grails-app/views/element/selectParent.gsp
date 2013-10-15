@@ -1,6 +1,6 @@
 <html>
     <head>
-        <r:require modules="core,bootstrap,dynatree,jqueryform,newTerm, contextItem"/>
+        <r:require modules="core,bootstrap,dynatree,jqueryform,newTerm,contextItem"/>
         <meta name="layout" content="basic"/>
         <title>Propose New Term</title>
     </head>
@@ -13,6 +13,10 @@
 
             <div id="addParentTree">
                 <g:render template="termTree"/>
+            </div>
+
+            <div id="addParentDictionaryTree">
+                <g:render template="dictionaryTermTree"/>
             </div>
         </div>
     </body>
