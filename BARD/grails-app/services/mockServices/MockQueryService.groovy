@@ -33,7 +33,7 @@ class MockQueryService implements IQueryService {
         return [:]
     }
 
-    String histogramDataByEID(int ncgcWarehouseId) {
+    String histogramDataByEID(long ncgcWarehouseId) {
         return null  //To change body of implemented methods use File | Settings | File Templates.
     }
 
