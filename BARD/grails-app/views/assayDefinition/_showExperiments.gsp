@@ -22,7 +22,9 @@
                     <td>
                         <g:link controller="experiment" action="show" id="${experiment.id}">${experiment.id}</g:link>
                     </td>
-                    <td style="line-height: 150%"><p>${experiment.experimentName}</p></td>
+                    <td>
+                        <g:link controller="experiment" action="show"
+                                id="${experiment.id}">${experiment.experimentName}</g:link></td>
                     <td>
                         <g:if test="${!experiment.externalReferences.isEmpty()}">
 
@@ -68,9 +70,7 @@
     </g:if>
     <br/>
     <g:if test="${assayInstance.allowsNewExperiments()}">
-        <g:if test="${editable == 'canedit'}">
-            <g:link controller="experiment" action="create" params="${[assayId: assayInstance.id]}"
-                    class="btn"><i class="icon-plus"></i>Create Experiment</g:link>
-        </g:if>
+        <g:link controller="experiment" action="create" params="${[assayId: assayInstance.id]}"
+                class="btn"><i class="icon-plus"></i>Create Experiment</g:link>
     </g:if>
 </div>

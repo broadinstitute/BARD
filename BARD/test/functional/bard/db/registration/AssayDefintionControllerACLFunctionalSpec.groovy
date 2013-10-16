@@ -183,7 +183,6 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
             urlenc assayName: name, ownerRole: assayData.roleId
         }
         then:
-        then:
         def ex = thrown(RESTClientException)
         assert ex.response.statusCode == expectedHttpResponse
         where:
@@ -201,12 +200,13 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         then:
         assert response.statusCode == expectedHttpResponse
         where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
+        desc                 | team              | teamPassword      | expectedHttpResponse
+        "Not Logged in User" | null              | null              | HttpServletResponse.SC_FOUND
+        "User A_1"           | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
+        "User B"             | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FOUND
+        "User A_2"           | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
+        "ADMIN"              | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
+        "CURATOR"            | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
     }
 
     def 'test reloadCardHolder #desc'() {
@@ -225,6 +225,38 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
         "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
         "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
+    }
+
+    def 'test reloadCardHolder unauthorized #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "", team, teamPassword)
+
+        when:
+        client.get(path: '/reloadCardHolder', query: [assayId: assayData.id, include_entities: true])
+        then:
+        def ex = thrown(RESTClientException)
+        assert ex.response.statusCode == expectedHttpResponse
+
+
+        where:
+        desc                 | team | teamPassword | expectedHttpResponse
+        "Not Logged in User" | null | null         | HttpServletResponse.SC_UNAUTHORIZED
+    }
+
+    def 'test show not logged in #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "show/${assayData.id}", team, teamPassword)
+
+        when:
+        final Response response = client.get()
+
+        then:
+        assert response.statusCode == expectedHttpResponse
+
+        where:
+        desc                 | team | teamPassword | expectedHttpResponse
+        "Not Logged in User" | null | null         | HttpServletResponse.SC_OK
+
     }
 
     def 'test show #desc'() {
@@ -273,6 +305,27 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
     }
     /**
+     * Forwards user to the edit Measure page
+     * @return
+     */
+    def 'test editMeasure not logged in  #desc'() {
+        given:
+        long assayId = assayData.id
+        RESTClient client = getRestClient(controllerUrl, "editMeasure/${assayId}", team, teamPassword)
+
+        when:
+        client.get()
+
+        then:
+        def ex = thrown(RESTClientException)
+        assert ex.response.statusCode == expectedHttpResponse
+
+        where:
+        desc                 | team | teamPassword | expectedHttpResponse
+        "Not Logged in User" | null | null         | HttpServletResponse.SC_UNAUTHORIZED
+
+    }
+    /**
      * Forwards user to the edit Context page
      * @return
      */
@@ -300,7 +353,28 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
 
     }
+    /**
+     * Forwards user to the edit Context page
+     * @return
+     */
+    def 'test editContext  not logged in #desc'() {
+        given:
+        long assayId = assayData.id
+        String groupBySection = ContextType.BIOLOGY.id
+        RESTClient client = getRestClient(controllerUrl, "editContext", team, teamPassword)
 
+        when:
+        def response = client.post() {
+            urlenc id: assayId, groupBySection: groupBySection
+        }
+
+        then:
+        def ex = thrown(RESTClientException)
+        assert ex.response.statusCode == expectedHttpResponse
+        where:
+        desc                 | team | teamPassword | expectedHttpResponse
+        "Not Logged in User" | null | null         | HttpServletResponse.SC_UNAUTHORIZED
+    }
 
 
     def 'test cloneAssay #desc'() {
@@ -312,7 +386,6 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         then:
         // they all redirect -- see https://www.pivotaltracker.com/story/show/54059075
         assert response.statusCode == expectedHttpResponse
-//        assert response.text.contains(team)
 
         where:
         desc       | team              | teamPassword      | expectedHttpResponse
@@ -323,6 +396,21 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
 
     }
+
+    def 'test cloneAssay not logged in  #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "cloneAssay/${assayData.id}", team, teamPassword)
+        when:
+        client.get()
+
+        then:
+        def ex = thrown(RESTClientException)
+        assert ex.response.statusCode == expectedHttpResponse
+        where:
+        desc                 | team | teamPassword | expectedHttpResponse
+        "Not Logged in User" | null | null         | HttpServletResponse.SC_UNAUTHORIZED
+    }
+
 
     def 'test assayTypes #desc'() {
         given:
@@ -337,12 +425,13 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
 
         where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
+        desc                 | team              | teamPassword      | expectedHttpResponse
+        "Not Logged in User" | null              | null              | HttpServletResponse.SC_OK
+        "User A_1"           | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
+        "User B"             | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
+        "User A_2"           | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
+        "ADMIN"              | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
+        "CURATOR"            | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
 
     }
 
@@ -359,12 +448,13 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
 
         where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
+        desc                 | team              | teamPassword      | expectedHttpResponse
+        "Not Logged in User" | null              | null              | HttpServletResponse.SC_OK
+        "User A_1"           | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
+        "User B"             | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
+        "User A_2"           | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
+        "ADMIN"              | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
+        "CURATOR"            | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
     }
 
 
@@ -420,7 +510,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
     }
 
-    def 'test associate context #forbidden'() {
+    def 'test associate context forbidden #desc'() {
         given:
         long id = assayData.id
         RESTClient client = getRestClient(controllerUrl, "associateContext", team, teamPassword)
@@ -438,6 +528,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
         where:
         desc                  | team              | teamPassword      | expectedHttpResponse
+        "Not Logged in User"  | null              | null              | HttpServletResponse.SC_UNAUTHORIZED
         "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
         "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
     }

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<PC-AssayContainer xmlns="http://www.ncbi.nlm.nih.gov" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:schemaLocation="http://www.ncbi.nlm.nih.gov ftp://ftp.ncbi.nlm.nih.gov/pubchem/specifications/pubchem.xsd">
+    <PC-AssaySubmit>
+        <PC-AssaySubmit_assay>
+            <PC-AssaySubmit_assay_descr>
+                <PC-AssayDescription>
+                    <PC-AssayDescription_aid>
+                        <PC-ID>
+                            <PC-ID_id>0</PC-ID_id>
+                            <PC-ID_version>0</PC-ID_version>
+                        </PC-ID>
+                    </PC-AssayDescription_aid>
+                    <PC-AssayDescription_aid-source>
+                        <PC-Source>
+                            <PC-Source_db>
+                                <PC-DBTracking>
+                                    <PC-DBTracking_name>The Scripps Research Institute Molecular Screening Center</PC-DBTracking_name>
+                                    <PC-DBTracking_source-id>
+                                        <Object-id>
+                                            <Object-id_str>ABC</Object-id_str>
+                                        </Object-id>
+                                    </PC-DBTracking_source-id>
+                                </PC-DBTracking>
+                            </PC-Source_db>
+                        </PC-Source>
+                    </PC-AssayDescription_aid-source>
+                    <PC-AssayDescription_name>ABC</PC-AssayDescription_name>
+                    <PC-AssayDescription_xref>
+                    </PC-AssayDescription_xref>
+                    <PC-AssayDescription_results>
+                        <PC-ResultType>
+                            <PC-ResultType_tid>1</PC-ResultType_tid>
+                            <PC-ResultType_name>Inhbition</PC-ResultType_name>
+                            <PC-ResultType_type value="float">1</PC-ResultType_type>
+                            <PC-ResultType_unit value="none">254</PC-ResultType_unit>
+                        </PC-ResultType>
+                    </PC-AssayDescription_results>
+                    <PC-AssayDescription_revision>0</PC-AssayDescription_revision>
+                    <PC-AssayDescription_activity-outcome-method value="confirmatory">2</PC-AssayDescription_activity-outcome-method>
+                    <PC-AssayDescription_project-category value="mlpcn">2</PC-AssayDescription_project-category>
+                </PC-AssayDescription>
+            </PC-AssaySubmit_assay_descr>
+        </PC-AssaySubmit_assay>
+    </PC-AssaySubmit>
+</PC-AssayContainer>

@@ -1,9 +1,8 @@
 package bard.db.experiment
 
-import acl.CapPermissionService
 import bard.db.enums.DocumentType
-import bard.db.enums.ReadyForExtraction
 import bard.db.enums.ExperimentStatus
+import bard.db.enums.ReadyForExtraction
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
@@ -48,8 +47,9 @@ class Experiment extends AbstractContextOwner {
     // this is needed to change the value to anything except "Ready"
     boolean disableUpdateReadyForExtraction = false
 
-    static transients = ['experimentContextItems','disableUpdateReadyForExtraction']
-//    static transients = ['fullyValidateContextItems','assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions', "disableUpdateReadyForExtraction"]
+
+
+    static transients = ['experimentContextItems', 'disableUpdateReadyForExtraction']
     Role ownerRole //The team that owns this object. This is used by the ACL to allow edits etc
 
     List<ExperimentContextItem> getExperimentContextItems() {
@@ -59,6 +59,7 @@ class Experiment extends AbstractContextOwner {
         }
         return experimentContextItems as List<ExperimentContextItem>
     }
+
     static belongsTo = [ownerRole: Role]
     static hasMany = [experimentContexts: ExperimentContext,
             experimentMeasures: ExperimentMeasure,
@@ -90,7 +91,7 @@ class Experiment extends AbstractContextOwner {
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
 
         ncgcWarehouseId(nullable: true)
-        ownerRole(nullable:true)
+        ownerRole(nullable: true)
     }
 
     String getDisplayName() {
@@ -119,6 +120,14 @@ class Experiment extends AbstractContextOwner {
             capPermissionService?.addPermission(this)
         }
     }
+
+
+
+    String getOwner() {
+        final String objectOwner = this.ownerRole?.displayName
+        return objectOwner
+    }
+
 
     List<ExperimentDocument> getPublications() {
         final List<ExperimentDocument> documents = experimentDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION } as List<ExperimentDocument>

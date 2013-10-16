@@ -8,9 +8,11 @@
 eventWarStart = { type ->
     String version
     String branchName
+    String buildDate = new Date()
     try {
         version = "git rev-parse HEAD".execute().text
         branchName =  "git rev-parse --abbrev-ref HEAD".execute().text
+
     } catch (e) {
         // couldn't access git.  Retrieved from the user interactively
         println "In order to build a war file we need the Git hash and name for the most recent build"
@@ -28,5 +30,6 @@ eventWarStart = { type ->
     }
     metadata.'git.branch.name' = "${branchName}".toString().trim()
     metadata.'git.branch.version' = "${version}".toString().trim()
+    metadata.'war.created'=buildDate.toString()
     metadata.persist()
 }

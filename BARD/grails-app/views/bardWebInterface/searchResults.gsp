@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="logoSearchCartAndFooter"/>
-
+    <meta name="layout" content="basic"/>
+    <title>Search</title>
     <r:require modules="search,promiscuity,compoundOptions,addAllItemsToCarts"/>
 </head>
 

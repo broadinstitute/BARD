@@ -1,11 +1,15 @@
 package bard.db.registration
 
 import bard.db.experiment.AssayContextExperimentMeasure
+import bard.db.guidance.Guidance
+import bard.db.guidance.context.BiologyShouldHaveOneSupportingReferencePerContextRule
+import bard.db.guidance.context.OneBiologyAttributePerContextRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractContextOwner
 
 class AssayContext extends AbstractContext {
+
 
     private static final Map<String, String> KEY_LABEL_NAME_MAP = ['assay component role': 'label',
             'assay component type': 'label', 'detection': 'detection method',
@@ -47,7 +51,7 @@ class AssayContext extends AbstractContext {
     public AssayContext clone(Assay newOwner) {
         AssayContext newContext = new AssayContext(contextName: contextName, contextType: contextType);
 
-        for(item in assayContextItems) {
+        for (item in assayContextItems) {
             item.clone(newContext)
         }
 
@@ -69,5 +73,13 @@ class AssayContext extends AbstractContext {
     @Override
     Class<? extends AbstractContextItem> getItemSubClass() {
         return AssayContextItem
+    }
+
+    @Override
+    List<Guidance> getGuidance() {
+        List<Guidance> guidanceList = super.getGuidance()
+        guidanceList.add(new OneBiologyAttributePerContextRule(this).getGuidance())
+        guidanceList.add(new BiologyShouldHaveOneSupportingReferencePerContextRule(this).getGuidance())
+        guidanceList.flatten()
     }
 }

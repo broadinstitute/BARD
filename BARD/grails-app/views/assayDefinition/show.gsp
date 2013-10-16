@@ -5,7 +5,7 @@
     <r:require
             modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,assaysummary,canEditWidget"/>
     <meta name="layout" content="basic"/>
-    <title>Assay Definition</title>
+    <title>ADID ${assayInstance?.id}: ${assayInstance?.assayName}</title>
 </head>
 
 <body>
@@ -100,7 +100,7 @@
         <g:if test="${assayInstance.panelAssays}">
             <li><a href="#panels-header"><i class="icon-chevron-right"></i>Panels</a></li>
         </g:if>
-    %{--<li><a href="#measures-header"><i class="icon-chevron-right"></i>Measures</a></li>--}%
+    <li><a href="#measures-header"><i class="icon-chevron-right"></i>Measures</a></li>
         <li><a href="#documents-header"><i class="icon-chevron-right"></i>Documents</a>
             <ul class="nav nav-list bs-docs-sidenav" style="padding-left: 0; margin: 0;">
                 <li><a href="#documents-description-header"><i class="icon-chevron-right"></i>Descriptions</a>
@@ -130,6 +130,7 @@
     </div>
 </section>
 <br/>
+<g:render template="/common/guidance" model="[guidanceList: assayInstance.guidance]" />
 <section id="biology-header">
 
     <h3 class="sect">Biology <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
@@ -367,18 +368,18 @@
 </g:if>
 <br/>
 
-%{--<br/>--}%
-%{--<section id="measures-header">--}%
+<br/>
+<section id="measures-header">
 
-%{--<h3 class="sect">Measures<g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i--}%
-%{--class="icon-question-sign"></i></g:link></h3>--}%
+    <h3 class="sect">Measures<g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
+            class="icon-question-sign"></i></g:link></h3>
 
 
-%{--<div class="row-fluid">--}%
-%{--<g:render template="measuresView"--}%
-%{--model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson, editable: editable]"/>--}%
-%{--</div>--}%
-%{--</section>--}%
+    <div class="row-fluid">
+        <g:render template="measuresView"
+                  model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson, editable: editable]"/>
+    </div>
+</section>
 <g:render template="/document/documents"
           model="[documentKind: DocumentKind.AssayDocument, owningEntity: assayInstance, canedit: editable]"/>
 </div>

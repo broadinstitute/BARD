@@ -1,5 +1,6 @@
 package bard.db.project
 
+import acl.CapPermissionService
 import bard.db.enums.ProjectStatus
 import bard.db.people.Role
 import grails.buildtestdata.mixin.Build
@@ -23,9 +24,11 @@ import spock.lang.Specification
 @TestFor(ProjectService)
 public class ProjectServiceUnitSpec extends Specification {
 
+    CapPermissionService capPermissionService
     @Before
     void setup() {
-        Project.metaClass.isDirty = { return false }
+        this.capPermissionService = Mock(CapPermissionService)
+        service.capPermissionService = capPermissionService
     }
     void "test update project name"(){
         given:

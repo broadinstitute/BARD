@@ -6,29 +6,23 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.rest.spring.experiment.Activity
-import bard.core.rest.spring.experiment.ExperimentData
-import bard.core.rest.spring.experiment.ExperimentSearch
-import bard.core.rest.spring.experiment.ExperimentShow
+import bard.core.rest.spring.*
+import bard.core.rest.spring.assays.*
+import bard.core.rest.spring.compounds.*
+import bard.core.rest.spring.experiment.*
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
+import bard.core.rest.spring.substances.Substance
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
 import bard.db.dictionary.BardDescriptor
 import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
 import bardqueryapi.experiment.ExperimentBuilder
-import bard.core.rest.spring.*
-import bard.core.rest.spring.assays.*
-import bard.core.rest.spring.compounds.*
-import bard.core.rest.spring.experiment.ExperimentSearchResult
-import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.tuple.ImmutablePair
 import org.apache.commons.lang3.tuple.Pair
 
 //import org.broadinstitute.ontology.GOOntologyService
-import org.springframework.cache.annotation.Cacheable
-
 class QueryService implements IQueryService {
     final static String PROBE_ETAG_ID = 'bee2c650dca19d5f'
 
@@ -115,7 +109,6 @@ class QueryService implements IQueryService {
         return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
 
-
     /**
      * @param searchString
      * @param top
@@ -167,25 +160,26 @@ class QueryService implements IQueryService {
         }
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
+
     Map<Long, Pair<Long, Long>> findActiveVsTestedForExperiments(final List<Long> capExperimentIds) {
         Map<Long, Pair<Long, Long>> activeVTestedMap = [:]
         final List<SearchFilter> searchFilters = []
         if (capExperimentIds) {
             final SearchParams searchParams = this.queryHelperService.constructSearchParams("", capExperimentIds.size(), 0, searchFilters)
-            final ExperimentSearchResult experimentSearchResult = experimentRestService.searchExperimentsByCapIds(capExperimentIds,searchParams,true)
+            final ExperimentSearchResult experimentSearchResult = experimentRestService.searchExperimentsByCapIds(capExperimentIds, searchParams, true)
 
             final List<ExperimentSearch> experiments = experimentSearchResult?.experiments
             if (experiments) {
                 activeVTestedMap = experiments.collectEntries { ExperimentSearch experimentSearch ->
                     Long activeCompounds = experimentSearch.activeCompounds
                     Long testedCompounds = experimentSearch.compounds
-                    if(testedCompounds < 0){
+                    if (testedCompounds < 0) {
                         testedCompounds = 0
                     }
-                    if(activeCompounds < 0){
+                    if (activeCompounds < 0) {
                         activeCompounds = 0
                     }
-                    [experimentSearch.capExptId, new ImmutablePair<Long, Long>(activeCompounds,testedCompounds)]
+                    [experimentSearch.capExptId, new ImmutablePair<Long, Long>(activeCompounds, testedCompounds)]
 
                 }
             }
@@ -193,13 +187,17 @@ class QueryService implements IQueryService {
         }
         return activeVTestedMap
     }
-    /**
-     * @param searchString
-     * @param top
-     * @param skip
-     * @param searchFilters {@link SearchFilter}'s
-     * @return Map
-     */
+
+    String histogramDataByEID(long ncgcWarehouseId) {
+        return experimentRestService.histogramDataByEID(ncgcWarehouseId)
+    }
+/**
+ * @param searchString
+ * @param top
+ * @param skip
+ * @param searchFilters {@link SearchFilter}'s
+ * @return Map
+ */
     Map findProjectsByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         List<ProjectAdapter> foundProjectAdapters = []
         Collection<Value> facets = []
@@ -236,6 +234,7 @@ class QueryService implements IQueryService {
         ]
 
     }
+
     /**
      * @param smiles
      * @param structureSearchParamsType {@link StructureSearchParams}
@@ -701,4 +700,59 @@ class QueryService implements IQueryService {
         }
         labelToPathMap
     }
+
+    long numberOfAssays() {
+        return assayRestService.getResourceCount()
+    }
+
+    long numberOfProjects() {
+        return projectRestService.getResourceCount()
+    }
+
+    long numberOfExperiments() {
+        return experimentRestService.getResourceCount()
+    }
+
+    long numberOfCompounds() {
+        return compoundRestService.getResourceCount()
+    }
+
+    long numberOfSubstances() {
+        return substanceRestService.getResourceCount()
+    }
+
+    int numberOfProbes() {
+        final CompoundResult compoundResult = compoundRestService.findCompoundsByETag(PROBE_ETAG_ID)
+        return compoundResult.compounds.size()
+
+    }
+
+    List<Assay> findRecentlyAddedAssays(int numberOfAssays = 6) {
+        final List<Assay> assays = assayRestService.findRecentlyAdded(numberOfAssays)
+        return assays
+    }
+
+    List<ExperimentSearch> findRecentlyAddedExperiments(int numberOfExperiments = 6) {
+        final List<ExperimentSearch> experiments = experimentRestService.findRecentlyAdded(numberOfExperiments)
+        return experiments
+    }
+
+    List<Project> findRecentlyAddedProjects(int numberOfProjects = 6) {
+        final List<Project> projects = projectRestService.findRecentlyAdded(numberOfProjects)
+        return projects
+    }
+
+    List<Substance> findRecentlyAddedSubstances(int numberOfSubstances = 6) {
+        final List<Substance> substances = substanceRestService.findRecentlyAdded(6)
+        return substances
+    }
+
+    List<Compound> findRecentlyAddedProbes(int numberOfProbes = 6) {
+        final CompoundResult compoundResult = compoundRestService.findCompoundsByETag(PROBE_ETAG_ID)
+        final List<Compound> compounds = compoundResult.compounds
+        final int numberOfCompounds = compounds.size()
+        final List<Compound> recentlyAddedCompounds = compounds.subList(numberOfCompounds - numberOfProbes, numberOfCompounds)
+        return recentlyAddedCompounds
+    }
+
 }

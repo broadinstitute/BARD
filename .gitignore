@@ -52,3 +52,5 @@ clover.license
 bard-rest-api-wrapper/plugin.xml
 functional-spock/plugin.xml
 shopping-cart-0.8.2/plugin.xml
+BARD/last_query.txt
+BARD/last_response.txt

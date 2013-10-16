@@ -4,7 +4,7 @@
 <head>
     <r:require modules="core,bootstrap,contextItem,handlebars"/>
     <meta name="layout" content="basic"/>
-    <title>Edit ContextItem</title>
+    <title>Edit Context Item</title>
 
 </head>
 
@@ -22,7 +22,7 @@
         <div class="row-fluid">
             <div class="span6 offset2">
                 <h3>Current context:</h3>
-                <g:render template="show"
+                <g:render template="edit"
                           model="${[context: instance.context, highlightedItemId: instance.contextItemId]}"/>
             </div>
         </div>

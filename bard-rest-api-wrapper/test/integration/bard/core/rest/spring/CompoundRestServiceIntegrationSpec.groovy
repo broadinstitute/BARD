@@ -5,16 +5,15 @@ import bard.core.SuggestParams
 import bard.core.exceptions.RestApiException
 import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.compounds.*
 import bard.core.rest.spring.util.Counts
 import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
-import bard.core.rest.spring.compounds.*
 
 /**
  * Tests for CompoundRestService in JDO
@@ -25,6 +24,19 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
     CompoundRestService compoundRestService
     @Shared
     List<Long> cids = [2722L, 5394L]
+
+
+    void "get the last #label compounds"() {
+        when:
+        CompoundResult compoundResult = compoundRestService.findRecentlyAddedCompounds(numberOfCompounds)
+        then:
+        assert compoundResult.getCompounds().size() == numberOfCompounds
+        where:
+
+        label | numberOfCompounds
+        "10"  | 10
+        "5"   | 5
+    }
 
     void "searchCompoundsByCIDs #label"() {
         when:

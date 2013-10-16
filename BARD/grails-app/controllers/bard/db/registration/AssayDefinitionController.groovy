@@ -34,7 +34,6 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 
 @Mixin(EditingHelper)
-@Secured(['isAuthenticated()'])
 class AssayDefinitionController {
 
     static allowedMethods = [associateContext: "POST", disassociateContext: "POST", deleteMeasure: "POST", addMeasure: "POST"]
@@ -48,6 +47,7 @@ class AssayDefinitionController {
     CapPermissionService capPermissionService
     IQueryService queryService
 
+    @Secured(['isAuthenticated()'])
     def groupAssays() {
         List<Assay> assays = capPermissionService.findAllObjectsForRoles(Assay)
         LinkedHashSet<Assay> uniqueAssays = new LinkedHashSet<Assay>(assays)
@@ -57,7 +57,7 @@ class AssayDefinitionController {
     def assayComparisonReport() {
 
     }
-
+    @Secured(['isAuthenticated()'])
     def generateAssayComparisonReport(final Long assayOneId, final Long assayTwoId) {
         if (assayOneId == null || assayTwoId == null) {
             render(status: HttpServletResponse.SC_BAD_REQUEST, text: "Please enter valid assay ids in both text boxes")
@@ -77,7 +77,7 @@ class AssayDefinitionController {
         final Map reportMap = assayDefinitionService.generateAssayComparisonReport(assayOne, assayTwo)
         render(template: "generateAssayCompareReport", model: reportMap)
     }
-
+    @Secured(['isAuthenticated()'])
     def editAssayType(InlineEditableCommand inlineEditableCommand) {
         try {
             final AssayType assayType = AssayType.byId(inlineEditableCommand.value)
@@ -99,7 +99,7 @@ class AssayDefinitionController {
             editErrorMessage()
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
         try {
             final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value)?:Role.findByAuthority(inlineEditableCommand.value)
@@ -132,7 +132,7 @@ class AssayDefinitionController {
             editErrorMessage()
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def editAssayStatus(InlineEditableCommand inlineEditableCommand) {
         try {
             final AssayStatus assayStatus = AssayStatus.byId(inlineEditableCommand.value)
@@ -155,7 +155,7 @@ class AssayDefinitionController {
             editErrorMessage()
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def editAssayName(InlineEditableCommand inlineEditableCommand) {
         try {
             Assay assay = Assay.findById(inlineEditableCommand.pk)
@@ -186,7 +186,7 @@ class AssayDefinitionController {
             editErrorMessage()
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def editDesignedBy(InlineEditableCommand inlineEditableCommand) {
         try {
             Assay assay = Assay.findById(inlineEditableCommand.pk)
@@ -266,7 +266,7 @@ class AssayDefinitionController {
     def index() {
         redirect(action: "groupAssays")
     }
-
+    @Secured(['isAuthenticated()'])
     def save(AssayCommand assayCommand) {
         if (!assayCommand.validate()) {
             create(assayCommand)
@@ -279,6 +279,7 @@ class AssayDefinitionController {
         }
         render(view: "create", model: [assayCommand: assayCommand])
     }
+    @Secured(['isAuthenticated()'])
     def create(AssayCommand assayCommand) {
         if (!assayCommand) {
             projectCommand: new AssayCommand()
@@ -286,7 +287,7 @@ class AssayDefinitionController {
         [assayCommand: new AssayCommand()]
     }
 
-
+    @Secured(['isAuthenticated()'])
     def cloneAssay(Long id) {
         Assay assay = Assay.get(id)
         try {
@@ -343,7 +344,7 @@ class AssayDefinitionController {
         final Map<Long, Pair<Long, Long>> experimentsActiveVsTested = queryService.findActiveVsTestedForExperiments(experimentIds)
         return [assayInstance: assayInstance, assayOwner: owner, measureTreeAsJson: measureTreeAsJson, editable: editable ? 'canedit' : 'cannotedit', experimentsActiveVsTested: experimentsActiveVsTested]
     }
-
+    @Secured(['isAuthenticated()'])
     def editContext(Long id, String groupBySection) {
         def assayInstance = Assay.get(id)
 
@@ -356,7 +357,7 @@ class AssayDefinitionController {
 
         [assayInstance: assayInstance, contexts: [contextGroup]]
     }
-
+    @Secured(['isAuthenticated()'])
     def editMeasure() {
         JSON measuresTreeAsJson = null;
 
@@ -371,7 +372,7 @@ class AssayDefinitionController {
 
         [experimentInstance: experimentInstance, measuresTreeAsJson: measuresTreeAsJson]
     }
-
+    @Secured(['isAuthenticated()'])
     def deleteMeasure() {
         ExperimentMeasure experimentMeasure = ExperimentMeasure.get(params.measureId)
 
@@ -390,7 +391,7 @@ class AssayDefinitionController {
         }
         redirect(action: "editMeasure", id: params.id)
     }
-
+    @Secured(['isAuthenticated()'])
     def addMeasure() {
         // final Assay assayInstance = Assay.get(params.id)
         final Experiment experiment = Experiment.get(params.id)
@@ -438,7 +439,7 @@ class AssayDefinitionController {
             }
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def disassociateContext() {
         final AssayContext assayContext = AssayContext.get(params.assayContextId)
         try {
@@ -459,7 +460,7 @@ class AssayDefinitionController {
         }
         redirect(action: "editMeasure", id: assayContext.assay.id)
     }
-
+    @Secured(['isAuthenticated()'])
     def associateContext() {
         try {
             def measure = ExperimentMeasure.get(params.measureId)
@@ -484,7 +485,7 @@ class AssayDefinitionController {
         }
         redirect(action: "editMeasure", id: params.id)
     }
-
+    @Secured(['isAuthenticated()'])
     def changeRelationship() {
         try {
             def measure = ExperimentMeasure.get(params.measureId)
@@ -510,7 +511,7 @@ class AssayDefinitionController {
         redirect(action: "editMeasure", id: params.id)
     }
 
-
+    @Secured(['isAuthenticated()'])
     def reloadCardHolder(Long assayId) {
         def assay = Assay.get(assayId)
         if (assay) {
@@ -527,6 +528,7 @@ class AssayDefinitionController {
         render(template: "editItemForm", model: [assayContextItem: assayContextItem, assayContextId: assayContextId])
     }
     //cannot find anywhere that it is used
+    @Secured(['isAuthenticated()'])
     def updateCardName(String edit_card_name, Long contextId) {
         try {
             AssayContext assayContext = AssayContext.findById(contextId)
@@ -545,6 +547,7 @@ class AssayDefinitionController {
      * @param parentMeasureId
      * @return
      */
+    @Secured(['isAuthenticated()'])
     def moveMeasureNode(Long measureId, Long parentMeasureId) {
         try {
             ExperimentMeasure measure = ExperimentMeasure.get(measureId)

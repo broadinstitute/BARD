@@ -6,7 +6,7 @@ class HomePage extends ScaffoldPage {
 
     static at = {
         waitFor(5, 0.5){ title }
-        assert title.contains("BARD: Catalog of Assay Protocols")
+        assert title.contains("BioAssay Research Database")
         return true
     }
 

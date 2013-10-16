@@ -142,7 +142,9 @@ class ExperimentExportService extends ExportAbstractService {
         attributes.put("experimentId", experiment.id?.toString())
         attributes.put('status', convertStatusToString(experiment.experimentStatus))
         attributes.put('readyForExtraction', experiment.readyForExtraction.getId())
-        attributes.put('confidenceLevel', experiment.confidenceLevel?.toString())
+        if(experiment.confidenceLevel != null  && StringUtils.isNotBlank(experiment.confidenceLevel?.toString())){
+            attributes.put('confidenceLevel', experiment.confidenceLevel.toString())
+        }
         if(experiment.lastUpdated){
             final GregorianCalendar gregorianCalendar = new GregorianCalendar();
             gregorianCalendar.setTime(experiment.lastUpdated);

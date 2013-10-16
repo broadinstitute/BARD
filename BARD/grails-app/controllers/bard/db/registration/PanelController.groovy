@@ -11,7 +11,6 @@ import groovy.transform.InheritConstructors
 import org.springframework.security.access.AccessDeniedException
 
 @Mixin(EditingHelper)
-@Secured(['isAuthenticated()'])
 class PanelController {
 
     static allowedMethods = [associateAssay: "POST", disassociateAssay: "POST"]
@@ -20,13 +19,13 @@ class PanelController {
     CapPermissionService capPermissionService
 
     PanelService panelService
-
+    @Secured(['isAuthenticated()'])
     def myPanels() {
         List<Panel> panels = capPermissionService.findAllObjectsForRoles(Panel)
         Set<Panel> uniquePanels = new HashSet<Panel>(panels)
         [panels: uniquePanels]
     }
-
+    @Secured(['isAuthenticated()'])
     def deletePanel() {
         Panel panel = Panel.get(params.id)
 
@@ -38,11 +37,11 @@ class PanelController {
         flash.message = "Panel deleted successfully"
         redirect(action: "myPanels")
     }
-
+    @Secured(['isAuthenticated()'])
     def addAssayToPanel(AssociatePanelCommand associatePanelCommand) {
         return [associatePanelCommand: associatePanelCommand]
     }
-
+    @Secured(['isAuthenticated()'])
     def addAssays(AssociatePanelCommand associatePanelCommand) {
 
         if (!associatePanelCommand.id) {
@@ -61,7 +60,7 @@ class PanelController {
 
 
     }
-
+    @Secured(['isAuthenticated()'])
     def addAssay(AssociatePanelCommand associatePanelCommand) {
         if (!associatePanelCommand.id) {
             [associatePanelCommand: new AssociatePanelCommand()]
@@ -76,7 +75,7 @@ class PanelController {
         redirect(controller: "panel", action: "show", id: associatePanelCommand.id)
 
     }
-
+    @Secured(['isAuthenticated()'])
     def removeAssays(AssociatePanelCommand associatePanelCommand) {
 
         if (!associatePanelCommand.id) {
@@ -93,7 +92,7 @@ class PanelController {
         redirect(controller: "panel", action: "show", id: associatePanelCommand.id)
 
     }
-
+    @Secured(['isAuthenticated()'])
     def removeAssay(AssociatePanelCommand associatePanelCommand) {
         if (!associatePanelCommand.id) {
             [associatePanelCommand: new AssociatePanelCommand()]
@@ -108,7 +107,7 @@ class PanelController {
 
 
 
-
+    @Secured(['isAuthenticated()'])
     def editDescription(InlineEditableCommand inlineEditableCommand) {
         try {
             Panel panel = Panel.findById(inlineEditableCommand.pk)
@@ -139,7 +138,7 @@ class PanelController {
             editErrorMessage()
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def editPanelName(InlineEditableCommand inlineEditableCommand) {
         try {
             Panel panel = Panel.findById(inlineEditableCommand.pk)
@@ -170,6 +169,7 @@ class PanelController {
             editErrorMessage()
         }
     }
+    @Secured(['isAuthenticated()'])
     def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
         try {
             final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value)?:Role.findByAuthority(inlineEditableCommand.value)
@@ -204,7 +204,7 @@ class PanelController {
     def index() {
         redirect(action: "myPanels")
     }
-
+    @Secured(['isAuthenticated()'])
     def save(PanelCommand panelCommand) {
         if (!panelCommand.validate()) {
             render(view: "create", model: [panelCommand: panelCommand])
@@ -217,7 +217,7 @@ class PanelController {
         }
         render(view: "create", model: [panelCommand: panelCommand])
     }
-
+    @Secured(['isAuthenticated()'])
     def create() {
         return [panelCommand: new PanelCommand()]
     }
@@ -233,7 +233,7 @@ class PanelController {
         }
 
         boolean editable = canEdit(permissionEvaluator, springSecurityService, panelInstance)
-        String owner = capPermissionService.getOwner(panelInstance)
+        String owner = panelInstance.getOwner()
         return [panelInstance: panelInstance, panelOwner: owner, editable: editable ? 'canedit' : 'cannotedit']
     }
 

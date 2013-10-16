@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import acl.CapPermissionService
 import bard.core.SearchParams
 import bard.core.rest.spring.AssayRestService
 import bard.core.rest.spring.assays.AssayResult
@@ -19,17 +20,16 @@ import registration.AssayService
 class AssayDefinitionService {
     AssayService assayService
     AssayRestService assayRestService
+    CapPermissionService capPermissionService
 
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Assay updateOwnerRole(Long id, Role ownerRole) {
         Assay assay = Assay.findById(id)
         assay.ownerRole = ownerRole
-//
-//        //TODO: Update the roles of all of the experiments that belong to it
-//        for(Experiment experiment :assay.experiments){
-//           experiment.ownerRole = ownerRole
-//        }
         assay.save(flush: true)
+
+
+        capPermissionService.updatePermission(assay, ownerRole)
         return Assay.findById(id)
     }
 

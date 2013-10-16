@@ -1,6 +1,7 @@
 package bard.db.dictionary
 
 import bard.db.enums.AddChildMethod
+import bard.util.BardCacheUtilsService
 import grails.plugins.springsecurity.SpringSecurityService
 
 import java.util.concurrent.ExecutorService
@@ -15,8 +16,8 @@ import java.util.concurrent.Executors
  */
 class ElementService {
     SpringSecurityService springSecurityService
-    OntologyDataAccessService ontologyDataAccessService
-    final ExecutorService executorService = Executors.newCachedThreadPool()
+    BardCacheUtilsService bardCacheUtilsService
+
 
     /**
      *
@@ -29,20 +30,9 @@ class ElementService {
                 abbreviation: termCommand.abbreviation, synonyms: termCommand.synonyms, curationNotes: termCommand.curationNotes)
         element.save(flush: true)
         addElementHierarchy(parentElement, element, termCommand.relationship)
-
-        reloadCache()
-
         return element
     }
 
-    public void reloadCache() {
-        //execute async
-        this.executorService.execute(new Runnable() {
-            public void run() {
-                ontologyDataAccessService.reloadCache()
-            }
-        });
-    }
     /**
      *
      * @param parentElement

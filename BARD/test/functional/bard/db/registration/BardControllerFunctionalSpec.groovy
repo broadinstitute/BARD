@@ -70,7 +70,9 @@ abstract class BardControllerFunctionalSpec extends Specification {
             url = StringUtils.removeEnd(baseUrl, "/")
         }
         RESTClient client = new RESTClient(url)
-        client.authorization = new HTTPBasicAuthorization(team, teamPassword)
+        if (team && teamPassword) {
+            client.authorization = new HTTPBasicAuthorization(team, teamPassword)
+        }
         client.httpClient.sslTrustAllCerts = true
         client.httpClient.followRedirects = false
         return client

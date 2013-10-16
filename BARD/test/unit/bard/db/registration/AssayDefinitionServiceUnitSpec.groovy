@@ -32,7 +32,7 @@ public class AssayDefinitionServiceUnitSpec extends Specification {
 
     @Before
     void setup() {
-        Assay.metaClass.isDirty = { return false }
+        service.capPermissionService =Mock(CapPermissionService)
     }
     void 'test generateAssayComparisonReport'() {
         setup:

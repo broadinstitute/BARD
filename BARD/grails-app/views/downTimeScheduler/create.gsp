@@ -55,15 +55,10 @@
         </g:form>
     </div>
 </div>
-<%
-    Date startDate = new Date()
-    Date endDate = startDate + 1
-
-%>
 <r:script type="text/javascript">
+
     $('.form_datetime').datetimepicker({
-        format: 'mm/dd/yyyy hh:mm P',
-        startDate: '+0d',
+        startDate: '-1d',
         endDate: '+1m',
         autoclose: true,
         todayHighlight: true,
