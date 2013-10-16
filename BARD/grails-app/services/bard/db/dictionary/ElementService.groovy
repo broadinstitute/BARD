@@ -77,7 +77,7 @@ class ElementService {
                 boolean isFolder = childElement.parentHierarchies ? true : false
                 final AddChildMethod childMethod = childElement.addChildMethod
                 String childElementLabel = childElement.label + (childElement.elementStatus.equals(ElementStatus.Retired) ? " (Retired)" : "")
-                childNodes.add([elementId: childElement.id, childMethodDescription: childMethod.description, childMethod: childMethod.toString(), addClass: childMethod.label, title: childElementLabel, description: childElement.description, isFolder: isFolder, isLazy: isLazy])
+                childNodes.add([elementId: childElement.id, key: childElement.id, childMethodDescription: childMethod.description, childMethod: childMethod.toString(), addClass: childMethod.label, title: childElementLabel, description: childElement.description, isFolder: isFolder, isLazy: isLazy])
             }
         }
         childNodes.sort { Map a, Map b -> a["title"].toLowerCase().compareTo(b["title"].toLowerCase()) }
@@ -87,8 +87,8 @@ class ElementService {
      * @param full = will render the full tree otherwise it will lazily render it
      * @return list of hierarchy
      */
-    public List createElementHierarchyTree(boolean doNotShowRetired) {
-        Element element = Element.findByLabel("BARD")//find the ROOT OF THE BARD TREE
+    public List createElementHierarchyTree(boolean doNotShowRetired, String treeRoot) {
+        Element element = Element.findByLabel(treeRoot)//find the ROOT OF THE TREE ("BARD" or "BARD Dictionary")
         return getChildNodes(element.id, doNotShowRetired)
     }
 }

@@ -1,5 +1,5 @@
 <%@ page import="bard.db.enums.AddChildMethod" %>
-<div class="span5">
+<div>
     <h3>Current BARD Hierarchy</h3>
 
     <div>

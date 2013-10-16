@@ -29,22 +29,23 @@ class ElementControllerUnitSpec extends Specification {
     def setup() {
         this.controller.elementService = Mock(ElementService.class)
         this.controller.bardCacheUtilsService = Mock(BardCacheUtilsService.class)
-        this.parentElement = Element.build(label: 'parent label with spaces')
+        this.parentElement = Element.build(label: 'parent label with spaces', addChildMethod: AddChildMethod.DIRECT)
     }
 
     void "test buildTopLevelHierarchyTree"() {
 
         given:
         final String label = "label"
+        final String key = "key"
         final String description = "description"
         final boolean isFolder = false
         final boolean isLazy = false
         long elementId = Element.build(label: label).id
         when:
-        controller.buildTopLevelHierarchyTree()
+        controller.buildTopLevelHierarchyTree(false, "BARD")
         then:
-        controller.elementService.createElementHierarchyTree(false) >> {
-            [[elementId: elementId, title: label, description: description, isFolder: isFolder, isLazy: isLazy]]
+        controller.elementService.createElementHierarchyTree(false, "BARD") >> {
+            [[elementId: elementId, title: label, key: key, description: description, isFolder: isFolder, isLazy: isLazy]]
         }
         def controllerResponse = controller.response.contentAsString
         def jsonResult = JSON.parse(controllerResponse)
@@ -59,6 +60,7 @@ class ElementControllerUnitSpec extends Specification {
 
         given:
         final String label = "label"
+        final String key = "key"
         final String description = "description"
         final boolean isFolder = false
         final boolean isLazy = false
@@ -70,6 +72,7 @@ class ElementControllerUnitSpec extends Specification {
         controller.elementService.getChildNodes(_, _) >> {
             [[elementId: elementId,
                     title: label,
+                    key: key,
                     description: description,
                     isFolder: isFolder,
                     isLazy: isLazy,
@@ -83,6 +86,7 @@ class ElementControllerUnitSpec extends Specification {
         assert jsonResult
         assert [elementId] == jsonResult.elementId
         assert [label] == jsonResult.title
+        assert [key] == jsonResult.key
         assert [false] == jsonResult.isFolder
         assert [false] == jsonResult.isLazy
         assert [AddChildMethod.DIRECT.label] == jsonResult.addClass
@@ -250,8 +254,8 @@ class ElementControllerUnitSpec extends Specification {
     }
 
     void "add New Term Page"() {
-
         when:
+        params.attributeElementId = 1
         this.controller.addTerm()
         then:
         assert EXPECTED_ADD_TERN_VIEW == view
