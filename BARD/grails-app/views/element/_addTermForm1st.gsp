@@ -21,9 +21,16 @@
     </div>
 </div>
 
+
+<div class="control-group">
+    <div class="controls" id="attributeElementErrorField">
+    </div>
+</div>
+
 <div class="control-group">
     <div class="controls">
-        <p><i class="icon-info-sign"></i> We set the parent term for you based on the attribute from your context item, however you can delete this and choose something else</p>
+        <p><i class="icon-info-sign"></i> We set the parent term for you based on the attribute from your context item, however you can delete this and choose something else
+        </p>
     </div>
 </div>
 
