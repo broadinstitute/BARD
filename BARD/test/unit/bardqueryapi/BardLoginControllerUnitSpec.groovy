@@ -101,7 +101,6 @@ class BardLoginControllerUnitSpec extends Specification {
         then:
         this.authenticationTrustResolver.isRememberMe(_) >> {true}
         assert response.status == 200
-        assert response.contentAsString.contains('<h2 class="form-signin-heading">Please sign in</h2>')
     }
 
     void "test authfail() #label"() {
