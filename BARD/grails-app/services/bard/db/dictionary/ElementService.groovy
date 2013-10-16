@@ -77,7 +77,7 @@ class ElementService {
                 boolean isFolder = childElement.parentHierarchies ? true : false
                 final AddChildMethod childMethod = childElement.addChildMethod
                 String childElementLabel = childElement.label + (childElement.elementStatus.equals(ElementStatus.Retired) ? " (Retired)" : "")
-                childNodes.add([elementId: childElement.id, childMethodDescription: childMethod.description, childMethod: childMethod.toString(), addClass: childMethod.label, title: childElementLabel, description: childElement.description, isFolder: isFolder, isLazy: isLazy])
+                childNodes.add([elementId: childElement.id, key: childElement.id, childMethodDescription: childMethod.description, childMethod: childMethod.toString(), addClass: childMethod.label, title: childElementLabel, description: childElement.description, isFolder: isFolder, isLazy: isLazy])
             }
         }
         childNodes.sort { Map a, Map b -> a["title"].toLowerCase().compareTo(b["title"].toLowerCase()) }

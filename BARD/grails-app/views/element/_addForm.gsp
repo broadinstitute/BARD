@@ -1,11 +1,13 @@
 <div class="span6 offset1">
     <g:form class="form-horizontal" action="saveTerm" id="saveTerm" name="saveTerm">
-        <g:hiddenField name="currentElementId" id="currentElementId"
+        <g:hiddenField name="currentElement.id" id="currentElement.id"
                        value="${termCommand?.parentElementId ?: ''}"/>
-        %{--<g:hiddenField name="parentLabel" id="parentLabel"--}%
-                       %{--value="${termCommand?.parentLabel ?: ''}"/>--}%
-        %{--<g:hiddenField name="parentDescription" id="parentDescription"--}%
-                       %{--value="${termCommand?.parentDescription ?: ''}"/>--}%
+        <g:hiddenField name="parentElementId" id="parentElementId"
+                       value="${termCommand?.parentElementId ?: ''}"/>
+        <g:hiddenField name="parentLabel" id="parentLabel"
+                       value="${termCommand?.parentLabel ?: ''}"/>
+        <g:hiddenField name="parentDescription" id="parentDescription"
+                       value="${termCommand?.parentDescription ?: ''}"/>
         <g:render template="addTermForm2nd"/>
         <div class="control-group">
             <label>

@@ -1,4 +1,4 @@
-<div class="span6 offset1">
+<div>
     <g:form class="form-horizontal" action="addTerm" id="addTerm" name="addTerm">
         <g:render template="addTermForm1st"/>
 

@@ -3,14 +3,14 @@ $(document).ready(function () {
     createHierarchyTree("#dictionary-element-hierarchy-tree", "BARD Dictionary Tree", "BARD Dictionary");
 });
 
-function reloadTree(){
+function reloadTree() {
     var doNotShowRetired = $("#doNotShowRetiredTerms").is(':checked');
     $("#element-hierarchy-tree").dynatree("option", "initAjax", {
         url: "/BARD/element/buildTopLevelHierarchyTree",
-        data: {doNotShowRetired: doNotShowRetired}
+        data: {doNotShowRetired: doNotShowRetired, treeRoot: "BARD"}
     });
 
-    $("#element-hierarchy-tree").dynatree("option", "onLazyRead", function (node){
+    $("#element-hierarchy-tree").dynatree("option", "onLazyRead", function (node) {
         node.appendAjax(
             {
                 url: "/BARD/element/getChildrenAsJson",
@@ -24,7 +24,7 @@ function reloadTree(){
     $("#saveTerm")[0].reset();
 }
 
-function createHierarchyTree(treeElementName, treeTitle, treeRoot)  {
+function createHierarchyTree(treeElementName, treeTitle, treeRoot) {
     var doNotShowRetired = $("#doNotShowRetiredTerms").is(':checked');
 
     $(treeElementName).dynatree
@@ -95,7 +95,7 @@ function createHierarchyTree(treeElementName, treeTitle, treeRoot)  {
  * Credit : http://raghunathgurjar.wordpress.com/2012/05/02/how-close-current-window-tab-in-all-browsers-using-javascript/
  */
 function closeWindow() {
-    var win = window.open("","_self");
+    var win = window.open("", "_self");
     win.close();
 }
 function reloadActiveNode() {
@@ -108,10 +108,17 @@ function reloadActiveNode() {
 }
 
 function selectCurrentElement() {
-    var currentElementId = $("#currentElementId").val();
-    if (currentElementId) {
-        $("#element-hierarchy-tree").dynatree("getTree").activateKey(currentElementId);
-        $("#dictionar-element-hierarchy-tree").dynatree("getTree").activateKey(currentElementId);
+    var attributeElementId = $("#attributeElementId").val();
+    if (attributeElementId) {
+        try {//If the tree exists, activate the selected attribute
+            $("#element-hierarchy-tree").dynatree("getTree").activateKey(attributeElementId);
+        }
+        catch(e) {}
+
+        try {//If the tree exists, activate the selected attribute
+        $("#dictionary-element-hierarchy-tree").dynatree("getTree").activateKey(attributeElementId);
+        }
+        catch(e) {}
     }
 }
 
