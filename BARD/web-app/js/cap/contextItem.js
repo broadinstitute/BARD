@@ -418,7 +418,11 @@ $(document).ready(function () {
             dataType: "json"
         }).done(function (data) {
                 if ("DIRECT" === data.addChildMethod) {
-                    $('#nextBtn').attr("disabled", false);//enable the NEXT button with a successfull selection
+                    $('#nextBtn').attr("disabled", false);//enable the NEXT button with a successful selection
+                    $('#attributeElementErrorField').empty();
+                }
+                else {
+                    $('#attributeElementErrorField').html('<p class="text-error"><i class="icon-exclamation-sign"></i> That term is not allowed to be used as a parent</p>');
                 }
             });
     }

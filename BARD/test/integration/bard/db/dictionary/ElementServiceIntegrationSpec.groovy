@@ -62,7 +62,7 @@ class ElementServiceIntegrationSpec extends IntegrationSpec {
         boolean doNotShowRetired = false
         buildElementHierarchy(eh0a.childElement, leafElement, "subClassOf")
         when:
-        List hierarchies = elementService.createElementHierarchyTree(doNotShowRetired)
+        List hierarchies = elementService.createElementHierarchyTree(doNotShowRetired, "BARD")
         then:
         assert hierarchies
         assert 1 == hierarchies.size()
