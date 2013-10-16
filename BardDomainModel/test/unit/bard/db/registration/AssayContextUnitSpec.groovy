@@ -26,15 +26,13 @@ import static bard.db.guidance.context.OneBiologyAttributePerContextRule.ONE_BIO
 @Unroll
 class AssayContextUnitSpec extends AbstractContextUnitSpec<AssayContext> {
 
-
     @Before
     @Override
     void doSetup() {
         domainInstance = AssayContext.buildWithoutSave()
     }
 
-
-    /*def 'test guidance #desc'() {
+    void 'test guidance #desc'() {
         given:
         final AssayContext assayContext = AssayContext.build()
 
@@ -60,7 +58,6 @@ class AssayContextUnitSpec extends AbstractContextUnitSpec<AssayContext> {
 
         where:
         desc                                                                     | attributeElementMaps                                                                   | valueElementMaps                                               | expectedGuidanceMessages
-//        "1 biology attribute with invalid value"                                 | [[label: 'biology']]                                                                   | [[label: 'foo']]                                               | [VALID_BIOLOGY_VALUE_MESSAGE]
         "2 biology attributes no good"                                           | [[label: 'biology'], [label: 'biology']]                                               | [[label: 'biological process'], [label: 'biological process']] | [ONE_BIOLOGY_ATTRIBUTE, BIOLOGICAL_PROCESS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
         "no biology attribute ok"                                                | []                                                                                     | []                                                             | []
 
@@ -69,22 +66,22 @@ class AssayContextUnitSpec extends AbstractContextUnitSpec<AssayContext> {
         "biology='biological process', with more than 1 supporting term no good" | [[label: 'biology'], [label: 'NCBI BioSystems term'], [label: 'NCBI BioSystems term']] | [[label: 'biological process']]                                | [BIOLOGICAL_PROCESS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
         "biology='biological process', without supporting term no good"          | [[label: 'biology']]                                                                   | [[label: 'biological process']]                                | [BIOLOGICAL_PROCESS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
 
-        "biology='molecular target' should have supporting term"                 | [[label: 'biology'], [label: 'GO gene-product ID']]                                    | [[label: 'molecular target']]                                  | []
-        "biology='molecular target' should have supporting term"                 | [[label: 'biology'], [label: 'GenBank ID']]                                            | [[label: 'molecular target']]                                  | []
-        "biology='molecular target' should have supporting term"                 | [[label: 'biology'], [label: 'NCBI accession number']]                                 | [[label: 'molecular target']]                                  | []
-        "biology='molecular target' should have supporting term"                 | [[label: 'biology'], [label: 'UniProt accession number']]                              | [[label: 'molecular target']]                                  | []
-        "biology='molecular target' should have supporting term"                 | [[label: 'biology'], [label: 'gene Entrez GI']]                                        | [[label: 'molecular target']]                                  | []
-        "biology='molecular target' should have supporting term"                 | [[label: 'biology'], [label: 'protein Entrez GI']]                                     | [[label: 'molecular target']]                                  | []
+        "biology='molecular target' should have supporting term ok"              | [[label: 'biology'], [label: 'GO gene-product ID']]                                    | [[label: 'molecular target']]                                  | []
+        "biology='molecular target' should have supporting term ok"              | [[label: 'biology'], [label: 'GenBank ID']]                                            | [[label: 'molecular target']]                                  | []
+        "biology='molecular target' should have supporting term ok"              | [[label: 'biology'], [label: 'NCBI accession number']]                                 | [[label: 'molecular target']]                                  | []
+        "biology='molecular target' should have supporting term ok"              | [[label: 'biology'], [label: 'UniProt accession number']]                              | [[label: 'molecular target']]                                  | []
+        "biology='molecular target' should have supporting term ok"              | [[label: 'biology'], [label: 'gene Entrez GI']]                                        | [[label: 'molecular target']]                                  | []
+        "biology='molecular target' should have supporting term ok"              | [[label: 'biology'], [label: 'protein Entrez GI']]                                     | [[label: 'molecular target']]                                  | []
         "biology='molecular target' with more than 1 supporting term no good"    | [[label: 'biology'], [label: 'GO gene-product ID'], [label: 'GO gene-product ID']]     | [[label: 'molecular target']]                                  | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
         "biology='molecular target' should have supporting term"                 | [[label: 'biology']]                                                                   | [[label: 'molecular target']]                                  | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
-        //TODO build out like molecular target
-        "biology='macromolecule' should have supporting term" | [[label: 'biology']] | [[label: 'macromolecule']] | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
-        "biology='antibody' should have supporting term" | [[label: 'biology']] | [[label: 'antibody']] | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
-        "biology='gene' should have supporting term" | [[label: 'biology']] | [[label: 'gene']] | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
-        "biology='nucleotide' should have supporting term" | [[label: 'biology']] | [[label: 'nucleotide']] | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
-        "biology='peptide' should have supporting term" | [[label: 'biology']] | [[label: 'peptide']] | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
-        "biology='protein-DNA complex' should have supporting term" | [[label: 'biology']] | [[label: 'protein-DNA complex']] | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
-        "biology='protein-reporter complex' should have supporting term" | [[label: 'biology']] | [[label: 'protein-reporter complex']] | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
-        "biology='protein-reporter complex' should have supporting term" | [[label: 'biology']] | [[label: 'protein']] | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
-    } */
+
+        "biology='macromolecule' should have supporting term"                    | [[label: 'biology']]                                                                   | [[label: 'macromolecule']]                                     | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
+        "biology='antibody' should have supporting term"                         | [[label: 'biology']]                                                                   | [[label: 'antibody']]                                          | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
+        "biology='gene' should have supporting term"                             | [[label: 'biology']]                                                                   | [[label: 'gene']]                                              | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
+        "biology='nucleotide' should have supporting term"                       | [[label: 'biology']]                                                                   | [[label: 'nucleotide']]                                        | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
+        "biology='peptide' should have supporting term"                          | [[label: 'biology']]                                                                   | [[label: 'peptide']]                                           | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
+        "biology='protein-DNA complex' should have supporting term"              | [[label: 'biology']]                                                                   | [[label: 'protein-DNA complex']]                               | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
+        "biology='protein-reporter complex' should have supporting term"         | [[label: 'biology']]                                                                   | [[label: 'protein-reporter complex']]                          | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
+        "biology='protein-reporter complex' should have supporting term"         | [[label: 'biology']]                                                                   | [[label: 'protein']]                                           | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
+    }
 }
