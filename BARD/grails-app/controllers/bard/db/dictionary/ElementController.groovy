@@ -1,12 +1,15 @@
 package bard.db.dictionary
 
 import bard.db.command.BardCommand
+import bard.db.enums.AddChildMethod
 import bard.util.BardCacheUtilsService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.validation.Validateable
 import grails.validation.ValidationErrors
 import groovy.transform.InheritConstructors
+
+import javax.servlet.http.HttpServletResponse
 
 @Secured(['isAuthenticated()'])
 class ElementController {
@@ -17,12 +20,14 @@ class ElementController {
     BardCacheUtilsService bardCacheUtilsService
     ModifyElementAndHierarchyService modifyElementAndHierarchyService
 
-    def index(){
-        redirect(uri:'/')
+    def index() {
+        redirect(uri: '/')
     }
-    def showTopLevelHierarchyHelp(){
-        render(view:'showTopLevelHierarchyHelp')
+
+    def showTopLevelHierarchyHelp() {
+        render(view: 'showTopLevelHierarchyHelp')
     }
+
     def list() {
         Map parameterMap = generatePaths()
 
@@ -39,15 +44,34 @@ class ElementController {
         render elementHierarchyAsJsonTree
     }
 
-    def buildTopLevelHierarchyTree(boolean doNotShowRetired) {
-        List elementHierarchyTree = elementService.createElementHierarchyTree(doNotShowRetired)
+    def buildTopLevelHierarchyTree(boolean doNotShowRetired, String treeRoot) {
+        List elementHierarchyTree = elementService.createElementHierarchyTree(doNotShowRetired, treeRoot)
         JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
         render elementHierarchyAsJsonTree
     }
 
+    /**
+     * Handles adding a new term element to the dictionary.
+     * First step is to choose the new term's parent ID
+     * Second step is to add content and create the new term.
+     *
+     * @return
+     */
+    def selectParent() {
+        flash.message = ''
+        Element parentElement = Element.findById(params.attributeElementId)
+        render(view: 'selectParent', model: [termCommand: new TermCommand(parentElementId: parentElement.id, parentLabel: parentElement?.label, parentDescription: parentElement?.description)])
+    }
+
     def addTerm() {
         flash.message = ''
-        render(view: 'addTerm', model: [termCommand: new TermCommand()])
+        Element parentElement = Element.findById(params.attributeElementId)
+        if (!parentElement || parentElement?.addChildMethod != AddChildMethod.DIRECT) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                    "Could not find Experiment ${params.attributeElementId} or this experiment could not be used as a parent-element for a new proposed term-element")
+            return
+        }
+        render(view: 'addTerm', model: [termCommand: new TermCommand(parentElementId: parentElement.id, parentLabel: parentElement?.label, parentDescription: parentElement?.description)])
     }
 
     def saveTerm(TermCommand termCommand) {
@@ -77,6 +101,7 @@ class ElementController {
         }
         render(view: 'addTerm', model: [termCommand: termCommand, currentElement: currentElement])
     }
+
     @Secured(["hasRole('ROLE_CURATOR')"])
     def edit() {
         Map parameterMap = generatePaths()
@@ -103,6 +128,7 @@ class ElementController {
 
         return result
     }
+
     @Secured(["hasRole('ROLE_CURATOR')"])
     def update(ElementEditCommand elementEditCommand) {
         String errorMessage = null
@@ -220,6 +246,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
 @Validateable
 class TermCommand extends BardCommand {
     BuildElementPathsService buildElementPathsService
+    Long parentElementId
     String parentLabel
     String parentDescription
     String label

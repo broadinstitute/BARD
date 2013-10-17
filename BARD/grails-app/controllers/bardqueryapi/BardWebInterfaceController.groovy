@@ -41,7 +41,6 @@ import javax.servlet.http.HttpServletResponse
  */
 @Mixin(SearchHelper)
 @Mixin(InetAddressUtil)
-@Secured(['isAuthenticated()'])
 class BardWebInterfaceController {
     def shoppingCartService
     BardUtilitiesService bardUtilitiesService
@@ -113,7 +112,7 @@ class BardWebInterfaceController {
     def redirectToIndex() {
         redirect(controller: 'bardWebInterface', action: 'index')
     }
-
+    @Secured(['isAuthenticated()'])
     def navigationPage() {
         render(view: 'navigationPage', model: {})
     }

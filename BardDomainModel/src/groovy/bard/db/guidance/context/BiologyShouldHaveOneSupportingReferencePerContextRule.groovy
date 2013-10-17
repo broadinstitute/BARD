@@ -80,11 +80,7 @@ class BiologyShouldHaveOneSupportingReferencePerContextRule implements GuidanceR
             }
         } else if (molecularTargetItems) { // else if  the biology is a molecular target e.g. 'biology' = 'molecular interaction'
             final List<AbstractContextItem> molecularTargetTerms = context.contextItems.findAll { AbstractContextItem item ->
-                item.attributeElement.label in
-
-
-
-                        MOLECULAR_TARGET_TERMS
+                item.attributeElement.label in MOLECULAR_TARGET_TERMS
             }
             if (molecularTargetTerms.size() != 1) {
                 guidanceList.add(new DefaultGuidanceImpl(MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG))

@@ -50,7 +50,9 @@ class OntologyJsonControllerUnitSpec extends Specification {
         actualMap.expectedValueType == element.expectedValueType.name()
         actualMap.externalUrl == element.externalURL
         actualMap.hasIntegratedSearch == hasIntegratedSearch
-        actualMap.size() == 6
+        actualMap.description == element.description
+        actualMap.addChildMethod == element.addChildMethod.name()
+        actualMap.size() == 8
 
         where:
         desc                                       | elementMap                                                                                                  | hasIntegratedSearch
@@ -81,7 +83,7 @@ class OntologyJsonControllerUnitSpec extends Specification {
         where:
         desc                | serviceReturnValue                                                             | expectedMap
         'no elements found' | { [] }                                                                         | [results: []]
-        '1 element found'   | { [Element.build(label: 'l1', expectedValueType: ExpectedValueType.NUMERIC)] } | [results: [[id: '1', text: 'l1', expectedValueType: ExpectedValueType.NUMERIC, hasIntegratedSearch: false, externalUrl: null, unitId: null]]]
+        '1 element found'   | { [Element.build(label: 'l1', expectedValueType: ExpectedValueType.NUMERIC)] } | [results: [[id: 1, text: "l1", description: null, expectedValueType: "NUMERIC", hasIntegratedSearch: false, externalUrl: null, unitId: null, addChildMethod: "NO"]]]
     }
 
     void "test getAttributeDescriptors #desc"() {
@@ -104,7 +106,7 @@ class OntologyJsonControllerUnitSpec extends Specification {
         where:
         desc                       | serviceReturnValue                                                                                                                    | expectedMap
         'no BardDescriptors found' | { [] }                                                                                                                                | [results: []]
-        '1 BardDescriptor found'   | { [BardDescriptor.build([fullPath: 'somePath', element: Element.build(label: 'l1', expectedValueType: ExpectedValueType.NUMERIC)])] } | [results:[[id:1, text:'l1', expectedValueType:ExpectedValueType.NUMERIC, parentFullPath:null, fullPath:'somePath', hasIntegratedSearch:false, externalUrl:null, unitId:null]]]
+        '1 BardDescriptor found'   | { [BardDescriptor.build([fullPath: "somePath", element: Element.build(label: 'l1', expectedValueType: ExpectedValueType.NUMERIC)])] } | [results: [[id: 1, text: "l1", description: null, expectedValueType: "NUMERIC", parentFullPath: null, fullPath: "somePath", hasIntegratedSearch: false, externalUrl: null, unitId: null, addChildMethod: "NO"]]]
     }
 
     void "test getValueDescriptorsV2 #desc"() {
@@ -127,7 +129,7 @@ class OntologyJsonControllerUnitSpec extends Specification {
         where:
         desc                       | serviceReturnValue                               | expectedMap
         'no BardDescriptors found' | { [] }                                           | [results: []]
-        '1 BardDescriptor found'   | { [BardDescriptor.build(fullPath: 'somePath')] } | [results:[[id:1, text:'label1', expectedValueType:ExpectedValueType.NONE, parentFullPath:null, fullPath:'somePath', hasIntegratedSearch:false, externalUrl:null, unitId:null]]]
+        '1 BardDescriptor found'   | { [BardDescriptor.build(fullPath: 'somePath')] } | [results: [[id: 1, text: "label1", description: null, expectedValueType: "NONE", parentFullPath: null, fullPath: "somePath", hasIntegratedSearch: false, externalUrl: null, unitId: null, addChildMethod: "NO"]]]
     }
 
     void "test findExternalItemsByTerm #desc "() {

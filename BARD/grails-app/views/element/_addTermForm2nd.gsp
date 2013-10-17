@@ -1,32 +1,24 @@
 <%@ page import="bard.db.dictionary.*" %>
 <g:render template="/common/message"/>
 <g:render template="/common/errors" model="['errors': termCommand?.errors?.allErrors]"/>
-<h3>Propose New Term</h3>
-<div class="control-group">
-    <label>
-        <h4>1. Select a parent term from the current BARD Hierarchy.</h4>
-    </label>
-</div>
+<h3>Propose New Term (page 2 of 2)</h3>
 <div class="control-group ${hasErrors(bean: termCommand, field: 'parentLabel', 'error')} required">
     <label class="control-label" for="parentLabel">
-        <strong><g:message code="termCommand.parentLabel.label"/>  </strong>
-        <span class="required-indicator">*</span>
-
+        <strong><g:message code="termCommand.parentLabel.label"/></strong>
     </label>
 
     <div class="controls">
-        <g:textField id="parentLabel" name="parentLabel" readonly="true"  maxlength="${bard.db.dictionary.Element.LABEL_MAX_SIZE}" value="${termCommand?.parentLabel}"/>
+        <g:textField id="parentLabel" name="parentLabel" maxlength="${bard.db.dictionary.Element.LABEL_MAX_SIZE}" value="${termCommand?.parentLabel}" class="lowercase" onblur="trimText(this)" disabled="true"/>
         <span class="help-inline"><g:fieldError field="parentLabel" bean="${termCommand}"/></span>
     </div>
 </div>
-
 <div class="control-group ${hasErrors(bean: termCommand, field: 'parentDescription', 'error')} required">
-    <label class="control-label" for="description">
+    <label class="control-label" for="parentDescription">
         <strong><g:message code="termCommand.parentDescription.label"/></strong>
     </label>
 
     <div class="controls">
-        <g:textArea name="parentDescription" id="parentDescription" readonly="true" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.DESCRIPTION_MAX_SIZE}" value="${termCommand?.parentDescription}"/>
+        <g:textField id="parentDescription" name="parentDescription" maxlength="${bard.db.dictionary.Element.LABEL_MAX_SIZE}" value="${termCommand?.parentDescription}" class="lowercase" onblur="trimText(this)" disabled="true"/>
         <span class="help-inline"><g:fieldError field="parentDescription" bean="${termCommand}"/></span>
     </div>
 </div>

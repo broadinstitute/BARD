@@ -2,7 +2,11 @@ package iteration_035
 
 databaseChangeLog = {
 
-    changeSet(author: "ycruz", id: "iteration-035/01-update-contextitem-valuedisplay", dbms: "oracle", context: "standard") {
+    changeSet(author: "jasiedu", id: "iteration-035/01-remove-new-object-role", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_035/01-remove-new-object-role.sql", stripComments: true)
+    }
+
+    changeSet(author: "ycruz", id: "iteration-035/02-update-contextitem-valuedisplay", dbms: "oracle", context: "standard") {
         grailsChange {
             change {
                 sql.execute("""BEGIN
@@ -11,7 +15,7 @@ databaseChangeLog = {
                                    """)
             }
         }
-        sqlFile(path: "iteration_035/01-update-contextitem-valuedisplay.sql", stripComments: true, endDelimiter: ";")
+        sqlFile(path: "iteration_035/02-update-contextitem-valuedisplay.sql", stripComments: true, endDelimiter: ";")
     }
 
 }

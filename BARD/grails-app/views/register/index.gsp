@@ -18,7 +18,6 @@
                     <h3>Register a New External BARD User in Crowd</h3>
                     <g:form action='register' name='registerForm'>
                         <g:render template="register"/>
-                        <g:render template="primaryGroup" model="[]"/>
                     </g:form>
                 </div>
 

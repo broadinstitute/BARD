@@ -1,15 +1,16 @@
 $(document).ready(function () {
-    createHierarchyTree();
+    createHierarchyTree("#element-hierarchy-tree", "BARD Hierarchy Tree", "BARD");
+    createHierarchyTree("#dictionary-element-hierarchy-tree", "BARD Dictionary Tree", "BARD Dictionary");
 });
 
-function reloadTree(){
+function reloadTree() {
     var doNotShowRetired = $("#doNotShowRetiredTerms").is(':checked');
     $("#element-hierarchy-tree").dynatree("option", "initAjax", {
         url: "/BARD/element/buildTopLevelHierarchyTree",
-        data: {doNotShowRetired: doNotShowRetired}
+        data: {doNotShowRetired: doNotShowRetired, treeRoot: "BARD"}
     });
 
-    $("#element-hierarchy-tree").dynatree("option", "onLazyRead", function (node){
+    $("#element-hierarchy-tree").dynatree("option", "onLazyRead", function (node) {
         node.appendAjax(
             {
                 url: "/BARD/element/getChildrenAsJson",
@@ -23,39 +24,29 @@ function reloadTree(){
     $("#saveTerm")[0].reset();
 }
 
-function createHierarchyTree()  {
+function createHierarchyTree(treeElementName, treeTitle, treeRoot) {
     var doNotShowRetired = $("#doNotShowRetiredTerms").is(':checked');
 
-    $("#element-hierarchy-tree").dynatree
+    $(treeElementName).dynatree
     (
         {
-            title: "BARD Hierarchy Tree",
+            title: treeTitle,
             autoFocus: false,
             initAjax: {
                 url: "/BARD/element/buildTopLevelHierarchyTree",
-                data: {doNotShowRetired: doNotShowRetired}
+                data: {doNotShowRetired: doNotShowRetired, treeRoot: treeRoot}
             },
             onActivate: function (node) {
-                $("#parentLabel").val(node.data.title);
+                $("#attributeElementId").select2("data", {id: node.data.elementId, text: node.data.title});
                 $("#parentDescription").val(node.data.description);
 
                 if (node.data.childMethod == 'DIRECT') {
                     //make fields writable
-                    $("#termLabelId").attr("readonly", false);
-                    $("#termDescriptionId").attr("readonly", false);
-                    $("#abbrvId").attr("readonly", false);
-                    $("#synonymsId").attr("readonly", false);
-                    $("#curationNotesId").attr("readonly", false);
-                    $("#saveBtn").attr("disabled", false);
+                    $("#nextBtn").attr("disabled", false);
                 }
                 else {
                     //make all fields readonly
-                    $("#termLabelId").attr("readonly", true);
-                    $("#termDescriptionId").attr("readonly", true);
-                    $("#abbrvId").attr("readonly", true);
-                    $("#synonymsId").attr("readonly", true);
-                    $("#curationNotesId").attr("readonly", true);
-                    $("#saveBtn").attr("disabled", true);
+                    $("#nextBtn").attr("disabled", true);
 
                 }
             },
@@ -104,7 +95,7 @@ function createHierarchyTree()  {
  * Credit : http://raghunathgurjar.wordpress.com/2012/05/02/how-close-current-window-tab-in-all-browsers-using-javascript/
  */
 function closeWindow() {
-    var win = window.open("","_self");
+    var win = window.open("", "_self");
     win.close();
 }
 function reloadActiveNode() {
@@ -117,9 +108,17 @@ function reloadActiveNode() {
 }
 
 function selectCurrentElement() {
-    var currentElementId = $("#currentElementId").val();
-    if (currentElementId) {
-        $("#element-hierarchy-tree").dynatree("getTree").activateKey(currentElementId);
+    var attributeElementId = $("#attributeElementId").val();
+    if (attributeElementId) {
+        try {//If the tree exists, activate the selected attribute
+            $("#element-hierarchy-tree").dynatree("getTree").activateKey(attributeElementId);
+        }
+        catch(e) {}
+
+        try {//If the tree exists, activate the selected attribute
+        $("#dictionary-element-hierarchy-tree").dynatree("getTree").activateKey(attributeElementId);
+        }
+        catch(e) {}
     }
 }
 
