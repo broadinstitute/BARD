@@ -14,7 +14,9 @@ $(document).ready(function () {
                     siteName: 'BioActivity Research Database',
                     siteLogo: '/BARD/images/bard_logo_small.png',   //requires https
                     termsOfService: '/BARD/about/termsOfUse', //requires https
-                    privacyPolicy: '/BARD/about/privacyPolicy' //requires https
+                    privacyPolicy: '/BARD/about/privacyPolicy', //requires https
+                    returnTo: '/BARD/bardWebInterface'
+
                 });
             };
         } else {

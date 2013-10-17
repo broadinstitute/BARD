@@ -12,12 +12,40 @@
 <div class="container">
 
     <div>
-        <img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database"/>
+        <a class="brand" href="/BARD">
+            <img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database"/>
+        </a>
+
     </div>
     <br/>
 
-    <g:if env="offline">
-        %{--This should only be used for testing. We fall back to our offline way of doing things--}%
+
+
+
+    <g:if env="development">
+        <p>
+            <span class="brand">BARD</span> <strong>offers a convenient way to sign in or create an account.</strong>
+        </p>
+
+        <p>
+            By logging in, you accept BARD's
+            <g:link controller="about" action="termsOfUse" target="_blank">Terms</g:link> and
+            <g:link controller="about" action="privacyPolicy" target="_blank">Privacy Policy</g:link>
+
+        </p>
+
+        <a class="btn btn-medium btn-info persona-button persona-orange" title="Sign in with your email"
+           id='signin'><img src="${resource(dir: 'images', file: 'email_sign_in_blue.png')}"
+                            alt="Sign in with your Email"/></a>
+        <br/>
+        <br/>
+
+        <div class="btnMessage"><a href="https://login.persona.org/about"
+                                   target="_blank">Mozilla Persona</a> is a simple sign-in system from the non-profit behind Firefox
+        </div>
+    </g:if>
+    <g:else>
+    %{--This should only be used for testing. We fall back to our offline way of doing things--}%
         <form action='${postUrl}' method='POST' id='loginForm' autocomplete='off'>
 
             <g:if test='${flash.message}'>
@@ -45,27 +73,6 @@
                 <g:message code="bard.springSecurity.login.button"/>
             </button>
         </form>
-    </g:if>
-    <g:else>
-        <p>
-            <span class="brand">BARD</span> <strong>offers a convenient way to sign in or create an account.</strong>
-        </p>
-
-        <p>
-            By logging in, you accept BARD's
-            <g:link controller="about" action="termsOfUse" target="_blank">Terms </g:link> and
-            <g:link controller="about" action="privacyPolicy" target="_blank">Privacy Policy</g:link>
-
-        </p>
-
-        <a class="btn btn-medium btn-info persona-button persona-orange" title="Sign in with your email"
-           id='signin'><img src="${resource(dir: 'images', file: 'email_sign_in_blue.png')}" alt="Sign in with your Email"/></a>
-        <br/>
-        <br/>
-
-        <div class="btnMessage"><a href="https://login.persona.org/about"
-                                   target="_blank">Mozilla Persona</a> is a simple sign-in system from the non-profit behind Firefox
-        </div>
     </g:else>
 </div>
 
