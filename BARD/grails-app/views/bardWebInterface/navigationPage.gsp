@@ -25,8 +25,6 @@
 
                                 <ul>
                                     <li class="controller"><g:link
-                                            controller="aclClass">ACL Management</g:link></li>
-                                    <li class="controller"><g:link
                                             controller="downTimeScheduler"
                                             action="create">Schedule Down Time</g:link></li>
                                     <li class="controller"><g:link
