@@ -31,8 +31,6 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    <li class="controller"><g:link
-                                            controller="aclClass">ACL Management</g:link></li>
                                           <li class="controller"><g:link controller="person"
                                                                    action="list">List Person Table</g:link></li>
                                     <li class="controller"><g:link controller="moveExperiments"
