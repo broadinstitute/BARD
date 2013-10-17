@@ -1,13 +1,32 @@
 // Mozilla Persona Stuff
+
 $(document).ready(function () {
+
+    var href = window.location.href;
+
+
     var signinLink = document.getElementById('signin');
 
     if (signinLink) {
-        signinLink.onclick = function () {
-            navigator.id.request({
-                siteName: 'BioActivity Research Database'
-            });
-        };
+        if (href.match("^https")) {
+            signinLink.onclick = function () {
+                navigator.id.request({
+                    siteName: 'BioActivity Research Database',
+                    siteLogo: '/BARD/images/bard_logo_small.png',   //requires https
+                    termsOfService: '/BARD/about/termsOfUse', //requires https
+                    privacyPolicy: '/BARD/about/privacyPolicy', //requires https
+                    returnTo: '/BARD/bardWebInterface'
+
+                });
+            };
+        } else {
+            signinLink.onclick = function () {
+                navigator.id.request({
+                    siteName: 'BioActivity Research Database'
+                });
+            };
+        }
+
     }
 
     var signoutLink = document.getElementById('logoutButton');

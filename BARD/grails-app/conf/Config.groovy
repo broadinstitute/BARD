@@ -4,35 +4,6 @@ import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
-registeruser {
-    signup {
-        emailBody = '''
-Hi $username,<br/>
-<br/>
-You (or someone pretending to be you) created an account with this email address.<br/>
-<br/>
-If you made the request, please click&nbsp;<a href="$url">here</a> to finish the registration.
-'''
-        emailFrom = 'do.not.reply@localhost'
-        emailSubject = 'New Account'
-        defaultRoleNames = ['ROLE_USER']
-        postRegisterUrl = null // use defaultTargetUrl if not set
-    }
-    forgotPassword {
-        emailBody = '''
-Hi $username,<br/>
-<br/>
-You (or someone pretending to be you) requested that your password be reset.<br/>
-<br/>
-If you didn't make this request then ignore the email; no changes have been made.<br/>
-<br/>
-If you did make the request, then click <a href="$url">here</a> to reset your password.
-'''
-        emailFrom = 'do.not.reply@localhost'
-        emailSubject = 'Password Reset'
-        postResetUrl = null // use defaultTargetUrl if not set
-    }
-}
 
 ncgc.thickclient.compounds.url = "http://bard.nih.gov/bard/compounds/"
 ncgc.thickclient.etags.url = "http://bard.nih.gov/bard/etag/"

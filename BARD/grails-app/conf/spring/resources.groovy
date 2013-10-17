@@ -59,25 +59,7 @@ beans = {
     personaAuthenticationProvider(PersonaAuthenticationProvider) {
         onlinePersonaVerifyer = ref('onlinePersonaVerifyer')
     }
-    clientBasicAuth(wslite.http.auth.HTTPBasicAuthorization) {
-        username = grailsApplication.config.CbipCrowd.application.username
-        password = grailsApplication.config.CbipCrowd.application.password
-    }
 
-    httpClient(wslite.http.HTTPClient) {
-        connectTimeout = 60000
-        readTimeout = 10000
-        useCaches = false
-        followRedirects = false
-        sslTrustAllCerts = true
-    }
-
-
-    restClient(wslite.rest.RESTClient) {
-        url = grailsApplication.config.CbipCrowd.register.url
-        httpClient = ref('httpClient')
-        authorization = ref('clientBasicAuth')
-    }
     modifiedByListener(ModifiedByListener) {
         springSecurityService = ref('springSecurityService')
     }

@@ -39,6 +39,7 @@ function createHierarchyTree(treeElementName, treeTitle, treeRoot) {
             onActivate: function (node) {
                 $("#attributeElementId").select2("data", {id: node.data.elementId, text: node.data.title});
                 $("#parentDescription").val(node.data.description);
+                $("#attributeElementId").trigger("change");//trigger the 'change' event on the select2 container
 
                 if (node.data.childMethod == 'DIRECT') {
                     //make fields writable
