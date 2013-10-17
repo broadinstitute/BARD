@@ -12,17 +12,15 @@ $(document).ready(function () {
             signinLink.onclick = function () {
                 navigator.id.request({
                     siteName: 'BioActivity Research Database',
-                    siteLogo: '/logo.png',   //requires https
-                    termsOfService: '/tos.html', //requires https
-                    privacyPolicy: '/privacy.html', //requires https
-                    returnTo: '/index.html'
+                    siteLogo: '/BARD/images/bard_logo_small.png',   //requires https
+                    termsOfService: '/BARD/about/termsOfUse', //requires https
+                    privacyPolicy: '/BARD/about/privacyPolicy' //requires https
                 });
             };
         } else {
             signinLink.onclick = function () {
                 navigator.id.request({
-                    siteName: 'BioActivity Research Database',
-                    returnTo: '/index.html'
+                    siteName: 'BioActivity Research Database'
                 });
             };
         }

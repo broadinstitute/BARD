@@ -5,9 +5,9 @@ databaseChangeLog = {
     changeSet(author: "jasiedu", id: "iteration-035/01-remove-new-object-role", dbms: "oracle", context: "standard") {
         sqlFile(path: "iteration_035/01-remove-new-object-role.sql", stripComments: true)
     }
-//    changeSet(author: "jasiedu", id: "iteration-035/00-drop-registration-tables", dbms: "oracle", context: "standard") {
-//        sqlFile(path: "iteration_035/00-drop-registration-tables.sql", stripComments: true)
-//    }
+    changeSet(author: "jasiedu", id: "iteration-035/00-drop-registration-tables", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_035/00-drop-registration-tables.sql", stripComments: true)
+    }
     changeSet(author: "jasiedu", id: "iteration-035/02-reset-auditing-on-Person-Table", dbms: "oracle", context: "standard") {
         grailsChange {
             change {
