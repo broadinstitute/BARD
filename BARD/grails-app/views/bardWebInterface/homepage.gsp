@@ -295,287 +295,59 @@
 
 <g:if test="${true}">
 %{--The BARD is  growing line sits on its own above the blocks--}%
-<section
-        class="tabs-section">%{--This section tag binds 'Bard is growing', the blocks, and the tab information together  --}%
-<div class="container-fluid">
-    <div class="page-header">
-        <h1>BARD Is Growing <small>Statistics &amp; Recent Submissions</small></h1>
-    </div>
-</div>
-
-%{--Here we have a set of clickable boxes, each one leading to a carousel of information. These are implemented simply as tabs,--}%
-%{--all of which are defined in the next section. This information should probably come back dynamically through ajax ( at least --}%
-%{--once we have information worth providing--}%
-<div class="tabs-list-holder">
-    <ul class="tabs-list">
-        <li>
-            <g:projectCount/>
-        </li>
-        <li class="active">
-            <g:assayCount/>
-        </li>
-        <li>
-            <g:experimentCount/>
-        </li>
-        <li>
-            <g:substanceCount/>
-        </li>
-        <li>
-            <g:probeCount/>
-        </li>
-    </ul>
-</div>
-
-
-
-%{--Contents of the "Projects" tab (of our row of five content boxes) --}%
-<div class="container-fluid">
-<div class="tab-content">
-<div class="tab-pane" id="tab-projects" data-interval="false">
-    <div class="items-gallery slide" id="items-gallery-1">
-        <a href="#items-gallery-1" class="btn-prev" data-slide="prev">Previous</a>
-        <a href="#items-gallery-1" class="btn-next" data-slide="next">Previous</a>
-
-        <div class="carousel-inner">
-            <div class="item active">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedProjects}" var="project">
-                        <g:if test="${i < 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${project.updated}</time>
-
-                                <h2>
-                                    <g:link controller="project" action="show"
-                                            id="${project.capProjectId}">${project.name}</g:link>
-                                </h2>
-
-                                %{--<p>Schwyn B, Neilands JB.</p>--}%
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedProjects}" var="project">
-                        <g:if test="${i >= 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${project.updated}</time>
-
-                                <h2>
-                                    <g:link controller="project" action="show"
-                                            id="${project.capProjectId}">${project.name}</g:link>
-                                </h2>
-
-                                %{--<p>Schwyn B, Neilands JB.</p>--}%
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
+    <section
+            class="tabs-section">%{--This section tag binds 'Bard is growing', the blocks, and the tab information together  --}%
+        <div class="container-fluid">
+            <div class="page-header">
+                <h1>BARD Is Growing <small>Statistics &amp; Recent Submissions</small></h1>
             </div>
         </div>
-    </div>
-</div>
+
+        %{--Here we have a set of clickable boxes, each one leading to a carousel of information. These are implemented simply as tabs,--}%
+        %{--all of which are defined in the next section. This information should probably come back dynamically through ajax ( at least --}%
+        %{--once we have information worth providing--}%
+        <div class="tabs-list-holder">
+            <ul class="tabs-list">
+                <li>
+                    <g:projectCount/>
+                </li>
+                <li class="active">
+                    <g:assayCount/>
+                </li>
+                <li>
+                    <g:experimentCount/>
+                </li>
+                <li>
+                    <g:substanceCount/>
+                </li>
+                <li>
+                    <g:probeCount/>
+                </li>
+            </ul>
+        </div>
 
 
-%{--Contents of the "Definitions" tab (of our row of five content boxes) --}%
-<div class="tab-pane active" id="tab-definitions">
-    <div class="items-gallery slide" id="items-gallery-2" data-interval="false">
-        <a href="#items-gallery-2" class="btn-prev" data-slide="prev" data-toggle="collapse">Previous</a>
-        <a href="#items-gallery-2" class="btn-next" data-slide="next">Previous</a>
+        <div class="container-fluid">
+            <div class="tab-content">
+                %{--Contents of the "Projects" tab (of our row of five content boxes) --}%
+                <g:render template="recentlyAddedProjects" model="['recentlyAddedProjects': recentlyAddedProjects]"/>
 
-        <div class="carousel-inner">
-            <div class="item active">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedAssays}" var="assay">
-                        <g:if test="${i < 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${assay.updated}</time>
+                %{--Contents of the "Definitions" tab (of our row of five content boxes) --}%
+                <g:render template="recentlyAddedAssays" model="['recentlyAddedAssays': recentlyAddedAssays]"/>
 
-                                <h2>
-                                    <g:link controller="assayDefinition" action="show"
-                                            id="${assay.capAssayId}">${assay.title}</g:link>
-                                </h2>
 
-                                <p>${assay.designedBy}</p>
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
+                %{--Contents of the "Experiments" tab (of our row of five content boxes) --}%
+                <g:render template="recentlyAddedExperiments"
+                          model="['recentlyAddedExperiments': recentlyAddedExperiments]"/>
+                %{--Contents of the "Compounds" tab (of our row of five content boxes) --}%
+                <g:render template="recentlyAddedSubstances"
+                          model="['recentlyAddedSubstances': recentlyAddedSubstances]"/>
 
-            <div class="item">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedAssays}" var="assay">
-                        <g:if test="${i >= 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${assay.updated}</time>
-
-                                <h2>
-                                    <g:link controller="assayDefinition" action="show"
-                                            id="${assay.capAssayId}">${assay.title}</g:link>
-                                </h2>
-
-                                <p>${assay.designedBy}</p>
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
+                %{--Contents of the "Probes" tab (of our row of five content boxes) --}%
+                <g:render template="recentlyAddedProbes" model="['recentlyAddedProbes': recentlyAddedProbes]"/>
             </div>
         </div>
-    </div>
-</div>
-
-%{--Contents of the "Experiments" tab (of our row of five content boxes) --}%
-<div class="tab-pane" id="tab-experiments">
-    <div class="items-gallery slide" id="items-gallery-3" data-interval="false">
-        <a href="#items-gallery-3" class="btn-prev" data-slide="prev">Previous</a>
-        <a href="#items-gallery-3" class="btn-next" data-slide="next">Previous</a>
-
-        <div class="carousel-inner">
-            <div class="item active">
-                <div class="row-fluid">
-
-                    <g:each status="i" in="${recentlyAddedExperiments}" var="experiment">
-                        <g:if test="${i < 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${experiment.updated}</time>
-
-                                <h2>
-                                    <g:link controller="experiment" action="show"
-                                            id="${experiment.capExptId}">${experiment.name}</g:link>
-                                </h2>
-
-                                <p></p>
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedExperiments}" var="experiment">
-                        <g:if test="${i >= 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${experiment.updated}</time>
-
-                                <h2>
-                                    <g:link controller="experiment" action="show"
-                                            id="${experiment.capExptId}">${experiment.name}</g:link>
-                                </h2>
-
-                                <p></p>
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-%{--Contents of the "Compounds" tab (of our row of five content boxes) --}%
-<div class="tab-pane" id="tab-substances">
-    <div class="items-gallery slide" id="items-gallery-4" data-interval="false">
-        <a href="#items-gallery-4" class="btn-prev" data-slide="prev">Previous</a>
-        <a href="#items-gallery-4" class="btn-next" data-slide="next">Previous</a>
-
-        <div class="carousel-inner">
-            <div class="item active">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedSubstances}" var="substance">
-                        <g:if test="${i < 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${substance.updated}</time>
-
-                                <h2>
-                                    <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${substance.sid}">
-                                        <img src="${resource(dir: 'images', file: 'pubchem.png')}" alt="PubChem"/>
-                                        ${substance.sid}</a>
-                                </h2>
-
-                                %{--<p>SMILES: ${substance.smiles}</p>--}%
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedSubstances}" var="substance">
-                        <g:if test="${i >= 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${substance.updated}</time>
-
-                                <h2>
-                                    <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${substance.sid}">
-                                        <img src="${resource(dir: 'images', file: 'pubchem.png')}" alt="PubChem"/>
-                                        ${substance.sid}</a>
-                                </h2>
-
-                                %{--<p>SMILES: ${substance.smiles}</p>--}%
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-%{--Contents of the "Probes" tab (of our row of five content boxes) --}%
-<div class="tab-pane" id="tab-probes">
-    <div class="items-gallery slide" id="items-gallery-5" data-interval="false">
-        <a href="#items-gallery-5" class="btn-prev" data-slide="prev">Previous</a>
-        <a href="#items-gallery-5" class="btn-next" data-slide="next">Previous</a>
-
-        <div class="carousel-inner">
-            <div class="item active">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedProbes}" var="compound">
-                        <g:if test="${i < 3}">
-                            <article class="span4">
-                                %{--<time datetime="2013-10-16">${compound.}</time>--}%
-
-                                <h2>
-                                    <g:link controller="bardWebInterface" action="showCompound"
-                                            id="${compound.id}">${compound.name}</g:link>
-                                </h2>
-
-                                <p>CID: ${compound.id}</p>
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedProbes}" var="compound">
-                        <g:if test="${i >= 3}">
-                            <article class="span4">
-                                %{--<time datetime="2013-10-16">${compound.}</time>--}%
-
-                                <h2>
-                                    <g:link controller="bardWebInterface" action="showCompound"
-                                            id="${compound.id}">${compound.name}</g:link>
-                                </h2>
-
-                                <p>CID: ${compound.id}</p>
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-</div>
-</section>
+    </section>
 </g:if>
 
 
