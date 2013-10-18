@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Cache ETL :elt_job.kjb</title>
+<title>run_etl components</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -31,113 +31,80 @@ function nameClassifier(name, separator)
 </script>
 </head>
 <body onload="initPage(this);" class="Content">
-<div class="pageHeader"></div>
 <div class="PageBody">
-	<div id="name_classifier" style="display: none;"><a href="../EA3/EA263.htm">«Kettle» elt_job.kjb</a></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Cache ETL", " : "))</script>  : Public  &lt;&lt;Kettle&gt;&gt; Component instance</span>
+	
+<img src="EA302.png" usemap="#EA302" border="0" />
+
+<MAP NAME="EA302">
+<area shape="rect" coords="86,78,126,91" href="EA348.htm" target="_self">
+<area shape="rect" coords="286,372,299,412" href="EA347.htm" target="_self">
+<area shape="rect" coords="161,372,174,412" href="EA346.htm" target="_self">
+<area shape="rect" coords="369,372,382,412" href="EA345.htm" target="_self">
+<area shape="rect" coords="86,234,126,247" href="EA344.htm" target="_self">
+<area shape="rect" coords="486,372,499,412" href="EA343.htm" target="_self">
+<area shape="rect" coords="582,151,622,164" href="EA342.htm" target="_self">
+<area shape="rect" coords="582,95,622,108" href="EA341.htm" target="_self">
+<area shape="rect" coords="222,372,235,412" href="EA340.htm" target="_self">
+<area shape="rect" coords="125,78,140,93" href="EA328.htm" target="_self">
+<area shape="rect" coords="286,358,301,373" href="EA329.htm" target="_self">
+<area shape="rect" coords="161,358,176,373" href="EA330.htm" target="_self">
+<area shape="rect" coords="369,358,384,373" href="EA338.htm" target="_self">
+<area shape="rect" coords="125,234,140,249" href="EA332.htm" target="_self">
+<area shape="rect" coords="486,358,501,373" href="EA327.htm" target="_self">
+<area shape="rect" coords="568,151,583,166" href="EA337.htm" target="_self">
+<area shape="rect" coords="568,95,583,110" href="EA336.htm" target="_self">
+<area shape="rect" coords="222,358,237,373" href="EA335.htm" target="_self">
+<area shape="rect" coords="314,339,329,354" href="../EA3/EA290.htm" target="_self">
+<area shape="rect" coords="161,339,176,354" href="../EA3/EA289.htm" target="_self">
+<area shape="rect" coords="209,339,224,354" href="../EA3/EA288.htm" target="_self">
+<area shape="rect" coords="108,339,123,354" href="../EA3/EA287.htm" target="_self">
+<area shape="rect" coords="57,339,72,354" href="../EA3/EA286.htm" target="_self">
+<area shape="rect" coords="25,98,40,113" href="../EA3/EA285.htm" target="_self">
+<area shape="rect" coords="571,73,586,88" href="../EA3/EA284.htm" target="_self">
+<area shape="rect" coords="571,146,586,161" href="../EA3/EA283.htm" target="_self">
+<area shape="rect" coords="484,339,499,354" href="../EA3/EA282.htm" target="_self">
+<area shape="rect" coords="168,469,515,565" href="EA324.htm" target="_self">
+<area shape="rect" coords="397,95,507,155" href="EA325.htm" target="_self">
+<area shape="rect" coords="440,232,550,292" href="EA326.htm" target="_self">
+<area shape="rect" coords="308,229,418,289" href="EA331.htm" target="_self">
+<area shape="rect" coords="174,229,290,289" href="EA334.htm" target="_self">
+<area shape="rect" coords="203,101,322,161" href="EA333.htm" target="_self">
+<area shape="rect" coords="132,38,575,365" href="EA323.htm" target="_self">
+</MAP>
+
+	<div class="ObjectTitle">run_etl components : CompositeStructure diagram</div>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">10/15/2013 4:34:54 PM</td>
+			<td width="85%" class="ObjectDetailsValue">10/10/2013 3:37:36 PM</td>
 		</tr>
 		<tr>
-			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">10/15/2013 4:35:29 PM</td>
+			<td width="15%" class="ObjectDetailsTopic">Modified:</td>
+			<td width="85%" class="ObjectDetailsValue">10/17/2013 12:41:00 PM</td>
 		</tr>
-		<tr style="height: 10px"><td colspan="2"></td></tr>
-		<tr>
-			<td class="ObjectDetailsTopic"><img src="../../../images/plus03.gif" align="absmiddle" id="proj" onclick="parent.toggleData(this.id)" />Project:</td>
-			<td class="ObjectDetailsValue"></td>
+		<tr style="padding-top: 10px;">
+			<td width="15%" class="ObjectDetailsTopic"><img src="../../../images/plus03.gif" align="absmiddle" id="proj" onclick="parent.toggleData(this.id)" />Project:</td>
+			<td width="85%" class="ObjectDetailsValue"></td>			
 		</tr>
 		<tr id="proj00" style="display: none;">
-			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Author:</td>
-			<td class="ObjectDetailsValue">Simon</td>
+			<td width="15%" class="ObjectDetailsTopic" style="padding-left: 18px;">Author:</td>
+			<td width="85%" class="ObjectDetailsValue">Simon</td>
 		</tr>
 		<tr id="proj01" style="display: none;">
-			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Version:</td>
-			<td class="ObjectDetailsValue">1.0</td>
-		</tr>
-		<tr id="proj02" style="display: none;">
-			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Phase:</td>
-			<td class="ObjectDetailsValue">1.0</td>
-		</tr>
-		<tr id="proj03" style="display: none;">
-			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Status:</td>
-			<td class="ObjectDetailsValue">Proposed</td>
-		</tr>
-		<tr id="proj04" style="display: none;">
-			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Complexity:</td>
-			<td class="ObjectDetailsValue">Easy</td>
-		</tr>
-		<tr id="proj05" style="display: none;">
-			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Difficulty:</td>
-			<td class="ObjectDetailsValue"></td>
-		</tr>
-		<tr id="proj06" style="display: none;">
-			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Priority:</td>
-			<td class="ObjectDetailsValue"></td>
-		</tr>
-		<tr id="proj05" style="display: none;">
-			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Multiplicity:</td>
-			<td class="ObjectDetailsValue"></td>
+			<td width="15%" class="ObjectDetailsTopic" style="padding-left: 18px;">Version:</td>
+			<td width="85%" class="ObjectDetailsValue">1.0</td>
 		</tr>
 		<tr>
-			<td class="ObjectDetailsTopic"><img src="../../../images/plus03.gif" align="absmiddle" id="adv" onclick="parent.toggleData(this.id)" />Advanced:</td>
-			<td class="ObjectDetailsValue"></td>
+			<td width="15%" class="ObjectDetailsTopic"><img src="../../../images/plus03.gif" align="absmiddle" id="adv" onclick="parent.toggleData(this.id)" />Advanced:</td>
+			<td width="85%" class="ObjectDetailsValue"></td>			
 		</tr>
 		<tr id="adv00" style="display: none;">
-			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{2B249A10-B7C9-41ff-8380-329DBB9B19D0}</td>
-		</tr>
-		<tr id="adv01" style="display: none;">
-			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA287.htm">Cache (QA)</a></td>
+			<td width="15%" class="ObjectDetailsTopic" style="padding-left: 18px;">ID:</td>
+			<td width="85%" class="ObjectDetailsValue">{79D2B757-2187-4c5a-AA9F-FD421584D053}</td>
 		</tr>
 	</table>
 	
-	<div class="TableGroup" id="TableGroup">
-		<ul class="ItemTitle">
-			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Advanced</li>
-			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
-		</ul>
-		<div class="ItemBody" id="CustomPropertiesTable">
-			<table border="0" cellspacing="0" cellpadding="0" class="Table">
-				<tr>
-					<td width="30%" class="TableHeading">Property</td>
-					<td width="70%" class="TableHeading">Value</td>
-				</tr>
-			<tr>
-				<td width="30%" class="TableRow">isIndirectlyInstantiated:</td>
-				<td width="70%" class="TableRow">true</td>
-			</tr>
-
-
-			</table>
-		</div>		<div class="ItemBody" id="LinksTable">
-			<table align="center" border="0" cellspacing="0" cellpadding="0" class="Table">
-				<tr>
-					<td width="30%" class="TableHeading">Object</td>
-					<td width="15%" class="TableHeading">Type</td>
-					<td width="15%" class="TableHeading">Connection</td>
-					<td width="40%" class="TableHeading">Notes</td>
-				</tr>
-				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA307.htm">«config» QA_properties</a></td>
-					<td width="15%" class="TableRow" valign="top">Artifact</td>
-					<td width="15%" class="TableRow" valign="top">Dependency</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA294.htm">«Pentaho» </a></td>
-					<td width="15%" class="TableRow" valign="top">Component</td>
-					<td width="15%" class="TableRow" valign="top">Dependency</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-
-			</table>
-		</div>
-	</div>
-<div class="pageFooter"></div>
+</div>
  
 </body>
 </html>
