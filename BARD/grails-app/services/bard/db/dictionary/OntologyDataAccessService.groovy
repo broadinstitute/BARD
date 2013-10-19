@@ -20,7 +20,7 @@ import static bard.validation.ext.ExternalOntologyNCBI.NCBI_TOOL
 
 class OntologyDataAccessService {
 
-    private static final int DEFAULT_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE = 20
+    private static final int DEFAULT_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE = 50
 
     ExternalOntologyFactory externalOntologyFactory
 
