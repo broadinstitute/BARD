@@ -1,6 +1,7 @@
 package bard.db.dictionary
 
 import bard.db.enums.AddChildMethod
+import bard.db.enums.ExpectedValueType
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
@@ -23,32 +24,35 @@ class ElementServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
-    void "test List getChildNodes"() {
+    void "test List getChildNodes #description"() {
         given:
 
         final Element parentElement = Element.build(label: parentLabel, description: description)
         final Element childElement = Element.build(label: childLabel, description: description)
-        final Element leafElement = Element.build(label: leafLabel, description: description)
+        final Element leafElement = Element.build(label: leafLabel, description: description, expectedValueType: ExpectedValueType.ELEMENT)
         ElementHierarchy eh0a = buildElementHierarchy(parentElement, childElement, "subClassOf")
         boolean doNotShowRetired = false
         buildElementHierarchy(eh0a.childElement, leafElement, "subClassOf")
         when:
-        List hierarchies = elementService.getChildNodes(childElement.id, doNotShowRetired)
+        List hierarchies = elementService.getChildNodes(childElement.id, doNotShowRetired, expectedValueType)
         then:
-        assert hierarchies
-        assert 1 == hierarchies.size()
-        final Map map = (Map) hierarchies.get(0)
-        assert leafLabel == map.title
-        assert description == map.description
-        assert false == map.isFolder
-        assert false == map.isLazy
-        assert AddChildMethod.NO.label == map.addClass
-        assert AddChildMethod.NO.description == map.childMethodDescription
-        assert AddChildMethod.NO.toString() == map.childMethod
+        assert hierarchiesSize == hierarchies.size()
+        if (hierarchies) {
+            final Map map = (Map) hierarchies.get(0)
+            assert leafLabel == map.title
+            assert description == map.description
+            assert false == map.isFolder
+            assert false == map.isLazy
+            assert AddChildMethod.NO.label == map.addClass
+            assert AddChildMethod.NO.description == map.childMethodDescription
+            assert AddChildMethod.NO.toString() == map.childMethod
+        }
 
         where:
-        description          | parentLabel | childLabel | leafLabel
-        "Has 'BARD' as root" | "BARD"      | "child"    | "leaf"
+        description                       | parentLabel | childLabel | leafLabel | expectedValueType                | hierarchiesSize
+        "Has 'BARD' as root"              | "BARD1"     | "child1"   | "leaf1"   | null                             | 1
+        "with expectedValueType=ELEMENT"  | "BARD2"     | "child2"   | "leaf2"   | ExpectedValueType.ELEMENT.name() | 1
+        "with expectedValueType!=ELEMENT" | "BARD3"     | "child3"   | "leaf3"   | ExpectedValueType.NONE.name()    | 0
 
     }
 
@@ -62,7 +66,7 @@ class ElementServiceIntegrationSpec extends IntegrationSpec {
         boolean doNotShowRetired = false
         buildElementHierarchy(eh0a.childElement, leafElement, "subClassOf")
         when:
-        List hierarchies = elementService.createElementHierarchyTree(doNotShowRetired, "BARD")
+        List hierarchies = elementService.createElementHierarchyTree(doNotShowRetired, "BARD", null)
         then:
         assert hierarchies
         assert 1 == hierarchies.size()

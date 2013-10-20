@@ -1,6 +1,7 @@
 package bard.db.dictionary
 
 import bard.db.enums.AddChildMethod
+import bard.db.enums.ExpectedValueType
 import bard.util.BardCacheUtilsService
 import grails.plugins.springsecurity.SpringSecurityService
 
@@ -60,7 +61,8 @@ class ElementService {
      * @param elementId
      * @return List
      */
-    List getChildNodes(long elementId, boolean doNotShowRetired) {
+    List getChildNodes(long elementId, boolean doNotShowRetired, String expectedValueType) {
+        ExpectedValueType expValType = ExpectedValueType.values().find {val -> val?.name()?.toLowerCase() == expectedValueType?.toLowerCase()}
         def childNodes = []
         final Element parentElement = Element.get(elementId)
         final List<ElementHierarchy> list = new ArrayList(parentElement.parentHierarchies)
@@ -69,6 +71,10 @@ class ElementService {
         for (ElementHierarchy elementHierarchy : hierarchies) {
             final Element childElement = elementHierarchy.childElement
             if(doNotShowRetired && childElement.elementStatus.equals(ElementStatus.Retired)){
+                continue
+            }
+            //Check if this is the element type we are expecting
+            if (expValType && childElement.expectedValueType != expValType) {
                 continue
             }
             if (!seenSet.contains(childElement)) {
@@ -87,8 +93,8 @@ class ElementService {
      * @param full = will render the full tree otherwise it will lazily render it
      * @return list of hierarchy
      */
-    public List createElementHierarchyTree(boolean doNotShowRetired, String treeRoot) {
+    public List createElementHierarchyTree(boolean doNotShowRetired, String treeRoot, String expectedValueType) {
         Element element = Element.findByLabel(treeRoot)//find the ROOT OF THE TREE ("BARD" or "BARD Dictionary")
-        return getChildNodes(element.id, doNotShowRetired)
+        return getChildNodes(element.id, doNotShowRetired, expectedValueType)
     }
 }

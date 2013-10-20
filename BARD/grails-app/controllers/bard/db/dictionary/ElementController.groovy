@@ -2,6 +2,7 @@ package bard.db.dictionary
 
 import bard.db.command.BardCommand
 import bard.db.enums.AddChildMethod
+import bard.db.enums.ExpectedValueType
 import bard.util.BardCacheUtilsService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
@@ -38,14 +39,14 @@ class ElementController {
         }
     }
 
-    def getChildrenAsJson(long elementId, boolean doNotShowRetired) {
-        List elementHierarchyTree = elementService.getChildNodes(elementId, doNotShowRetired)
+    def getChildrenAsJson(long elementId, boolean doNotShowRetired, String expectedValueType) {
+        List elementHierarchyTree = elementService.getChildNodes(elementId, doNotShowRetired, expectedValueType)
         JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
         render elementHierarchyAsJsonTree
     }
 
-    def buildTopLevelHierarchyTree(boolean doNotShowRetired, String treeRoot) {
-        List elementHierarchyTree = elementService.createElementHierarchyTree(doNotShowRetired, treeRoot)
+    def buildTopLevelHierarchyTree(boolean doNotShowRetired, String treeRoot, String expectedValueType) {
+        List elementHierarchyTree = elementService.createElementHierarchyTree(doNotShowRetired, treeRoot, expectedValueType)
         JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
         render elementHierarchyAsJsonTree
     }
