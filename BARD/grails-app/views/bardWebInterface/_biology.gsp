@@ -1,3 +1,4 @@
+<%@ page import="bard.db.dictionary.Element" %>
 <table class="table table-striped table-bordered">
     <thead>
         <th>Biology</th>
@@ -8,7 +9,17 @@
         <g:each in="${biology}" var="biologyEntry">
             <tr>
                 <td>${biologyEntry?.biology?.toLowerCase()}</td>
-                <td>${biologyEntry.dictLabel}</td>
+                <td>
+                    <g:if test="${biologyEntry.dictLabel}">
+                        <% Element element = Element.get(dictId)%>
+                        <span class="dictionary editable-click" title="" data-placement="bottom" data-toggle="tooltip"
+                              href="#" data-original-title="${element?.description}">
+                            ${biologyEntry.dictLabel}</span>
+
+                    </g:if>
+
+                    %{--${biologyEntry.dictLabel}--}%
+                </td>
                 <td>
                     <g:if test="${biologyEntry.dictLabel == "UniProt accession number"}">
                         <a href='http://www.uniprot.org/uniprot/?query=${biologyEntry.extId}' target="_blank">

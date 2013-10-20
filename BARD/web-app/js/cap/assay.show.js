@@ -15,6 +15,6 @@ $(document).ready(function () {
         var measureId = $(this).attr('id');
         $("#measure-tree").dynatree("getTree").activateKey(measureId);
     });
-
+    $('.dictionary').tooltip();
 });
 

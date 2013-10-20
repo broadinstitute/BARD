@@ -3,6 +3,8 @@ package bard.db.command
 import bard.db.people.Role
 import grails.validation.ValidationErrors
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.GrantedAuthorityImpl
 
 /**
  * Created with IntelliJ IDEA.
@@ -55,15 +57,16 @@ abstract class BardCommand {
     static List<Role> userRoles() {
         final Set<Role> roleSet = [] as Set<Role>
 
-        final Collection<Role> authorities = SpringSecurityUtils.getPrincipalAuthorities()
+        final Collection<GrantedAuthority> authorities = SpringSecurityUtils.getPrincipalAuthorities()
 
         //if logged in user is an admin , then add all teams
         if (isCurrentUserBARDAdmin()) {
             //Only add the roles with ids
             authorities.addAll(Role.list())
         }
-        for (Role role : authorities) {
-            if ((role.authority?.startsWith("ROLE_TEAM_") && role.id)) {
+        for (GrantedAuthority grantedAuthority : authorities) {
+            if (grantedAuthority.authority?.startsWith("ROLE_TEAM_")) {
+                Role role = (Role)grantedAuthority
                 roleSet.add(role)
             }
         }
@@ -74,7 +77,7 @@ abstract class BardCommand {
     }
 
     static boolean isCurrentUserBARDAdmin() {
-        for (Role role : SpringSecurityUtils.getPrincipalAuthorities()) {
+        for (GrantedAuthorityImpl role : SpringSecurityUtils.getPrincipalAuthorities()) {
             if (role.authority == BARD_ADMIN_ROLE_AUTHORITY) {
                 return true
             }
