@@ -54,7 +54,10 @@ class AssayDefinitionController {
     def assayComparisonReport() {
 
     }
-
+    def teams(){
+        final List<Role> roles = Role.list()
+        [roles:roles]
+    }
     def generateAssayComparisonReport(final Long assayOneId, final Long assayTwoId) {
         if (assayOneId == null || assayTwoId == null) {
             render(status: HttpServletResponse.SC_BAD_REQUEST, text: "Please enter valid assay ids in both text boxes")
