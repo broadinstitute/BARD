@@ -11,7 +11,7 @@ import groovy.transform.InheritConstructors
 
 import javax.servlet.http.HttpServletResponse
 
-@Secured(['isAuthenticated()'])
+
 class ElementController {
 
     private static final String errorMessageKey = "errorMessageKey"
@@ -19,7 +19,7 @@ class ElementController {
     BuildElementPathsService buildElementPathsService
     BardCacheUtilsService bardCacheUtilsService
     ModifyElementAndHierarchyService modifyElementAndHierarchyService
-
+    @Secured(['isAuthenticated()'])
     def index() {
         redirect(uri: '/')
     }
@@ -27,7 +27,7 @@ class ElementController {
     def showTopLevelHierarchyHelp() {
         render(view: 'showTopLevelHierarchyHelp')
     }
-
+    @Secured(['isAuthenticated()'])
     def list() {
         Map parameterMap = generatePaths()
 
@@ -37,13 +37,13 @@ class ElementController {
             render(parameterMap.get(errorMessageKey))
         }
     }
-
+    @Secured(['isAuthenticated()'])
     def getChildrenAsJson(long elementId, boolean doNotShowRetired) {
         List elementHierarchyTree = elementService.getChildNodes(elementId, doNotShowRetired)
         JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
         render elementHierarchyAsJsonTree
     }
-
+    @Secured(['isAuthenticated()'])
     def buildTopLevelHierarchyTree(boolean doNotShowRetired, String treeRoot) {
         List elementHierarchyTree = elementService.createElementHierarchyTree(doNotShowRetired, treeRoot)
         JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
@@ -57,12 +57,13 @@ class ElementController {
      *
      * @return
      */
+    @Secured(['isAuthenticated()'])
     def selectParent() {
         flash.message = ''
         Element parentElement = Element.findById(params.attributeElementId)
         render(view: 'selectParent', model: [termCommand: new TermCommand(parentElementId: parentElement.id, parentLabel: parentElement?.label, parentDescription: parentElement?.description)])
     }
-
+    @Secured(['isAuthenticated()'])
     def addTerm() {
         flash.message = ''
         Element parentElement = Element.findById(params.attributeElementId)
@@ -73,7 +74,7 @@ class ElementController {
         }
         render(view: 'addTerm', model: [termCommand: new TermCommand(parentElementId: parentElement.id, parentLabel: parentElement?.label, parentDescription: parentElement?.description)])
     }
-
+    @Secured(['isAuthenticated()'])
     def saveTerm(TermCommand termCommand) {
         Element currentElement = null
         flash.message = ''
