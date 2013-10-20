@@ -4,7 +4,6 @@ import bard.db.people.Role
 import grails.validation.ValidationErrors
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.GrantedAuthorityImpl
 
 /**
  * Created with IntelliJ IDEA.
@@ -77,7 +76,7 @@ abstract class BardCommand {
     }
 
     static boolean isCurrentUserBARDAdmin() {
-        for (GrantedAuthorityImpl role : SpringSecurityUtils.getPrincipalAuthorities()) {
+        for (GrantedAuthority role : SpringSecurityUtils.getPrincipalAuthorities()) {
             if (role.authority == BARD_ADMIN_ROLE_AUTHORITY) {
                 return true
             }
