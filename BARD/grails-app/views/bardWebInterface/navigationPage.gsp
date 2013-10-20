@@ -83,10 +83,6 @@
                             <ul>
                                 <li class="controller"><g:link controller="experiment"
                                                                action="myExperiments">My Experiments</g:link></li>
-                                <g:if test="${BardCommand.userRoles()}">
-                                    <li class="controller"><g:link controller="experiment"
-                                                                   action="create">Create a New Experiment</g:link></li>
-                                </g:if>
                                 <li class="controller"><g:link controller="jobs"
                                                                action="index">My import jobs</g:link></li>
                             </ul>
