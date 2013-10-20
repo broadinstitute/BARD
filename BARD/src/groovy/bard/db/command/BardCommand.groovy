@@ -65,7 +65,7 @@ abstract class BardCommand {
         }
         for (GrantedAuthority grantedAuthority : authorities) {
             if (grantedAuthority.authority?.startsWith("ROLE_TEAM_")) {
-                Role role = (Role)grantedAuthority
+                Role role = Role.findByAuthority(grantedAuthority.authority)
                 roleSet.add(role)
             }
         }
