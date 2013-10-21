@@ -95,6 +95,7 @@ modules = {
     contextItem {
         dependsOn 'select2, bootstrapplus, card'
         resource url: '/js/cap/contextItem.js'
+        resource url: '/css/contextItem.css'
     }
     createProject {
         resource url: '/js/cap/createProject.js'
@@ -246,8 +247,8 @@ modules = {
     }
     select2 {
         dependsOn 'jquery'
-        resource url: "/js/select2-release-3.2/select2.css"
-        resource url: "/js/select2-release-3.2/select2.js"
+        resource url: "/js/select2-3.4.3/select2.css"
+        resource url: "/js/select2-3.4.3/select2.js"
     }
     showProjectAssay {
         dependsOn("cardDisplayCSS")

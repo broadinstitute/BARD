@@ -37,23 +37,41 @@ $(document).ready(function () {
         }
     }
 
+    function updateSelect2DescriptionPopover(elementId, data){
+        if(data.description){
+            $(elementId).popover({placement:'top',
+                                  html: true,
+                                  trigger:'manual',
+                                  title:'<b>' +data.text + '</b>',
+                                  content:data.description});
+            $(elementId).popover('show');
+        }
+        else{
+            $(elementId).popover("destroy");
+        }
+    }
+
     /***********************************************
      * the backingData will have the form element/descriptor
      * [
      *   [
-     *      "id": '',                  // id for the
-     *      "text": '',                // the label/name of the element/descriptor
-     *      "unitId": '',              // id of unit if this attribute has default units assigned, should be paired with expectedValueType:NUMERIC
-     *      "expectedValueType": '',   // ( NUMERIC || ELEMENT || EXTERNAL_ONTOLOGY || FREE_TEXT || NONE )
-     *      "externalUrl":'',          // (URL|'') for externalOntology the URL
-     *      "hasIntegratedSearch": '', // (true|false) for and externalOntology do we have an integrated search
-     *      "fullPath": ''             // fullPath of the attribute within the hierarchy
+     *      id: 1,                         // id for the
+     *      text: "l1",                    // the label/name of the element/descriptor
+     *      description: null,             // the description or definition of the element
+     *      expectedValueType: "NUMERIC",  // ( NUMERIC || ELEMENT || EXTERNAL_ONTOLOGY || FREE_TEXT || NONE )
+     *      parentFullPath: null,          // the path of the parent descriptor in the hierarchy
+     *      fullPath: "somePath",          // fullPath of the attribute within the hierarchy
+     *      hasIntegratedSearch: false,    // (true|false) for and externalOntology do we have an integrated search
+     *      externalUrl: null,             // (URL|'') for externalOntology the URL
+     *      unitId: null,                  // id of unit if this attribute has default units assigned, should be paired with expectedValueType:NUMERIC
+     *      addChildMethod: "NO"           // indication of if a child descriptor can be added by the end user, ( RDM_REQUEST || DIRECT || NO )
      *   ]
      *   ...
      *  ]
      * @param backingData
      */
     function initializeAttributeSelect2(backingData) {
+        $("attributeElementId").off(); // clear any existing event listeners
         $("#attributeElementId").select2({
             placeholder: "Search for attribute name",
             allowClear: true,
@@ -74,8 +92,8 @@ $(document).ready(function () {
                 }
             },
             data: backingData,
-            formatResult: function (result, container, query) {
-                return itemSelect2Format(result, container, query);
+            formatResult: function (result, container, query, escapeMarkup) {
+                return itemSelect2Format(result, container, query, escapeMarkup);
             },
             query: function (query) {
                 var filteredData = {results: []};
@@ -95,22 +113,28 @@ $(document).ready(function () {
             // based on the attribute selected only show the appropriate value widgets
             var selectedData = $("#attributeElementId").select2("data");
             updateConstraintWidgets(selectedData);
+            updateDescriptionText('#attributeDescription', selectedData);
             // Update the 'description' field is available
             updateDescriptionField();
             validateAddToChildren();
+        }).on("select2-highlight", function(e) {
+            updateSelect2DescriptionPopover(".select2-search", e.choice);
         });
+
         initialFocus();
     };
     initializeAttributeSelect2({results: []});
     $.ajax("/BARD/ontologyJSon/getAttributeDescriptors").done(function (data) {
         initializeAttributeSelect2(data);
     });
-    function itemSelect2Format(result, container, query) {
+
+
+    function itemSelect2Format(result, container, query,escapeMarkup) {
         var markup = [];
-        window.Select2.util.markMatch(result.parentFullPath, query.term, markup);
+        window.Select2.util.markMatch(result.parentFullPath, query.term, markup, escapeMarkup);
         markup.push('> ');
         markup.push('<b>');
-        window.Select2.util.markMatch(result.text, query.term, markup);
+        window.Select2.util.markMatch(result.text, query.term, markup, escapeMarkup);
         markup.push('</b>');
         return markup.join("");
     }
@@ -217,6 +241,7 @@ $(document).ready(function () {
     }
 
     function initializeValueElementSelect2(backingData) {
+        $("#valueElementId").off();  // clear any existing event listeners
         $("#valueElementId").select2({
             allowClear: true,
             placeholder: "Search for value",
@@ -234,8 +259,8 @@ $(document).ready(function () {
                         });
                 }
             },
-            formatResult: function (result, container, query) {
-                return itemSelect2Format(result, container, query);
+            formatResult: function (result, container, query, escapeMarkup) {
+                return itemSelect2Format(result, container, query, escapeMarkup);
             },
             query: function (query) {
                 var filteredData = {results: []};
@@ -247,9 +272,13 @@ $(document).ready(function () {
                 query.callback(filteredData);
             }
         }).on("change", function (e) {
-                $("#valueDisplay").val($("#valueElementId").select2("data").text);
+                var selectedData = $("#valueElementId").select2("data");
+                $("#valueDisplay").val(selectedData.text);
+                $('#valueDescription').val( selectedData.description);
                 $('button.btn-primary').focus();
-            });
+        }).on("select2-highlight", function(e) {
+            updateSelect2DescriptionPopover(".select2-search", e.choice);
+        });
         $('#elementValueContainer').show();
         potentiallyFocus("#valueElementId");
     }
