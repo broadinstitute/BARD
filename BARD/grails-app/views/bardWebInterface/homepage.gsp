@@ -1,3 +1,4 @@
+<%@ page import="bardqueryapi.IDSearchType" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +9,7 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
     <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
           rel='stylesheet' type='text/css'>
-    <r:require modules="bardHomepage,jquerynotifier,downtime,autocomplete"/>
+    <r:require modules="bardHomepage,idSearch,jquerynotifier,downtime,autocomplete"/>
     <!--[if lt IE 9]><link rel="stylesheet" href="../css/bardHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
     <!--[if IE]><script src="../js/bardHomepage/ie.js"></script><![endif]-->
 
@@ -139,7 +140,7 @@
     </div>
 </article>
 
-<g:if test="${true}">
+
 %{--Block to hold the main search textblock--}%
     <div class="search-panel">
         <div class="container-fluid">
@@ -150,13 +151,26 @@
                 <p>Search assay, project and experiment data or <a
                         href="#">learn about BARD’s innovative search features.</a></p>
             </div>
-
             <div class="search-block">
 
                 <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm"
                         class="search-form">
                     <fieldset>
                         <div class="search-field input-append">
+                            <g:link controller="bardWebInterface" action="jsDrawEditor">
+                            %{--<img src="${resource(dir: 'images', file: 'structureEditIcon.png')}"--}%
+                                <img
+                                %{--src="../images/bardHomepage/struct_icon.png" --}%
+                                        src="${resource(dir: 'images/bardHomepage', file: 'struct_icon.png')}"
+
+                                        alt="Draw or paste a structure"
+                                        title="Draw or paste a structure" style="width:74px;float: left;"/>
+                            </g:link>
+                            <img     src="${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}"
+                            %{--src="../images/bardHomepage/ids_icon.png"--}%
+                                     alt="List of IDs for search"
+                                     title="List of IDs for search"  data-toggle="modal" href="#idModalDiv"
+                                     style="width:44px;float: left;"/>
                             <div class="text-field">
                                 <g:textField id="searchString" name="searchString"
                                              placeholder="Search by Chemistry, Biology, Structure and More"
@@ -184,8 +198,39 @@
 
         </div>
     </div>
-</g:if>
 
+<div class="modal hide" id="idModalDiv">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+
+        <h3>Enter a Comma separated list of IDs</h3>
+    </div>
+
+    <div class="modal-body">
+        <textarea class="field span9" id="idSearchString" name="idSearchString" rows="15"></textarea>
+    </div>
+
+    <div class="modal-footer">
+        <g:form name="idSearchForm" class="form-inline">
+            <div>
+                <g:radioGroup name="idSearchType"
+                              values="${IDSearchType.values()}"
+                              value="${IDSearchType.ALL}"
+                              labels="${IDSearchType.values().label}">
+                    <label class="radio inline"><%=it.radio%>${it.label}</label>
+                </g:radioGroup>
+            </div>
+
+            <br>
+
+            <div>
+                <a href="#" class="btn" data-dismiss="modal" id="closeButton21">Close</a>
+                <a href="#" class="idSearchButton btn btn-primary" data-dismiss="modal">Search</a>
+            </div>
+        </g:form>
+    </div>
+
+</div>
 %{--carousel news panel. This will need dynamic content--}%
 <g:if test="${true}">
     <section class="news-panel">
