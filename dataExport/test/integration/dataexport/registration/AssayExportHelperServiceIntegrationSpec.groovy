@@ -81,7 +81,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
     void "test generate Full Assay"() {
         given:
         Element element = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
-        Assay assay = Assay.build(capPermissionService: null)
+        Assay assay = Assay.build(capPermissionService: null, readyForExtraction: ReadyForExtraction.READY)
         AssayContext assayContext = AssayContext.build(assay: assay, contextType: ContextType.UNCLASSIFIED)
         AssayContextItem.build(assayContext: assayContext, attributeElement: element, valueType: ValueType.FREE_TEXT, valueDisplay: "x")
         AssayDocument.build(assay: assay)
