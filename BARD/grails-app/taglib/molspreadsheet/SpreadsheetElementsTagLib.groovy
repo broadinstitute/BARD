@@ -113,9 +113,9 @@ class SpreadsheetElementsTagLib {
                     //We want to display the hill slope so grab the first value in the list
                     HillCurveValueHolder hillCurveValueHolder = hillCurveValueHolderList.get(0)
                     if (hillCurveValueHolder) {
-                        final Double hillSlope = hillCurveValueHolder?.coef
-                        if (hillSlope) {
-                            String display = "Hill Slope: ${hillSlope}"
+                        final Double hillCoef = hillCurveValueHolder?.coef
+                        if (hillCoef) {
+                            String display = "Hill Coefficient: ${hillCoef}"
                             stringBuilder.append("<nobr>${display}</nobr><br />")
                         }
                     }
