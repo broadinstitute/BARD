@@ -530,6 +530,13 @@ class XmlTestSamples {
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
         </project>
     '''
+
+    static final String PRJECT_WITH_NO_PROJECT_EXPERIMENT='''<project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-10-21T13:35:12.365-04:00'>
+    <projectName>name</projectName>
+  <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
+    <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
+    </project>
+    '''
     static final String PROJECT_WITH_EXPERIMENT_WITH_ONE_CONTEXT = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00'>
             <projectName>name</projectName>
@@ -683,7 +690,7 @@ class XmlTestSamples {
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
           </attributeId>
         </assayContextItem>'''
-    static final String PANEL_MEASURE = '''
+    static final String PANEL = '''
 <panel id='1'>
   <name>name</name>
   <description>description</description>

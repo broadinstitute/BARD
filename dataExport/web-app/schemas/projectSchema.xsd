@@ -44,7 +44,7 @@ application/vnd.bard.cap+xml;type=project</xs:documentation>
                 <xs:element minOccurs="0" name="projectExperiments">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element maxOccurs="unbounded" ref="projectExperiment"/>
+                            <xs:element minOccurs="0" maxOccurs="unbounded" ref="projectExperiment"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
