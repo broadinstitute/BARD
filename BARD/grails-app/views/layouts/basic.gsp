@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>BARD: <g:layoutTitle default="BioAssay Research Database"/></title>
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
+          rel='stylesheet' type='text/css'>
     <g:layoutHead/>
 
     <r:require modules="basic,bootstrap,autocomplete,cart,idSearch,jquerynotifier,downtime"/>
@@ -41,6 +43,8 @@
                 </strong>
 
                 <div class="search-block">
+                    <g:render template="/layouts/templates/socialMedia"/>
+                    <br/>
                     <g:render template="/layouts/templates/searchBlock"/>
                 </div>
 
