@@ -3,8 +3,7 @@ package dataexport.registration
 import bard.db.dictionary.Element
 import bard.db.enums.ContextType
 import bard.db.enums.DocumentType
-import bard.db.enums.ExpectedValueType
-import bard.db.experiment.AssayContextExperimentMeasure
+import bard.db.enums.ReadyForExtraction
 import bard.db.registration.*
 import common.tests.XmlTestAssertions
 import grails.buildtestdata.TestDataConfigurationHolder
@@ -135,11 +134,11 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         String results =  PANELS
         Panel panel1 = Panel.build(name:"name1",description:"description1")
         Panel panel2 = Panel.build(name:"name2",description:"description2")
-        Assay assay = Assay.build()
+        Assay assay = Assay.build(readyForExtraction: ReadyForExtraction.READY)
 
-        PanelAssay panelAssay1 = PanelAssay.build(assay:assay,panel:panel1)
+        PanelAssay.build(assay:assay,panel:panel1)
 
-        PanelAssay panelAssay2 = PanelAssay.build(assay:assay,panel:panel2)
+        PanelAssay.build(assay:assay,panel:panel2)
 
 
         when: "We attempt to generate a panel in xml"
@@ -149,9 +148,30 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
 
     }
+
+    void "test generate Assay with no Panels - Empty Panel Assays because non- of them is ready for extraction"() {
+        given:
+        String results =  PANELS
+        Panel panel1 = Panel.build(name:"name1",description:"description1")
+        Panel panel2 = Panel.build(name:"name2",description:"description2")
+        Assay assay = Assay.build(readyForExtraction: ReadyForExtraction.NOT_READY)
+
+        PanelAssay.build(assay:assay,panel:panel1)
+
+        PanelAssay.build(assay:assay,panel:panel2)
+
+
+        when: "We attempt to generate a panel in xml"
+        this.assayExportHelperService.generatePanels(this.markupBuilder,assay.panelAssays)
+        then: "A valid xml panel is generated with the expected panel attributes"
+        XmlTestAssertions.assertResults("<panels/>", this.writer.toString())
+
+
+
+    }
     void "test generate Panel #label"() {
         given:
-        String results =  PANEL_MEASURE
+        String results =  PANEL
         Panel panel = Panel.build(name:"name",description:"description")
         Assay assay = Assay.build()
         PanelAssay panelAssay = PanelAssay.build(assay:assay,panel:panel)
@@ -162,6 +182,8 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
 
     }
+
+
     void "test generate AssayDocument #label"() {
         given:
         AssayDocument assayDocument = AssayDocument.build(map)

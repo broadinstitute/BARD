@@ -25,16 +25,10 @@
 
                                 <ul>
                                     <li class="controller"><g:link
-                                            controller="aclClass">ACL Management</g:link></li>
-                                    <li class="controller"><g:link
                                             controller="downTimeScheduler"
                                             action="create">Schedule Down Time</g:link></li>
                                     <li class="controller"><g:link
                                             controller="downTimeScheduler" action="list">View Down Times</g:link></li>
-                                    <li class="controller"><g:link
-                                            controller="register">Register External BARD User</g:link></li>
-                                    <li class="controller"><g:link controller="register"
-                                                                   action="listUsersAndGroups">List External BARD Users</g:link></li>
                                     <li class="controller"><g:link controller="person"
                                                                    action="list">List Person Table</g:link></li>
                                     <li class="controller"><g:link controller="moveExperiments"

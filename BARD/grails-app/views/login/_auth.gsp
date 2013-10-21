@@ -6,90 +6,77 @@
     <r:require modules="core,bootstrap,login"/>
     <r:layoutResources/>
 
-    <style type="text/css">
-    body {
-        padding-top: 40px;
-        padding-bottom: 40px;
-        background-color: #f5f5f5;
-    }
-
-    .form-signin {
-        max-width: 300px;
-        padding: 19px 29px 29px;
-        margin: 0 auto 20px;
-        background-color: #fff;
-        border: 1px solid #e5e5e5;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        border-radius: 5px;
-        -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
-        -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
-    }
-
-    .form-signin .form-signin-heading,
-    .form-signin .checkbox {
-        margin-bottom: 10px;
-    }
-
-    .form-signin input[type="text"],
-    .form-signin input[type="password"] {
-        font-size: 16px;
-        height: auto;
-        margin-bottom: 15px;
-        padding: 7px 9px;
-    }
-
-    </style>
-
-    <r:script type='text/javascript'>
-        $(document).ready(function () {
-            $('input[name="j_username"]').focus();
-        });
-    </r:script>
 </head>
 
 <body>
 <div class="container">
 
-    <form action='${postUrl}' method='POST' id='loginForm' autocomplete='off'>
-
-        <div>
+    <div>
+        <a class="brand" href="/BARD">
             <img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database"/>
-        </div>
-        <br>
+        </a>
 
-        <g:if test='${flash.message}'>
-            <div class='login_message'>
-                <strong>${flash.message}</strong>
-            </div>
-        </g:if>
-
-
-        <h2 class="form-signin-heading">Please sign in</h2>
-
-        <input type="text" name='j_username' id='username'
-               placeholder="${message(code: "springSecurity.login.username.label")}">
-
-        <input type="password"
-               placeholder="${message(code: "springSecurity.login.password.label")}" name='j_password' id='password'>
-
-        %{--<label for='remember_me' class="checkbox">--}%
-        <input type="checkbox" name='${rememberMeParameter}' id='remember_me'
-               <g:if test='${hasCookie}'>checked='checked'</g:if>>
-        <g:message code="springSecurity.login.remember.me.label"/>
-        %{--</label>--}%
-
-        <button class="btn btn-medium btn-primary" type="submit">
-            <g:message code="bard.springSecurity.login.button"/>
-        </button>
-    </form>
+    </div>
     <br/>
-    <g:if env="development">
-        <a class="btn btn-medium btn-info" id='signin'>Sign in with your Email</a>
-    </g:if>
 
-</div> <!-- /container -->
+
+
+
+    <g:if env="persona">
+        <p>
+            <span class="brand">BARD</span> <strong>offers a convenient way to sign in or create an account.</strong>
+        </p>
+
+        <p>
+            By logging in, you accept BARD's
+            <g:link controller="about" action="termsOfUse" target="_blank">Terms</g:link> and
+            <g:link controller="about" action="privacyPolicy" target="_blank">Privacy Policy</g:link>
+
+        </p>
+
+        <a class="btn btn-medium btn-info persona-button persona-orange" title="Sign in with your email"
+           id='signin'><img src="${resource(dir: 'images', file: 'email_sign_in_blue.png')}"
+                            alt="Sign in with your Email"/></a>
+        <br/>
+        <br/>
+
+        <div class="btnMessage"><a href="https://login.persona.org/about"
+                                   target="_blank">Mozilla Persona</a> is a simple sign-in system from the non-profit behind Firefox
+        </div>
+    </g:if>
+    <g:else>
+    %{--This should only be used for testing. We fall back to our offline way of doing things--}%
+        <form action='${postUrl}' method='POST' id='loginForm' autocomplete='off'>
+
+            <g:if test='${flash.message}'>
+                <div class='login_message'>
+                    <strong>${flash.message}</strong>
+                </div>
+            </g:if>
+
+
+            <h2 class="form-signin-heading">Please sign in</h2>
+
+            <input type="text" name='j_username' id='username'
+                   placeholder="${message(code: "springSecurity.login.username.label")}">
+
+            <input type="password"
+                   placeholder="${message(code: "springSecurity.login.password.label")}" name='j_password' id='password'>
+
+            %{--<label for='remember_me' class="checkbox">--}%
+            <input type="checkbox" name='${rememberMeParameter}' id='remember_me'
+                   <g:if test='${hasCookie}'>checked='checked'</g:if>>
+            <g:message code="springSecurity.login.remember.me.label"/>
+            %{--</label>--}%
+
+            <button class="btn btn-medium btn-primary" type="submit">
+                <g:message code="bard.springSecurity.login.button"/>
+            </button>
+        </form>
+    </g:else>
+</div>
+
+
 
 <r:layoutResources/>
 

@@ -137,8 +137,10 @@ class AssayExportHelperService extends ExportAbstractService {
         }
 
         for (Experiment experiment : assay.experiments) {
-            final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experiment.id]).toString()
-            markupBuilder.link(rel: 'related', type: "${this.mediaTypesDTO.experimentMediaType}", href: "${experimentHref}")
+            if (experiment.readyForExtraction == ReadyForExtraction.READY) {  //only link experiments that are set to ready for extraction
+                final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experiment.id]).toString()
+                markupBuilder.link(rel: 'related', type: "${this.mediaTypesDTO.experimentMediaType}", href: "${experimentHref}")
+            }
         }
     }
 
@@ -153,7 +155,9 @@ class AssayExportHelperService extends ExportAbstractService {
         if (panelAssays) {
             markupBuilder.panels() {
                 for (PanelAssay panelAssay : panelAssays) {
-                    generatePanel(markupBuilder, panelAssay)
+                    if (panelAssay.assay?.readyForExtraction == ReadyForExtraction.READY) {  //only show assays that are ready to be extracted
+                        generatePanel(markupBuilder, panelAssay)
+                    }
                 }
             }
         }

@@ -2,14 +2,17 @@ package bardqueryapi
 
 import bard.core.rest.spring.DictionaryRestService
 import bard.core.rest.spring.util.CapDictionary
+import bard.db.dictionary.Element
 import grails.plugins.springsecurity.Secured
 
 class DictionaryTermsController {
-    DictionaryRestService dictionaryRestService
 
+    def index() {
+        redirect(action: "dictionaryTerms")
+    }
 
     def dictionaryTerms() {
-        final CapDictionary capDictionary = dictionaryRestService.getDictionary()
-        render view: "dictionaryTerms", model: [capDictionary: capDictionary]
+        final List<Element> elements = Element.list()
+        render view: "dictionaryTerms", model: [capDictionary: elements]
     }
 }

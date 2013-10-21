@@ -1,5 +1,6 @@
 package bard.db.experiment
 
+import bard.db.experiment.results.ImportSummary
 import bard.db.registration.ExternalReference
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.apache.commons.lang3.time.StopWatch
@@ -28,6 +29,8 @@ outFile.withWriter { writer ->
 
     def experimentController = ctx.getBean("bard.db.project.ExperimentController")
     assert experimentController, "Could not find ExperimentController"
+    def pubchemImportService = ctx.getBean("pubchemImportService")
+    assert pubchemImportService, "Could not find PubchemImportService"
 
     Integer index = 1
     for (eid in eids) {
@@ -40,17 +43,20 @@ outFile.withWriter { writer ->
         println(message)
         writer.writeLine(message)
         try {
-            Experiment.withTransaction { TransactionStatus transactionStatus ->
-                Experiment.withSession { Session session ->
-                    BardContextUtils.setBardContextUsername(session, 'user')
-                    experimentController.reloadResults(new Long(eid))
-                    //      comment below when ready to commit
-                    //transactionStatus.setRollbackOnly()
+//            SpringSecurityUtils.doWithAuth("gwalzer") {
+                Experiment.withTransaction { TransactionStatus transactionStatus ->
+                    Experiment.withSession { Session session ->
+//                        BardContextUtils.setBardContextUsername(session, 'user')
 
-                    println("\t...Finished")
-                    writer.writeLine("\t...Finished")
+                        //      comment below when ready to commit
+                        //transactionStatus.setRollbackOnly()
+                        ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid, { msg -> println("\tPubChemService: " + msg); writer.writeLine("\t" + msg) })
+
+                        println("\t...Finished")
+                        writer.writeLine("\t...Finished")
+                    }
                 }
-            }
+//            }
         } catch (Exception exp) {
             failedEids << "\nEID=${eid} [AID=${aid}; ADID=${experiment.assay.id}]\n\tCause:\n\t${exp.cause}"
             String msg = "\tFailed reloading: ${ExceptionUtils.getStackTrace(exp)}"

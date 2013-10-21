@@ -1,3 +1,4 @@
+<%@ page import="bardqueryapi.IDSearchType" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +9,7 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
     <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
           rel='stylesheet' type='text/css'>
-    <r:require modules="bardHomepage,downtime,autocomplete"/>
+    <r:require modules="bardHomepage,idSearch,jquerynotifier,downtime,autocomplete"/>
     <!--[if lt IE 9]><link rel="stylesheet" href="../css/bardHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
     <!--[if IE]><script src="../js/bardHomepage/ie.js"></script><![endif]-->
 
@@ -34,61 +35,8 @@
 
         </div>
         <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
-        <ul class="social-networks">
-            <li>
-                %{--Facebook widget plugin--}%
-                <a href="#"
-                   onclick="
-                       window.open(
-                               'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href),
-                               'facebook-share-dialog',
-                               'width=626,height=436');
-                       return false;"
-                   style="background:url('../images/bardHomepage/facebook-share-icon.gif') no-repeat; width:58px; height:18px;">
-                </a>
-            </li>
-            <li style="width: 80px;">
-                %{--Twitter widget plugin--}%
-                <script>!function (d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
-                    if (!d.getElementById(id)) {
-                        js = d.createElement(s);
-                        js.id = id;
-                        js.src = p + '://platform.twitter.com/widgets.js';
-                        fjs.parentNode.insertBefore(js, fjs);
-                    }
-                }(document, 'script', 'twitter-wjs');
-                </script>
+        <g:render template="/layouts/templates/socialMedia"/>
 
-                <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://bard.nih.gov/BARD/"
-                   data-text="BARD">Tweet</a>
-            </li>
-            <li>
-                %{--LinkedIn widget plugin--}%
-                <script src="//platform.linkedin.com/in.js" type="text/javascript">
-                    lang: en_US
-                </script>
-                <script type="IN/Share" data-url="https://bard.nih.gov/BARD/" data-counter="right"></script>
-            </li>
-            <li>
-                %{--Google Plus widget plugin--}%
-
-                <!-- Place this tag where you want the +1 button to render. -->
-                <div class="g-plusone"></div>
-
-                <!-- Place this tag after the last +1 button tag. -->
-                <script type="text/javascript">
-                    (function () {
-                        var po = document.createElement('script');
-                        po.type = 'text/javascript';
-                        po.async = true;
-                        po.src = 'https://apis.google.com/js/plusone.js';
-                        var s = document.getElementsByTagName('script')[0];
-                        s.parentNode.insertBefore(po, s);
-                    })();
-                </script>
-            </li>
-        </ul>
         <nav class="nav-panel">
             <ul class="nav">
                 <li class="dropdown">
@@ -139,7 +87,7 @@
     </div>
 </article>
 
-<g:if test="${true}">
+
 %{--Block to hold the main search textblock--}%
     <div class="search-panel">
         <div class="container-fluid">
@@ -150,13 +98,26 @@
                 <p>Search assay, project and experiment data or <a
                         href="#">learn about BARD’s innovative search features.</a></p>
             </div>
-
             <div class="search-block">
 
                 <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm"
                         class="search-form">
                     <fieldset>
                         <div class="search-field input-append">
+                            <g:link controller="bardWebInterface" action="jsDrawEditor">
+                            %{--<img src="${resource(dir: 'images', file: 'structureEditIcon.png')}"--}%
+                                <img
+                                %{--src="../images/bardHomepage/struct_icon.png" --}%
+                                        src="${resource(dir: 'images/bardHomepage', file: 'struct_icon.png')}"
+
+                                        alt="Draw or paste a structure"
+                                        title="Draw or paste a structure" style="width:74px;float: left;"/>
+                            </g:link>
+                            <img     src="${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}"
+                            %{--src="../images/bardHomepage/ids_icon.png"--}%
+                                     alt="List of IDs for search"
+                                     title="List of IDs for search"  data-toggle="modal" href="#idModalDiv"
+                                     style="width:44px;float: left;"/>
                             <div class="text-field">
                                 <g:textField id="searchString" name="searchString"
                                              placeholder="Search by Chemistry, Biology, Structure and More"
@@ -184,8 +145,39 @@
 
         </div>
     </div>
-</g:if>
 
+<div class="modal hide" id="idModalDiv">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+
+        <h3>Enter a Comma separated list of IDs</h3>
+    </div>
+
+    <div class="modal-body">
+        <textarea class="field span9" id="idSearchString" name="idSearchString" rows="15"></textarea>
+    </div>
+
+    <div class="modal-footer">
+        <g:form name="idSearchForm" class="form-inline">
+            <div>
+                <g:radioGroup name="idSearchType"
+                              values="${IDSearchType.values()}"
+                              value="${IDSearchType.ALL}"
+                              labels="${IDSearchType.values().label}">
+                    <label class="radio inline"><%=it.radio%>${it.label}</label>
+                </g:radioGroup>
+            </div>
+
+            <br>
+
+            <div>
+                <a href="#" class="btn" data-dismiss="modal" id="closeButton21">Close</a>
+                <a href="#" class="idSearchButton btn btn-primary" data-dismiss="modal">Search</a>
+            </div>
+        </g:form>
+    </div>
+
+</div>
 %{--carousel news panel. This will need dynamic content--}%
 <g:if test="${true}">
     <section class="news-panel">
@@ -295,287 +287,59 @@
 
 <g:if test="${true}">
 %{--The BARD is  growing line sits on its own above the blocks--}%
-<section
-        class="tabs-section">%{--This section tag binds 'Bard is growing', the blocks, and the tab information together  --}%
-<div class="container-fluid">
-    <div class="page-header">
-        <h1>BARD Is Growing <small>Statistics &amp; Recent Submissions</small></h1>
-    </div>
-</div>
-
-%{--Here we have a set of clickable boxes, each one leading to a carousel of information. These are implemented simply as tabs,--}%
-%{--all of which are defined in the next section. This information should probably come back dynamically through ajax ( at least --}%
-%{--once we have information worth providing--}%
-<div class="tabs-list-holder">
-    <ul class="tabs-list">
-        <li>
-            <g:projectCount/>
-        </li>
-        <li class="active">
-            <g:assayCount/>
-        </li>
-        <li>
-            <g:experimentCount/>
-        </li>
-        <li>
-            <g:substanceCount/>
-        </li>
-        <li>
-            <g:probeCount/>
-        </li>
-    </ul>
-</div>
-
-
-
-%{--Contents of the "Projects" tab (of our row of five content boxes) --}%
-<div class="container-fluid">
-<div class="tab-content">
-<div class="tab-pane" id="tab-projects" data-interval="false">
-    <div class="items-gallery slide" id="items-gallery-1">
-        <a href="#items-gallery-1" class="btn-prev" data-slide="prev">Previous</a>
-        <a href="#items-gallery-1" class="btn-next" data-slide="next">Previous</a>
-
-        <div class="carousel-inner">
-            <div class="item active">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedProjects}" var="project">
-                        <g:if test="${i < 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${project.updated}</time>
-
-                                <h2>
-                                    <g:link controller="project" action="show"
-                                            id="${project.capProjectId}">${project.name}</g:link>
-                                </h2>
-
-                                %{--<p>Schwyn B, Neilands JB.</p>--}%
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedProjects}" var="project">
-                        <g:if test="${i >= 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${project.updated}</time>
-
-                                <h2>
-                                    <g:link controller="project" action="show"
-                                            id="${project.capProjectId}">${project.name}</g:link>
-                                </h2>
-
-                                %{--<p>Schwyn B, Neilands JB.</p>--}%
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
+    <section
+            class="tabs-section">%{--This section tag binds 'Bard is growing', the blocks, and the tab information together  --}%
+        <div class="container-fluid">
+            <div class="page-header">
+                <h1>BARD Is Growing <small>Statistics &amp; Recent Submissions</small></h1>
             </div>
         </div>
-    </div>
-</div>
+
+        %{--Here we have a set of clickable boxes, each one leading to a carousel of information. These are implemented simply as tabs,--}%
+        %{--all of which are defined in the next section. This information should probably come back dynamically through ajax ( at least --}%
+        %{--once we have information worth providing--}%
+        <div class="tabs-list-holder">
+            <ul class="tabs-list">
+                <li>
+                    <g:projectCount/>
+                </li>
+                <li class="active">
+                    <g:assayCount/>
+                </li>
+                <li>
+                    <g:experimentCount/>
+                </li>
+                <li>
+                    <g:substanceCount/>
+                </li>
+                <li>
+                    <g:probeCount/>
+                </li>
+            </ul>
+        </div>
 
 
-%{--Contents of the "Definitions" tab (of our row of five content boxes) --}%
-<div class="tab-pane active" id="tab-definitions">
-    <div class="items-gallery slide" id="items-gallery-2" data-interval="false">
-        <a href="#items-gallery-2" class="btn-prev" data-slide="prev" data-toggle="collapse">Previous</a>
-        <a href="#items-gallery-2" class="btn-next" data-slide="next">Previous</a>
+        <div class="container-fluid">
+            <div class="tab-content">
+                %{--Contents of the "Projects" tab (of our row of five content boxes) --}%
+                <g:render template="recentlyAddedProjects" model="['recentlyAddedProjects': recentlyAddedProjects]"/>
 
-        <div class="carousel-inner">
-            <div class="item active">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedAssays}" var="assay">
-                        <g:if test="${i < 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${assay.updated}</time>
+                %{--Contents of the "Definitions" tab (of our row of five content boxes) --}%
+                <g:render template="recentlyAddedAssays" model="['recentlyAddedAssays': recentlyAddedAssays]"/>
 
-                                <h2>
-                                    <g:link controller="assayDefinition" action="show"
-                                            id="${assay.capAssayId}">${assay.title}</g:link>
-                                </h2>
 
-                                <p>${assay.designedBy}</p>
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
+                %{--Contents of the "Experiments" tab (of our row of five content boxes) --}%
+                <g:render template="recentlyAddedExperiments"
+                          model="['recentlyAddedExperiments': recentlyAddedExperiments]"/>
+                %{--Contents of the "Compounds" tab (of our row of five content boxes) --}%
+                <g:render template="recentlyAddedSubstances"
+                          model="['recentlyAddedSubstances': recentlyAddedSubstances]"/>
 
-            <div class="item">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedAssays}" var="assay">
-                        <g:if test="${i >= 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${assay.updated}</time>
-
-                                <h2>
-                                    <g:link controller="assayDefinition" action="show"
-                                            id="${assay.capAssayId}">${assay.title}</g:link>
-                                </h2>
-
-                                <p>${assay.designedBy}</p>
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
+                %{--Contents of the "Probes" tab (of our row of five content boxes) --}%
+                <g:render template="recentlyAddedProbes" model="['recentlyAddedProbes': recentlyAddedProbes]"/>
             </div>
         </div>
-    </div>
-</div>
-
-%{--Contents of the "Experiments" tab (of our row of five content boxes) --}%
-<div class="tab-pane" id="tab-experiments">
-    <div class="items-gallery slide" id="items-gallery-3" data-interval="false">
-        <a href="#items-gallery-3" class="btn-prev" data-slide="prev">Previous</a>
-        <a href="#items-gallery-3" class="btn-next" data-slide="next">Previous</a>
-
-        <div class="carousel-inner">
-            <div class="item active">
-                <div class="row-fluid">
-
-                    <g:each status="i" in="${recentlyAddedExperiments}" var="experiment">
-                        <g:if test="${i < 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${experiment.updated}</time>
-
-                                <h2>
-                                    <g:link controller="experiment" action="show"
-                                            id="${experiment.capExptId}">${experiment.name}</g:link>
-                                </h2>
-
-                                <p></p>
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedExperiments}" var="experiment">
-                        <g:if test="${i >= 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${experiment.updated}</time>
-
-                                <h2>
-                                    <g:link controller="experiment" action="show"
-                                            id="${experiment.capExptId}">${experiment.name}</g:link>
-                                </h2>
-
-                                <p></p>
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-%{--Contents of the "Compounds" tab (of our row of five content boxes) --}%
-<div class="tab-pane" id="tab-substances">
-    <div class="items-gallery slide" id="items-gallery-4" data-interval="false">
-        <a href="#items-gallery-4" class="btn-prev" data-slide="prev">Previous</a>
-        <a href="#items-gallery-4" class="btn-next" data-slide="next">Previous</a>
-
-        <div class="carousel-inner">
-            <div class="item active">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedSubstances}" var="substance">
-                        <g:if test="${i < 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${substance.updated}</time>
-
-                                <h2>
-                                    <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${substance.sid}">
-                                        <img src="${resource(dir: 'images', file: 'pubchem.png')}" alt="PubChem"/>
-                                        ${substance.sid}</a>
-                                </h2>
-
-                                %{--<p>SMILES: ${substance.smiles}</p>--}%
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedSubstances}" var="substance">
-                        <g:if test="${i >= 3}">
-                            <article class="span4">
-                                <time datetime="2013-10-16">${substance.updated}</time>
-
-                                <h2>
-                                    <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${substance.sid}">
-                                        <img src="${resource(dir: 'images', file: 'pubchem.png')}" alt="PubChem"/>
-                                        ${substance.sid}</a>
-                                </h2>
-
-                                %{--<p>SMILES: ${substance.smiles}</p>--}%
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-%{--Contents of the "Probes" tab (of our row of five content boxes) --}%
-<div class="tab-pane" id="tab-probes">
-    <div class="items-gallery slide" id="items-gallery-5" data-interval="false">
-        <a href="#items-gallery-5" class="btn-prev" data-slide="prev">Previous</a>
-        <a href="#items-gallery-5" class="btn-next" data-slide="next">Previous</a>
-
-        <div class="carousel-inner">
-            <div class="item active">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedProbes}" var="compound">
-                        <g:if test="${i < 3}">
-                            <article class="span4">
-                                %{--<time datetime="2013-10-16">${compound.}</time>--}%
-
-                                <h2>
-                                    <g:link controller="bardWebInterface" action="showCompound"
-                                            id="${compound.id}">${compound.name}</g:link>
-                                </h2>
-
-                                <p>CID: ${compound.id}</p>
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
-
-            <div class="item">
-                <div class="row-fluid">
-                    <g:each status="i" in="${recentlyAddedProbes}" var="compound">
-                        <g:if test="${i >= 3}">
-                            <article class="span4">
-                                %{--<time datetime="2013-10-16">${compound.}</time>--}%
-
-                                <h2>
-                                    <g:link controller="bardWebInterface" action="showCompound"
-                                            id="${compound.id}">${compound.name}</g:link>
-                                </h2>
-
-                                <p>CID: ${compound.id}</p>
-                            </article>
-                        </g:if>
-                    </g:each>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-</div>
-</section>
+    </section>
 </g:if>
 
 

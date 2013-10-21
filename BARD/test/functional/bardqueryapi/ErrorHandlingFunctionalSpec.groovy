@@ -13,8 +13,6 @@ import static groovyx.net.http.ContentType.URLENC
 class ErrorHandlingFunctionalSpec extends Specification {
     RemoteControl remote = new RemoteControl()
     String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
-    String userName = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers.user.username}
-    String password = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers.user.password}
 
     void "test findNonPrivateIpAddress"() {
         given:

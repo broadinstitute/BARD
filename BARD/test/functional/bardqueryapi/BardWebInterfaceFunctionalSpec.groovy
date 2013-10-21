@@ -15,15 +15,13 @@ import javax.servlet.http.HttpServletResponse
 class BardWebInterfaceFunctionalSpec extends Specification {
     RemoteControl remote = new RemoteControl()
     String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
-    String userName = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers.user.username}
-    String password = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers.user.password}
 
 
     def "test promiscuity action #label"() {
         given: "That we have a valid cid #cid"
         String requestUrl = "${baseUrl}/bardWebInterface/promiscuity?cid=${cid}"
         RESTClient http = new RESTClient(requestUrl)
-        authenticate(http)
+
         when: 'We send an HTTP GET request to the promiscuity action with cid #cid'
         HttpResponseDecorator serverResponse = (HttpResponseDecorator) http.get(requestContentType: JSON)
 
@@ -43,7 +41,7 @@ class BardWebInterfaceFunctionalSpec extends Specification {
         given:
         String requestUrl = "${baseUrl}/bardWebInterface/promiscuity?cid=${cid}"
         RESTClient http = new RESTClient(requestUrl)
-        authenticate(http)
+
         when: 'We send an HTTP GET request for the search action'
         (HttpResponseDecorator) http.get(requestContentType: JSON)
 
@@ -61,7 +59,7 @@ class BardWebInterfaceFunctionalSpec extends Specification {
         given: "there is a service end point to get the root elements"
         String requestUrl = generateRequestUrl([searchString], searchAction)
         RESTClient http = new RESTClient(requestUrl)
-        authenticate(http)
+
         when: 'We send an HTTP GET request for the search action'
         HttpResponseDecorator serverResponse = (HttpResponseDecorator) http.get(requestContentType: JSON)
 
@@ -82,15 +80,12 @@ class BardWebInterfaceFunctionalSpec extends Specification {
 
     }
 
-    void authenticate(RESTClient http) {
-        http.auth.basic this.userName, this.password
-    }
 
     def "Test Search By IDs: #label"() {
         given: "there is a service end point to get the root elements"
         String requestUrl = generateRequestUrl([searchString], searchAction)
         RESTClient http = new RESTClient(requestUrl)
-        authenticate(http)
+
         when: 'We send an HTTP GET request for the search action'
         HttpResponseDecorator serverResponse = (HttpResponseDecorator) http.get(requestContentType: JSON)
 
@@ -110,7 +105,7 @@ class BardWebInterfaceFunctionalSpec extends Specification {
         given: "there is a service end point to get the root elements"
         String requestUrl = generateRequestUrl([searchString, filterName, filterValue, formName], searchAction);
         RESTClient http = new RESTClient(requestUrl)
-        authenticate(http)
+
         when: 'We send an HTTP GET request for the search action'
         HttpResponseDecorator serverResponse = (HttpResponseDecorator) http.get(requestContentType: JSON)
 
@@ -134,7 +129,7 @@ class BardWebInterfaceFunctionalSpec extends Specification {
 
         final String requestUrl = sb.toString()
         RESTClient http = new RESTClient(requestUrl)
-        authenticate(http)
+
         when: 'We send an HTTP GET request for the auto complete action'
         HttpResponseDecorator serverResponse = (HttpResponseDecorator) http.get(requestContentType: JSON)
 

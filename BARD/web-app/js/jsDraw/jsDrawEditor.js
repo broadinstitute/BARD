@@ -1,12 +1,5 @@
 var jsDrawEditor = null;
 
-dojo.addOnLoad(function () {
-    jsDrawEditor = new JSDraw2.Editor("jsDrawEditorDiv", {popup:false, rxn: false, biology: false});
-    adjustJSDrawEditorWindow()
-    //Read cached structure
-    jsDrawEditor.readCookie();
-});
-
 //On clicking the Submit button, update the hidden field with search-type + smiles and cache the structure in local storage.
 $(document).on('click', '#searchButton', function (event) {
     var smiles = jsDrawEditor.getSmiles();
@@ -33,6 +26,11 @@ $(document).on('click', '#searchButton', function (event) {
 });
 
 $(document).ready(function () {
+    jsDrawEditor = new JSDraw2.Editor("jsDrawEditorDiv", {popup:false, rxn: false, biology: false});
+    adjustJSDrawEditorWindow()
+    //Read cached structure
+    jsDrawEditor.readCookie();
+
     $(window).resize(function () {
         adjustJSDrawEditorWindow();
     });

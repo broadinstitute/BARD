@@ -28,7 +28,9 @@
                    class="projectName"
                    id="nameId"
                    data-toggle="manual"
-                   data-type="text"
+                   data-inputclass="input-xxlarge"
+                   data-type="textarea"
+
                    data-value="${project?.name}"
                    data-pk="${project.id}"
                    data-url="/BARD/project/editProjectName"
@@ -42,9 +44,9 @@
                 <span
                    class="description"
                    id="descriptionId"
-                   data-type="text"
+                   data-inputclass="input-xxlarge"
+                   data-type="textarea"
                    data-toggle="manual"
-                   data-type="text"
                    data-value="${project.description}"
                    data-pk="${project.id}"
                    data-url="/BARD/project/editDescription"

@@ -130,7 +130,7 @@ grails.project.dependency.resolution = {
         compile ":cache:1.0.1"
        // compile ':events-push:1.0.M7'
         compile ":famfamfam:1.0.1"
-        compile ":spring-security-ui:0.2"
+        //compile ":spring-security-ui:0.2"
 
         compile ":jesque:0.6.2"
         compile ":jesque-web:0.4.0"
@@ -152,7 +152,7 @@ grails.project.dependency.resolution = {
 
 // making the domain plugin an in-place plugin
 grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
-grails.plugin.location.'crowd-user-registration' = "../crowdUserRegistration"
+//grails.plugin.location.'crowd-user-registration' = "../crowdUserRegistration"
 
 
 grails.plugin.location.'shopping-cart:0.8.2' = "../shopping-cart-0.8.2"
