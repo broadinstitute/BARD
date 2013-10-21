@@ -100,7 +100,10 @@
                 <br/>
 
                 <section id="annotations-header">
-                    <h3 class="sect">Annotations</h3>
+                    <h3 class="sect">Annotations
+                        <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
+                                class="icon-question-sign"></i></g:link>
+                    </h3>
                     <g:render template="/common/guidance" model="[guidanceList:instance.guidance]" />
                     <div class="row-fluid">
                         <div id="cardHolderAssayComponents" class="span12">
@@ -128,7 +131,10 @@
 
                 <g:if test="${projectAdapter?.biology}">
                     <section id="biology-info">
-                        <h3>Biology</h3>
+                        <h3>Biology
+                            <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
+                                    class="icon-question-sign"></i></g:link>
+                        </h3>
 
                         <g:render template="../bardWebInterface/biology" model="['biology': projectAdapter.biology]"/>
                     </section>
