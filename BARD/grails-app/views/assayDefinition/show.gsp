@@ -369,17 +369,6 @@
 <br/>
 
 <br/>
-<section id="measures-header">
-
-    <h3 class="sect">Measures<g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
-            class="icon-question-sign"></i></g:link></h3>
-
-
-    <div class="row-fluid">
-        <g:render template="measuresView"
-                  model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson, editable: editable]"/>
-    </div>
-</section>
 <g:render template="/document/documents"
           model="[documentKind: DocumentKind.AssayDocument, owningEntity: assayInstance, canedit: editable]"/>
 </div>

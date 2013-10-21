@@ -331,9 +331,7 @@ class AssayDefinitionController {
             }
         }
 
-
-
-        measureTreeAsJson = []//new JSON(measureTreeService.createMeasureTree(assayInstance, false))
+        measureTreeAsJson = []
         boolean editable = canEdit(permissionEvaluator, springSecurityService, assayInstance)
         String owner = capPermissionService.getOwner(assayInstance)
 

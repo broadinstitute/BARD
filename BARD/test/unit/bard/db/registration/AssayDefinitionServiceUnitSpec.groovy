@@ -24,8 +24,8 @@ import spock.lang.Specification
  * Time: 2:07 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, Experiment, AssayContextMeasure, AssayContext, ExperimentMeasure, AssayContextItem, AssayDocument, Role,AssayContextExperimentMeasure])
-@Mock([Assay, Experiment, ExperimentMeasure, AssayContext, AssayContextMeasure, AssayContextItem, AssayDocument,Role,AssayContextExperimentMeasure])
+@Build([Assay, Experiment, AssayContext, ExperimentMeasure, AssayContextItem, AssayDocument, Role,AssayContextExperimentMeasure])
+@Mock([Assay, Experiment, ExperimentMeasure, AssayContext, AssayContextItem, AssayDocument,Role,AssayContextExperimentMeasure])
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(AssayDefinitionService)
 public class AssayDefinitionServiceUnitSpec extends Specification {

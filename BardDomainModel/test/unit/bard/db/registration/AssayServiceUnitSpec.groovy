@@ -93,8 +93,8 @@ public class AssayServiceUnitSpec extends Specification {
         AssayContext context = AssayContext.build(assay: assay, contextName: "alpha")
         AssayContextItem contextItem = AssayContextItem.build(assayContext: context)
         AssayDocument.build(assay: assay)
-        Measure measure = Measure.build(assay: assay)
-        AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: context, measure: measure)
+//        Measure measure = Measure.build(assay: assay)
+//        AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: context, measure: measure)
         Assay.metaClass.isDirty =
             { return false }
         when:

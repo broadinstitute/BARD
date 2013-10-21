@@ -68,24 +68,25 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
             if (!childElement) {
                 childElement = Element.build(label: childLabel).save(flush: true)
             }
-            Measure childMeasure = Measure.findByResultType(childElement)
+            ExperimentMeasure childMeasure = ExperimentMeasure.findByResultType(childElement)
             if (!childMeasure) {
-                childMeasure = Measure.build(resultType: childElement).save(flush: true)
+                childMeasure = ExperimentMeasure.build(resultType: childElement).save(flush: true)
             }
 
-//            Element parentElement = Element.findByLabel(parentLabel)
-//            if (!parentElement) {
-//                parentElement = Element.build(label: parentLabel).save(flush: true)
-//            }
-//            Measure parentMeasure = Measure.findByResultType(parentElement)
-//            if (!parentMeasure) {
-//                parentMeasure = Measure.build(resultType: parentElement, childMeasures: [childMeasure] as Set).save(flush: true)
-//            }
-//            childMeasure.parentMeasure = parentMeasure
-//            childMeasure.parentChildRelationship = HierarchyType.SUPPORTED_BY
-//            childMeasure.save(flush: true)
+            Element parentElement = Element.findByLabel(parentLabel)
+            if (!parentElement) {
+                parentElement = Element.build(label: parentLabel).save(flush: true)
+            }
+            ExperimentMeasure parentMeasure = ExperimentMeasure.findByResultType(parentElement)
+            if (!parentMeasure) {
+                parentMeasure = ExperimentMeasure.build(resultType: parentElement).save(flush: true)
 
-            Assay assay = Assay.build(assayName: "Assay Name10", measures: [childMeasure, parentMeasure] as Set, ownerRole: role).save(flush: true)
+                childMeasure.parentChildRelationship = HierarchyType.SUPPORTED_BY
+                parentMeasure.addToChildMeasures(childMeasure)
+                childMeasure.save(flush: true)
+            }
+
+            Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role).save(flush: true)
             AssayContext context = AssayContext.build(assay: assay, contextName: "alpha").save(flush: true)
 
             //create assay context
@@ -279,31 +280,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
 
     }
-    /**
-     * Forwards user to the edit Measure page
-     * @return
-     */
-    def 'test editMeasure #desc'() {
-        given:
-        long assayId = assayData.id
-        RESTClient client = getRestClient(controllerUrl, "editMeasure/${assayId}", team, teamPassword)
 
-        when:
-        final Response response = client.get()
-
-        then:
-        assert response.statusCode == expectedHttpResponse
-        assert response.text.contains("Editing Measures for ${assayData.assayName} (ADID: ${assayId})")
-
-        where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
-
-    }
     /**
      * Forwards user to the edit Measure page
      * @return
@@ -577,27 +554,6 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
     }
 
-    def 'test change Relationship context #desc'() {
-        given:
-        long id = assayData.id
-        RESTClient client = getRestClient(controllerUrl, "changeRelationship", team, teamPassword)
-        long measureId = assayData.measureId
-        when:
-        def response = client.post() {
-            urlenc measureId: measureId, relationship: HierarchyType.SUPPORTED_BY.id, id: id
-        }
-
-        then:
-        assert response.statusCode == expectedHttpResponse
-
-        where:
-        desc                | team              | teamPassword      | expectedHttpResponse
-        "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
-        "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
-    }
-
-
     def 'test change Relationship context #forbidden'() {
         given:
         long id = assayData.id
@@ -855,168 +811,6 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
         "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
         "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-    }
-
-
-    def 'test addMeasure - unauthorized #desc'() {
-        given:
-        String reAuthenticateWith = TEAM_A_1_USERNAME
-
-        long resultTypeId = (Long) remote.exec({
-            SpringSecurityUtils.reauthenticate(reAuthenticateWith, null)
-            String resultTypeLabel = "resultTypeLabel"
-            Element resultTypeElement = Element.findByLabel(resultTypeLabel)
-            if (!resultTypeElement) {
-                resultTypeElement = Element.build(label: resultTypeLabel).save(flush: true)
-            }
-            return resultTypeElement.id
-        })
-        String parentChildRelationship = HierarchyType.SUPPORTED_BY.id
-        RESTClient client = getRestClient(controllerUrl, "addMeasure", team, teamPassword)
-        long id = assayData.id
-
-        when:
-        client.post() {
-            urlenc resultTypeId: resultTypeId, id: id, parentChildRelationship: parentChildRelationship
-        }
-
-        then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
-
-        where:
-        desc                  | team              | teamPassword      | expectedHttpResponse
-        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
-    }
-
-    def 'test addMeasure #desc'() {
-        given:
-        String reAuthenticateWith = TEAM_A_1_USERNAME
-        String resultTypeLabel = team + "_addMeasure"
-
-        long resultTypeId = (Long) remote.exec({
-            SpringSecurityUtils.reauthenticate(reAuthenticateWith, null)
-            Element resultTypeElement = Element.findByLabel(resultTypeLabel)
-            if (!resultTypeElement) {
-                resultTypeElement = Element.build(label: resultTypeLabel).save(flush: true)
-            }
-            return resultTypeElement.id
-        })
-        String parentChildRelationship = HierarchyType.SUPPORTED_BY.id
-        RESTClient client = getRestClient(controllerUrl, "addMeasure", team, teamPassword)
-        long id = assayData.id
-        when:
-        def response = client.post() {
-            urlenc resultTypeId: resultTypeId, id: id, parentChildRelationship: parentChildRelationship
-        }
-
-        then:
-        assert response.statusCode == expectedHttpResponse
-        where:
-        desc                | team              | teamPassword      | expectedHttpResponse
-        "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-    }
-
-    def 'test moveMeasureNode - unauthorized #desc'() {
-        given:
-        Long measureId = assayData.measureId
-        Long parentMeasureId = assayData.parentMeasureId
-        RESTClient client = getRestClient(controllerUrl, "moveMeasureNode", team, teamPassword)
-        long id = assayData.id
-
-        when:
-        client.post() {
-            urlenc measureId: measureId, id: id, parentMeasureId: parentMeasureId
-        }
-
-        then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
-
-        where:
-        desc                  | team              | teamPassword      | expectedHttpResponse
-        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
-    }
-
-    def 'test moveMeasureNode #desc'() {
-        given:
-        Long measureId = assayData.measureId
-        Long parentMeasureId = assayData.parentMeasureId
-        RESTClient client = getRestClient(controllerUrl, "moveMeasureNode", team, teamPassword)
-        long id = assayData.id
-
-        when:
-        def response = client.post() {
-            urlenc measureId: measureId, id: id, parentMeasureId: parentMeasureId
-        }
-        then:
-        assert response.statusCode == expectedHttpResponse
-        where:
-        desc                | team              | teamPassword      | expectedHttpResponse
-        "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-    }
-
-    def 'test delete Measure - unauthorized #desc'() {
-        given:
-        Long measureId = assayData.measureId
-        RESTClient client = getRestClient(controllerUrl, "deleteMeasure", team, teamPassword)
-        long id = assayData.id
-
-        when:
-        client.post() {
-            urlenc measureId: measureId, id: id
-        }
-
-        then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
-
-        where:
-        desc                  | team              | teamPassword      | expectedHttpResponse
-        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
-    }
-
-    def 'test delete Measure #desc'() {
-        given:
-        Long assayId = assayData.id
-        long id = assayData.id
-        String reAuthenticateWith = TEAM_A_1_USERNAME
-
-        long measureId = (Long) remote.exec({
-            SpringSecurityUtils.reauthenticate(reAuthenticateWith, null)
-            String elementLabel = "parent_X"
-            Element element = Element.findByLabel(elementLabel)
-            if (!element) {
-                element = Element.build(label: elementLabel).save(flush: true)
-            }
-            ExperimentMeasure measure = ExperimentMeasure.findByResultType(element)
-
-            if (!measure) {
-                measure = ExperimentMeasure.build(resultType: element).save(flush: true)
-            }
-            Assay assay = Assay.findById(assayId)
-           // assay.addToMeasures(measure)
-            return measure.id
-        })
-        RESTClient client = getRestClient(controllerUrl, "deleteMeasure", team, teamPassword)
-        when:
-        def response = client.post() {
-            urlenc measureId: measureId, id: id
-        }
-        then:
-        assert response.statusCode == expectedHttpResponse
-        where:
-        desc                | team              | teamPassword      | expectedHttpResponse
-        "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
-        "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
     }
 
     private Map getCurrentAssayProperties() {

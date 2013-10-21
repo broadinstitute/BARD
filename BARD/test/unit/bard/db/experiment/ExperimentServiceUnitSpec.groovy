@@ -54,20 +54,8 @@ public class ExperimentServiceUnitSpec extends Specification {
         experiment.description == "desc"
         experiment.assay == assay
         experiment.experimentMeasures.size() == 0
-
-        when:
-        ExperimentMeasure parentExpMeasure = experiment.experimentMeasures.find { it.parent == null }
-
-        then:
-        parentExpMeasure != null
-
-        when:
-        ExperimentMeasure childExpMeasure = experiment.experimentMeasures.find { it.parent == parentExpMeasure }
-
-        then:
-        childExpMeasure != null
-        childExpMeasure.parentChildRelationship == HierarchyType.SUPPORTED_BY
     }
+
     //TODO: Rework
 //    @Ignore
 //    void 'update measures'() {
