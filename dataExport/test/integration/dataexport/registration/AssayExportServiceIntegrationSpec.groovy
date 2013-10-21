@@ -99,14 +99,11 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
         Element element = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
         Assay assay = Assay.build(capPermissionService: null, readyForExtraction: ReadyForExtraction.READY)
         AssayContext assayContext = AssayContext.build(assay: assay, contextType: ContextType.UNCLASSIFIED)
-        AssayContextItem.build(assayContext: assayContext, attributeElement: element, valueType: ValueType.FREE_TEXT, valueDisplay: "value")
+        AssayContextItem.build(assayContext: assayContext, attributeElement: element, valueType: ValueType.FREE_TEXT, valueDisplay: "valueDisplay")
         AssayDocument.build(assay: assay)
 
         Panel panel = Panel.build()
         PanelAssay.build(assay: assay, panel: panel)
-
-
-        AssayDocument.build(assay: assay)
         when:
         this.assayExportService.generateAssay(this.markupBuilder, assay.id)
 
