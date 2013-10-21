@@ -105,7 +105,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
         where:
         label                             | results                                             | mapClosure                                                                                   | numAssayContextMeasureRefs
         "minimal"                         | EXPERIMENT_MEASURE_MINIMAL                          | { [:] }                                                                                      | 0
-        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF                  | { [parent: ExperimentMeasure.build()] }                                                      | 0
+        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF                  | { [parent: ExperimentMeasure.build(),priorityElement: true] }                                                      | 0
         "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP | { [parent: ExperimentMeasure.build(), parentChildRelationship: HierarchyType.SUPPORTED_BY] } | 0
     }
 

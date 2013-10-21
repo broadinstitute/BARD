@@ -3,6 +3,7 @@ package dataexport.registration
 import bard.db.dictionary.Element
 import bard.db.enums.ContextType
 import bard.db.enums.DocumentType
+import bard.db.enums.ExpectedValueType
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.registration.*

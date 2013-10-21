@@ -14,7 +14,6 @@ import bard.db.registration.MeasureCaseInsensitiveDisplayLabelComparator
 class ExperimentMeasure {
 
     private static final int MODIFIED_BY_MAX_SIZE = 40
-    public static final int PARENT_CHILD_RELATIONSHIP_MAX_SIZE = 20
 
 
     Element resultType
@@ -28,7 +27,7 @@ class ExperimentMeasure {
     Date dateCreated = new Date()
     Date lastUpdated = new Date()
     String modifiedBy
-
+    boolean priorityElement = false
     Set<ExperimentMeasure> childMeasures = [] as Set
     Set<AssayContextExperimentMeasure> assayContextExperimentMeasures = [] as Set
 
@@ -53,6 +52,7 @@ class ExperimentMeasure {
         parent(column: 'PARENT_EXPRMT_MEASURE_ID')
         resultType(column: 'RESULT_TYPE_ID')
         statsModifier(column: 'STATS_MODIFIER_ID')
+        priorityElement(column:'PRIORITY_ELEMENT')
 
     }
     /**

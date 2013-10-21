@@ -42,21 +42,6 @@
                 <xs:element minOccurs="0" name="panels">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element maxOccurs="unbounded" name="panel">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element name="name" type="xs:string"/>
-                                        <xs:element minOccurs="0" ref="description"/>
-                                    </xs:sequence>
-                                    <xs:attribute name="id" type="bardID" use="required"/>
-                                </xs:complexType>
-                            </xs:element>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                <xs:element minOccurs="0" name="panels">
-                    <xs:complexType>
-                        <xs:sequence>
                             <xs:element maxOccurs="unbounded" name="panel" minOccurs="0">
                                 <xs:complexType>
                                     <xs:sequence>
@@ -137,7 +122,7 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:element name="assayDocument" type="documentType"></xs:element>
+    <xs:element name="assayDocument" type="documentType"/>
     <xs:complexType name="assayContextItemType">
         <xs:complexContent>
             <xs:extension base="abstractContextItemType">
@@ -171,6 +156,6 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:element name="assayContext" type="assayContexType"></xs:element>
+    <xs:element name="assayContext" type="assayContexType"/>
     <xs:element name="assayContextItem" type="assayContextItemType"/>
 </xs:schema>

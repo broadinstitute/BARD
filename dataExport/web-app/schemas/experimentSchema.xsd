@@ -280,6 +280,7 @@ Link to parent experiment
             <xs:attribute name="experimentMeasureId" type="bardID" use="required"/>
             <xs:attribute name="parentExperimentMeasureRef" type="bardID"/>
             <xs:attribute ref="parentChildRelationship"/>
+            <xs:attribute default="false" name="priorityElement" type="xs:boolean" use="optional"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>

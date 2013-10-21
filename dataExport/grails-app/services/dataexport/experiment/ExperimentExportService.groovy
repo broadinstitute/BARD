@@ -120,7 +120,7 @@ class ExperimentExportService extends ExportAbstractService {
     }
 
     private String convertStatusToString(ExperimentStatus status) {
-        switch(status) {
+        switch (status) {
             case ExperimentStatus.APPROVED:
                 return "Approved";
             case ExperimentStatus.DRAFT:
@@ -142,16 +142,16 @@ class ExperimentExportService extends ExportAbstractService {
         attributes.put("experimentId", experiment.id?.toString())
         attributes.put('status', convertStatusToString(experiment.experimentStatus))
         attributes.put('readyForExtraction', experiment.readyForExtraction.getId())
-        if(experiment.confidenceLevel != null  && StringUtils.isNotBlank(experiment.confidenceLevel?.toString())){
+        if (experiment.confidenceLevel != null && StringUtils.isNotBlank(experiment.confidenceLevel?.toString())) {
             attributes.put('confidenceLevel', experiment.confidenceLevel.toString())
         }
-        if(experiment.lastUpdated){
+        if (experiment.lastUpdated) {
             final GregorianCalendar gregorianCalendar = new GregorianCalendar();
             gregorianCalendar.setTime(experiment.lastUpdated);
             final XMLGregorianCalendar lastUpdatedDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
-           attributes.put('lastUpdated', lastUpdatedDate.toString())
+            attributes.put('lastUpdated', lastUpdatedDate.toString())
         }
-        if(StringUtils.isNotBlank(experiment.modifiedBy)){
+        if (StringUtils.isNotBlank(experiment.modifiedBy)) {
             attributes.put('modifiedBy', experiment.modifiedBy)
         }
 
@@ -316,24 +316,28 @@ class ExperimentExportService extends ExportAbstractService {
         if (parent) {
             attributes.put('parentExperimentMeasureRef', parent.id)
         }
-       HierarchyType parentChildRelationship = experimentMeasure.parentChildRelationship
+        HierarchyType parentChildRelationship = experimentMeasure.parentChildRelationship
         if (parentChildRelationship) {
             attributes.put('parentChildRelationship', parentChildRelationship.getId())
         }
+        //add priority element
+        attributes.put('priorityElement', experimentMeasure.priorityElement.toString())
+
         markupBuilder.experimentMeasure(attributes) {
             final Element resultType = experimentMeasure.resultType
             if (resultType) { //this is the result type
-                AssayExportHelperService.createElementRef(markupBuilder, resultType, 'resultTypeRef', this.mediaTypeDTO.elementMediaType,this.grailsLinkGenerator)
+                AssayExportHelperService.createElementRef(markupBuilder, resultType, 'resultTypeRef', this.mediaTypeDTO.elementMediaType, this.grailsLinkGenerator)
             }
             final Element statsModifier = experimentMeasure.statsModifier
             if (statsModifier) {
-                AssayExportHelperService.createElementRef(markupBuilder, statsModifier, 'statsModifierRef', this.mediaTypeDTO.elementMediaType,this.grailsLinkGenerator)
+                AssayExportHelperService.createElementRef(markupBuilder, statsModifier, 'statsModifierRef', this.mediaTypeDTO.elementMediaType, this.grailsLinkGenerator)
             }
-            generateAssayContextExperimentMeasureRefs(markupBuilder,  experimentMeasure.assayContextExperimentMeasures)
-            generateChildMeasuresRefs(markupBuilder,experimentMeasure.childMeasures)
+            generateAssayContextExperimentMeasureRefs(markupBuilder, experimentMeasure.assayContextExperimentMeasures)
+            generateChildMeasuresRefs(markupBuilder, experimentMeasure.childMeasures)
         }
     }
-    protected void generateChildMeasuresRefs(MarkupBuilder markupBuilder,Set<ExperimentMeasure> childMeasures) {
+
+    protected void generateChildMeasuresRefs(MarkupBuilder markupBuilder, Set<ExperimentMeasure> childMeasures) {
         if (childMeasures) {
             markupBuilder.childMeasureRefs() {
                 for (ExperimentMeasure childMeasure : childMeasures) {
@@ -342,11 +346,12 @@ class ExperimentExportService extends ExportAbstractService {
             }
         }
     }
-    protected void generateAssayContextExperimentMeasureRefs(MarkupBuilder markupBuilder,Set<AssayContextExperimentMeasure> assayContextExperimentMeasures) {
+
+    protected void generateAssayContextExperimentMeasureRefs(MarkupBuilder markupBuilder, Set<AssayContextExperimentMeasure> assayContextExperimentMeasures) {
         if (assayContextExperimentMeasures) {
             markupBuilder.assayContextRefs() {
                 for (AssayContextExperimentMeasure assayContextExperimentMeasure : assayContextExperimentMeasures) {
-                     assayContextRef(assayContextExperimentMeasure.assayContext.id)
+                    assayContextRef(assayContextExperimentMeasure.assayContext.id)
                 }
             }
         }
