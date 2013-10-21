@@ -43,7 +43,6 @@ class ReadyForExtractFlushListenerUnitSpec extends Specification {
         description                     | targetConstructor
         "Assay"                         | { assay -> assay }
         "AssayContext"                  | { assay -> AssayContext.build(assay: assay) }
-        "AssayContextExperimentMeasure" | { assay -> AssayContextExperimentMeasure.build(assayContext: AssayContext.build(assay: assay)) }
         "AssayDocument"                 | { assay -> AssayDocument.build(assay: assay) }
     }
 
@@ -86,6 +85,7 @@ class ReadyForExtractFlushListenerUnitSpec extends Specification {
         "ExperimentContextItem" | { experiment -> ExperimentContextItem.build(context: ExperimentContext.build(experiment: experiment)) }
         "ExperimentMeasure"     | { experiment -> ExperimentMeasure.build(experiment: experiment) }
         "ExperimentFile"        | { experiment -> ExperimentFile.build(experiment: experiment) }
+        "AssayContextExperimentMeasure" | { experiment -> AssayContextExperimentMeasure.build(assayContext: AssayContext.build(), experimentMeasure: ExperimentMeasure.build(experiment: experiment)) }
     }
 
     def 'test project setting ready for extract for #description'() {
