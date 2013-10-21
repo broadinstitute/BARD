@@ -82,9 +82,10 @@ class MergeAssayDefintionControllerFunctionalSpec extends BardControllerFunction
                 dbpassword, driverClassName)
         sql.call("{call bard_context.set_username(?)}", [TEAM_A_1_USERNAME])
         for (Long assayId : assayIdList) {
+            sql.execute("DELETE FROM EXPRMT_MEASURE WHERE EXPERIMENT_ID in (select experiment_id from experiment where assay_id = ${assayId})")
+            sql.execute("DELETE FROM external_reference WHERE EXPERIMENT_ID in (select experiment_id from experiment where assay_id = ${assayId})")
             sql.execute("DELETE FROM EXPERIMENT WHERE ASSAY_ID=${assayId}")
             sql.execute("DELETE FROM ASSAY_CONTEXT WHERE ASSAY_ID=${assayId}")
-          //  sql.execute("DELETE FROM MEASURE WHERE ASSAY_ID=${assayId}")
             sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${assayId}")
         }
     }
