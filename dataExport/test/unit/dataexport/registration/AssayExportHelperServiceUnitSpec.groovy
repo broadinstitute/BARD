@@ -4,6 +4,7 @@ import bard.db.dictionary.Element
 import bard.db.enums.ContextType
 import bard.db.enums.DocumentType
 import bard.db.enums.ReadyForExtraction
+import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.registration.*
 import common.tests.XmlTestAssertions
 import grails.buildtestdata.TestDataConfigurationHolder
