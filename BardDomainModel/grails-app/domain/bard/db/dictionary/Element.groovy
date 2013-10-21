@@ -14,7 +14,6 @@ class Element extends AbstractElement {
     Set<TreeRoot> treeRoots = [] as Set<TreeRoot>
     Set<OntologyItem> ontologyItems = [] as Set<OntologyItem>
     String curationNotes //Used in UI to explain why you are adding a new term
-    Element replacedBy // when an element is retired, this can be set to indicate what term should be used in its place.
     ExpectedValueType expectedValueType = ExpectedValueType.NONE
     AddChildMethod addChildMethod = AddChildMethod.NO
 
@@ -49,7 +48,6 @@ class Element extends AbstractElement {
 //    }
     static constraints = {
         curationNotes(nullable: true, maxSize: DESCRIPTION_MAX_SIZE)
-        replacedBy(nullable: true)
         expectedValueType(nullable: false)
         addChildMethod(nullable: false)
 
