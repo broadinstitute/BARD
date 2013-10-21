@@ -7,6 +7,6 @@
             ${substance.sid}</a>
     </h2>
 
-    <p><img src="http://bard.nih.gov/api/v17.3/substances/${substance.cid}/image?s=200" alt="Structure"/> </p>
+    <p><img src="${grailsApplication.config.ncgc.server.root.url}/substances/${substance.cid}/image?s=200" alt="Structure"/> </p>
 
 </article>
