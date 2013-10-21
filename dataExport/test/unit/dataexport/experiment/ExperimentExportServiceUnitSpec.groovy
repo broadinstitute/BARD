@@ -7,7 +7,6 @@ import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
 import bard.db.experiment.ExperimentMeasure
 import bard.db.registration.ExternalReference
-import bard.db.registration.Measure
 import common.tests.XmlTestAssertions
 import dataexport.registration.MediaTypesDTO
 import exceptions.NotFoundException
