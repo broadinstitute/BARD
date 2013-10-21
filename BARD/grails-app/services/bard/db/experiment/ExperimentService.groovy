@@ -10,7 +10,6 @@ import bard.db.enums.HierarchyType
 import bard.db.enums.ReadyForExtraction
 import bard.db.people.Role
 import bard.db.registration.Assay
-import bard.db.registration.Measure
 import bardqueryapi.TableModel
 import bardqueryapi.experiment.ExperimentBuilder
 import org.apache.commons.lang.StringUtils

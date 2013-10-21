@@ -7,7 +7,6 @@ import bard.db.experiment.results.*
 import bard.db.registration.*
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
-import bard.db.registration.AssayContextMeasure
 import bard.db.registration.AttributeType
 import bard.db.registration.ItemService
 import bard.db.registration.PugService

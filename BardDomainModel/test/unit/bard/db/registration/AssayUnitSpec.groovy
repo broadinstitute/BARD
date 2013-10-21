@@ -17,8 +17,8 @@ import static bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule.*
  * Time: 11:51 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, AssayContext, AssayContextItem, Measure, Element])
-@Mock([Assay, AssayContext, AssayContextItem, Measure, Element])
+@Build([Assay, AssayContext, AssayContextItem, Element])
+@Mock([Assay, AssayContext, AssayContextItem, Element])
 @Unroll
 class AssayUnitSpec extends Specification {
     def 'test allowsNewExperiments when #desc'() {

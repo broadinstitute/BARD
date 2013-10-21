@@ -9,10 +9,8 @@ import bard.db.enums.ValueType
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
-import bard.db.registration.AssayContextMeasure
 import bard.db.registration.AttributeType
 import bard.db.registration.ExternalReference
-import bard.db.registration.Measure
 import groovy.sql.Sql
 import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.commons.GrailsApplication

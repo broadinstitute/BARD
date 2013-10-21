@@ -34,8 +34,8 @@ import javax.servlet.http.HttpServletResponse
 
 
 @TestFor(AssayDefinitionController)
-@Build([Assay, Element, AssayContext, AssayContextMeasure, Measure, Role, Experiment, ExperimentMeasure, AssayContextExperimentMeasure])
-@Mock([Assay, Element, AssayContext, AssayContextMeasure, Measure, Role, Experiment, ExperimentMeasure, AssayContextExperimentMeasure])
+@Build([Assay, Element, AssayContext, Role, Experiment, ExperimentMeasure, AssayContextExperimentMeasure])
+@Mock([Assay, Element, AssayContext, Role, Experiment, ExperimentMeasure, AssayContextExperimentMeasure])
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
 class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
