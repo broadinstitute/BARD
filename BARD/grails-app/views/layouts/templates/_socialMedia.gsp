@@ -8,7 +8,7 @@
                        'facebook-share-dialog',
                        'width=626,height=436');
                return false;"
-           style="background:url('../images/bardHomepage/facebook-share-icon.gif') no-repeat; width:58px; height:18px;">
+           style="background:url('/BARD/images/bardHomepage/facebook-share-icon.gif') no-repeat; width:58px; height:18px;">
         </a>
     </li>
     <li style="width: 80px;">
