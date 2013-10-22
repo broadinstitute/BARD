@@ -35,8 +35,6 @@
 
 <g:if test="${instance?.id}">
 
-
-
 <div class="container-fluid">
 <div class="row-fluid">
 <div class="span3 bs-docs-sidebar heading-numbering">
@@ -138,9 +136,9 @@
                         data-url="/BARD/experiment/editOwnerRole"
                         data-placeholder="Required"
                         data-original-title="Select Owner Role">${instance?.owner}</span>
-                <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="ownerRoleId" title="Click to edit owner role"></a>
+                <a href="#" class="icon-pencil documentPencil ${editable}" data-id="ownerRoleId"
+                   title="Click to edit owner role"></a>
             </dd>
-
             <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
             <dd>
                 <span class="rfddate" id="rfd" data-type="combodate" data-pk="${instance.id}"
@@ -272,7 +270,13 @@
             <br/>
             <g:if test="${editable == 'canedit'}">
                 <p>
-                    <g:link action="edit" id="${instance.id}" class="btn">Edit Measures</g:link>
+                    <g:if test="${instance.experimentMeasures}">
+                        <g:link action="edit" id="${instance.id}" class="btn">Edit Measures</g:link>
+                    </g:if>
+                    <g:else>
+                        %{--TODO: Add create mesures resource--}%
+                        %{--<g:link action="edit" id="${instance.id}" class="btn">Create Measures</g:link>--}%
+                    </g:else>
                 </p>
             </g:if>
             <br/>
