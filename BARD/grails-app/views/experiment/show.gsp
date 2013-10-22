@@ -234,7 +234,8 @@
 </section>
 <br/>
 <section id="contexts-header">
-    <h3 class="sect">Contexts</h3>
+    <h3 class="sect">Contexts <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
+            class="icon-question-sign"></i></g:link></h3>
 
     <div class="row-fluid">
         <g:render template="../context/show"
