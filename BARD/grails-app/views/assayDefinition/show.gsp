@@ -100,7 +100,6 @@
         <g:if test="${assayInstance.panelAssays}">
             <li><a href="#panels-header"><i class="icon-chevron-right"></i>Panels</a></li>
         </g:if>
-    <li><a href="#measures-header"><i class="icon-chevron-right"></i>Measures</a></li>
         <li><a href="#documents-header"><i class="icon-chevron-right"></i>Documents</a>
             <ul class="nav nav-list bs-docs-sidenav" style="padding-left: 0; margin: 0;">
                 <li><a href="#documents-description-header"><i class="icon-chevron-right"></i>Descriptions</a>

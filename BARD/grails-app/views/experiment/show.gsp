@@ -34,11 +34,7 @@
 </g:if>
 
 <g:if test="${instance?.id}">
-<g:if test="${editable == 'canedit'}">
-    <p>
-        <g:link action="edit" id="${instance.id}" class="btn">Edit</g:link>
-    </p>
-</g:if>
+
 
 
 <div class="container-fluid">
@@ -272,7 +268,16 @@
                 </r:script>
 
             </div>
+            <br/>
+            <g:if test="${editable == 'canedit'}">
+                <p>
+                    <g:link action="edit" id="${instance.id}" class="btn">Edit Measures</g:link>
+                </p>
+            </g:if>
+            <br/>
+            <br/>
         </section>
+
         <section id="results-summary-header">
             <h4 class="subsect">Result Summary</h4>
 
@@ -315,6 +320,7 @@
                 </g:else>
 
             </div>
+
         </section>
     </div>
 </section>
