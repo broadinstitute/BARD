@@ -17,7 +17,9 @@
                 <g:if test="${context.hasProperty('assayContextMeasures') && context.assayContextMeasures}">
                     <p>Measure<g:if test="${context.assayContextMeasures.size() > 1}">s</g:if>:
                         <g:each in="${context.assayContextMeasures}" status="i" var="assayContextMeasure">
-                            <a href="#measures-header" class="treeNode" id="${assayContextMeasure.measure.id}">${assayContextMeasure.measure.displayLabel}<g:if test="${i < context.assayContextMeasures.size() - 1}">,  </g:if></a>
+                            <a href="#measures-header" class="treeNode"
+                               id="${assayContextMeasure.measure.id}">${assayContextMeasure.measure.displayLabel}<g:if
+                                    test="${i < context.assayContextMeasures.size() - 1}">,</g:if></a>
                         </g:each>
                     </p>
                 </g:if>
@@ -25,27 +27,39 @@
         </caption>
         <tbody>
         <g:each in="${context.contextItems}" status="i" var="contextItem">
-            <tr id="${contextItem.id}" class="context_item_row ${highlightedItemId==contextItem.id?'warning':''} ${(contextItem.validate())?'':'validation-failed'}">
+            <tr id="${contextItem.id}"
+                class="context_item_row ${highlightedItemId == contextItem.id ? 'warning' : ''} ${(contextItem.validate()) ? '' : 'validation-failed'}">
                 <td>
                     <g:if test="${contextItem.hasProperty("attributeType")}">
-                        <g:if test="${contextItem.attributeType == AttributeType.List || contextItem.attributeType == AttributeType.Free || contextItem.attributeType == AttributeType.Range }">
-                            <a title="The value for ${contextItem.attributeElement?.label} will be specified as part of the experiment"><i class="icon-share"></i>
+                        <g:if test="${contextItem.attributeType == AttributeType.List || contextItem.attributeType == AttributeType.Free || contextItem.attributeType == AttributeType.Range}">
+                            <a title="The value for ${contextItem.attributeElement?.label} will be specified as part of the experiment"><i
+                                    class="icon-share"></i></a>
                         </g:if>
                     </g:if>
                 </td>
-                <td class="attributeLabel">${contextItem.attributeElement?.label}</td>
-                <g:if test="${ contextItem.attributeElement?.externalURL }">
-                	<td class="valuedLabel">
-                		<a href="${contextItem.attributeElement.externalURL + contextItem.extValueId}" target="_blank">${contextItem.valueDisplay}</a>
-                	</td>
+                <td class="attributeLabel">
+                    <g:if test="${contextItem.attributeElement}">
+                        <span class="dictionary editable-click" title="" data-placement="bottom" data-toggle="tooltip"
+                              href="#" data-original-title="${contextItem.attributeElement?.description}">
+                            ${contextItem.attributeElement?.label}</span>
+
+                    </g:if>
+
+                </td>
+                <g:if test="${contextItem.attributeElement?.externalURL}">
+                    <td class="valuedLabel">
+                        <a href="${contextItem.attributeElement.externalURL + contextItem.extValueId}"
+                           target="_blank">${contextItem.valueDisplay}</a>
+                    </td>
                 </g:if>
                 <g:else>
-                	<td class="valuedLabel">${contextItem.valueDisplay}</td>
-                </g:else>                
+                    <td class="valuedLabel">${contextItem.valueDisplay}
+                    </td>
+                </g:else>
             </tr>
         </g:each>
         </tbody>
     </table>
-    <g:render template="/common/guidance" model="[guidanceList: context.guidance]" />
+    <g:render template="/common/guidance" model="[guidanceList: context.guidance]"/>
 </div>
 

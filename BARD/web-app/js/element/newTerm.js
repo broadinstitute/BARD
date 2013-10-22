@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    createHierarchyTree("#element-hierarchy-tree", "BARD Hierarchy Tree", "BARD");
-    createHierarchyTree("#dictionary-element-hierarchy-tree", "BARD Dictionary Tree", "BARD Dictionary");
+    createHierarchyTree("#element-hierarchy-tree", "BARD Hierarchy Tree", "BARD", null);
+    createHierarchyTree("#dictionary-element-hierarchy-tree", "BARD Dictionary Tree", "BARD Dictionary", "ELEMENT");
 });
 
 function reloadTree() {
@@ -24,7 +24,15 @@ function reloadTree() {
     $("#saveTerm")[0].reset();
 }
 
-function createHierarchyTree(treeElementName, treeTitle, treeRoot) {
+/**
+ * Build the DYNATREE tree using ajax calls to the ElementController.
+ *
+ * @param treeElementName
+ * @param treeTitle
+ * @param treeRoot This is used in CAP's Element table to get to the root of the tree; from the root we start loading the children elements.
+ * @param expectedValueType Filter based on the element type (e.g., 'element', 'numeric', etc.
+ */
+function createHierarchyTree(treeElementName, treeTitle, treeRoot, expectedValueType) {
     var doNotShowRetired = $("#doNotShowRetiredTerms").is(':checked');
 
     $(treeElementName).dynatree
@@ -34,7 +42,7 @@ function createHierarchyTree(treeElementName, treeTitle, treeRoot) {
             autoFocus: false,
             initAjax: {
                 url: "/BARD/element/buildTopLevelHierarchyTree",
-                data: {doNotShowRetired: doNotShowRetired, treeRoot: treeRoot}
+                data: {doNotShowRetired: doNotShowRetired, treeRoot: treeRoot, expectedValueType: expectedValueType}
             },
             onActivate: function (node) {
                 $("#attributeElementId").select2("data", {id: node.data.elementId, text: node.data.title});
@@ -57,7 +65,7 @@ function createHierarchyTree(treeElementName, treeTitle, treeRoot) {
                     {
                         url: "/BARD/element/getChildrenAsJson",
                         dataType: "json",
-                        data: {elementId: node.data.elementId, doNotShowRetired: doNotShowRetired}
+                        data: {elementId: node.data.elementId, doNotShowRetired: doNotShowRetired, expectedValueType: expectedValueType}
 
                     }
                 );

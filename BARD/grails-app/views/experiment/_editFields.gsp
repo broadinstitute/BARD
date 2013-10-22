@@ -19,10 +19,15 @@
         </dd>
         <dt>Owner:</dt>
         <dd>
-            <g:select name="ownerRole" id="ownerRole" required="required"
-                      from="${BardCommand.userRoles()}"
-                      value="${experiment?.ownerRole}"
-                      optionValue="displayName" optionKey="id"/>
+            <g:if test="${bard.db.command.BardCommand.userRoles()}">
+                <g:select name="ownerRole" id="ownerRole" required="required"
+                          from="${BardCommand.userRoles()}"
+                          value="${experiment?.ownerRole}"
+                          optionValue="displayName" optionKey="id"/>
+            </g:if>
+            <g:else>
+                You need to be part of a team to create Experiments. Follow this <g:link controller="assayDefinition" action="teams">link</g:link> to the Teams Page
+            </g:else>
         </dd>
         <dt>Hold until Date:</dt>
         <dd>

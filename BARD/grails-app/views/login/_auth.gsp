@@ -22,7 +22,7 @@
 
 
 
-    <g:if env="development">
+    <g:if env="persona">
         <p>
             <span class="brand">BARD</span> <strong>offers a convenient way to sign in or create an account.</strong>
         </p>

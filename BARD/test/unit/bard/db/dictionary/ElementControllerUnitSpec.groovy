@@ -42,9 +42,9 @@ class ElementControllerUnitSpec extends Specification {
         final boolean isLazy = false
         long elementId = Element.build(label: label).id
         when:
-        controller.buildTopLevelHierarchyTree(false, "BARD")
+        controller.buildTopLevelHierarchyTree(false, "BARD", null)
         then:
-        controller.elementService.createElementHierarchyTree(false, "BARD") >> {
+        controller.elementService.createElementHierarchyTree(false, "BARD", null) >> {
             [[elementId: elementId, title: label, key: key, description: description, isFolder: isFolder, isLazy: isLazy]]
         }
         def controllerResponse = controller.response.contentAsString
@@ -67,9 +67,9 @@ class ElementControllerUnitSpec extends Specification {
         long elementId = Element.build(label: label).id
         boolean doNotShowRetired = false
         when:
-        controller.getChildrenAsJson(elementId, doNotShowRetired)
+        controller.getChildrenAsJson(elementId, doNotShowRetired, null)
         then:
-        controller.elementService.getChildNodes(_, _) >> {
+        controller.elementService.getChildNodes(_, _, _) >> {
             [[elementId: elementId,
                     title: label,
                     key: key,

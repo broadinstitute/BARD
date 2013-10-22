@@ -1,3 +1,4 @@
+<%@ page import="bard.db.dictionary.OntologyItem" %>
 <html>
 <head>
     <title>BARD: Dictionary Terms and Description</title>
@@ -12,7 +13,6 @@
 
 <body>
 
-
 <div class="container-fluid">
     <div class="row-fluid">
 
@@ -23,23 +23,35 @@
                 <th>ID</th>
                 <th>Term</th>
                 <th class="sorter-false">Description</th>
+                <th>Units</th>
+                <th class="sorter-false">Reference</th>
             </tr>
             </thead>
             <tbody>
-            <g:each in="${capDictionary?.nodes}" var="dictionaryElement">
-                <g:if test="${dictionaryElement.description}">
+            <g:each in="${capDictionary}" var="dictionaryElement">
+                <g:if test="${dictionaryElement.label}">
                     <tr>
                         <td>
-                            ${dictionaryElement.elementId}
+                            ${dictionaryElement.id}
                         </td>
                         <td>
-                            <a name="${dictionaryElement.elementId}"></a>
+                            <a name="${dictionaryElement.id}"></a>
                             ${dictionaryElement.label}
                         </td>
                         <td>
                             ${dictionaryElement.description}
                         </td>
-
+                        <td>
+                            ${dictionaryElement?.unit?.abbreviation}
+                        </td>
+                        <td>
+                            <%
+                                List<OntologyItem> ontologyItems = dictionaryElement.ontologyItems as List<OntologyItem>
+                            %>
+                            <g:each in="${ontologyItems}" var="ontologyItem">
+                                ${ontologyItem.displayValue()}
+                            </g:each>
+                        </td>
                     </tr>
                 </g:if>
             </g:each>

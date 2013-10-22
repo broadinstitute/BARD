@@ -45,7 +45,7 @@
                         </g:if>
                     </g:if>
                 </td>
-                <td class="attributeLabel">${contextItem.attributeElement?.label}</td>
+                <td class="attributeLabel">${contextItem.attributeElement?.label} </td>
                 <td class="valuedLabel">${contextItem.valueDisplay}</td>
 
 

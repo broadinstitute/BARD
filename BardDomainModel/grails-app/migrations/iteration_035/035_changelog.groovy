@@ -6,7 +6,11 @@ databaseChangeLog = {
         sqlFile(path: "iteration_035/01-remove-new-object-role.sql", stripComments: true)
     }
 
-    changeSet(author: "ycruz", id: "iteration-035/02-update-contextitem-valuedisplay", dbms: "oracle", context: "standard") {
+    changeSet(author: "gwalzer", id: "iteration-035/02-drop-Replaced-By-Id-column-in-Element-table", dbms: "oracle", context: "standard") {
+        dropColumn(columnName: "REPLACED_BY_ID", tableName: "ELEMENT")
+    }
+
+    changeSet(author: "ycruz", id: "iteration-035/03-update-contextitem-valuedisplay", dbms: "oracle", context: "standard") {
         grailsChange {
             change {
                 sql.execute("""BEGIN
@@ -15,7 +19,7 @@ databaseChangeLog = {
                                    """)
             }
         }
-        sqlFile(path: "iteration_035/02-update-contextitem-valuedisplay.sql", stripComments: true, endDelimiter: ";")
+        sqlFile(path: "iteration_035/03-update-contextitem-valuedisplay.sql", stripComments: true, endDelimiter: ";")
     }
 
 }

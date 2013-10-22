@@ -25,7 +25,9 @@ class OntologyItem {
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
-
+    String displayValue(){
+        return ontology.getOntologyName() + " : " + ontology?.getSystemUrl() + this.itemReference
+    }
     static mapping = {
         id(column: 'ONTOLOGY_ITEM_ID', generator: 'sequence', params: [sequence: 'ONTOLOGY_ITEM_ID_SEQ'])
     }
