@@ -2,9 +2,11 @@ package bard.db.experiment
 
 import au.com.bytecode.opencsv.CSVReader
 import bard.db.dictionary.Element
+import bard.db.enums.HierarchyType
+import bard.db.experiment.results.*
+import bard.db.registration.*
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
-import bard.db.registration.AssayContextMeasure
 import bard.db.registration.AttributeType
 import bard.db.registration.ItemService
 import bard.db.registration.PugService
@@ -17,10 +19,6 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
-
-import bard.db.experiment.results.*
-import bard.db.enums.HierarchyType
-import org.apache.commons.lang.StringUtils;
 
 class ResultsService {
 
@@ -194,7 +192,7 @@ class ResultsService {
         def assay = experiment.assay
 
         def assayItems = assay.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }
-        def measureItems = assayItems.findAll { it.assayContext.assayContextMeasures.size() > 0 }
+        def measureItems = assayItems.findAll { it.assayContext.assayContextExperimentMeasures.size() > 0 }
         assayItems.removeAll(measureItems)
 
         return [itemService.getLogicalItems(assayItems), experiment.experimentMeasures as List, itemService.getLogicalItems(measureItems)]
@@ -220,7 +218,7 @@ class ResultsService {
 
         // add all of the measurements
         for (measure in measures) {
-            String name = measure.measure.displayLabel
+            String name = measure.displayLabel
             columns.add(name)
         }
 
@@ -304,7 +302,7 @@ class ResultsService {
             }
         }
 
-        if(!skipExperimentContextItems) {
+        if (!skipExperimentContextItems) {
             Set<String> unusedKeyNames = new HashSet(experimentAnnotations.keySet())
 
             // walk through all the context items on the assay
@@ -431,7 +429,7 @@ class ResultsService {
     Collection<Result> extractResultFromEachRow(ExperimentMeasure measure, Collection<Row> rows, Map<Integer, Collection<Row>> byParent, IdentityHashMap<RawCell, Row> unused, ImportSummary errors, Map<ExperimentMeasure, ItemService.Item> itemsByMeasure) {
         List<Result> results = []
 
-        String label = measure.measure.displayLabel
+        String label = measure.displayLabel
 
         for (row in rows) {
             // change this to a call to find
@@ -555,7 +553,7 @@ class ResultsService {
 
         if (parsed instanceof Cell) {
             Cell cell = parsed
-            Element unit = measure.measure.resultType.unit;
+            Element unit = measure.resultType.unit;
 
             Result result = new Result()
             result.qualifier = cell.qualifier
@@ -563,8 +561,8 @@ class ResultsService {
             result.valueNum = cell.value
             result.valueMin = cell.minValue
             result.valueMax = cell.maxValue
-            result.statsModifier = measure.measure.statsModifier
-            result.resultType = measure.measure.resultType
+            result.statsModifier = measure.statsModifier
+            result.resultType = measure.resultType
             result.replicateNumber = replicate
             result.substanceId = substanceId
             result.dateCreated = new Date()
@@ -659,7 +657,7 @@ class ResultsService {
     Map<ExperimentMeasure, Collection<ItemService.Item>> constructItemsByMeasure(Experiment experiment) {
         Map<ExperimentMeasure, Collection<ItemService.Item>> itemsByMeasure = experiment.experimentMeasures.collectEntries { ExperimentMeasure em ->
             [em,
-                    em.measure.assayContextMeasures.collectMany { AssayContextMeasure acm ->
+                    em.assayContextExperimentMeasures.collectMany { AssayContextExperimentMeasure acm ->
                         itemService.getLogicalItems(acm.assayContext.contextItems)
                     }]
         }
@@ -898,7 +896,7 @@ class ResultsService {
         // this is probably ridiculously slow, but my preference would be allow DB constraints to cascade the deletes, but that isn't in place.  So
         // walk the tree and delete all the objects.
 
-        if(!skipExperimentContextItems) {
+        if (!skipExperimentContextItems) {
             new ArrayList(experiment.experimentContexts).each { ExperimentContext context ->
                 new ArrayList(context.experimentContextItems).each { item ->
                     context.removeFromExperimentContextItems(item)

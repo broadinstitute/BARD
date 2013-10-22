@@ -81,9 +81,9 @@ def merge(def session, List<Assay> assays, String modifiedBy) {
     println("end handleDocuments ")
     session.flush()
 
-    println("start handleMeasure")
-    mergeAssayService.handleMeasure(session,removingAssays, assayWillKeep, modifiedBy)         // associate measure
-    println("end handleMeasure")
+    //println("start handleMeasure")
+    //mergeAssayService.handleMeasure(session,removingAssays, assayWillKeep, modifiedBy)         // associate measure
+    //println("end handleMeasure")
     session.flush()
 
     println("Update assays status to Retired")

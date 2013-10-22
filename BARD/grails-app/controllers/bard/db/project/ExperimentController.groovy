@@ -81,7 +81,8 @@ class ExperimentController {
 
         JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance, false))
 
-        JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance.assay, false))
+        JSON assayMeasuresAsJsonTree = new JSON([])
+            //new JSON(measureTreeService.createMeasureTree(experimentInstance.assay, false))
         boolean editable = canEdit(permissionEvaluator, springSecurityService, experimentInstance)
         boolean isAdmin = SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
         String owner = capPermissionService.getOwner(experimentInstance)
@@ -346,7 +347,8 @@ class ExperimentController {
 
     private Map renderEditFieldsForView(String viewName, Experiment experiment, Assay assay) {
         JSON experimentMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experiment, false))
-        JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTreeWithSelections(assay, experiment, true))
+        JSON assayMeasuresAsJsonTree = new JSON([])
+            //new JSON(measureTreeService.createMeasureTreeWithSelections(assay, experiment, true))
 
         return [view: viewName, model: [experiment: experiment, assay: assay, experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree]]
     }

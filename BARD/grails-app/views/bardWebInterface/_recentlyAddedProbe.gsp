@@ -5,5 +5,5 @@
     </h2>
 
     <p>CID: ${compound.id}</p>
-    <p><img src="http://bard.nih.gov/api/v17.3/compounds/${compound.id}/image?s=200" alt="Structure"/> </p>
+    <p><img src="${grailsApplication.config.ncgc.server.root.url}/compounds/${compound.id}/image?s=200" alt="Structure"/> </p>
 </article>

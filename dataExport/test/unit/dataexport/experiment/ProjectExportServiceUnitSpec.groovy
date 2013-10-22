@@ -107,7 +107,7 @@ class ProjectExportServiceUnitSpec extends Specification {
         where:
         label                         | results                        | numItems | map
         "Minimal"                     | CONTEXT_MINIMAL                | 0        | [contextType: ContextType.UNCLASSIFIED]
-        "Minimal with name"           | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextType: ContextType.UNCLASSIFIED,contextName: 'contextName']
+        "Minimal with name"           | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextType: ContextType.UNCLASSIFIED, contextName: 'contextName']
         "Minimal with group"          | CONTEXT_MINIMAL_WITH_GROUP     | 0        | [contextType: ContextType.BIOLOGY]
         "Minimal with 1 contextItem"  | CONTEXT_MINIMAL_WITH_ONE_ITEM  | 1        | [contextType: ContextType.UNCLASSIFIED]
         "Minimal with 2 contextItems" | CONTEXT_MINIMAL_WITH_TWO_ITEMS | 2        | [contextType: ContextType.UNCLASSIFIED]
@@ -151,7 +151,7 @@ class ProjectExportServiceUnitSpec extends Specification {
         where:
         label                         | results                        | numItems | map
         "Minimal"                     | CONTEXT_MINIMAL                | 0        | [contextType: ContextType.UNCLASSIFIED]
-        "Minimal with name"           | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextType: ContextType.UNCLASSIFIED,contextName: 'contextName']
+        "Minimal with name"           | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextType: ContextType.UNCLASSIFIED, contextName: 'contextName']
         "Minimal with group"          | CONTEXT_MINIMAL_WITH_GROUP     | 0        | [contextType: ContextType.BIOLOGY]
         "Minimal with 1 contextItem"  | CONTEXT_MINIMAL_WITH_ONE_ITEM  | 1        | [contextType: ContextType.UNCLASSIFIED]
         "Minimal with 2 contextItems" | CONTEXT_MINIMAL_WITH_TWO_ITEMS | 2        | [contextType: ContextType.UNCLASSIFIED]
@@ -193,7 +193,7 @@ class ProjectExportServiceUnitSpec extends Specification {
         where:
         label                  | results                        | numItems | map
         "Minimal"              | CONTEXT_MINIMAL                | 0        | [contextType: ContextType.UNCLASSIFIED]
-        "with contextName"     | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextType: ContextType.UNCLASSIFIED,contextName: 'contextName']
+        "with contextName"     | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextType: ContextType.UNCLASSIFIED, contextName: 'contextName']
         "with contextGroup"    | CONTEXT_MINIMAL_WITH_GROUP     | 0        | [contextType: ContextType.BIOLOGY]
         "context with 1 item"  | CONTEXT_MINIMAL_WITH_ONE_ITEM  | 1        | [contextType: ContextType.UNCLASSIFIED]
         "context with 2 items" | CONTEXT_MINIMAL_WITH_TWO_ITEMS | 2        | [contextType: ContextType.UNCLASSIFIED]
@@ -227,6 +227,7 @@ class ProjectExportServiceUnitSpec extends Specification {
         numPrjCtx.times { ProjectContext.build(project: project, contextType: ContextType.UNCLASSIFIED) }
         numPrjExp.times {
             ProjectExperiment pe = ProjectExperiment.build(project: project)
+            pe.experiment.readyForExtraction = ReadyForExtraction.READY
             numPrjExpCtx.times { ProjectExperimentContext.build(projectExperiment: pe, contextType: ContextType.UNCLASSIFIED) }
         }
         numPrjStep.times { ProjectStep.build(previousProjectExperiment: project.projectExperiments.first(), nextProjectExperiment: project.projectExperiments.last()) }
@@ -261,5 +262,33 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         "With 2 experiments 1 Project step" | PROJECT_WITH_TWO_EXPERIMENTS_ONE_PROJECT_STEP | 0         | 0      | 0         | 2         | 0            | 1          | [:]
     }
+
+    void "test generate ProjectExperiment experiment - Not Ready #label"() {
+        given: "A Project"
+        map << [readyForExtraction: READY]   // in this test always setting readyForExtraction to Ready
+        final Project project = Project.build(map)
+        numExtRef.times { ExternalReference.build(project: project) }
+        numDoc.times { ProjectDocument.build(project: project) }
+        numPrjCtx.times { ProjectContext.build(project: project, contextType: ContextType.UNCLASSIFIED) }
+        numPrjExp.times {
+            ProjectExperiment pe = ProjectExperiment.build(project: project)
+            pe.experiment.readyForExtraction = ReadyForExtraction.NOT_READY
+            numPrjExpCtx.times { ProjectExperimentContext.build(projectExperiment: pe, contextType: ContextType.UNCLASSIFIED) }
+        }
+        numPrjStep.times { ProjectStep.build(previousProjectExperiment: project.projectExperiments.first(), nextProjectExperiment: project.projectExperiments.last()) }
+
+        when: "We attempt to generate a Project XML document"
+        this.projectExportService.generateProject(this.markupBuilder, project)
+
+        then: "A valid xml document is generated and is similar to the expected document"
+        String actualXml = this.writer.toString()
+        XmlTestAssertions.assertResultsWithOverrideAttributes(results, actualXml)
+        XmlTestAssertions.validate(projectSchema, actualXml)
+
+        where:
+        label               | results                           | numExtRef | numDoc | numPrjCtx | numPrjExp | numPrjExpCtx | numPrjStep | map
+        "With 1 experiment" | PRJECT_WITH_NO_PROJECT_EXPERIMENT | 0         | 0      | 0         | 1         | 0            | 0          | [:]
+    }
+
 
 }

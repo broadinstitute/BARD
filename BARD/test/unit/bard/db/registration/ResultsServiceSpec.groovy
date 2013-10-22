@@ -22,8 +22,8 @@ import static bard.db.enums.ExpectedValueType.*
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(ServiceUnitTestMixin)
-@Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure])
-@Mock([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure])
+@Build([Assay, AssayContext, AssayContextItem, AssayContextExperimentMeasure, Element, Substance, Experiment, ExperimentMeasure])
+@Mock([Assay, AssayContext, AssayContextItem, AssayContextExperimentMeasure, Element, Substance, Experiment, ExperimentMeasure])
 @TestFor(ResultsService)
 @Unroll
 class ResultsServiceSpec extends Specification {
@@ -44,16 +44,16 @@ class ResultsServiceSpec extends Specification {
         when:
 
         def parentResultType = Element.build(label: "parent")
-        def parentMeasure = Measure.build(resultType: parentResultType)
+        def parentExperimentMeasure = ExperimentMeasure.build(resultType: parentResultType)
         def parentCell = new RawCell(columnName: "parent", value: "1")
 
         def childResultType = Element.build(label: "child")
-        def childMeasure = Measure.build(resultType: childResultType)
+        def childMeasure = ExperimentMeasure.build(resultType: childResultType, parent: parentExperimentMeasure, parentChildRelationship: HierarchyType.CALCULATED_FROM)
         def childCell = new RawCell(columnName: "child", value: "1")
 
-        ExperimentMeasure parentExperimentMeasure = ExperimentMeasure.build(measure: parentMeasure)
-        ExperimentMeasure childExperimentMeasure = ExperimentMeasure.build(parent: parentExperimentMeasure, measure: childMeasure, parentChildRelationship: HierarchyType.CALCULATED_FROM)
-        parentExperimentMeasure.childMeasures.add(childExperimentMeasure)
+//        //ExperimentMeasure parentExperimentMeasure = ExperimentMeasure.build(parent: parentMeasure)
+//        ExperimentMeasure childExperimentMeasure = ExperimentMeasure.build(parent: parentExperimentMeasure, childMeasures: [childMeasure] as Set<ExperimentMeasure>, parentChildRelationship: HierarchyType.CALCULATED_FROM)
+//        parentExperimentMeasure.childMeasures.add(childExperimentMeasure)
 
         List<Row> rows;
         if (onSameLine) {
@@ -67,7 +67,7 @@ class ResultsServiceSpec extends Specification {
 
         def errors = new ImportSummary()
 
-        def results = service.createResults(rows, [parentExperimentMeasure, childExperimentMeasure], errors, [:])
+        def results = service.createResults(rows, [parentExperimentMeasure, childMeasure], errors, [:])
 
         then:
         !errors.hasErrors()
@@ -106,14 +106,16 @@ class ResultsServiceSpec extends Specification {
         Experiment experiment = Experiment.build(assay: assay)
         AssayContext assayContext = AssayContext.build(assay: assay)
         AssayContext measureContext = AssayContext.build(assay: assay)
-        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, valueDisplay: null, valueType: ValueType.NONE, attributeType: AttributeType.Free, attributeElement: Element.build(label: "cell line", expectedValueType: FREE_TEXT))
-        Measure measure = Measure.build(resultType: Element.build(label: "ec50"))
-        AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: measureContext, measure: measure)
-        AssayContextItem measureContextItem = AssayContextItem.build(assayContext: measureContext, attributeType: AttributeType.Free, valueDisplay: null, valueType: ValueType.NONE, attributeElement: Element.build(label: "hill slope",expectedValueType:NUMERIC))
-        measureContext.assayContextMeasures = [assayContextMeasure] as Set
+
+        AssayContextItem.build(assayContext: assayContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "cell line", expectedValueType: FREE_TEXT),valueDisplay: null)
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(resultType: Element.build(label: "ec50"))
+        AssayContextExperimentMeasure assayContextExperimentMeasure = AssayContextExperimentMeasure.build(assayContext: measureContext, experimentMeasure: experimentMeasure)
+        AssayContextItem.build(assayContext: measureContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "hill slope", expectedValueType: NUMERIC),valueDisplay: null)
+        measureContext.assayContextExperimentMeasures = [assayContextExperimentMeasure] as Set
+
         assay.assayContexts = [assayContext, measureContext]
-        assay.measures = [measure] as Set
-        experiment.experimentMeasures = [ExperimentMeasure.build(measure: measure)] as Set
+        //assay.measures = [experimentMeasure] as Set
+        experiment.experimentMeasures = [experimentMeasure] as Set
 
 
         ResultsService.Template template = service.generateMaxSchema(experiment)
@@ -130,8 +132,8 @@ class ResultsServiceSpec extends Specification {
     def createSampleFile() {
         Assay assay = Assay.build()
         Experiment experiment = Experiment.build(assay: assay)
-        Measure inhibitionMeasure = Measure.build()
-        Measure ec50Measure = Measure.build()
+        ExperimentMeasure inhibitionMeasure = ExperimentMeasure.build()
+        ExperimentMeasure ec50Measure = ExperimentMeasure.build()
 
 //        def columns = [new ResultsService.Column("Inhibition", inhibitionMeasure), new ResultsService.Column("EC50", ec50Measure)]
         def constantItems = []
@@ -317,8 +319,7 @@ class ResultsServiceSpec extends Specification {
         when:
 
         def resultType = Element.build(label: "x")
-        def measure = Measure.build(resultType: resultType)
-        def experimentMeasure = ExperimentMeasure.build(measure: measure)
+        def experimentMeasure = ExperimentMeasure.build(resultType: resultType)
         def row = new Row(rowNumber: 1, sid: substance.id, cells: [new RawCell(columnName: "x", value: "5")], replicate: 1)
 
         def errors = new ImportSummary()
@@ -345,8 +346,7 @@ class ResultsServiceSpec extends Specification {
         def attribute = Element.build(label: "item", expectedValueType: NUMERIC)
         def item = this.service.itemService.getLogicalItems([AssayContextItem.build(attributeType: AttributeType.Free, valueType: ValueType.NONE, valueDisplay: null, attributeElement: attribute)])[0]
         def resultType = Element.build(label: "measure")
-        def measure = Measure.build(resultType: resultType)
-        def experimentMeasure = ExperimentMeasure.build(measure: measure)
+        def experimentMeasure = ExperimentMeasure.build(resultType: resultType)
 
         // construct a row of two cells: a measurement and an associated context
         def mCell = new RawCell(columnName: "measure", value: "5")
@@ -395,7 +395,7 @@ class ResultsServiceSpec extends Specification {
         resultContextItem.valueMin == minVal
         resultContextItem.qualifier == expectedQualifier
         resultContextItem.valueDisplay == valueDisplay
-        resultContextItem.extValueId==cellString
+        resultContextItem.extValueId == cellString
 
         where:
         desc            | cellString | expectedValue | expectedQualifier | minVal | maxVal | valueDisplay
@@ -521,8 +521,8 @@ class ResultsServiceSpec extends Specification {
         when:
         def attribute = Element.build(expectedValueType: ELEMENT)
         def context = AssayContext.build()
-        def trumpetItem = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueDisplay: "trumpet", valueElement: Element.build(label:"trumpet"))
-        def tubaItem = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueDisplay: "tuba", valueElement: Element.build(label:"tuba"))
+        def trumpetItem = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueDisplay: "trumpet", valueElement: Element.build(label: "trumpet"))
+        def tubaItem = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueDisplay: "tuba", valueElement: Element.build(label: "tuba"))
         def item = this.service.itemService.getLogicalItems([trumpetItem, tubaItem])[0]
 
         ResultContextItem c0 = service.createResultItem("trumpet", item, errors)
@@ -658,18 +658,15 @@ class ResultsServiceSpec extends Specification {
 
         // a result type is used by two different measures
         // there are two parents, which each have a child.  Both children have the same result type
-        Measure parent1Measure = Measure.build(resultType: Element.build(label: "parent1"))
-        Measure parent2Measure = Measure.build(resultType: Element.build(label: "parent2"))
+        ExperimentMeasure parent1Measure = ExperimentMeasure.build(resultType: Element.build(label: "parent1"))
+        ExperimentMeasure parent2Measure = ExperimentMeasure.build(resultType: Element.build(label: "parent2"))
+
         Element duplicatedResultType = Element.build(label: "childCol")
-        Measure child1Measure = Measure.build(resultType: duplicatedResultType)
-        Measure child2Measure = Measure.build(resultType: duplicatedResultType)
-        ExperimentMeasure parent1ExpMeasure = ExperimentMeasure.build(measure: parent1Measure)
-        ExperimentMeasure parent2ExpMeasure = ExperimentMeasure.build(measure: parent2Measure)
-        ExperimentMeasure.build(measure: child1Measure, parent: parent1ExpMeasure)
-        ExperimentMeasure.build(measure: child2Measure, parent: parent2ExpMeasure)
+        ExperimentMeasure child1Measure = ExperimentMeasure.build(resultType: duplicatedResultType, parent: parent1Measure)
+        ExperimentMeasure child2Measure = ExperimentMeasure.build(resultType: duplicatedResultType, parent: parent2Measure)
 
         when:
-        Collection<Result> results = service.extractResultFromEachRow(parent1ExpMeasure, [makeRow(["parent1": "1", "childCol": "2"])], [:], new IdentityHashMap(), errors, [:])
+        Collection<Result> results = service.extractResultFromEachRow(parent1Measure, [makeRow(["parent1": "1", "childCol": "2"])], [:], new IdentityHashMap(), errors, [:])
 
         then:
         !errors.hasErrors()

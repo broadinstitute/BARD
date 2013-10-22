@@ -10,7 +10,6 @@ import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static bard.db.model.AbstractContextOwner.*
 import static bard.db.registration.Assay.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
@@ -18,8 +17,8 @@ import static test.TestUtils.createString
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@Build([Assay, Element, Measure])
-@Mock([Assay, Element, Measure])
+@Build([Assay, Element])
+@Mock([Assay, Element])
 @Unroll
 class AssayConstraintUnitSpec extends Specification {
     Assay domainInstance
@@ -281,20 +280,20 @@ class AssayConstraintUnitSpec extends Specification {
         'date valid'     | new Date()     | true  | null
     }
 
-    void "test getChildrenSorted by displayLabel case insensitive input:#input expected: #expected"() {
-        when:
-        for (String label in input) {
-            domainInstance.addToMeasures(Measure.build(resultType: Element.build(label: label), assay: domainInstance))
-        }
-
-        then:
-        domainInstance.getRootMeasuresSorted()*.displayLabel == expected
-
-        where:
-        input           | expected
-        ['b', 'a']      | ['a', 'b']
-        ['B', 'a']      | ['a', 'B']
-        ['c', 'B', 'a'] | ['a', 'B', 'c']
-    }
+//    void "test getChildrenSorted by displayLabel case insensitive input:#input expected: #expected"() {
+//        when:
+//        for (String label in input) {
+//            //domainInstance.addToMeasures(Measure.build(resultType: Element.build(label: label), assay: domainInstance))
+//        }
+//
+//        then:
+//        domainInstance.getRootMeasuresSorted()*.displayLabel == expected
+//
+//        where:
+//        input           | expected
+//        ['b', 'a']      | ['a', 'b']
+//        ['B', 'a']      | ['a', 'B']
+//        ['c', 'B', 'a'] | ['a', 'B', 'c']
+//    }
 }
 

@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.guidance.Guidance
 import bard.db.guidance.context.BiologyShouldHaveOneSupportingReferencePerContextRule
 import bard.db.guidance.context.OneBiologyAttributePerContextRule
@@ -21,11 +22,12 @@ class AssayContext extends AbstractContext {
 
 
     List<AssayContextItem> assayContextItems = []
-    Set<AssayContextMeasure> assayContextMeasures = [] as Set
+
+    Set<AssayContextExperimentMeasure> assayContextExperimentMeasures = [] as Set
 
     static belongsTo = [assay: Assay]
 
-    static hasMany = [assayContextItems: AssayContextItem, assayContextMeasures: AssayContextMeasure]
+    static hasMany = [assayContextItems: AssayContextItem,assayContextExperimentMeasures:AssayContextExperimentMeasure]
 
     static mapping = {
         sort("ASSAY_CONTEXT_ID") // default sort order

@@ -34,11 +34,7 @@
 </g:if>
 
 <g:if test="${instance?.id}">
-<g:if test="${editable == 'canedit'}">
-    <p>
-        <g:link action="edit" id="${instance.id}" class="btn">Edit</g:link>
-    </p>
-</g:if>
+
 
 
 <div class="container-fluid">
@@ -102,8 +98,8 @@
                         data-toggle="manual"
                         class="experimentNameY"
                         id="nameId"
-
-                        data-type="text"
+                        data-inputclass="input-xxlarge"
+                        data-type="textarea"
                         data-value="${instance?.experimentName}"
                         data-pk="${instance.id}"
                         data-url="/BARD/experiment/editExperimentName"
@@ -118,7 +114,8 @@
                         class="description"
                         data-toggle="manual"
                         id="descriptionId"
-                        data-type="text"
+                        data-inputclass="input-xxlarge"
+                        data-type="textarea"
                         data-value="${instance.description}"
                         data-pk="${instance.id}"
                         data-url="/BARD/experiment/editDescription"
@@ -237,7 +234,8 @@
 </section>
 <br/>
 <section id="contexts-header">
-    <h3 class="sect">Contexts</h3>
+    <h3 class="sect">Contexts <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
+            class="icon-question-sign"></i></g:link></h3>
 
     <div class="row-fluid">
         <g:render template="../context/show"
@@ -271,7 +269,16 @@
                 </r:script>
 
             </div>
+            <br/>
+            <g:if test="${editable == 'canedit'}">
+                <p>
+                    <g:link action="edit" id="${instance.id}" class="btn">Edit Measures</g:link>
+                </p>
+            </g:if>
+            <br/>
+            <br/>
         </section>
+
         <section id="results-summary-header">
             <h4 class="subsect">Result Summary</h4>
 
@@ -314,6 +321,7 @@
                 </g:else>
 
             </div>
+
         </section>
     </div>
 </section>

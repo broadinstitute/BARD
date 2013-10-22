@@ -63,31 +63,17 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         XmlTestAssertions.assertResults(XmlTestSamples.ASSAY_CONTEXTS, this.writer.toString())
     }
 
-    void "test generate AssayContext with measureRefs"() {
-        given: "Given an Assay Id"
-        Assay assay = Assay.build(capPermissionService: null)
-        AssayContext assayContext = AssayContext.buildWithoutSave(assay: assay, contextName: 'Context for IC50', contextType: ContextType.UNCLASSIFIED)
-        Measure measure = Measure.build(assay: assay, resultType: Element.build(label: 'IC50'))
-        AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(measure: measure, assayContext: assayContext)
 
-        when: "A service call is made to generate measure contexts for that Assay"
-        this.assayExportHelperService.generateAssayContexts(this.markupBuilder, assay.assayContexts)
 
-        then: "An XML is generated that conforms to the expected XML"
-
-        XmlTestAssertions.assertResults(XmlTestSamples.ASSAY_CONTEXT_WITH_MEASURES, this.writer.toString())
-    }
 
     void "test generate Full Assay"() {
         given:
         Element element = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
-        Assay assay = Assay.build(capPermissionService: null)
+        Assay assay = Assay.build(capPermissionService: null, readyForExtraction: ReadyForExtraction.READY)
         AssayContext assayContext = AssayContext.build(assay: assay, contextType: ContextType.UNCLASSIFIED)
-        AssayContextItem.build(assayContext: assayContext, attributeElement: element, valueType: ValueType.FREE_TEXT, valueDisplay: "x")
+        AssayContextItem.build(assayContext: assayContext, attributeElement: element)
         AssayDocument.build(assay: assay)
 
-        Measure measure = Measure.build(assay: assay, resultType: element)
-        AssayContextMeasure.build(measure: measure, assayContext: assayContext)
 
         Panel panel = Panel.build()
         PanelAssay.build(assay: assay, panel: panel)

@@ -95,8 +95,15 @@ class ProjectExportService extends ExportAbstractService {
             if (project.contexts) {
                 generateProjectContexts(markupBuilder, project.contexts)
             }
-            if (project.projectExperiments) {
-                generateProjectExperiments(markupBuilder, project.projectExperiments)
+            final Set<ProjectExperiment> projectExperiments = project.projectExperiments
+            final Set<ProjectExperiment> projectExperimentsReadyForExraction = new HashSet<ProjectExperiment>()
+            for (ProjectExperiment projectExperiment : projectExperiments) {
+                if (projectExperiment.experiment?.readyForExtraction == ReadyForExtraction.READY) {
+                  projectExperimentsReadyForExraction.add(projectExperiment)
+                }
+            }
+            if (projectExperimentsReadyForExraction) {
+                generateProjectExperiments(markupBuilder, projectExperimentsReadyForExraction)
             }
             if (project.projectSteps) {
                 generateProjectSteps(markupBuilder, project.projectSteps)
@@ -292,6 +299,7 @@ class ProjectExportService extends ExportAbstractService {
     protected void generateProjectExperiment(MarkupBuilder markupBuilder, ProjectExperiment projectExperiment) {
         markupBuilder.projectExperiment(projectExperimentId: projectExperiment.id) {
             Experiment experiment = projectExperiment.experiment
+
             experimentRef(label: experiment.experimentName) {
                 Map map = [
                         mapping: 'experiment',

@@ -1,6 +1,7 @@
 package iteration_033
 
 databaseChangeLog = {
+
     // Tables from core shoping-cart plugin
     changeSet(author: "ddurkin (generated)", id: "1376496330012-1", context: "standard") {
         createTable(tableName: "SC_QUANTITY") {
