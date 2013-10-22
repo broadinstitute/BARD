@@ -31,41 +31,59 @@
 %{--The control area at the top of the page is all contained within this header--}%
 <header class="navbar navbar-static-top" id="header">
     <div class="container-fluid">
-        <div class="row-fluid span12" id="downtimeMessage">
-
+        <div class="row-fluid">
+            <div class="span12" id="downtimeMessage"></div>
         </div>
-        <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
-        <g:render template="/layouts/templates/socialMedia"/>
 
-        <nav class="nav-panel">
-            <ul class="nav">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Search</a></li>
-                        <li><a href="#">Work with results</a></li>
-                        <li><a href="#">Submit data</a></li>
-                        <li><a href="#">Use securely</a></li>
-                        <li><a href="#">Create and use plug-ins</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Community</a></li>
-                        <li><a href="#">Report a bug</a></li>
-                        <li><a href="#">Contact us</a></li>
-                    </ul>
-                </li>
-                <li><a href="/BARD/bardWebInterface/navigationPage">Submissions</a></li>
-            </ul>
-            <g:if test="${false}">
-                <ul class="login-nav">
-                    <li><a href="#">Sign up</a></li>
-                    <li><a href="#">Sign in</a></li>
-                </ul>
-            </g:if>
-        </nav>
+        <div class="row-fluid">
+            <div class="span6">
+                <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
+            </div>
+
+            <div class="span6">
+                <div class="row-fluid">
+                    <div class="center-aligned span6">
+                        <g:render template="/layouts/templates/socialMedia"/>
+                    </div>
+
+                    <div class="right-aligned span6">
+                        <g:render template="/layouts/templates/loginStrip"/>
+                    </div>
+                </div>
+
+                <div class="row-fluid">
+                    <nav class="nav-panel span12 right-aligned">
+                        <ul class="nav">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Search</a></li>
+                                    <li><a href="#">Work with results</a></li>
+                                    <li><a href="#">Submit data</a></li>
+                                    <li><a href="#">Use securely</a></li>
+                                    <li><a href="#">Create and use plug-ins</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Community</a></li>
+                                    <li><a href="#">Report a bug</a></li>
+                                    <li><a href="#">Contact us</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="/BARD/bardWebInterface/navigationPage">Submissions</a></li>
+                        </ul>
+                        <g:if test="${false}">
+                            <ul class="login-nav">
+                                <li><a href="#">Sign up</a></li>
+                                <li><a href="#">Sign in</a></li>
+                            </ul>
+                        </g:if>
+                    </nav>
+                </div>
+            </div>
+        </div>
     </div>
 </header>
 
@@ -89,62 +107,64 @@
 
 
 %{--Block to hold the main search textblock--}%
-    <div class="search-panel">
-        <div class="container-fluid">
+<div class="search-panel">
+    <div class="container-fluid">
 
-            <div class="head-holder">
-                <h2>SEARCH BARD</h2>
+        <div class="head-holder">
+            <h2>SEARCH BARD</h2>
 
-                <p>Search assay, project and experiment data or <a
-                        href="#">learn about BARD’s innovative search features.</a></p>
-            </div>
-            <div class="search-block">
+            <p>Search assay, project and experiment data or <a
+                    href="#">learn about BARD’s innovative search features.</a></p>
+        </div>
 
-                <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm"
-                        class="search-form">
-                    <fieldset>
-                        <div class="search-field input-append">
-                            <g:link controller="bardWebInterface" action="jsDrawEditor">
-                            %{--<img src="${resource(dir: 'images', file: 'structureEditIcon.png')}"--}%
-                                <img
-                                %{--src="../images/bardHomepage/struct_icon.png" --}%
-                                        src="${resource(dir: 'images/bardHomepage', file: 'struct_icon.png')}"
+        <div class="search-block">
 
-                                        alt="Draw or paste a structure"
-                                        title="Draw or paste a structure" style="width:74px;float: left;"/>
-                            </g:link>
-                            <img     src="${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}"
-                            %{--src="../images/bardHomepage/ids_icon.png"--}%
-                                     alt="List of IDs for search"
-                                     title="List of IDs for search"  data-toggle="modal" href="#idModalDiv"
-                                     style="width:44px;float: left;"/>
-                            <div class="text-field">
-                                <g:textField id="searchString" name="searchString"
-                                             placeholder="Search by Chemistry, Biology, Structure and More"
-                                             value="${flash.searchString}"/>
-                            </div>
+            <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm"
+                    class="search-form">
+                <fieldset>
+                    <div class="search-field input-append">
+                        <g:link controller="bardWebInterface" action="jsDrawEditor">
+                        %{--<img src="${resource(dir: 'images', file: 'structureEditIcon.png')}"--}%
+                            <img
+                            %{--src="../images/bardHomepage/struct_icon.png" --}%
+                                    src="${resource(dir: 'images/bardHomepage', file: 'struct_icon.png')}"
 
-                            <div class="btn-field">
-                                <button name="search" class="btn btn-primary" id="searchButton"
-                                        type="submit">Search <span
-                                        class="hidden-phone">BARD</span>
-                                </button>
-                            </div>
+                                    alt="Draw or paste a structure"
+                                    title="Draw or paste a structure" style="width:74px;float: left;"/>
+                        </g:link>
+                        <img src="${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}"
+                        %{--src="../images/bardHomepage/ids_icon.png"--}%
+                             alt="List of IDs for search"
+                             title="List of IDs for search" data-toggle="modal" href="#idModalDiv"
+                             style="width:44px;float: left;"/>
+
+                        <div class="text-field">
+                            <g:textField id="searchString" name="searchString"
+                                         placeholder="Search by Chemistry, Biology, Structure and More"
+                                         value="${flash.searchString}"/>
                         </div>
-                    </fieldset>
-                </g:form>
+
+                        <div class="btn-field">
+                            <button name="search" class="btn btn-primary" id="searchButton"
+                                    type="submit">Search <span
+                                    class="hidden-phone">BARD</span>
+                            </button>
+                        </div>
+                    </div>
+                </fieldset>
+            </g:form>
 
 
 
-                <div class="links-holder">
-                    <a href="#">Advanced Search</a>
-                    <a href="#" class="download-link hidden-phone">Download the BARD Desktop Client</a>
-                </div>
-
+            <div class="links-holder">
+                <a href="#">Advanced Search</a>
+                <a href="#" class="download-link hidden-phone">Download the BARD Desktop Client</a>
             </div>
 
         </div>
+
     </div>
+</div>
 
 <div class="modal hide" id="idModalDiv">
     <div class="modal-header">
