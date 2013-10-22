@@ -92,13 +92,6 @@
             </div>
         </div>
     </g:if>
-    <div class="control-group">
-        <label class="control-label" for="valueDescription"><g:message code="contextItem.valueDescription.label"/>:</label>
-        <div class="controls">
-            <g:textArea id="valueDescription" name="valueDescription" class="span11"
-                        value="${instance?.contextItem?.valueElement?.description}" disabled="true"/>
-        </div>
-    </div>
     <div class="control-group ${hasErrors(bean: instance, field: 'valueElementId', 'error')}">
 
         <label class="control-label" for="valueElementId"><g:message
@@ -109,6 +102,13 @@
                            value="${instance?.valueElementId}" disabled="${disabledInput}"/>
 
             <span class="help-inline"><g:fieldError field="valueElementId" bean="${instance}"/></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="valueDescription"><g:message code="contextItem.valueDescription.label"/>:</label>
+        <div class="controls">
+            <g:textArea id="valueDescription" name="valueDescription" class="span11"
+                        value="${instance?.contextItem?.valueElement?.description}" disabled="true"/>
         </div>
     </div>
 </div>

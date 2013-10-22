@@ -93,9 +93,8 @@ modules = {
     }
 
     contextItem {
-        dependsOn 'select2, bootstrapplus, card'
+        dependsOn 'select2, bootstrapplus, card, descriptorSelect2Widget'
         resource url: '/js/cap/contextItem.js'
-        resource url: '/css/contextItem.css'
     }
     createProject {
         resource url: '/js/cap/createProject.js'
@@ -117,6 +116,11 @@ modules = {
         resource url: "js/lib/dc.js"
         resource url: "js/lib/crossfilter.js"
         resource url: "css/dc.css"
+    }
+    descriptorSelect2Widget {
+        dependsOn 'core'
+        resource url: "/js/cap/descriptorSelect2Widget.js"
+        resource url: '/css/select2PopoverOverride.css'
     }
     dictionaryPage {
         dependsOn("tableSorter")
@@ -205,6 +209,7 @@ modules = {
     }
 
     newTerm {
+        dependsOn 'descriptorSelect2Widget'
         resource url: '/css/newterm/newTerms.css'
         resource url: '/js/element/newTerm.js'
 
