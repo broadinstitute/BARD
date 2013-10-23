@@ -12,8 +12,11 @@ import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
 import bard.db.registration.MeasureCaseInsensitiveDisplayLabelComparator
 
-class Experiment extends AbstractContextOwner {
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 
+class Experiment extends AbstractContextOwner {
+    static final DateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy", Locale.US)
     public static final int EXPERIMENT_NAME_MAX_SIZE = 1000
     private static final int MODIFIED_BY_MAX_SIZE = 40
     public static final int DESCRIPTION_MAX_SIZE = 1000
@@ -75,7 +78,7 @@ class Experiment extends AbstractContextOwner {
     }
 
     static constraints = {
-        experimentName(blank: false, maxSize: EXPERIMENT_NAME_MAX_SIZE)
+        experimentName(nullable:false,blank: false, maxSize: EXPERIMENT_NAME_MAX_SIZE)
         experimentStatus(nullable: false)
         readyForExtraction(nullable: false)
         assay()

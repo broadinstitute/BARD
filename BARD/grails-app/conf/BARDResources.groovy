@@ -112,6 +112,9 @@ modules = {
         resource url: '/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'
         resource url: '/js/bootstrap-datetimepicker/css/datetimepicker.css'
     }
+    datePicker {
+        resource url: '/js/bootstrap-datepicker/bootstrap-datepicker.js'
+     }
     dcLibrary {
         resource url: "js/lib/dc.js"
         resource url: "js/lib/crossfilter.js"

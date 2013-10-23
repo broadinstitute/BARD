@@ -1,8 +1,8 @@
-<%@ page import="bard.db.project.*" %>
+<%@ page import="bard.db.command.BardCommand; java.text.SimpleDateFormat; bard.db.project.*" %>
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
-    <r:require modules="core,bootstrap"/>
+    <r:require modules="core,bootstrap,datePicker"/>
     <meta name="layout" content="basic"/>
     <r:external file="css/bootstrap-plus.css"/>
     <title>Create Experiment</title>
@@ -23,22 +23,91 @@
 </g:if>
 
 <g:form action="save">
-    <input type="hidden" name="assayId" value="${assay.id}"/>
+    <input type="hidden" name="assayId" value="${experimentCommand.assayId}"/>
+    <input type="hidden" name="fromCreatePage" value="true"/>
 
-    <p>
-        <g:link controller="assayDefinition" action="show" id="${assay.id}"  class="btn">Cancel</g:link>
-        <input type="submit" class="btn btn-primary" value="Create"/>
 
-    </p>
-    
-    <g:hasErrors bean="${experiment}">
-  	<div class="alert alert-error">
-    	<button type="button" class="close" data-dismiss="alert">×</button>
-     	<g:renderErrors bean="${experiment}"/>
-   	</div>
-	</g:hasErrors>
+    <g:hasErrors bean="${experimentCommand}">
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <g:renderErrors bean="${experimentCommand}"/>
+        </div>
+    </g:hasErrors>
 
-    <g:render template="editFields" model="${[experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree, experiment: experiment, assay: assay]}"/>
+    <g:if test="${experimentCommand.experimentName == null || experimentCommand.errors}">
+
+        <h3>Summary</h3>
+
+        <dl class="dl-horizontal">
+
+            <dt>Name:</dt>
+            <dd>
+                <g:textArea class="input-xxlarge" name="experimentName" required="required"
+                            value="${fieldValue(bean: experimentCommand, field: "experimentName")}"/>
+            </dd>
+            <dt>Owner:</dt>
+            <dd>
+                <g:if test="${BardCommand.userRoles()}">
+                    <g:select name="ownerRole" id="ownerRole" required="required"
+                              from="${BardCommand.userRoles()}"
+                              value="${experimentCommand?.ownerRole}"
+                              optionValue="displayName" optionKey="authority"/>
+                </g:if>
+                <g:else>
+                    You need to be part of a team to create Experiments. Follow this <g:link
+                        controller="assayDefinition" action="teams">link</g:link> to the Teams Page
+                </g:else>
+            </dd>
+            <dt>Description:</dt><dd>
+            <g:textArea class="input-xxlarge" name="description"
+                        value="${fieldValue(bean: experimentCommand, field: "description")}"/>
+        </dd>
+            <dt>Run Date From:</dt><dd>
+
+            <div class="input-append date exp_datetime">
+                <input name="runDateFrom" id="runDateFrom" class="input-large" type="text"
+                       value="${experimentCommand.runDateFrom}" readonly>
+                <span class="add-on"><i class="icon-remove"></i></span>
+                <span class="add-on"><i class="icon-calendar"></i></span>
+                <span class="help-inline"><g:fieldError field="runDateFrom"
+                                                        bean="experimentCommand"/>
+                </span>
+            </input>
+            </div>
+        </dd>
+
+            <dt>Run Date To:</dt><dd>
+            <div class="input-append date exp_datetime">
+                <input name="runDateTo" id="runDateTo" class="input-large" type="text"
+                       value="${experimentCommand.runDateTo}" readonly/>
+                <span class="add-on"><i class="icon-remove"></i></span>
+                <span class="add-on"><i class="icon-calendar"></i></span>
+                <span class="help-inline"><g:fieldError field="runDateTo"
+                                                        bean="experimentCommand"/>
+                </span>
+
+            </div>
+        </dd>
+            <dd>
+                <br/>
+
+                <p>
+                    <g:link controller="assayDefinition" action="show" id="${experimentCommand.assayId}"
+                            class="btn">Cancel</g:link>
+                    <input type="submit" class="btn btn-primary" value="Create"/>
+
+                </p>
+            </dd>
+        </dl>
+
+        <r:script type="text/javascript">
+
+            $('.exp_datetime').datepicker({
+                format: 'mm/dd/yyyy',
+                autoclose: true
+            });
+        </r:script>
+    </g:if>
 </g:form>
 
 </body>
