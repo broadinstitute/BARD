@@ -704,7 +704,6 @@ class PubchemReformatService {
 
     // recreate experiment measures on an already existing experiment/assay
     void recreateMeasures(Experiment experiment, Collection<MappedStub> newMeasures) {
-        Assay assay = experiment.assay
         Map<String, ExperimentMeasure> measureByKey = [:]
         for (measure in experiment.experimentMeasures) {
             measureByKey[makeMeasureKey(measure)] = measure
@@ -739,16 +738,12 @@ class PubchemReformatService {
             experimentMeasure.save(failOnError: true)
 
             createExperimentMeasures(experiment, measureByKey, newMeasure.children, experimentMeasure)
-        }
-    }
 
-    boolean isContextCompatible(ExperimentMeasure existingMeasure, Collection<Element> attributes, AssayContext context) {
-        Set<Element> nonfixedAttributes = context.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }.collect(new HashSet()) { it.attributeElement }
-        if (!nonfixedAttributes.containsAll(attributes)) {
-//            throw new RuntimeException("Context \"${context.contextName}\" for measure ${existingMeasure} did not contain all non-fixed attributes: ${nonfixedAttributes} != ${attributes}")
-            return false;
+            Collection<Element> elementKeys = newMeasure.contextItems.keySet().findAll { newMeasure.contextItems[it].size() > 1 }
+            if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
+                createAssayContextForResultType(experiment.assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, experimentMeasure)
+            }
         }
-        return true;
     }
 
     void createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element, Collection<String>> attributeValues, Collection<Element> freeAttributes, ExperimentMeasure experimentMeasure) {
@@ -788,7 +783,7 @@ class PubchemReformatService {
             AssayContextItem item = new AssayContextItem();
             item.attributeType = AttributeType.Free
             item.attributeElement = freeAttribute
-            context.addToAssayContextItems(item)
+            assayContext.addToAssayContextItems(item)
             item.valueDisplay = item.deriveDisplayValue()
         }
 
