@@ -101,23 +101,24 @@
                    width="100%">
                 <thead>
                 <tr class="molSpreadSheetHead">
-                    <th rowspan="2" class="molSpreadSheetImg">Molecular structure</th>
-                    <th rowspan="2" class="molSpreadSheetHeadData" width="<%=columnWidth%>%">CID</th>
+                    <th rowspan="3" class="molSpreadSheetImg">Molecular structure</th>
+                    <th rowspan="3" class="molSpreadSheetHeadData" width="<%=columnWidth%>%">CID</th>
                     <% int column = 0 %>
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
                         <g:if test="${column == 2}">
-                            <th rowspan="2" class="molSpreadSheetHeadData" id="promiscuitycol"
+                            <th rowspan="3" class="molSpreadSheetHeadData" id="promiscuitycol"
                                 width="<%=columnWidth%>%"><%=molSpreadSheetData.mapColumnsToAssay[column]%><br/>${colHeader}
                             </th>
 
                         </g:if>
 
                         <g:if test="${column == 3}">
-                            <th rowspan="2" class="display molSpreadSheetHeadData"
+                            <th rowspan="3" class="display molSpreadSheetHeadData"
                                 width="<%=columnWidth%>%">${colHeader}</th>
                         </g:if>
                         <% column++ %>
                     </g:each>
+                    <!-- assay identifier line -->
                     <g:each var="assayColumn" in="${molSpreadSheetData.determineResponseTypesPerAssay()}">
                         <th class="molSpreadSheetHeadData" rel="tooltip"
                             colspan="<%=assayColumn."numberOfResultTypes"%>"
@@ -144,6 +145,18 @@
                         </th>
                     </g:each>
                 </tr>
+                <!-- assay identifier line -->
+                <tr class="molSpreadSheetHead">
+                <g:each var="experimentColumn" in="${molSpreadSheetData.determineExperimentPerAssay()}">
+                   <th class="molSpreadSheetHeadData"
+                        colspan="<%=experimentColumn."colspan"%>">
+                    <g:link controller="experiment" action="show" id="${experimentColumn.eid}">
+                        EID=<%=experimentColumn."eid"%>
+                    </g:link>
+                   </th>
+                </g:each>
+                </tr>
+                <!-- result types line -->
                 <tr class="molSpreadSheetHead">
                     <% column = 0 %>
                     <g:set var="columnDictionaryLookup" value="${molSpreadSheetData?.getColumnsDescr()}"/>

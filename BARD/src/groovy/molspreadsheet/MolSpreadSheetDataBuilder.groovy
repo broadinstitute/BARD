@@ -106,7 +106,7 @@ class MolSpreadSheetDataBuilder {
         // finally deal with the data
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData, experimentList, spreadSheetActivityList, this.dataMap)
         molecularSpreadSheetService.fillInTheMissingCellsAndConvertToExpandedMatrix(molSpreadSheetData, this.dataMap)
-        molecularSpreadSheetService.prepareMapOfColumnsToAssay(molSpreadSheetData)
+        molecularSpreadSheetService.prepareMapOfColumnsToAssay(molSpreadSheetData,experimentList)
     }
 }
 

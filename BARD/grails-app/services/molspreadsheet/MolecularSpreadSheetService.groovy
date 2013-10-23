@@ -625,7 +625,7 @@ class MolecularSpreadSheetService {
      *
      * @param molSpreadSheetData
      */
-    protected void prepareMapOfColumnsToAssay(final MolSpreadSheetData molSpreadSheetData) {
+    protected void prepareMapOfColumnsToAssay(final MolSpreadSheetData molSpreadSheetData, List<ExperimentSearch> experimentList) {
         molSpreadSheetData.mapColumnsToAssay = [:]
         int columnIndex = 0
         int assayIndex = 0
@@ -687,6 +687,7 @@ class MolecularSpreadSheetService {
                 }
                 for (String columnSubheadings in listOfColumnSubheadings) {
                     molSpreadSheetData.mapColumnsToAssayName[columnIndex] = molSpreadSheetData.experimentFullNameList[assayIndex].toString()
+                    molSpreadSheetData.mapColumnsToExperimentId[columnIndex] = experimentList[assayIndex].capExptId.toString()
                     molSpreadSheetData.mapColumnsToAssay[columnIndex++] = molSpreadSheetData.experimentNameList[assayIndex].toString()
                 }
                  assayIndex++

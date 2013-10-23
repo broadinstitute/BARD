@@ -14,6 +14,7 @@ class MolSpreadSheetData {
     Map<Long, Integer> rowPointer = [:]
     Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
     Map<Integer, String> mapColumnsToAssay = [:]
+    Map<Integer, String> mapColumnsToExperimentId = [:]
     Map<Integer, String> mapColumnsToAssayName = [:]
     Map<Integer, Boolean> mapColumnsNormalization = [:]
 
@@ -145,6 +146,25 @@ class MolSpreadSheetData {
     }
 
 
+
+     List <LinkedHashMap<String, String>> determineExperimentPerAssay() {
+
+         List <LinkedHashMap<String, Integer>> returnValue = []
+         LinkedHashMap<String, Integer> accumulator = [:]
+         for (element in mapColumnsToExperimentId) {
+             if  (!accumulator.containsKey("${element.value}".toString())) {
+                 accumulator["${element.value}"]  = 1
+             }  else {
+                 accumulator["${element.value}"] = (1+accumulator["${element.value}"])
+             }
+         }
+
+         for (element in accumulator) {
+            returnValue << [eid:"${element.key}",colspan:"${element.value}"]
+         }
+
+         returnValue
+     }
 
 
     List<LinkedHashMap<String, String>> determineResponseTypesPerAssay() {
