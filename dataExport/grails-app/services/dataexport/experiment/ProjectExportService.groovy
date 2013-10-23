@@ -1,6 +1,7 @@
 package dataexport.experiment
 
 import bard.db.dictionary.Element
+import bard.db.enums.ExperimentStatus
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
 
@@ -99,7 +100,10 @@ class ProjectExportService extends ExportAbstractService {
             final Set<ProjectExperiment> projectExperiments = project.projectExperiments
             final Set<ProjectExperiment> projectExperimentsReadyForExraction = new HashSet<ProjectExperiment>()
             for (ProjectExperiment projectExperiment : projectExperiments) {
-                if (projectExperiment.experiment?.readyForExtraction == ReadyForExtraction.READY) {
+
+                if (projectExperiment.experiment?.readyForExtraction == ReadyForExtraction.READY ||
+                        projectExperiment.experiment.experimentStatus == ExperimentStatus.APPROVED ||
+                        projectExperiment.experiment.experimentStatus == ExperimentStatus.RETIRED) {
                   projectExperimentsReadyForExraction.add(projectExperiment)
                 }
             }
