@@ -294,14 +294,14 @@ class XmlTestSamples {
     '''
 
     static final String PROJECT_MINIMAL = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
         </project>
     '''
     static final String PROJECT_WITH_DESCRIPTION = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <description>description</description>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
@@ -309,7 +309,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_ONE_EXTERNAL_REFERENCE = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
@@ -317,7 +317,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_TWO_EXTERNAL_REFERENCES = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
@@ -326,7 +326,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_ONE_DOCUMENT = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
@@ -334,7 +334,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_TWO_DOCUMENTS = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
@@ -343,7 +343,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_WITH_ONE_CONTEXT = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <contexts>
                 <context id='1' displayOrder='0'>
@@ -355,7 +355,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_WITH_TWO_CONTEXT = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <contexts>
                 <context id='1' displayOrder='0'>
@@ -370,7 +370,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_WITH_ONE_CONTEXT_ONE_EXPERIMENT = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <contexts>
                 <context id='1' displayOrder='0'>
@@ -390,7 +390,7 @@ class XmlTestSamples {
     '''
 
     static final String PROJECT_WITH_EXPERIMENT = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <projectExperiments>
                 <projectExperiment projectExperimentId='1'>
@@ -404,14 +404,14 @@ class XmlTestSamples {
         </project>
     '''
 
-    static final String PRJECT_WITH_NO_PROJECT_EXPERIMENT = '''<project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-10-21T13:35:12.365-04:00'>
+    static final String PRJECT_WITH_NO_PROJECT_EXPERIMENT = '''<project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-10-21T13:35:12.365-04:00' status='Draft'>
     <projectName>name</projectName>
   <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
     <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
     </project>
     '''
     static final String PROJECT_WITH_EXPERIMENT_WITH_ONE_CONTEXT = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <projectExperiments>
                 <projectExperiment projectExperimentId='1'>
@@ -430,7 +430,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_WITH_EXPERIMENT_WITH_TWO_CONTEXT = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <projectExperiments>
                 <projectExperiment projectExperimentId='1'>
@@ -452,7 +452,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_WITH_TWO_EXPERIMENTS_ONE_PROJECT_STEP = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <projectExperiments>
                 <projectExperiment projectExperimentId='1'>
