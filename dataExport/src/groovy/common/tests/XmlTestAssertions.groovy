@@ -17,7 +17,7 @@ import javax.xml.validation.Validator
 class XmlTestAssertions {
     public static void assertResults(final String expectedResults, final String generatedResults) {
         XMLUnit.setIgnoreWhitespace(true)
-        Diff xmlDiff = new Diff(expectedResults, generatedResults)
+        Diff xmlDiff = new Diff(expectedResults.trim(), generatedResults.trim())
         if (BooleanUtils.isFalse(xmlDiff.similar())) {
             println("expected: $expectedResults")
             println("actual: $generatedResults")

@@ -1,12 +1,12 @@
 package dataexport.experiment
 
 import bard.db.enums.ContextType
+import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
 import bard.db.experiment.ExperimentMeasure
 import bard.db.registration.ExternalReference
-import bard.db.registration.Measure
 import common.tests.XmlTestAssertions
 import dataexport.registration.MediaTypesDTO
 import exceptions.NotFoundException
@@ -32,8 +32,8 @@ import bard.db.enums.HierarchyType
  * Time: 12:52 PM
  * To change this template use File | Settings | File Templates.
  */ @TestFor(ExperimentExportService)
-@Build([Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExternalReference, Measure])
-@Mock([Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExternalReference, Measure])
+@Build([Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExternalReference, AssayContextExperimentMeasure])
+@Mock([Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExternalReference, AssayContextExperimentMeasure])
 class ExperimentExportServiceUnitSpec extends Specification {
     Writer writer
     MarkupBuilder markupBuilder
@@ -98,13 +98,14 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
         then: "A valid xml measure is generated with the expected measure attributes, result type and entry unit"
         String actualXml = this.writer.toString()
+        println actualXml
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(schemaResource, actualXml)
 
         where:
         label                             | results                                             | mapClosure                                                                                   | numAssayContextMeasureRefs
         "minimal"                         | EXPERIMENT_MEASURE_MINIMAL                          | { [:] }                                                                                      | 0
-        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF                  | { [parent: ExperimentMeasure.build()] }                                                      | 0
+        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF                  | { [parent: ExperimentMeasure.build(),priorityElement: true] }                                                      | 0
         "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP | { [parent: ExperimentMeasure.build(), parentChildRelationship: HierarchyType.SUPPORTED_BY] } | 0
     }
 

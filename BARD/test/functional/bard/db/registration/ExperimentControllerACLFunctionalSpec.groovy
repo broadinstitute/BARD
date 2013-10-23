@@ -60,7 +60,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
             Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role).save(flush: true)
             Experiment experiment = Experiment.build(assay: assay, ownerRole:role).save(flush: true)
 
-            return [id: experiment.id, experimentName: experiment.experimentName, assayName: assay.assayName, assayId: assay.id, roleId: role.id, otherRoleId: otherRole.id]
+            return [id: experiment.id, experimentName: experiment.experimentName, assayName: assay.assayName, assayId: assay.id, authority: role.authority]
         })
         assayIdList.add(experimentData.assayId)
 
@@ -462,7 +462,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         when:
 
         def response = client.post() {
-            urlenc assayId: assayId, ownerRole: experimentData.roleId, experimentName : team ,experimentTree:"[]"
+            urlenc assayId: assayId, ownerRole: experimentData.authority, experimentName : team ,experimentTree:"[]"
         }
 
         then:

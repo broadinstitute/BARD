@@ -3,6 +3,9 @@ package dataexport.registration
 import bard.db.dictionary.Element
 import bard.db.enums.ContextType
 import bard.db.enums.DocumentType
+import bard.db.enums.ExpectedValueType
+import bard.db.enums.ReadyForExtraction
+import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.registration.*
 import common.tests.XmlTestAssertions
 import grails.buildtestdata.TestDataConfigurationHolder
@@ -12,12 +15,10 @@ import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static common.tests.XmlTestSamples.*
-import bard.db.enums.ExpectedValueType
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,8 +27,8 @@ import bard.db.enums.ExpectedValueType
  * Time: 12:52 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, AssayContext, AssayContextItem, AssayContextMeasure, AssayDocument, Element, Measure, Panel,PanelAssay])
-@Mock([Assay, AssayContext, AssayContextItem, AssayContextMeasure, AssayDocument, Element, Measure,Panel,PanelAssay])
+@Build([Assay, AssayContext, AssayContextItem, AssayContextExperimentMeasure, AssayDocument, Element, Panel,PanelAssay])
+@Mock([Assay, AssayContext, AssayContextItem, AssayContextExperimentMeasure, AssayDocument, Element, Panel,PanelAssay])
 @Unroll
 class AssayExportHelperServiceUnitSpec extends Specification {
     Writer writer
@@ -57,7 +58,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         given:
         AssayContext assayContext = AssayContext.build(map)
         numItems.times { AssayContextItem.build(assayContext: assayContext) }
-        numMeasureRefs.times { AssayContextMeasure.build(assayContext: assayContext) }
+//        numMeasureRefs.times { AssayContextMeasure.build(assayContext: assayContext) }
 
         when: "We attempt to generate a measure context in xml"
         this.assayExportHelperService.generateAssayContext(this.markupBuilder, assayContext)
@@ -128,36 +129,18 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         attributes == results
     }
 
-    void "test generate Measure #label"() {
-        given:
-        Measure measure = Measure.build(mapClosure.call())
-        numAssayContextMeasureRefs.times { AssayContextMeasure.build(measure: measure) }
 
-        when: "We attempt to generate a measure in xml"
-        this.assayExportHelperService.generateMeasure(this.markupBuilder, measure)
-        then: "A valid xml measure is generated with the expected measure attributes, result type and entry unit"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
-
-        where:
-        label                   | results                            | mapClosure                                                 | numAssayContextMeasureRefs
-        "minimal"               | MEASURE_MINIMAL                    | { [:] }                                                    | 0
-        "with parentMeasureRef" | MEASURE_WITH_PARENT_MEASURE_REF    | { [parentMeasure: Measure.build()] }                       | 0
-        "with statsModifierRef" | MEASURE_WITH_STATS_MODIFIER_REF    | { [statsModifier: Element.build(label: "statsModifier")] } | 0
-        "with entryUnitRef"     | MEASURE_WITH_ENTRY_UNIT_REF        | { [entryUnit: Element.build(label: "entryUnit")] }         | 0
-        "with assayContextRefs" | MEASURE_WITH_ONE_ASSAY_CONTEXT_REF | { [:] }                                                    | 1
-        "with assayContextRefs" | MEASURE_WITH_TWO_ASSAY_CONTEXT_REF | { [:] }                                                    | 2
-    }
 
     void "test generate Assay with Panels #label"() {
         given:
         String results =  PANELS
         Panel panel1 = Panel.build(name:"name1",description:"description1")
         Panel panel2 = Panel.build(name:"name2",description:"description2")
-        Assay assay = Assay.build()
+        Assay assay = Assay.build(readyForExtraction: ReadyForExtraction.READY)
 
-        PanelAssay panelAssay1 = PanelAssay.build(assay:assay,panel:panel1)
+        PanelAssay.build(assay:assay,panel:panel1)
 
-        PanelAssay panelAssay2 = PanelAssay.build(assay:assay,panel:panel2)
+        PanelAssay.build(assay:assay,panel:panel2)
 
 
         when: "We attempt to generate a panel in xml"
@@ -167,9 +150,30 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
 
     }
+
+    void "test generate Assay with no Panels - Empty Panel Assays because non- of them is ready for extraction"() {
+        given:
+        String results =  PANELS
+        Panel panel1 = Panel.build(name:"name1",description:"description1")
+        Panel panel2 = Panel.build(name:"name2",description:"description2")
+        Assay assay = Assay.build(readyForExtraction: ReadyForExtraction.NOT_READY)
+
+        PanelAssay.build(assay:assay,panel:panel1)
+
+        PanelAssay.build(assay:assay,panel:panel2)
+
+
+        when: "We attempt to generate a panel in xml"
+        this.assayExportHelperService.generatePanels(this.markupBuilder,assay.panelAssays)
+        then: "A valid xml panel is generated with the expected panel attributes"
+        XmlTestAssertions.assertResults("<panels/>", this.writer.toString())
+
+
+
+    }
     void "test generate Panel #label"() {
         given:
-        String results =  PANEL_MEASURE
+        String results =  PANEL
         Panel panel = Panel.build(name:"name",description:"description")
         Assay assay = Assay.build()
         PanelAssay panelAssay = PanelAssay.build(assay:assay,panel:panel)
@@ -180,6 +184,8 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
 
     }
+
+
     void "test generate AssayDocument #label"() {
         given:
         AssayDocument assayDocument = AssayDocument.build(map)

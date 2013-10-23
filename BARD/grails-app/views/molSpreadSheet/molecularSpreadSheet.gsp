@@ -7,6 +7,12 @@
     <meta name="layout" content="basic"/>
     <title>Molecular Spreadsheet</title>
     <r:require modules="molecularSpreadSheet,promiscuity,compoundOptions"/>
+    %{--Fixes the problem where Twitter Bootstrap's popover box was too narrow--}%
+    <style type="text/css">
+    div.tooltip-inner {
+        max-width: 500px;
+    }
+    </style>
 </head>
 
 <body>
@@ -18,10 +24,11 @@
     </div>
 </div>
 
-<div id="molecularSpreadSheet" href="${createLink(controller: 'molSpreadSheet', action: 'molecularSpreadSheet', params: [pid:pid, cid:cid, norefresh:norefresh, transpose:transpose, ChangeNorm:ChangeNorm])}">
- </div>
+<div id="molecularSpreadSheet"
+     href="${createLink(controller: 'molSpreadSheet', action: 'molecularSpreadSheet', params: [pid: pid, cid: cid, norefresh: norefresh, transpose: transpose, ChangeNorm: ChangeNorm])}">
+</div>
 
-<g:render template="spreadsheetColorKey" />
+<g:render template="spreadsheetColorKey"/>
 
 </body>
 </html>

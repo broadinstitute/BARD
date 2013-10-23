@@ -84,7 +84,7 @@ class MergeAssayDefinitionService {
     static List<Long> convertStringToIdList(final String idsAsString) {
         final List<Long> ids = []
 
-        final List<String> idsAsList = idsAsString.trim().split("\\s+") as List<String>
+        final List<String> idsAsList = idsAsString.trim().split("\\W+") as List<String>
 
         idsAsList.each {
             ids << Long.valueOf(it.trim())
@@ -255,11 +255,6 @@ class MergeAssayDefinitionService {
         sessionFactory.currentSession.flush()
 
 
-        println("start handleMeasure")
-
-        mergeAssayService.handleMeasure(sessionFactory.currentSession, assaysToMerge, targetAssay, modifiedBy)         // associate measure
-        println("end handleMeasure")
-        sessionFactory.currentSession.flush()
 
         println("Update assays status to Retired")
         mergeAssayService.updateStatus(assaysToMerge, modifiedBy)         // associate measure

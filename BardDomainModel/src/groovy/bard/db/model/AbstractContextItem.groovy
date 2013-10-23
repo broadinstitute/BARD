@@ -78,7 +78,12 @@ abstract class AbstractContextItem<T extends AbstractContext> {
             case ValueType.ELEMENT:
                 return valueElement.label
             case ValueType.NUMERIC:
-                return [qualifier?.trim(), valueNum, attributeElement.unit?.abbreviation ?: attributeElement.unit?.label].findAll().join(' ')
+                String valueQualifier = qualifier?.trim()
+//                return [qualifier?.trim(), valueNum, attributeElement.unit?.abbreviation ?: attributeElement.unit?.label].findAll().join(' ')
+                if(valueQualifier.equals("="))
+                    return [valueNum, attributeElement.unit?.abbreviation ?: attributeElement.unit?.label].findAll().join(' ')
+                else
+                    return [qualifier?.trim(), valueNum, attributeElement.unit?.abbreviation ?: attributeElement.unit?.label].findAll().join(' ')
             case ValueType.RANGE:
                 return [[valueMin, valueMax].join(' - '), attributeElement.unit?.abbreviation ?: attributeElement.unit?.label].findAll().join(' ')
             case ValueType.NONE:

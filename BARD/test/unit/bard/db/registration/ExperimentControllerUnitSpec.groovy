@@ -466,7 +466,7 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         controller.experimentService = experimentService
         params.experimentTree = "[]"
         ExperimentCommand experimentCommand =
-            new ExperimentCommand(assayId: assay.id, experimentName: "name", description: "desc", ownerRole: role)
+            new ExperimentCommand(assayId: assay.id, experimentName: "name", description: "desc", ownerRole: role.authority)
          experimentCommand.springSecurityService = Mock(SpringSecurityService)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
@@ -476,7 +476,6 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         controller.save(experimentCommand)
 
         then:
-        1 * experimentService.updateMeasures(_, _)
         Experiment.getAll().size() == 1
         def experiment = Experiment.getAll().first()
         assert response.redirectedUrl == "/experiment/show/${experiment.id}"

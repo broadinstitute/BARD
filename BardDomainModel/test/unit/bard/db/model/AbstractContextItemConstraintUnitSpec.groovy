@@ -71,8 +71,8 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
         where:
         desc                            | expectedDisplayValue | attributeElementMap            | instanceMap                    | valueElementMap | qualifier | valueNum | unitElementMap         | valueMin | valueMax | valueDisplay
         'only valueElement'             | 't'                  | [expectedValueType: ELEMENT]   | [valueType: ValueType.ELEMENT] | [label: 't']    | null      | null     | null                   | null     | null     | 'some value'
-        'qualifier and valueNum'        | '= 1.0'              | [expectedValueType: NUMERIC]   | [valueType: ValueType.NUMERIC] | null            | '= '      | 1.0      | null                   | null     | null     | 'some value'
-        'qualifier, valueNum and units' | '= 1.0 abbr'         | [expectedValueType: NUMERIC]   | [valueType: ValueType.NUMERIC] | null            | '= '      | 1.0      | [abbreviation: 'abbr'] | null     | null     | 'some value'
+        'qualifier and valueNum'        | '1.0'              | [expectedValueType: NUMERIC]   | [valueType: ValueType.NUMERIC] | null            | '= '      | 1.0      | null                   | null     | null     | 'some value'
+        'qualifier, valueNum and units' | '1.0 abbr'         | [expectedValueType: NUMERIC]   | [valueType: ValueType.NUMERIC] | null            | '= '      | 1.0      | [abbreviation: 'abbr'] | null     | null     | 'some value'
     }
 
     /**

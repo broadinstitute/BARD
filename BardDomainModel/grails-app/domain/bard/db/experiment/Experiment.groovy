@@ -10,9 +10,13 @@ import bard.db.people.Role
 import bard.db.project.ProjectExperiment
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
+import bard.db.registration.MeasureCaseInsensitiveDisplayLabelComparator
+
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 
 class Experiment extends AbstractContextOwner {
-
+    static final DateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy", Locale.US)
     public static final int EXPERIMENT_NAME_MAX_SIZE = 1000
     private static final int MODIFIED_BY_MAX_SIZE = 40
     public static final int DESCRIPTION_MAX_SIZE = 1000
@@ -50,6 +54,7 @@ class Experiment extends AbstractContextOwner {
 
     static transients = ['experimentContextItems', 'disableUpdateReadyForExtraction']
     Role ownerRole //The team that owns this object. This is used by the ACL to allow edits etc
+
     List<ExperimentContextItem> getExperimentContextItems() {
         Set<ExperimentContextItem> experimentContextItems = new HashSet<ExperimentContextItem>()
         for (ExperimentContext experimentContext : this.experimentContexts) {
@@ -73,7 +78,7 @@ class Experiment extends AbstractContextOwner {
     }
 
     static constraints = {
-        experimentName(blank: false, maxSize: EXPERIMENT_NAME_MAX_SIZE)
+        experimentName(nullable:false,blank: false, maxSize: EXPERIMENT_NAME_MAX_SIZE)
         experimentStatus(nullable: false)
         readyForExtraction(nullable: false)
         assay()
@@ -166,5 +171,16 @@ class Experiment extends AbstractContextOwner {
     Set<ExperimentDocument> getDocuments() {
         this.experimentDocuments
     }
+
+    Collection<ExperimentMeasure> getRootMeasures() {
+        return experimentMeasures.findAll { it.parent == null }
+    }
+    /**
+     * @return a list of Measures without parents sorted by displayLabel case insensitive
+     */
+    List<ExperimentMeasure> getRootMeasuresSorted() {
+        return experimentMeasures.findAll { it.parent == null }.sort(new MeasureCaseInsensitiveDisplayLabelComparator())
+    }
+
 
 }

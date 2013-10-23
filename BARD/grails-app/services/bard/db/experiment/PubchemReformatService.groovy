@@ -9,19 +9,14 @@ import bard.db.enums.ValueType
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
-import bard.db.registration.AssayContextMeasure
 import bard.db.registration.AttributeType
 import bard.db.registration.ExternalReference
-import bard.db.registration.Measure
 import groovy.sql.Sql
 import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.hibernate.classic.Session
-import org.hibernate.jdbc.Work
 
 import java.sql.Connection
 import java.sql.DriverManager
-import java.sql.SQLException
 import java.util.regex.Pattern
 
 /**
@@ -301,8 +296,8 @@ class PubchemReformatService {
     void convertRow(Collection<ExperimentMeasure> measures, Long substanceId, Map<String, String> pubchemRow, ResultMap map, CapCsvWriter writer, Integer parentRow, String parentTid, Long eidToInclude) {
         //println("convertRow: ${measures.collect { it.measure.resultType.label } }, ${parentRow}, ${parentTid}")
         for (expMeasure in measures) {
-            String resultType = expMeasure.measure.resultType.label
-            String statsModifier = expMeasure.measure.statsModifier?.label
+            String resultType = expMeasure.resultType?.label
+            String statsModifier = expMeasure.statsModifier?.label
 
             List rows = map.getValues(pubchemRow, resultType, statsModifier, parentTid, eidToInclude)
 //            println("Rows: ${rows}")
@@ -319,9 +314,9 @@ class PubchemReformatService {
 
         experiment.experimentMeasures.each {
             // add measure name
-            colNames.add(makeLabel(it.measure.resultType.label, it.measure.statsModifier?.label))
+            colNames.add(makeLabel(it.resultType?.label, it.statsModifier?.label))
             // add context items
-            it.measure.assayContextMeasures.each {
+            it.assayContextExperimentMeasures.each {
                 it.assayContext.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }.each {
                     colNames.add(it.attributeElement.label)
                 }
@@ -683,10 +678,10 @@ class PubchemReformatService {
         return measures
     }
 
-    String makeMeasureKey(Measure measure) {
+    String makeMeasureKey(ExperimentMeasure measure) {
         String prefix = ""
-        if (measure.parentMeasure != null) {
-            prefix = makeMeasureKey(measure.parentMeasure)
+        if (measure.parent != null) {
+            prefix = makeMeasureKey(measure.parent)
         }
         return "${prefix}/${measure.resultType?.id},${measure.statsModifier?.id}"
     }
@@ -710,14 +705,14 @@ class PubchemReformatService {
     // recreate experiment measures on an already existing experiment/assay
     void recreateMeasures(Experiment experiment, Collection<MappedStub> newMeasures) {
         Assay assay = experiment.assay
-        Map<String, Measure> measureByKey = [:]
-        for (measure in assay.measures) {
+        Map<String, ExperimentMeasure> measureByKey = [:]
+        for (measure in experiment.experimentMeasures) {
             measureByKey[makeMeasureKey(measure)] = measure
             //println("existing measure: ${measure.resultType.label}")
         }
 
         // first, make sure all of the measures we want exist
-        verifyOrCreateMeasures(newMeasures, measureByKey, assay)
+        verifyOrCreateMeasures(newMeasures, measureByKey, experiment)
 
         ExperimentMeasure.withSession { s -> s.flush() }
 
@@ -733,7 +728,7 @@ class PubchemReformatService {
         createExperimentMeasures(experiment, measureByKey, newMeasures, null)
     }
 
-    private void verifyOrCreateMeasures(Collection<MappedStub> newMeasures, LinkedHashMap<String, Measure> measureByKey, Assay assay) {
+    private void verifyOrCreateMeasures(Collection<MappedStub> newMeasures, LinkedHashMap<String, ExperimentMeasure> measureByKey, Experiment experiment) {
         //println("verifyOrCreate: ${newMeasures.collect { [it.resultType.label, it.statsModifier?.label] } }")
 
         for (newMeasure in newMeasures) {
@@ -743,13 +738,13 @@ class PubchemReformatService {
             Collection<Element> elementKeys = newMeasure.contextItems.keySet().findAll { newMeasure.contextItems[it].size() > 1 }
 
             if (measureByKey.containsKey(newMeasureKey)) {
-                Measure existingMeasure = measureByKey[newMeasureKey]
+                ExperimentMeasure existingMeasure = measureByKey[newMeasureKey]
                 if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
-                    if (existingMeasure.assayContextMeasures.size() == 0) {
+                    if (existingMeasure.assayContextExperimentMeasures.size() == 0) {
                         createAssayContextForResultType(assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, existingMeasure)
                     } else {
                         boolean found = false;
-                        for (acm in existingMeasure.assayContextMeasures) {
+                        for (acm in existingMeasure.assayContextExperimentMeasures) {
                             AssayContext context = acm.assayContext;
                             if (isContextCompatible(existingMeasure, elementKeys + newMeasure.contextItemColumns, context)) {
                                 found = true;
@@ -764,33 +759,33 @@ class PubchemReformatService {
             } else {
                 //println("creating new measure for ${newMeasure.resultType.label}")
                 // create a new measure on this assay
-                Measure measure = new Measure()
-                assay.addToMeasures(measure)
+                ExperimentMeasure measure = new ExperimentMeasure()
+                experiment.addToExperimentMeasures(measure)
                 measure.statsModifier = newMeasure.statsModifier
                 measure.resultType = newMeasure.resultType
 
                 if (newMeasure.parent != null) {
-                    measure.parentMeasure = measureByKey[makeMeasureKey(newMeasure.parent)]
+                    measure.parent = measureByKey[makeMeasureKey(newMeasure.parent)]
                     measure.parentChildRelationship = newMeasure.parentChildRelationship
                 }
 
                 measure.save(failOnError: true)
 
                 if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
-                    createAssayContextForResultType(assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, measure)
+                    createAssayContextForResultType(experiment.assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, measure)
                 }
 
                 measureByKey[newMeasureKey] = measure
             }
 
-            verifyOrCreateMeasures(newMeasure.children, measureByKey, assay)
+            verifyOrCreateMeasures(newMeasure.children, measureByKey, experiment)
         }
     }
 
-    void createExperimentMeasures(Experiment experiment, Map<String, Measure> measureByKey, Collection<MappedStub> newMeasures, ExperimentMeasure parentExperimentMeasure) {
+    void createExperimentMeasures(Experiment experiment, Map<String, ExperimentMeasure> measureByKey, Collection<MappedStub> newMeasures, ExperimentMeasure parentExperimentMeasure) {
         for (newMeasure in newMeasures) {
             ExperimentMeasure experimentMeasure = new ExperimentMeasure(dateCreated: new Date())
-            experimentMeasure.measure = measureByKey[makeMeasureKey(newMeasure)]
+            experimentMeasure = measureByKey[makeMeasureKey(newMeasure)]
             if (parentExperimentMeasure != null) {
                 experimentMeasure.parentChildRelationship = newMeasure.parentChildRelationship
                 parentExperimentMeasure.addToChildMeasures(experimentMeasure)
@@ -804,7 +799,7 @@ class PubchemReformatService {
         }
     }
 
-    boolean isContextCompatible(Measure existingMeasure, Collection<Element> attributes, AssayContext context) {
+    boolean isContextCompatible(ExperimentMeasure existingMeasure, Collection<Element> attributes, AssayContext context) {
         Set<Element> nonfixedAttributes = context.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }.collect(new HashSet()) { it.attributeElement }
         if (!nonfixedAttributes.containsAll(attributes)) {
 //            throw new RuntimeException("Context \"${context.contextName}\" for measure ${existingMeasure} did not contain all non-fixed attributes: ${nonfixedAttributes} != ${attributes}")
@@ -813,10 +808,10 @@ class PubchemReformatService {
         return true;
     }
 
-    void createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element, Collection<String>> attributeValues, Collection<Element> freeAttributes, Measure measure) {
-        AssayContext context = new AssayContext()
-        context.contextName = "annotations for ${measure.resultType.label}";
-        context.contextType = ContextType.EXPERIMENT
+    void createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element, Collection<String>> attributeValues, Collection<Element> freeAttributes, ExperimentMeasure experimentMeasure) {
+        AssayContext assayContext = new AssayContext()
+        assayContext.contextName = "annotations for ${experimentMeasure.resultType.label}";
+        assayContext.contextType = ContextType.EXPERIMENT
 
         for (attribute in attributeKeys) {
             if (attribute.id == SCREENING_CONCENTRATION_ID) {
@@ -831,7 +826,7 @@ class PubchemReformatService {
                 item.valueMax = maxConcentration
                 item.valueDisplay = [item.valueMin, item.valueMax].join(' - ')
 
-                context.addToAssayContextItems(item)
+                assayContext.addToAssayContextItems(item)
             } else {
                 for (value in attributeValues[attribute]) {
                     AssayContextItem item = new AssayContextItem();
@@ -841,7 +836,7 @@ class PubchemReformatService {
 
                     assignValue(item, value)
 
-                    context.addToAssayContextItems(item)
+                    assayContext.addToAssayContextItems(item)
                 }
             }
         }
@@ -854,14 +849,14 @@ class PubchemReformatService {
             item.valueDisplay = item.deriveDisplayValue()
         }
 
-        assay.addToAssayContexts(context)
+        assay.addToAssayContexts(assayContext)
 
-        context.save(failOnError: true)
+        assayContext.save(failOnError: true)
 
-        AssayContextMeasure assayContextMeasure = new AssayContextMeasure()
-        context.addToAssayContextMeasures(assayContextMeasure)
-        measure.addToAssayContextMeasures(assayContextMeasure)
-        assayContextMeasure.save(failOnError: true)
+        AssayContextExperimentMeasure assayContextExperimentMeasure = new AssayContextExperimentMeasure()
+        assayContext.addToAssayContextExperimentMeasures(assayContextExperimentMeasure)
+        experimentMeasure.addToAssayContextExperimentMeasures(assayContextExperimentMeasure)
+        assayContextExperimentMeasure.save(failOnError: true)
     }
 
     public void assignValue(AssayContextItem item, String value) {

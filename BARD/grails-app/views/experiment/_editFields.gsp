@@ -2,79 +2,10 @@
 
 <div class="row-fluid">
 <div id="foo" class="span12">
-<h1>Create Experiment for ADID: ${assay.id}</h1>
+<h1>Edit Experiment Measures for EID: ${experiment.id}</h1>
 
-<h2><g:link controller="assayDefinition" action="show"
-            id="${assay.id}">${assay.name}</g:link></h2>
-<g:if test="${experiment.experimentName == null || experiment.errors}">
-
-    <h3>Summary</h3>
-
-    <dl class="dl-horizontal">
-
-        <dt>Name:</dt>
-        <dd>
-            <input class="input-xxlarge" type="text" name="experimentName"
-                   value="${fieldValue(bean: experiment, field: "experimentName")}"/>
-        </dd>
-        <dt>Owner:</dt>
-        <dd>
-            <g:if test="${bard.db.command.BardCommand.userRoles()}">
-                <g:select name="ownerRole" id="ownerRole" required="required"
-                          from="${BardCommand.userRoles()}"
-                          value="${experiment?.ownerRole}"
-                          optionValue="displayName" optionKey="id"/>
-            </g:if>
-            <g:else>
-                You need to be part of a team to create Experiments. Follow this <g:link controller="assayDefinition" action="teams">link</g:link> to the Teams Page
-            </g:else>
-        </dd>
-        <dt>Hold until Date:</dt>
-        <dd>
-            <input type="text" class="input-large date-selection" id="holdUntilDate" name="holdUntilDate"
-                   placeholder="Click icon to select date"
-                   value="${experiment.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.holdUntilDate) : experiment.holdUntilDate}"/>
-            (No more than 1 year from today)
-        </dd>
-
-        <%--
-        <dt>Description:</dt><dd>
-        <input class="input-xxlarge" type="text" name="description"
-               value="${fieldValue(bean: experiment, field: "description")}"/>
-    </dd>
-
-
-        <dt><g:message code="experiment.experimentStatus.label" default="Status"/>:</dt>
-        <dd>
-            <g:select id="experimentStatus" name='experimentStatus' value="${person?.type?.id}"
-                      from="${bard.db.enums.ExperimentStatus.values()}"
-                      optionValue="id"></g:select>
-        </dd>
-
-
-
-        <dt>Run Date From:</dt><dd>
-        <input type="text" class="input-large date-selection" name="runDateFrom"
-               placeholder="Click icon to select date"
-               value="${experiment.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateFrom) : experiment.runDateFrom}"/>
-    </dd>
-
-        <dt>Run Date To:</dt><dd>
-        <input type="text" class="input-large date-selection" name="runDateTo" placeholder="Click icon to select date"
-               value="${experiment.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateTo) : experiment.runDateTo}"/>
-
-
-    </dd>  --%>
-    </dl>
-
-    <r:script>
-        $('.date-selection').datepicker({
-            format: 'MM/dd/yyyy',
-            showOn: "button",
-            buttonText: '<i class="icon-calendar"></i>'
-        });
-    </r:script>
-</g:if>
+<h2><g:link controller="experiment" action="show"
+            id="${experiment.id}">${experiment.experimentName}</g:link></h2>
 
 <h3>Measures</h3>
 

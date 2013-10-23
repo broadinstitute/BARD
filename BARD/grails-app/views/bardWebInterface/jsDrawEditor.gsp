@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>BARD: Structure Search</title>
+    <script type="text/javascript" src="${request.contextPath}/js/dojo-min/dojoConfig.js"></script>
     <script type="text/javascript" src="${request.contextPath}/js/dojo-min/dojo/dojo.js"></script>
     <script type="text/javascript" src="${request.contextPath}/js/jsDraw/Scilligence.JSDraw2.js"></script>
     <script type="text/javascript" src="${request.contextPath}/js/jsDraw/license.js"></script>

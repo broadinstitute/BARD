@@ -21,6 +21,7 @@ import grails.validation.Validateable
 import groovy.transform.InheritConstructors
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.access.AccessDeniedException
+import org.springframework.validation.Errors
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -44,15 +45,14 @@ class ExperimentController {
         Set<Experiment> uniqueExperiments = new HashSet<Experiment>(experiments)
         [experiments: uniqueExperiments]
     }
-    @Secured(['isAuthenticated()'])
-    def create() {
-        def assay = Assay.get(params.assayId)
-        render renderEditFieldsForView("create", new Experiment(), assay);
-    }
+
+
+
     @Secured(['isAuthenticated()'])
     def edit() {
         def experiment = Experiment.get(params.id)
-        render renderEditFieldsForView("edit", experiment, experiment.assay);
+        JSON experimentMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experiment, false))
+        [experiment: experiment, assay: experiment.assay, experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree]
     }
 
     /**
@@ -81,7 +81,8 @@ class ExperimentController {
 
         JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance, false))
 
-        JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance.assay, false))
+        JSON assayMeasuresAsJsonTree = new JSON([])
+        //new JSON(measureTreeService.createMeasureTree(experimentInstance.assay, false))
         boolean editable = canEdit(permissionEvaluator, springSecurityService, experimentInstance)
         boolean isAdmin = SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
         String owner = capPermissionService.getOwner(experimentInstance)
@@ -92,6 +93,7 @@ class ExperimentController {
                 editable: editable ? 'canedit' : 'cannotedit',
                 isAdmin: isAdmin]
     }
+
     @Secured(['isAuthenticated()'])
     def editHoldUntilDate(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -111,12 +113,12 @@ class ExperimentController {
         } catch (AccessDeniedException ade) {
             log.error(ade)
             render accessDeniedErrorMessage()
-            return
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editRunFromDate(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -136,12 +138,12 @@ class ExperimentController {
         } catch (AccessDeniedException ade) {
             log.error(ade)
             render accessDeniedErrorMessage()
-            return
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editRunToDate(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -161,12 +163,12 @@ class ExperimentController {
         } catch (AccessDeniedException ade) {
             log.error(ade)
             render accessDeniedErrorMessage()
-            return
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editDescription(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -199,6 +201,7 @@ class ExperimentController {
             editErrorMessage()
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -230,6 +233,7 @@ class ExperimentController {
             editErrorMessage()
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editExperimentName(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -283,6 +287,7 @@ class ExperimentController {
             editErrorMessage()
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editContext(Long id, String groupBySection) {
         Experiment instance = Experiment.get(id)
@@ -297,6 +302,19 @@ class ExperimentController {
     }
 
     @Secured(['isAuthenticated()'])
+    def create(ExperimentCommand experimentCommand) {
+        if (experimentCommand.fromCreatePage) { //if we are coming from the create page then there is an error and we display that to users
+            return [experimentCommand: experimentCommand]
+        } else {
+            //if there are errors clear them
+            experimentCommand.clearErrors()
+            return [experimentCommand: experimentCommand]
+        }
+        [experimentCommand: new ExperimentCommand(modifiedBy: springSecurityService.principal?.username)]
+
+    }
+
+    @Secured(['isAuthenticated()'])
     def save(ExperimentCommand experimentCommand) {
         if (!experimentCommand.validate()) {
             create(experimentCommand)
@@ -304,17 +322,13 @@ class ExperimentController {
         }
 
         Experiment experiment = experimentCommand.createNewExperiment()
-        if(!experiment){
-            render renderEditFieldsForView("create", experiment, experimentCommand.assay);
+        if (!experiment) {
+            create(experimentCommand)
             return
         }
-        if (!validateExperiment(experiment)) {
-            render renderEditFieldsForView("create", experiment, experimentCommand.assay);
-        } else {
-            experimentService.updateMeasures(experiment.id, JSON.parse(params.experimentTree))
-            redirect(action: "show", id: experiment.id)
-        }
+       redirect(action: "show", id: experiment.id)
     }
+
     @Secured(['isAuthenticated()'])
     def update() {
         def experiment = Experiment.get(params.id)
@@ -326,11 +340,13 @@ class ExperimentController {
             return
         }
         if (!experiment.save(flush: true)) {
-            render renderEditFieldsForView("edit", experiment, experiment.assay);
+            JSON experimentMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experiment, false))
+            render view: "edit", model: [experiment: experiment, assay: experiment.assay, experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree]
         } else {
             redirect(action: "show", id: experiment.id)
         }
     }
+
     @Secured(['isAuthenticated()'])
     def reloadResults(Long id) {
         String jobKey = asyncResultsService.createJobKey()
@@ -338,50 +354,11 @@ class ExperimentController {
         asyncResultsService.doReloadResultsAsync(id, jobKey, link)
         redirect(action: "viewLoadStatus", params: [jobKey: jobKey, experimentId: id])
     }
+
     @Secured(['isAuthenticated()'])
     def viewLoadStatus(String jobKey, String experimentId) {
         JobStatus status = asyncResultsService.getStatus(jobKey)
         [experimentId: experimentId, status: status]
-    }
-
-    private Map renderEditFieldsForView(String viewName, Experiment experiment, Assay assay) {
-        JSON experimentMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experiment, false))
-        JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTreeWithSelections(assay, experiment, true))
-
-        return [view: viewName, model: [experiment: experiment, assay: assay, experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree]]
-    }
-
-    private boolean validateExperiment(Experiment experiment) {
-        println "Validating Experiment dates"
-
-        Date today = new Date();
-        Calendar cal = Calendar.getInstance()
-        cal.add(Calendar.YEAR, 1)
-        Date oneYearFromToday = cal.getTime()
-        if (experiment.holdUntilDate) {
-            // Checks that the Hold Until Today is before today date
-            if (experiment.holdUntilDate.before(today)) {
-                experiment.errors.reject('experiment.holdUntilDate.incorrectEarlyValue', 'Hold Until Date must be equal or after today')
-            }
-            // Checks that the Hold Until Today date is not more than 1 year from today
-            if (experiment.holdUntilDate.after(oneYearFromToday)) {
-                experiment.errors.reject('experiment.holdUntilDate.incorrecMoreThan1YearFromToday', 'Hold Until Date is more than 1 year from today')
-            }
-        }
-        if (experiment.runDateFrom && experiment.runDateTo) {
-            //Checks that Run Date To is not before Run From Date
-            if (experiment.runDateFrom.after(experiment.runDateTo)) {
-                experiment.errors.reject('experiment.holdUntilDate.incorrecRunDateFrom', 'Run Date To cannot be before Run From Date')
-            }
-        }
-        return !experiment.hasErrors()
-    }
-
-    private def setEditFormParams(Experiment experiment) {
-        experiment.properties["experimentName", "description", "experimentStatus"] = params
-        experiment.holdUntilDate = params.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").parse(params.holdUntilDate) : null
-        experiment.runDateFrom = params.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateFrom) : null
-        experiment.runDateTo = params.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateTo) : null
     }
 }
 @InheritConstructors
@@ -390,32 +367,73 @@ class ExperimentCommand extends BardCommand {
     Long assayId
     String experimentName
     String description
-    Role ownerRole
+    String ownerRole
     Date dateCreated = new Date()
-    String holdUntilDate
     String runDateFrom
     String runDateTo
     SpringSecurityService springSecurityService
-
+    String modifiedBy
+    boolean fromCreatePage = false //If true, we can validate the inputs, otherwise we are coming from some other page and we do not require validations.
+    // Note that the assayId must not be blank regardless of which page you are coming from
     public Assay getAssay() {
         return Assay.get(this.assayId)
     }
 
-    public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['ownerRole','experimentName', 'description', 'dateCreated'].asImmutable()
+    public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['experimentName', 'description', 'dateCreated'].asImmutable()
 
     static constraints = {
-        importFrom(Experiment, exclude: ['assay', 'holdUntilDate','runDateTo', 'runDateFrom', 'readyForExtraction', 'lastUpdated','ownerRole'])
+        importFrom(Experiment, exclude: ['assay', 'holdUntilDate', 'runDateTo', 'runDateFrom', 'readyForExtraction', 'lastUpdated', 'ownerRole', 'experimentStatus'])
         assayId(nullable: false, validator: { value, command, err ->
             if (!Assay.get(value)) {
                 err.rejectValue('assayId', "message.code", "Could not find ADID : ${value}");
             }
         })
-        ownerRole(nullable: false, validator: { value, command, err ->
-            /*We make it required in the command object even though it is optional in the domain.
-         We will make it required in the domain as soon as we are done back populating the data*/
-            //validate that the selected role is in the roles associated with the user
-            if (!BardCommand.isRoleInUsersRoleList(value)) {
-                err.rejectValue('ownerRole', "message.code", "You do not have the privileges to create Assays for this team : ${value.displayName}");
+        ownerRole(nullable: false, blank: false, validator: { value, command, err ->
+            Role role = Role.findByAuthority(value)
+            if (!BardCommand.isRoleInUsersRoleList(role)) {
+                err.rejectValue('ownerRole', "message.code", "You do not have the privileges to create Assays for this team : ${role.displayName}");
+            }
+        })
+        runDateTo(nullable: true, blank: true, validator: { String field, ExperimentCommand instance, Errors errors ->
+            if (field?.trim()) {
+                try {
+                    Date runTo = Experiment.dateFormat.parse(field)
+                    if (instance.runDateFrom) {
+                        final Date runFrom = Experiment.dateFormat.parse(instance.runDateFrom)
+                        //Checks that Run Date To is not before Run From Date
+                        if (runFrom.after(runTo)) {
+                            errors.rejectValue(
+                                    'runDateTo',
+                                    'experiment.holdUntilDate.incorrecRunDateFrom',
+                                    'Run Date To cannot be before Run From Date')
+                        }
+                    }
+                } catch (Exception ee) {
+                    errors.rejectValue(
+                            'runDateTo',
+                            'experimentCommand.date.invalid')
+                }
+            }
+        })
+        runDateFrom(nullable: true, blank: true, validator: { String field, ExperimentCommand instance, Errors errors ->
+            if (field?.trim()) {
+                try {
+                    Date runFrom = Experiment.dateFormat.parse(field)
+                    if (instance.runDateFrom) {
+                        final Date runTo = Experiment.dateFormat.parse(instance.runDateFrom)
+                        //Checks that Run Date To is not before Run From Date
+                        if (runFrom.after(runTo)) {
+                            errors.rejectValue(
+                                    'runDateFrom',
+                                   'experiment.holdUntilDate.incorrecRunDateFrom',
+                                            'Run Date To cannot be before Run From Date')
+                        }
+                    }
+                } catch (Exception ee) {
+                    errors.rejectValue(
+                            'runDateFrom',
+                            'experimentCommand.date.invalid')
+                }
             }
         })
     }
@@ -439,9 +457,9 @@ class ExperimentCommand extends BardCommand {
 
     void copyFromCmdToDomain(Experiment experiment) {
         experiment.modifiedBy = springSecurityService.principal?.username
-        experiment.holdUntilDate = holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").parse(holdUntilDate) : null
-        experiment.runDateFrom = runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").parse(runDateFrom) : null
-        experiment.runDateTo = runDateTo ? new SimpleDateFormat("MM/dd/yyyy").parse(runDateTo) : null
+        experiment.runDateFrom = runDateFrom ? Experiment.dateFormat.parse(runDateFrom) : null
+        experiment.runDateTo = runDateTo ? Experiment.dateFormat.parse(runDateTo) : null
+        experiment.ownerRole = Role.findByAuthority(ownerRole)
         experiment.assay = getAssay()
         for (String field in PROPS_FROM_CMD_TO_DOMAIN) {
             experiment[(field)] = this[(field)]

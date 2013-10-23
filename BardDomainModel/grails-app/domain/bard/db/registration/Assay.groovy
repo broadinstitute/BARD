@@ -49,7 +49,8 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     Date lastUpdated = new Date()
 
     Set<Experiment> experiments = [] as Set<Experiment>
-    Set<Measure> measures = [] as Set<Measure>
+    //TODO: Mark for deletion
+   // Set<Measure> measures = [] as Set<Measure>
     List<AssayContext> assayContexts = [] as List<AssayContext>
     Set<AssayDocument> assayDocuments = [] as Set<AssayDocument>
     Set<PanelAssay> panelAssays = [] as Set
@@ -63,7 +64,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     static belongsTo = [ownerRole: Role]
     static hasMany = [
             experiments: Experiment,
-            measures: Measure,
+            //measures: Measure,
             assayContexts: AssayContext,
             assayDocuments: AssayDocument,
             panelAssays: PanelAssay
@@ -173,16 +174,16 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     }
 
 
-    Collection<Measure> getRootMeasures() {
-        return measures.findAll { it.parentMeasure == null }
-    }
+//    Collection<Measure> getRootMeasures() {
+//        return measures.findAll { it.parentMeasure == null }
+//    }
 
     /**
      * @return a list of Measures without parents sorted by displayLabel case insensitive
      */
-    List<Measure> getRootMeasuresSorted() {
-        return measures.findAll { it.parentMeasure == null }.sort(new MeasureCaseInsensitiveDisplayLabelComparator())
-    }
+//    List<Measure> getRootMeasuresSorted() {
+//        return measures.findAll { it.parentMeasure == null }.sort(new MeasureCaseInsensitiveDisplayLabelComparator())
+//    }
 
     boolean allowsNewExperiments() {
         return (assayStatus != AssayStatus.RETIRED && assayType != AssayType.TEMPLATE)

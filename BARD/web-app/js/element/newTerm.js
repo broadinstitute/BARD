@@ -1,7 +1,34 @@
 $(document).ready(function () {
     createHierarchyTree("#element-hierarchy-tree", "BARD Hierarchy Tree", "BARD", null);
     createHierarchyTree("#dictionary-element-hierarchy-tree", "BARD Dictionary Tree", "BARD Dictionary", "ELEMENT");
+
+
+    var attributeSelect2 = new DescriptorSelect2('#attributeElementId', 'Search for attribute name',{results: []});
+    $.ajax("/BARD/ontologyJSon/getAttributeDescriptors").done(function (data) {
+        attributeSelect2.initSelect2(data);
+    });
+    $("#attributeElementId").on("change", function (e) {
+        // based on the attribute selected only show the appropriate value widgets
+        var selectedData = $("#attributeElementId").select2("data");
+        $('#parentDescription').attr('value', selectedData.description);
+        validateAddToChildren(selectedData);
+
+    }).on("select2-highlight", function(e) {
+            attributeSelect2.updateSelect2DescriptionPopover(e.choice);
+    });
 });
+
+//Validate that the element can be used as a parent-element for a newly proposed element (element.addChildMethod==DIRECT)
+function validateAddToChildren(data) {
+    if ("DIRECT" === data.addChildMethod) {
+        $('#attributeElementErrorField').empty();
+        $('#nextBtn').attr("disabled", false);//enable the NEXT button with a successful selection
+        $('#nextBtn').focus();
+    }
+    else {
+        $('#attributeElementErrorField').html('<p class="text-error"><i class="icon-exclamation-sign"></i> That term is not allowed to be used as a parent</p>');
+    }
+}
 
 function reloadTree() {
     var doNotShowRetired = $("#doNotShowRetiredTerms").is(':checked');

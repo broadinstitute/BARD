@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.experiment.ExperimentMeasure
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -20,7 +21,7 @@ class MeasureCaseInsensitiveDisplayLabelComparatorUnitSpec extends Specification
         SortedSet measures = new TreeSet(new MeasureCaseInsensitiveDisplayLabelComparator())
 
         for (String label in input) {
-            measures << new Measure(resultType: new Element(label: label))
+            measures << new ExperimentMeasure(resultType: new Element(label: label))
         }
 
         then:

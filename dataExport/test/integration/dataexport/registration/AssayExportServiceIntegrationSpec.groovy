@@ -1,10 +1,7 @@
 package dataexport.registration
 
 import bard.db.dictionary.Element
-import bard.db.enums.ContextType
-import bard.db.enums.DocumentType
-import bard.db.enums.ExpectedValueType
-import bard.db.enums.ValueType
+import bard.db.enums.*
 import bard.db.registration.*
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
@@ -100,16 +97,13 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
         given:
         Element element = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
-        Assay assay = Assay.build(capPermissionService: null)
+        Assay assay = Assay.build(capPermissionService: null, readyForExtraction: ReadyForExtraction.READY)
         AssayContext assayContext = AssayContext.build(assay: assay, contextType: ContextType.UNCLASSIFIED)
-        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeElement: element, valueType: ValueType.FREE_TEXT, valueDisplay: "value")
+        AssayContextItem.build(assayContext: assayContext, attributeElement: element, valueType: ValueType.FREE_TEXT, valueDisplay: "valueDisplay")
         AssayDocument.build(assay: assay)
 
-        Measure measure = Measure.build(assay: assay, resultType: element)
-        AssayContextMeasure.build(measure: measure, assayContext: assayContext)
         Panel panel = Panel.build()
         PanelAssay.build(assay: assay, panel: panel)
-
         when:
         this.assayExportService.generateAssay(this.markupBuilder, assay.id)
 

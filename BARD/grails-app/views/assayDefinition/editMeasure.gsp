@@ -220,7 +220,7 @@
     <div id="measure-details-none" class="measure-detail-card">
         <p>To edit, delete or add children to a measure, first click on the name in the tree below to select it.</p>
     </div>
-    <g:each in="${assayInstance.measures}" var="measure">
+    <g:each in="${assayInstance?.measures}" var="measure">
         <div id="measure-details-${measure.id}" class="measure-detail-card" style="display: none">
             <h1>Measure: ${measure.resultType?.label}</h1>
 

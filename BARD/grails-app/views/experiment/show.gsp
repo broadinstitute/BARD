@@ -34,12 +34,6 @@
 </g:if>
 
 <g:if test="${instance?.id}">
-<g:if test="${editable == 'canedit'}">
-    <p>
-        <g:link action="edit" id="${instance.id}" class="btn">Edit</g:link>
-    </p>
-</g:if>
-
 
 <div class="container-fluid">
 <div class="row-fluid">
@@ -102,8 +96,8 @@
                         data-toggle="manual"
                         class="experimentNameY"
                         id="nameId"
-
-                        data-type="text"
+                        data-inputclass="input-xxlarge"
+                        data-type="textarea"
                         data-value="${instance?.experimentName}"
                         data-pk="${instance.id}"
                         data-url="/BARD/experiment/editExperimentName"
@@ -118,7 +112,8 @@
                         class="description"
                         data-toggle="manual"
                         id="descriptionId"
-                        data-type="text"
+                        data-inputclass="input-xxlarge"
+                        data-type="textarea"
                         data-value="${instance.description}"
                         data-pk="${instance.id}"
                         data-url="/BARD/experiment/editDescription"
@@ -141,9 +136,9 @@
                         data-url="/BARD/experiment/editOwnerRole"
                         data-placeholder="Required"
                         data-original-title="Select Owner Role">${instance?.owner}</span>
-                <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="ownerRoleId" title="Click to edit owner role"></a>
+                <a href="#" class="icon-pencil documentPencil ${editable}" data-id="ownerRoleId"
+                   title="Click to edit owner role"></a>
             </dd>
-
             <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
             <dd>
                 <span class="rfddate" id="rfd" data-type="combodate" data-pk="${instance.id}"
@@ -237,7 +232,8 @@
 </section>
 <br/>
 <section id="contexts-header">
-    <h3 class="sect">Contexts</h3>
+    <h3 class="sect">Contexts <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
+            class="icon-question-sign"></i></g:link></h3>
 
     <div class="row-fluid">
         <g:render template="../context/show"
@@ -271,7 +267,22 @@
                 </r:script>
 
             </div>
+            <br/>
+            <g:if test="${editable == 'canedit'}">
+                <p>
+                    <g:if test="${instance.experimentMeasures}">
+                        <g:link action="edit" id="${instance.id}" class="btn">Edit Measures</g:link>
+                    </g:if>
+                    <g:else>
+                        %{--TODO: Add create mesures resource--}%
+                        %{--<g:link action="edit" id="${instance.id}" class="btn">Create Measures</g:link>--}%
+                    </g:else>
+                </p>
+            </g:if>
+            <br/>
+            <br/>
         </section>
+
         <section id="results-summary-header">
             <h4 class="subsect">Result Summary</h4>
 
@@ -314,6 +325,7 @@
                 </g:else>
 
             </div>
+
         </section>
     </div>
 </section>

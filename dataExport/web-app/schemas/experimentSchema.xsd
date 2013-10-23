@@ -70,16 +70,8 @@ Link to Project and Assay</xs:documentation>
             <xs:attribute name="holdUntilDate" type="xs:dateTime" use="optional"/>
             <xs:attribute name="runDateFrom" type="xs:dateTime" use="optional"/>
             <xs:attribute name="runDateTo" type="xs:dateTime" use="optional"/>
-            <xs:attribute name="status" use="required">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="Pending"/>
-                        <xs:enumeration value="Approved"/>
-                        <xs:enumeration value="Rejected"/>
-                        <xs:enumeration value="Revised"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
+            <xs:attribute name="status" type="xs:string" use="required"/>
+              
             <xs:attribute ref="readyForExtraction" use="required"/>
             <xs:attribute ref="lastUpdated"/>
             <xs:attribute ref="modifiedBy"/>
@@ -241,10 +233,46 @@ Link to parent experiment
     </xs:element>
     <xs:element name="experimentMeasure">
         <xs:complexType>
+            <xs:sequence>
+                <xs:element name="resultTypeRef">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element minOccurs="0" ref="link"/>
+                        </xs:sequence>
+                        <xs:attribute name="label" type="xs:string" use="required">
+                            <xs:annotation>
+                                <xs:documentation>label on Element that this references</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element minOccurs="0" name="statsModifierRef">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element minOccurs="0" ref="link"/>
+                        </xs:sequence>
+                        <xs:attribute name="label" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element minOccurs="0" name="assayContextRefs">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="assayContextRef" type="bardID"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element minOccurs="0" name="childMeasureRefs">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="childMeasureRef" type="bardID"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
             <xs:attribute name="experimentMeasureId" type="bardID" use="required"/>
-            <xs:attribute name="measureRef" type="bardID" use="required"/>
             <xs:attribute name="parentExperimentMeasureRef" type="bardID"/>
             <xs:attribute ref="parentChildRelationship"/>
+            <xs:attribute default="false" name="priorityElement" type="xs:boolean" use="optional"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>

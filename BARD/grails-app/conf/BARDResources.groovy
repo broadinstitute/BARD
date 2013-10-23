@@ -93,7 +93,7 @@ modules = {
     }
 
     contextItem {
-        dependsOn 'select2, bootstrapplus, card'
+        dependsOn 'select2, bootstrapplus, card, descriptorSelect2Widget'
         resource url: '/js/cap/contextItem.js'
     }
     createProject {
@@ -112,10 +112,18 @@ modules = {
         resource url: '/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'
         resource url: '/js/bootstrap-datetimepicker/css/datetimepicker.css'
     }
+    datePicker {
+        resource url: '/js/bootstrap-datepicker/bootstrap-datepicker.js'
+     }
     dcLibrary {
         resource url: "js/lib/dc.js"
         resource url: "js/lib/crossfilter.js"
         resource url: "css/dc.css"
+    }
+    descriptorSelect2Widget {
+        dependsOn 'core'
+        resource url: "/js/cap/descriptorSelect2Widget.js"
+        resource url: '/css/select2PopoverOverride.css'
     }
     dictionaryPage {
         dependsOn("tableSorter")
@@ -204,6 +212,7 @@ modules = {
     }
 
     newTerm {
+        dependsOn 'descriptorSelect2Widget'
         resource url: '/css/newterm/newTerms.css'
         resource url: '/js/element/newTerm.js'
 
@@ -246,8 +255,8 @@ modules = {
     }
     select2 {
         dependsOn 'jquery'
-        resource url: "/js/select2-release-3.2/select2.css"
-        resource url: "/js/select2-release-3.2/select2.js"
+        resource url: "/js/select2-3.4.3/select2.css"
+        resource url: "/js/select2-3.4.3/select2.js"
     }
     showProjectAssay {
         dependsOn("cardDisplayCSS")
