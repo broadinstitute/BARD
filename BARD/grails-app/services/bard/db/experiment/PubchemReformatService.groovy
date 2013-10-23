@@ -711,9 +711,6 @@ class PubchemReformatService {
             //println("existing measure: ${measure.resultType.label}")
         }
 
-        // first, make sure all of the measures we want exist
-        verifyOrCreateMeasures(newMeasures, measureByKey, experiment)
-
         ExperimentMeasure.withSession { s -> s.flush() }
 
         // delete all existing experiment measures
@@ -728,69 +725,15 @@ class PubchemReformatService {
         createExperimentMeasures(experiment, measureByKey, newMeasures, null)
     }
 
-    private void verifyOrCreateMeasures(Collection<MappedStub> newMeasures, LinkedHashMap<String, ExperimentMeasure> measureByKey, Experiment experiment) {
-        //println("verifyOrCreate: ${newMeasures.collect { [it.resultType.label, it.statsModifier?.label] } }")
-
-        for (newMeasure in newMeasures) {
-            String newMeasureKey = makeMeasureKey(newMeasure)
-
-            // find the context items which are variable
-            Collection<Element> elementKeys = newMeasure.contextItems.keySet().findAll { newMeasure.contextItems[it].size() > 1 }
-
-            if (measureByKey.containsKey(newMeasureKey)) {
-                ExperimentMeasure existingMeasure = measureByKey[newMeasureKey]
-                if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
-                    if (existingMeasure.assayContextExperimentMeasures.size() == 0) {
-                        createAssayContextForResultType(assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, existingMeasure)
-                    } else {
-                        boolean found = false;
-                        for (acm in existingMeasure.assayContextExperimentMeasures) {
-                            AssayContext context = acm.assayContext;
-                            if (isContextCompatible(existingMeasure, elementKeys + newMeasure.contextItemColumns, context)) {
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (!found) {
-                            throw new RuntimeException("Could not find context that contained ${(elementKeys + newMeasure.contextItemColumns).collect { it.label }} for ${existingMeasure.displayLabel}")
-                        }
-                    }
-                }
-            } else {
-                //println("creating new measure for ${newMeasure.resultType.label}")
-                // create a new measure on this assay
-                ExperimentMeasure measure = new ExperimentMeasure()
-                experiment.addToExperimentMeasures(measure)
-                measure.statsModifier = newMeasure.statsModifier
-                measure.resultType = newMeasure.resultType
-
-                if (newMeasure.parent != null) {
-                    measure.parent = measureByKey[makeMeasureKey(newMeasure.parent)]
-                    measure.parentChildRelationship = newMeasure.parentChildRelationship
-                }
-
-                measure.save(failOnError: true)
-
-                if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
-                    createAssayContextForResultType(experiment.assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, measure)
-                }
-
-                measureByKey[newMeasureKey] = measure
-            }
-
-            verifyOrCreateMeasures(newMeasure.children, measureByKey, experiment)
-        }
-    }
-
     void createExperimentMeasures(Experiment experiment, Map<String, ExperimentMeasure> measureByKey, Collection<MappedStub> newMeasures, ExperimentMeasure parentExperimentMeasure) {
         for (newMeasure in newMeasures) {
             ExperimentMeasure experimentMeasure = new ExperimentMeasure(dateCreated: new Date())
-            experimentMeasure = measureByKey[makeMeasureKey(newMeasure)]
             if (parentExperimentMeasure != null) {
                 experimentMeasure.parentChildRelationship = newMeasure.parentChildRelationship
                 parentExperimentMeasure.addToChildMeasures(experimentMeasure)
             }
-
+            experimentMeasure.resultType = newMeasure.resultType
+            experimentMeasure.statsModifier = newMeasure.statsModifier
             experiment.addToExperimentMeasures(experimentMeasure)
 
             experimentMeasure.save(failOnError: true)
