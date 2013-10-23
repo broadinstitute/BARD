@@ -120,16 +120,7 @@ class ExperimentExportService extends ExportAbstractService {
     }
 
     private String convertStatusToString(ExperimentStatus status) {
-        switch (status) {
-            case ExperimentStatus.APPROVED:
-                return "Approved";
-            case ExperimentStatus.DRAFT:
-                return "Pending";
-            case ExperimentStatus.RETIRED:
-                return "Rejected";
-            default:
-                throw new RuntimeException("invalid status: ${status}")
-        }
+        return status.id
     }
     /**
      *
@@ -140,7 +131,7 @@ class ExperimentExportService extends ExportAbstractService {
         Map<String, String> attributes = [:]
 
         attributes.put("experimentId", experiment.id?.toString())
-        attributes.put('status', convertStatusToString(experiment.experimentStatus))
+        attributes.put('status', experiment.experimentStatus.id)
         attributes.put('readyForExtraction', experiment.readyForExtraction.getId())
         if (experiment.confidenceLevel != null && StringUtils.isNotBlank(experiment.confidenceLevel?.toString())) {
             attributes.put('confidenceLevel', experiment.confidenceLevel.toString())
