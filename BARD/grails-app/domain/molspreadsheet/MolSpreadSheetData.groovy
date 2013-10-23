@@ -160,7 +160,7 @@ class MolSpreadSheetData {
          }
 
          for (element in accumulator) {
-            returnValue << [eid:"${element.key}",colspan:"${element.value}"]
+            returnValue << [eid:"${element.key}",colspan:element.value]
          }
 
          returnValue
