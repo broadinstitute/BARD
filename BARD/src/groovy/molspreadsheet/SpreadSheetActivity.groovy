@@ -20,6 +20,7 @@ class SpreadSheetActivity {
     List<HillCurveValue> hillCurveValueList = []
     List<ActivityConcentration>  activityConcentrationList = []
     List<PriorityElement>  priorityElementList = []
+    static String DEFAULT_DATATYPE = "AC50"
 
     public void activityToSpreadSheetActivity(final Activity activity, final List <MolSpreadSheetColSubHeader> resultTypeNames) {    //List <MolSpreadSheetColSubHeader>
         this.cid = activity.cid
@@ -29,6 +30,23 @@ class SpreadSheetActivity {
         this.addOutCome(activity)
         ResultData resultData = activity.resultData
         readOutsToHillCurveValues(resultData, resultTypeNames)
+    }
+
+
+
+    public void nonPriorityElementToSpreadSheetActivity(final Activity activity, final List <MolSpreadSheetColSubHeader> resultTypeNames){
+        this.cid = activity.cid
+        this.eid = activity.bardExptId
+        this.sid = activity.sid
+        this.addPotency(activity)
+        this.addOutCome(activity)
+        ResultData resultData = activity.resultData
+        if (!resultTypeNames*.columnTitle.contains(DEFAULT_DATATYPE)) {
+            resultTypeNames << new MolSpreadSheetColSubHeader( columnTitle:  DEFAULT_DATATYPE)
+        }
+        ArrayList<ActivityConcentration>  activityConcentrationArrayList = []
+        activityConcentrationArrayList.add(new ActivityConcentration(value:new Double(activity.potency), pubChemDisplayName:  DEFAULT_DATATYPE, qualifier: "", dictElemId: 959))
+//        this.priorityElementList << new PriorityElement(primaryElements: activityConcentrationArrayList)
     }
 
     void addPotency(final Activity activity) {

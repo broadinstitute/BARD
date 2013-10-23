@@ -97,80 +97,98 @@ class MolSpreadSheetCell {
      */
     static List <MolSpreadSheetCell> molSpreadSheetCellListFactory(SpreadSheetActivity spreadSheetActivity) {
         List <MolSpreadSheetCell> molSpreadSheetCellList  = []
-        for (PriorityElement priorityElement in spreadSheetActivity.priorityElementList) {
+        if (spreadSheetActivity.priorityElementList?.size()>0) {
+            for (PriorityElement priorityElement in spreadSheetActivity.priorityElementList) {
+                MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell()
+                molSpreadSheetCell.molSpreadSheetCellType = MolSpreadSheetCellType.numeric
+                molSpreadSheetCell.spreadSheetActivityStorage = new SpreadSheetActivityStorage( eid: spreadSheetActivity.eid,
+                        cid: spreadSheetActivity.cid,
+                        sid: spreadSheetActivity.sid,
+                        activityOutcome: spreadSheetActivity.activityOutcome )
+                int counter = 0
+                molSpreadSheetCell.spreadSheetActivityStorage.responseUnit = priorityElement.responseUnit
+                if (priorityElement.value == "") {       // Not sure this never happens, but let's be prepared in case it does
+                    molSpreadSheetCell.activity = MolSpreadSheetCellActivityOutcome.Unspecified
+                    molSpreadSheetCell.intInternalValue = 0
+                } else {
+                    // Get the units
+                    String identifierString = priorityElement.dictionaryLabel ?: priorityElement.responseUnit ?: " "
+                    // Check for an identifier.  We can ignore "=", since we only care about the identifier the changes something
+                    if (priorityElement.qualifier == ">") {
+                        molSpreadSheetCell.molSpreadSheetCellType = MolSpreadSheetCellType.greaterThanNumeric
+                    } else if (priorityElement.qualifier == "<") {
+                        molSpreadSheetCell.molSpreadSheetCellType = MolSpreadSheetCellType.lessThanNumeric
+                    }
+                    // Check for child elements, and save them if they are available
+                    if (priorityElement.hasChildElements()) {
+                        molSpreadSheetCell.spreadSheetActivityStorage.childElements = priorityElement.childElements
+                    }
+
+                    // Try to pick a value that we can use to identify the units of the displayed value. We will choose from three possibilities
+                    //  in descending order of priority
+                    String activityUnit = ""
+                    if (molSpreadSheetCell.spreadSheetActivityStorage.responseUnit) {
+                        activityUnit = molSpreadSheetCell.spreadSheetActivityStorage.responseUnit
+                    } else if (priorityElement.testConcentrationUnit) {
+                        activityUnit = priorityElement.testConcentrationUnit
+                    } else if (priorityElement.concentrationResponseSeries) {
+                        activityUnit = priorityElement.concentrationResponseSeries.testConcentrationUnit
+                    }
+
+                    // Gather up the curve values if they exist
+                    HillCurveValueHolder hillCurveValueHolder
+                    if (priorityElement.value == null) {
+                        hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: Double.NaN)
+                    } else if (!MolSpreadSheetCellHelper.isNumeric(priorityElement.value)) {
+                        String stringRepresentationOfValue = priorityElement.value as String
+                        hillCurveValueHolder = new HillCurveValueHolder(identifier: "${identifierString} ${stringRepresentationOfValue}", slope: Double.NaN)
+                    } else {
+                        Double value = Double.parseDouble(priorityElement.value) // note from .isNumeric() above that this parse will be successful
+                        molSpreadSheetCell.spreadSheetActivityStorage.dictionaryDescription = priorityElement.getDictionaryDescription() ?: ''
+                        molSpreadSheetCell.spreadSheetActivityStorage.dictionaryLabel = priorityElement.getDictionaryLabel() ?: ''
+                        molSpreadSheetCell.spreadSheetActivityStorage.dictionaryId = priorityElement.getDictElemId() ?: 0
+                        if (priorityElement.concentrationResponseSeries?.curveFitParameters) {
+                            CurveFitParameters curveFitParameters = priorityElement.concentrationResponseSeries.curveFitParameters
+                            hillCurveValueHolder = new HillCurveValueHolder(
+                                    identifier: identifierString,
+                                    s0: curveFitParameters.s0,
+                                    sInf: curveFitParameters.sInf,
+                                    slope: value,
+                                    qualifier: molSpreadSheetCell.molSpreadSheetCellType,
+                                    coef: curveFitParameters.hillCoef,
+                                    conc: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.testConcentration,
+                                    response: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.value,
+                                    xAxisLabel: "Log(Concentration) ${priorityElement.concentrationResponseSeries.testConcentrationUnit?:priorityElement.testConcentrationUnit}",
+                                    yAxisLabel: priorityElement.concentrationResponseSeries?.getYAxisLabel())
+                        } else {
+                            hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: value)
+                        }
+                    }
+                    hillCurveValueHolder.setQualifier(molSpreadSheetCell.molSpreadSheetCellType as MolSpreadSheetCellType)
+                    hillCurveValueHolder.subColumnIndex = 0 //this.spreadSheetActivityStorage.columnNames.indexOf(identifierString) //this field can be removed
+                    molSpreadSheetCell.spreadSheetActivityStorage.setResponseUnit(activityUnit)
+                    molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
+                    molSpreadSheetCell.spreadSheetActivityStorage.qualifier = molSpreadSheetCell.molSpreadSheetCellType
+                    counter++
+
+                }
+                molSpreadSheetCellList << molSpreadSheetCell
+            }
+        } else {
             MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell()
             molSpreadSheetCell.molSpreadSheetCellType = MolSpreadSheetCellType.numeric
             molSpreadSheetCell.spreadSheetActivityStorage = new SpreadSheetActivityStorage( eid: spreadSheetActivity.eid,
-                                                                                            cid: spreadSheetActivity.cid,
-                                                                                            sid: spreadSheetActivity.sid,
-                                                                                            activityOutcome: spreadSheetActivity.activityOutcome )
-            int counter = 0
-            molSpreadSheetCell.spreadSheetActivityStorage.responseUnit = priorityElement.responseUnit
-            if (priorityElement.value == "") {       // Not sure this never happens, but let's be prepared in case it does
-                molSpreadSheetCell.activity = MolSpreadSheetCellActivityOutcome.Unspecified
-                molSpreadSheetCell.intInternalValue = 0
-            } else {
-                // Get the units
-                String identifierString = priorityElement.dictionaryLabel ?: priorityElement.responseUnit ?: " "
-                // Check for an identifier.  We can ignore "=", since we only care about the identifier the changes something
-                if (priorityElement.qualifier == ">") {
-                    molSpreadSheetCell.molSpreadSheetCellType = MolSpreadSheetCellType.greaterThanNumeric
-                } else if (priorityElement.qualifier == "<") {
-                    molSpreadSheetCell.molSpreadSheetCellType = MolSpreadSheetCellType.lessThanNumeric
-                }
-                // Check for child elements, and save them if they are available
-                if (priorityElement.hasChildElements()) {
-                    molSpreadSheetCell.spreadSheetActivityStorage.childElements = priorityElement.childElements
-                }
-
-                // Try to pick a value that we can use to identify the units of the displayed value. We will choose from three possibilities
-                //  in descending order of priority
-                String activityUnit = ""
-                if (molSpreadSheetCell.spreadSheetActivityStorage.responseUnit) {
-                    activityUnit = molSpreadSheetCell.spreadSheetActivityStorage.responseUnit
-                } else if (priorityElement.testConcentrationUnit) {
-                    activityUnit = priorityElement.testConcentrationUnit
-                } else if (priorityElement.concentrationResponseSeries) {
-                    activityUnit = priorityElement.concentrationResponseSeries.testConcentrationUnit
-                }
-
-                // Gather up the curve values if they exist
-                HillCurveValueHolder hillCurveValueHolder
-                if (priorityElement.value == null) {
-                    hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: Double.NaN)
-                } else if (!MolSpreadSheetCellHelper.isNumeric(priorityElement.value)) {
-                    String stringRepresentationOfValue = priorityElement.value as String
-                    hillCurveValueHolder = new HillCurveValueHolder(identifier: "${identifierString} ${stringRepresentationOfValue}", slope: Double.NaN)
-                } else {
-                    Double value = Double.parseDouble(priorityElement.value) // note from .isNumeric() above that this parse will be successful
-                    molSpreadSheetCell.spreadSheetActivityStorage.dictionaryDescription = priorityElement.getDictionaryDescription() ?: ''
-                    molSpreadSheetCell.spreadSheetActivityStorage.dictionaryLabel = priorityElement.getDictionaryLabel() ?: ''
-                    molSpreadSheetCell.spreadSheetActivityStorage.dictionaryId = priorityElement.getDictElemId() ?: 0
-                    if (priorityElement.concentrationResponseSeries?.curveFitParameters) {
-                        CurveFitParameters curveFitParameters = priorityElement.concentrationResponseSeries.curveFitParameters
-                        hillCurveValueHolder = new HillCurveValueHolder(
-                                identifier: identifierString,
-                                s0: curveFitParameters.s0,
-                                sInf: curveFitParameters.sInf,
-                                slope: value,
-                                qualifier: molSpreadSheetCell.molSpreadSheetCellType,
-                                coef: curveFitParameters.hillCoef,
-                                conc: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.testConcentration,
-                                response: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.value,
-                                xAxisLabel: "Log(Concentration) ${priorityElement.concentrationResponseSeries.testConcentrationUnit?:priorityElement.testConcentrationUnit}",
-                                yAxisLabel: priorityElement.concentrationResponseSeries?.getYAxisLabel())
-                    } else {
-                        hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: value)
-                    }
-                }
-                hillCurveValueHolder.setQualifier(molSpreadSheetCell.molSpreadSheetCellType as MolSpreadSheetCellType)
-                hillCurveValueHolder.subColumnIndex = 0 //this.spreadSheetActivityStorage.columnNames.indexOf(identifierString) //this field can be removed
-                molSpreadSheetCell.spreadSheetActivityStorage.setResponseUnit(activityUnit)
-                molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
-                molSpreadSheetCell.spreadSheetActivityStorage.qualifier = molSpreadSheetCell.molSpreadSheetCellType
-                counter++
-
-            }
+                    cid: spreadSheetActivity.cid,
+                    sid: spreadSheetActivity.sid,
+                    activityOutcome: spreadSheetActivity.activityOutcome )
+            molSpreadSheetCell.spreadSheetActivityStorage.potency = spreadSheetActivity.potency
+            molSpreadSheetCell.spreadSheetActivityStorage.responseUnit = 'uM'
+            molSpreadSheetCell.spreadSheetActivityStorage.dictionaryDescription = 'AC50 descrip'
+            molSpreadSheetCell.spreadSheetActivityStorage.dictionaryLabel = 'AC50'
+            molSpreadSheetCell.spreadSheetActivityStorage.dictionaryId = 959
+            HillCurveValueHolder hillCurveValueHolder = new HillCurveValueHolder( slope: new Double( spreadSheetActivity.potency), identifier: "=" )
+            molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList = []
+            molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.add (hillCurveValueHolder)
             molSpreadSheetCellList << molSpreadSheetCell
         }
         return molSpreadSheetCellList

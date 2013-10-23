@@ -194,7 +194,14 @@ class MolecularSpreadSheetService {
                 if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
                     molSpreadSheetData.columnPointer.put(translation, columnCount)
                 }
-                spreadSheetActivityList.add(extractActivitiesFromExperiment(molSpreadSheetData, columnCount, activity))
+
+                if (activity.resultData.priorityElements?.size()>0) {  // documends with  priority elements we know how to handle
+                    spreadSheetActivityList.add(extractActivitiesFromExperiment(molSpreadSheetData, columnCount, activity))
+                } else {     // need to handle documents w/o priority elements too
+                    spreadSheetActivityList.add(constructActivityForNonpriorityElement(molSpreadSheetData, columnCount, activity))
+                }
+
+
             }
             columnCount++
         }
@@ -359,13 +366,20 @@ class MolecularSpreadSheetService {
                 List <MolSpreadSheetCell> molSpreadSheetCellList = MolSpreadSheetCell.molSpreadSheetCellListFactory (spreadSheetActivity)
                 if (dataMap.containsKey(arrayKey)) {
                     // we have multiple values for cell = ${arrayKey}.  If our existing value is null then use the non-null version
-                    if ((dataMap[arrayKey].spreadSheetActivityStorage == null) ||
-                            (dataMap[arrayKey].spreadSheetActivityStorage.hillCurveValueHolderList == null) ||
-                            (dataMap[arrayKey].spreadSheetActivityStorage.hillCurveValueHolderList.size() < 0)) {
-                        dataMap[arrayKey] = molSpreadSheetCellList
-                        // TODO for now we will take the non-null value over the null value. Eventually of course
-                        //  the null values should be exiled from the database, but at least for now I see them sometimes
-                    }
+//                    if ((dataMap[arrayKey].spreadSheetActivityStorage == null) ||
+//                            (dataMap[arrayKey].spreadSheetActivityStorage.hillCurveValueHolderList == null) ||
+//                            (dataMap[arrayKey].spreadSheetActivityStorage.hillCurveValueHolderList.size() < 0)) {
+//                        dataMap[arrayKey] = molSpreadSheetCellList
+//                        // TODO for now we will take the non-null value over the null value. Eventually of course
+//                        //  the null values should be exiled from the database, but at least for now I see them sometimes
+//                    } else {
+                        // as long as the list is not null we add every element into the data map
+                        if ((molSpreadSheetCellList != null) && (molSpreadSheetCellList.size () > 0))  {
+                            for (MolSpreadSheetCell molSpreadSheetCell in molSpreadSheetCellList) {
+                                dataMap[arrayKey].add(molSpreadSheetCell)
+                            }
+                        }
+                    //}
                 } else {
                     dataMap[arrayKey] = molSpreadSheetCellList
                 }
@@ -692,6 +706,19 @@ class MolecularSpreadSheetService {
         spreadSheetActivity.activityToSpreadSheetActivity(experimentValue, molSpreadSheetData.getSubColumnList(START_DYNAMIC_COLUMNS + experimentCount))
         return spreadSheetActivity
     }
+
+
+
+    SpreadSheetActivity constructActivityForNonpriorityElement(MolSpreadSheetData molSpreadSheetData, final Integer experimentCount, final Activity experimentValue) {
+        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.nonPriorityElementToSpreadSheetActivity(experimentValue, molSpreadSheetData.getSubColumnList(START_DYNAMIC_COLUMNS + experimentCount))
+        return spreadSheetActivity
+    }
+
+
+
+
+
     /**
      *
      * @param columnNames

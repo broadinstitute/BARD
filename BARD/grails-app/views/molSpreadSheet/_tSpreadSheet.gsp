@@ -130,6 +130,8 @@
 
                                 <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                                     <g:exptDataCell colCnt="${currentRowCounter}"
+                                                    mssHeaders="${molSpreadSheetData?.mssHeaders}"
+                                                    molSpreadSheetData="${molSpreadSheetData}"
                                                     spreadSheetActivityStorage="${molSpreadSheetData?.findSpreadSheetActivity(rowCnt, currentRowCounter)}"/>
                                 </g:each>
 
