@@ -811,11 +811,11 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             Experiment experimentFrom = Experiment.build().save(flush: true)
             Experiment experimentTo = Experiment.build().save(flush: true)
 
-            final ProjectExperiment projectExperimentFrom = ProjectExperiment.findByProjectAndExperiment(project, experimentFrom) ?:
-                ProjectExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
+            final ProjectSingleExperiment projectExperimentFrom = ProjectSingleExperiment.findByProjectAndExperiment(project, experimentFrom) ?:
+                ProjectSingleExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
 
-            final ProjectExperiment projectExperimentTo = ProjectExperiment.findByProjectAndExperiment(project, experimentTo) ?:
-                ProjectExperiment.build(project: project, experiment: experimentTo, stage: toElement).save(flush: true)
+            final ProjectSingleExperiment projectExperimentTo = ProjectSingleExperiment.findByProjectAndExperiment(project, experimentTo) ?:
+                ProjectSingleExperiment.build(project: project, experiment: experimentTo, stage: toElement).save(flush: true)
 
             return [peFromId: projectExperimentFrom.id, peToId: projectExperimentTo.id, eFromId: experimentFrom.id, eToId: experimentTo.id, projectId: project.id]
         })
@@ -842,11 +842,11 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             Experiment experimentFrom = Experiment.build().save(flush: true)
             Experiment experimentTo = Experiment.build().save(flush: true)
 
-            final ProjectExperiment projectExperimentFrom = ProjectExperiment.findByProjectAndExperiment(project, experimentFrom) ?:
-                ProjectExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
+            final ProjectSingleExperiment projectExperimentFrom = ProjectSingleExperiment.findByProjectAndExperiment(project, experimentFrom) ?:
+                ProjectSingleExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
 
-            final ProjectExperiment projectExperimentTo = ProjectExperiment.findByProjectAndExperiment(project, experimentTo) ?:
-                ProjectExperiment.build(project: project, experiment: experimentTo, stage: toElement).save(flush: true)
+            final ProjectSingleExperiment projectExperimentTo = ProjectSingleExperiment.findByProjectAndExperiment(project, experimentTo) ?:
+                ProjectSingleExperiment.build(project: project, experiment: experimentTo, stage: toElement).save(flush: true)
 
             final ProjectStep projectStep = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(projectExperimentFrom, projectExperimentTo) ?:
                 ProjectStep.build(previousProjectExperiment: projectExperimentFrom, nextProjectExperiment: projectExperimentTo).save(flush: true)

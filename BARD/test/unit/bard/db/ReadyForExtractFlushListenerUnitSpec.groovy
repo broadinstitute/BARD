@@ -19,9 +19,9 @@ import spock.lang.Unroll
  * Time: 11:17 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Element, ElementHierarchy, Project, ProjectContext, ProjectContextItem, ProjectDocument, ExternalReference, ExternalSystem, ProjectExperiment, ProjectExperimentContext, ProjectExperimentContextItem, ProjectStep,
+@Build([Element, ElementHierarchy, Project, ProjectContext, ProjectContextItem, ProjectDocument, ExternalReference, ExternalSystem, ProjectSingleExperiment, ProjectExperimentContext, ProjectExperimentContextItem, ProjectStep,
 Experiment, ElementHierarchy, Ontology, OntologyItem, Assay, AssayContext, AssayContextExperimentMeasure, AssayDocument, AssayContextItem, Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExperimentFile])
-@Mock([Element, ElementHierarchy, Project, ProjectContext, ProjectContextItem, ProjectDocument, ExternalReference, ExternalSystem, ProjectExperiment, ProjectExperimentContext, ProjectExperimentContextItem, ProjectStep,
+@Mock([Element, ElementHierarchy, Project, ProjectContext, ProjectContextItem, ProjectDocument, ExternalReference, ExternalSystem, ProjectSingleExperiment, ProjectExperimentContext, ProjectExperimentContextItem, ProjectStep,
 Experiment, ElementHierarchy, Ontology, OntologyItem, Assay, AssayContext, AssayContextExperimentMeasure, AssayDocument, AssayContextItem, Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExperimentFile])
 @Unroll
 class ReadyForExtractFlushListenerUnitSpec extends Specification {
@@ -108,14 +108,14 @@ class ReadyForExtractFlushListenerUnitSpec extends Specification {
         "ProjectDocument"              | { project -> ProjectDocument.build(project: project) }
         "ExternalReference"            | { project -> ExternalReference.build(project: project) }
         "ExternalSystem"               | { project -> ExternalSystem.build(externalReferences: [ExternalReference.build(project: project)]) }
-        "ProjectExperiment"            | { project -> ProjectExperiment.build(project: project) }
-        "ProjectExperimentContext"     | { project -> ProjectExperimentContext.build(projectExperiment: ProjectExperiment.build(project: project)) }
-        "ProjectExperimentContextItem" | { project -> ProjectExperimentContextItem.build(context: ProjectExperimentContext.build(projectExperiment: ProjectExperiment.build(project: project))) }
-        "ProjectStep next"             | { project -> buildStep(ProjectExperiment.build(project: project), ProjectExperiment.build(project: project)) }
-        "ProjectStep prev"             | { project -> buildStep(ProjectExperiment.build(project: project), ProjectExperiment.build(project: project)) }
+        "ProjectSingleExperiment"            | { project -> ProjectSingleExperiment.build(project: project) }
+        "ProjectExperimentContext"     | { project -> ProjectExperimentContext.build(projectExperiment: ProjectSingleExperiment.build(project: project)) }
+        "ProjectExperimentContextItem" | { project -> ProjectExperimentContextItem.build(context: ProjectExperimentContext.build(projectExperiment: ProjectSingleExperiment.build(project: project))) }
+        "ProjectStep next"             | { project -> buildStep(ProjectSingleExperiment.build(project: project), ProjectSingleExperiment.build(project: project)) }
+        "ProjectStep prev"             | { project -> buildStep(ProjectSingleExperiment.build(project: project), ProjectSingleExperiment.build(project: project)) }
     }
 
-    ProjectStep buildStep(ProjectExperiment next, ProjectExperiment prev) {
+    ProjectStep buildStep(ProjectSingleExperiment next, ProjectSingleExperiment prev) {
         ProjectStep step = ProjectStep.build()
         step.nextProjectExperiment = next
         step.previousProjectExperiment = prev

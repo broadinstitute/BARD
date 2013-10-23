@@ -67,7 +67,7 @@ class ProjectService {
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void removeExperimentFromProject(Experiment experiment, Long id) {
         Project project = Project.findById(id)
-        def projectExperiment = ProjectExperiment.findByExperimentAndProject(experiment, project)
+        def projectExperiment = ProjectSingleExperiment.findByExperimentAndProject(experiment, project)
         if (!projectExperiment) throw new UserFixableException("Can not find association between experiment " + experiment.id + " and project " + project.id)
 
         deleteProjectStepsByProjectExperiment(projectExperiment)
@@ -160,7 +160,7 @@ class ProjectService {
         if (isExperimentAssociatedWithProject(experiment, project))
             throw new UserFixableException("Experiement " + experiment.id + " is already associated with Project " + project.id)
 
-        ProjectExperiment pe = new ProjectExperiment(experiment: experiment, project: project, stage: stage)
+        ProjectSingleExperiment pe = new ProjectSingleExperiment(experiment: experiment, project: project, stage: stage)
         project.addToProjectExperiments(pe)
         experiment.addToProjectExperiments(pe)
         pe.save()

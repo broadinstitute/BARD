@@ -1,5 +1,7 @@
 package bard.db.project
 
+import spock.lang.IgnoreRest
+
 import static org.junit.Assert.*
 
 import grails.test.mixin.*
@@ -21,8 +23,8 @@ import bard.db.registration.ExternalReference
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(ProjectExperimentRenderService)
-@Build([Project, ProjectExperiment, ProjectStep, Experiment, Assay, Element, ExternalReference])
-@Mock([Project, ProjectExperiment, ProjectStep, Experiment, Assay, Element, ExternalReference])
+@Build([Project, ProjectExperiment, ProjectSingleExperiment, ProjectStep, Experiment, Assay, Element, ExternalReference])
+@Mock([Project, ProjectExperiment, ProjectSingleExperiment, ProjectStep, Experiment, Assay, Element, ExternalReference])
 @Unroll
 class ProjectExperimentRenderServiceUnitSpec extends Specification {
     ProjectExperimentRenderService renderService = new ProjectExperimentRenderService()
@@ -34,10 +36,10 @@ class ProjectExperimentRenderServiceUnitSpec extends Specification {
         Experiment e3 = Experiment.build(id: 3)
         Experiment e4 = Experiment.build(id: 4)
         Project p = Project.build(id: 1)
-        ProjectExperiment pe1 = ProjectExperiment.build(project: p, experiment: e1)
-        ProjectExperiment pe2 = ProjectExperiment.build(project: p, experiment: e2)
-        ProjectExperiment pe3 = ProjectExperiment.build(project: p, experiment: e3)
-        ProjectExperiment pe4 = ProjectExperiment.build(project: p, experiment: e4)
+        ProjectSingleExperiment pe1 = ProjectSingleExperiment.build(project: p, experiment: e1)
+        ProjectSingleExperiment pe2 = ProjectSingleExperiment.build(project: p, experiment: e2)
+        ProjectSingleExperiment pe3 = ProjectSingleExperiment.build(project: p, experiment: e3)
+        ProjectSingleExperiment pe4 = ProjectSingleExperiment.build(project: p, experiment: e4)
         ProjectStep ps12 = ProjectStep.build(previousProjectExperiment: pe1, nextProjectExperiment: pe2)
         ProjectStep ps13 = ProjectStep.build(previousProjectExperiment: pe1, nextProjectExperiment: pe3)
 
@@ -71,7 +73,7 @@ class ProjectExperimentRenderServiceUnitSpec extends Specification {
     void "test isIsolatedNode #desc"() {
         given: "an "
 
-        ProjectExperiment pe = ProjectExperiment.build(followingProjectSteps: createProjectSteps(numberOfFollowingSteps),
+        ProjectSingleExperiment pe = ProjectSingleExperiment.build(followingProjectSteps: createProjectSteps(numberOfFollowingSteps),
                 precedingProjectSteps: createProjectSteps(numberOfPrecedingSteps))
         when:
         def result = renderService.isIsolatedNode(pe)
@@ -91,7 +93,7 @@ class ProjectExperimentRenderServiceUnitSpec extends Specification {
 
         given: "an "
 
-        ProjectExperiment pe = ProjectExperiment.build(id: 1, experiment: Experiment.build(id: 2, experimentName: "experimentName", assay: Assay.build(id: 3)),
+        ProjectSingleExperiment pe = ProjectSingleExperiment.build(id: 1, experiment: Experiment.build(id: 2, experimentName: "experimentName", assay: Assay.build(id: 3)),
                 followingProjectSteps: createProjectSteps(0),
                 precedingProjectSteps: createProjectSteps(0),
                 stage: Element.build(label: "stageLabel")
@@ -129,7 +131,7 @@ class ProjectExperimentRenderServiceUnitSpec extends Specification {
     void "test constructEdges #desc"() {
         given: "an "
 
-        ProjectExperiment pe = ProjectExperiment.build(followingProjectSteps: createProjectSteps(numberOfFollowingSteps),
+        ProjectSingleExperiment pe = ProjectSingleExperiment.build(followingProjectSteps: createProjectSteps(numberOfFollowingSteps),
                 precedingProjectSteps: createProjectSteps(numberOfPrecedingSteps))
         List<Long> processingQ = []
         when:

@@ -410,7 +410,7 @@ class ProjectController {
     def updateProjectStage(InlineEditableCommand inlineEditableCommand) {
         //pass in the project experiment
         try {
-            ProjectExperiment projectExperiment = ProjectExperiment.findById(inlineEditableCommand.pk)
+            ProjectSingleExperiment projectExperiment = ProjectSingleExperiment.findById(inlineEditableCommand.pk)
 
             //x-editable will not send a new value only when the original is different from the selected
             //but we still add this piece of defensive code anyway just so it still works if someone hacks the URL

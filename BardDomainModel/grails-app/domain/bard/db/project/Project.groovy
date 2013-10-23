@@ -139,14 +139,10 @@ class Project extends AbstractContextOwner implements GuidanceAware {
         }
     }
 
-
-
     String getOwner() {
         final String objectOwner = this.ownerRole?.displayName
         return objectOwner
     }
-
-
 
     @Override
     List<Guidance> getGuidance() {

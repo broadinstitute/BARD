@@ -146,4 +146,18 @@ databaseChangeLog = {
         }
         sqlFile(path: "iteration_035/05-delete-measure-and-references.sql", stripComments: true)
     }
+
+    changeSet(author: "pmontgom", id: "iteration-035/06-create-exp-panel", dbms: "oracle", context: "standard") {
+        grailsChange {
+            change {
+                sql.execute("""BEGIN
+                               bard_context.set_username('pmontgom');
+                               END;
+                               """)
+            }
+        }
+        sqlFile(path: "iteration_035/06-create-exp-panel.sql", stripComments: true)
+   }
+
+
 }

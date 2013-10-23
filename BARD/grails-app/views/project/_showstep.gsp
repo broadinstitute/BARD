@@ -67,29 +67,44 @@
             <br/>
             <br/>
 
-            <strong>Experiment ID:</strong>
-            <a href='/BARD/experiment/show/{{selected.eid}}'>{{selected.eid}}</a>
-            <g:if test="${editable == 'canedit'}">
-                <a href="#" onclick="deleteItem({{selected.eid}}, ${instanceId});return false;"
-                   style="font-family:arial;color:red;font-size:10px;"><i
-                        class="icon-trash"></i>Remove from Project</a>
-            </g:if>
-            <br/>
-            <br/>
+            {{#if selected.eid}}
+                <strong>Experiment ID:</strong>
+                <a href='/BARD/experiment/show/{{selected.eid}}'>{{selected.eid}}</a>
+                <g:if test="${editable == 'canedit'}">
+                    <a href="#" onclick="deleteItem({{selected.eid}}, ${instanceId});return false;"
+                       style="font-family:arial;color:red;font-size:10px;"><i
+                            class="icon-trash"></i>Remove from Project</a>
+                </g:if>
+                <br/>
+                <br/>
 
-            <strong>Experiment Name:</strong>
+                <strong>Experiment Name:</strong>
 
-            <div>{{selected.ename}}</div>
-            <br/>
+                <div>{{selected.ename}}</div>
+                <br/>
 
-            <strong>Assay Definition ID:</strong> <a href="/BARD/assayDefinition/show/{{selected.assay}}"
-                                                     id="assaylink1"
-                                                     target="_blank">{{selected.assay}}</a>
-            <br/>
-            <br/>
+                <strong>Assay Definition ID:</strong> <a href="/BARD/assayDefinition/show/{{selected.assay}}"
+                                                         id="assaylink1"
+                                                         target="_blank">{{selected.assay}}</a>
+                <br/>
+                <br/>
 
-            <strong>PubChem AID:</strong> <a href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid={{selected.aid}}"
-                                             id="aidlink1" target="_blank">{{selected.aid}}</a>
+                <strong>PubChem AID:</strong> <a href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid={{selected.aid}}"
+                                                 id="aidlink1" target="_blank">{{selected.aid}}</a>
+            {{/if}}
+
+            {{#if selected.pid}}
+                <strong>Experiment IDs:</strong>
+                {{#each selected.eids}}
+                    <a href='/BARD/experiment/show/{{this}}'>{{this}}</a>
+                {{/each}}
+                <br/>
+
+                <strong>Panel:</strong> <a href="/BARD/panel/show/{{selected.pid}}"
+                                                         id="assaylink1"
+                                                         target="_blank">{{selected.panel}}</a>
+                <br/>
+            {{/if}}
         </script>
 
     </div>

@@ -27,14 +27,31 @@ function refreshProjectSteps(){
         });
 }
 
-var colors = [ "#0000FF", "#FF0000", "#00FF00", "#FFFF00", "#FF00FF",
-    "#FF8080", "#808080", "#FFB300", "#803E75", "#FF6800",
-    "#A6BDD7", "#C10020", "#CEA262",
-    "#817066", "#007D34", "#F6768E",
-    "#00538A", "#FF7A5C", "#53377A",
-    "#FF8E00", "#B32851", "#F4C800",
-    "#7F180D", "#93AA00", "#593315",
-    "#F13A13", "#232C16" ];
+var colors = ["#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C", "#FB9A99", "#E31A1C",  "#FDBF6F", "#FF7F00", "#CAB2D6", "#6A3D9A", "#FFFF99"];
+
+//
+//var colors = [ "#0000FF", "#FF0000", "#00FF00", "#FFFF00", "#FF00FF",
+//    "#FF8080", "#808080", "#FFB300", "#803E75", "#FF6800",
+//    "#A6BDD7", "#C10020", "#CEA262",
+//    "#817066", "#007D34", "#F6768E",
+//    "#00538A", "#FF7A5C", "#53377A",
+//    "#FF8E00", "#B32851", "#F4C800",
+//    "#7F180D", "#93AA00", "#593315",
+//    "#F13A13", "#232C16" ];
+
+var currentColorIndex = 0;
+
+var aidToColorMap = {}
+
+function getColorForNode(node) {
+    var color = aidToColorMap[node.assay]
+    if(! color) {
+        currentColorIndex = (currentColorIndex + 1)
+        color = colors[currentColorIndex]
+        aidToColorMap[node.assay] = color
+    }
+    return color
+}
 
 //var graphInJSON = $.parseJSON($('#stepGraph').html());
 //var isolatedNodes = graphInJSON.isolatedNodes;
@@ -61,6 +78,17 @@ function inspect(s) {
     return "<pre>" + s.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;") + "</pre>"
 }
 
+function nodeToDotDescription(node) {
+    var keyValues = node.keyValues;
+    var text;
+    if(keyValues.type == "single"){
+        text = node.id + "[style=\"bold,filled\",color=\""+getColorForNode(keyValues)+"\",label=\"" + keyValues.eid + "\\n " + keyValues.stage + "\"" + "];";
+    } else {
+        text = node.id + "[style=\"bold,filled\",color=\""+getColorForNode(keyValues)+"\",label=\"Panel of "+keyValues.eids.length + " experiments\\n" + keyValues.stage + "\"" + "];";
+    }
+    return text
+}
+
 function getsrc() {
     var graphInJSON = $.parseJSON($('#stepGraph').html());
     var connectedNodes = graphInJSON.connectedNodes;
@@ -69,15 +97,14 @@ function getsrc() {
     var textgraph = "digraph {graph[fontname=\"Helvetica-Oblique\",fontsize=18];node[shape=polygon,sides=4,fontsize=8,style=\"filled\",fillcolor=\"white\"];";
 
     for (var i = 0; i < connectedNodes.length; i++) {
-        var keyValues = connectedNodes[i].keyValues;
-        textgraph = textgraph + connectedNodes[i].id + "[color=salmon2,label=\"" + keyValues.eid + " " + keyValues.stage + "\"" + "];";
+        textgraph = textgraph + nodeToDotDescription(connectedNodes[i])
     }
 
     // hack: to layout unconnected nodes, pretend there are links between them forcing them into a grid.
     var unconnectedPerRow = 4;
     for (var i = 0; i < isolatedNodes.length; i++) {
         var keyValues = isolatedNodes[i].keyValues;
-        textgraph = textgraph + isolatedNodes[i].id + "[color=salmon2,label=\"" + keyValues.eid + " " + keyValues.stage + "\"" + "];";
+        textgraph = textgraph + nodeToDotDescription(isolatedNodes[i])
 
         if(i >= unconnectedPerRow) {
         var prevIndex = i - unconnectedPerRow;
