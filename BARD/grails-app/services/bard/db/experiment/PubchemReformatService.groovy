@@ -741,14 +741,48 @@ class PubchemReformatService {
 
             Collection<Element> elementKeys = newMeasure.contextItems.keySet().findAll { newMeasure.contextItems[it].size() > 1 }
             if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
-                createAssayContextForResultType(experiment.assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, experimentMeasure)
+                String contextTitle = "annotations for ${experimentMeasure.resultType.label}"
+
+                // try to find an existing context that is shaped exactly like we want
+                AssayContext assayContext = findAssayContextForResultType(experiment.assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, contextTitle)
+                if(assayContext == null) {
+                    // if couldn't find one, create a new context
+                    assayContext = createAssayContextForResultType(experiment.assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, contextTitle)
+                }
+
+                // regardless if whether it was created or found, link it to this measure
+                AssayContextExperimentMeasure assayContextExperimentMeasure = new AssayContextExperimentMeasure()
+                assayContext.addToAssayContextExperimentMeasures(assayContextExperimentMeasure)
+                experimentMeasure.addToAssayContextExperimentMeasures(assayContextExperimentMeasure)
+
+                assayContextExperimentMeasure.save(failOnError: true)
             }
         }
     }
 
-    void createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element, Collection<String>> attributeValues, Collection<Element> freeAttributes, ExperimentMeasure experimentMeasure) {
+    boolean assayContextMatches(AssayContext context, String contextName, Set<Element> attributeKeys) {
+        if(context.contextName != contextName)
+            return false;
+
+        Set<Element> nonfixedAttributes = (context.contextItems.findAll {it.attributeType != AttributeType.Fixed} . collect {it.attributeElement} ) as Set
+
+        if(nonfixedAttributes.size() != attributeKeys.size())
+            return false;
+
+        return attributeKeys.containsAll(nonfixedAttributes)
+    }
+
+    AssayContext findAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element, Collection<String>> attributeValues, Collection<Element> freeAttributes, String contextName) {
+        for(context in assay.contexts) {
+            if(assayContextMatches(context, contextName, (attributeKeys as Set) + (freeAttributes as Set)))
+                return context;
+        }
+        return null;
+    }
+
+    AssayContext createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element, Collection<String>> attributeValues, Collection<Element> freeAttributes, String contextName) {
         AssayContext assayContext = new AssayContext()
-        assayContext.contextName = "annotations for ${experimentMeasure.resultType.label}";
+        assayContext.contextName = contextName
         assayContext.contextType = ContextType.EXPERIMENT
 
         for (attribute in attributeKeys) {
@@ -790,11 +824,7 @@ class PubchemReformatService {
         assay.addToAssayContexts(assayContext)
 
         assayContext.save(failOnError: true)
-
-        AssayContextExperimentMeasure assayContextExperimentMeasure = new AssayContextExperimentMeasure()
-        assayContext.addToAssayContextExperimentMeasures(assayContextExperimentMeasure)
-        experimentMeasure.addToAssayContextExperimentMeasures(assayContextExperimentMeasure)
-        assayContextExperimentMeasure.save(failOnError: true)
+        return assayContext
     }
 
     public void assignValue(AssayContextItem item, String value) {
