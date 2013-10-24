@@ -300,35 +300,7 @@ class MolecularSpreadSheetService {
             }
         }
     }
-//    protected void fillInTheMissingCellsAndConvertToExpandedMatrix(MolSpreadSheetData molSpreadSheetData, Map<String, MolSpreadSheetCell> dataMap) {
-//        for (int row in 0..(molSpreadSheetData.rowCount - 1)) {
-//            int exptNumberColTracker = 0
-//            for (int col in 0..(molSpreadSheetData.superColumnCount - 1)) {
-//                String key = "${row}_${col}"
-//                MolSpreadSheetCell molSpreadSheetCell = null
-//                SpreadSheetActivityStorage spreadSheetActivityStorage = null
-//                if (dataMap.containsKey(key)) {
-//                    molSpreadSheetCell = dataMap[key]
-//                    spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
-//                }
-//                if (molSpreadSheetData.mssHeaders[col].molSpreadSheetColSubHeaderList.size()>0){
-//                    for (int experimentNum in 0..molSpreadSheetData.mssHeaders[col].molSpreadSheetColSubHeaderList.size() - 1) {
-//                        String finalKey = "${row}_${(exptNumberColTracker++)}"
-//                        if (spreadSheetActivityStorage == null) {
-//                            if (molSpreadSheetCell != null) {
-//                                molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell)
-//                            } else {
-//                                molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell()
-//                            }
-//                        } else {
-//                            molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell, experimentNum)
-//                        }
-//                    }
-//                }
-//            }
-//
-//        }
-//    }
+
 
 
 
@@ -365,21 +337,13 @@ class MolecularSpreadSheetService {
                 String arrayKey = "${innerRowPointer}_${innerColumnCount + START_DYNAMIC_COLUMNS}"
                 List <MolSpreadSheetCell> molSpreadSheetCellList = MolSpreadSheetCell.molSpreadSheetCellListFactory (spreadSheetActivity)
                 if (dataMap.containsKey(arrayKey)) {
-                    // we have multiple values for cell = ${arrayKey}.  If our existing value is null then use the non-null version
-//                    if ((dataMap[arrayKey].spreadSheetActivityStorage == null) ||
-//                            (dataMap[arrayKey].spreadSheetActivityStorage.hillCurveValueHolderList == null) ||
-//                            (dataMap[arrayKey].spreadSheetActivityStorage.hillCurveValueHolderList.size() < 0)) {
-//                        dataMap[arrayKey] = molSpreadSheetCellList
-//                        // TODO for now we will take the non-null value over the null value. Eventually of course
-//                        //  the null values should be exiled from the database, but at least for now I see them sometimes
-//                    } else {
-                        // as long as the list is not null we add every element into the data map
-                        if ((molSpreadSheetCellList != null) && (molSpreadSheetCellList.size () > 0))  {
-                            for (MolSpreadSheetCell molSpreadSheetCell in molSpreadSheetCellList) {
-                                dataMap[arrayKey].add(molSpreadSheetCell)
-                            }
+                    // we have multiple values for cell = ${arrayKey}.
+                    // as long as the list is not null we add every element into the data map
+                    if ((molSpreadSheetCellList != null) && (molSpreadSheetCellList.size () > 0))  {
+                        for (MolSpreadSheetCell molSpreadSheetCell in molSpreadSheetCellList) {
+                            dataMap[arrayKey].add(molSpreadSheetCell)
                         }
-                    //}
+                    }
                 } else {
                     dataMap[arrayKey] = molSpreadSheetCellList
                 }
