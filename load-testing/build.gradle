@@ -1,0 +1,50 @@
+apply plugin: "groovy"
+apply plugin: "idea"
+
+repositories {
+    mavenCentral() 
+}
+configurations {
+    seleniumServer
+}
+
+ext.seleniumVersion = "2.37.1"
+ext.phantomjsdriverVersion = "1.0.4"
+dependencies {
+    compile "org.codehaus.groovy:groovy-all:2.1.7"
+    compile "org.seleniumhq.selenium:selenium-java:$seleniumVersion"
+    compile "org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion"
+    compile "com.github.detro.ghostdriver:phantomjsdriver:$phantomjsdriverVersion"
+
+    seleniumServer "org.seleniumhq.selenium:selenium-server:$seleniumVersion"
+
+    testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
+    testCompile "junit:junit:4.11"
+}
+
+task seleniumServerStart() << { 
+    ant.java(classname: 'org.openqa.selenium.server.SeleniumServer', fork: true, spawn: true, classpath: configurations.seleniumServer.asPath) 
+} 
+
+test {
+    systemProperties = System.getProperties()
+    outputs.upToDateWhen { false }
+}
+
+task wrapper(type: Wrapper) {
+        gradleVersion = '1.8'
+}
+
+task(console, dependsOn: 'classes', type: JavaExec) {
+    main = 'groovy.ui.Console'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task createDirs << {
+    sourceSets*.allSource.srcDirs*.each { dir ->
+        ant.touch(file: new File(dir, '.gitignore'), mkdirs: true)
+    }
+    sourceSets*.resources.srcDirs*.each { dir ->
+        ant.touch(file: new File(dir, '.gitignore'), mkdirs: true)
+    }
+}
