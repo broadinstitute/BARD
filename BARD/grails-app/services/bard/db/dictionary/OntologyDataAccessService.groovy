@@ -258,7 +258,7 @@ class OntologyDataAccessService {
      * @return a List<ExternalItem> empty if no matches, items are sorted case-insensitive by display
      * @throws ExternalOntologyException
      */
-    @TypeChecked
+
     List<ExternalItem> findExternalItemsByTerm(String externalUrl, String term, int limit) throws ExternalOntologyException {
         Assert.hasText(externalUrl, "externalUrl cannot be blank")
         Assert.hasText(term, "term cannot be blank")

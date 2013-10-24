@@ -45,17 +45,21 @@ class SpreadSheetActivity {
             resultTypeNames << new MolSpreadSheetColSubHeader( columnTitle:  DEFAULT_DATATYPE)
         }
         ArrayList<ActivityConcentration>  activityConcentrationArrayList = []
-        activityConcentrationArrayList.add(new ActivityConcentration(value:new Double(activity.potency), pubChemDisplayName:  DEFAULT_DATATYPE, qualifier: "", dictElemId: 959))
+        activityConcentrationArrayList.add(new ActivityConcentration(value:this.potency, pubChemDisplayName:  DEFAULT_DATATYPE, qualifier: "", dictElemId: 959))
 //        this.priorityElementList << new PriorityElement(primaryElements: activityConcentrationArrayList)
     }
 
     void addPotency(final Activity activity) {
-        if (activity.potency) {
+        // convert a "null" potency to a "NaN"
+        if (activity.potency==null) {
+            this.potency = Double.NaN
+        }  else {
             this.potency = new Double(activity.potency)
         }
     }
 
     void addOutCome(final Activity activity) {
+        this.activityOutcome =  ActivityOutcome.UNSPECIFIED // provide a default
         if (activity.outcome != null) {
             this.activityOutcome = ActivityOutcome.findActivityOutcome(activity.outcome.intValue())
         }

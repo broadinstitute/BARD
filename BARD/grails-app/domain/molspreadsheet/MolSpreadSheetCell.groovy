@@ -181,12 +181,16 @@ class MolSpreadSheetCell {
                     cid: spreadSheetActivity.cid,
                     sid: spreadSheetActivity.sid,
                     activityOutcome: spreadSheetActivity.activityOutcome )
-            molSpreadSheetCell.spreadSheetActivityStorage.potency = spreadSheetActivity.potency
+            if (spreadSheetActivity.potency==null){
+                molSpreadSheetCell.spreadSheetActivityStorage.potency = Double.NaN
+            }  else {
+                molSpreadSheetCell.spreadSheetActivityStorage.potency = spreadSheetActivity.potency
+            }
             molSpreadSheetCell.spreadSheetActivityStorage.responseUnit = 'uM'
-            molSpreadSheetCell.spreadSheetActivityStorage.dictionaryDescription = 'AC50 descrip'
+            molSpreadSheetCell.spreadSheetActivityStorage.dictionaryDescription = 'The effective concentration of an inhibitor, which produces 50% of the maximum possible response for that inhibitor.'
             molSpreadSheetCell.spreadSheetActivityStorage.dictionaryLabel = 'AC50'
             molSpreadSheetCell.spreadSheetActivityStorage.dictionaryId = 959
-            HillCurveValueHolder hillCurveValueHolder = new HillCurveValueHolder( slope: new Double( spreadSheetActivity.potency), identifier: "=" )
+            HillCurveValueHolder hillCurveValueHolder = new HillCurveValueHolder( slope: molSpreadSheetCell.spreadSheetActivityStorage.potency, identifier: "=" )
             molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList = []
             molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.add (hillCurveValueHolder)
             molSpreadSheetCellList << molSpreadSheetCell
