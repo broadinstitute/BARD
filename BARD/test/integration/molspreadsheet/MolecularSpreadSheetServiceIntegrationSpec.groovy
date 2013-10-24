@@ -262,7 +262,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         then: "we should be able to generate a list of spreadsheet activity elements"
         dataMap.size() != 0
         dataMap["0_4"] != null
-        dataMap["0_4"].size() == 0
+        dataMap["0_4"].size() == 1
         assertNotNull molSpreadSheetData.mssData
     }
 

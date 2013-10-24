@@ -67,9 +67,9 @@ abstract class BardCommand {
         for (GrantedAuthority grantedAuthority : grantedAuthorities) {
             if ((grantedAuthority.authority?.startsWith("ROLE_TEAM_"))) {
                 Role role = (Role)grantedAuthority
-                if (role.id) {
+                //if (role.id) {
                     roleSet.add(role)
-                }
+                //}
             }
         }
         List<Role> roles = new ArrayList<Role>(roleSet)

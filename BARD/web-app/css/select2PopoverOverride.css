@@ -1,0 +1,7 @@
+/*
+ * want to override the default with for bootstrap popover to be as wide as the select2 widget we're using for contextItems
+ */
+div.popover {
+    max-width: 100%;
+    width: 100%;
+}

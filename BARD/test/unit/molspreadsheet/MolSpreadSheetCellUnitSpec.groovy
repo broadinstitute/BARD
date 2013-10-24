@@ -2,6 +2,7 @@ package molspreadsheet
 
 import bard.core.rest.spring.experiment.PriorityElement
 import bard.core.rest.spring.experiment.ConcentrationResponseSeries
+import bardqueryapi.ActivityOutcome
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -172,7 +173,32 @@ class MolSpreadSheetCellUnitSpec extends Specification {
     }
 
 
+void "Test molSpreadSheetCellListFactory with and without priority elements"() {
+    given:
+    SpreadSheetActivity spreadSheetActivityWithPriority = new  SpreadSheetActivity( eid: 1L,cid: 2L,sid: 3L,activityOutcome: ActivityOutcome.ACTIVE)
+    PriorityElement priorityElement1 = new  PriorityElement()
+    priorityElement1.value = 0.47
+    priorityElement1.concentrationResponseSeries = new ConcentrationResponseSeries()
+    priorityElement1.concentrationResponseSeries.concentrationResponsePoints = [new ConcentrationResponsePoint(value: "0.47", testConcentration: 47d)]
+    spreadSheetActivityWithPriority.priorityElementList = [priorityElement1]
+    SpreadSheetActivity spreadSheetActivityWithoutPriorityButWithPotency = new  SpreadSheetActivity( eid: 1L,cid: 2L,sid: 3L,activityOutcome: ActivityOutcome.ACTIVE)
+    spreadSheetActivityWithoutPriorityButWithPotency.potency = 0.47
+    SpreadSheetActivity spreadSheetActivityWithoutPriorityAndNoPotency = new  SpreadSheetActivity( eid: 1L,cid: 2L,sid: 3L,activityOutcome: ActivityOutcome.ACTIVE)
+    spreadSheetActivityWithoutPriorityAndNoPotency.potency = null
 
+    when:
+    List <MolSpreadSheetCell> molSpreadSheetCellListWithPriority = MolSpreadSheetCell.molSpreadSheetCellListFactory(spreadSheetActivityWithPriority)
+    List <MolSpreadSheetCell> molSpreadSheetCellListWithoutPriorityButWithPotency = MolSpreadSheetCell.molSpreadSheetCellListFactory(spreadSheetActivityWithPriority)
+    List <MolSpreadSheetCell> molSpreadSheetCellListWithoutPriorityAndNoPotency = MolSpreadSheetCell.molSpreadSheetCellListFactory(spreadSheetActivityWithoutPriorityAndNoPotency)
+
+    then:
+    assertNotNull molSpreadSheetCellListWithPriority
+    assertNotNull molSpreadSheetCellListWithoutPriorityButWithPotency
+    assert molSpreadSheetCellListWithPriority[0].spreadSheetActivityStorage.hillCurveValueHolderList[0].toString() ==   molSpreadSheetCellListWithoutPriorityButWithPotency[0].spreadSheetActivityStorage.hillCurveValueHolderList[0].toString()
+    assertNotNull molSpreadSheetCellListWithoutPriorityAndNoPotency
+    assert molSpreadSheetCellListWithPriority[0].spreadSheetActivityStorage.hillCurveValueHolderList[0].toString() !=   molSpreadSheetCellListWithoutPriorityAndNoPotency[0].spreadSheetActivityStorage.hillCurveValueHolderList[0].toString()
+
+}
 
     void "Test molSpreadSheetCellListFactory"() {
         SpreadSheetActivity spreadSheetActivity = new  SpreadSheetActivity()
@@ -191,8 +217,7 @@ class MolSpreadSheetCellUnitSpec extends Specification {
         List <MolSpreadSheetCell> molSpreadSheetCellList = MolSpreadSheetCell.molSpreadSheetCellListFactory(spreadSheetActivity)
 
         then:
-        println molSpreadSheetCellList
-       assertNotNull molSpreadSheetCellList
+        assertNotNull molSpreadSheetCellList
 
     }
 

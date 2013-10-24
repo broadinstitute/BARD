@@ -1,13 +1,9 @@
 package dataexport.experiment
 
 import bard.db.dictionary.Element
-import bard.db.enums.ExperimentStatus
+import bard.db.enums.HierarchyType
 import bard.db.enums.ReadyForExtraction
-import bard.db.experiment.AssayContextExperimentMeasure
-import bard.db.experiment.Experiment
-import bard.db.experiment.ExperimentContext
-import bard.db.experiment.ExperimentContextItem
-import bard.db.experiment.ExperimentMeasure
+import bard.db.experiment.*
 import bard.db.registration.ExternalReference
 import dataexport.registration.AssayExportHelperService
 import dataexport.registration.BardHttpResponse
@@ -16,12 +12,11 @@ import dataexport.util.ExportAbstractService
 import dataexport.util.UtilityService
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
+import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 import javax.xml.datatype.DatatypeFactory
 import javax.xml.datatype.XMLGregorianCalendar
-import org.apache.commons.lang.StringUtils
-import bard.db.enums.HierarchyType
 
 /**
  * Class that generates Experiments as XML
@@ -118,19 +113,6 @@ class ExperimentExportService extends ExportAbstractService {
         this.generateExperiment(markupBuilder, experiment)
         return experiment.version
     }
-
-    private String convertStatusToString(ExperimentStatus status) {
-        switch (status) {
-            case ExperimentStatus.APPROVED:
-                return "Approved";
-            case ExperimentStatus.DRAFT:
-                return "Pending";
-            case ExperimentStatus.RETIRED:
-                return "Rejected";
-            default:
-                throw new RuntimeException("invalid status: ${status}")
-        }
-    }
     /**
      *
      * @param experiment
@@ -140,7 +122,7 @@ class ExperimentExportService extends ExportAbstractService {
         Map<String, String> attributes = [:]
 
         attributes.put("experimentId", experiment.id?.toString())
-        attributes.put('status', convertStatusToString(experiment.experimentStatus))
+        attributes.put('status', experiment.experimentStatus.id)
         attributes.put('readyForExtraction', experiment.readyForExtraction.getId())
         if (experiment.confidenceLevel != null && StringUtils.isNotBlank(experiment.confidenceLevel?.toString())) {
             attributes.put('confidenceLevel', experiment.confidenceLevel.toString())

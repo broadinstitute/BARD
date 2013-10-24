@@ -70,16 +70,8 @@ Link to Project and Assay</xs:documentation>
             <xs:attribute name="holdUntilDate" type="xs:dateTime" use="optional"/>
             <xs:attribute name="runDateFrom" type="xs:dateTime" use="optional"/>
             <xs:attribute name="runDateTo" type="xs:dateTime" use="optional"/>
-            <xs:attribute name="status" use="required">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="Pending"/>
-                        <xs:enumeration value="Approved"/>
-                        <xs:enumeration value="Rejected"/>
-                        <xs:enumeration value="Revised"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
+            <xs:attribute name="status" type="xs:string" use="required"/>
+              
             <xs:attribute ref="readyForExtraction" use="required"/>
             <xs:attribute ref="lastUpdated"/>
             <xs:attribute ref="modifiedBy"/>

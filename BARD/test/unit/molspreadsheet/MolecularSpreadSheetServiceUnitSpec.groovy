@@ -143,6 +143,11 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     void "test prepareMapOfColumnsToAssay "() {
         when:
+        List<ExperimentSearch> experimentList = [new  ExperimentSearch(capExptId: 0L),
+                                                 new  ExperimentSearch(capExptId: 1L),
+                                                 new  ExperimentSearch(capExptId: 2L),
+                                                 new  ExperimentSearch(capExptId: 3L),
+                                                 new  ExperimentSearch(capExptId: 4L)]
         final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'a')])
         molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'b')])
@@ -151,7 +156,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'e'),
                 new MolSpreadSheetColSubHeader(columnTitle:'f'),
                 new MolSpreadSheetColSubHeader(columnTitle:'g')])
-        service.prepareMapOfColumnsToAssay(molSpreadSheetData)
+        service.prepareMapOfColumnsToAssay(molSpreadSheetData,experimentList)
         molSpreadSheetData.experimentNameList << 'a'
 
         then: "we want to pull out the active values"
@@ -161,6 +166,11 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     void "test prepareMapOfColumnsToAssay inner loops"() {
         when:
+        final List<ExperimentSearch> experimentList = [new  ExperimentSearch(capExptId: 0L),
+                new  ExperimentSearch(capExptId: 1L),
+                new  ExperimentSearch(capExptId: 2L),
+                new  ExperimentSearch(capExptId: 3L),
+                new  ExperimentSearch(capExptId: 4L)]
         final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'a')])
         molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'b')])
@@ -188,7 +198,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         molSpreadSheetData.mssData.put("0_5", molSpreadSheetCell0)
         molSpreadSheetData.mssData.put("1_5", molSpreadSheetCell1)
         molSpreadSheetData.mssData.put("2_5", molSpreadSheetCell2)
-        service.prepareMapOfColumnsToAssay(molSpreadSheetData)
+        service.prepareMapOfColumnsToAssay(molSpreadSheetData,experimentList)
         println 'hello'
 
         then: "we want to pull out the active values"
@@ -220,6 +230,11 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     void "test prepareMapOfColumnsToAssay min max determination"() {
         when:
+        List<ExperimentSearch> experimentList = [new  ExperimentSearch(capExptId: 0L),
+                new  ExperimentSearch(capExptId: 1L),
+                new  ExperimentSearch(capExptId: 2L),
+                new  ExperimentSearch(capExptId: 3L),
+                new  ExperimentSearch(capExptId: 4L)]
         final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'a')])
         molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'b')])
@@ -249,7 +264,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         molSpreadSheetData.mssData.put("0_5", molSpreadSheetCell0)
         molSpreadSheetData.mssData.put("1_5", molSpreadSheetCell1)
         molSpreadSheetData.mssData.put("2_5", molSpreadSheetCell2)
-        service.prepareMapOfColumnsToAssay(molSpreadSheetData)
+        service.prepareMapOfColumnsToAssay(molSpreadSheetData,experimentList)
         println 'hello'
 
         then: "we want to pull out the active values"
@@ -317,13 +332,17 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     void "test populateMolSpreadSheetData"() {
         given:
-        final List<ExperimentSearch> experimentList = []
+        final List<ExperimentSearch> experimentList = [new  ExperimentSearch(capExptId: 0L),
+                new  ExperimentSearch(capExptId: 1L),
+                new  ExperimentSearch(capExptId: 2L),
+                new  ExperimentSearch(capExptId: 3L),
+                new  ExperimentSearch(capExptId: 4L)]
         experimentList << new ExperimentSearch()
         final List<SpreadSheetActivity> spreadSheetActivityList = []
-        spreadSheetActivityList << new SpreadSheetActivity(cid: 54687454L,eid: 3997L)
-        spreadSheetActivityList << new SpreadSheetActivity(cid: 54687454L,eid: 3997L)
+        spreadSheetActivityList << new SpreadSheetActivity(cid: 54687454L,eid: 3997L, potency: 47L)
+        spreadSheetActivityList << new SpreadSheetActivity(cid: 54687454L,eid: 3997L, potency: 47L)
         Map<String, List<MolSpreadSheetCell>> dataMap = [:]
-        dataMap["0_4"]  = new  MolSpreadSheetCell ()
+        dataMap["0_4"]  = [new  MolSpreadSheetCell ()]
         MolSpreadSheetData molSpreadSheetData = new   MolSpreadSheetData ()
         molSpreadSheetData.rowPointer[54687454L] = 0
         molSpreadSheetData.columnPointer[3997L] = 0
@@ -334,7 +353,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
         then:
         assert dataMap["0_4"]!=null
-        assert dataMap["0_4"].size()==0
+        assert dataMap["0_4"].size()==3
     }
 
 

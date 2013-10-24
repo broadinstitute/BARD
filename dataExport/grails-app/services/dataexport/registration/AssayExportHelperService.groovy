@@ -1,7 +1,9 @@
 package dataexport.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.AssayStatus
 import bard.db.enums.ContextType
+import bard.db.enums.ExperimentStatus
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
@@ -137,7 +139,9 @@ class AssayExportHelperService extends ExportAbstractService {
         }
 
         for (Experiment experiment : assay.experiments) {
-            if (experiment.readyForExtraction == ReadyForExtraction.READY) {  //only link experiments that are set to ready for extraction
+            if (experiment.readyForExtraction == ReadyForExtraction.READY ||
+                    experiment.experimentStatus==ExperimentStatus.APPROVED ||
+                    experiment.experimentStatus == ExperimentStatus.RETIRED) {  //only link experiments that are set to ready for extraction
                 final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experiment.id]).toString()
                 markupBuilder.link(rel: 'related', type: "${this.mediaTypesDTO.experimentMediaType}", href: "${experimentHref}")
             }
@@ -155,7 +159,9 @@ class AssayExportHelperService extends ExportAbstractService {
         if (panelAssays) {
             markupBuilder.panels() {
                 for (PanelAssay panelAssay : panelAssays) {
-                    if (panelAssay.assay?.readyForExtraction == ReadyForExtraction.READY) {  //only show assays that are ready to be extracted
+                    if (panelAssay.assay?.readyForExtraction == ReadyForExtraction.READY ||
+                            panelAssay.assay.assayStatus== AssayStatus.APPROVED ||
+                            panelAssay.assay.assayStatus == AssayStatus.RETIRED) {  //only show assays that are ready to be extracted
                         generatePanel(markupBuilder, panelAssay)
                     }
                 }

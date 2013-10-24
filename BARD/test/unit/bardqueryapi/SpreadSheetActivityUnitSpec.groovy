@@ -110,7 +110,7 @@ class SpreadSheetActivityUnitSpec extends Specification {
         when:
         spreadSheetActivity.addPotency(activity)
         then:
-        assert (spreadSheetActivity.potency != null) == expected
+        assert (spreadSheetActivity.potency != Double.NaN) == expected
         where:
         label             | activity                   | expected
         "With potency"    | new Activity(potency: "2") | true

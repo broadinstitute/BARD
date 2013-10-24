@@ -704,15 +704,11 @@ class PubchemReformatService {
 
     // recreate experiment measures on an already existing experiment/assay
     void recreateMeasures(Experiment experiment, Collection<MappedStub> newMeasures) {
-        Assay assay = experiment.assay
         Map<String, ExperimentMeasure> measureByKey = [:]
         for (measure in experiment.experimentMeasures) {
             measureByKey[makeMeasureKey(measure)] = measure
             //println("existing measure: ${measure.resultType.label}")
         }
-
-        // first, make sure all of the measures we want exist
-        verifyOrCreateMeasures(newMeasures, measureByKey, experiment)
 
         ExperimentMeasure.withSession { s -> s.flush() }
 
@@ -728,89 +724,65 @@ class PubchemReformatService {
         createExperimentMeasures(experiment, measureByKey, newMeasures, null)
     }
 
-    private void verifyOrCreateMeasures(Collection<MappedStub> newMeasures, LinkedHashMap<String, ExperimentMeasure> measureByKey, Experiment experiment) {
-        //println("verifyOrCreate: ${newMeasures.collect { [it.resultType.label, it.statsModifier?.label] } }")
-
-        for (newMeasure in newMeasures) {
-            String newMeasureKey = makeMeasureKey(newMeasure)
-
-            // find the context items which are variable
-            Collection<Element> elementKeys = newMeasure.contextItems.keySet().findAll { newMeasure.contextItems[it].size() > 1 }
-
-            if (measureByKey.containsKey(newMeasureKey)) {
-                ExperimentMeasure existingMeasure = measureByKey[newMeasureKey]
-                if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
-                    if (existingMeasure.assayContextExperimentMeasures.size() == 0) {
-                        createAssayContextForResultType(assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, existingMeasure)
-                    } else {
-                        boolean found = false;
-                        for (acm in existingMeasure.assayContextExperimentMeasures) {
-                            AssayContext context = acm.assayContext;
-                            if (isContextCompatible(existingMeasure, elementKeys + newMeasure.contextItemColumns, context)) {
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (!found) {
-                            throw new RuntimeException("Could not find context that contained ${(elementKeys + newMeasure.contextItemColumns).collect { it.label }} for ${existingMeasure.displayLabel}")
-                        }
-                    }
-                }
-            } else {
-                //println("creating new measure for ${newMeasure.resultType.label}")
-                // create a new measure on this assay
-                ExperimentMeasure measure = new ExperimentMeasure()
-                experiment.addToExperimentMeasures(measure)
-                measure.statsModifier = newMeasure.statsModifier
-                measure.resultType = newMeasure.resultType
-
-                if (newMeasure.parent != null) {
-                    measure.parent = measureByKey[makeMeasureKey(newMeasure.parent)]
-                    measure.parentChildRelationship = newMeasure.parentChildRelationship
-                }
-
-                measure.save(failOnError: true)
-
-                if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
-                    createAssayContextForResultType(experiment.assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, measure)
-                }
-
-                measureByKey[newMeasureKey] = measure
-            }
-
-            verifyOrCreateMeasures(newMeasure.children, measureByKey, experiment)
-        }
-    }
-
     void createExperimentMeasures(Experiment experiment, Map<String, ExperimentMeasure> measureByKey, Collection<MappedStub> newMeasures, ExperimentMeasure parentExperimentMeasure) {
         for (newMeasure in newMeasures) {
             ExperimentMeasure experimentMeasure = new ExperimentMeasure(dateCreated: new Date())
-            experimentMeasure = measureByKey[makeMeasureKey(newMeasure)]
             if (parentExperimentMeasure != null) {
                 experimentMeasure.parentChildRelationship = newMeasure.parentChildRelationship
                 parentExperimentMeasure.addToChildMeasures(experimentMeasure)
             }
-
+            experimentMeasure.resultType = newMeasure.resultType
+            experimentMeasure.statsModifier = newMeasure.statsModifier
             experiment.addToExperimentMeasures(experimentMeasure)
 
             experimentMeasure.save(failOnError: true)
 
             createExperimentMeasures(experiment, measureByKey, newMeasure.children, experimentMeasure)
+
+            Collection<Element> elementKeys = newMeasure.contextItems.keySet().findAll { newMeasure.contextItems[it].size() > 1 }
+            if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
+                String contextTitle = "annotations for ${experimentMeasure.resultType.label}"
+
+                // try to find an existing context that is shaped exactly like we want
+                AssayContext assayContext = findAssayContextForResultType(experiment.assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, contextTitle)
+                if(assayContext == null) {
+                    // if couldn't find one, create a new context
+                    assayContext = createAssayContextForResultType(experiment.assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, contextTitle)
+                }
+
+                // regardless if whether it was created or found, link it to this measure
+                AssayContextExperimentMeasure assayContextExperimentMeasure = new AssayContextExperimentMeasure()
+                assayContext.addToAssayContextExperimentMeasures(assayContextExperimentMeasure)
+                experimentMeasure.addToAssayContextExperimentMeasures(assayContextExperimentMeasure)
+
+                assayContextExperimentMeasure.save(failOnError: true)
+            }
         }
     }
 
-    boolean isContextCompatible(ExperimentMeasure existingMeasure, Collection<Element> attributes, AssayContext context) {
-        Set<Element> nonfixedAttributes = context.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }.collect(new HashSet()) { it.attributeElement }
-        if (!nonfixedAttributes.containsAll(attributes)) {
-//            throw new RuntimeException("Context \"${context.contextName}\" for measure ${existingMeasure} did not contain all non-fixed attributes: ${nonfixedAttributes} != ${attributes}")
+    boolean assayContextMatches(AssayContext context, String contextName, Set<Element> attributeKeys) {
+        if(context.contextName != contextName)
             return false;
-        }
-        return true;
+
+        Set<Element> nonfixedAttributes = (context.contextItems.findAll {it.attributeType != AttributeType.Fixed} . collect {it.attributeElement} ) as Set
+
+        if(nonfixedAttributes.size() != attributeKeys.size())
+            return false;
+
+        return attributeKeys.containsAll(nonfixedAttributes)
     }
 
-    void createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element, Collection<String>> attributeValues, Collection<Element> freeAttributes, ExperimentMeasure experimentMeasure) {
+    AssayContext findAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element, Collection<String>> attributeValues, Collection<Element> freeAttributes, String contextName) {
+        for(context in assay.contexts) {
+            if(assayContextMatches(context, contextName, (attributeKeys as Set) + (freeAttributes as Set)))
+                return context;
+        }
+        return null;
+    }
+
+    AssayContext createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element, Collection<String>> attributeValues, Collection<Element> freeAttributes, String contextName) {
         AssayContext assayContext = new AssayContext()
-        assayContext.contextName = "annotations for ${experimentMeasure.resultType.label}";
+        assayContext.contextName = contextName
         assayContext.contextType = ContextType.EXPERIMENT
 
         for (attribute in attributeKeys) {
@@ -845,18 +817,14 @@ class PubchemReformatService {
             AssayContextItem item = new AssayContextItem();
             item.attributeType = AttributeType.Free
             item.attributeElement = freeAttribute
-            context.addToAssayContextItems(item)
+            assayContext.addToAssayContextItems(item)
             item.valueDisplay = item.deriveDisplayValue()
         }
 
         assay.addToAssayContexts(assayContext)
 
         assayContext.save(failOnError: true)
-
-        AssayContextExperimentMeasure assayContextExperimentMeasure = new AssayContextExperimentMeasure()
-        assayContext.addToAssayContextExperimentMeasures(assayContextExperimentMeasure)
-        experimentMeasure.addToAssayContextExperimentMeasures(assayContextExperimentMeasure)
-        assayContextExperimentMeasure.save(failOnError: true)
+        return assayContext
     }
 
     public void assignValue(AssayContextItem item, String value) {

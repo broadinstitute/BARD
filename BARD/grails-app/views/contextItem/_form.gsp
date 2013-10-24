@@ -33,6 +33,14 @@
     </div>
 </div>
 
+<div class="control-group">
+    <label class="control-label" for="attributeDescription"><g:message code="contextItem.attributeDescription.label"/>:</label>
+    <div class="controls">
+        <g:textArea id="attributeDescription" name="attributeDescription" class="span11"
+                    value="${instance?.contextItem?.attributeElement?.description}" disabled="true"/>
+    </div>
+</div>
+
 <g:if test="${instance?.contextClass == 'AssayContext'}">
     <div class="control-group">
         <div class="controls">
@@ -94,6 +102,13 @@
                            value="${instance?.valueElementId}" disabled="${disabledInput}"/>
 
             <span class="help-inline"><g:fieldError field="valueElementId" bean="${instance}"/></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="valueDescription"><g:message code="contextItem.valueDescription.label"/>:</label>
+        <div class="controls">
+            <g:textArea id="valueDescription" name="valueDescription" class="span11"
+                        value="${instance?.contextItem?.valueElement?.description}" disabled="true"/>
         </div>
     </div>
 </div>

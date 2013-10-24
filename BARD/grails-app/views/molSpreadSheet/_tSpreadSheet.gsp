@@ -48,7 +48,7 @@
             <table cellpadding="0" cellspacing="0" border="1" class="molSpreadSheet display" id="molspreadsheet"
                    width="100%">
                 <tr>
-                    <th class="molSpreadSheetImg" colspan=2>Molecular structure</th>
+                    <th class="molSpreadSheetImg" colspan=3>Molecular structure</th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <td class="molSpreadSheetImg">
                             <% String retrievedSmiles = """${molSpreadSheetData?.displayValue(rowCnt, 0)."smiles"}""".toString() %>
@@ -58,7 +58,7 @@
                     </g:each>
                 </tr>
                 <tr>
-                    <th class="molSpreadSheetImg" colspan=2>CID</th>
+                    <th class="molSpreadSheetImg" colspan=3>CID</th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <% cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
                         <td class="molSpreadSheet" property="cid">
@@ -69,7 +69,7 @@
 
                 <tr>
                     <th class="molSpreadSheetImg"
-                        colspan=2><%="${((columnHeaders?.size() > 2) ? (columnHeaders[2]) : 'promiscuity')}"%></th>
+                        colspan=3><%="${((columnHeaders?.size() > 2) ? (columnHeaders[2]) : 'promiscuity')}"%></th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <% cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
                         <td class="molSpreadSheet">
@@ -80,7 +80,7 @@
 
                 <tr>
                     <th class="molSpreadSheetImg"
-                        colspan=2><%="${((columnHeaders?.size() > 3) ? (columnHeaders[3]) : 'inactive/active')}"%></th>
+                        colspan=3><%="${((columnHeaders?.size() > 3) ? (columnHeaders[3]) : 'inactive/active')}"%></th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <% String activeVrsTested = """${molSpreadSheetData?.displayValue(rowCnt, 3)?."value"}""".toString() %>
                         <% cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
@@ -91,10 +91,13 @@
                 </tr>
 
                 <% int rowsToSkipBeforeNextAssayid = 0 %>
+                <% int rowsToSkipBeforeNextExperimentId = 0 %>
                 <% int currentRowCounter = 0 %>
                 <g:set var="assayHeaders" value="${molSpreadSheetData.determineResponseTypesPerAssay()}"/>
+                <g:set var="experimentsPerAssay" value="${molSpreadSheetData.determineExperimentPerAssay()}"/>
                 <g:if test="${(assayHeaders.size() > 0)}">
                     <g:set var="assayHeaderIterator" value="${assayHeaders.iterator()}"/>
+                    <g:set var="experimentHeaderIterator" value="${experimentsPerAssay.iterator()}"/>
                     <g:set var="columnDictionaryLookup" value="${molSpreadSheetData?.getColumnsDescr()}"/>
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
                         <g:if test="${currentRowCounter > 3}">
@@ -102,7 +105,7 @@
                                 <g:if test="${(rowsToSkipBeforeNextAssayid == 0)}">
                                     <g:set var="currentAssayIdHeader" value="${assayHeaderIterator.next()}"/>
                                     <% rowsToSkipBeforeNextAssayid = currentAssayIdHeader."numberOfResultTypes"
-                                      def bardAssayId = currentAssayIdHeader."bardAssayId"
+                                    def bardAssayId = currentAssayIdHeader."bardAssayId"
                                     %>
                                     <th class="molSpreadSheetHeadData"
                                         rowspan="<%=rowsToSkipBeforeNextAssayid%>">
@@ -111,7 +114,19 @@
                                         </g:link>
                                     </th>
                                 </g:if>
+                                <g:if test="${(rowsToSkipBeforeNextExperimentId == 0)}">
+                                    <g:set var="currentExperimentIdHeader" value="${experimentHeaderIterator.next()}"/>
+                                    <%
+                                        rowsToSkipBeforeNextExperimentId = currentExperimentIdHeader.colspan
+                                    %>
+                                    <th class="molSpreadSheetHeadData" rowspan="<%=rowsToSkipBeforeNextExperimentId%>">
+                                        <g:link controller="experiment" action="show" id="${currentExperimentIdHeader.eid}">
+                                            EID=<%=currentExperimentIdHeader.eid%>
+                                        </g:link>
+                                    </th>
+                                </g:if>
                                 <% rowsToSkipBeforeNextAssayid-- %>
+                                <% rowsToSkipBeforeNextExperimentId-- %>
                                 <th class="molSpreadSheetHeadData">
                                     <g:if test="${columnDictionaryLookup[currentRowCounter]}">
                                         ${colHeader}
@@ -130,6 +145,8 @@
 
                                 <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                                     <g:exptDataCell colCnt="${currentRowCounter}"
+                                                    mssHeaders="${molSpreadSheetData?.mssHeaders}"
+                                                    molSpreadSheetData="${molSpreadSheetData}"
                                                     spreadSheetActivityStorage="${molSpreadSheetData?.findSpreadSheetActivity(rowCnt, currentRowCounter)}"/>
                                 </g:each>
 
