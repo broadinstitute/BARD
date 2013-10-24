@@ -2,6 +2,7 @@ package bard.db.experiment
 
 import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
+import bard.db.enums.ValueType
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
@@ -293,8 +294,10 @@ class PubchemReformatServiceUnitSpec extends Specification {
         PubchemReformatService service = new PubchemReformatService()
         Assay assay = Assay.build()
         Experiment experiment = Experiment.build(assay: assay)
-        // ExperimentMeasure oldMeasure = ExperimentMeasure.build(experiment: experiment)
-        // Experiment experiment = Experiment.build(assay: assay)
+
+        // create an existing measure
+        ExperimentMeasure.build(experiment: experiment)
+
         ExperimentMeasure oldExperimentMeasure = ExperimentMeasure.build(experiment: experiment)
         Element cellCount = Element.build(label: "cell count", expectedValueType: NUMERIC)
 
@@ -311,10 +314,36 @@ class PubchemReformatServiceUnitSpec extends Specification {
         AssayContext context = assay.assayContexts.first()
         context.assayContextExperimentMeasures.size() == 1
 
+        // make sure the old measure has been replaced with the new one
         experiment.experimentMeasures.size() == 1
         !experiment.experimentMeasures.contains(oldExperimentMeasure)
-        // there is the original measure, and a new one used by this experiment
-        // assay.measures.size() == 2
+    }
+
+    def 'test recreating measure without recreating assay context'() {
+        setup:
+        PubchemReformatService service = new PubchemReformatService()
+        Assay assay = Assay.build()
+        Experiment experiment = Experiment.build(assay: assay)
+
+        // create an assay context that is exactly like the one we would have created
+        Element cellCount = Element.build(label: "cell count", expectedValueType: NUMERIC)
+        AssayContext context = AssayContext.build(assay: assay, contextName: "annotations for percent inhibition")
+        AssayContextItem.build(assayContext: context, attributeType: AttributeType.Free, attributeElement: cellCount, valueType: ValueType.NONE, valueDisplay: null)
+
+        // the new measures with cell type provided as context
+        Collection<PubchemReformatService.MappedStub> newMeasures = [
+                new PubchemReformatService.MappedStub(resultType: Element.build(label: "percent inhibition"), parentChildRelationship: HierarchyType.CALCULATED_FROM,
+                        contextItems: [(cellCount): ["100.0", "200.0"]])
+        ]
+
+        when:
+        service.recreateMeasures(experiment, newMeasures)
+
+        then:
+        // make sure we still only have one context
+        assay.assayContexts.size() == 1
+        // and that context is connected to our measure
+        assay.assayContexts.first().assayContextExperimentMeasures.size() == 1
     }
 
     def 'test creating measure hierarchy from result map'() {
