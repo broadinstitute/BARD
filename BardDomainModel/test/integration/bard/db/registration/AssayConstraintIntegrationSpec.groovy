@@ -51,32 +51,6 @@ class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
         'valid value'    | AssayStatus.RETIRED  | true  | null
     }
 
-    void "test assayShortName constraints #desc value: '#valueUnderTest'"() {
-
-        final String field = 'assayShortName'
-
-        when: 'a value is set for the field under test'
-        domainInstance[(field)] = valueUnderTest
-        domainInstance.validate()
-
-        then: 'verify valid or invalid for expected reason'
-        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domain can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
-
-        where:
-        desc               | valueUnderTest                              | valid | errorCode
-        'null not valid'   | null                                        | false | 'nullable'
-        'too long'         | createString(ASSAY_SHORT_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-
-//        'blank valid'      | ''                                          | false  | null // fails as oracle treats '' same as null
-        'blank valid'      | '   '                                       | true  | null
-        'exactly at limit' | createString(ASSAY_SHORT_NAME_MAX_SIZE)     | true  | null
-    }
-
     void "test assayName constraints #desc assayName: "() {
 
         final String field = 'assayName'

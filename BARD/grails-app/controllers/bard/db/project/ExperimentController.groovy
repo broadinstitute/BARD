@@ -108,7 +108,7 @@ class ExperimentController {
 
             experiment = experimentService.updateHoldUntilDate(inlineEditableCommand.pk, holdUntilDate)
             final String updatedDateAsString = formatter.format(experiment.holdUntilDate)
-            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, updatedDateAsString)
+            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, updatedDateAsString)
         } catch (AccessDeniedException ade) {
             log.error(ade)
             render accessDeniedErrorMessage()
@@ -133,7 +133,7 @@ class ExperimentController {
 
             experiment = experimentService.updateRunFromDate(inlineEditableCommand.pk, runFromDate)
             final String updatedDateAsString = formatter.format(experiment.runDateFrom)
-            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, updatedDateAsString)
+            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, updatedDateAsString)
         } catch (AccessDeniedException ade) {
             log.error(ade)
             render accessDeniedErrorMessage()
@@ -158,7 +158,7 @@ class ExperimentController {
 
             experiment = experimentService.updateRunToDate(inlineEditableCommand.pk, runToDate)
             final String updatedDateAsString = formatter.format(experiment.runDateTo)
-            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, updatedDateAsString)
+            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, updatedDateAsString)
         } catch (AccessDeniedException ade) {
             log.error(ade)
             render accessDeniedErrorMessage()
@@ -190,7 +190,7 @@ class ExperimentController {
                 throw new Exception("Error while editing Experiment Description")
             }
 
-            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.description)
+            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, experiment.description)
 
         } catch (AccessDeniedException ade) {
             log.error(ade)
@@ -219,7 +219,7 @@ class ExperimentController {
                 return
             }
             experiment = experimentService.updateOwnerRole(inlineEditableCommand.pk, ownerRole)
-            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.owner)
+            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, experiment.owner)
 
         }
         catch (AccessDeniedException ade) {
@@ -252,7 +252,7 @@ class ExperimentController {
                 throw new Exception("Error while editing Experiment Name")
             }
 
-            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.experimentName)
+            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, experiment.experimentName)
 
         } catch (AccessDeniedException ade) {
             log.error(ade)
@@ -274,7 +274,7 @@ class ExperimentController {
                 return
             }
             experiment = experimentService.updateExperimentStatus(inlineEditableCommand.pk, experimentStatus)
-            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.experimentStatus.id)
+            generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, experiment.experimentStatus.id)
 
         } catch (AccessDeniedException ade) {
             log.error(ade)

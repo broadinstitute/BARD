@@ -77,7 +77,6 @@ public class AssayServiceUnitSpec extends Specification {
         assert clonedAssay.assayName == expectedAssayName
         assert clonedAssay.assayStatus == expectedAssayStatus
         assert clonedAssay.readyForExtraction == assay.readyForExtraction
-        assert clonedAssay.assayShortName == assay.assayShortName
         assert clonedAssay.assayVersion == "1"
         assert clonedAssay.designedBy == "me"
 
@@ -104,7 +103,6 @@ public class AssayServiceUnitSpec extends Specification {
         // test assay props are good
         assay != newAssay
         assert "Clone of ${assay.assayName}" == newAssay.assayName
-        assert assay.assayShortName == newAssay.assayShortName
         assert AssayStatus.DRAFT == newAssay.assayStatus
         assert assay.assayType != newAssay.assayType
         assert newAssay.assayType == AssayType.REGULAR
@@ -149,7 +147,6 @@ public class AssayServiceUnitSpec extends Specification {
         // test assay props are good
         assay != newAssay
         assay.assayName == newAssay.assayName
-        assay.assayShortName == newAssay.assayShortName
         assay.assayStatus == newAssay.assayStatus
         assay.assayType == newAssay.assayType
         assay.designedBy == newAssay.designedBy

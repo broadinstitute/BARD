@@ -38,8 +38,6 @@
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Name" data-id="nameId"></a>
             </dd>
 
-            <dt><g:message code="assay.assayShortName.label" default="Fix i18n"/>:</dt>
-            <dd id="shortNameId"><g:fieldValue bean="${assay}" field="assayShortName"/></dd>
             <dt><g:message code="assay.ownerRole.label" default="Owner"/>:</dt>
             <dd>
                 <span

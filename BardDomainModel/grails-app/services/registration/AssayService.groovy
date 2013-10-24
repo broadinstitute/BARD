@@ -110,7 +110,6 @@ class AssayService {
         //assay version should always be set to 1 after colining
         return new Assay(
                 assayStatus: assayStatus,
-                assayShortName: assay.assayShortName,
                 assayName: assayName,
                 assayVersion: "1",
                 designedBy: designedBy,

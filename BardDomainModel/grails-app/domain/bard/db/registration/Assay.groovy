@@ -35,7 +35,6 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
 
     def capPermissionService
     AssayStatus assayStatus = AssayStatus.DRAFT
-    String assayShortName
     String assayName
     String assayVersion
     String designedBy
@@ -73,7 +72,6 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
 
     static constraints = {
         assayStatus()
-        assayShortName(maxSize: ASSAY_SHORT_NAME_MAX_SIZE)
         assayName(maxSize: ASSAY_NAME_MAX_SIZE, blank: false)
         assayVersion(maxSize: ASSAY_VERSION_MAX_SIZE, blank: false)
         designedBy(nullable: true, maxSize: DESIGNED_BY_MAX_SIZE)

@@ -158,7 +158,7 @@ class PanelController {
             if (panel?.hasErrors()) {
                 throw new Exception("Error while editing panel Name")
             }
-            generateAndRenderJSONResponse(panel.version, panel.modifiedBy, "", panel.lastUpdated, panel.name)
+            generateAndRenderJSONResponse(panel.version, panel.modifiedBy, panel.lastUpdated, panel.name)
         }
         catch (AccessDeniedException ade) {
             log.error(ade)
@@ -188,7 +188,7 @@ class PanelController {
                 return
             }
             panel = panelService.updatePanelOwnerRole(inlineEditableCommand.pk,ownerRole)
-            generateAndRenderJSONResponse(panel.version, panel.modifiedBy, "", panel.lastUpdated, panel.ownerRole.displayName)
+            generateAndRenderJSONResponse(panel.version, panel.modifiedBy, panel.lastUpdated, panel.ownerRole.displayName)
 
         }
         catch (AccessDeniedException ade) {

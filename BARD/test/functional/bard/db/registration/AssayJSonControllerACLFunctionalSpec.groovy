@@ -37,10 +37,10 @@ class AssayJSonControllerACLFunctionalSpec extends BardControllerFunctionalSpec 
         String reauthenticateWithUser = TEAM_A_1_USERNAME
         assayData = (Map) remote.exec({
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
-            Assay assay1 = Assay.build(assayName: "Assay Name101", assayShortName: "Assay Short Name").save(flush: true)
-            Assay assay2 = Assay.build(assayName: "Assay Name102", assayShortName: "Assay Short Name").save(flush: true)
-            Assay assay3 = Assay.build(assayName: "Assay Name103", assayShortName: "Assay Short Name").save(flush: true)
-            return [shortName: assay1.assayShortName, ids: [assay1.id, assay2.id, assay3.id]]
+            Assay assay1 = Assay.build(assayName: "Assay Name101").save(flush: true)
+            Assay assay2 = Assay.build(assayName: "Assay Name102").save(flush: true)
+            Assay assay3 = Assay.build(assayName: "Assay Name103").save(flush: true)
+            return [assayName: assay1.assayName, ids: [assay1.id, assay2.id, assay3.id]]
         })
     }     // run before the first feature method
     def cleanupSpec() {
@@ -76,7 +76,7 @@ class AssayJSonControllerACLFunctionalSpec extends BardControllerFunctionalSpec 
         RESTClient client = getRestClient(controllerUrl, "", team, teamPassword)
 
         when:
-        final Response response = client.get(path: '/getNames', query: [term: assayData.shortName, include_entities: true])
+        final Response response = client.get(path: '/getNames', query: [term: assayData.assayName, include_entities: true])
         then:
         assert response.statusCode == expectedHttpResponse
         assert response.contentType == "application/json"

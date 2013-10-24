@@ -73,7 +73,7 @@ class ProjectController {
                 return
             }
             project = projectService.updateProjectStatus(inlineEditableCommand.pk, projectStatus)
-            generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.projectStatus.id)
+            generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.projectStatus.id)
         }
         catch (AccessDeniedException ade) {
             log.error(ade)
@@ -103,7 +103,7 @@ class ProjectController {
                 return
             }
             project = projectService.updateOwnerRole(inlineEditableCommand.pk, ownerRole)
-            generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.ownerRole.displayName)
+            generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.ownerRole.displayName)
 
         }
         catch (AccessDeniedException ade) {
@@ -136,7 +136,7 @@ class ProjectController {
             if (project?.hasErrors()) {
                 throw new Exception("Error while editing Project Name")
             }
-            generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.name)
+            generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.name)
 
         } catch (AccessDeniedException ade) {
             log.error(ade)
@@ -168,7 +168,7 @@ class ProjectController {
                 throw new Exception("Error while editing Project Description")
             }
 
-            generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.description)
+            generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.description)
 
         } catch (AccessDeniedException ade) {
             log.error(ade)

@@ -93,7 +93,7 @@ class AssayDefinitionController {
                 return
             }
             assay = assayDefinitionService.updateAssayType(inlineEditableCommand.pk, assayType)
-            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayType.id)
+            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.assayType.id)
         }
         catch (AccessDeniedException ade) {
             log.error(ade)
@@ -125,7 +125,7 @@ class AssayDefinitionController {
             //verify that the role is part of the users role
 
             assay = assayDefinitionService.updateOwnerRole(inlineEditableCommand.pk, ownerRole)
-            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.ownerRole.displayName)
+            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.ownerRole.displayName)
 
         }
         catch (AccessDeniedException ade) {
@@ -148,7 +148,7 @@ class AssayDefinitionController {
                 return
             }
             assay = assayDefinitionService.updateAssayStatus(inlineEditableCommand.pk, assayStatus)
-            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayStatus.id)
+            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.assayStatus.id)
 
         }
         catch (AccessDeniedException ade) {
@@ -180,7 +180,7 @@ class AssayDefinitionController {
             if (assay?.hasErrors()) {
                 throw new Exception("Error while editing assay Name")
             }
-            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayName)
+            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.assayName)
         }
         catch (AccessDeniedException ade) {
             log.error(ade)
@@ -212,7 +212,7 @@ class AssayDefinitionController {
                 throw new Exception("Error while editing Assay designed by")
             }
 
-            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.designedBy)
+            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.designedBy)
         }
         catch (AccessDeniedException ade) {
             log.error(ade)
@@ -589,14 +589,11 @@ class EditingHelper {
         return permissionEvaluator?.hasPermission(auth, domainInstance.id, clazz.name, BasePermission.ADMINISTRATION)
     }
 
-    def generateAndRenderJSONResponse(Long currentVersion, String modifiedBy, String shortName, Date lastUpdated, final String newValue) {
+    def generateAndRenderJSONResponse(Long currentVersion, String modifiedBy, Date lastUpdated, final String newValue) {
         Map<String, String> dataMap = [:]
         dataMap.put('version', currentVersion.toString())
         dataMap.put('modifiedBy', modifiedBy)
         dataMap.put('lastUpdated', formatter.format(lastUpdated))
-        if (shortName?.trim()) {
-            dataMap.put("shortName", shortName)
-        }
         dataMap.put("data", newValue)
 
         JSON jsonResponse = dataMap as JSON
@@ -641,7 +638,7 @@ class AssayCommand extends BardCommand {
     public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['ownerRole', 'assayType', 'assayName', 'assayVersion', 'dateCreated'].asImmutable()
 
     static constraints = {
-        importFrom(Assay, exclude: ['ownerRole', 'assayShortName', 'assayStatus', 'readyForExtraction', 'lastUpdated'])
+        importFrom(Assay, exclude: ['ownerRole', 'assayStatus', 'readyForExtraction', 'lastUpdated'])
         ownerRole(nullable: false, validator: { value, command, err ->
             /*We make it required in the command object even though it is optional in the domain.
          We will make it required in the domain as soon as we are done back populating the data*/
@@ -672,7 +669,6 @@ class AssayCommand extends BardCommand {
     void copyFromCmdToDomain(Assay assay) {
         assay.designedBy = springSecurityService.principal?.username
         assay.modifiedBy = assay.designedBy
-        assay.assayShortName = this.assayName
         for (String field in PROPS_FROM_CMD_TO_DOMAIN) {
             assay[(field)] = this[(field)]
         }

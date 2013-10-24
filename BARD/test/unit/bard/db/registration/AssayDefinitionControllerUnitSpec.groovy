@@ -111,7 +111,6 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assert responseJSON.get("version").asText() == "0"
         assert responseJSON.get("data").asText() == updatedAssay.assayType.id
         assert responseJSON.get("lastUpdated").asText()
-        assert responseJSON.get("shortName").asText()
         assert response.contentType == "text/json;charset=utf-8"
     }
 
@@ -159,7 +158,6 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assert responseJSON.get("version").asText() == "0"
         assert responseJSON.get("data").asText() == updatedAssay.assayStatus.id
         assert responseJSON.get("lastUpdated").asText()
-        assert responseJSON.get("shortName").asText()
         assert response.contentType == "text/json;charset=utf-8"
     }
 
@@ -217,7 +215,6 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assert responseJSON.get("version").asText() == "0"
         assert responseJSON.get("data").asText() == updatedAssay.assayName
         assert responseJSON.get("lastUpdated").asText()
-        assert responseJSON.get("shortName").asText()
         assert response.contentType == "text/json;charset=utf-8"
     }
 
@@ -265,7 +262,6 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assert responseJSON.get("version").asText() == "0"
         assert responseJSON.get("data").asText() == updatedAssay.designedBy
         assert responseJSON.get("lastUpdated").asText()
-        assert responseJSON.get("shortName").asText()
         assert response.contentType == "text/json;charset=utf-8"
     }
 

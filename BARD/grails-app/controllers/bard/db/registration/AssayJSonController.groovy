@@ -9,14 +9,14 @@ class AssayJSonController {
 	def getNames() {
 		def results
 		if(params?.term)
-			results = Assay.findAllByAssayShortNameIlike("%${params.term}%", [sort: "assayShortName", order: "asc"])
+			results = Assay.findAllByAssayNameIlike("%${params.term}%", [sort: "assayName", order: "asc"])
 		else
 			results = Assay.list()	
 					
 		render(contentType: "text/json") {
 			if(results){
 				for (a in results) {
-					element a.assayShortName
+					element a.assayName
 				}
 			}
 			else
