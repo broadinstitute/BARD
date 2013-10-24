@@ -52,7 +52,7 @@ class PubchemImportService {
         statusCallback("Recreating measures...")
 
         if(map.allRecords.size() == 0) {
-            throw new RuntimeException("Skipping ${aid} -> ${ref.experiment.id} because we're missing resultmapping")
+            throw new RuntimeException("Skipping ${aid} -> ${refs*.experiment*.id.join(', ')} because we're missing resultmapping")
         }
 
         for(eid in eids) {
