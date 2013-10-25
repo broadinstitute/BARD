@@ -13,13 +13,6 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element default="" name="assayShortName">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:maxLength value="250"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
                 <xs:element name="assayName">
                     <xs:annotation>
                         <xs:documentation>Name of the assay. Is this required?
