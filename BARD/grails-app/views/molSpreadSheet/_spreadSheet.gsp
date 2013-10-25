@@ -4,9 +4,9 @@
 <script type="text/javascript">
     jQuery.extend(jQuery.fn.dataTableExt.oSort, {
         "num-html-pre":function (a) {
-            // First remove HTML tags and any text
-            //var tagfreestr = a.replace(/<.*?>/g, "").replace(/[^\d.-]/g,"");
-            var tagfree =  a.replace(/<.*?>/g, "");
+            // First remove HTML tags and any text.  There may be quite a bit of code to remove in each
+            // cell, but we can depend on a <nobr> variant to identify the place where the numbers start.
+            var tagfree =  a.replace(/<.*?(nobr>\s|nobr>&gt;\s|nobr>&lt;\s)/g, "");
             var firstvalue = tagfree.split(" ") ;
             var getnumbers=firstvalue[0].replace(/[^\d.-]/g,"");
             var stringlen= getnumbers.length;
