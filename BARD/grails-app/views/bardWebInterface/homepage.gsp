@@ -220,19 +220,19 @@
                             </div>
 
                             <div class="item">
-                                <strong class="ttl">Presentation<time
-                                        datetime="2013-08-17T08:20">SEP 08 2013 @ 9:00 am</time>
+                                <strong class="ttl">Release<time
+                                        datetime="2013-08-17T08:20">NOV 20 2013 @ 3:00 pm</time>
                                 </strong>
 
-                                <p><a href="#">Session at ACS meeting devoted to Bard</a></p>
+                                <p><a href="#">Projected public release of BARD</a></p>
                             </div>
 
                             <div class="item">
                                 <strong class="ttl">Demonstration<time
-                                        datetime="2013-08-18T08:20">SEP 24 2013 @ 2:00 pm</time>
+                                        datetime="2013-08-18T08:20">NOV 5 2013 @ 2:00 pm</time>
                                 </strong>
 
-                                <p><a href="#">Next regularly scheduled BARD iteration demo.</a></p>
+                                <p><a href="#">Regularly scheduled BARD iteration demo.</a></p>
                             </div>
                         </div>
                     </div>
