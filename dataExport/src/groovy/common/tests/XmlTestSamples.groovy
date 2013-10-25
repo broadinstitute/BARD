@@ -476,7 +476,6 @@ class XmlTestSamples {
 
     static final String ASSAY_NO_DESIGNER_UNIT = '''
         <assay assayId='1' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft'  lastUpdated='2013-06-17T22:45:13.910-04:00'>
-          <assayShortName>assayShortName</assayShortName>
           <assayName>assayName</assayName>
           <link rel='edit' href='null' type='xml' />
           <link rel='self' href='null' type='xml' />
@@ -515,7 +514,6 @@ class XmlTestSamples {
     '''
     static final String ASSAY_WITH_DESIGNER_NAME = '''
         <assay assayId='1' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft'  lastUpdated='2013-06-17T22:45:13.910-04:00'>
-          <assayShortName>assayShortName</assayShortName>
           <assayName>assayName</assayName>
           <designedBy>Broad</designedBy>
           <link rel='edit' href='null' type='xml' />
@@ -524,7 +522,6 @@ class XmlTestSamples {
         </assay> '''
     static final String ASSAY_WITH_DOCUMENT = '''
          <assay assayId='1' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft'  lastUpdated='2013-06-17T22:45:13.910-04:00'>
-          <assayShortName>assayShortName</assayShortName>
           <assayName>assayName</assayName>
           <link rel='edit' href='null' type='xml' />
           <link rel='self' href='null' type='xml' />
@@ -650,7 +647,6 @@ class XmlTestSamples {
 
     static String ASSAY_FULL_DOC = '''
 <assay assayId='1' readyForExtraction='Ready' assayVersion='assayVersi' assayType='Regular' status='Draft' lastUpdated='2013-10-21T17:54:16.257-04:00'>
-  <assayShortName>assayShortName</assayShortName>
   <assayName>assayName</assayName>
   <assayContexts>
     <assayContext assayContextId='1' displayOrder='0'>
@@ -678,7 +674,7 @@ class XmlTestSamples {
 
     static String ASSAYS_FROM_SERVER = '''
     <assays count='1'>
-        <link rel='related' assayShortName='assayShortName' type='application/vnd.bard.cap+xml;type=assay' href='http://localhost:8080/dataExport/api/assays/1'/>
+        <link rel='related' type='application/vnd.bard.cap+xml;type=assay' href='http://localhost:8080/dataExport/api/assays/1'/>
     </assays>
     '''
 
