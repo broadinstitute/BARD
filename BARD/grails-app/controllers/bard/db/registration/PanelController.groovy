@@ -127,7 +127,7 @@ class PanelController {
             if (panel?.hasErrors()) {
                 throw new Exception("Error while editing panel Description")
             }
-            generateAndRenderJSONResponse(panel.version, panel.modifiedBy, "", panel.lastUpdated, panel.description)
+            generateAndRenderJSONResponse(panel.version, panel.modifiedBy, panel.lastUpdated, panel.description)
         }
         catch (AccessDeniedException ade) {
             log.error(ade)
