@@ -211,7 +211,6 @@ class AssayExportHelperService extends ExportAbstractService {
             attributes.put('modifiedBy', assay.modifiedBy)
         }
         markupBuilder.assay(attributes) {
-            assayShortName(assay.assayShortName)
             assayName(assay.assayName)
             if (assay.designedBy) {
                 designedBy(assay.designedBy)
