@@ -53,7 +53,7 @@
             </div>
             <div class="control-group">
                 <div class="controls">
-                    <g:link controller="assayDefinition" action="groupAssays"
+                    <g:link controller="assayDefinition" action="myAssays"
                             class="btn">Cancel</g:link>
                     <input type="submit" class="btn btn-primary" value="Create New Assay Definition">
                 </div>

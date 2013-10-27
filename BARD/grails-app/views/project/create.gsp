@@ -111,7 +111,7 @@
 
             <div class="control-group">
                 <div class="controls">
-                    <g:link controller="project" action="groupProjects"
+                    <g:link controller="project" action="myProjects"
                             class="btn">Cancel</g:link>
                     <input type="submit" class="btn btn-primary" value="Create New Project">
                 </div>

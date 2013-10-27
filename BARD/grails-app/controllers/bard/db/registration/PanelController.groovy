@@ -19,12 +19,14 @@ class PanelController {
     CapPermissionService capPermissionService
 
     PanelService panelService
+
     @Secured(['isAuthenticated()'])
     def myPanels() {
-        List<Panel> panels = capPermissionService.findAllObjectsForRoles(Panel)
+        List<Panel> panels = capPermissionService.findAllByOwnerRolesAndClass(Panel)
         Set<Panel> uniquePanels = new HashSet<Panel>(panels)
         [panels: uniquePanels]
     }
+
     @Secured(['isAuthenticated()'])
     def deletePanel() {
         Panel panel = Panel.get(params.id)
@@ -37,10 +39,12 @@ class PanelController {
         flash.message = "Panel deleted successfully"
         redirect(action: "myPanels")
     }
+
     @Secured(['isAuthenticated()'])
     def addAssayToPanel(AssociatePanelCommand associatePanelCommand) {
         return [associatePanelCommand: associatePanelCommand]
     }
+
     @Secured(['isAuthenticated()'])
     def addAssays(AssociatePanelCommand associatePanelCommand) {
 
@@ -60,6 +64,7 @@ class PanelController {
 
 
     }
+
     @Secured(['isAuthenticated()'])
     def addAssay(AssociatePanelCommand associatePanelCommand) {
         if (!associatePanelCommand.id) {
@@ -75,6 +80,7 @@ class PanelController {
         redirect(controller: "panel", action: "show", id: associatePanelCommand.id)
 
     }
+
     @Secured(['isAuthenticated()'])
     def removeAssays(AssociatePanelCommand associatePanelCommand) {
 
@@ -92,6 +98,7 @@ class PanelController {
         redirect(controller: "panel", action: "show", id: associatePanelCommand.id)
 
     }
+
     @Secured(['isAuthenticated()'])
     def removeAssay(AssociatePanelCommand associatePanelCommand) {
         if (!associatePanelCommand.id) {
@@ -138,6 +145,7 @@ class PanelController {
             editErrorMessage()
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editPanelName(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -169,10 +177,11 @@ class PanelController {
             editErrorMessage()
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
         try {
-            final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value)?:Role.findByAuthority(inlineEditableCommand.value)
+            final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value) ?: Role.findByAuthority(inlineEditableCommand.value)
             if (!ownerRole) {
                 editBadUserInputErrorMessage("Could not find a registered team with name ${inlineEditableCommand.value}")
                 return
@@ -187,7 +196,7 @@ class PanelController {
                 editBadUserInputErrorMessage("You do not have the permission to select team: ${inlineEditableCommand.value}")
                 return
             }
-            panel = panelService.updatePanelOwnerRole(inlineEditableCommand.pk,ownerRole)
+            panel = panelService.updatePanelOwnerRole(inlineEditableCommand.pk, ownerRole)
             generateAndRenderJSONResponse(panel.version, panel.modifiedBy, panel.lastUpdated, panel.ownerRole.displayName)
 
         }
@@ -204,6 +213,7 @@ class PanelController {
     def index() {
         redirect(action: "myPanels")
     }
+
     @Secured(['isAuthenticated()'])
     def save(PanelCommand panelCommand) {
         if (!panelCommand.validate()) {
@@ -217,6 +227,7 @@ class PanelController {
         }
         render(view: "create", model: [panelCommand: panelCommand])
     }
+
     @Secured(['isAuthenticated()'])
     def create() {
         return [panelCommand: new PanelCommand()]
@@ -323,7 +334,7 @@ class PanelCommand extends BardCommand {
     String ownerRole
 
     static constraints = {
-        importFrom(Panel, exclude: ['readyForExtraction', 'lastUpdated', 'dateCreated','ownerRole'])
+        importFrom(Panel, exclude: ['readyForExtraction', 'lastUpdated', 'dateCreated', 'ownerRole'])
         ownerRole(nullable: false, blank: false, validator: { value, command, err ->
             Role role = Role.findByAuthority(value)
             /*We make it required in the command object even though it is optional in the domain.
@@ -357,6 +368,6 @@ class PanelCommand extends BardCommand {
         panel.modifiedBy = springSecurityService.principal?.username
         panel.name = this.name
         panel.description = this.description
-        panel.ownerRole =  Role.findByAuthority(ownerRole)
+        panel.ownerRole = Role.findByAuthority(ownerRole)
     }
 }

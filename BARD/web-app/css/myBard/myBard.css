@@ -1,0 +1,11 @@
+.overlay {
+    left: 50%;
+    position: absolute;
+    margin-left: -100px;
+    width: 200px;
+    text-align: center;
+    /*display: none;*/
+    margin-top: -10px;
+    background: #000;
+    color: #FFF;
+}

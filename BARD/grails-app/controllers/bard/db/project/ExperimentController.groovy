@@ -40,7 +40,7 @@ class ExperimentController {
 
     @Secured(['isAuthenticated()'])
     def myExperiments() {
-        List<Experiment> experiments = capPermissionService.findAllObjectsForRoles(Experiment)
+        List<Experiment> experiments = capPermissionService.findAllByOwnerRolesAndClass(Experiment)
         Set<Experiment> uniqueExperiments = new HashSet<Experiment>(experiments)
         [experiments: uniqueExperiments]
     }
@@ -714,7 +714,7 @@ class ResultTypeCommand extends AbstractResultTypeCommand {
         parentChildRelationship(nullable: true, blank: true, validator: { value, command, err ->
             if (value) { //Should only exist if there is a parent
                 if (!command.parentExperimentMeasureId) {
-                    err.rejectValue('parentChildRelationship',"command.parentChildRelationship.no.hierarchy" );
+                    err.rejectValue('parentChildRelationship', "command.parentChildRelationship.no.hierarchy");
                 }
             }
         })
@@ -722,7 +722,7 @@ class ResultTypeCommand extends AbstractResultTypeCommand {
         parentExperimentMeasureId(nullable: true, blank: true, validator: { value, command, err ->
             if (value) { //Should only exist if there is a parent
                 if (!command.parentChildRelationship) {
-                    err.rejectValue('parentExperimentMeasureId',"command.parentMeasure.no.hierarchy" );
+                    err.rejectValue('parentExperimentMeasureId', "command.parentMeasure.no.hierarchy");
                 }
             }
         })
@@ -742,7 +742,7 @@ class ResultTypeCommand extends AbstractResultTypeCommand {
             experimentMeasureToReturn.statsModifier = getStatsModifier()
             experimentMeasureToReturn.parent = getParentExperimentMeasure()
             experimentMeasureToReturn.resultType = this.getResultType()
-            return experimentService.updateExperimentMeasure(this.experimentId, experimentMeasure,this.contextIds)
+            return experimentService.updateExperimentMeasure(this.experimentId, experimentMeasure, this.contextIds)
         }
         return null
     }

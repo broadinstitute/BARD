@@ -1,9 +1,15 @@
 package acl
 
 import bard.acl.CapPermissionInterface
+import bard.db.enums.AssayStatus
+import bard.db.enums.ExperimentStatus
+import bard.db.enums.ProjectStatus
+import bard.db.experiment.Experiment
 import bard.db.people.Person
 import bard.db.people.Role
+import bard.db.project.Project
 import bard.db.registration.Assay
+import bard.db.registration.Panel
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.util.GrailsNameUtils
 import groovy.transform.TypeChecked
@@ -38,8 +44,8 @@ class CapPermissionService implements CapPermissionInterface {
             final BardUser bardUser = (BardUser) springSecurityService.principal
             //use the first team that you can find
             final Collection<GrantedAuthority> authorities = bardUser.authorities
-            if(authorities){
-                role = (Role)authorities.get(0);
+            if (authorities) {
+                role = (Role) authorities.get(0);
             }
 
             if (!role) {
@@ -74,7 +80,8 @@ class CapPermissionService implements CapPermissionInterface {
             }
         }
     }
-    void updatePermission(domainObjectInstance,Role newRole){
+
+    void updatePermission(domainObjectInstance, Role newRole) {
         final Class<?> clazz = domainObjectInstance.getClass()
         AclClass aclClass = AclClass.findByClassName(clazz.getName())
         final AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByObjectIdAndAclClass(domainObjectInstance.id, aclClass)
@@ -83,13 +90,13 @@ class CapPermissionService implements CapPermissionInterface {
 
             AclSid aclSid = AclSid.findBySidAndPrincipal(newRole.authority, false)
             if (!aclSid) {
-                aclSid= new AclSid(sid: newRole.authority, principal: false)
-                aclSid.save(flush:true)
+                aclSid = new AclSid(sid: newRole.authority, principal: false)
+                aclSid.save(flush: true)
             }
             List<AclEntry> aclEntryList = AclEntry.findAllByAclObjectIdentity(aclObjectIdentity)
             for (AclEntry aclEntry : aclEntryList) {
-                 springSecurityUiService.updateAclEntry(aclEntry,aclObjectIdentity.id,
-                         aclSid.id,aclEntry.aceOrder,aclEntry.mask,aclEntry.granting,aclEntry.auditSuccess,aclEntry.auditFailure)
+                springSecurityUiService.updateAclEntry(aclEntry, aclObjectIdentity.id,
+                        aclSid.id, aclEntry.aceOrder, aclEntry.mask, aclEntry.granting, aclEntry.auditSuccess, aclEntry.auditFailure)
             }
         }
     }
@@ -137,6 +144,7 @@ class CapPermissionService implements CapPermissionInterface {
         if (username) {
             allRolesAndUserName.addAll(SpringSecurityUtils.getPrincipalAuthorities()*.getAuthority())
             allRolesAndUserName.add(username)
+
             return findAllByRolesAndClass(allRolesAndUserName, domainClass)
         } else {
             return []
@@ -173,6 +181,25 @@ class CapPermissionService implements CapPermissionInterface {
             return query.list()
 
         }
+    }
+
+    public <T> List<T> findAllByOwnerRolesAndClass(Class<T> domainClass) {
+        List<String> userAuthorities = SpringSecurityUtils.getPrincipalAuthorities()*.getAuthority()
+
+        List<Role> userRoles = Role.findAllByAuthorityInList(userAuthorities)
+
+        switch (domainClass) {
+            case Experiment:
+                return Experiment.findAllByOwnerRoleInListAndExperimentStatusInList(userRoles, [ExperimentStatus.APPROVED, ExperimentStatus.DRAFT])
+            case Assay:
+                return Assay.findAllByOwnerRoleInListAndAssayStatusInList(userRoles, [AssayStatus.APPROVED, AssayStatus.DRAFT]);
+            case Project:
+                return Project.findAllByOwnerRoleInListAndProjectStatusInList(userRoles, [ProjectStatus.APPROVED, ProjectStatus.DRAFT])
+            case Panel:
+                return Panel.findAllByOwnerRoleInList(userRoles)
+        }
+        return []
+
     }
 
 
