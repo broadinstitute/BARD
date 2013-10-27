@@ -281,27 +281,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
     }
 
-    /**
-     * Forwards user to the edit Measure page
-     * @return
-     */
-    def 'test editMeasure not logged in  #desc'() {
-        given:
-        long assayId = assayData.id
-        RESTClient client = getRestClient(controllerUrl, "editMeasure/${assayId}", team, teamPassword)
 
-        when:
-        client.get()
-
-        then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
-
-        where:
-        desc                 | team | teamPassword | expectedHttpResponse
-        "Not Logged in User" | null | null         | HttpServletResponse.SC_UNAUTHORIZED
-
-    }
     /**
      * Forwards user to the edit Context page
      * @return
@@ -465,115 +445,6 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     }
 
 
-    def 'test associate context #desc'() {
-        given:
-        long id = assayData.id
-        RESTClient client = getRestClient(controllerUrl, "associateContext", team, teamPassword)
-        long measureId = assayData.measureId
-        long assayContextId = assayData.assayContextId
-        when:
-        def response = client.post() {
-            urlenc measureId: measureId, assayContextId: assayContextId, id: id
-        }
-
-        then:
-        //all of these redirect
-        assert response.statusCode == expectedHttpResponse
-
-        where:
-        desc                | team              | teamPassword      | expectedHttpResponse
-        "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
-        "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
-    }
-
-    def 'test associate context forbidden #desc'() {
-        given:
-        long id = assayData.id
-        RESTClient client = getRestClient(controllerUrl, "associateContext", team, teamPassword)
-        long measureId = assayData.measureId
-        long assayContextId = assayData.assayContextId
-        when:
-
-        client.post() {
-            urlenc measureId: measureId, assayContextId: assayContextId, id: id
-        }
-
-        then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
-
-        where:
-        desc                  | team              | teamPassword      | expectedHttpResponse
-        "Not Logged in User"  | null              | null              | HttpServletResponse.SC_UNAUTHORIZED
-        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
-    }
-
-    def 'test disassociateContext context #desc'() {
-        given:
-        long id = assayData.id
-        RESTClient client = getRestClient(controllerUrl, "disassociateContext", team, teamPassword)
-        long measureId = assayData.measureId
-        long assayContextId = assayData.assayContextId
-        when:
-        def response = client.post() {
-            urlenc measureId: measureId, assayContextId: assayContextId, id: id
-        }
-
-        then:
-        assert response.statusCode == expectedHttpResponse
-
-        where:
-        desc                | team              | teamPassword      | expectedHttpResponse
-        "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
-        "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
-    }
-
-
-    def 'test disassociateContext context #forbidden'() {
-        given:
-        long id = assayData.id
-        RESTClient client = getRestClient(controllerUrl, "disassociateContext", team, teamPassword)
-        long measureId = assayData.measureId
-        long assayContextId = assayData.assayContextId
-        when:
-
-        client.post() {
-            urlenc measureId: measureId, assayContextId: assayContextId, id: id
-        }
-
-        then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
-
-        where:
-        desc                  | team              | teamPassword      | expectedHttpResponse
-        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
-    }
-
-    def 'test change Relationship context #forbidden'() {
-        given:
-        long id = assayData.id
-        RESTClient client = getRestClient(controllerUrl, "changeRelationship", team, teamPassword)
-        long measureId = assayData.measureId
-        when:
-
-        client.post() {
-            urlenc measureId: measureId, relationship: HierarchyType.SUPPORTED_BY.id, id: id
-        }
-
-        then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
-
-        where:
-        desc                  | team              | teamPassword      | expectedHttpResponse
-        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
-    }
 
     def 'test editDesignedBy #desc forbidden'() {
         given:

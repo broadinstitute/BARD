@@ -2,13 +2,10 @@ package bard.db.registration
 
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
-import bard.db.people.Person
-import bard.db.people.PersonRole
 import bard.db.people.Role
 import bard.db.project.ExperimentController
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 import wslite.rest.RESTClient
@@ -473,47 +470,6 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
         "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
         "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
-    }
-
-
-    def 'test update #desc'() {
-        given:
-        long id = experimentData.id
-        RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
-
-        when:
-
-        def response = client.post() {
-            urlenc id: id, experimentTree: "[]"
-        }
-
-        then:
-        assert response.statusCode == expectedHttpResponse
-
-        where:
-        desc                | team              | teamPassword      | expectedHttpResponse
-        "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
-        "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
-    }
-
-
-    def 'test update - unauthorized #desc'() {
-        given:
-        long id = experimentData.id
-        RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
-        when:
-        client.post() {
-            urlenc id: id, experimentTree: "[]"
-        }
-        then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
-
-        where:
-        desc                  | team              | teamPassword      | expectedHttpResponse
-        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
     }
 
     private Map getCurrentExperimentProperties() {
