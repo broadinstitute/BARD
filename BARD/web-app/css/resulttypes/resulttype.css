@@ -1,0 +1,10 @@
+#extendwidth dt{
+    overflow: visible;
+    width: 170px !important;
+    white-space: normal;
+}
+#extendwidth2 dt{
+    overflow: visible;
+    width: 170px !important;
+    white-space: normal;
+}

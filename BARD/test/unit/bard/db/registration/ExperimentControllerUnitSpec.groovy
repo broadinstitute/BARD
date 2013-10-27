@@ -1,25 +1,29 @@
 package bard.db.registration
 
 import acl.CapPermissionService
+import bard.db.dictionary.AssayDescriptor
+import bard.db.dictionary.Element
+import bard.db.dictionary.OntologyDataAccessService
+import bard.db.enums.ExpectedValueType
 import bard.db.enums.ExperimentStatus
+import bard.db.enums.HierarchyType
+import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentMeasure
 import bard.db.experiment.ExperimentService
 import bard.db.people.Role
-import bard.db.project.ExperimentCommand
-import bard.db.project.ExperimentController
-import bard.db.project.InlineEditableCommand
+import bard.db.project.*
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
 import grails.plugins.springsecurity.SpringSecurityService
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
-import org.junit.Ignore
 import org.springframework.security.access.AccessDeniedException
-import spock.lang.IgnoreRest
 
 import javax.servlet.http.HttpServletResponse
 
@@ -32,7 +36,8 @@ import javax.servlet.http.HttpServletResponse
  */
 @TestFor(ExperimentController)
 @TestMixin(DomainClassUnitTestMixin)
-@Build([Assay, Experiment,Role])
+@Build([Assay, Experiment, Role, Element, ExperimentMeasure])
+@Mock([Assay, Experiment, Element, ExperimentMeasure, AssayDescriptor, AssayContextItem, AssayContext, AssayContextExperimentMeasure])
 class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     @Before
     void setup() {
@@ -352,7 +357,7 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         assertAccesDeniedErrorMessage()
     }
 
-    void 'test experimentStatus only has Approved and Retired '(){
+    void 'test experimentStatus only has Approved and Retired '() {
         when:
         controller.experimentStatus()
 
@@ -373,6 +378,7 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         controller.experimentService.updateExperimentStatus(_, _) >> { throw new Exception("") }
         assertEditingErrorMessage()
     }
+
     void 'test edit owner Role success'() {
         given:
         final Role oldRole = Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE TEAM A")
@@ -381,7 +387,7 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         Experiment newExperiment = Experiment.build(version: 0, ownerRole: oldRole)  //no designer
         Experiment updatedExperiment =
             Experiment.build(experimentName: "My New Name", version: 1, lastUpdated: new Date(),
-                   ownerRole: newRole)
+                    ownerRole: newRole)
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: newExperiment.id,
                     version: newExperiment.version, name: newExperiment.experimentName,
@@ -467,7 +473,7 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         params.experimentTree = "[]"
         ExperimentCommand experimentCommand =
             new ExperimentCommand(assayId: assay.id, experimentName: "name", description: "desc", ownerRole: role.authority)
-         experimentCommand.springSecurityService = Mock(SpringSecurityService)
+        experimentCommand.springSecurityService = Mock(SpringSecurityService)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
         }
@@ -498,4 +504,123 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         capPermissionService.getOwner(_) >> { 'owner' }
         m.instance == exp
     }
+
+    void 'test create result type'() {
+        when:
+        Experiment experiment = Experiment.build()
+        params.experimentId = experiment.id
+        controller.addResultTypes()
+        then:
+        assert view == "/experiment/createResultTypes"
+        assert model.resultTypeCommand
+        assert !model.currentExperimentMeasures
+    }
+
+    void 'test create dose result type'() {
+        when:
+        Experiment experiment = Experiment.build()
+        params.experimentId = experiment.id
+        controller.addDoseResultTypes()
+        then:
+        assert view == "/experiment/createDoseResultTypes"
+        assert model.resultTypeCommand
+        assert !model.currentExperimentMeasures
+    }
+
+    void 'test save result type'() {
+        given:
+        final Element responseResultType = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
+        final Experiment experiment = Experiment.build()
+        final Element statsModifier = Element.build()
+        final ExperimentMeasure parentExperimentMeasure = ExperimentMeasure.build()
+        final HierarchyType hierarchyType = HierarchyType.CALCULATED_FROM
+        ExperimentService experimentService = controller.experimentService
+        Long experimentId = experiment.id
+        Map m = [
+                experimentService: experimentService,
+                experimentId: experiment.id,
+                resultTypeId: responseResultType.id,
+                statsModifierId: statsModifier.id,
+                parentExperimentMeasureId: parentExperimentMeasure.id,
+                parentChildRelationship: hierarchyType.id
+        ]
+        ResultTypeCommand resultTypeCommand = new ResultTypeCommand(m)
+        when:
+
+        controller.saveResultType(resultTypeCommand)
+        then:
+
+        1 * experimentService.createNewExperimentMeasure(_, _, _, _, _, _, _) >> {
+            new ExperimentMeasure(experiment: experiment,
+                    priorityElement: false, resultType: responseResultType,
+                    parent: parentExperimentMeasure, parentChildRelationship: hierarchyType,
+                    statsModifier: statsModifier)
+        }
+        assert response.redirectedUrl == "/experiment/show/${experimentId}#result-type-header"
+    }
+
+    void 'test save dose result type'() {
+        given:
+        final Element concentrationResultType = Element.build()
+        final Element responseResultType = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
+        final Experiment experiment = Experiment.build()
+        final Element statsModifier = Element.build()
+        final ExperimentMeasure parentExperimentMeasure = ExperimentMeasure.build()
+        final HierarchyType hierarchyType = HierarchyType.CALCULATED_FROM
+        ExperimentService experimentService = controller.experimentService
+        Long experimentId = experiment.id
+        Map m = [ontologyDataAccessService: Mock(OntologyDataAccessService),
+                experimentService: experimentService,
+                experimentId: experiment.id,
+                concentrationResultTypeId: concentrationResultType.id,
+                responseResultTypeId: responseResultType.id,
+                statsModifierId: statsModifier.id,
+                parentExperimentMeasureId: parentExperimentMeasure.id,
+                parentChildRelationship: hierarchyType.id
+        ]
+        DoseResultTypeCommand doseResultTypeCommand = new DoseResultTypeCommand(m)
+        when:
+
+        controller.saveDoseResultType(doseResultTypeCommand)
+        then:
+        5 * experimentService.createNewExperimentMeasure(_, _, _, _, _, _, _) >> {
+            new ExperimentMeasure(experiment: experiment,
+                    priorityElement: false, resultType: responseResultType,
+                    parent: parentExperimentMeasure, parentChildRelationship: HierarchyType.SUPPORTED_BY,
+                    statsModifier: statsModifier)
+        }
+        assert response.redirectedUrl == "/experiment/show/${experimentId}#result-type-header"
+    }
+
+    void "test edit Measure"() {
+        given:
+        Experiment experiment = Experiment.build()
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(experiment: experiment)
+        params.measureId = experimentMeasure.id
+        params.experimentId = experiment.id
+        when:
+        controller.editMeasure()
+
+        then:
+        assert view == "/experiment/createResultTypes"
+        assert model.resultTypeCommand
+        assert model.currentExperimentMeasures
+    }
+
+    void "test delete Measure"() {
+        given:
+        ExperimentService experimentService = controller.experimentService
+        Experiment experiment = Experiment.build()
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(experiment: experiment)
+        when:
+        controller.deleteMeasure(experimentMeasure.id, experiment.id)
+        then:
+        experimentService.deleteExperimentMeasure(_, _) >> {}
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+        assert responseJSON.link.toString() == experiment.id.toString()
+
+    }
+
 }

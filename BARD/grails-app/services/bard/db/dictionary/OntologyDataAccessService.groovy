@@ -107,13 +107,23 @@ class OntologyDataAccessService {
      * @return Selecting all the Bard Tree descriptors that represent elements that aren't Retired or have an expectedValueType of none
      */
     public List<Descriptor> getDescriptorsForAttributes(String startOfFullPath) {
+
+        return getDescriptors(startOfFullPath, ExpectedValueType.NONE)
+    }
+    /**
+     * @param startOfFullPath you can specify a portion of the fullpath like biology,project management,
+     * @return Selecting all the Bard Tree descriptors that represent elements that aren't Retired or have an expectedValueType of none
+     */
+    public List<Descriptor> getDescriptors(String startOfFullPath, ExpectedValueType expectedValueType) {
         final Criteria c = BardDescriptor.createCriteria()
         final List<Descriptor> results = c.list([readOnly: true]) {
             like("fullPath", "BARD> ${StringUtils.trimToEmpty(startOfFullPath)}%")
             element {
                 and {
                     ne("elementStatus", ElementStatus.Retired)
-                    ne("expectedValueType", ExpectedValueType.NONE)
+                    if (expectedValueType) {
+                        ne("expectedValueType", expectedValueType)
+                    }
                 }
             }
             order("fullPath")
@@ -188,9 +198,9 @@ class OntologyDataAccessService {
     /**
      *
      * @param elementId given an element which represents and attribute for a contextItem
-     * @return  a  list of  Descriptors containing all reasonable dictionary values that are descendants
+     * @return a  list of  Descriptors containing all reasonable dictionary values that are descendants
      */
-    public List<Descriptor> getDescriptorsForValues(Long elementId){
+    public List<Descriptor> getDescriptorsForValues(Long elementId) {
         List<Descriptor> results = []
         BardDescriptor.withSession { Session session ->
             Query query = session.createSQLQuery("""
@@ -206,7 +216,7 @@ class OntologyDataAccessService {
             """)
             query.addEntity(BardDescriptor)
             query.setLong("ancestorElementId", elementId)
-            query.setParameterList("allowedExpectedValueTypes" , [ExpectedValueType.NONE.id, ExpectedValueType.ELEMENT.id])
+            query.setParameterList("allowedExpectedValueTypes", [ExpectedValueType.NONE.id, ExpectedValueType.ELEMENT.id])
             query.setString('elementStatus', ElementStatus.Retired.name())
             query.setReadOnly(true)
             results = query.list()

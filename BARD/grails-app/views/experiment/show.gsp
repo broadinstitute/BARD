@@ -3,13 +3,15 @@
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,twitterBootstrapAffix,dynatree,xeditable,experimentsummary,canEditWidget,richtexteditorForEdit, sectionCounter, card,histogram"/>
+            modules="core,bootstrap,twitterBootstrapAffix,xeditable,experimentsummary,canEditWidget,richtexteditorForEdit, sectionCounter, card,histogram"/>
     <meta name="layout" content="basic"/>
     <r:external file="css/bootstrap-plus.css"/>
     <title>EID ${instance?.id}: ${instance?.experimentName}</title>
+
 </head>
 
 <body>
+<g:hiddenField name="experimentId" id="experimentId" value="${instance.id}"/>
 <div class="row-fluid">
     <div class="span12">
         <div class="well well-small">
@@ -43,7 +45,7 @@
         <li><a href="#contexts-header"><i class="icon-chevron-right"></i>Contexts</a></li>
         <li><a href="#results-header"><i class="icon-chevron-right"></i>Results</a>
             <ul class="nav nav-list bs-docs-sidenav" style="padding-left: 0; margin: 0;">
-                <li><a href="#measures-header"><i class="icon-chevron-right"></i>Measures</a></li>
+                <li><a href="#result-type-header"><i class="icon-chevron-right"></i>Result Types</a></li>
                 <li><a href="#results-summary-header"><i class="icon-chevron-right"></i>Result Summary</a></li>
             </ul>
         </li>
@@ -243,7 +245,7 @@
 
     <div class="row-fluid">
         <g:if test="${!uneditable || true}">
-            <g:if test="${editable == 'canedit' || true}">
+            <g:if test="${editable == 'canedit'}">
                 <div class="span12">
                     <g:link action="editContext" id="${instance?.id}"
                             params="[groupBySection: ContextType.UNCLASSIFIED.id.encodeAsURL()]"
@@ -257,27 +259,31 @@
 <section id="results-header">
     <div class="page-header">
         <h3 class="sect">Results</h3>
-        <section id="measures-header">
-            <h4 class="subsect">Measures</h4>
+        <section id="result-type-header">
+            <h4 class="subsect">Result Types</h4>
+            <g:if test="${instance.experimentMeasures}">
+                <div class="row-fluid">
+                    <span><i class='icon-star'></i> by any node in the tree below, means that the result type is a priority element
+                    <g:render template="priorityElementDictionary"/>
+                    </span> <br/><br/>
+                    <div class="tree" id="result-type-table">
 
-            <div class="row-fluid">
-                <div id="measure-tree"></div>
-                <r:script>
-            $("#measure-tree").dynatree({children: <%=measuresAsJsonTree%> })
-                </r:script>
-
-            </div>
+                    </div>
+                </div>
+            </g:if>
             <br/>
             <g:if test="${editable == 'canedit'}">
-                <p>
-                    <g:if test="${instance.experimentMeasures}">
-                        <g:link action="edit" id="${instance.id}" class="btn">Edit Measures</g:link>
-                    </g:if>
-                    <g:else>
-                        %{--TODO: Add create mesures resource--}%
-                        %{--<g:link action="edit" id="${instance.id}" class="btn">Create Measures</g:link>--}%
-                    </g:else>
-                </p>
+                <g:if test="${instance.experimentMeasures}">
+                </g:if>
+                <g:else>
+                    <p><b>No result types specified</b></p>
+                </g:else>
+
+                <g:link action="addResultTypes" params="[experimentId: instance.id]" class="btn"><i
+                        class="icon-plus"></i> Add result type</g:link>
+                <g:link action="addDoseResultTypes" params="[experimentId: instance.id]"
+                        class="btn"><i class="icon-plus"></i> Add dose response result type</g:link>
+
             </g:if>
             <br/>
             <br/>

@@ -845,7 +845,7 @@ class PubchemReformatService {
             AssayContextItem item = new AssayContextItem();
             item.attributeType = AttributeType.Free
             item.attributeElement = freeAttribute
-            context.addToAssayContextItems(item)
+            assayContext.addToAssayContextItems(item)
             item.valueDisplay = item.deriveDisplayValue()
         }
 

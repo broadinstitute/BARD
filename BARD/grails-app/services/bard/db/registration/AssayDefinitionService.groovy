@@ -1,17 +1,10 @@
 package bard.db.registration
 
 import acl.CapPermissionService
-import bard.core.SearchParams
-import bard.core.rest.spring.AssayRestService
-import bard.core.rest.spring.assays.AssayResult
 import bard.db.context.item.ContextDTO
 import bard.db.context.item.ContextItemDTO
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
-import bard.db.enums.HierarchyType
-import bard.db.enums.ReadyForExtraction
-import bard.db.experiment.Experiment
-import bard.db.experiment.ExperimentMeasure
 import bard.db.people.Role
 import org.apache.commons.collections.CollectionUtils
 import org.springframework.security.access.prepost.PreAuthorize
@@ -19,7 +12,6 @@ import registration.AssayService
 
 class AssayDefinitionService {
     AssayService assayService
-    AssayRestService assayRestService
     CapPermissionService capPermissionService
 
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
@@ -65,29 +57,6 @@ class AssayDefinitionService {
                 assayTwoADID: assayTwo.id
         ]
     }
-
-    /**
-     * Move measure to parent
-     * @param assay
-     * @param measure
-     * @param parentMeasure
-     * @return
-     */
-    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void moveMeasure(Long id, ExperimentMeasure measure, ExperimentMeasure parentMeasure) {
-
-        measure.parent = parentMeasure
-        if (!measure.parentChildRelationship) {
-            if (parentMeasure) {
-                measure.parentChildRelationship = HierarchyType.SUPPORTED_BY
-            }
-        }
-    }
-
-    Assay saveNewAssay(Assay assayInstance) {
-        return assayInstance.save(flush: true)
-    }
-
     Assay recomputeAssayShortName(Assay assay) {
         return assayService.recomputeAssayShortName(assay)
     }
@@ -130,73 +99,4 @@ class AssayDefinitionService {
     Assay cloneAssayForEditing(Assay assay, String designedBy) {
         return assayService.cloneAssayForEditing(assay, designedBy)
     }
-
-    List<String> loadNCGCAssayIds() {
-        //look for assays with an NCGC ID of null and Ready for extraction status of complete
-        List<Long> capIds = Assay.findAllByNcgcWarehouseIdIsNullAndReadyForExtraction(ReadyForExtraction.COMPLETE).collect { it.id }
-
-        if (!capIds) {
-            return
-        }
-        int start = 0
-        final int NUMBER_OF_RECORDS_TO_PROCESS_PER_ROUND = 5
-        int end = capIds.size() > NUMBER_OF_RECORDS_TO_PROCESS_PER_ROUND ? NUMBER_OF_RECORDS_TO_PROCESS_PER_ROUND : capIds.size()
-        List<String> updateStatements = []
-        List<Long> toProcess = capIds.subList(start, end)
-        while (toProcess) {
-            updateStatements.addAll(loadNCGCAssayIdsFromList(toProcess))
-            start = end
-            end = end + NUMBER_OF_RECORDS_TO_PROCESS_PER_ROUND
-
-            if (end > capIds.size()) {
-                end = capIds.size()
-            }
-            if (start == end) {
-                toProcess = []
-            } else {
-                toProcess = capIds.subList(start, end)
-            }
-        }
-
-        return updateStatements
-    }
-
-    List<String> loadNCGCAssayIdsFromList(List<Long> capAssayIds) {
-        if (!capAssayIds) {
-            return
-        }
-        List<String> updateStatements = []
-        SearchParams searchParams = new SearchParams(skip: 0, top: capAssayIds.size())
-
-        try {
-            AssayResult assayResult = assayRestService.searchAssaysByCapIds(capAssayIds, searchParams)
-            if (assayResult) {
-                final List<bard.core.rest.spring.assays.Assay> assays = assayResult.assays
-                if (assays) {
-                    for (bard.core.rest.spring.assays.Assay assayR : assays) {
-                        if (assayR) {
-                            //batch update or do it one by one?
-                            final Assay assay = Assay.get(assayR.capAssayId)
-                            if (assay) {
-                                updateStatements.add("UPDATE ASSAY SET NCGC_WAREHOUSE_ID=${assayR.bardAssayId} WHERE ASSAY_ID=${assayR.capAssayId};")
-                                assay.ncgcWarehouseId = assayR.bardAssayId
-                                assay.save(flush: true)
-                            } else {
-                                log.error("Could not find Assay with id ${assayR.capAssayId}")
-                            }
-                        }
-                    }
-                } else {
-                    log.error("The following Cap Assay Ids ${capAssayIds} could not be found in the warehouse")
-                }
-            } else {
-                log.error("The following Cap Assay Ids ${capAssayIds} could not be found in the warehouse")
-            }
-        } catch (Exception ee) {
-            log.error("Error From loadNCGCAssayIdsFromList " + ee.message)
-            ee.stackTrace
-        }
-        return updateStatements
-    }
-
 }

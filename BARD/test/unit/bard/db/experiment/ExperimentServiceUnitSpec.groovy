@@ -3,11 +3,14 @@ package bard.db.experiment
 import bard.db.dictionary.Element
 import bard.db.enums.ExperimentStatus
 import bard.db.enums.HierarchyType
-import bard.db.registration.*
+import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.AssayContextItem
+import bard.db.registration.AssayDocument
 import bardqueryapi.TableModel
 import bardqueryapi.experiment.ExperimentBuilder
 import grails.buildtestdata.mixin.Build
-import grails.converters.JSON
+import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
@@ -22,84 +25,89 @@ import spock.lang.Specification
  * Time: 2:07 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, Experiment, AssayContextExperimentMeasure, AssayContext, ExperimentMeasure, AssayContextItem, AssayDocument])
-@Mock([Assay, Experiment, ExperimentMeasure, AssayContext, AssayContextExperimentMeasure, AssayContextItem, AssayDocument])
+@Build([Element, Assay, Experiment, AssayContextExperimentMeasure, AssayContext, ExperimentMeasure, AssayContextItem, AssayDocument])
+@Mock([Element, Assay, Experiment, ExperimentMeasure, AssayContext, AssayContextExperimentMeasure, AssayContextItem, AssayDocument])
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(ExperimentService)
 public class ExperimentServiceUnitSpec extends Specification {
 
+    void "test update ExperimentMeasure"() {
+        given:
+        Experiment experiment = Experiment.build()
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(experiment: experiment, parentChildRelationship: HierarchyType.SUPPORTED_BY)
+        def oldValue =   experimentMeasure[(field)]
+        experimentMeasure[(field)] = valueUnderTest.call()
+        when:
+        service.updateExperimentMeasure(experimentMeasure.id, experimentMeasure, [])
+        then:
+        assert experimentMeasure[(field)] != oldValue
+
+        where:
+        desc                    | valueUnderTest                    | field
+        "change stats modifier" | { Element.build() }               | "statsModifier"
+        "change result type"    | { Element.build() }               | "resultType"
+        "change hierarchy"      | { HierarchyType.CALCULATED_FROM } | "parentChildRelationship"
+        "change priority"       | { true }                          | "priorityElement"
+
+    }
+
+    void "test add AssayContextExperimentMeasures"() {
+        given:
+        List<Long> assayContextIds = []
+        for (int i = 0; i < expectedResult; i++) {
+            assayContextIds.add(AssayContext.build().id)
+        }
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build()
+        when:
+        service.addAssayContextExperimentMeasures(assayContextIds, experimentMeasure)
+        then:
+        assert experimentMeasure.assayContextExperimentMeasures.size() == expectedResult
+
+        where:
+        desc                       | expectedResult
+        "With a single context id" | 1
+        "With 2 context ids"       | 2
+        "With no context ids"      | 0
+
+    }
+
+    void "test create New Experiment Measure"() {
+        given:
+        SpringSecurityService springSecurityService = Mock(SpringSecurityService)
+        service.springSecurityService = springSecurityService
+        Experiment experiment = Experiment.build()
+        Long experimentId = experiment.id
+        ExperimentMeasure parent = ExperimentMeasure.build(experiment: experiment)
+        Element resultType = Element.build()
+        Element statsModifier = Element.build()
+        final HierarchyType hierarchyType = HierarchyType.CALCULATED_FROM
+        when:
+        ExperimentMeasure experimentMeasure = service.createNewExperimentMeasure(experimentId, parent, resultType, statsModifier, [], hierarchyType, false)
+        then:
+        assert experimentMeasure
+        assert experimentMeasure.parent == parent
+        assert !experimentMeasure.priorityElement
+        assert experimentMeasure.statsModifier == statsModifier
+        assert experimentMeasure.experiment == experiment
+        assert experimentMeasure.resultType == resultType
+
+
+    }
+
     void 'test preview experiment'() {
         given:
         service.experimentBuilder = Mock(ExperimentBuilder)
-        service.resultsExportService=Mock(ResultsExportService)
+        service.resultsExportService = Mock(ResultsExportService)
         Experiment experiment = Experiment.build()
         when:
         TableModel createdTableModel = service.previewResults(experiment.id)
         then:
-        service.resultsExportService.readResultsForSubstances(_) >> {[new JsonSubstanceResults()]}
-        service.experimentBuilder.buildModelForPreview(_,_) >> {new TableModel()}
+        service.resultsExportService.readResultsForSubstances(_) >> { [new JsonSubstanceResults()] }
+        service.experimentBuilder.buildModelForPreview(_, _) >> { new TableModel() }
         assert createdTableModel
     }
 
-    void 'test create experiment'() {
-        given:
-        mockDomain(Experiment)
-        Assay assay = Assay.build()
 
-        when:
-        Experiment experiment = service.createNewExperiment(assay.id, "name", "desc")
-
-        then:
-        experiment.experimentName == "name"
-        experiment.description == "desc"
-        experiment.assay == assay
-        experiment.experimentMeasures.size() == 0
-    }
-
-    //TODO: Rework
-//    @Ignore
-//    void 'update measures'() {
-//        given:
-//        mockDomain(ExperimentMeasure);
-//
-//        when:
-//        Measure measure = Measure.build()
-//        Experiment experiment = Experiment.build()
-//        ExperimentMeasure parent = ExperimentMeasure.build(experiment: experiment)
-//        ExperimentMeasure child = ExperimentMeasure.build(parent: parent, experiment: experiment)
-//        experiment.setExperimentMeasures([parent, child] as Set)
-//
-//        then:
-//        ExperimentMeasure.findAll().size() == 2
-//
-//        when: "we drop a child"
-//        service.updateMeasures(experiment.id, JSON.parse("[{\"id\": ${parent.id}, \"parentId\": null, \"measureId\": ${parent.measure.id}}]"))
-//
-//        then:
-//        experiment.experimentMeasures.size() == 1
-//        ExperimentMeasure.findAll().size() == 1
-//
-//        when: "we add a child"
-//        service.updateMeasures(experiment.id, JSON.parse("[{\"id\": ${parent.id}, \"parentId\": null, \"measureId\": ${parent.measure.id}}, {\"id\": \"new-1\", \"parentId\": ${parent.id}, \"measureId\": ${measure.id}}]"))
-//
-//        then:
-//        experiment.experimentMeasures.size() == 2
-//        (experiment.experimentMeasures.findAll { it.parent == null}).size() == 1
-//
-//        when: "we drop child and create element at top level"
-//        service.updateMeasures(experiment.id, JSON.parse("[{\"id\": ${parent.id}, \"parentId\": null, \"measureId\": ${parent.measure.id}}, {\"id\": \"new-2\", \"parentId\": null, \"measureId\": ${measure.id}}]"))
-//
-//        then:
-//        experiment.experimentMeasures.size() == 2
-//        (experiment.experimentMeasures.findAll { it.parent == null}).size() == 2
-//
-//        when: "we drop everything and recreate parent child"
-//        service.updateMeasures(experiment.id, JSON.parse("[{\"id\": \"new-1\", \"parentId\": null, \"measureId\": ${parent.measure.id}}, {\"id\": \"new-2\", \"parentId\": \"new-1\", \"measureId\": ${measure.id}}]"))
-//
-//        then:
-//        experiment.experimentMeasures.size() == 2
-//        (experiment.experimentMeasures.findAll { it.parent == null}).size() == 1
-//    }
 
     void 'test splitting experiment from assay'() {
         given:
@@ -113,26 +121,17 @@ public class ExperimentServiceUnitSpec extends Specification {
         Experiment experiment = Experiment.build(assay: assay)
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(experiment: experiment, resultType: resultType, statsModifier: statsModifier)
         AssayContextExperimentMeasure.build(assayContext: context, experimentMeasure: experimentMeasure)
-        Assay.metaClass.isDirty = { return false }
         when:
         service.splitExperimentsFromAssay(assay.id, [experiment])
 
         then:
         experiment.assay != assay // the assay is different
-        //experimentMeasure.measure != measure // and measure is different
-
-        // but the new measure is identical to the original measure
         experimentMeasure.resultType == resultType
         experimentMeasure.statsModifier == statsModifier
 
         Assay newAssay = experiment.assay
         newAssay.assayContexts.size() == 1
         newAssay.assayContexts.first().contextName == "alpha"
-
-        // verify the assayContextMeasures are hooked up right
-        //  experimentMeasure.measure.assayContextMeasures.size() == 1
-        //experimentMeasure.measure.assayContextMeasures.first().assayContext == newAssay.assayContexts.first()
-        //experimentMeasure.measure.assayContextMeasures.first().measure == experimentMeasure.measure
     }
 
     void "test update Experiment Status"() {
