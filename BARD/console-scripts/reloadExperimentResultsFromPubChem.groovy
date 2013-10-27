@@ -34,28 +34,31 @@ outFile.withWriter { writer ->
 
     Integer index = 1
     for (eid in eids) {
-        def experiment = Experiment.get(eid)
-        assert experiment, "Experiment ${experiment.id} does not exist"
-        ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
-        def aid = Integer.parseInt(xref.extAssayRef.replace("aid=", ""))
-
-        String message = "Reloading for EID=${eid} [AID=${aid}; ADID=${experiment.assay.id}] (${index++}/${eids.size()})"
-        println(message)
-        writer.writeLine(message)
         try {
+            def experiment = Experiment.get(eid)
+            assert experiment, "Experiment ${experiment.id} does not exist"
+            ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
+            assert xref, "Couldn't find ExternalReference object for eid=${experiment.id}"
+            def aid = Integer.parseInt(xref.extAssayRef.replace("aid=", ""))
+            assert aid, "Couldn't find AID for experiment eid=${experiment.id}"
+
+            String message = "Reloading for EID=${eid} [AID=${aid}; ADID=${experiment.assay.id}] (${index++}/${eids.size()})"
+            println(message)
+            writer.writeLine(message)
+
 //            SpringSecurityUtils.doWithAuth("gwalzer") {
-                Experiment.withTransaction { TransactionStatus transactionStatus ->
-                    Experiment.withSession { Session session ->
+            Experiment.withTransaction { TransactionStatus transactionStatus ->
+                Experiment.withSession { Session session ->
 //                        BardContextUtils.setBardContextUsername(session, 'user')
 
-                        //      comment below when ready to commit
-                        //transactionStatus.setRollbackOnly()
-                        ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid, { msg -> println("\tPubChemService: " + msg); writer.writeLine("\t" + msg) })
+                    //      comment below when ready to commit
+                    //transactionStatus.setRollbackOnly()
+                    ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid, { msg -> println("\tPubChemService: " + msg); writer.writeLine("\t" + msg) })
 
-                        println("\t...Finished")
-                        writer.writeLine("\t...Finished")
-                    }
+                    println("\t...Finished")
+                    writer.writeLine("\t...Finished")
                 }
+            }
 //            }
         } catch (Throwable exp) {
             failedEids << "\nEID=${eid} [AID=${aid}; ADID=${experiment.assay.id}]\n\tCause:\n\t${exp.cause}"
