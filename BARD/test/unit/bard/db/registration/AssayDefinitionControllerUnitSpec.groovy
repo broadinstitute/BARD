@@ -67,7 +67,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
     void 'test save success'() {
         given:
         Role role = Role.build()
-        AssayCommand assayCommand = new AssayCommand(assayName: "Some Name", assayType: AssayType.TEMPLATE, springSecurityService: controller.springSecurityService, ownerRole: role)
+        AssayCommand assayCommand = new AssayCommand(assayName: "Some Name", assayType: AssayType.TEMPLATE, springSecurityService: controller.springSecurityService, ownerRole: role.authority)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
         }

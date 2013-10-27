@@ -477,16 +477,14 @@ class ProjectCommand extends BardCommand {
     ProjectStatus projectStatus = ProjectStatus.DRAFT
 
     SpringSecurityService springSecurityService
-    Role ownerRole
+    String ownerRole
 
 
     static constraints = {
-        importFrom(Project, include: ["ownerRole", "name", "description", "groupType", "projectStatus"])
-        ownerRole(nullable: false, validator: { value, command, err ->
-            /*We make it required in the command object even though it is optional in the domain.
-         We will make it required in the domain as soon as we are done back populating the data*/
-            //validate that the selected role is in the roles associated with the user
-            if (!BardCommand.isRoleInUsersRoleList(value)) {
+        importFrom(Project, include: ["name", "description", "groupType", "projectStatus"])
+        ownerRole(nullable: false, blank: false, validator: { value, command, err ->
+            Role role = Role.findByAuthority(value)
+            if (!isRoleInUsersRoleList(role)) {
                 err.rejectValue('ownerRole', "message.code", "You do not have the privileges to create Projects for this team : ${value.displayName}");
             }
         })
@@ -510,8 +508,7 @@ class ProjectCommand extends BardCommand {
         project.description = this.description
         project.dateCreated = new Date()
         project.projectStatus = this.projectStatus
-        project.ownerRole = this.ownerRole
-
+        project.ownerRole =  Role.findByAuthority(ownerRole)
     }
 }
 @InheritConstructors
