@@ -93,20 +93,22 @@ class OntologyJsonControllerUnitSpec extends Specification {
         TestDataConfigurationHolder.reset()
 
         when: 'we look for items'
-        controller.getAttributeDescriptors()
+        controller.getAttributeDescriptors(startOfFullPath)
         final String resultJson = controller.response.contentAsString
 
         then: 'we serialize items as JSON'
-        1 * ontologyDataAccessService.getDescriptorsForAttributes() >> { serviceReturnValue.call() }
+        1 * ontologyDataAccessService.getDescriptorsForAttributes(_) >> { serviceReturnValue.call() }
         println(resultJson)
         Map resultMap = new JsonSlurper().parseText(resultJson)
         println(resultMap)
         resultMap.toString() == expectedMap.toString()
 
         where:
-        desc                       | serviceReturnValue                                                                                                                    | expectedMap
-        'no BardDescriptors found' | { [] }                                                                                                                                | [results: []]
-        '1 BardDescriptor found'   | { [BardDescriptor.build([fullPath: "somePath", element: Element.build(label: 'l1', expectedValueType: ExpectedValueType.NUMERIC)])] } | [results: [[id: 1, text: "l1", description: null, expectedValueType: "NUMERIC", parentFullPath: null, fullPath: "somePath", hasIntegratedSearch: false, externalUrl: null, unitId: null, addChildMethod: "NO"]]]
+        desc                                             | startOfFullPath | serviceReturnValue                                                                                                                    | expectedMap
+        'no BardDescriptors found'                       | null            | { [] }                                                                                                                                | [results: []]
+        '1 BardDescriptor found'                         | null            | { [BardDescriptor.build([fullPath: "somePath", element: Element.build(label: 'l1', expectedValueType: ExpectedValueType.NUMERIC)])] } | [results: [[id: 1, text: "l1", description: null, expectedValueType: "NUMERIC", parentFullPath: null, fullPath: "somePath", hasIntegratedSearch: false, externalUrl: null, unitId: null, addChildMethod: "NO"]]]
+        '1 BardDescriptor found with start of full path' | "somePath"      | { [BardDescriptor.build([fullPath: "somePath", element: Element.build(label: 'l1', expectedValueType: ExpectedValueType.NUMERIC)])] } | [results: [[id: 1, text: "l1", description: null, expectedValueType: "NUMERIC", parentFullPath: null, fullPath: "somePath", hasIntegratedSearch: false, externalUrl: null, unitId: null, addChildMethod: "NO"]]]
+
     }
 
     void "test getValueDescriptorsV2 #desc"() {

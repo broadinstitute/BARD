@@ -7,7 +7,8 @@
                         <g:render template="../contextItem/${subTemplate}"
                                   model="[contextOwner: contextOwner,
                                           context: context,
-                                          cardSection: biology.key]"/>
+                                          cardSection: biology.key,showCheckBoxes:showCheckBoxes,
+                                          existingContextIds: existingContextIds]"/>
                     </g:each>
                 </div>
             </g:each>

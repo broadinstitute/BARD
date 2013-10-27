@@ -13,7 +13,22 @@
     <table class="table table-hover">
         <caption id="${context.id}" class="assay_context">
             <div class="cardTitle">
-                <p>${context.preferredName}</p>
+                <p>
+                    <g:if test="${showCheckBoxes}">
+                        <%
+                            boolean isChecked = false;
+                            if (existingContextIds) {
+                                if (existingContextIds.contains(context.id)) {
+                                    isChecked = true;
+
+                                }
+                            }
+                        %>
+                        <g:checkBox name="contextIds" value="${context.id}" checked="${isChecked}"/>
+                    </g:if>
+
+                    ${context.preferredName}
+                </p>
                 <g:if test="${context.hasProperty('assayContextMeasures') && context.assayContextMeasures}">
                     <p>Measure<g:if test="${context.assayContextMeasures.size() > 1}">s</g:if>:
                         <g:each in="${context.assayContextMeasures}" status="i" var="assayContextMeasure">
@@ -39,9 +54,16 @@
                 </td>
                 <td class="attributeLabel">
                     <g:if test="${contextItem.attributeElement}">
-                        <span class="dictionary editable-click" title="" data-placement="bottom" data-toggle="tooltip"
-                              href="#" data-original-title="${contextItem.attributeElement?.description}">
-                            ${contextItem.attributeElement?.label}</span>
+
+                        <g:if test="${contextItem.attributeElement.description}">
+                            <span class="dictionary editable-click" title="" data-placement="bottom" data-toggle="tooltip"
+                                  href="#" data-original-title="${contextItem.attributeElement?.description}">
+                                ${contextItem.attributeElement?.label}</span>
+                         </g:if>
+                        <g:else>
+                                ${contextItem.attributeElement?.label}
+                        </g:else>
+
 
                     </g:if>
 

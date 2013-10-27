@@ -59,18 +59,31 @@ class OntologyJSonController {
     }
     /**
      * @return List of elements to be used as attributes for ContextItems
+     */
+    @Cacheable(value = "contextItemAttributeDescriptors")
+    def getStatsModifierDescriptors(String startOfFullPath) {
+        final List<Descriptor> descriptors = ontologyDataAccessService.getDescriptors(startOfFullPath,null)
+        final List<Map> attributes = descriptors.collect { Descriptor descriptor ->
+            asMapForSelect2(descriptor, false)
+        }
+        final Map map = ['results': attributes]
+        render map as JSON
+    }
+    /**
+     * @return List of elements to be used as attributes for ContextItems
      *
      * note: this cache will need to be cleared if the element hierarchy is changed or a new element is added
      */
     @Cacheable(value = "contextItemAttributeDescriptors")
-    def getAttributeDescriptors() {
-        final List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForAttributes()
+    def getAttributeDescriptors(String startOfFullPath) {
+        final List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForAttributes(startOfFullPath)
         final List<Map> attributes = descriptors.collect { Descriptor descriptor ->
             asMapForSelect2(descriptor, true)
         }
         final Map map = ['results': attributes]
         render map as JSON
     }
+
     /**
      *
      * @param attributeId
@@ -113,15 +126,6 @@ class OntologyJSonController {
         }
         map.put('fullPath', descriptor.fullPath.replace('BARD> ', ''))
         map.put('parentFullPath', descriptor.parent?.fullPath?.replace('BARD> ', ''))
-
-//        List nonRetiredChildren = descriptor.children.findAll{BardDescriptor child -> child.element.elementStatus != ElementStatus.Retired }.sort{it.label}
-//        if(nonRetiredChildren){
-//            map.children = []
-//            for(BardDescriptor child in nonRetiredChildren){
-//                map.children << asMapForSelect2(child, removeIdForExpectedValueTypeNone)
-//            }
-//        }
-
         return map
     }
 

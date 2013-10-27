@@ -7,7 +7,7 @@
  */
 $(document).ready(function () {
     // $.fn.editable.defaults.mode = 'inline';
-
+    $('.dictionary').tooltip();
     //set up editing for documents
     $('.documents').editable({
         mode: 'inline',

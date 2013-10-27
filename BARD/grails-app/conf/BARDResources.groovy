@@ -76,9 +76,6 @@ modules = {
     card {
         resource url: '/css/card.css'
     }
-    cardDisplayCSS {
-        resource url: "css/card.css"
-    }
     cart {
         resource url: "js/cart.js", disposition: 'head'
         resource url: "css/cart.css"
@@ -93,7 +90,7 @@ modules = {
     }
 
     contextItem {
-        dependsOn 'select2, bootstrapplus, card, descriptorSelect2Widget'
+        dependsOn 'bootstrapplus, card, descriptorSelect2Widget'
         resource url: '/js/cap/contextItem.js'
     }
     createProject {
@@ -114,14 +111,14 @@ modules = {
     }
     datePicker {
         resource url: '/js/bootstrap-datepicker/bootstrap-datepicker.js'
-     }
+    }
     dcLibrary {
         resource url: "js/lib/dc.js"
         resource url: "js/lib/crossfilter.js"
         resource url: "css/dc.css"
     }
     descriptorSelect2Widget {
-        dependsOn 'core'
+        dependsOn 'core,select2'
         resource url: "/js/cap/descriptorSelect2Widget.js"
         resource url: '/css/select2PopoverOverride.css'
     }
@@ -149,6 +146,9 @@ modules = {
     }
     experimentsummary {
         resource url: '/js/cap/editExperimentSummary.js'
+        resource url: '/js/cap/editMeasures.js'
+        resource url: '/css/editMeasures.css'
+
     }
     //G
     grailspagination {
@@ -234,7 +234,10 @@ modules = {
         resource url: "js/promiscuity.js"
         resource url: "css/promiscuity.css"
     }
-    richtexteditor {
+    resulttype {
+        dependsOn("descriptorSelect2Widget")
+        resource url: "js/resulttypes/resulttype.js"
+        resource url: "css/resulttypes/resulttype.css"
     }
     richtexteditorForCreate {
         resource url: "/js/cap/createDocument.js"
@@ -259,7 +262,7 @@ modules = {
         resource url: "/js/select2-3.4.3/select2.js"
     }
     showProjectAssay {
-        dependsOn("cardDisplayCSS")
+        dependsOn("card")
         //Polyfill for handling History
         resource url: "js/html5historyapi/history.js"
         resource url: "js/coreShowProjectAssay.js"

@@ -4,7 +4,7 @@
 <head>
     <title>BioAssay Research Database</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <r:require modules="core,bootstrap,cardDisplayCSS,jqueryMobile"/>
+    <r:require modules="core,bootstrap,card,jqueryMobile"/>
     <r:layoutResources/>
 </head>
 

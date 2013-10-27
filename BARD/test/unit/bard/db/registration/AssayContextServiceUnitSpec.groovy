@@ -1,7 +1,6 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
-import bard.db.enums.HierarchyType
 import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.experiment.ExperimentMeasure
 import grails.buildtestdata.mixin.Build
@@ -25,23 +24,9 @@ import spock.lang.Unroll
 class AssayContextServiceUnitSpec extends Specification {
 
     @Shared String ORIGINAL_CONTEXT_NAME = 'original title'
-    @Shared String NEW_CONTEXT_NAME = 'new title'
 
-    void "test changeParentChildRelationship #desc"() {
-        given:
-        ExperimentMeasure measure = ExperimentMeasure.build()
-        when:
-        ExperimentMeasure foundMeasure = service.changeParentChildRelationship(measure, hierarchyType, null)
-        then:
-        assert foundMeasure
 
-        where:
-        desc                                              | hierarchyType
-        "Hierarchy Type ${HierarchyType.CALCULATED_FROM}" | HierarchyType.CALCULATED_FROM
-        "Hierarchy Type ${HierarchyType.SUPPORTED_BY}"    | HierarchyType.SUPPORTED_BY
-        ""                                                | null
 
-    }
 
 
     void "test addItemToEndOfList #desc"() {
@@ -107,32 +92,6 @@ class AssayContextServiceUnitSpec extends Specification {
         'addItem at index 1'    | 2                            | 1                | 3
 
     }
-
-    void "test associate and disassociate measure with context"() {
-        given:
-        mockDomain(AssayContextExperimentMeasure.class)
-        AssayContext context = AssayContext.build()
-        ExperimentMeasure experimentMeasure = ExperimentMeasure.build()
-
-        when:
-        service.associateExperimentContext(experimentMeasure, context, context.assay.id)
-
-        then:
-        experimentMeasure.assayContextExperimentMeasures.size() == 1
-        context.assayContextExperimentMeasures.size() == 1
-        experimentMeasure.assayContextExperimentMeasures.first() == context.assayContextExperimentMeasures.first()
-        AssayContextExperimentMeasure link = experimentMeasure.assayContextExperimentMeasures.first()
-        link.experimentMeasure == experimentMeasure
-        link.assayContext == context
-
-        when:
-        service.disassociateAssayContext(experimentMeasure, context, context.assay.id)
-
-        then:
-        experimentMeasure.assayContextExperimentMeasures.size() == 0
-        context.assayContextExperimentMeasures.size() == 0
-    }
-
 
     private void assertItemAdded(AssayContext targetAssayContext, AssayContextItem draggedAssayContextItem, int sizeAfterAdd, int indexOfAddedItem) {
         assert draggedAssayContextItem.assayContext == targetAssayContext
