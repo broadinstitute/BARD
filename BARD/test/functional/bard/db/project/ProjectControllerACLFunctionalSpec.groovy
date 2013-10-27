@@ -68,7 +68,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             StageTree.build(element: element).save(flush: true)
 
             //create assay context
-            return [id: project.id, name: project.name, roleId: role.id, otherRoleId: otherRole.id]
+            return [id: project.id, name: project.name, roleId: role.authority, otherRoleId: otherRole.authority]
         })
         projectIdList.add(projectData.id)
 
@@ -152,8 +152,8 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         where:
         desc      | team              | teamPassword      | expectedHttpResponse
-        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_NOT_FOUND
-        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_NOT_FOUND
+        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
     }
 
     def 'test edit Project Status #desc'() {

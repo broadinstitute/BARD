@@ -320,16 +320,17 @@ class PanelCommand extends BardCommand {
     String name
     String description
     SpringSecurityService springSecurityService
-    Role ownerRole
+    String ownerRole
 
     static constraints = {
-        importFrom(Panel, exclude: ['ownerRole', 'readyForExtraction', 'lastUpdated', 'dateCreated'])
-        ownerRole(nullable: false, validator: { value, command, err ->
+        importFrom(Panel, exclude: ['readyForExtraction', 'lastUpdated', 'dateCreated','ownerRole'])
+        ownerRole(nullable: false, blank: false, validator: { value, command, err ->
+            Role role = Role.findByAuthority(value)
             /*We make it required in the command object even though it is optional in the domain.
-         We will make it required in the domain as soon as we are done back populating the data*/
+            We will make it required in the domain as soon as we are done back populating the data*/
             //validate that the selected role is in the roles associated with the user
-            if (!BardCommand.isRoleInUsersRoleList(value)) {
-                err.rejectValue('ownerRole', "message.code", "You do not have the privileges to create Panels for this team : ${value.displayName}");
+            if (!isRoleInUsersRoleList(role)) {
+                err.rejectValue('ownerRole', "panelCommand.role.privileges", "You do not have the privileges to create Panels for this team : ${role.displayName}");
             }
         })
     }
@@ -356,6 +357,6 @@ class PanelCommand extends BardCommand {
         panel.modifiedBy = springSecurityService.principal?.username
         panel.name = this.name
         panel.description = this.description
-        panel.ownerRole = this.ownerRole
+        panel.ownerRole =  Role.findByAuthority(ownerRole)
     }
 }

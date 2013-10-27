@@ -59,7 +59,7 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role).save(flush: true)
             Panel panel = Panel.build(name: "Panel Name", description: "Panel Name", ownerRole: role).save(flush: true)
 
-            return [assayId: assay.id, panelId: panel.id, panelName: panel.name, roleId: role.id, otherRoleId: otherRole.id]
+            return [assayId: assay.id, panelId: panel.id, panelName: panel.name, roleId: role.authority, otherRoleId: otherRole.authority]
         })
         assayIdList.add(panelAssayData.assayId)
         panelIdList.add(panelAssayData.panelId)

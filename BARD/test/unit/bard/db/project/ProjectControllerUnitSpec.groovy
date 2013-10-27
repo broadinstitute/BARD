@@ -99,7 +99,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         given:
         projectCommand.springSecurityService = controller.springSecurityService
 
-        projectCommand.ownerRole = this.role
+        projectCommand.ownerRole = this.role.authority
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
             return [this.role,this.otherRole]
         }

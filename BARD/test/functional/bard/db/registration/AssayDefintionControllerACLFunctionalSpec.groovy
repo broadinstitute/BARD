@@ -91,7 +91,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
             //create assay context
             return [id: assay.id, assayName: assay.assayName, assayContextId: context.id,
-                    measureId: childMeasure.id, parentMeasureId: parentMeasure.id, roleId: role.id, otherRoleId: otherRole.id]
+                    measureId: childMeasure.id, parentMeasureId: parentMeasure.id, roleId: role.authority, otherRoleId: otherRole.authority]
         })
         assayIdList.add(assayData.id)
 

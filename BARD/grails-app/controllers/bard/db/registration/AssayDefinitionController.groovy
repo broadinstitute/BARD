@@ -51,10 +51,11 @@ class AssayDefinitionController {
     }
 
     @Secured(['isAuthenticated()'])
-    def teams(){
+    def teams() {
         final List<Role> roles = Role.list()
-        [roles:roles]
+        [roles: roles]
     }
+
     def generateAssayComparisonReport(final Long assayOneId, final Long assayTwoId) {
         if (assayOneId == null || assayTwoId == null) {
             render(status: HttpServletResponse.SC_BAD_REQUEST, text: "Please enter valid assay ids in both text boxes")
@@ -74,6 +75,7 @@ class AssayDefinitionController {
         final Map reportMap = assayDefinitionService.generateAssayComparisonReport(assayOne, assayTwo)
         render(template: "generateAssayCompareReport", model: reportMap)
     }
+
     @Secured(['isAuthenticated()'])
     def editAssayType(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -96,10 +98,11 @@ class AssayDefinitionController {
             editErrorMessage()
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
         try {
-            final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value)?:Role.findByAuthority(inlineEditableCommand.value)
+            final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value) ?: Role.findByAuthority(inlineEditableCommand.value)
             if (!ownerRole) {
                 editBadUserInputErrorMessage("Could not find a registered team with name ${inlineEditableCommand.value}")
                 return
@@ -129,6 +132,7 @@ class AssayDefinitionController {
             editErrorMessage()
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editAssayStatus(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -152,6 +156,7 @@ class AssayDefinitionController {
             editErrorMessage()
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editAssayName(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -183,6 +188,7 @@ class AssayDefinitionController {
             editErrorMessage()
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editDesignedBy(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -217,7 +223,7 @@ class AssayDefinitionController {
 
     /**
      * Draft is excluded as End users cannot set a status back to Draft
-     * @return  list of strings representing available status options
+     * @return list of strings representing available status options
      */
     def assayStatus() {
         List<String> sorted = []
@@ -263,6 +269,7 @@ class AssayDefinitionController {
     def index() {
         redirect(action: "groupAssays")
     }
+
     @Secured(['isAuthenticated()'])
     def save(AssayCommand assayCommand) {
         if (!assayCommand.validate()) {
@@ -276,6 +283,7 @@ class AssayDefinitionController {
         }
         render(view: "create", model: [assayCommand: assayCommand])
     }
+
     @Secured(['isAuthenticated()'])
     def create(AssayCommand assayCommand) {
         if (!assayCommand) {
@@ -334,6 +342,7 @@ class AssayDefinitionController {
         final Map<Long, Pair<Long, Long>> experimentsActiveVsTested = queryService.findActiveVsTestedForExperiments(experimentIds)
         return [assayInstance: assayInstance, assayOwner: owner, editable: editable ? 'canedit' : 'cannotedit', experimentsActiveVsTested: experimentsActiveVsTested]
     }
+
     @Secured(['isAuthenticated()'])
     def editContext(Long id, String groupBySection) {
         def assayInstance = Assay.get(id)
@@ -347,6 +356,7 @@ class AssayDefinitionController {
 
         [assayInstance: assayInstance, contexts: [contextGroup]]
     }
+
     @Secured(['isAuthenticated()'])
     def reloadCardHolder(Long assayId) {
         def assay = Assay.get(assayId)
@@ -372,7 +382,7 @@ class AssayDefinitionController {
             assay = assayContext.assay
             render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
         } catch (AccessDeniedException aee) {
-            log.error("Update care Name",aee)
+            log.error("Update care Name", aee)
             render accessDeniedErrorMessage()
         }
     }
@@ -424,10 +434,12 @@ class EditingHelper {
         render(status: HttpServletResponse.SC_BAD_REQUEST, text: message, contentType: 'text/plain', template: null)
 
     }
+
     def editBadUserInputErrorMessage(String message) {
         render(status: HttpServletResponse.SC_BAD_REQUEST, text: message, contentType: 'text/plain', template: null)
 
     }
+
     def accessDeniedErrorMessage() {
         return [status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null]
     }
@@ -442,21 +454,22 @@ class AssayCommand extends BardCommand {
     String assayVersion = "1"
     Date dateCreated = new Date()
     AssayType assayType = AssayType.REGULAR
-    Role ownerRole
+    String ownerRole
 
     SpringSecurityService springSecurityService
 
 
-    public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['ownerRole', 'assayType', 'assayName', 'assayVersion', 'dateCreated'].asImmutable()
+    public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['assayType', 'assayName', 'assayVersion', 'dateCreated'].asImmutable()
 
     static constraints = {
         importFrom(Assay, exclude: ['ownerRole', 'assayStatus', 'readyForExtraction', 'lastUpdated'])
-        ownerRole(nullable: false, validator: { value, command, err ->
+        ownerRole(nullable: false, blank: false, validator: { value, command, err ->
+            Role role = Role.findByAuthority(value)
             /*We make it required in the command object even though it is optional in the domain.
-         We will make it required in the domain as soon as we are done back populating the data*/
+            We will make it required in the domain as soon as we are done back populating the data*/
             //validate that the selected role is in the roles associated with the user
-            if (!isRoleInUsersRoleList(value)) {
-                err.rejectValue('ownerRole', "message.code", "You do not have the privileges to create Assays for this team : ${value.displayName}");
+            if (!isRoleInUsersRoleList(role)) {
+                err.rejectValue('ownerRole', "assayCommand.role.privileges", "You do not have the privileges to create Assays for this team : ${role.displayName}");
             }
         })
     }
@@ -481,6 +494,7 @@ class AssayCommand extends BardCommand {
     void copyFromCmdToDomain(Assay assay) {
         assay.designedBy = springSecurityService.principal?.username
         assay.modifiedBy = assay.designedBy
+        assay.ownerRole = Role.findByAuthority(ownerRole)
         for (String field in PROPS_FROM_CMD_TO_DOMAIN) {
             assay[(field)] = this[(field)]
         }

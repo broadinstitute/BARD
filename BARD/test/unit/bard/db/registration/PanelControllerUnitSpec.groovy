@@ -53,7 +53,7 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     void 'test save success'() {
         final Role role = Role.build()
         given:
-        PanelCommand panelCommand = new PanelCommand(name: "Some Name", springSecurityService: controller.springSecurityService, ownerRole: role)
+        PanelCommand panelCommand = new PanelCommand(name: "Some Name", springSecurityService: controller.springSecurityService, ownerRole: role.authority)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
             return [role]
         }

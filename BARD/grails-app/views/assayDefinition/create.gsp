@@ -18,7 +18,7 @@
                     <g:message code="assay.assayName.label"/>:</label>
 
                 <div class="controls">
-                    <g:textField id="assayName" name="assayName" value="${assayCommand?.assayName}" required=""/>
+                    <g:textArea id="assayName" name="assayName" value="${assayCommand?.assayName}" required="" class="input-xxlarge"/>
                     <span class="help-inline"><g:fieldError field="assayName" bean="assay"/></span>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                         <g:select name="ownerRole" id="ownerRole"  required="required"
                                   from="${BardCommand.userRoles()}"
                                   value="${assayCommand?.ownerRole}"
-                                  optionValue="displayName" optionKey="id"/>
+                                  optionValue="displayName" optionKey="authority"/>
                     </g:if>
                     <g:else>
                         <p> You need to be part of a team to create Assays. Follow this <g:link controller="assayDefinition" action="teams">link</g:link> to the Teams Page</p>

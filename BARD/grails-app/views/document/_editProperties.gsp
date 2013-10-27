@@ -15,8 +15,7 @@
     <label class="control-label" for="documentName">* <g:message code="document.name.label"/>:</label>
 
     <div class="controls">
-        <g:textField class="span8" id="documentName" name="documentName"
-                     value="${document?.documentName}"/>
+        <g:textArea id="documentName" name="documentName" value="${document.documentName}" required="" class="span8 input-xxlarge"/>
         <span class="help-inline"><g:fieldError field="documentName" bean="${document}"/></span>
     </div>
 </div>
