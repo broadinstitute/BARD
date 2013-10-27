@@ -57,7 +57,7 @@ outFile.withWriter { writer ->
                     }
                 }
 //            }
-        } catch (Exception exp) {
+        } catch (Throwable exp) {
             failedEids << "\nEID=${eid} [AID=${aid}; ADID=${experiment.assay.id}]\n\tCause:\n\t${exp.cause}"
             String msg = "\tFailed reloading: ${ExceptionUtils.getStackTrace(exp)}"
             println(msg)
