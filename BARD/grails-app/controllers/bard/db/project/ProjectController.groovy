@@ -18,6 +18,7 @@ import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.web.client.HttpClientErrorException
@@ -35,12 +36,12 @@ class ProjectController {
     IQueryService queryService
 
     @Secured(['isAuthenticated()'])
-    def groupProjects() {
-        String username = springSecurityService.principal?.username
-        List<Project> projects = capPermissionService.findAllObjectsForRoles(Project)
-        LinkedHashSet<Project> uniqueProjects = new LinkedHashSet<Project>(projects)
-        render(view: "groupProjects", model: [projects: uniqueProjects])
+    def myProjects() {
+        List<Project> projects =capPermissionService.findAllByOwnerRolesAndClass(Project)
+        Set<Project> uniqueProjects = new HashSet<Project>(projects)
+        render(view: "myProjects", model: [projects: uniqueProjects])
     }
+
     @Secured(['isAuthenticated()'])
     def create(ProjectCommand projectCommand) {
         if (!projectCommand) {
@@ -48,6 +49,7 @@ class ProjectController {
         }
         [projectCommand: projectCommand]
     }
+
     @Secured(['isAuthenticated()'])
     def save(ProjectCommand projectCommand) {
         if (!projectCommand.validate()) {
@@ -83,10 +85,11 @@ class ProjectController {
             editErrorMessage()
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editOwnerRole(InlineEditableCommand inlineEditableCommand) {
         try {
-            final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value)?:Role.findByAuthority(inlineEditableCommand.value)
+            final Role ownerRole = Role.findByDisplayName(inlineEditableCommand.value) ?: Role.findByAuthority(inlineEditableCommand.value)
             if (!ownerRole) {
                 editBadUserInputErrorMessage("Could not find a registered team with name ${inlineEditableCommand.value}")
                 return
@@ -146,6 +149,7 @@ class ProjectController {
             editErrorMessage()
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editDescription(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -187,13 +191,13 @@ class ProjectController {
 
     /**
      * Draft is excluded as End users cannot set a status back to Draft
-     * @return  list of strings representing available status options
+     * @return list of strings representing available status options
      */
     def projectStatus() {
         List<String> sorted = []
         final Collection<ProjectStatus> projectStatuses = ProjectStatus.values()
         for (ProjectStatus projectStatus : projectStatuses) {
-            if(projectStatus != ProjectStatus.DRAFT){
+            if (projectStatus != ProjectStatus.DRAFT) {
                 sorted.add(projectStatus.id)
             }
         }
@@ -274,6 +278,7 @@ class ProjectController {
             render 'serviceError:' + e.message
         }
     }
+
     @Secured(['isAuthenticated()'])
     def removeExperimentFromProject(Long experimentId, Long projectId) {
         def experiment = Experiment.findById(experimentId)
@@ -288,6 +293,7 @@ class ProjectController {
             render 'serviceError:' + e.message
         }
     }
+
     @Secured(['isAuthenticated()'])
     def removeEdgeFromProject(Long fromExperimentId, Long toExperimentId, Long projectId) {
         def fromExperiment = Experiment.findById(fromExperimentId)
@@ -304,6 +310,7 @@ class ProjectController {
             render 'serviceError:' + e.message
         }
     }
+
     @Secured(['isAuthenticated()'])
     def linkExperiment(Long fromExperimentId, Long toExperimentId, Long projectId) {
         if (fromExperimentId == null || toExperimentId == null) {
@@ -326,6 +333,7 @@ class ProjectController {
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: e.message
         }
     }
+
     @Secured(['isAuthenticated()'])
     def associateExperimentsToProject() {
         // get all values regardless none, single, or multiple, ajax seemed serialized array and passed [] at the end of the param name.
@@ -357,6 +365,7 @@ class ProjectController {
             }
         }
     }
+
     @Secured(['isAuthenticated()'])
     def editSummary(Long instanceId, String projectName, String description, String projectStatus) {
         Project projectInstance = Project.findById(instanceId)
@@ -383,6 +392,7 @@ class ProjectController {
         final JSON json = sorted as JSON
         render text: json, contentType: 'text/json', template: null
     }
+
     @Secured(['isAuthenticated()'])
     def editContext(Long id, String groupBySection) {
         Project instance = Project.get(id)
@@ -395,6 +405,7 @@ class ProjectController {
         AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(ContextType.byId(groupBySection?.decodeURL()))
         [instance: instance, contexts: [contextGroup]]
     }
+
     @Secured(['isAuthenticated()'])
     def updateProjectStage(InlineEditableCommand inlineEditableCommand) {
         //pass in the project experiment
@@ -426,6 +437,7 @@ class ProjectController {
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "An internal Server error happend while you were performing this task. Contact the BARD team to help resove this issue", contentType: 'text/plain', template: null
         }
     }
+
     @Secured(['isAuthenticated()'])
     def showEditSummary(Long instanceId) {
         def instance = Project.findById(instanceId)
@@ -508,7 +520,7 @@ class ProjectCommand extends BardCommand {
         project.description = this.description
         project.dateCreated = new Date()
         project.projectStatus = this.projectStatus
-        project.ownerRole =  Role.findByAuthority(ownerRole)
+        project.ownerRole = Role.findByAuthority(ownerRole)
     }
 }
 @InheritConstructors

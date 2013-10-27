@@ -40,10 +40,10 @@ class AssayDefinitionController {
     IQueryService queryService
 
     @Secured(['isAuthenticated()'])
-    def groupAssays() {
-        List<Assay> assays = capPermissionService.findAllObjectsForRoles(Assay)
-        LinkedHashSet<Assay> uniqueAssays = new LinkedHashSet<Assay>(assays)
-        render(view: "groupAssays", model: [assays: uniqueAssays])
+    def myAssays() {
+        List<Assay> assays = capPermissionService.findAllByOwnerRolesAndClass(Assay);
+        Set<Assay> uniqueAssays = new HashSet<Assay>(assays)
+        render(view: "myAssays", model: [assays: uniqueAssays])
     }
 
     def assayComparisonReport() {
@@ -267,7 +267,7 @@ class AssayDefinitionController {
     }
 
     def index() {
-        redirect(action: "groupAssays")
+        redirect(action: "myAssays")
     }
 
     @Secured(['isAuthenticated()'])

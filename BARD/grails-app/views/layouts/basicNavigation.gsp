@@ -53,7 +53,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="controller"><g:link controller="assayDefinition"
-                                                               action="groupAssays">My Assay Definitions</g:link></li>
+                                                               action="myAssays">My Assay Definitions</g:link></li>
                                 %{--//You should belong to at least one team to create--}%
                                 <li class="controller"><g:link controller="assayDefinition"
                                                                action="create">Create Assay Definition</g:link></li>
@@ -68,7 +68,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="controller"><g:link controller="project"
-                                                               action="groupProjects">My Projects</g:link></li>
+                                                               action="myProjects">My Projects</g:link></li>
                                 %{--//You should belong to at least one team to create--}%
                                 <li class="controller"><g:link controller="project"
                                                                action="create">Create a New Project</g:link></li>

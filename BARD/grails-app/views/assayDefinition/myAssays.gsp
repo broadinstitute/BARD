@@ -3,7 +3,7 @@
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,tableSorter"/>
+            modules="myBard"/>
     <meta name="layout" content="basic"/>
     <title>My Assay Definitions</title>
 </head>
@@ -11,19 +11,11 @@
 <body>
 <div class="container-fluid">
     <div class="row-fluid">
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#myAssays').tablesorter({
-                    headers: {
-                        0: { sorter: "digit"  },
-                        3: { sorter: "shortDate"  }
-                    },
-                    widgets: ['zebra']
-                });
-            });
-        </script>
         <g:if test="${assays}">
-            <table id="myAssays" class="tablesorter table table-striped table-hover table-bordered">
+            <div id="overlay" class="overlay">
+                Please wait while we sort the column...
+            </div>
+            <table id="myAssays" class="tablesorter table table-striped table-hover table-bordered myBard">
                 <caption><b>Total:</b> ${assays.size()}</caption>
                 <thead>
                 <tr>
@@ -42,6 +34,7 @@
                 </g:each>
                 </tbody>
             </table>
+            <g:render template="/layouts/templates/tableSorterPaging"/>
         </g:if>
         <br/>
     </div>
