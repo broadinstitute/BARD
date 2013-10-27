@@ -34,12 +34,14 @@ outFile.withWriter { writer ->
 
     Integer index = 1
     for (eid in eids) {
+        def aid
+        def experiment
         try {
-            def experiment = Experiment.get(eid)
+            experiment = Experiment.get(eid)
             assert experiment, "Experiment ${experiment.id} does not exist"
             ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
             assert xref, "Couldn't find ExternalReference object for eid=${experiment.id}"
-            def aid = Integer.parseInt(xref.extAssayRef.replace("aid=", ""))
+            aid = Integer.parseInt(xref.extAssayRef.replace("aid=", ""))
             assert aid, "Couldn't find AID for experiment eid=${experiment.id}"
 
             String message = "Reloading for EID=${eid} [AID=${aid}; ADID=${experiment.assay.id}] (${index++}/${eids.size()})"
@@ -61,7 +63,7 @@ outFile.withWriter { writer ->
             }
 //            }
         } catch (Throwable exp) {
-            failedEids << "\nEID=${eid} [AID=${aid}; ADID=${experiment.assay.id}]\n\tCause:\n\t${exp.cause}"
+            failedEids << "\nEID=${eid} [AID=${aid}; ADID=${experiment?.assay?.id}]\n\tCause:\n\t${exp.cause}"
             String msg = "\tFailed reloading: ${ExceptionUtils.getStackTrace(exp)}"
             println(msg)
             writer.writeLine(msg)
