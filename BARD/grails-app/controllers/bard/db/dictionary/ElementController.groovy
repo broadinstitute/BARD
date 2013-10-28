@@ -36,12 +36,14 @@ class ElementController {
             render(parameterMap.get(errorMessageKey))
         }
     }
+
     @Secured(['isAuthenticated()'])
     def getChildrenAsJson(long elementId, boolean doNotShowRetired, String expectedValueType) {
         List elementHierarchyTree = elementService.getChildNodes(elementId, doNotShowRetired, expectedValueType)
         JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
         render elementHierarchyAsJsonTree
     }
+
     @Secured(['isAuthenticated()'])
     def buildTopLevelHierarchyTree(boolean doNotShowRetired, String treeRoot, String expectedValueType) {
         List elementHierarchyTree = elementService.createElementHierarchyTree(doNotShowRetired, treeRoot, expectedValueType)
@@ -62,6 +64,7 @@ class ElementController {
         Element parentElement = Element.findById(params.attributeElementId)
         render(view: 'selectParent', model: [termCommand: new TermCommand(parentElementId: parentElement.id, parentLabel: parentElement?.label, parentDescription: parentElement?.description)])
     }
+
     @Secured(['isAuthenticated()'])
     def addTerm() {
         flash.message = ''
@@ -90,7 +93,7 @@ class ElementController {
                     termCommand.currentElement = currentElement
                     termCommand.transferErrorsFromCurrentElement()
                 } else {
-                    termCommand = new TermCommand()
+                    termCommand.success = true
                     flash.message = "Proposed term ${currentElement?.label} has been saved"
                     bardCacheUtilsService.refreshDueToNewDictionaryEntry()
                 }
@@ -257,6 +260,7 @@ class TermCommand extends BardCommand {
     String curationNotes
     String relationship = "subClassOf"
     Element currentElement
+    Boolean success = false
 
     /**
      * Copy errors from the current element into the Command object for display

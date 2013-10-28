@@ -1,6 +1,6 @@
 <%@ page import="bard.db.enums.AddChildMethod" %>
 <div>
-    <h3>Current BARD Hierarchy</h3>
+    <h3>Entire BARD Vocabulary</h3>
 
     <div>
         <ul>

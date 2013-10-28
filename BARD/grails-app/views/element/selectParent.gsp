@@ -12,12 +12,12 @@
     </div>
 
     <div class="span6">
-        <div id="addParentTree">
-            <g:render template="termTree"/>
-        </div>
-
         <div id="addParentDictionaryTree">
             <g:render template="dictionaryTermTree"/>
+        </div>
+
+        <div id="addParentTree">
+            <g:render template="termTree"/>
         </div>
     </div>
 </div>

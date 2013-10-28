@@ -5,7 +5,7 @@
 
 <div class="control-group">
     <label>
-        <h4>1. Select a parent term from the current BARD Hierarchy.</h4>
+        <h4>1. Select a parent for your new term:</h4>
     </label>
 </div>
 

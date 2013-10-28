@@ -274,6 +274,7 @@ class ElementControllerUnitSpec extends Specification {
         this.controller.elementService.addNewTerm(_) >> { Element.build(label: label) }
         assert EXPECTED_ADD_TERN_VIEW == view
         assert flashMessage == flash.message
+        assert termCommand.success == valid
         TestUtils.assertFieldValidationExpectations(termCommand, this.parentLabelField, valid, errorCode)
         where:
         desc                                | valueUnderTest                         | valid | errorCode                           | flashMessage

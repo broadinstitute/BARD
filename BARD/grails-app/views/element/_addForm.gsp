@@ -17,7 +17,7 @@
 
         <div class="control-group">
             <div class="controls">
-                <input type="submit" class="btn btn-primary" value="Save" id="saveBtn">
+                <input type="submit" class="btn btn-primary" value="Save" id="saveBtn" ${termCommand?.success ? 'disabled=true' : ''}>
                 <a href="javascript:closeWindow();">Close this window to cancel</a>
               </div>
         </div>
