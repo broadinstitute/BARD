@@ -72,7 +72,7 @@ function createHierarchyTree(treeElementName, treeTitle, treeRoot, expectedValue
                 data: {doNotShowRetired: doNotShowRetired, treeRoot: treeRoot, expectedValueType: expectedValueType}
             },
             onActivate: function (node) {
-                $("#attributeElementId").select2("data", {id: node.data.elementId, text: node.data.title});
+                $("#attributeElementId").select2("data", {id: node.data.elementId, text: node.data.title, addChildMethod: node.data.childMethod});
                 $("#parentDescription").val(node.data.description);
                 $("#attributeElementId").trigger("change");//trigger the 'change' event on the select2 container
 
