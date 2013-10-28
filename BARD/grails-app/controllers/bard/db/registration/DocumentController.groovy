@@ -227,7 +227,7 @@ class DocumentHelper {
                 }
             }
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             return [status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: DOCUMENT_INTERNAL_SERVER_ERROR, contentType: 'text/plain', template: null]
         }
     }
