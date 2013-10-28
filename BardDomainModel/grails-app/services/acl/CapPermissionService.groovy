@@ -37,9 +37,11 @@ class CapPermissionService implements CapPermissionInterface {
         if (!role) {  //Use any team from the user roles, if you don;t find any throw an exception
             final BardUser bardUser = (BardUser) springSecurityService.principal
             //use the first team that you can find
-            final Collection<GrantedAuthority> authorities = bardUser.authorities
+            final List<GrantedAuthority> authorities = bardUser.authorities  as List<GrantedAuthority>
             if(authorities){
-                role = (Role)authorities.get(0);
+                final GrantedAuthority grantedAuthority = authorities.get(0)
+                role = Role.findByAuthority(grantedAuthority?.authority);
+                domainObjectInstance.ownerRole = role
             }
 
             if (!role) {
