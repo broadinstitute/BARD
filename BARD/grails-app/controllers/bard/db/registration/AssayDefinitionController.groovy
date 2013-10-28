@@ -94,7 +94,7 @@ class AssayDefinitionController {
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -128,7 +128,7 @@ class AssayDefinitionController {
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -152,7 +152,7 @@ class AssayDefinitionController {
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -184,7 +184,7 @@ class AssayDefinitionController {
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -216,7 +216,7 @@ class AssayDefinitionController {
             log.error(ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
