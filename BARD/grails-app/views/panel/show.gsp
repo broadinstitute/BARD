@@ -148,9 +148,14 @@
                                 $(document).ready(function () {
                                     $("#panelTable").tablesorter({
                                         headers: {
-                                            0: { sorter: "digit"  }
+                                            0: { sorter: "digit"  } ,
+                                            2: { sorter: false }
                                         },
                                         widgets: ['zebra']
+                                        ,
+                                        sortList: [
+                                            [0, 0]
+                                        ]
                                     });
                                 });
                             </script>
