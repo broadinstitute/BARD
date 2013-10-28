@@ -14,7 +14,7 @@ import spock.lang.Unroll
  * Time: 3:05 PM
  */
 @Unroll
-class Element300ServiceIntegrationSpec extends IntegrationSpec {
+class ElementServiceIntegrationSpec extends IntegrationSpec {
 
     ElementService elementService
 
