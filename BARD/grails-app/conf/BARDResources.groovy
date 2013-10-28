@@ -111,6 +111,7 @@ modules = {
     }
     datePicker {
         resource url: '/js/bootstrap-datepicker/bootstrap-datepicker.js'
+        resource url: '/js/bootstrap-datepicker/datepicker.css'
     }
     dcLibrary {
         resource url: "js/lib/dc.js"
@@ -291,6 +292,7 @@ modules = {
     tableSorter {
         resource url: '/js/jquery-table-sorter/jquery.tablesorter.min.js'
         resource url: '/js/jquery-table-sorter/jquery.tablesorter.pager.js'
+        resource url: '/js/jquery-table-sorter/jquery.tablesorter.widgets.js'
         resource url: '/js/jquery-table-sorter/theme.default.css'
     }
     twitterBootstrapAffix {

@@ -7,8 +7,7 @@ $(document).ready(function () {
         sortList: [
             [0, 0],
             [2, 0]
-        ],
-        widgets: ['zebra']
+        ]
     }).tablesorterPager({container: $("#pager")});
 
 
@@ -21,14 +20,14 @@ $(document).ready(function () {
         sortList: [
             [3, 0],
             [0, 0]
-        ],
-        widgets: ['zebra']
+        ]
     }).tablesorterPager({container: $("#pager")});
     $("#overlay").hide();
 
-    $(".tablesorter").on("sortStart",function () {
+    //Sorting message
+    $(".tablesorter").bind("sortStart",function () {
         $("#overlay").show();
-    }).on("sortEnd", function () {
+    }).bind("sortEnd", function () {
             $("#overlay").hide();
         });
 
