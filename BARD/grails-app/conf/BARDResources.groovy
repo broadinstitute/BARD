@@ -124,7 +124,7 @@ modules = {
         resource url: '/css/select2PopoverOverride.css'
     }
     dictionaryPage {
-        dependsOn("tableSorter")
+        dependsOn("myBard")
         resource url: "js/html5historyapi/history.js"
     }
 
@@ -218,10 +218,10 @@ modules = {
         resource url: '/js/element/newTerm.js'
 
     }
-    myBard{
-        dependsOn('core','bootstrap','tableSorter')
-        resource url:'/js/myBard/myBard.js'
-        resource url:'/css/myBard/myBard.css'
+    myBard {
+        dependsOn('core', 'bootstrap', 'tableSorter')
+        resource url: '/js/myBard/myBard.js'
+        resource url: '/css/myBard/myBard.css'
     }
     projectstep {
         dependsOn "handlebars,zyngaScroller"
@@ -290,10 +290,8 @@ modules = {
         resource url: "css/sunburst.css"
     }
     tableSorter {
-        resource url: '/js/jquery-table-sorter/jquery.tablesorter.min.js'
-        resource url: '/js/jquery-table-sorter/jquery.tablesorter.pager.js'
-        resource url: '/js/jquery-table-sorter/jquery.tablesorter.widgets.js'
         resource url: '/js/jquery-table-sorter/theme.default.css'
+        resource url: '/js/jquery-table-sorter/stupidtable.min.js'
     }
     twitterBootstrapAffix {
         resource url: "/css/twitterBootstrapAffix.css"

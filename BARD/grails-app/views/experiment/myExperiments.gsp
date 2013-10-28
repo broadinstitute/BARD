@@ -21,15 +21,14 @@
             </div>
 
             <div class="span10">
-                <div id="overlay" class="overlay">
-                    Please wait while we sort the column...
-                </div>
-
-                <table id="myExperiments" class="tablesorter table table-striped table-hover table-bordered">
+                <g:render template="/layouts/templates/tableSorterTip"/>
+                <table>
                     <caption><b>Total:</b> ${experiments.size()}</caption>
                     <thead>
                     <tr>
-                        <th>Experiment ID</th><th>Name</th><th>Status</th><th>Belongs to ADID</th> <th>Date Created</th>
+                        <th data-sort="int">Experiment ID</th><th data-sort="string-ins">Name</th><th data-sort="string">Status</th>
+                        <th data-sort="int">Belongs to ADID</th>
+                        <th data-sort="int">Date Created</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -37,21 +36,18 @@
                         <tr>
                             <td><g:link controller="experiment" id="${experiment.id}"
                                         action="show">${experiment.id}</g:link></td>
-                            <td style="line-height: 150%"><p>${experiment.experimentName}</p></td>
+                            <td style="line-height: 150%"><p>${experiment.experimentName?.trim()}</p></td>
                             <td style="line-height: 150%"><p>${experiment.experimentStatus.id}</p></td>
                             <td style="line-height: 150%"><p>
                                 <g:link controller="assayDefinition" id="${experiment.assay.id}"
                                         action="show">${experiment.assay.id}</g:link>
                             </p></td>
-                            <td><g:formatDate date="${experiment.dateCreated}" format="MM/dd/yyyy"/></td>
+                            <td data-sort-value="${experiment.dateCreated?.time}"><g:formatDate date="${experiment.dateCreated}" format="MM/dd/yyyy"/></td>
                         </tr>
                     </g:each>
                     </tbody>
                 </table>
             </div>
-
-            <div class="span1"></div>
-            <g:render template="/layouts/templates/tableSorterPaging"/>
         </g:if>
         <br/>
     </div>

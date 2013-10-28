@@ -2,7 +2,7 @@
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,tableSorter"/>
+            modules="myBard"/>
     <meta name="layout" content="main"/>
     <title>View Down Time</title>
 </head>

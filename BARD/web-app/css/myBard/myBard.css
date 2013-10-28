@@ -9,3 +9,44 @@
     background: #000;
     color: #FFF;
 }
+body {
+    font-family: "Ubuntu", "Trebuchet MS", sans-serif;
+}
+table {
+    border-collapse: collapse;
+    margin: 1em auto;
+}
+th, td {
+    padding: 5px 10px;
+    border: 1px solid #999;
+    font-size: 12px;
+}
+th {
+    background-color: #eee;
+}
+th[data-sort]{
+    cursor:pointer;
+}
+
+/* just some random additional styles for a more real-world situation */
+#msg {
+    color: #0a0;
+    text-align: center;
+}
+td.name {
+    font-weight: bold;
+}
+td.email {
+    color: #666;
+    text-decoration: underline;
+}
+/* zebra-striping seems to really slow down Opera sometimes */
+tr:nth-child(even) > td {
+    background-color: #f9f9f7;
+}
+tr:nth-child(odd) > td {
+    background-color: #ffffff;
+}
+.disabled {
+    opacity: 0.5;
+}

@@ -1,30 +1,25 @@
 <%@ page import="bard.db.dictionary.OntologyItem" %>
+<!DOCTYPE html>
 <html>
 <head>
     <title>BARD: Dictionary Terms and Description</title>
-    <r:require modules="bootstrap,dictionaryPage"/>
-    <r:layoutResources/>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#dictionary").tablesorter();
-        });
-    </script>
+    <r:require modules="dictionaryPage"/>
 </head>
 
 <body>
 
 <div class="container-fluid">
     <div class="row-fluid">
-
-        <table id="dictionary" class="tablesorter table table-condensed table-striped table-bordered">
+        <g:render template="/layouts/templates/tableSorterTip"/>
+        <table class="table table-striped table-hover table-bordered">
             <caption>Dictionary Terms and Description</caption>
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Term</th>
-                <th class="sorter-false">Description</th>
-                <th>Units</th>
-                <th class="sorter-false">Reference</th>
+                <th data-sort="string-ins">Term</th>
+                <th>Description</th>
+                <th data-sort="string-ins">Units</th>
+                <th>Reference</th>
             </tr>
             </thead>
             <tbody>

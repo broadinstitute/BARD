@@ -12,14 +12,12 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <g:if test="${assays}">
-            <div id="overlay" class="overlay">
-                Please wait while we sort the column...
-            </div>
-            <table id="myAssays" class="tablesorter table table-striped table-hover table-bordered myBard">
+            <g:render template="/layouts/templates/tableSorterTip"/>
+            <table>
                 <caption><b>Total:</b> ${assays.size()}</caption>
                 <thead>
                 <tr>
-                    <th>ADID</th><th>Name</th><th>Status</th> <th>Date Created</th>
+                    <th data-sort="int">ADID</th><th data-sort="string-ins">Name</th><th data-sort="string">Status</th> <th data-sort="int">Date Created</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,15 +25,14 @@
                     <tr>
                         <td><g:link controller="assayDefinition" id="${assay.id}"
                                     action="show">${assay.id}</g:link></td>
-                        <td style="line-height: 150%"><p>${assay.assayName}</p></td>
+                        <td style="line-height: 150%"><p>${assay.assayName?.trim()}</p></td>
                         <td>${assay.assayStatus.id}</td>
-                        <td><g:formatDate date="${assay.dateCreated}" format="MM/dd/yyyy"/></td>
+                        <td data-sort-value="${assay.dateCreated.time}"><g:formatDate date="${assay.dateCreated}" format="MM/dd/yyyy"/></td>
                     </tr>
                 </g:each>
                 </tbody>
             </table>
-            <g:render template="/layouts/templates/tableSorterPaging"/>
-        </g:if>
+         </g:if>
         <br/>
     </div>
 </div>

@@ -3,7 +3,7 @@
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,tableSorter"/>
+            modules="myBard"/>
     <meta name="layout" content="basic"/>
     <title>BARD Teams</title>
 </head>
@@ -11,32 +11,28 @@
 <body>
 <div class="container-fluid">
     <div class="row-fluid">
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#roles').tablesorter({
-                    widgets: ['zebra']
-                });
-            });
-        </script>
-            <p>Please email the BARD team at bard-users@broadinstitute.org if you would like to be added to a Team</p> <br/>
-            <table id="roles" class="tablesorter table table-striped table-hover table-bordered">
-                <caption>BARD Teams</caption>
-                <thead>
-                <tr>
-                    <th>Team Name</th><th>Date Created</th>
-                </tr>
-                </thead>
-                <tbody>
-                <g:each in="${roles}" var="role">
-                    <g:if test="${role?.authority?.startsWith("ROLE_TEAM_")}">
-                        <tr>
-                            <td>${role.displayName}</td>
-                            <td><g:formatDate date="${role.dateCreated}" format="MM/dd/yyyy"/></td>
-                        </tr>
-                    </g:if>
-                </g:each>
-                </tbody>
-            </table>
+        <p>Please email the BARD team at bard-users@broadinstitute.org if you would like to be added to a Team</p> <br/>
+
+        <g:render template="/layouts/templates/tableSorterTip"/>
+        <table class="table table-striped table-hover table-bordered">
+            <caption>BARD Teams</caption>
+            <thead>
+            <tr>
+                <th data-sort="string-ins">Team Name</th><th data-sort="int">Date Created</th>
+            </tr>
+            </thead>
+            <tbody>
+            <g:each in="${roles}" var="role">
+                <g:if test="${role?.authority?.startsWith("ROLE_TEAM_")}">
+                    <tr>
+                        <td>${role.displayName}</td>
+                        <td data-sort-value="${role.dateCreated?.time}"><g:formatDate date="${role.dateCreated}"
+                                                                                      format="MM/dd/yyyy"/></td>
+                    </tr>
+                </g:if>
+            </g:each>
+            </tbody>
+        </table>
         <br/>
     </div>
 </div>
