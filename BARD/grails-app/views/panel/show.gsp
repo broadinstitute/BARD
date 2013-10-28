@@ -3,7 +3,7 @@
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,projectsummary,canEditWidget,tableSorter"/>
+            modules="myBard,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,projectsummary,canEditWidget"/>
     <meta name="layout" content="basic"/>
     <title>Panel ID ${panelInstance?.id}</title>
 </head>
@@ -144,49 +144,36 @@
                         </div>
 
                         <div>
-                            <script type="text/javascript">
-                                $(document).ready(function () {
-                                    $("#panelTable").tablesorter({
-                                        headers: {
-                                            0: { sorter: "digit"  } ,
-                                            2: { sorter: false }
-                                        },
-                                        widgets: ['zebra']
-                                        ,
-                                        sortList: [
-                                            [0, 0]
-                                        ]
-                                    });
-                                });
-                            </script>
-
-
                             <g:if test="${panelInstance.panelAssays}">
                                 <h3>Associated Assay Definitions</h3>
-                                <table id="panelTable" class="tablesorter table table-striped table-hover table-bordered">
-                                  <thead>
-                                  <tr>
-                                      <th>ADID</th><th>Assay Name</th><th></th></thead>
-                                  </tr>
-                                  </thead>
-                               <tbody>
-                                <g:each in="${panelInstance.panelAssays}" var="panelAssay">
+
+                                <g:render template="/layouts/templates/tableSorterTip"/>
+                                <table class="table table-striped table-hover table-bordered">
+                                    <caption>Associated Assay Definitions</caption>
+                                    <thead>
                                     <tr>
-                                        <td><g:link controller="assayDefinition" action="show"
-                                                    id="${panelAssay.assay.id}">${panelAssay.assay.id}</g:link></td><td>${panelAssay.assay.assayName}</td>
-                                        <td>
-                                            <g:if test="${editable == 'canedit'}">
-                                                <g:link controller="panel" action="removeAssay"
-                                                        params="${[id: panelInstance.id, assayIds: panelAssay.assay.id]}"
-                                                        class="btn btn-mini" title="Remove From Panel"
-                                                        onclick="return confirm('Are you sure you wish to remove this Assay Definition from this Panel?');"><i
-                                                        class="icon-trash"></i>Remove From Panel</g:link>
-                                            </g:if>
-                                        </td>
+                                        <th data-sort="int">ADID</th><th data-sort="string-ins">Assay Name</th></th>
                                     </tr>
-                                </g:each>
-                                </tbody>
-                            </table>
+                                    </thead>
+
+                                    <tbody>
+                                    <g:each in="${panelInstance.panelAssays}" var="panelAssay">
+                                        <tr>
+                                            <td><g:link controller="assayDefinition" action="show"
+                                                        id="${panelAssay.assay.id}">${panelAssay.assay.id}</g:link></td><td>${panelAssay.assay.assayName}</td>
+                                            <td>
+                                                <g:if test="${editable == 'canedit'}">
+                                                    <g:link controller="panel" action="removeAssay"
+                                                            params="${[id: panelInstance.id, assayIds: panelAssay.assay.id]}"
+                                                            class="btn btn-mini" title="Remove From Panel"
+                                                            onclick="return confirm('Are you sure you wish to remove this Assay Definition from this Panel?');"><i
+                                                            class="icon-trash"></i>Remove From Panel</g:link>
+                                                </g:if>
+                                            </td>
+                                        </tr>
+                                    </g:each>
+                                    </tbody>
+                                </table>
                             </g:if>
                             <g:if test="${editable == 'canedit'}">
                                 <g:link controller="panel" action="addAssays" params="${[id: panelInstance.id]}"
