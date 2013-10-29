@@ -17,6 +17,9 @@ function DescriptorSelect2(elementId, placeholderText, backingData ) {
     };
 
     this.updateSelect2DescriptionPopover = function(data){
+        // destroy any existing popover
+        $(".select2-search").popover("destroy");
+        // if we have any description, create a popover
         if(data.description){
             $(".select2-search").popover({placement:'top',
                 html: true,
@@ -24,9 +27,6 @@ function DescriptorSelect2(elementId, placeholderText, backingData ) {
                 title:'<b>' +data.text + '</b>',
                 content:data.description});
             $(".select2-search").popover('show');
-        }
-        else{
-            $(".select2-search").popover("destroy");
         }
     };
     /***********************************************
