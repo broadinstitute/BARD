@@ -61,6 +61,11 @@ class AssayService {
                 }
             }
         }
+        if(!newAssay.ownerRole){
+            if(SpringSecurityUtils?.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')) { //if this is an admin
+                newAssay.ownerRole = Role.findByAuthority('ROLE_BARD_ADMINISTRATOR')
+            }
+        }
         newAssay.save(flush: true, validate: false)
 
 
