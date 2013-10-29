@@ -42,7 +42,7 @@
 <div class="span3 bs-docs-sidebar heading-numbering">
     <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar">
         <li><a href="#summary-header"><i class="icon-chevron-right"></i>Overview</a></li>
-        <li><a href="#contexts-header"><i class="icon-chevron-right"></i>Contexts</a></li>
+        <li><a href="#contexts-header"><i class="icon-chevron-right"></i>Annotations</a></li>
         <li><a href="#results-header"><i class="icon-chevron-right"></i>Results</a>
             <ul class="nav nav-list bs-docs-sidenav" style="padding-left: 0; margin: 0;">
                 <li><a href="#result-type-header"><i class="icon-chevron-right"></i>Result Types</a></li>
@@ -234,7 +234,7 @@
 </section>
 <br/>
 <section id="contexts-header">
-    <h3 class="sect">Contexts <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
+    <h3 class="sect">Annotations <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
             class="icon-question-sign"></i></g:link></h3>
 
     <div class="row-fluid">
