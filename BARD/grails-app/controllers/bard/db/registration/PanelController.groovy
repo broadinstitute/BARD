@@ -141,7 +141,7 @@ class PanelController {
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -173,7 +173,7 @@ class PanelController {
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -205,7 +205,7 @@ class PanelController {
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
