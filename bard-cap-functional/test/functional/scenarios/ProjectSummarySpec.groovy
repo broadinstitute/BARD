@@ -14,43 +14,33 @@ import db.Project
 /**
  * @author Muhammad.Rafique
  * Date Created: 13/02/07
- * Last Updated: 13/10/07
+ * Last Updated: 13/10/29
  */
 class ProjectSummarySpec extends BardFunctionalSpec {
-//	def testData = TestDataReader.getTestData()
 	int statusIndex = 1
 	int nameIndex = 2
 	int descriptionIndex = 3
-	
+
 	def setup() {
 		logInSomeUser()
-
-//		when: "User is at Home page, Navigating to Search Project By Id page"
-//		at HomePage
-//		navigateTo(NavigateTo.PROJECT_BY_ID)
-//
-//		then: "User is at Search Project by Id page"
-//		at CapSearchPage
-//
-//		when: "User is trying to search some project"
-//		at CapSearchPage
-//		capSearchBy(SearchBy.PROJECT_ID, testData.ProjectID)
-//
-//		then: "User is at View Project Definition page"
-//		at ViewProjectDefinitionPage
 	}
 
 
 	def "Test Project Summary Status Edit"() {
 		given:"Navigating to Show Project page"
 		to ViewProjectDefinitionPage
-		
+
 		when:"User is at View Project Page, Fetch Summary info on UI and DB for validation"
 		at ViewProjectDefinitionPage
 		def uiSummary = getUISummaryInfo()
 		def dbSummary = Project.getProjectSummaryById(TestData.projectId)
 		def statusOriginal = uiSummary.Status
-		def statusEdited = "Approved"
+		def statusEdited = ""
+		if(statusOriginal != "Approved"){
+			statusEdited = "Approved"
+		}else{
+			statusEdited = "Retired"
+		}
 
 		then:"Verify Summary Status before edit on UI & DB"
 		assert uiSummary.Status.equalsIgnoreCase(dbSummary.Status)
@@ -66,26 +56,14 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		then:"Verify Summary Status after edit on UI & DB"
 		assert uiSummary.Status.equalsIgnoreCase(statusEdited)
 		assert uiSummary.Status.equalsIgnoreCase(dbSummary.Status)
-		
-		and:"Revert Edit/Update Summary Status"
-		editSummary(statusIndex, statusOriginal, true)
 
-		when:"Summary Status is reverted, Fetch Summary info on UI and DB for validation"
-		at ViewProjectDefinitionPage
-		uiSummary = getUISummaryInfo()
-		dbSummary = Project.getProjectSummaryById(TestData.projectId)
-
-		then:"Verify Summary Status after revert on UI & DB"
-		assert uiSummary.Status.equalsIgnoreCase(statusOriginal)
-		assert uiSummary.Status.equalsIgnoreCase(dbSummary.Status)
-		
 		report "ProjectSummaryStatus"
 	}
 
 	def "Test Project Summary Name Edit"() {
 		given:"Navigating to Show Project page"
 		to ViewProjectDefinitionPage
-		
+
 		when:"User is at View Project Page, Fetch Summary info on UI and DB for validation"
 		at ViewProjectDefinitionPage
 		def uiSummary = getUISummaryInfo()
@@ -98,7 +76,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 
 		and:"Edit/Update Summary Name"
 		editSummary(nameIndex, nameEdited)
-		
+
 		when:"Summary Name is Updated, Fetch Summary info on UI and DB for validation"
 		at ViewProjectDefinitionPage
 		uiSummary = getUISummaryInfo()
@@ -119,14 +97,14 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		then:"Verify Summary Name after revert on UI & DB"
 		assert uiSummary.Name.equalsIgnoreCase(nameOriginal)
 		assert uiSummary.Name.equalsIgnoreCase(dbSummary.Name)
-		
+
 		report "ProjectSummaryName"
 	}
 
 	def "Test Project Summary Name Edit with empty value"() {
 		given:"Navigating to Show Project page"
-		to ViewProjectDefinitionPage 
-		
+		to ViewProjectDefinitionPage
+
 		when:"User is at View Project Page, Fetch Summary info on UI and DB for validation"
 		at ViewProjectDefinitionPage
 		def uiSummary = getUISummaryInfo()
@@ -154,7 +132,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 	def "Test Project Summary Description Edit"() {
 		given:"Navigating to Show Project page"
 		to ViewProjectDefinitionPage
-		
+
 		when:"User is at View Project Page, Fetch Summary info on UI and DB for validation"
 		at ViewProjectDefinitionPage
 		def uiSummary = getUISummaryInfo()
@@ -188,14 +166,14 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		then:"Verify Summary Description after revert on UI & DB"
 		assert uiSummary.Description.equalsIgnoreCase(projectDescriptionOriginal)
 		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description)
-		
+
 		report "ProjectSummaryDescription"
 	}
 
 	def "Test Project Summary Description Edit with empty value"() {
 		given:"Navigating to Show Project page"
 		to ViewProjectDefinitionPage
-		
+
 		when:"User is at View Project Page, Fetch Summary info on UI and DB for validation"
 		at ViewProjectDefinitionPage
 		def uiSummary = getUISummaryInfo()
@@ -216,7 +194,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		then:"Verify Summary Description after edit on UI & DB"
 		assert uiSummary.Description.equalsIgnoreCase(projectDescriptionOriginal)
 		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())
-		
+
 		report "ProjectSummaryDescriptionEmpty"
 	}
 }

@@ -10,19 +10,11 @@ class TestData {
 	static def projectId = 1315
 	static def assayId = 8129
 
-	static String documentDescriptionName = "Description Document"
-	static String documentDescriptionContent = "Description Content"
-	static String documentProtocolName = "Protocol Document"
-	static String documentProtocolContent = "Protocol Content"
-	static String documentCommentsName = "Comments Document"
-	static String documentCommentsContent = "Comments Content"
-	static String documentPublicationName = "Publication Document"
-	static String documentPublicationContent = "https://www.publication.com"
-	static String documentURLName = "External URL Document"
-	static String documentURLContent = "https://www.externalURL.com"
-	static String documentOtherName = "Other Document"
-	static String documentOtherContent = "Other Content"
-
+	final static def documents = [
+									documentName:"Document Name",
+									documentContent:"this is document contents",
+									documentUrl:"https://www.google.com"
+		]
 	final static def ValueType_Element = [
 											AttributeFromDictionary:"repetition throughput",
 											ValueFromDictionary:"multiple repetition"

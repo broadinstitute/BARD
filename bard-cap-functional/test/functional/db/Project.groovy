@@ -86,7 +86,7 @@ class Project extends DatabaseConnectivity {
 		def documentList = []
 		def sql = getSql()
 		sql.eachRow(ProjectQueries.PROJECT_DOCUMENT, [projectId, documentType]) { row ->
-			documentList.add(row.Name)
+			documentList.add(row.Name.trim())
 			//documentList.add(documentMap)
 		}
 		return documentList

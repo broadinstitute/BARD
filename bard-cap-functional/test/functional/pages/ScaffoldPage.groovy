@@ -16,7 +16,7 @@ class ScaffoldPage extends CommonFunctionalPage {
     }
 
     def logout() {
-        def logoutLink = $("button.btn.btn-primary", text:"Logout")
+        def logoutLink = $("#logoutButton")
         assert logoutLink
         def firstLink = logoutLink[0]
         firstLink.click();

@@ -1,13 +1,11 @@
 package pages
 
-
 /**
  * @author Muhammad.Rafique
  * Date Created: 13/02/11
  * Date Updated: 13/10/07
  */
 class LoginPage extends ScaffoldPage {
-	//	static url = getAppUrl()+"login/auth"
 	static url = "bardLogin/auth"
 	static at = { $("h2.form-signin-heading").text().equalsIgnoreCase("Please sign in") }
 
@@ -19,14 +17,14 @@ class LoginPage extends ScaffoldPage {
 
 	HomePage logIn(String username, String password) {
 		if (!isLoggedInAsUser(username)) {
-//			if(isLoggedIn()) {                  // logged in as someone else
-//				logout()
-//				waitFor(5, 0.5){$(id: "username")}
-//			}
+			if(isLoggedIn()) {                  // logged in as someone else
+				logout()
+				waitFor(5, 0.5){$(id: "username")}
+			}
 			logInNoValidation(username, password)
 		}
 
-//		assert isLoggedInAsUser(username), "Not logged in as $username"
+		assert isLoggedInAsUser(username), "Not logged in as $username"
 
 		return new HomePage()
 	}
@@ -37,8 +35,4 @@ class LoginPage extends ScaffoldPage {
 		signIn.click()
 	}
 
-//	static String getAppUrl() {
-//		RemoteControl remotec = new RemoteControl()
-//		return remotec {ctx.grailsApplication.config.grails.serverURL}
-//	}
 }

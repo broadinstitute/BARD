@@ -1,5 +1,7 @@
 package pages
 
+import org.apache.tools.ant.taskdefs.WaitFor;
+
 import geb.Page
 import modules.CardsHolderModule
 import modules.DocumentSectionModule
@@ -93,9 +95,11 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		def errorMessage = "Required and cannot be empty"
 		assert summaryEdit(indexValue).editIconPencil
 		summaryEdit(indexValue).editIconPencil.click()
-		ajaxRequestCompleted()
-		assert editableForm.buttons.iconOk
-		assert editableForm.buttons.iconRemove
+//		ajaxRequestCompleted()
+//		assert editableForm.buttons.iconOk
+//		assert editableForm.buttons.iconRemove
+		waitFor { editableForm.buttons.iconOk }
+		waitFor { editableForm.buttons.iconRemove }
 		if(isCombo){
 			selectingComboValue(editValue)
 		}else{
@@ -107,7 +111,9 @@ class CapScaffoldPage extends CommonFunctionalPage {
 				fillInputField(editValue)
 			}
 		}
-		ajaxRequestCompleted()
+		waitFor { !editableForm.buttons.iconOk }
+		waitFor { !editableForm.buttons.iconRemove }
+//		ajaxRequestCompleted()
 	}
 	def selectingComboValue(def editValue){
 		assert editableForm.selectInput
@@ -115,10 +121,10 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		editableForm.buttons.iconOk.click()
 	}
 	def fillInputField(def editValue){
-		assert editableForm.inputField
+		assert editableForm.inputTextArea
 		assert editableForm.buttons.iconOk
-		editableForm.inputField.value("")
-		editableForm.inputField.value(editValue)
+		editableForm.inputTextArea.value("")
+		editableForm.inputTextArea.value(editValue)
 		editableForm.buttons.iconOk.click()
 	}
 	def getUISummaryInfo(){
@@ -134,6 +140,13 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		document.addNewDocument.iconPlus.click()
 	}
 
+	def navigateToEditDocument(def document, def docName){
+		if(isDocument(document, docName)){
+			assert document.documentContents(docName).iconPencil
+			document.documentContents(docName).iconPencil.click()
+		}
+	}
+	
 	def editDocument(def document, def docName, def editValue){
 		def errorMessage = "Field is required and must not be empty"
 		if(isDocument(document, docName)){

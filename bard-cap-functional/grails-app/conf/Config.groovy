@@ -79,8 +79,8 @@ environments {
 mockUsers {
 	integrationTestUser {
 		roles = ['ROLE_USER', 'ROLE_CURATOR', 'ROLE_BARD_ADMINISTRATOR']
-		username = 'integrationTestUser'
-		password = 'integrationTestUser'
+		username = 'mrafique'
+		password = 'Nicezindagi@070840'
 		email = 'integrationTestUser@nowhere.com'
 	}
 }
