@@ -138,13 +138,13 @@ grails {
 
             controllerAnnotations.staticRules = [
                     '/console/**': ['ROLE_CONSOLE_USER'],
-                    '/jesqueOverview/**': ['ROLE_ADMINISTRATOR'],
-                    '/jesqueQueues/**': ['ROLE_ADMINISTRATOR'],
-                    '/jesqueFailed/**': ['ROLE_ADMINISTRATOR'],
-                    '/jesqueStats/**': ['ROLE_ADMINISTRATOR'],
-                    '/jesqueWorking/**': ['ROLE_ADMINISTRATOR'],
-                    '/jesqueWorkers/**': ['ROLE_ADMINISTRATOR'],
-                    '/jesqueScheduled/**': ['ROLE_ADMINISTRATOR'],
+                    '/jesqueOverview/**': ['ROLE_BARD_ADMINISTRATOR'],
+                    '/jesqueQueues/**': ['ROLE_BARD_ADMINISTRATOR'],
+                    '/jesqueFailed/**': ['ROLE_BARD_ADMINISTRATOR'],
+                    '/jesqueStats/**': ['ROLE_BARD_ADMINISTRATOR'],
+                    '/jesqueWorking/**': ['ROLE_BARD_ADMINISTRATOR'],
+                    '/jesqueWorkers/**': ['ROLE_BARD_ADMINISTRATOR'],
+                    '/jesqueScheduled/**': ['ROLE_BARD_ADMINISTRATOR'],
             ]
             ipRestrictions = [
                     '/console/**': '127.0.0.1'
@@ -307,7 +307,6 @@ if (appName) {
     if (bard.basic.auth){
         grails.config.locations << "classpath:bard-basic-auth-config.groovy"
     }
-
 }
 
 if (System.getProperty("migrationContextsToRun") != null) {
