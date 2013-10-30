@@ -26,7 +26,25 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
         // remove authenticated user from context to clean up
         SecurityContextHolder.clearContext();
     }
+    void "test getOwner integration test user"() {
+        given: 'a logged in user creates an assay'
+        springSecurityService.reauthenticate(username)
 
+        Assay assay = Assay.build()
+        assay.save(flush: true)
+
+        when:
+        String actualOwner = capPermissionService.getOwner(assay)
+
+        then:
+        assert actualOwner
+
+        where:
+        desc                             | username              | expectedOwner
+        'owner is integration test user' | 'integrationTestUser' | 'BARD Administrator'
+        'owner is teamMember1'           | 'teamA_1'             | 'ROLE_TEAM_A'
+        'owner is teamMember2'           | 'teamA_2'             | 'ROLE_TEAM_A'
+    }
 
     void "test getOwner #desc"() {
         given: 'a logged in user creates an assay'
@@ -39,11 +57,10 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
         String actualOwner = capPermissionService.getOwner(assay)
 
         then:
-        actualOwner == expectedOwner
+        assert actualOwner == expectedOwner
 
         where:
         desc                             | username              | expectedOwner
-        'owner is integration test user' | 'integrationTestUser' | 'BARD Administrator'
         'owner is teamMember1'           | 'teamA_1'             | 'ROLE_TEAM_A'
         'owner is teamMember2'           | 'teamA_2'             | 'ROLE_TEAM_A'
     }
