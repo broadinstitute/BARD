@@ -19,8 +19,8 @@ import static test.TestUtils.createString
  * Time: 12:07 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build([ProjectExperiment, ProjectSingleExperiment, Project, Experiment, Element])
-@Mock([ProjectExperiment, ProjectSingleExperiment, Project, Experiment, Element])
+@Build([ProjectSingleExperiment, Project, Experiment, Element])
+@Mock([ProjectSingleExperiment, Project, Experiment, Element])
 @Unroll
 class ProjectExperimentConstraintUnitSpec extends Specification {
 

@@ -37,8 +37,8 @@ import javax.servlet.http.HttpServletResponse
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(ProjectController)
-@Build([Role, Project, ProjectSingleExperiment, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
-@Mock([Role, Project, ProjectSingleExperiment, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
+@Build([Role, Project, ProjectSingleExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
+@Mock([Role, Project, ProjectSingleExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
 class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
