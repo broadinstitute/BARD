@@ -139,8 +139,8 @@ class ProjectService {
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void removeEdgeFromProject(Experiment fromExperiment, Experiment toExperiment, Long id) {
         Project project = Project.findById(id)
-        def fromProjectExperiment = ProjectExperiment.findByExperimentAndProject(fromExperiment, project)
-        def toProjectExperiment = ProjectExperiment.findByExperimentAndProject(toExperiment, project)
+        def fromProjectExperiment = ProjectSingleExperiment.findByExperimentAndProject(fromExperiment, project)
+        def toProjectExperiment = ProjectSingleExperiment.findByExperimentAndProject(toExperiment, project)
         if (!fromProjectExperiment || !toProjectExperiment)
             throw new UserFixableException("Experiment " + fromExperiment.id + " and / or Experiment " + toExperiment.id + " are / is not associated with project " + project.id)
         def projectStep = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(fromProjectExperiment, toProjectExperiment)
@@ -187,8 +187,8 @@ class ProjectService {
         if (!isExperimentAssociatedWithProject(fromExperiment, project) ||
                 !isExperimentAssociatedWithProject(toExperiment, project))
             throw new UserFixableException("Experiment " + fromExperiment.id + " or experiment " + toExperiment.id + " is not associated with project " + project.id)
-        ProjectExperiment peFrom = ProjectExperiment.findByProjectAndExperiment(project, fromExperiment)
-        ProjectExperiment peTo = ProjectExperiment.findByProjectAndExperiment(project, toExperiment)
+        ProjectSingleExperiment peFrom = ProjectSingleExperiment.findByProjectAndExperiment(project, fromExperiment)
+        ProjectSingleExperiment peTo = ProjectSingleExperiment.findByProjectAndExperiment(project, toExperiment)
         ProjectStep ps = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(peFrom, peTo)
         if (ps) // do not want to add one already exist
             throw new UserFixableException(("Link between " + fromExperiment.id + " and " + toExperiment.id + " does exist, can not be added again."))
