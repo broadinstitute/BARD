@@ -1,4 +1,4 @@
-<%@ page import="bard.db.registration.Assay; bard.db.command.BardCommand; java.text.SimpleDateFormat; bard.db.project.*" %>
+<%@ page import="bard.db.enums.HierarchyType; bard.db.registration.Assay; bard.db.command.BardCommand; java.text.SimpleDateFormat; bard.db.project.*" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
@@ -91,17 +91,17 @@
                 </dd>
                 <dd><br/>Relationship to Parent</dd>
                 <dt>
-
-                <div id="hierarchyLabelId"></div></dt>
+                 <div id="selectedParentLabelId"></div>
+                </dt>
                 <dd>
                     <g:select name="parentChildRelationship" id="parentChildRelationshipId"
                               class="parentChildRelationship"
                               noSelection="${['': 'none']}"
-                              from="${bard.db.enums.HierarchyType.values()}"
+                              from="${HierarchyType.values()}"
                               value="${resultTypeCommand?.parentChildRelationship}"
                               optionValue="id" optionKey="id"/>
 
-                    <span id="selectedParentLabelId"></span>
+                    <span id="hierarchyLabelId"></span>
                 </dd>
             </g:if>
             <br/><br/><br/>
@@ -127,7 +127,13 @@
                 </div>
 
                 <g:render template="../context/show"
-                          model="[contextOwner: contextOwner, contexts: contextOwner.groupContexts(), uneditable: true, showCheckBoxes: true, existingContextIds: resultTypeCommand.contextIds]"/>
+                          model="[contextOwner: contextOwner, contexts: contextOwner.groupContexts(),
+                                  uneditable: true, showCheckBoxes: true, existingContextIds: resultTypeCommand.contextIds]"/>
+                <g:render template="../context/currentCard"
+                          model="[contextOwner: contextOwner, currentCard: contextOwner.groupExperimentalVariables(), subTemplate: 'show', renderEmptyGroups: false,
+                                  showCheckBoxes: true, existingContextIds: resultTypeCommand.contextIds
+                          ]"/>
+
             </div>
 
             <dd>
