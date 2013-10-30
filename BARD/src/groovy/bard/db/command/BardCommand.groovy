@@ -57,19 +57,17 @@ abstract class BardCommand {
         final Set<Role> roleSet = [] as Set<Role>
 
         final Collection<GrantedAuthority> grantedAuthorities = SpringSecurityUtils.getPrincipalAuthorities()
-        final List<Role> authorities = []
+        //final List<Role> authorities = []
 
         //if logged in user is an admin , then add all teams
         if (isCurrentUserBARDAdmin()) {
             //Only add the roles with ids
-            authorities.addAll(Role.list())
+            roleSet.addAll(Role.list())
         }
         for (GrantedAuthority grantedAuthority : grantedAuthorities) {
             if ((grantedAuthority.authority?.startsWith("ROLE_TEAM_"))) {
-                Role role = (Role)grantedAuthority
-                //if (role.id) {
-                    roleSet.add(role)
-                //}
+                Role role = (Role) grantedAuthority
+                roleSet.add(role)
             }
         }
         List<Role> roles = new ArrayList<Role>(roleSet)
@@ -79,12 +77,8 @@ abstract class BardCommand {
     }
 
     static boolean isCurrentUserBARDAdmin() {
-        for (GrantedAuthority grantedAuthority : SpringSecurityUtils.getPrincipalAuthorities()) {
-            if (grantedAuthority.authority == BARD_ADMIN_ROLE_AUTHORITY) {
-                return true
-            }
-        }
-        return false
+
+        return SpringSecurityUtils.ifAnyGranted(BARD_ADMIN_ROLE_AUTHORITY)
     }
     /**
      *
