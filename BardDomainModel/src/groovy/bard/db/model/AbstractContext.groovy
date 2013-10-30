@@ -5,6 +5,8 @@ import bard.db.dictionary.Element
 import bard.db.enums.ContextType
 import bard.db.guidance.Guidance
 import bard.db.guidance.GuidanceAware
+import bard.db.registration.AssayContextItem
+import bard.db.registration.AttributeType
 
 /**
  * Created with IntelliJ IDEA.
@@ -47,8 +49,16 @@ abstract class AbstractContext implements GuidanceAware {
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
-    static transients = ["preferredName", 'itemSubClass']
+    static transients = ["preferredName", 'itemSubClass','atLeastOneNonFixedContextItem']
 
+    boolean atLeastOneNonFixedContextItem(){
+        for(AssayContextItem assayContextItem : this.getContextItems()){
+            if(assayContextItem.attributeType != AttributeType.Fixed){
+                return true
+            }
+        }
+        return false
+    }
     /**
      *
      * @return

@@ -1,6 +1,6 @@
 $(document).ready(function () {
     createHierarchyTree("#element-hierarchy-tree", "BARD Hierarchy Tree", "BARD", null);
-    createHierarchyTree("#dictionary-element-hierarchy-tree", "BARD Dictionary Tree", "BARD Dictionary", "ELEMENT");
+    createHierarchyTree("#dictionary-element-hierarchy-tree", "BARD Dictionary Tree", "BARD Dictionary", null);
 
 
     var attributeSelect2 = new DescriptorSelect2('#attributeElementId', 'Search for attribute name',{results: []});
