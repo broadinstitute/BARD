@@ -28,6 +28,10 @@ class ExperimentCommandUnitSpec extends Specification {
 
     def setup() {
         this.springSecurityService = Mock(SpringSecurityService)
+
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return true
+        }
     }
 
 

@@ -190,6 +190,9 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test edit Project owner new role not in list - fail'() {
         given:
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return false
+        }
         Project newProject = Project.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
 
         Role notInUsersRole = Role.build(authority: "ROLE_TEAM_C", displayName: "displayName");

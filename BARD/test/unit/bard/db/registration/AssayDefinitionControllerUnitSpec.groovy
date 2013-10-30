@@ -328,6 +328,10 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
     }
 
     void 'test clone assay fail users role, not in role list error'() {
+        given:
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return false
+        }
         when:
         controller.cloneAssay(assay.id)
         then:
