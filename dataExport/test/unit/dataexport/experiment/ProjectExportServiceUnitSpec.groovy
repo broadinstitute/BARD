@@ -30,9 +30,9 @@ import static common.tests.XmlTestSamples.*
  * To change this template use File | Settings | File Templates.
  */
 @Build([ExternalReference, Project, ProjectContext, ProjectContextItem, ProjectDocument, ProjectSingleExperiment,
-ProjectExperiment, ProjectExperimentContext, ProjectExperimentContextItem, StepContext, StepContextItem])
+ ProjectExperimentContext, ProjectExperimentContextItem, StepContext, StepContextItem])
 @Mock([ExternalReference, Project, ProjectContext, ProjectContextItem, ProjectDocument, ProjectSingleExperiment,
-ProjectExperiment, ProjectExperimentContext, ProjectExperimentContextItem, StepContext, StepContextItem])
+ ProjectExperimentContext, ProjectExperimentContextItem, StepContext, StepContextItem])
 @Unroll
 class ProjectExportServiceUnitSpec extends Specification {
     Writer writer
@@ -152,7 +152,6 @@ class ProjectExportServiceUnitSpec extends Specification {
         label              | results                     | numContext | map
         "Minimal"          | PROJECT_STEP_MINIMAL        | 0          | [:]
         "With edgeName"    | PROJECT_STEP_WITH_EDGE_NAME | 0          | [edgeName: 'edge']
-        "With one context" | PROJECT_STEP_WITH_CONTEXT   | 1          | [:]
     }
 
     void "generate StepContext #label"() {
