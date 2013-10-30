@@ -23,8 +23,8 @@ import bard.db.registration.ExternalReference
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(ProjectExperimentRenderService)
-@Build([Project, ProjectExperiment, ProjectSingleExperiment, ProjectStep, Experiment, Assay, Element, ExternalReference])
-@Mock([Project, ProjectExperiment, ProjectSingleExperiment, ProjectStep, Experiment, Assay, Element, ExternalReference])
+@Build([Project, ProjectSingleExperiment, ProjectStep, Experiment, Assay, Element, ExternalReference])
+@Mock([Project, ProjectSingleExperiment, ProjectStep, Experiment, Assay, Element, ExternalReference])
 @Unroll
 class ProjectExperimentRenderServiceUnitSpec extends Specification {
     ProjectExperimentRenderService renderService = new ProjectExperimentRenderService()
