@@ -177,8 +177,8 @@ class ExperimentService {
     }
 
 
-    Experiment createNewExperiment(Long id, String experimentName, String description) {
-        Assay assay = Assay.findById(id)
+    Experiment createNewExperiment(Long assayId, String experimentName, String description) {
+        Assay assay = Assay.findById(assayId)
         Experiment experiment = new Experiment(assay: assay, experimentName: experimentName, description: description, dateCreated: new Date())
 
         if (experiment.save(flush: true)) {
