@@ -789,10 +789,14 @@ class ResultsService {
         // connect parents
         for (result in results) {
             LogicalKey childKey = resultToKey[result]
-            assert childKey != null
+            if(childKey == null) {
+                throw new RuntimeException("childKey == null for ${result}")
+            }
             result.resultHierarchiesForResult.each {
                 LogicalKey parentKey = resultToKey[it.parentResult]
-                assert parentKey != null
+                if(parentKey == null) {
+                    throw new RuntimeException("parentKey == null for ${it.parentResult}")
+                }
                 childKey.parentKey = parentKey
             }
         }
@@ -861,7 +865,9 @@ class ResultsService {
                 bulkResultService.insertResults(getUsername(), experiment, results)
 
             Set<Long> sids = new HashSet(results.collect {it.substanceId} )
-            assert sids.size() == 1
+            if(sids.size() != 1) {
+                throw new RuntimeException("expected one sid, got ${sids}");
+            }
 
             resultsExportService.writeResultsForSubstance(writer, sids.first(), results as List)
         }
