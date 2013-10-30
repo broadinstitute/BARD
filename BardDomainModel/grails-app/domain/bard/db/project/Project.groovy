@@ -133,6 +133,11 @@ class Project extends AbstractContextOwner implements GuidanceAware {
         return context
     }
 
+    def addToProjectExperiments(ProjectExperiment projectExperiment) {
+        this.projectExperiments.add(projectExperiment)
+        projectExperiment.project = this
+    }
+
     def afterInsert() {
         Project.withNewSession {
             capPermissionService?.addPermission(this)
