@@ -266,6 +266,35 @@ li{line-height:inherit;}
 	position:relative;
 	z-index:1;
 }
+.low keyhero-area{
+    position:relative;
+    min-height:200px;
+    padding:26px 0 30px;
+}
+.hero-area:after{
+    content:'';
+    position:absolute;
+    top:-88px;
+    bottom:0;
+    right:-30px;
+    width:1195px;
+    background:url('../../images/bardHomepage/decor-hero.png') no-repeat;
+}
+.hero-area:before{
+    content:'';
+    position:absolute;
+    top:-88px;
+    left:100%;
+    width:9999px;
+    height:550px;
+    margin:0 0 0 30px;
+    background:url('../../images/bardHomepage/bg-decor-repeat.png') repeat-x;
+}
+.hero-area .row-fluid{
+    position:relative;
+    z-index:1;
+}
+
 .hero-block h1{
 	margin:0 0 24px;
 	font-weight:normal;

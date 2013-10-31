@@ -7,4 +7,8 @@ class AboutController {
     }
     def termsOfUse(){}
     def privacyPolicy(){}
+    def howToSearch () {
+        render (view:'howToSearch')
+    }
+
 }
