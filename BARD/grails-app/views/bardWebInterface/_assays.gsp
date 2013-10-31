@@ -34,7 +34,7 @@
             <th>Assay Type</th>
             <th>Detection Method Type</th>
             <th>ADID</th>
-            <th>Assay Title</th>
+            <th>Name</th>
             <th>Status</th>
         </tr>
         </thead>
