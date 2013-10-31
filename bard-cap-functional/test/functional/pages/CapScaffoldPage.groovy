@@ -95,9 +95,6 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		def errorMessage = "Required and cannot be empty"
 		assert summaryEdit(indexValue).editIconPencil
 		summaryEdit(indexValue).editIconPencil.click()
-//		ajaxRequestCompleted()
-//		assert editableForm.buttons.iconOk
-//		assert editableForm.buttons.iconRemove
 		waitFor { editableForm.buttons.iconOk }
 		waitFor { editableForm.buttons.iconRemove }
 		if(isCombo){
@@ -154,16 +151,24 @@ class CapScaffoldPage extends CommonFunctionalPage {
 			document.documentContents(docName).editIconPencil.click()
 			ajaxRequestCompleted()
 			if(editValue==""){
-				fillInputField(editValue)
+				fillDocumentFields(editValue)
 				validationError(controlError.helpBlock, errorMessage)
 				editableForm.buttons.iconRemove.click()
 			}else{
-				fillInputField(editValue)
+				fillDocumentFields(editValue)
 			}
 //			ajaxRequestCompleted()
 		}
 	}
 
+	def fillDocumentFields(def editValue){
+		assert editableForm.inputField
+		assert editableForm.buttons.iconOk
+		editableForm.inputField.value("")
+		editableForm.inputField.value(editValue)
+		editableForm.buttons.iconOk.click()
+	}
+	
 	def deleteDocument(def document, def docName){
 		if(isDocument(document, docName)){
 			assert document.documentContents(docName).iconTrash

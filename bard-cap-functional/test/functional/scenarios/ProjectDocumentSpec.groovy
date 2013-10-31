@@ -170,7 +170,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 				createDocument(testData.documentName, testData.documentContent)
 			}
 
-			and:"Navigating to View Project Page"
+			and:"Navigating to View Project Page, and edit document"
 			at ViewProjectDefinitionPage
 			assert isDocument(documentHeaders(docHeader), testData.documentName)
 			if(docType == "publication" || docType == "external url"){
