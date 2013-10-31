@@ -101,13 +101,9 @@
                     </sec:ifLoggedIn>
                     <sec:ifNotLoggedIn>
                         <g:form class="navbar-form pull-right" name="loginForm" controller="login">
-                            Not logged in&nbsp;&nbsp;
+                            Logged in anonymously&nbsp;&nbsp;
                             <button type="submit" class="btn">Login</button>
                         </g:form>
-                        <g:if env="development">
-                        OR
-                        <a class="btn btn-large" id='signin'>Sign in with your Email</a>
-                        </g:if>
                     </sec:ifNotLoggedIn>
                 </div>
             </div>

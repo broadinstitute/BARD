@@ -126,9 +126,6 @@
                                         <a href="#" class="icon-pencil documentPencil ${editable}" data-id="ownerRoleId"
                                            title="Click to edit owner role"></a>
                                     </dd>
-                                    %{--<dt>Owner:</dt>--}%
-                                    %{--<dd>${panelOwner}</dd>--}%
-
                                     <dt><g:message code="default.dateCreated.label"/>:</dt>
                                     <dd><g:formatDate date="${panelInstance.dateCreated}" format="MM/dd/yyyy"/></dd>
 
@@ -185,8 +182,10 @@
                                         onclick="return confirm('Are you sure you wish to delete this Panel?');"><i
                                         class="icon-trash"></i>Delete Panel</g:link>
                             </g:if>
-                            <g:link controller="panel" action="create"
-                                    class="btn"><i class="icon-plus"></i>Create a New Panel</g:link>
+                            <sec:ifLoggedIn>
+                                <g:link controller="panel" action="create"
+                                        class="btn"><i class="icon-plus"></i>Create a New Panel</g:link>
+                            </sec:ifLoggedIn>
                         </div>
                     </div>
                 </div>

@@ -108,22 +108,26 @@
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Name"
                    data-id="nameId"></a>
             </dd>
-            <dt><g:message code="experiment.description.label" default="Description"/>:</dt>
-            <dd>
-                <span
-                        class="description"
-                        data-toggle="manual"
-                        id="descriptionId"
-                        data-inputclass="input-xxlarge"
-                        data-type="textarea"
-                        data-value="${instance.description}"
-                        data-pk="${instance.id}"
-                        data-url="/BARD/experiment/editDescription"
-                        data-placeholder="Required"
-                        data-original-title="Edit Description By">${instance.description}</span>
-                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description"
-                   data-id="descriptionId"></a>
-            </dd>
+            <g:if test="${editable == 'canedit'}">
+                <dt><g:message code="experiment.description.label" default="Description"/>:</dt>
+                <dd>
+
+                    <span
+                            class="description"
+                            data-toggle="manual"
+                            id="descriptionId"
+                            data-inputclass="input-xxlarge"
+                            data-type="textarea"
+                            data-value="${instance.description}"
+                            data-pk="${instance.id}"
+                            data-url="/BARD/experiment/editDescription"
+                            data-placeholder="Required"
+                            data-original-title="Edit Description By">${instance.description}</span>
+                    <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description"
+                       data-id="descriptionId"></a>
+
+                </dd>
+            </g:if>
             <dt><g:message code="experiment.ownerRole.label" default="Owner"/>:</dt>
             <dd>
                 <span
@@ -141,39 +145,41 @@
                 <a href="#" class="icon-pencil documentPencil ${editable}" data-id="ownerRoleId"
                    title="Click to edit owner role"></a>
             </dd>
-            <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
-            <dd>
-                <span class="rfddate" id="rfd" data-type="combodate" data-pk="${instance.id}"
-                      data-url="/BARD/experiment/editRunFromDate"
-                      data-value="${instance.runDateFrom}"
-                      data-original-title="Select run from date"
-                      data-format="YYYY-MM-DD"
-                      data-toggle="manual"
-                      data-viewformat="MM/DD/YYYY"
-                      data-template="D / MMM / YYYY">
-                    <g:formatDate
-                            format="MM/dd/yyyy"
-                            date="${instance.runDateFrom}"/>
-                </span>
-                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit run from date"
-                   data-id="rfd"></a>
-            </dd>
-            <dt><g:message code="experiment.runtodate.label" default="Run Date to"/>:</dt>
-            <dd>
-                <span class="rdtdate" id="rdt" data-type="combodate" data-pk="${instance.id}"
-                      data-url="/BARD/experiment/editRunToDate"
-                      data-value="${instance.runDateTo}"
-                      data-original-title="Select run to date"
-                      data-toggle="manual"
-                      data-format="YYYY-MM-DD"
-                      data-viewformat="MM/DD/YYYY"
-                      data-template="D / MMM / YYYY">
-                    <g:formatDate
-                            format="MM/dd/yyyy"
-                            date="${instance.runDateTo}"/>
-                </span><a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit run to date"
-                          data-id="rdt"></a>
-            </dd>
+            <g:if test="${editable == 'canedit'}">
+                <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
+                <dd>
+                    <span class="rfddate" id="rfd" data-type="combodate" data-pk="${instance.id}"
+                          data-url="/BARD/experiment/editRunFromDate"
+                          data-value="${instance.runDateFrom}"
+                          data-original-title="Select run from date"
+                          data-format="YYYY-MM-DD"
+                          data-toggle="manual"
+                          data-viewformat="MM/DD/YYYY"
+                          data-template="D / MMM / YYYY">
+                        <g:formatDate
+                                format="MM/dd/yyyy"
+                                date="${instance.runDateFrom}"/>
+                    </span>
+                    <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit run from date"
+                       data-id="rfd"></a>
+                </dd>
+                <dt><g:message code="experiment.runtodate.label" default="Run Date to"/>:</dt>
+                <dd>
+                    <span class="rdtdate" id="rdt" data-type="combodate" data-pk="${instance.id}"
+                          data-url="/BARD/experiment/editRunToDate"
+                          data-value="${instance.runDateTo}"
+                          data-original-title="Select run to date"
+                          data-toggle="manual"
+                          data-format="YYYY-MM-DD"
+                          data-viewformat="MM/DD/YYYY"
+                          data-template="D / MMM / YYYY">
+                        <g:formatDate
+                                format="MM/dd/yyyy"
+                                date="${instance.runDateTo}"/>
+                    </span><a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit run to date"
+                              data-id="rdt"></a>
+                </dd>
+            </g:if>
             <dt><g:message code="default.dateCreated.label"/>:</dt>
             <dd><g:formatDate date="${instance.dateCreated}" format="MM/dd/yyyy"/></dd>
 
@@ -187,16 +193,14 @@
 
         <g:render template="experimentReferences"
                   model="[experiment: instance, excludedLinks: ['experiment.show']]"/>
-
-        <g:link controller="results" action="configureTemplate"
-                params="${[experimentId: instance.id]}"
-                class="btn">Download a template</g:link>
+        <sec:ifLoggedIn>
+            <g:link controller="results" action="configureTemplate"
+                    params="${[experimentId: instance.id]}"
+                    class="btn">Download a template</g:link>
+        </sec:ifLoggedIn>
         <g:if test="${editable == 'canedit'}">
             <a href="#uploadResultsModal" role="button" class="btn"
                data-toggle="modal">Upload results</a>
-        </g:if>
-
-        <g:if test="${editable == 'canedit'}">
             <g:link action="reloadResults" class="btn" id="${instance.id}">Reload Results from Pubchem</g:link>
         </g:if>
 
@@ -263,9 +267,11 @@
             <h4 class="subsect">Result Types</h4>
             <g:if test="${instance.experimentMeasures}">
                 <div class="row-fluid">
-                    <span><i class='icon-star'></i> by any node in the tree below, means that the result type is a priority element
+                    <span><i
+                            class='icon-star'></i> by any node in the tree below, means that the result type is a priority element
                     <g:render template="priorityElementDictionary"/>
                     </span> <br/><br/>
+
                     <div class="tree" id="result-type-table">
 
                     </div>
