@@ -79,19 +79,32 @@ class ExperimentController {
 
     def show() {
 
-        def experimentInstance = Experiment.get(params.id)
-        if (!experimentInstance) {
+        final Experiment experiment = Experiment.get(params.id)
+        if (!experiment) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'experiment.label', default: 'Experiment'), params.id])
             return
         }
 
-        boolean editable = canEdit(permissionEvaluator, springSecurityService, experimentInstance)
+        final Set<Long> contextIds = new HashSet<Long>()
+        //load the assay context items for this measure
+        for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
+            //load the assay context items for this measure
+            final Set<AssayContextExperimentMeasure> assayContextExperimentMeasures = experimentMeasure.assayContextExperimentMeasures
+            for (AssayContextExperimentMeasure assayContextExperimentMeasure : assayContextExperimentMeasures) {
+                contextIds.add(assayContextExperimentMeasure.assayContext.id);
+            }
+        }
+
+        boolean editable = canEdit(permissionEvaluator, springSecurityService, experiment)
         boolean isAdmin = SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
-        String owner = capPermissionService.getOwner(experimentInstance)
-        [instance: experimentInstance,
+        String owner = capPermissionService.getOwner(experiment)
+        [
+                instance: experiment,
+                contextIds:contextIds,
                 experimentOwner: owner,
                 editable: editable ? 'canedit' : 'cannotedit',
-                isAdmin: isAdmin]
+                isAdmin: isAdmin
+        ]
     }
 
     @Secured(['isAuthenticated()'])
