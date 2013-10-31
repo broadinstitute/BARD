@@ -24,20 +24,6 @@ class PersonConstraintUnitSpec extends Specification {
         domainInstance = Person.buildWithoutSave()
     }
 
-    void 'test isAdmin #desc'() {
-        given:
-        Person person = Person.build()
-        Role role = Role.build(authority: authority)
-        PersonRole.build(role: role, person: person)
-        when:
-        boolean isAdmin = person.isAdmin()
-        then:
-        assert isAdmin == adminProperty
-        where:
-        desc                     | authority                 | adminProperty
-        "Not Bard Administrator" | "Authority"               | false
-        "Bard Administrator"     | "ROLE_BARD_ADMINISTRATOR" | true
-    }
 
     void "test name constraints #desc name: '#valueUnderTest'"() {
         final String field = 'userName'
