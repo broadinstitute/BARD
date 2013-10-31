@@ -264,10 +264,10 @@ class XmlTestSamples {
         </projectExperiment>
     '''
     static final String PROJECT_STEP_MINIMAL = '''
-          <projectStep projectStepId='1' nextProjectExperimentRef='1' precedingProjectExperimentRef='1' />
+          <projectStep projectStepId='1' nextProjectExperimentRef='2' precedingProjectExperimentRef='2' />
     '''
     static final String PROJECT_STEP_WITH_EDGE_NAME = '''
-        <projectStep projectStepId='1' nextProjectExperimentRef='1' precedingProjectExperimentRef='1'>
+        <projectStep projectStepId='1' nextProjectExperimentRef='2' precedingProjectExperimentRef='2'>
             <edgeName>edge</edgeName>
         </projectStep>
     '''
