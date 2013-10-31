@@ -159,5 +159,8 @@ databaseChangeLog = {
         sqlFile(path: "iteration_035/06-create-exp-panel.sql", stripComments: true)
    }
 
+    changeSet(author: "pmontgom", id: "iteration-035/07-drop-old-constraint", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_035/07-drop-old-constraint.sql", stripComments: true)
+    }
 
 }
