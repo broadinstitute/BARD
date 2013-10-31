@@ -11,7 +11,7 @@
     <div class="span12">
         <div class="well well-small">
             <div class="pull-left">
-                <h4>Edit ${assayInstance?.getDomainClass()?.getNaturalName()} (${assayInstance?.id}) Contexts </h4>
+                <h4>Edit Assay (ADID:${assayInstance?.id}) Contexts </h4>
             </div>
             <g:if test="${assayInstance?.id}">
                 <div class="pull-right">
