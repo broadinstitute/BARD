@@ -68,15 +68,24 @@
                     </g:if>
 
                 </td>
-                <g:if test="${contextItem.attributeElement?.externalURL}">
-                    <td class="valuedLabel">
-                        <a href="${contextItem.attributeElement.externalURL + contextItem.extValueId}"
-                           target="_blank">${contextItem.valueDisplay}</a>
-                    </td>
+                <g:if test="${contextItem.hasProperty("attributeType")}">
+                    <g:if test="${!contextItem.valueDisplay?.trim() && contextItem.attributeType == AttributeType.Free }">
+                        <td class="valuedLabel">
+                            <i>Value will be provided with the experiment</i>
+                        </td>
+                    </g:if>
                 </g:if>
                 <g:else>
-                    <td class="valuedLabel">${contextItem.valueDisplay}
-                    </td>
+                    <g:if test="${contextItem.attributeElement?.externalURL}">
+                        <td class="valuedLabel">
+                            <a href="${contextItem.attributeElement.externalURL + contextItem.extValueId}"
+                               target="_blank">${contextItem.valueDisplay}</a>
+                        </td>
+                    </g:if>
+                    <g:else>
+                        <td class="valuedLabel">${contextItem.valueDisplay}
+                        </td>
+                    </g:else>
                 </g:else>
             </tr>
         </g:each>
