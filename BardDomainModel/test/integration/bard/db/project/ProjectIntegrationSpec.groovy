@@ -18,9 +18,7 @@ class ProjectIntegrationSpec extends BardIntegrationSpec {
     ProjectContext projectContext
     ProjectContextItem contextItem
 
-    ProjectExperiment projectExperiment
-    ProjectExperimentContext projectExperimentContext
-    ProjectExperimentContextItem projectExperimentContextItem
+    ProjectSingleExperiment projectExperiment
 
     ExternalReference externalReference
 
@@ -30,7 +28,7 @@ class ProjectIntegrationSpec extends BardIntegrationSpec {
     }
 
     public initializeProjectExperiment() {
-        projectExperiment = ProjectExperiment.buildWithoutSave()
+        projectExperiment = ProjectSingleExperiment.buildWithoutSave()
         projectExperiment.experiment.save()
         domainInstance.addToProjectExperiments(projectExperiment)
     }
@@ -52,16 +50,6 @@ class ProjectIntegrationSpec extends BardIntegrationSpec {
         projectContext
     }
 
-    void initializeProjectExperimentContext() {
-        projectExperimentContext = ProjectExperimentContext.buildWithoutSave()
-        projectExperiment.addToProjectExperimentContexts(projectExperimentContext)
-    }
-
-    void initializeProjectExperimentContextItem() {
-        projectExperimentContextItem = ProjectExperimentContextItem.buildWithoutSave()
-        projectExperimentContext.addToContextItems(projectExperimentContextItem)
-        projectExperimentContextItem.attributeElement.save()
-    }
 
     void "test context cascade save"() {
         given:
@@ -92,29 +80,6 @@ class ProjectIntegrationSpec extends BardIntegrationSpec {
         domainInstance.save(flush: true)
         then:
         projectExperiment.id != null
-    }
-
-    void "test stepContexts cascade save"() {
-        given:
-        initializeProjectExperiment()
-        initializeProjectExperimentContext()
-        assert projectExperimentContext.id == null
-        when:
-        domainInstance.save(flush: true)
-        then:
-        projectExperimentContext.id != null
-    }
-
-    void "test stepContextItems cascade save"() {
-        given:
-        initializeProjectExperiment()
-        initializeProjectExperimentContext()
-        initializeProjectExperimentContextItem()
-        assert projectExperimentContextItem.id == null
-        when:
-        domainInstance.save(flush: true)
-        then:
-        projectExperimentContextItem.id != null
     }
 
     void "test externalReferences cascade save"() {

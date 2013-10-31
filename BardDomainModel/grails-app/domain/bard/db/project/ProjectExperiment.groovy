@@ -12,11 +12,10 @@ import bard.db.model.AbstractContextOwner
  * Time: 10:53 PM
  * To change this template use File | Settings | File Templates.
  */
-class ProjectExperiment extends AbstractContextOwner{
+abstract class ProjectExperiment {
 
     private static final int MODIFIED_BY_MAX_SIZE = 40
 
-    Experiment experiment
     Project project
     Element stage
 
@@ -24,11 +23,10 @@ class ProjectExperiment extends AbstractContextOwner{
     Date lastUpdated
     String modifiedBy
 
-    List<ProjectExperimentContext> projectExperimentContexts = []
     Set<ProjectStep> precedingProjectSteps = [] as Set
     Set<ProjectStep> followingProjectSteps = [] as Set
 
-    static hasMany = [projectExperimentContexts: ProjectExperimentContext,
+    static hasMany = [
             precedingProjectSteps: ProjectStep,
             followingProjectSteps: ProjectStep]
 
@@ -36,7 +34,6 @@ class ProjectExperiment extends AbstractContextOwner{
             followingProjectSteps: 'previousProjectExperiment']
 
     static constraints = {
-        experiment()
         project()
         stage(nullable: true)
 
@@ -44,25 +41,9 @@ class ProjectExperiment extends AbstractContextOwner{
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
+
     static mapping = {
         id(column: "PROJECT_EXPERIMENT_ID", generator: "sequence", params: [sequence: 'PROJECT_EXPERIMENT_ID_SEQ'])
-        projectExperimentContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
-    }
-
-    @Override
-    List getContexts() {
-        return projectExperimentContexts;
-    }
-
-    @Override
-    void removeContext(AbstractContext context) {
-        this.removeFromProjectExperimentContexts(context)
-    }
-
-    @Override
-    AbstractContext createContext(Map properties) {
-        ProjectExperimentContext context = new ProjectExperimentContext(properties)
-        addToProjectExperimentContexts(context)
-        return context
+        discriminator column: "type"
     }
 }

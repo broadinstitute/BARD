@@ -14,8 +14,8 @@ import spock.lang.Unroll
  * Time: 3:05 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([ProjectExperiment, ProjectExperimentContext, ProjectExperimentContextItem, Element])
-@Mock([ProjectExperiment, ProjectExperimentContext, ProjectExperimentContextItem, Element])
+@Build([ProjectExperimentContext, ProjectExperimentContextItem, Element])
+@Mock([ProjectExperimentContext, ProjectExperimentContextItem, Element])
 @Unroll
 class ProjectExperimentContextUnitSpec extends AbstractContextUnitSpec<ProjectExperimentContext> {
     @Before

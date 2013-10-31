@@ -312,6 +312,7 @@ class AssayDefinitionController {
         }
         catch (Exception ee) {
             flash.message = ee.message
+            log.error("Clone assay failed", ee);
         }
         redirect(action: "show", id: assay.id)
     }

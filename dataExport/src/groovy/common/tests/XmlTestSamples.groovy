@@ -263,23 +263,11 @@ class XmlTestSamples {
             </stageRef>
         </projectExperiment>
     '''
-    static final String PROJECT_EXPERIMENT_WITH_CONTEXT = '''
-        <projectExperiment projectExperimentId='1'>
-            <experimentRef label='experimentName'>
-                <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
-            </experimentRef>
-            <contexts>
-                <context id='1' displayOrder='0'>
-                  <contextName />
-                </context>
-            </contexts>
-        </projectExperiment>
-    '''
     static final String PROJECT_STEP_MINIMAL = '''
-          <projectStep projectStepId='1' nextProjectExperimentRef='1' precedingProjectExperimentRef='1' />
+          <projectStep projectStepId='1' nextProjectExperimentRef='2' precedingProjectExperimentRef='2' />
     '''
     static final String PROJECT_STEP_WITH_EDGE_NAME = '''
-        <projectStep projectStepId='1' nextProjectExperimentRef='1' precedingProjectExperimentRef='1'>
+        <projectStep projectStepId='1' nextProjectExperimentRef='2' precedingProjectExperimentRef='2'>
             <edgeName>edge</edgeName>
         </projectStep>
     '''
@@ -409,47 +397,6 @@ class XmlTestSamples {
   <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
     <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
     </project>
-    '''
-    static final String PROJECT_WITH_EXPERIMENT_WITH_ONE_CONTEXT = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
-            <projectName>name</projectName>
-            <projectExperiments>
-                <projectExperiment projectExperimentId='1'>
-                  <experimentRef label='experimentName'>
-                    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
-                  </experimentRef>
-                  <contexts>
-                    <context id='1' displayOrder='0'>
-                      <contextName />
-                    </context>
-                  </contexts>
-                </projectExperiment>
-              </projectExperiments>
-            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
-            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
-        </project>
-    '''
-    static final String PROJECT_WITH_EXPERIMENT_WITH_TWO_CONTEXT = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
-            <projectName>name</projectName>
-            <projectExperiments>
-                <projectExperiment projectExperimentId='1'>
-                  <experimentRef label='experimentName'>
-                    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
-                  </experimentRef>
-                  <contexts>
-                    <context id='1' displayOrder='0'>
-                      <contextName />
-                    </context>
-                    <context id='2' displayOrder='1'>
-                      <contextName />
-                    </context>
-                  </contexts>
-                </projectExperiment>
-              </projectExperiments>
-            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
-            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
-        </project>
     '''
     static final String PROJECT_WITH_TWO_EXPERIMENTS_ONE_PROJECT_STEP = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>

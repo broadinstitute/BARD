@@ -8,6 +8,7 @@ import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
 import bard.db.project.ProjectExperiment
+import bard.db.project.ProjectSingleExperiment
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
 import bard.db.registration.MeasureCaseInsensitiveDisplayLabelComparator
@@ -38,9 +39,10 @@ class Experiment extends AbstractContextOwner {
     Long id;
     Long ncgcWarehouseId;
     Integer confidenceLevel = 1
+    PanelExperiment panel;
 
     List<ExperimentContext> experimentContexts = []
-    Set<ProjectExperiment> projectExperiments = [] as Set
+    Set<ProjectSingleExperiment> projectExperiments = [] as Set
     Set<ExternalReference> externalReferences = [] as Set
     Set<ExperimentMeasure> experimentMeasures = [] as Set
     Set<ExperimentFile> experimentFiles = [] as Set
@@ -67,7 +69,7 @@ class Experiment extends AbstractContextOwner {
     static hasMany = [experimentContexts: ExperimentContext,
             experimentMeasures: ExperimentMeasure,
             externalReferences: ExternalReference,
-            projectExperiments: ProjectExperiment,
+            projectExperiments: ProjectSingleExperiment,
             experimentFiles: ExperimentFile,
             experimentDocuments: ExperimentDocument]
 
@@ -75,6 +77,7 @@ class Experiment extends AbstractContextOwner {
         id(column: "EXPERIMENT_ID", generator: "sequence", params: [sequence: 'EXPERIMENT_ID_SEQ'])
         experimentContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
         readyForExtraction(type: ReadyForExtractionEnumUserType)
+        panel(column: 'PANEL_EXPRMT_ID')
     }
 
     static constraints = {
@@ -82,7 +85,7 @@ class Experiment extends AbstractContextOwner {
         experimentStatus(nullable: false)
         readyForExtraction(nullable: false)
         assay()
-
+        panel(nullable: true)
         runDateFrom(nullable: true)
         runDateTo(nullable: true)
         holdUntilDate(nullable: true)

@@ -15,8 +15,8 @@ import static test.TestUtils.assertFieldValidationExpectations
  * Time: 1:25 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([ProjectExperiment, ProjectExperimentContext])
-@Mock([ProjectExperiment, ProjectExperimentContext])
+@Build([ProjectSingleExperiment, ProjectExperimentContext])
+@Mock([ProjectSingleExperiment, ProjectExperimentContext])
 @Unroll
 class ProjectExperimentContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec {
 

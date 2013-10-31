@@ -67,8 +67,10 @@
         <div class="span9">
             <div class="pull-left">
                 <g:if test="${assayInstance?.id}">
-                    <g:link action="cloneAssay" id="${assayInstance?.id}" class="btn"><g:img
-                            uri="/images/clone-icon.png"/> Clone Assay Definition</g:link>
+                    <sec:ifLoggedIn>
+                        <g:link action="cloneAssay" id="${assayInstance?.id}" class="btn"><g:img
+                                uri="/images/clone-icon.png"/> Clone Assay Definition</g:link>
+                    </sec:ifLoggedIn>
                 </g:if>
             </div>
         </div>
@@ -129,7 +131,7 @@
     </div>
 </section>
 <br/>
-<g:render template="/common/guidance" model="[guidanceList: assayInstance.guidance]" />
+<g:render template="/common/guidance" model="[guidanceList: assayInstance.guidance]"/>
 <section id="biology-header">
 
     <h3 class="sect">Biology <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i

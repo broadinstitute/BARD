@@ -29,9 +29,9 @@ class ProjectStepConstraintIntegrationSpec extends BardIntegrationSpec {
         def fixture = fixtureLoader.build {
             project(Project)
             nextExperiment(Experiment)
-            nextProjectExperiment(ProjectExperiment, project: project, experiment: nextExperiment)
+            nextProjectExperiment(ProjectSingleExperiment, project: project, experiment: nextExperiment)
             previousExperiment(Experiment)
-            previousProjectExperiment(ProjectExperiment, project: project, experiment: previousExperiment)
+            previousProjectExperiment(ProjectSingleExperiment, project: project, experiment: previousExperiment)
         }
         def props = [nextProjectExperiment: fixture.nextProjectExperiment, previousProjectExperiment: fixture.previousProjectExperiment]
         domainInstance = ProjectStep.buildWithoutSave(props)

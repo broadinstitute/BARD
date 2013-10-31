@@ -26,7 +26,7 @@ class ProjectExperimentConstraintIntegrationSpec extends BardIntegrationSpec {
 
     @Before
     void doSetup() {
-        domainInstance = ProjectExperiment.buildWithoutSave()
+        domainInstance = ProjectSingleExperiment.buildWithoutSave()
         domainInstance.project?.save()
         domainInstance.experiment?.save()
     }

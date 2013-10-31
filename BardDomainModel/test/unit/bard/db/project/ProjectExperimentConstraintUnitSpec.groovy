@@ -19,16 +19,16 @@ import static test.TestUtils.createString
  * Time: 12:07 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build([ProjectExperiment, Project, Experiment, Element])
-@Mock([ProjectExperiment, Project, Experiment, Element])
+@Build([ProjectSingleExperiment, Project, Experiment, Element])
+@Mock([ProjectSingleExperiment, Project, Experiment, Element])
 @Unroll
 class ProjectExperimentConstraintUnitSpec extends Specification {
 
-    ProjectExperiment domainInstance
+    ProjectSingleExperiment domainInstance
 
     @Before
     void doSetup() {
-        domainInstance = ProjectExperiment.buildWithoutSave()
+        domainInstance = ProjectSingleExperiment.buildWithoutSave()
     }
 
     void "test experiment constraints #desc experiment: '#valueUnderTest'"() {

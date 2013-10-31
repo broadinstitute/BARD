@@ -6,11 +6,13 @@ import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
+import bard.db.people.Role
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import registration.AssayService
 import spock.lang.Specification
 
@@ -27,20 +29,6 @@ import spock.lang.Specification
 @TestFor(AssayService)
 public class AssayServiceUnitSpec extends Specification {
 
-//    void "test cloneMeasures"() {
-//        given:
-//        Assay assay = Assay.build()
-//        Assay clonedAssay = service.cloneAssayOnly(assay, assay.dateCreated, "me", "Clone ")
-//        AssayContext context = AssayContext.build(assay: assay, contextName: "alpha")
-//        AssayContextItem.build(assayContext: context)
-//        Experiment experiment = Experiment.build(assay: assay)
-//        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(experiment: experiment)
-//        AssayContextExperimentMeasure.build(assayContext: context, experimentMeasure: experimentMeasure)
-//        when:
-//        Map<ExperimentMeasure, ExperimentMeasure> map = service.cloneMeasures(assay, clonedAssay)
-//        then:
-//        assert map.size() == experiment.experimentMeasures.size()
-//    }
 
     void 'test cloneDocuments'() {
         given:
@@ -92,10 +80,12 @@ public class AssayServiceUnitSpec extends Specification {
         AssayContext context = AssayContext.build(assay: assay, contextName: "alpha")
         AssayContextItem contextItem = AssayContextItem.build(assayContext: context)
         AssayDocument.build(assay: assay)
-//        Measure measure = Measure.build(assay: assay)
-//        AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: context, measure: measure)
-        Assay.metaClass.isDirty =
-            { return false }
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return true
+        }
+        Role.metaClass.'static'.findByAuthority={String authority ->
+              new Role()
+        }
         when:
         Assay newAssay = service.cloneAssayForEditing(assay, assay.designedBy);
 
@@ -124,9 +114,6 @@ public class AssayServiceUnitSpec extends Specification {
         AssayContextItem newContextItem = newContext.assayContextItems.first()
         newContextItem != contextItem
         newContextItem.attributeType == contextItem.attributeType
-
-        // test all measure properties are good
-        //newAssay.measures.size() == 0
     }
 
     void 'test assay clone'() {

@@ -29,10 +29,10 @@ import static common.tests.XmlTestSamples.*
  * Time: 12:52 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([ExternalReference, Project, ProjectContext, ProjectContextItem, ProjectDocument,
-ProjectExperiment, ProjectExperimentContext, ProjectExperimentContextItem, StepContext, StepContextItem])
-@Mock([ExternalReference, Project, ProjectContext, ProjectContextItem, ProjectDocument,
-ProjectExperiment, ProjectExperimentContext, ProjectExperimentContextItem, StepContext, StepContextItem])
+@Build([ExternalReference, Project, ProjectContext, ProjectContextItem, ProjectDocument, ProjectSingleExperiment,
+ ProjectExperimentContext, ProjectExperimentContextItem, StepContext, StepContextItem])
+@Mock([ExternalReference, Project, ProjectContext, ProjectContextItem, ProjectDocument, ProjectSingleExperiment,
+ ProjectExperimentContext, ProjectExperimentContextItem, StepContext, StepContextItem])
 @Unroll
 class ProjectExportServiceUnitSpec extends Specification {
     Writer writer
@@ -115,7 +115,7 @@ class ProjectExportServiceUnitSpec extends Specification {
 
     void "generate ProjectExperiment #label"() {
         given:
-        ProjectExperiment projectExperiment = ProjectExperiment.build(mapClosure.call())
+        ProjectExperiment projectExperiment = ProjectSingleExperiment.build(mapClosure.call())
         numContext.times { ProjectExperimentContext.build(projectExperiment: projectExperiment, contextType: ContextType.UNCLASSIFIED) }
 
         when:
@@ -131,31 +131,9 @@ class ProjectExportServiceUnitSpec extends Specification {
         label              | results                          | numContext | mapClosure
         "Minimal"          | PROJECT_EXPERIMENT_MINIMAL       | 0          | { [:] }
         "With stageRef"    | PROJECT_EXPERIMENT_WITH_STAGEREF | 0          | { [stage: Element.build(label: 'stage')] }
-        "With one context" | PROJECT_EXPERIMENT_WITH_CONTEXT  | 1          | { [:] }
 
     }
 
-    void "generate ProjectExperimentContext #label"() {
-        given:
-        ProjectExperimentContext projectExperimentContext = ProjectExperimentContext.build(map)
-        numItems.times { ProjectExperimentContextItem.build(context: projectExperimentContext) }
-
-        when:
-        this.projectExportService.generateProjectExperimentContext(this.markupBuilder, projectExperimentContext)
-
-        then:
-        String actualXml = this.writer.toString()
-        XmlTestAssertions.assertResults(results, actualXml)
-        XmlTestAssertions.validate(projectSchema, actualXml)
-
-        where:
-        label                         | results                        | numItems | map
-        "Minimal"                     | CONTEXT_MINIMAL                | 0        | [contextType: ContextType.UNCLASSIFIED]
-        "Minimal with name"           | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextType: ContextType.UNCLASSIFIED, contextName: 'contextName']
-        "Minimal with group"          | CONTEXT_MINIMAL_WITH_GROUP     | 0        | [contextType: ContextType.BIOLOGY]
-        "Minimal with 1 contextItem"  | CONTEXT_MINIMAL_WITH_ONE_ITEM  | 1        | [contextType: ContextType.UNCLASSIFIED]
-        "Minimal with 2 contextItems" | CONTEXT_MINIMAL_WITH_TWO_ITEMS | 2        | [contextType: ContextType.UNCLASSIFIED]
-    }
 
     void "generate ProjectStep #label"() {
         given:
@@ -174,7 +152,6 @@ class ProjectExportServiceUnitSpec extends Specification {
         label              | results                     | numContext | map
         "Minimal"          | PROJECT_STEP_MINIMAL        | 0          | [:]
         "With edgeName"    | PROJECT_STEP_WITH_EDGE_NAME | 0          | [edgeName: 'edge']
-        "With one context" | PROJECT_STEP_WITH_CONTEXT   | 1          | [:]
     }
 
     void "generate StepContext #label"() {
@@ -226,7 +203,7 @@ class ProjectExportServiceUnitSpec extends Specification {
         numDoc.times { ProjectDocument.build(project: project) }
         numPrjCtx.times { ProjectContext.build(project: project, contextType: ContextType.UNCLASSIFIED) }
         numPrjExp.times {
-            ProjectExperiment pe = ProjectExperiment.build(project: project)
+            ProjectSingleExperiment pe = ProjectSingleExperiment.build(project: project)
             pe.experiment.readyForExtraction = ReadyForExtraction.READY
             numPrjExpCtx.times { ProjectExperimentContext.build(projectExperiment: pe, contextType: ContextType.UNCLASSIFIED) }
         }
@@ -257,8 +234,6 @@ class ProjectExportServiceUnitSpec extends Specification {
         "With 1 context and 1 experiment"   | PROJECT_WITH_ONE_CONTEXT_ONE_EXPERIMENT       | 0         | 0      | 1         | 1         | 0            | 0          | [:]
 
         "With 1 experiment"                 | PROJECT_WITH_EXPERIMENT                       | 0         | 0      | 0         | 1         | 0            | 0          | [:]
-        "With 1 experiment 1 context"       | PROJECT_WITH_EXPERIMENT_WITH_ONE_CONTEXT      | 0         | 0      | 0         | 1         | 1            | 0          | [:]
-        "With 1 experiment 2 context"       | PROJECT_WITH_EXPERIMENT_WITH_TWO_CONTEXT      | 0         | 0      | 0         | 1         | 2            | 0          | [:]
 
         "With 2 experiments 1 Project step" | PROJECT_WITH_TWO_EXPERIMENTS_ONE_PROJECT_STEP | 0         | 0      | 0         | 2         | 0            | 1          | [:]
     }
@@ -271,7 +246,7 @@ class ProjectExportServiceUnitSpec extends Specification {
         numDoc.times { ProjectDocument.build(project: project) }
         numPrjCtx.times { ProjectContext.build(project: project, contextType: ContextType.UNCLASSIFIED) }
         numPrjExp.times {
-            ProjectExperiment pe = ProjectExperiment.build(project: project)
+            ProjectSingleExperiment pe = ProjectSingleExperiment.build(project: project)
             pe.experiment.readyForExtraction = ReadyForExtraction.NOT_READY
             numPrjExpCtx.times { ProjectExperimentContext.build(projectExperiment: pe, contextType: ContextType.UNCLASSIFIED) }
         }

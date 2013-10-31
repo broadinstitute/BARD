@@ -789,10 +789,14 @@ class ResultsService {
         // connect parents
         for (result in results) {
             LogicalKey childKey = resultToKey[result]
-            assert childKey != null
+            if(childKey == null) {
+                throw new RuntimeException("childKey == null for ${result}")
+            }
             result.resultHierarchiesForResult.each {
                 LogicalKey parentKey = resultToKey[it.parentResult]
-                assert parentKey != null
+                if(parentKey == null) {
+                    throw new RuntimeException("parentKey == null for ${it.parentResult}")
+                }
                 childKey.parentKey = parentKey
             }
         }
@@ -860,10 +864,18 @@ class ResultsService {
             if (options.writeResultsToDb)
                 bulkResultService.insertResults(getUsername(), experiment, results)
 
-            Set<Long> sids = new HashSet(results.collect {it.substanceId} )
-            assert sids.size() == 1
+            // it's possible to have a rows with the SID populated but no measures reported,
+            // especially when dealing converted data with panels.  (There may have originally
+            // been measures in the original pubchem file for _other_ experiments in the panel,
+            // but this experiment may be empty.)   So, if there are no results just skip this batch
+            if(results.size() > 0) {
+                Set<Long> sids = new HashSet(results.collect {it.substanceId} )
 
-            resultsExportService.writeResultsForSubstance(writer, sids.first(), results as List)
+                if(sids.size() != 1) {
+                    throw new RuntimeException("expected one sid, got ${sids}");
+                }
+                resultsExportService.writeResultsForSubstance(writer, sids.first(), results as List)
+            }
         }
 
         public void finish() {

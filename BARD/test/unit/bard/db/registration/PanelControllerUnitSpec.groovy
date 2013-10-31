@@ -162,6 +162,9 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     }
     void 'test edit Panel owner new role not in list - fail'() {
         given:
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return false
+        }
         Panel newPanel = Panel.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
 
         Role notInUsersRole = Role.build(authority: "ROLE_TEAM_C", displayName: "displayName");

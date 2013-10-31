@@ -67,27 +67,14 @@ class ProjectService {
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void removeExperimentFromProject(Experiment experiment, Long id) {
         Project project = Project.findById(id)
-        def projectExperiment = ProjectExperiment.findByExperimentAndProject(experiment, project)
+        def projectExperiment = ProjectSingleExperiment.findByExperimentAndProject(experiment, project)
         if (!projectExperiment) throw new UserFixableException("Can not find association between experiment " + experiment.id + " and project " + project.id)
 
         deleteProjectStepsByProjectExperiment(projectExperiment)
-        deleteExperimentContextsByProjectExperiment(projectExperiment)
 
         projectExperiment.delete(flush: true)
     }
 
-    /**
-     * delete contexts associated with given a projectexperiment
-     * @param projectExperiment
-     */
-    private void deleteExperimentContextsByProjectExperiment(ProjectExperiment projectExperiment) {
-        def projectExperimentContexts = ProjectExperimentContext.findByProjectExperiment(projectExperiment)
-
-        if (projectExperimentContexts) {
-            projectExperiment.projectExperimentContexts.removeAll(projectExperimentContexts)
-            projectExperimentContexts.each { it.delete() }
-        }
-    }
 
     /**
      * delete projectsteps having given projectexperiment as start point or end point
@@ -139,8 +126,8 @@ class ProjectService {
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void removeEdgeFromProject(Experiment fromExperiment, Experiment toExperiment, Long id) {
         Project project = Project.findById(id)
-        def fromProjectExperiment = ProjectExperiment.findByExperimentAndProject(fromExperiment, project)
-        def toProjectExperiment = ProjectExperiment.findByExperimentAndProject(toExperiment, project)
+        def fromProjectExperiment = ProjectSingleExperiment.findByExperimentAndProject(fromExperiment, project)
+        def toProjectExperiment = ProjectSingleExperiment.findByExperimentAndProject(toExperiment, project)
         if (!fromProjectExperiment || !toProjectExperiment)
             throw new UserFixableException("Experiment " + fromExperiment.id + " and / or Experiment " + toExperiment.id + " are / is not associated with project " + project.id)
         def projectStep = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(fromProjectExperiment, toProjectExperiment)
@@ -160,7 +147,7 @@ class ProjectService {
         if (isExperimentAssociatedWithProject(experiment, project))
             throw new UserFixableException("Experiement " + experiment.id + " is already associated with Project " + project.id)
 
-        ProjectExperiment pe = new ProjectExperiment(experiment: experiment, project: project, stage: stage)
+        ProjectSingleExperiment pe = new ProjectSingleExperiment(experiment: experiment, project: project, stage: stage)
         project.addToProjectExperiments(pe)
         experiment.addToProjectExperiments(pe)
         pe.save()
@@ -187,8 +174,8 @@ class ProjectService {
         if (!isExperimentAssociatedWithProject(fromExperiment, project) ||
                 !isExperimentAssociatedWithProject(toExperiment, project))
             throw new UserFixableException("Experiment " + fromExperiment.id + " or experiment " + toExperiment.id + " is not associated with project " + project.id)
-        ProjectExperiment peFrom = ProjectExperiment.findByProjectAndExperiment(project, fromExperiment)
-        ProjectExperiment peTo = ProjectExperiment.findByProjectAndExperiment(project, toExperiment)
+        ProjectSingleExperiment peFrom = ProjectSingleExperiment.findByProjectAndExperiment(project, fromExperiment)
+        ProjectSingleExperiment peTo = ProjectSingleExperiment.findByProjectAndExperiment(project, toExperiment)
         ProjectStep ps = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(peFrom, peTo)
         if (ps) // do not want to add one already exist
             throw new UserFixableException(("Link between " + fromExperiment.id + " and " + toExperiment.id + " does exist, can not be added again."))

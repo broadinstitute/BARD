@@ -37,14 +37,14 @@ import javax.servlet.http.HttpServletResponse
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(ProjectController)
-@Build([Role, Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
-@Mock([Role, Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
+@Build([Role, Project, ProjectSingleExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
+@Mock([Role, Project, ProjectSingleExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
 class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     @Shared Project project
-    @Shared ProjectExperiment projectExperimentFrom
-    @Shared ProjectExperiment projectExperimentTo
+    @Shared ProjectSingleExperiment projectExperimentFrom
+    @Shared ProjectSingleExperiment projectExperimentTo
     @Shared StageTree stageTree1
     @Shared StageTree stageTree2
     ProjectService projectService
@@ -70,8 +70,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         stageTree2 = StageTree.build(element: element2)
         Experiment experimentFrom = Experiment.build()
         Experiment experimentTo = Experiment.build()
-        projectExperimentFrom = ProjectExperiment.build(project: project, experiment: experimentFrom, stage: element1)
-        projectExperimentTo = ProjectExperiment.build(project: project, experiment: experimentTo, stage: element2)
+        projectExperimentFrom = ProjectSingleExperiment.build(project: project, experiment: experimentFrom, stage: element1)
+        projectExperimentTo = ProjectSingleExperiment.build(project: project, experiment: experimentTo, stage: element2)
         ProjectStep projectStep = ProjectStep.build(previousProjectExperiment: projectExperimentFrom, nextProjectExperiment: projectExperimentTo)
         projectExperimentFrom.addToFollowingProjectSteps(projectStep)
         projectExperimentTo.addToPrecedingProjectSteps(projectStep)
@@ -190,6 +190,9 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test edit Project owner new role not in list - fail'() {
         given:
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return false
+        }
         Project newProject = Project.build(version: 0, name: "My Name", ownerRole: this.role)  //no designer
 
         Role notInUsersRole = Role.build(authority: "ROLE_TEAM_C", displayName: "displayName");
@@ -347,7 +350,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test update stage for an Experiment  #desc'() {
         given:
-        ProjectExperiment projectExperimentFrom1 = ProjectExperiment.build(project: project, experiment: Experiment.build())
+        ProjectSingleExperiment projectExperimentFrom1 = ProjectSingleExperiment.build(project: project, experiment: Experiment.build())
 
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: projectExperimentFrom1.id, name: stage, value: projectExperimentTo.stage.label)
@@ -360,14 +363,14 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
         where:
         desc                                                  | stage  | expectedStage
-        "ProjectExperiment has null stage element ID"         | null   | "secondary assay"
-        "ProjectExperiment has stage ID that is not a number" | "name" | "secondary assay"
+        "ProjectSingleExperiment has null stage element ID"         | null   | "secondary assay"
+        "ProjectSingleExperiment has stage ID that is not a number" | "name" | "secondary assay"
     }
 
     void 'test update stage for an Experiment  - access denied'() {
         given:
         accessDeniedRoleMock()
-        ProjectExperiment projectExperimentFrom1 = ProjectExperiment.build(project: project, experiment: Experiment.build())
+        ProjectSingleExperiment projectExperimentFrom1 = ProjectSingleExperiment.build(project: project, experiment: Experiment.build())
 
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: projectExperimentFrom1.id, name: stage, value: projectExperimentTo.stage.label)
@@ -378,8 +381,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assertAccesDeniedErrorMessage()
         where:
         desc                                                  | stage  | expectedStage
-        "ProjectExperiment has null stage element ID"         | null   | "secondary assay"
-        "ProjectExperiment has stage ID that is not a number" | "name" | "secondary assay"
+        "ProjectSingleExperiment has null stage element ID"         | null   | "secondary assay"
+        "ProjectSingleExperiment has stage ID that is not a number" | "name" | "secondary assay"
     }
 
     void 'test updateProjectStage change the stage'() {

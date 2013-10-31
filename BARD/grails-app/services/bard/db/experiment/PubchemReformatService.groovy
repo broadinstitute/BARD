@@ -383,7 +383,9 @@ class PubchemReformatService {
         //second pass: associate context columns to rows
         for (row in rows) {
             if (row.CONTEXTTID != null && row.TID != row.CONTEXTTID) {
-                assert row.RESULTTYPE == null
+                if(row.RESULTTYPE != null) {
+                    throw new RuntimeException("expected resulttype == null for TID ${row.TID} because CONTEXTTID != null")
+                }
                 ResultMapContextColumn col = new ResultMapContextColumn(attribute: row.CONTEXTITEM, tid: row.TID, qualifierTid: row.QUALIFIERTID)
                 ResultMapRecord record = byTid[row.CONTEXTTID.toString()]
                 record.contextItemColumns.add(col)

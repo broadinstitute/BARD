@@ -1,10 +1,12 @@
 package bard.db.project
 
 import grails.converters.JSON
+import net.sf.ehcache.hibernate.HibernateUtil
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import bard.db.registration.ExternalReference
 import bard.db.experiment.Experiment
+import org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsHibernateUtil
 
 /**
  * This is a service that return a list of nodes and edges in JSON format to be displayed in views.
@@ -24,25 +26,29 @@ class ProjectExperimentRenderService {
     }
 
     def processProject(Project project) {
-        List<Long> visitedNodes = []        // as name said
+        Set<Long> visitedNodes = [] as Set // as name said
         List<Long> queue = []              // processing queue
 
         Set<Edge> edges = new HashSet()   // all edges
         List<Node> nodes = []            // nodes have connections to other nodes
         List<Node> isolatedNodes = []   // nodes have no connections to any nodes, need to be displayed differently
+        Map<Long, ProjectExperiment> byId = [:]
 
         // add each experiment id associated with the project
         project.projectExperiments.each {
             queue.add(it.id)
+            byId[it.id] = it
         }
+
         // BFS to construct graph
         while (queue.size() > 0) {
             Long currentNode = queue.remove(0)         // remove the first one in the queue
             if (visitedNodes.contains(currentNode)) { // don't process one that is already processed
                 continue;
             }
-            ProjectExperiment pe = ProjectExperiment.findById(currentNode)
-            visitedNodes.add(pe.id)                 // keep visited
+            visitedNodes.add(currentNode)           // keep visited
+
+            ProjectExperiment pe = byId[currentNode]
             Node node = constructNode(pe)           // construct node
             if (isIsolatedNode(pe)) {
                 isolatedNodes << node
@@ -87,21 +93,43 @@ class ProjectExperimentRenderService {
         return pe?.followingProjectSteps?.size() == 0 &&
                 pe?.precedingProjectSteps?.size() == 0
     }
+
     /**
      * Each projectexperiment is a node, extract attributes may be displayed
      * @param pe
      * @return node
      */
     Node constructNode(ProjectExperiment pe) {
-        def peAttributes = ['eid': pe?.experiment?.id,
-                'stage': pe?.stage?.label,
-                'assay': pe?.experiment?.assay?.id,
-                'ename': pe?.experiment?.experimentName,
-                'incount': 0,
-                'outcount': 0,
-                'aid': getAidByExperiment(pe.experiment),
-                'peid':pe?.id, 'stageid':pe?.stage?.id
-        ]
+        pe = GrailsHibernateUtil.unwrapIfProxy(pe)
+        def peAttributes
+        if(pe instanceof ProjectPanelExperiment) {
+            ProjectPanelExperiment ppe = (ProjectPanelExperiment)pe;
+            peAttributes = [
+                    'type':'panel',
+                    'stage': ppe.stage?.label,
+                    'stageid':ppe.stage?.id,
+                    'incount': 0,
+                    'outcount': 0,
+                    'peid':ppe.id,
+                    'pid': ppe.panelExperiment.panelId,
+                    'panel': ppe.panelExperiment.panel.name,
+                    'eids' : ppe.panelExperiment.experiments.collect {it.id}
+            ]
+        } else {
+            ProjectSingleExperiment pse = (ProjectSingleExperiment)pe;
+            peAttributes = [
+                    'type':'single',
+                    'peid':pse.id,
+                    'stage': pse.stage?.label,
+                    'stageid':pse.stage?.id,
+                    'aid': getAidByExperiment(pse.experiment),
+                    'assay': pse.experiment?.assay?.id,
+                    'incount': 0,
+                    'outcount': 0,
+                    'eid': pse.experiment?.id,
+                    'ename': pse.experiment?.experimentName,
+            ]
+        }
         return new Node(id: pe?.id, keyValues: peAttributes)
     }
 
