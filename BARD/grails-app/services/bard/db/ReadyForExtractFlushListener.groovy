@@ -164,8 +164,6 @@ class ReadyForExtractFlushListener implements FlushEventListener, PostInsertEven
             return (((ExperimentMeasure) entity).experiment)
         } else if (entity instanceof ExperimentFile) {
             return (((ExperimentFile) entity).experiment)
-        } else if (entity instanceof AssayContextExperimentMeasure) {
-            return (((AssayContextExperimentMeasure) entity).experimentMeasure.experiment)
         }
         // these classes update project's status
         else if (entity instanceof Project) {
