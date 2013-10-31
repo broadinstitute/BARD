@@ -64,7 +64,9 @@ abstract class BardCommand {
             //Only add the roles with ids
             roleSet.addAll(Role.getTeamRoles())
             //add BARD Admin
-            roleSet.add(Role.findByAuthority(BARD_ADMIN_ROLE_AUTHORITY))
+            final Role bard_admin = Role.findByAuthority(BARD_ADMIN_ROLE_AUTHORITY)
+
+            roleSet.add(bard_admin)
         }
         for (GrantedAuthority grantedAuthority : grantedAuthorities) {
             if ((grantedAuthority.authority?.startsWith("ROLE_TEAM_"))) {

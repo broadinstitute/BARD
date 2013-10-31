@@ -316,6 +316,9 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     void 'test clone assay fail validation error'() {
         given:
+        Role.metaClass.'static'.findByAuthority ={
+           return this.role
+        }
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [this.role]
         }
