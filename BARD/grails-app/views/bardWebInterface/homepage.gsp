@@ -72,7 +72,9 @@
                                     <li><a href="#">Contact us</a></li>
                                 </ul>
                             </li>
-                            <li><a href="/BARD/bardWebInterface/navigationPage">Submissions</a></li>
+                            <sec:ifLoggedIn>
+                                <li><a href="/BARD/bardWebInterface/navigationPage">My BARD</a></li>
+                            </sec:ifLoggedIn>
                         </ul>
                         <g:if test="${false}">
                             <ul class="login-nav">

@@ -12,8 +12,7 @@
     <r:require modules="basic,bootstrap,autocomplete,cart,idSearch,jquerynotifier,downtime"/>
     <%@ page import="bardqueryapi.IDSearchType" %>
     <r:layoutResources/>
-    <ga:trackPageview />
-
+    <ga:trackPageview/>
 
 </head>
 
@@ -30,13 +29,16 @@
     <div class="search-panel">
 
         <div class="container-fluid">
-            <div id="downtimenotify"class="row-fluid span12" style="display:none">
+            <div id="downtimenotify" class="row-fluid span12" style="display:none">
                 <div id="basic-template">
                     <a class="ui-notify-cross ui-notify-close" href="#">x</a>
+
                     <h1 id="downTimeTitle">#{title}</h1>
+
                     <p>#{text}</p>
                 </div>
             </div>
+
             <div class="row-fluid span12">
                 <strong class="logo"><a
                         href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a>
@@ -57,10 +59,12 @@
                     <div class="visible-desktop">
                         <g:render template="/layouts/templates/queryCart"/>
                     </div>
-                    <a href='/BARD/bardWebInterface/navigationPage'
-                       style="background: #0093d0; color: white; margin-top: 8px"
-                       class="btn btn-primary">My submissions
-                    </a>
+                    <sec:ifLoggedIn>
+                        <a href='/BARD/bardWebInterface/navigationPage'
+                           style="background: #0093d0; color: white; margin-top: 8px"
+                           class="btn btn-primary">My BARD
+                        </a>
+                    </sec:ifLoggedIn>
                 </nav>
 
             </div>
