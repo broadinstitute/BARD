@@ -40,17 +40,7 @@ class Person {
         }
     }
 
-    boolean isAdmin() {
-        final Set<Role> foundRoles = getRoles()
-        boolean  foundAdmin = false
-        foundRoles.collect {
-            if (it.authority == "ROLE_BARD_ADMINISTRATOR") {
-                foundAdmin = true
-                return
-            }
-        }
-        return foundAdmin
-    }
+
 
     String getRolesAsList() {
         List<String> displayNames = []

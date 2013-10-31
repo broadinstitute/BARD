@@ -12,17 +12,22 @@ class Role implements GrantedAuthority, Comparable<Role> {
     String displayName
 
     boolean equals(Object other) {
-        Role that = (Role)other
-        return that?.authority == this?.authority
+        if (other instanceof Role) {
+            Role that = (Role) other
+            return that?.authority == this?.authority
+        }
+        return false
     }
 
     int hashCode() {
         def builder = new HashCodeBuilder()
         return builder.append(this.authority).toHashCode()
     }
+
     int compareTo(Role that) {
         return this.authority.compareTo(that.authority)
     }
+
     static List<Role> getTeamRoles() {
         List<Role> selectedRoles = []
         for (Role role : Role.list()) {
