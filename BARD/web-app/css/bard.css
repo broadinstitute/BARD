@@ -6,6 +6,10 @@ a.btn {
     color: #000000;
 }
 
+a.btn-primary {
+    color: #FFFFFF;
+}
+
 .right-aligned {
     text-align: right;
 }
