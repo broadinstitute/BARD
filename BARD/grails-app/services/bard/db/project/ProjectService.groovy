@@ -71,23 +71,10 @@ class ProjectService {
         if (!projectExperiment) throw new UserFixableException("Can not find association between experiment " + experiment.id + " and project " + project.id)
 
         deleteProjectStepsByProjectExperiment(projectExperiment)
-        deleteExperimentContextsByProjectExperiment(projectExperiment)
 
         projectExperiment.delete(flush: true)
     }
 
-    /**
-     * delete contexts associated with given a projectexperiment
-     * @param projectExperiment
-     */
-    private void deleteExperimentContextsByProjectExperiment(ProjectExperiment projectExperiment) {
-        def projectExperimentContexts = ProjectExperimentContext.findByProjectExperiment(projectExperiment)
-
-        if (projectExperimentContexts) {
-            projectExperiment.projectExperimentContexts.removeAll(projectExperimentContexts)
-            projectExperimentContexts.each { it.delete() }
-        }
-    }
 
     /**
      * delete projectsteps having given projectexperiment as start point or end point

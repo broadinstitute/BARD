@@ -1,10 +1,12 @@
 package bard.db.project
 
 import grails.converters.JSON
+import net.sf.ehcache.hibernate.HibernateUtil
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import bard.db.registration.ExternalReference
 import bard.db.experiment.Experiment
+import org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsHibernateUtil
 
 /**
  * This is a service that return a list of nodes and edges in JSON format to be displayed in views.
@@ -98,6 +100,7 @@ class ProjectExperimentRenderService {
      * @return node
      */
     Node constructNode(ProjectExperiment pe) {
+        pe = GrailsHibernateUtil.unwrapIfProxy(pe)
         def peAttributes
         if(pe instanceof ProjectPanelExperiment) {
             ProjectPanelExperiment ppe = (ProjectPanelExperiment)pe;
