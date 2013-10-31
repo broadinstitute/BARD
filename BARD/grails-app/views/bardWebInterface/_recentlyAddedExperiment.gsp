@@ -1,3 +1,4 @@
+<%@ page import="bard.db.experiment.Experiment" %>
 <article class="span4">
     <time datetime="2013-10-16">${experiment.updated}</time>
 
@@ -6,5 +7,5 @@
                 id="${experiment.capExptId}">${experiment.name}</g:link>
     </h2>
 
-    <p></p>
+    <p>${Experiment.get(experiment.capExptId)?.ownerRole?.displayName}</p>
 </article>
