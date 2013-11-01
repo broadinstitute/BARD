@@ -266,21 +266,20 @@ li{line-height:inherit;}
 	position:relative;
 	z-index:1;
 }
-.low keyhero-area{
+.lowkey-hero-area{
     position:relative;
     min-height:200px;
     padding:26px 0 30px;
 }
-.hero-area:after{
+.lowkey-hero-area:after{
     content:'';
     position:absolute;
     top:-88px;
     bottom:0;
     right:-30px;
     width:1195px;
-    background:url('../../images/bardHomepage/decor-hero.png') no-repeat;
 }
-.hero-area:before{
+.lowkey-hero-area:before{
     content:'';
     position:absolute;
     top:-88px;
@@ -288,9 +287,8 @@ li{line-height:inherit;}
     width:9999px;
     height:550px;
     margin:0 0 0 30px;
-    background:url('../../images/bardHomepage/bg-decor-repeat.png') repeat-x;
 }
-.hero-area .row-fluid{
+.lowkey-hero-area .row-fluid{
     position:relative;
     z-index:1;
 }
@@ -850,6 +848,13 @@ li{line-height:inherit;}
 		width:767px;
 		background:url('../../images/bardHomepage/decor-hero-tablet.png') no-repeat;
 	}
+    .lowkey-hero-area:before{display:none;}
+    .lowkey-hero-area:after{
+        top:-122px;
+        right:-54px;
+        width:767px;
+        background:url('../../images/bardHomepage/decor-hero-tablet.png') no-repeat;
+    }
 	.hero-block h1{
 		margin:0 0 11px;
 		font-size:28px;
@@ -943,7 +948,8 @@ li{line-height:inherit;}
 		right:0;
 		margin:0;
 	}
-	.hero-area:after{display:none;}
+    .hero-area:after{display:none;}
+    .lowkey-hero-area:after{display:none;}
 	.articles-gallery{display:none;}
 	.news-gallery{margin-right:-20px;}
 	.footer-columns [class*="span"]{
@@ -984,7 +990,8 @@ li{line-height:inherit;}
 		font-size:16px;
 		line-height:24px;
 	}
-	.hero-area{padding:16px 0 20px;}
+    .hero-area{padding:16px 0 20px;}
+    .lowkey-hero-area{padding:16px 0 20px;}
 	.hero-block h1{
 		margin:0 0 15px;
 		font-size:26px;

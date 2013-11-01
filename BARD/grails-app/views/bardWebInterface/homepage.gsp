@@ -22,6 +22,28 @@
     </noscript>
     <r:layoutResources/>
 
+    <style type="text/css">
+    /* start of modification for 5 columns */
+    @media (min-width: 768px){
+        .fivecolumns .span2 {
+            width: 18.2%;
+            *width: 18.2%;
+        }
+    }
+    @media (min-width: 1200px) {
+        .fivecolumns .span2 {
+            width: 17.9%;
+            *width: 17.8%;
+        }
+    }
+    @media (min-width: 768px) and (max-width: 979px) {
+        .fivecolumns .span2 {
+            width: 17.7%;
+            *width: 17.7%;
+        }
+    }
+        /* end of modification for 5 columns */
+    </style>
 </head>
 
 <body>
@@ -57,19 +79,18 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Search</a></li>
-                                    <li><a href="#">Work with results</a></li>
-                                    <li><a href="#">Submit data</a></li>
-                                    <li><a href="#">Use securely</a></li>
-                                    <li><a href="#">Create and use plug-ins</a></li>
+                                    <li><a href="../about/howToSearch">Search</a></li>
+                                    <li><a href="../about/howToFilterResults">Filter search results</a></li>
+                                    <li><a href="../about/howToReadResults">Interpret search results</a></li>
+                                    <li><a href="../about/howToUseSecurely">Use securely</a></li>
+                                    <li><a href="../about/howToUsePlugins">Create and use plug-ins</a></li>
                                 </ul>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support</a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Community</a></li>
-                                    <li><a href="#">Report a bug</a></li>
-                                    <li><a href="#">Contact us</a></li>
+                                    <li><a href="../about/howToReportABug">Report a bug</a></li>
+                                    <li><a href="../about/howToContactUs">Contact us</a></li>
                                 </ul>
                             </li>
                             <sec:ifLoggedIn>
@@ -159,8 +180,8 @@
 
 
             <div class="links-holder">
-                <a href="#">Advanced Search</a>
-                <a href="#" class="download-link hidden-phone">Download the BARD Desktop Client</a>
+                %{--<a href="#">Advanced Search</a>                    We can put this link back when we have an advanced search to present--}%
+                <a href="${createLink(controller: 'queryCart', action: 'toDesktopClient')}" target="_blank" class="download-link hidden-phone">Download the BARD Desktop Client</a>
             </div>
 
         </div>
@@ -369,17 +390,16 @@
 <footer id="footer">
     <div class="footer-columns">
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span3">
+            <div class="row-fluid fivecolumns">
+                <div class="span2">
                     <h3>About</h3>
                     <ul>
-                        <li><a href="#">Research Data Mgt.</a></li>
-                        <li><a href="#">History</a></li>
-                        <li><a href="#">Development Team</a></li>
+                        <li><a href="../about/bardHistory">History</a></li>
+                        <li><a href="../about/bardDevelopmentTeam">Development Team</a></li>
                     </ul>
                 </div>
 
-                <div class="span3">
+                <div class="span2">
                     <h3>Help</h3>
                     <ul>
                         <li><a href="#">Forums</a></li>
@@ -388,16 +408,27 @@
                     </ul>
                 </div>
 
-                <div class="span3">
+                <div class="span2">
                     <h3>Technology</h3>
                     <ul>
-                        <li><a href="#">Architecture &amp; Design</a></li>
-                        <li><a href="#">REST API</a></li>
-                        <li><a href="#">Source code on GitHub</a></li>
+                        <li><a href="../about/bardArchitecture">Architecture &amp; Design</a></li>
+                        <li><a href="https://github.com/ncatsdpiprobedev/bard/wiki">REST API</a></li>
+                        <li><a href="#" style="text-decoration: line-through;">Source code on GitHub<img src="${resource(dir: 'images/bardHomepage', file: 'comingSoon2.png')}" alt="coming soon"></a></li>
                     </ul>
                 </div>
 
-                <div class="span3 by">
+                <div class="span2">
+                    <h3>RDM</h3>
+                    <ul>
+                        <li><a href="../about/bardOrganizingPrinciples">Organizing principles</a></li>
+                        <li><a href="../element/showTopLevelHierarchyHelp">Top-level concepts</a></li>
+                        <li><a href="../dictionaryTerms/dictionaryTerms">Glossary</a></li>
+                    </ul>
+                </div>
+
+
+
+                <div class="span2">
                     <strong class="logo-by"><a href="#" title="Powered by ChemAxon">Powered by ChemAxon</a></strong>
 
                     <p>&copy; 2013 BARD</p>
