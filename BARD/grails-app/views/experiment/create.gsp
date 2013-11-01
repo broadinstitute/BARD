@@ -61,33 +61,8 @@
             <dt>Description:</dt><dd>
             <g:textArea class="input-xxlarge" name="description"
                         value="${fieldValue(bean: experimentCommand, field: "description")}"/>
-        </dd>
-            <dt>Run Date From:</dt><dd>
+            </dd>
 
-            <div class="input-append date exp_datetime">
-                <input name="runDateFrom" id="runDateFrom" class="input-large" type="text"
-                       value="${experimentCommand.runDateFrom}" readonly>
-                <span class="add-on"><i class="icon-remove"></i></span>
-                <span class="add-on"><i class="icon-calendar"></i></span>
-                <span class="help-inline"><g:fieldError field="runDateFrom"
-                                                        bean="experimentCommand"/>
-                </span>
-            </input>
-            </div>
-        </dd>
-
-            <dt>Run Date To:</dt><dd>
-            <div class="input-append date exp_datetime">
-                <input name="runDateTo" id="runDateTo" class="input-large" type="text"
-                       value="${experimentCommand.runDateTo}" readonly/>
-                <span class="add-on"><i class="icon-remove"></i></span>
-                <span class="add-on"><i class="icon-calendar"></i></span>
-                <span class="help-inline"><g:fieldError field="runDateTo"
-                                                        bean="experimentCommand"/>
-                </span>
-
-            </div>
-        </dd>
             <dd>
                 <br/>
 
