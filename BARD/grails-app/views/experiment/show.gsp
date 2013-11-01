@@ -43,6 +43,7 @@
     <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar">
         <li><a href="#summary-header"><i class="icon-chevron-right"></i>Overview</a></li>
         <li><a href="#contexts-header"><i class="icon-chevron-right"></i>Annotations</a></li>
+        <li><a href="#referenced-contexts-header"><i class="icon-chevron-right"></i>Experimental Variables</a></li>
         <li><a href="#results-header"><i class="icon-chevron-right"></i>Results</a>
             <ul class="nav nav-list bs-docs-sidenav" style="padding-left: 0; margin: 0;">
                 <li><a href="#result-type-header"><i class="icon-chevron-right"></i>Result Types</a></li>
@@ -258,8 +259,29 @@
             </g:if>
         </g:if>
     </div>
+    <br/>
 </section>
-<br/>
+
+<section id="referenced-contexts-header">
+    <h3 class="sect">Experimental Variables <g:link target="dictionary" controller="element"
+                                                       action="showTopLevelHierarchyHelp"><i
+                class="icon-question-sign"></i></g:link></h3>
+
+    <div class="row-fluid">
+        <g:render template="/context/currentCard"
+                  model="[contextOwner: instance.assay,
+                          currentCard: instance.assay.groupExperimentalVariables(),
+                          subTemplate: 'show',
+                          uneditable: true,
+                          showCheckBoxes: false,
+                          existingContextIds: contextIds,
+                          displayNonFixedContextsOnly: true,
+                          renderEmptyGroups: false,
+                          experimentId: instance.id
+                  ]"/>
+    </div>
+    <br/>
+</section>
 <section id="results-header">
     <div class="page-header">
         <h3 class="sect">Results</h3>

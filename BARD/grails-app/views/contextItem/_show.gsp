@@ -29,12 +29,25 @@
 
                     ${context.preferredName}
                 </p>
-                <g:if test="${context.hasProperty('assayContextMeasures') && context.assayContextMeasures}">
-                    <p>Measure<g:if test="${context.assayContextMeasures.size() > 1}">s</g:if>:
-                        <g:each in="${context.assayContextMeasures}" status="i" var="assayContextMeasure">
-                            <a href="#measures-header" class="treeNode"
-                               id="${assayContextMeasure.measure.id}">${assayContextMeasure.measure.displayLabel}<g:if
-                                    test="${i < context.assayContextMeasures.size() - 1}">,</g:if></a>
+                <g:if test="${context.hasProperty('assayContextExperimentMeasures') && context.assayContextExperimentMeasures && existingContextIds}">
+                    <g:set var="counter" value="${1}" />
+                    <g:set var="prevCounter" value="${0}" />
+                    <p>Result Types:
+
+                        <g:each in="${context.assayContextExperimentMeasures}" status="i" var="assayContextExperimentMeasure">
+                            <g:if test="${assayContextExperimentMeasure?.experimentMeasure?.experiment.id== experimentId}">
+
+                                <a href="#result-type-header" class="treeNode"
+                                   id="${assayContextExperimentMeasure?.experimentMeasure?.id}">
+                                    <g:if test="${counter > 1}">,</g:if>
+                                   ${assayContextExperimentMeasure?.experimentMeasure?.resultType.label}
+                                   <g:if test="${assayContextExperimentMeasure?.experimentMeasure?.statsModifier}">
+                                       (${assayContextExperimentMeasure?.experimentMeasure?.statsModifier.label})
+                                   </g:if>
+                                </a>
+                                <g:set var="counter" value="${counter + 1}" />
+                            </g:if>
+
                         </g:each>
                     </p>
                 </g:if>
