@@ -5,11 +5,20 @@ $(document).ready(function () {
 
     //load measures for this experiment
     $.ajax(experimentMeasuresLink).done(function (data) {
-        root = parseNodes(data);
+        rootUl = parseNodes(data);
+        var root = document.createElement("div");
+        root.className="span12";
+        root.appendChild(rootUl);
         $("#result-type-table").html(root);
     });
 
+    $('a.treeNode').on('click',function(){
+        $('.measureHi').removeClass().addClass('span6');
+        var measureId = $(this).attr('id');
 
+        //navigate to the node in the tree and highlight it
+        $("#e_"+measureId).addClass("measureHi");
+    });
     $(document).on("click", "a.deleteMeasuresIcon", function (event) {
         event.preventDefault();
 
@@ -26,12 +35,16 @@ $(document).ready(function () {
 });
 
 function parseNodes(nodes) { // takes a nodes array and turns it into a <ol>
-    var ol = document.createElement("ul");
+
+
+
+    var ul = document.createElement("ul");
     for (var i = 0; i < nodes.length; i++) {
-        ol.appendChild(parseNode(nodes[i]));
+        ul.appendChild(parseNode(nodes[i]));
     }
-    return ol;
+    return ul;
 }
+
 function createNodeWithEditDeleteIcons(liNode,measureId,addClass,title){
     var editLink = "/BARD/experiment/editMeasure?measureId=" + measureId + "&amp;experimentId=" + $("#experimentId").val();
     var deleteLink = "/BARD/experiment/deleteMeasure?measureId=" + measureId + "&amp;experimentId=" + $("#experimentId").val();
@@ -39,10 +52,12 @@ function createNodeWithEditDeleteIcons(liNode,measureId,addClass,title){
     var editIcon = '<a class="icon-pencil editMeasuresIcon" title="Click to edit result type" href="' + editLink + '"></a>';
     var deleteIcon = "<a class='icon-trash deleteMeasuresIcon' title='Click to delete result type' href='" + deleteLink + "'></a>";
     if (addClass == 'priority') {
-        liNode.innerHTML = "<span><i class='icon-star'></i></span>   " + title + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + editIcon + " " + deleteIcon;
+        liNode.innerHTML = "<div id=e_" + measureId + " class='span6'>" + "<i class='icon-star'></i></span>   " + title +
+            "</div><div class='span6'>" + editIcon + " " + deleteIcon + "</div>";
     }
     else {
-        liNode.innerHTML = title + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + editIcon + " " + deleteIcon;
+        liNode.innerHTML = "<div id=e_" + measureId + " class='span6'>" + title + "</div><div class='span6'>" +
+            editIcon + " " + deleteIcon+ "</div>";
     }
 }
 function createNodeWithoutEditDeleteIcons(liNode,measureId,addClass,title){
@@ -56,14 +71,12 @@ function createNodeWithoutEditDeleteIcons(liNode,measureId,addClass,title){
 //key: key, title: title, children: children, expand: true, relationship: relationship?.id, measureId: measureId
 function parseNode(node) { // takes a node object and turns it into a <li>
     var li = document.createElement("li");
-
     if(node.username){
         createNodeWithEditDeleteIcons(li,node.measureId,node.addClass,node.title);
     }
     else{
         createNodeWithoutEditDeleteIcons(li,node.measureId,node.addClass,node.title);
     }
-    //li.className = node.addClass;
     if (node.children) {
         li.appendChild(parseNodes(node.children));
     }

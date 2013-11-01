@@ -91,6 +91,7 @@ class ExperimentController {
             //load the assay context items for this measure
             final Set<AssayContextExperimentMeasure> assayContextExperimentMeasures = experimentMeasure.assayContextExperimentMeasures
             for (AssayContextExperimentMeasure assayContextExperimentMeasure : assayContextExperimentMeasures) {
+
                 contextIds.add(assayContextExperimentMeasure.assayContext.id);
             }
         }
@@ -98,6 +99,7 @@ class ExperimentController {
         boolean editable = canEdit(permissionEvaluator, springSecurityService, experiment)
         boolean isAdmin = SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
         String owner = capPermissionService.getOwner(experiment)
+
         [
                 instance: experiment,
                 contextIds:contextIds,
