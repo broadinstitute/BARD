@@ -151,17 +151,17 @@ class CapScaffoldPage extends CommonFunctionalPage {
 			document.documentContents(docName).editIconPencil.click()
 			ajaxRequestCompleted()
 			if(editValue==""){
-				fillDocumentFields(editValue)
+				fillFieldsInput(editValue)
 				validationError(controlError.helpBlock, errorMessage)
 				editableForm.buttons.iconRemove.click()
 			}else{
-				fillDocumentFields(editValue)
+				fillFieldsInput(editValue)
 			}
 //			ajaxRequestCompleted()
 		}
 	}
 
-	def fillDocumentFields(def editValue){
+	def fillFieldsInput(def editValue){
 		assert editableForm.inputField
 		assert editableForm.buttons.iconOk
 		editableForm.inputField.value("")

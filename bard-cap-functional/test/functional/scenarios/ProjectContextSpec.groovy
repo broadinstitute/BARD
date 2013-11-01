@@ -29,7 +29,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 	def setup() {
 		logInSomeUser()
 	}
-	
+/*	
 	def "Test Project Context Card Add"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
@@ -37,27 +37,22 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
 		def uiContentsBefore = getUIContexts(cardGroup)
-		def contexts = Project.getContexts(TestData.projectId)
-		println contexts
 		def dbContentsBefore = Project.getProjectContext(dbContextType, TestData.projectId)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 
 		when:"At Edit Project Context Page, Fetching Contexts Info from UI and DB for validation"
 		at EditContextPage
-		uiContentsBefore = getUIContexts(editContextGroup)
-		dbContentsBefore = Project.getProjectContext(dbContextType, TestData.projectId)
+		while(isContext(editContextGroup, contextCard)){
+			deleteContext(editContextGroup, contextCard)
+		}
 
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-		and:"Navigating to Context Item Page"
+		then:"Navigating to Context Item Page"
 		addNewContextCard(editContextGroup, contextCard)
 
 		and:"Verifying Context added successfully"
@@ -68,8 +63,6 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		def dbContentsAfterAdd = Project.getProjectContext(dbContextType, TestData.projectId)
 
 		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
 
 		and:"Navigating to View Project Definition Page"
@@ -81,8 +74,6 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		dbContentsAfterAdd = Project.getProjectContext(dbContextType, TestData.projectId)
 
 		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
 
 		and:"Cleaning up Context Items"
@@ -130,19 +121,16 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 
 		when:"At Edit Project Context Page, Fetching Contexts Info from UI and DB for validation"
 		at EditContextPage
-		uiContentsBefore = getUIContexts(editContextGroup)
-		dbContentsBefore = Project.getProjectContext(dbContextType, TestData.projectId)
+		while(isContext(editContextGroup, contextCard)){
+			deleteContext(editContextGroup, contextCard)
+		}
 
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-		and:"Edting Context"
+		then:"Add new Context Card and then Edit it"
 		if(!isContext(editContextGroup, contextCard)){
 			addNewContextCard(editContextGroup, contextCard)
 			editContext(editContextGroup, contextCard, editedContext)
@@ -158,8 +146,6 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		def dbContentsAfterAdd = Project.getProjectContext(dbContextType, TestData.projectId)
 
 		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
 
 		and:"Navigating to View Project Definition Page"
@@ -219,21 +205,19 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 
 		when:"At Edit Project Context Page, Fetching Contexts Info from UI and DB for validation"
 		at EditContextPage
-		uiContentsBefore = getUIContexts(editContextGroup)
-		dbContentsBefore = Project.getProjectContext(dbContextType, TestData.projectId)
+		while(isContext(editContextGroup, contextCard)){
+			deleteContext(editContextGroup, contextCard)
+		}
 
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-		and:"Deleting Context"
+		then:"Add New Context Card then Delete it"
 		if(!isContext(editContextGroup, contextCard)){
 			addNewContextCard(editContextGroup, contextCard)
+			assert isContext(editContextGroup, contextCard)
 			while(isContext(editContextGroup, contextCard)){
 				deleteContext(editContextGroup, contextCard)
 			}
@@ -266,40 +250,35 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		
 		report "ProjectContextCardDelete"
 	}
+	*/
 
-	def "Test Project Context Item Add with Element Type"(){
+	def "Test Project Context Item Add with #TestName"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
 		
-		def contextItem = TestData.ValueType_Element.AttributeFromDictionary
+//		def contextItem = TestData.ValueType_Element.AttributeFromDictionary
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
-		if(!isContext(cardGroup, contextCard)){
-			navigateToEditContext(section)
-			then:"At Edit Project Context Page, Adding Context"
-			at EditContextPage
-			addNewContextCard(editContextGroup, contextCard)
-		}else{
-			def uiContentsBefore = getUIContextItems(cardGroup, contextCard)
-			def dbContentsBefore = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsBefore.size() == dbContentsBefore.size()
-			assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-			and:"Nagating to Edit Project Context Page"
-			navigateToEditContext(section)
-		}
 		
-		then:"At Edit Project Context Page, Fetching Contexts Info from UI and DB for validation"
-		at EditContextPage
-		def uiContentsBefore = getUIContextItems(editContextGroup, contextCard)
-		def dbContentsBefore = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
+		def uiContentsBefore = getUIContexts(cardGroup)
+		def dbContentsBefore = Project.getProjectContext(dbContextType, TestData.projectId)
 
-		and:"Verifying Context Info with UI & DB"
+		then:"Verifying Context Info with UI & DB"
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
+		and:"Navigating to Edit Project Context Page"
+		navigateToEditContext(section)
+		
+		when:"At Edit Project Context Page, Fetching Contexts Info from UI and DB for validation"
+		at EditContextPage
+		while(isContext(editContextGroup, contextCard)){
+			deleteContext(editContextGroup, contextCard)
+		}
+		then:"Add Context Card, Before adding context item"
+		addNewContextCard(editContextGroup, contextCard)
+		assert isContext(editContextGroup, contextCard)
+		
 		and:"Navigating to Context Item Page"
 		navigateToAddContextItem(editContextGroup, contextCard)
 
@@ -307,8 +286,19 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		at ContextItemPage
 
 		then:"Adding New Context Item"
-		addEditContextItem(ContextItem.ADD, ExpectedValueType.ELEMENT, TestData.ValueType_Element)
-
+		if(TestName == "Element"){
+			addElementContextItem(inputData, true, false)
+		}else if(TestName == "FreeText"){
+			addFreeTextItem(inputData, true, false)
+		}else if(TestName == "NumericValue"){
+			addNumericValueItem(inputData, true, false)
+		}else if(TestName == "ExOntologyIntegtegrated"){
+			addExternalOntologyItem(inputData, true, false, true)
+		}
+		else if(TestName == "ExOntologyNoIntegtegrated"){
+			addExternalOntologyItem(inputData, true, false, false)
+		}
+		
 		and:"Verifying Context Item added successfully"
 		at EditContextPage
 		assert isContextItem(editContextGroup, contextCard, contextItem)
@@ -318,8 +308,6 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		def dbContentsAfterAdd = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
 
 		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
 
 		and:"Navigating to View Project Definition Page"
@@ -331,8 +319,6 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		dbContentsAfterAdd = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
 
 		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
 
 		and:"Cleaning up Context Items"
@@ -346,8 +332,6 @@ class ProjectContextSpec extends BardFunctionalSpec {
 			def dbContentsAfterDelete = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
 
 			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
-			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
 		and:"Cleaning up Contexts"
@@ -362,401 +346,16 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
 		
-		report "ProjectContextItemAddwithElementType"
+		report "$TestName"
+		
+		where:
+		TestName					| inputData								| contextItem
+		"Element"				| TestData.ValueType_Element			| TestData.ValueType_Element.AttributeFromDictionary
+		"FreeText"					| TestData.ValueType_FreeText			| TestData.ValueType_FreeText.AttributeFromDictionary
+		"NumericValue"				| TestData.ValueType_NumericValue		| TestData.ValueType_NumericValue.AttributeFromDictionary
+		"ExOntologyIntegtegrated"	| TestData.ValueType_ExternalOntology	| TestData.ValueType_ExternalOntology.AttributeFromDictionary
+//		"ExOntologyNoIntegtegrated"	| TestData.ValueType_ExternalOntology	| TestData.ValueType_ExternalOntology.AttributeFromDictionary
 	}
-
-	def "Test Project Context Item Add with Free Text Type"(){
-		given:"Navigate to Show Project page"
-		to ViewProjectDefinitionPage
-		
-		def contextItem =  TestData.valueType_FreeText.AttributeFromDictionary
-		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
-		at ViewProjectDefinitionPage
-		if(!isContext(cardGroup, contextCard)){
-			navigateToEditContext(section)
-			then:"At Edit Project Context Page, Adding Context"
-			at EditContextPage
-			addNewContextCard(editContextGroup, contextCard)
-		}else{
-		def uiContentsBefore = getUIContextItems(cardGroup, contextCard)
-		def dbContentsBefore = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-		and:"Nagating to Edit Project Context Page"
-		navigateToEditContext(section)
-		}
-		
-		then:"At Edit Project Context Page, Fetching Contexts Info from UI and DB for validation"
-		at EditContextPage
-		def uiContentsBefore = getUIContextItems(editContextGroup, contextCard)
-		def dbContentsBefore = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		and:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-		and:"Navigating to Context Item Page"
-		navigateToAddContextItem(editContextGroup, contextCard)
-
-		when: "At Context Item Page"
-		at ContextItemPage
-
-		then:"Adding New Context Item"
-		addEditContextItem(ContextItem.ADD, ExpectedValueType.FREE, TestData.valueType_FreeText)
-
-		and:"Verifying Context Item added successfully"
-		at EditContextPage
-		assert isContextItem(editContextGroup, contextCard, contextItem)
-
-		when:"Context Item  is added, Fetching Contexts Info from UI and DB for validation"
-		def uiContentsAfterAdd = getUIContextItems(editContextGroup, contextCard)
-		def dbContentsAfterAdd = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
-		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
-
-		and:"Navigating to View Project Definition Page"
-		finishEditing.buttonPrimary.click()
-
-		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
-		at ViewProjectDefinitionPage
-		uiContentsAfterAdd = getUIContextItems(cardGroup, contextCard)
-		dbContentsAfterAdd = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
-		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
-
-		and:"Cleaning up Context Items"
-		navigateToEditContext(section)
-		at EditContextPage
-		while(isContextItem(editContextGroup, contextCard, contextItem)){
-			deleteContextItem(editContextGroup, contextCard, contextItem)
-
-			when:"Context Item  is cleaned up, Fetching Contexts Info from UI and DB for validation"
-			def uiContentsAfterDelete = getUIContextItems(editContextGroup, contextCard)
-			def dbContentsAfterDelete = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
-			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
-		}
-		and:"Cleaning up Contexts"
-		while(isContext(editContextGroup, contextCard)){
-			deleteContext(editContextGroup, contextCard)
-		}
-		
-		and:"Navigating to View Project Definition Page"
-		finishEditing.buttonPrimary.click()
-
-		and:"At View Project Definition Page"
-		at ViewProjectDefinitionPage
-		assert !isContext(cardGroup, contextCard)
-		
-		report "ProjectContextItemAddwithFreeTextType"
-	}
-
-	def "Test Project Context Item Add with Numeric Value Type"(){
-		given:"Navigate to Show Project page"
-		to ViewProjectDefinitionPage
-		
-		def contextItem = TestData.ValueType_NumericValue.AttributeFromDictionary
-		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
-		at ViewProjectDefinitionPage
-		if(!isContext(cardGroup, contextCard)){
-			navigateToEditContext(section)
-			then:"At Edit Project Context Page, Adding Context"
-			at EditContextPage
-			addNewContextCard(editContextGroup, contextCard)
-		}else{
-		def uiContentsBefore = getUIContextItems(cardGroup, contextCard)
-		def dbContentsBefore = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-		and:"Nagating to Edit Project Context Page"
-		navigateToEditContext(section)
-		}
-		
-		then:"At Edit Project Context Page, Fetching Contexts Info from UI and DB for validation"
-		at EditContextPage
-		def uiContentsBefore = getUIContextItems(editContextGroup, contextCard)
-		def dbContentsBefore = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		and:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-		and:"Navigating to Context Item Page"
-		navigateToAddContextItem(editContextGroup, contextCard)
-
-		when: "At Context Item Page"
-		at ContextItemPage
-
-		then:"Adding New Context Item"
-		addEditContextItem(ContextItem.ADD, ExpectedValueType.NUMERIC, TestData.ValueType_NumericValue)
-
-		and:"Verifying Context Item added successfully"
-		at EditContextPage
-		assert isContextItem(editContextGroup, contextCard, contextItem)
-
-		when:"Context Item  is added, Fetching Contexts Info from UI and DB for validation"
-		def uiContentsAfterAdd = getUIContextItems(editContextGroup, contextCard)
-		def dbContentsAfterAdd = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
-		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
-
-		and:"Navigating to View Project Definition Page"
-		finishEditing.buttonPrimary.click()
-
-		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
-		at ViewProjectDefinitionPage
-		uiContentsAfterAdd = getUIContextItems(cardGroup, contextCard)
-		dbContentsAfterAdd = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
-		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
-
-		and:"Cleaning up Context Items"
-		navigateToEditContext(section)
-		at EditContextPage
-		while(isContextItem(editContextGroup, contextCard, contextItem)){
-			deleteContextItem(editContextGroup, contextCard, contextItem)
-
-			when:"Context Item  is cleaned up, Fetching Contexts Info from UI and DB for validation"
-			def uiContentsAfterDelete = getUIContextItems(editContextGroup, contextCard)
-			def dbContentsAfterDelete = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
-			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
-		}
-		and:"Cleaning up Contexts"
-		while(isContext(editContextGroup, contextCard)){
-			deleteContext(editContextGroup, contextCard)
-		}
-		
-		and:"Navigating to View Project Definition Page"
-		finishEditing.buttonPrimary.click()
-
-		and:"At View Project Definition Page"
-		at ViewProjectDefinitionPage
-		assert !isContext(cardGroup, contextCard)
-		
-		report "ProjectContextItemAddwithNumericValueType"
-	}
-
-	def "Test Project Context Item Add with External Ontology Type using Intergratged Search"(){
-		given:"Navigate to Show Project page"
-		to ViewProjectDefinitionPage
-		
-		def contextItem = TestData.ValueType_ExternalOntology.AttributeFromDictionary
-		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
-		at ViewProjectDefinitionPage
-		if(!isContext(cardGroup, contextCard)){
-			navigateToEditContext(section)
-			then:"At Edit Project Context Page, Adding Context"
-			at EditContextPage
-			addNewContextCard(editContextGroup, contextCard)
-		}else{
-		def uiContentsBefore = getUIContextItems(cardGroup, contextCard)
-		def dbContentsBefore = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-		and:"Nagating to Edit Project Context Page"
-		navigateToEditContext(section)
-		}
-		
-		then:"At Edit Project Context Page, Fetching Contexts Info from UI and DB for validation"
-		at EditContextPage
-		def uiContentsBefore = getUIContextItems(editContextGroup, contextCard)
-		def dbContentsBefore = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		and:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-		and:"Navigating to Context Item Page"
-		navigateToAddContextItem(editContextGroup, contextCard)
-
-		when: "At Context Item Page"
-		at ContextItemPage
-
-		then:"Adding New Context Item"
-		addEditContextItem(ContextItem.ADD, ExpectedValueType.ONTOLOGY, TestData.ValueType_ExternalOntology, true, true)
-
-		and:"Verifying Context Item added successfully"
-		at EditContextPage
-		assert isContextItem(editContextGroup, contextCard, contextItem)
-
-		when:"Context Item  is added, Fetching Contexts Info from UI and DB for validation"
-		def uiContentsAfterAdd = getUIContextItems(editContextGroup, contextCard)
-		def dbContentsAfterAdd = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
-		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
-
-		and:"Navigating to View Project Definition Page"
-		finishEditing.buttonPrimary.click()
-
-		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
-		at ViewProjectDefinitionPage
-		uiContentsAfterAdd = getUIContextItems(cardGroup, contextCard)
-		dbContentsAfterAdd = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
-		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
-
-		and:"Cleaning up Context Items"
-		navigateToEditContext(section)
-		at EditContextPage
-		while(isContextItem(editContextGroup, contextCard, contextItem)){
-			deleteContextItem(editContextGroup, contextCard, contextItem)
-
-			when:"Context Item  is cleaned up, Fetching Contexts Info from UI and DB for validation"
-			def uiContentsAfterDelete = getUIContextItems(editContextGroup, contextCard)
-			def dbContentsAfterDelete = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
-			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
-		}
-		and:"Cleaning up Contexts"
-		while(isContext(editContextGroup, contextCard)){
-			deleteContext(editContextGroup, contextCard)
-		}
-		
-		and:"Navigating to View Project Definition Page"
-		finishEditing.buttonPrimary.click()
-
-		and:"At View Project Definition Page"
-		at ViewProjectDefinitionPage
-		assert !isContext(cardGroup, contextCard)
-		
-		report "ProjectContextItemAddwithExternalOntologyTypewithIntegratedSearch"
-	}
-
-	def "Test Project Context Item Add with External Ontology Type not using Intergratged Search"(){
-		given:"Navigate to Show Project page"
-		to ViewProjectDefinitionPage
-		
-		def contextItem = TestData.ValueType_ExternalOntology.AttributeFromDictionary
-		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
-		at ViewProjectDefinitionPage
-		if(!isContext(cardGroup, contextCard)){
-			navigateToEditContext(section)
-			then:"At Edit Project Context Page, Adding Context"
-			at EditContextPage
-			addNewContextCard(editContextGroup, contextCard)
-		}else{
-		def uiContentsBefore = getUIContextItems(cardGroup, contextCard)
-		def dbContentsBefore = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-		and:"Nagating to Edit Project Context Page"
-		navigateToEditContext(section)
-		}
-		
-		then:"At Edit Project Context Page, Fetching Contexts Info from UI and DB for validation"
-		at EditContextPage
-		def uiContentsBefore = getUIContextItems(editContextGroup, contextCard)
-		def dbContentsBefore = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		and:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-		and:"Navigating to Context Item Page"
-		navigateToAddContextItem(editContextGroup, contextCard)
-
-		when: "At Context Item Page"
-		at ContextItemPage
-
-		then:"Adding New Context Item"
-		addEditContextItem(ContextItem.ADD, ExpectedValueType.ONTOLOGY, TestData.ValueType_ExternalOntology)
-
-		and:"Verifying Context Item added successfully"
-		at EditContextPage
-		assert isContextItem(editContextGroup, contextCard, contextItem)
-
-		when:"Context Item  is added, Fetching Contexts Info from UI and DB for validation"
-		def uiContentsAfterAdd = getUIContextItems(editContextGroup, contextCard)
-		def dbContentsAfterAdd = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
-		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
-
-		and:"Navigating to View Project Definition Page"
-		finishEditing.buttonPrimary.click()
-
-		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
-		at ViewProjectDefinitionPage
-		uiContentsAfterAdd = getUIContextItems(cardGroup, contextCard)
-		dbContentsAfterAdd = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
-		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
-
-		and:"Cleaning up Context Items"
-		navigateToEditContext(section)
-		at EditContextPage
-		while(isContextItem(editContextGroup, contextCard, contextItem)){
-			deleteContextItem(editContextGroup, contextCard, contextItem)
-
-			when:"Context Item  is cleaned up, Fetching Contexts Info from UI and DB for validation"
-			def uiContentsAfterDelete = getUIContextItems(editContextGroup, contextCard)
-			def dbContentsAfterDelete = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
-			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
-		}
-		and:"Cleaning up Contexts"
-		while(isContext(editContextGroup, contextCard)){
-			deleteContext(editContextGroup, contextCard)
-		}
-		
-		and:"Navigating to View Project Definition Page"
-		finishEditing.buttonPrimary.click()
-
-		and:"At View Project Definition Page"
-		at ViewProjectDefinitionPage
-		assert !isContext(cardGroup, contextCard)
-		
-		report "ProjectContextItemAddwithExternalOntolgyTypewithoutIntegratedSearch"
-	}
-	
 
 	def "Test Project Context Item Add with Element Type having Element field empty"(){
 		given:"Navigate to Show Project page"
@@ -778,7 +377,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 		}
 		
@@ -847,7 +446,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 		}
 		
@@ -916,7 +515,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 		}
 		
@@ -985,7 +584,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 		}
 		
@@ -1054,7 +653,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 		}
 		
@@ -1124,7 +723,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 		}
 		
@@ -1227,7 +826,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 		}
 		
@@ -1330,7 +929,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 		}
 		
@@ -1433,7 +1032,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 		}
 		
@@ -1536,7 +1135,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 		}
 		
@@ -1639,7 +1238,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 		}
 		
@@ -1714,7 +1313,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 		}
 		
@@ -1789,7 +1388,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 		}
 		
@@ -1864,7 +1463,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
 
-		and:"Nagating to Edit Project Context Page"
+		and:"Navigating to Edit Project Context Page"
 		navigateToEditContext(section)
 		}
 		

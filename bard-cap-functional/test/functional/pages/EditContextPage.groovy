@@ -53,7 +53,8 @@ class EditContextPage extends CapScaffoldPage{
 		assert addContextCard.saveBtn.buttonSubmitPrimary
 		addContextCard.inputCardName.value(contextName)
 		addContextCard.saveBtn.buttonSubmitPrimary.click()
-		ajaxRequestCompleted()
+//		ajaxRequestCompleted()
+		waitFor { isContext(groupId, contextName) }
 	}
 
 	def deleteContext(def cardGroup, def contextName){
@@ -66,6 +67,7 @@ class EditContextPage extends CapScaffoldPage{
 		}else{
 			withConfirm {cardTable(cardGroup, contextName).contextBtnGroup.iconTrash.click()}
 		}
+		waitFor { !isContext(cardGroup, contextName) }
 	}
 
 	def editContext(def cardGroup, def contextName, def editedValue){
@@ -75,9 +77,10 @@ class EditContextPage extends CapScaffoldPage{
 				cardTable(cardGroup, contextName).editContext.editIconPencil.click()
 				assert editableForm.buttons.iconOk
 				assert editableForm.buttons.iconRemove
-				fillInputField(editedValue)
-				ajaxRequestCompleted()
+				fillFieldsInput(editedValue)
+//				ajaxRequestCompleted()
 			}
 		}
+		waitFor { isContext(cardGroup, editedValue) }
 	}
 }

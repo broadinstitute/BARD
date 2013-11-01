@@ -23,6 +23,8 @@ class ContextItemPage extends CapScaffoldPage{
 		cardTable{ contextTitle -> module CardsHolderModule, $("div.card.roundedBorder.card-table-container").find("table.table.table-hover"), contextCard:contextTitle }
 		formLoading { module LoadingModule}
 		controlGroup {  $("div.control-group") }
+		containerControl(wait: true, required: false){ controlGroup.find(".select2-container.span11.select2-container-active")}
+		containerControlOpen(wait: true, required: false){ controlGroup.find(".select2-container.span11.select2-container-active.select2-dropdown-open")}
 		attributeFromDictionary { module SelectChoicePopupModule, controlGroup, containerId:"s2id_attributeElementId" }
 		integratedSearch { module SelectChoicePopupModule, controlGroup, containerId:"s2id_extValueSearch" } //External Ontology objects
 		externalOntologyId(wait: true, required: false) { controlGroup.find("input#extValueId") }									//External Ontology objects
@@ -36,8 +38,8 @@ class ContextItemPage extends CapScaffoldPage{
 		updateBtn { module ButtonsModule, controlGroup, buttonName:"Update" }
 		addAnotherItemBtn { module ButtonsModule, controlGroup, buttonName:"Add Another Item" }
 		backToContextBtn { module ButtonsModule, controlGroup, buttonName:"Back to Context" }
-		selectToDrop(wait: true, required: false) { module SelectToDropModule, $("div.select2-drop.select2-drop-active") }
-		//		controlError(wait: true, required: false) { $("div.control-group.error").find("div.controls").find("span.help-inline") }
+		selectToDrop(wait: true, required: false) { module SelectToDropModule }
+//		selectToDrop(wait: true, required: false) { module SelectToDropModule, $("#select2-drop") }
 		providedWithResults { controlGroup.find("input#providedWithResults") }
 		valueContraintFree(wait: true, required: false) { controlGroup.find("input#valueConstraintFree") }
 		valueConstraintList(wait: true, required: false) { controlGroup.find("input#valueConstraintList") }
@@ -51,6 +53,10 @@ class ContextItemPage extends CapScaffoldPage{
 		String qualifierReset = "Qualifier"
 		if(inputData.AttributeFromDictionary != ""){
 			if(add){
+				waitFor{ !selectToDrop.searchNoResult }
+//				if(!selectToDrop.selectDropMask){
+//					attributeFromDictionary.selectChoice.click()
+//				}
 				selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.AttributeFromDictionary)
 			}
 			switch(valueType){
@@ -128,11 +134,11 @@ class ContextItemPage extends CapScaffoldPage{
 	}
 	def isElementType(def inputData, def ci){
 		if(inputData.ValueFromDictionary != ""){
+			waitFor{ valueFromDictionary }
 			selectAutoChoiceValue(valueFromDictionary, selectToDrop, inputData.ValueFromDictionary)
 			addOrUpdate(ci)
 			navigateBackToContext()
 		}else{
-			valueFromDictionary.label.click()
 			addOrUpdate(ci)
 			def errorMessageTop = "A value from the dictionary is required."
 			def errorMessageIn = "When the attribute of an item expects a BARD dictionary element, a dictionary value is required."
@@ -144,6 +150,7 @@ class ContextItemPage extends CapScaffoldPage{
 	}
 	def isFreeTextTYpe(def inputData, def ci){
 		if(inputData.DiplayValue != ""){
+			waitFor{ displayValue }
 			displayValue.value("")
 			displayValue.value(inputData.DiplayValue)
 			addOrUpdate(ci)
@@ -157,6 +164,7 @@ class ContextItemPage extends CapScaffoldPage{
 	}
 	def isNumericType(def inputData, def ci){
 		if(inputData.NumericValue != ""){
+			waitFor{ numericValue }
 			qualifier.value(inputData.Qalifier)
 			numericValue.value("")
 			numericValue.value(inputData.NumericValue)
@@ -172,14 +180,12 @@ class ContextItemPage extends CapScaffoldPage{
 	def isExternalOntologyType(def inputData, def ci, def integration){
 		if(integration){
 			if(inputData.IntegratedSearch != ""){
-//				integratedSearch.label.click()
-//				externalOntologyId.value("")
-//				displayValue.value("")
+				waitFor{ integratedSearch }
 				selectAutoChoiceValue(integratedSearch, selectToDrop, inputData.IntegratedSearch)
 				addOrUpdate(ci)
 				navigateBackToContext()
 			}else{
-				integratedSearch.label.click()
+//				integratedSearch.label.click()
 				addOrUpdate(ci)
 				def ontologyAlert = "When the attribute of an item expects an External Ontology reference, the fields External Ontology Id and Display Value must not be blank."
 				alertError(controlError.alertError.find("p")[0], ontologyAlert)
@@ -188,7 +194,8 @@ class ContextItemPage extends CapScaffoldPage{
 
 		}else{
 			if(inputData.OntologyId != "" || inputData.DiplayValue != ""){
-				integratedSearch.label.click()
+				waitFor{ externalOntologyId }
+//				integratedSearch.label.click()
 				externalOntologyId.value("")
 				displayValue.value("")
 				externalOntologyId.value(inputData.OntologyId)
@@ -196,7 +203,7 @@ class ContextItemPage extends CapScaffoldPage{
 				addOrUpdate(ci)
 				navigateBackToContext()
 			}else{
-				integratedSearch.label.click()
+//				integratedSearch.label.click()
 				addOrUpdate(ci)
 				def ontologyAlert = "When the attribute of an item expects an External Ontology reference, the fields External Ontology Id and Display Value must not be blank."
 				alertError(controlError.alertError.find("p")[0], ontologyAlert)
@@ -209,14 +216,11 @@ class ContextItemPage extends CapScaffoldPage{
 		addOrUpdate(ci)
 		navigateBackToContext()
 	}
-	def addOrUpdate(ContextItem ci){
-		switch(ci){
-			case ContextItem.ADD:
-				saveBtn.buttonSubmitPrimary.click()
-				break;
-			case ContextItem.UPDATE:
-				updateBtn.buttonSubmitPrimary.click()
-				break;
+	def addOrUpdate(boolean isCreate){
+		if(isCreate){
+			saveBtn.buttonSubmitPrimary.click()
+		}else{
+		updateBtn.buttonSubmitPrimary.click()
 		}
 	}
 	def navigateBackToContext(){
@@ -231,20 +235,83 @@ class ContextItemPage extends CapScaffoldPage{
 		}
 		return false
 	}
-	def selectAutoChoiceValue(def element1, def element2,  def inputValue){
-		element1.label.click()
-		if(element1.selectClose.displayed){
-			element1.selectClose.click()
+	
+	def addExternalOntologyItem(def inputData, boolean isCreate=true, def resultUpload=false, def isIntegration = true){
+		waitFor{ !selectToDrop.searchNoResult }
+		selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.AttributeFromDictionary)
+		if(resultUpload){
+			providedWithResults.click()
+			if(valuConstraint=="Free"){
+				isFreeConstraint()
+				}else if(valuConstraint=="List"){
+					valueConstraintList.click()
+					isExternalOntologyType(inputData, isCreate, isIntegration)
+					}
+		}else{
+			isExternalOntologyType(inputData, isCreate, isIntegration)
 		}
+	}
+	
+	def addNumericValueItem(def inputData, boolean isCreate=true, def resultUpload=false){
+		waitFor{ !selectToDrop.searchNoResult }
+		selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.AttributeFromDictionary)
+		if(resultUpload){
+			providedWithResults.click()
+			if(valuConstraint=="Free"){
+				isFreeConstraint()
+			}else if(valuConstraint=="List"){
+				valueConstraintList.click()
+				isNumericType(inputData, isCreate)
+			}else if(valuConstraint=="Range"){
+				valueConstraintRange.click()
+				valueMin.value(inputData.valueMin)
+				valueMax.value(inputData.valueMax)
+				addOrUpdate(ci)
+				navigateBackToContext()
+			}
+
+		}else{
+			isNumericType(inputData, isCreate)
+		}
+	}
+	
+	def addFreeTextItem(def inputData, boolean isCreate=true, def resultUpload=false){
+		waitFor{ !selectToDrop.searchNoResult }
+		selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.AttributeFromDictionary)
+		if(resultUpload){
+			providedWithResults.click()
+			if(valuConstraint=="Free"){
+				isFreeConstraint()
+			}else if(valuConstraint=="List"){
+				valueConstraintList.click()
+				isFreeTextTYpe(inputData, isCreate)
+			}
+
+		}else{
+			isFreeTextTYpe(inputData, isCreate)
+		}
+	}
+	def addElementContextItem(def inputData, boolean isCreate=true, def resultUpload=false){
+		waitFor{ !selectToDrop.searchNoResult }
+		selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.AttributeFromDictionary)
+		if(resultUpload){
+			providedWithResults.click()
+			if(valuConstraint=="Free"){
+				isFreeConstraint()
+			}else if(valuConstraint=="List"){
+				valueConstraintList.click()
+				isElementType(inputData, isCreate)
+			}
+
+		}else{
+			isElementType(inputData, isCreate)
+		}
+	}
+	def selectAutoChoiceValue(def element1, def element2,  def inputValue){
 		int index = 0
+		assert element1.searchInput
 		element1.searchInput.value(inputValue)
-//		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { element2.searchResult[index].text() != "Searching..." && element2.searchResult[index].text() != "Please enter 1 more characters"}
-//		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { !element2.searchNoResult }
-//		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { !element2.searchResultSearching }
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { element2.searchResult != null }
-//		System.out.println(element2.searchResult.text())
+		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element2.searchResult[index].text().contains(inputValue)}
 		element2.searchResult[index].click()
-//		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { !formLoading.loading.displayed }
-		ajaxRequestCompleted()
 	}
 }
