@@ -1,9 +1,9 @@
 package bard.db.experiment
 
 import bard.db.BardIntegrationSpec
-import bard.db.enums.ReadyForExtraction
 import bard.db.enums.ExperimentStatus
-import grails.plugin.spock.IntegrationSpec
+import bard.db.enums.ReadyForExtraction
+import bard.db.people.Role
 import org.junit.Before
 import spock.lang.Unroll
 
@@ -254,5 +254,25 @@ class ExperimentConstraintIntegrationSpec extends BardIntegrationSpec {
         desc             | valueUnderTest | valid | errorCode
         'null not valid' | null           | false | 'nullable'
         'date valid'     | new Date()     | true  | null
+    }
+    void "test ownerRole constraints #desc ownerRole: '#valueUnderTest'"() {
+        final String field = 'ownerRole'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domain can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc               | valueUnderTest   | valid | errorCode
+        'null not valid'   | { null }         | false | 'nullable'
+        'owner Role valid' | { Role.build() } | true  | null
     }
 }

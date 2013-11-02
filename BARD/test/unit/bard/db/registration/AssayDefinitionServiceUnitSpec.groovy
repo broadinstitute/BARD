@@ -8,12 +8,10 @@ import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
 import bard.db.people.Role
 import grails.buildtestdata.mixin.Build
-import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
-import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import spock.lang.Specification
 

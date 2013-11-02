@@ -191,28 +191,15 @@ class ExperimentService {
         Assay newAssay = mapping.assay
         newAssay.fullyValidateContextItems = false
 
-        Map measureOldToNew = mapping.measureOldToNew
-
 
         for (Experiment experiment : experiments) {
             oldAssay.removeFromExperiments(experiment)
             newAssay.addToExperiments(experiment)
-
-            // map measures over to new assay
-            //TODO: Rework
-//            for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
-//                Measure oldMeasure = experimentMeasure.measure
-//                Measure newMeasure = measureOldToNew[oldMeasure]
-//                assert newMeasure != null
-//
-//                oldMeasure.removeFromExperimentMeasures(experimentMeasure)
-//                newMeasure.addToExperimentMeasures(experimentMeasure)
-//            }
         }
         oldAssay.save(flush: true)
 
         newAssay = newAssay.save(flush: true)
-        return Assay.findById(newAssay.id)
+        return Assay.findById(newAssay?.id)
     }
 
     public static int getTotalLengthRec2(final List<String> lst) {

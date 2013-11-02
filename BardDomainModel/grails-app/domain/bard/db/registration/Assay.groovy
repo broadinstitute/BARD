@@ -82,7 +82,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
         assayType(nullable: false)
         dateCreated(nullable: false)
         lastUpdated(nullable: false)
-        ownerRole(nullable: true)
+        ownerRole(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
@@ -171,17 +171,6 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
         this.assayContexts
     }
 
-
-//    Collection<Measure> getRootMeasures() {
-//        return measures.findAll { it.parentMeasure == null }
-//    }
-
-    /**
-     * @return a list of Measures without parents sorted by displayLabel case insensitive
-     */
-//    List<Measure> getRootMeasuresSorted() {
-//        return measures.findAll { it.parentMeasure == null }.sort(new MeasureCaseInsensitiveDisplayLabelComparator())
-//    }
 
     boolean allowsNewExperiments() {
         return (assayStatus != AssayStatus.RETIRED && assayType != AssayType.TEMPLATE)

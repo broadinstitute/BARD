@@ -97,7 +97,7 @@ class Experiment extends AbstractContextOwner {
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
 
         ncgcWarehouseId(nullable: true)
-        ownerRole(nullable: true)
+        ownerRole(nullable: false)
     }
 
     String getDisplayName() {

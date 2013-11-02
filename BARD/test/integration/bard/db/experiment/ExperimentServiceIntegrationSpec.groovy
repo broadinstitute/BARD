@@ -1,6 +1,7 @@
 package bard.db.experiment
 
 import bard.db.audit.BardContextUtils
+import bard.db.people.Role
 import bard.db.registration.Assay
 import bardqueryapi.TableModel
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -91,8 +92,9 @@ class ExperimentServiceIntegrationSpec extends IntegrationSpec {
 
     void "test splitExperimentsFromAssay"() {
         given:
-        final Assay assay = Assay.build(assayName: 'assayName3')
-        final Experiment experiment = Experiment.build(experimentName: "experimentsAlias", assay: assay).save(flush: true)
+        Role role = Role.build()
+        final Assay assay = Assay.build(assayName: 'assayName3', ownerRole:role)
+        final Experiment experiment = Experiment.build(experimentName: "experimentsAlias", assay: assay, ownerRole: role).save(flush: true)
 
         when:
         final Assay newAssay = experimentService.splitExperimentsFromAssay(assay.id, [experiment])
