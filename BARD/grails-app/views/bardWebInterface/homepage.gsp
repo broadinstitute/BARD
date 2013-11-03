@@ -52,35 +52,37 @@
                 </div>
 
                 <div class="row-fluid">
-                    <nav class="nav-panel span12 right-aligned">
-                        <ul class="nav">
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Search</a></li>
-                                    <li><a href="#">Work with results</a></li>
-                                    <li><a href="#">Submit data</a></li>
-                                    <li><a href="#">Use securely</a></li>
-                                    <li><a href="#">Create and use plug-ins</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Community</a></li>
-                                    <li><a href="#">Report a bug</a></li>
-                                    <li><a href="#">Contact us</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="/BARD/bardWebInterface/navigationPage">Submissions</a></li>
-                        </ul>
-                        <g:if test="${false}">
-                            <ul class="login-nav">
-                                <li><a href="#">Sign up</a></li>
-                                <li><a href="#">Sign in</a></li>
+                    <div class="span12">
+                        <nav class="nav-panel right-aligned">
+                            <ul class="nav">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Search</a></li>
+                                        <li><a href="#">Work with results</a></li>
+                                        <li><a href="#">Submit data</a></li>
+                                        <li><a href="#">Use securely</a></li>
+                                        <li><a href="#">Create and use plug-ins</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Community</a></li>
+                                        <li><a href="#">Report a bug</a></li>
+                                        <li><a href="#">Contact us</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="/BARD/bardWebInterface/navigationPage">Submissions</a></li>
                             </ul>
-                        </g:if>
-                    </nav>
+                            <g:if test="${false}">
+                                <ul class="login-nav">
+                                    <li><a href="#">Sign up</a></li>
+                                    <li><a href="#">Sign in</a></li>
+                                </ul>
+                            </g:if>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </div>
