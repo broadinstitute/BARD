@@ -56,6 +56,9 @@ class MockQueryService implements IQueryService {
     long numberOfSubstances() {
         return 0  //To change body of implemented methods use File | Settings | File Templates.
     }
+    long numberOfExperimentData(){
+        return 0
+    }
 
     int numberOfProbes() {
         return 0  //To change body of implemented methods use File | Settings | File Templates.

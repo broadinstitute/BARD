@@ -27,6 +27,8 @@ public interface IQueryService {
 
     long numberOfSubstances()
 
+    long numberOfExperimentData()
+
     int numberOfProbes()
 
     List<Compound> findRecentlyAddedProbes(int numberOfProbes)

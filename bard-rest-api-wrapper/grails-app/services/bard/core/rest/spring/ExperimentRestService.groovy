@@ -19,6 +19,7 @@ class ExperimentRestService extends AbstractRestService {
     public String getResourceContext() {
         return RestApiConstants.EXPERIMENTS_RESOURCE;
     }
+
     public List<ExperimentSearch> findRecentlyAdded(long top) {
         String recentURL = "${RestApiConstants.RECENT}${top}${RestApiConstants.QUESTION_MARK}expand=true"
         final String urlString = getResource(recentURL)
@@ -193,36 +194,6 @@ class ExperimentRestService extends AbstractRestService {
 
     }
 
-//    /**
-//     *
-//     * @param list of cap assay ids
-//     * @param searchParams
-//     * @param map of etags
-//     * @return {@link ExperimentSearchResult}
-//     */
-//    public ExperimentSearchResult searchExperimentsByCapIds(final List<Long> capIds, final SearchParams searchParams) {
-//        if (capIds) {
-//            final Map<String, Long> etags = [:]
-//            final long skip = searchParams.getSkip()
-//            HttpHeaders requestHeaders = new HttpHeaders();
-//            HttpEntity<List> entity = new HttpEntity<List>(requestHeaders);
-//
-//
-//            final String urlString = buildSearchByCapIdURLs(capIds, searchParams, "capExptId:")
-//            final URL url = new URL(urlString)
-//            final HttpEntity<ExperimentSearchResult> exchange = getExchange(url.toURI(), entity, ExperimentSearchResult.class) as HttpEntity<ExperimentSearchResult>
-//            final ExperimentSearchResult experimentSearchResult = exchange.getBody()
-//
-//            final HttpHeaders headers = exchange.getHeaders()
-//            extractETagsFromResponseHeader(headers, skip, etags)
-//            experimentSearchResult.setEtags(etags)
-//            return experimentSearchResult
-//        }
-//
-//        return null
-//
-//    }
-
     /**
      *
      * @param capIds
@@ -297,7 +268,6 @@ class ExperimentRestService extends AbstractRestService {
         return activities(experimentId, null)
     }
 
-    //TODO: Probably make two calls here, first to get the count and second to use it for parallel processing
     public ExperimentData activities(final Long experimentId, final String etag) {
         // unbounded fetching
         Integer top = multiplier * multiplier;
@@ -381,6 +351,21 @@ class ExperimentRestService extends AbstractRestService {
                 toString();
     }
 
+
+
+    public long getExptDataCount() {
+        return this.getResourceCount(getExptDataResourceCountURL())
+    }
+
+    public String getExptDataResourceCountURL() {
+        final String resourceName = RestApiConstants.EXPTDATA_RESOURCE
+        return new StringBuilder(externalUrlDTO.ncgcUrl).
+                append(resourceName).
+                append(RestApiConstants.FORWARD_SLASH).
+                append(RestApiConstants._COUNT).
+                toString();
+    }
+
     public CompoundResult findCompoundsByExperimentId(final Long eid) {
         final StringBuilder resource =
             new StringBuilder(
@@ -404,7 +389,7 @@ class ExperimentRestService extends AbstractRestService {
         final ProjectResult projectResult = (ProjectResult) this.getForObject(url.toURI(), ProjectResult.class)
         return projectResult
     }
-    //TODO: Right now this returns the default number of compounds, which is 500
+
     public List<Long> compoundsForExperiment(Long experimentId) {
         String resource = this.getResource(experimentId.toString()) + RestApiConstants.COMPOUNDS_RESOURCE;
         final URL url = new URL(resource)
