@@ -3,6 +3,7 @@ package bard.db.context.item
 import bard.db.dictionary.Element
 import bard.db.enums.ContextType
 import bard.db.enums.ExpectedValueType
+import bard.db.people.Role
 import bard.db.project.Project
 import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
@@ -52,22 +53,14 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
     def setupSpec() {
         String reauthenticateWithUser = TEAM_A_1_USERNAME
 
-//        createTeamsInDatabase(TEAM_A_1_USERNAME, TEAM_A_1_EMAIL, TEAM_A_1_ROLE, reauthenticateWithUser)
-//
-//        createTeamsInDatabase(TEAM_A_2_USERNAME, TEAM_A_2_EMAIL, TEAM_A_2_ROLE, reauthenticateWithUser)
-//
-//        createTeamsInDatabase(TEAM_B_1_USERNAME, TEAM_B_1_EMAIL, TEAM_B_1_ROLE, reauthenticateWithUser)
-//
-//        createTeamsInDatabase(ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_ROLE, reauthenticateWithUser)
-//
-//        createTeamsInDatabase(CURATOR_USERNAME, CURATOR_EMAIL, CURATOR_ROLE, reauthenticateWithUser)
-
-
-
 
         contextItemData = (Map) remote.exec({
             //Build assay as TEAM_A
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
+            Role role = Role.findByAuthority('ROLE_TEAM_A')
+            if (!role) {
+                role = Role.build(authority: 'ROLE_TEAM_A', displayName: 'ROLE_TEAM_A').save(flush: true)
+            }
 
             final String elementLabel = "My Cool Label"
             final Element element = Element.findByLabel(elementLabel)
@@ -75,15 +68,16 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
                 element = Element.build(label: elementLabel, expectedValueType: ExpectedValueType.FREE_TEXT).save(flush: true)
             }
 
+
             long attributeElementId = element.id
 
             ProjectContextItem projectContextItem = ProjectContextItem.build(attributeElement: element)
             AssayContextItem assayContextItem = AssayContextItem.build(attributeElement: element)
 
-            Assay assay = Assay.build(assayName: "Assay Name10").save(flush: true)
+            Assay assay = Assay.build(assayName: "Assay Name10", ownerRole:role).save(flush: true)
             AssayContext assayContext = AssayContext.build(assay: assay, contextName: "alpha").save(flush: true)
 
-            Project project = Project.build(name: "Proj Name10").save(flush: true)
+            Project project = Project.build(name: "Proj Name10", ownerRole:role).save(flush: true)
             ProjectContext projectContext = ProjectContext.build(project: project, contextName: "projectAlpha").save(flush: true)
 
 
@@ -217,9 +211,12 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
             }
 
             long attributeElementId = element.id
+            Role role = Role.findByAuthority('ROLE_TEAM_A')
+            if (!role) {
+                role = Role.build(authority: 'ROLE_TEAM_A', displayName: 'ROLE_TEAM_A').save(flush: true)
+            }
 
-
-            Assay assay = Assay.build().save(flush: true)
+            Assay assay = Assay.build(ownerRole: role).save(flush: true)
 
             AssayContext context = AssayContext.build(contextType: ContextType.BIOLOGY, assay: assay, contextName: "alpha2" + System.currentTimeMillis()).save(flush: true)
 
@@ -245,9 +242,12 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
             }
 
             long attributeElementId = element.id
+            Role role = Role.findByAuthority('ROLE_TEAM_A')
+            if (!role) {
+                role = Role.build(authority: 'ROLE_TEAM_A', displayName: 'ROLE_TEAM_A').save(flush: true)
+            }
 
-
-            Project project = Project.build().save(flush: true)
+            Project project = Project.build(ownerRole: role).save(flush: true)
 
             ProjectContext context = ProjectContext.build(contextType: ContextType.BIOLOGY, project: project, contextName: "alpha22" + System.currentTimeMillis()).save(flush: true)
 

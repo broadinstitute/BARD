@@ -1,5 +1,6 @@
 package bard.db.context.item
 
+import bard.db.people.Role
 import bard.db.project.Project
 import bard.db.project.ProjectContext
 import bard.db.registration.Assay
@@ -51,8 +52,14 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         contextData = (Map) remote.exec({
             //Build assay as TEAM_A
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
-            Assay assay = Assay.build(assayName: "Assay Name20").save(flush: true)
-            Project project = Project.build(name: "Some Project Name").save(flush: true)
+
+            Role role = Role.findByAuthority('ROLE_TEAM_A')
+            if (!role) {
+                role = Role.build(authority: 'ROLE_TEAM_A', displayName: 'ROLE_TEAM_A').save(flush: true)
+            }
+
+            Assay assay = Assay.build(assayName: "Assay Name20", ownerRole:role).save(flush: true)
+            Project project = Project.build(name: "Some Project Name",ownerRole:role).save(flush: true)
             //create assay context
             return [assayId: assay.id, projectId: project.id]
         })
@@ -243,7 +250,11 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         Map m = (Map) remote.exec({
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
-            Project project = Project.build(name: "Some Project Name2").save(flush: true)
+            Role role = Role.findByAuthority('ROLE_TEAM_A')
+            if (!role) {
+                role = Role.build(authority: 'ROLE_TEAM_A', displayName: 'ROLE_TEAM_A').save(flush: true)
+            }
+            Project project = Project.build(name: "Some Project Name2", ownerRole: role).save(flush: true)
             ProjectContext context = ProjectContext.build(project: project, contextName: "alpha").save(flush: true)
 
 
@@ -258,7 +269,11 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         Map m = (Map) remote.exec({
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
-            Assay assay = Assay.build(assayName: "Assay Name202").save(flush: true)
+            Role role = Role.findByAuthority('ROLE_TEAM_A')
+            if (!role) {
+                role = Role.build(authority: 'ROLE_TEAM_A', displayName: 'ROLE_TEAM_A').save(flush: true)
+            }
+            Assay assay = Assay.build(assayName: "Assay Name202", ownerRole: role).save(flush: true)
             AssayContext context = AssayContext.build(assay: assay, contextName: "alpha").save(flush: true)
 
             //create assay context
