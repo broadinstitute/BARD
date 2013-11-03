@@ -23,25 +23,28 @@
     <r:layoutResources/>
 
     <style type="text/css">
-    /* start of modification for 5 columns */
-    @media (min-width: 768px){
+        /* start of modification for 5 columns */
+    @media (min-width: 768px) {
         .fivecolumns .span2 {
             width: 18.2%;
             *width: 18.2%;
         }
     }
+
     @media (min-width: 1200px) {
         .fivecolumns .span2 {
             width: 17.9%;
             *width: 17.8%;
         }
     }
+
     @media (min-width: 768px) and (max-width: 979px) {
         .fivecolumns .span2 {
             width: 17.7%;
             *width: 17.7%;
         }
     }
+
         /* end of modification for 5 columns */
     </style>
 </head>
@@ -74,36 +77,38 @@
                 </div>
 
                 <div class="row-fluid">
-                    <nav class="nav-panel span12 right-aligned">
-                        <ul class="nav">
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="../about/howToSearch">Search</a></li>
-                                    <li><a href="../about/howToFilterResults">Filter search results</a></li>
-                                    <li><a href="../about/howToReadResults">Interpret search results</a></li>
-                                    <li><a href="../about/howToUseSecurely">Use securely</a></li>
-                                    <li><a href="../about/howToUsePlugins">Create and use plug-ins</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="../about/howToReportABug">Report a bug</a></li>
-                                    <li><a href="../about/howToContactUs">Contact us</a></li>
-                                </ul>
-                            </li>
-                            <sec:ifLoggedIn>
-                                <li><a href="/BARD/bardWebInterface/navigationPage">My BARD</a></li>
-                            </sec:ifLoggedIn>
-                        </ul>
-                        <g:if test="${false}">
-                            <ul class="login-nav">
-                                <li><a href="#">Sign up</a></li>
-                                <li><a href="#">Sign in</a></li>
+                    <div class="span12">
+                        <nav class="nav-panel right-aligned">
+                            <ul class="nav">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="../about/howToSearch">Search</a></li>
+                                        <li><a href="../about/howToFilterResults">Filter search results</a></li>
+                                        <li><a href="../about/howToReadResults">Interpret search results</a></li>
+                                        <li><a href="../about/howToUseSecurely">Use securely</a></li>
+                                        <li><a href="../about/howToUsePlugins">Create and use plug-ins</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="../about/howToReportABug">Report a bug</a></li>
+                                        <li><a href="../about/howToContactUs">Contact us</a></li>
+                                    </ul>
+                                </li>
+                                <sec:ifLoggedIn>
+                                    <li><a href="/BARD/bardWebInterface/navigationPage">My BARD</a></li>
+                                </sec:ifLoggedIn>
                             </ul>
-                        </g:if>
-                    </nav>
+                            <g:if test="${false}">
+                                <ul class="login-nav">
+                                    <li><a href="#">Sign up</a></li>
+                                    <li><a href="#">Sign in</a></li>
+                                </ul>
+                            </g:if>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </div>
@@ -181,7 +186,8 @@
 
             <div class="links-holder">
                 %{--<a href="#">Advanced Search</a>                    We can put this link back when we have an advanced search to present--}%
-                <a href="${createLink(controller: 'queryCart', action: 'toDesktopClient')}" target="_blank" class="download-link hidden-phone">Download the BARD Desktop Client</a>
+                <a href="${createLink(controller: 'queryCart', action: 'toDesktopClient')}" target="_blank"
+                   class="download-link hidden-phone">Download the BARD Desktop Client</a>
             </div>
 
         </div>
@@ -413,7 +419,9 @@
                     <ul>
                         <li><a href="../about/bardArchitecture">Architecture &amp; Design</a></li>
                         <li><a href="https://github.com/ncatsdpiprobedev/bard/wiki">REST API</a></li>
-                        <li><a href="#" style="text-decoration: line-through;">Source code on GitHub<img src="${resource(dir: 'images/bardHomepage', file: 'comingSoon2.png')}" alt="coming soon"></a></li>
+                        <li><a href="#" style="text-decoration: line-through;">Source code on GitHub<img
+                                src="${resource(dir: 'images/bardHomepage', file: 'comingSoon2.png')}"
+                                alt="coming soon"></a></li>
                     </ul>
                 </div>
 
@@ -425,7 +433,6 @@
                         <li><a href="../dictionaryTerms/dictionaryTerms">Glossary</a></li>
                     </ul>
                 </div>
-
 
 
                 <div class="span2">
