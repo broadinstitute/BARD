@@ -721,6 +721,10 @@ class QueryService implements IQueryService {
         return substanceRestService.getResourceCount()
     }
 
+    long numberOfExperimentData() {
+        return experimentRestService.getExptDataCount()
+    }
+
     int numberOfProbes() {
         final CompoundResult compoundResult = compoundRestService.findCompoundsByETag(PROBE_ETAG_ID)
         return compoundResult.compounds.size()
