@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import bard.db.enums.DocumentType
+import bard.db.people.Role
 import bard.db.project.Project
 import bard.db.project.ProjectDocument
 import groovy.sql.Sql
@@ -45,8 +46,16 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         documentData = (Map) remote.exec({
             //Build assay as TEAM_A
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
-            Assay assay = Assay.build(assayName: "Assay Name10").save(flush: true)
-            Project project = Project.build().save(flush: true)
+            Role role = Role.findByAuthority('ROLE_TEAM_A')
+            if (!role) {
+                role = Role.build(authority: 'ROLE_TEAM_A', displayName: 'ROLE_TEAM_A').save(flush: true)
+            }
+            Role otherRole = Role.findByAuthority('ROLE_TEAM_B')
+            if (!otherRole) {
+                otherRole = Role.build(authority: 'ROLE_TEAM_B', displayName: 'ROLE_TEAM_B').save(flush: true)
+            }
+            Assay assay = Assay.build(assayName: "Assay Name10", ownerRole:role).save(flush: true)
+            Project project = Project.build( ownerRole:role).save(flush: true)
 
             String documentName = "Comments"
             DocumentType documentType = DocumentType.DOCUMENT_TYPE_COMMENTS

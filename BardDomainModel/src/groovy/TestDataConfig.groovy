@@ -41,6 +41,10 @@ testDataConfig {
             def i = 1
             label = {-> "label${i++}" }
         }
+        'bard.db.people.Role' {
+            def i = 1
+            authority = {-> "ROLE_TEAM_${i++}" }
+        }
         'bard.db.dictionary.UnitTree' {
             def i = 1
             id = {-> i++ }

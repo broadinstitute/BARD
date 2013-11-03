@@ -102,6 +102,9 @@ class CapPermissionService implements CapPermissionInterface {
                         aclSid.id, aclEntry.aceOrder, aclEntry.mask, aclEntry.granting, aclEntry.auditSuccess, aclEntry.auditFailure)
             }
         }
+        else{
+            addPermission(domainObjectInstance, newRole,BasePermission.ADMINISTRATION)
+        }
     }
     /**
      * @param domainObjectInstance a domainInstance we track ACL permissions on

@@ -57,6 +57,7 @@ databaseChangeLog = {
     include(file: "iteration_033/033_changelog.groovy")
     include(file: "iteration_034/034_changelog.groovy")
     include(file: "iteration_035/035_changelog.groovy")
+    include(file: "iteration_036/036_changelog.groovy")
 
     // views
     changeSet(author: 'ddurkin', id: 'create-or-replace-dictionary-views.sql', dbms: 'oracle', context: 'standard', runAlways: 'true') {
@@ -65,7 +66,7 @@ databaseChangeLog = {
 
     // do last
 
-    include file: 'manage-audit-procedures.groovy'
+    //include file: 'manage-audit-procedures.groovy'
     include file: 'manage-stored-procedures.groovy'
     include file: 'manage-names-pkg.groovy'
     include file: 'drop-retired-tables.groovy'

@@ -15,6 +15,7 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import registration.AssayService
 import spock.lang.Specification
 
@@ -35,7 +36,7 @@ public class ExperimentServiceUnitSpec extends Specification {
         given:
         Experiment experiment = Experiment.build()
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(experiment: experiment, parentChildRelationship: HierarchyType.SUPPORTED_BY)
-        def oldValue =   experimentMeasure[(field)]
+        def oldValue = experimentMeasure[(field)]
         experimentMeasure[(field)] = valueUnderTest.call()
         when:
         service.updateExperimentMeasure(experimentMeasure.id, experimentMeasure, [])
@@ -107,13 +108,13 @@ public class ExperimentServiceUnitSpec extends Specification {
         assert createdTableModel
     }
 
-
-
     void 'test splitting experiment from assay'() {
         given:
-        service.assayService = new AssayService()
+        service.assayService = Mock(AssayService)
         Assay assay = Assay.build()
-
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return true
+        }
         Element resultType = Element.build()
         Element statsModifier = Element.build()
 
@@ -121,17 +122,26 @@ public class ExperimentServiceUnitSpec extends Specification {
         Experiment experiment = Experiment.build(assay: assay)
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(experiment: experiment, resultType: resultType, statsModifier: statsModifier)
         AssayContextExperimentMeasure.build(assayContext: context, experimentMeasure: experimentMeasure)
+
+        Assay newAssay = new Assay(dateCreated: assay.dateCreated,
+                designedBy: assay.designedBy,
+                assayStatus: assay.assayStatus,
+                readyForExtraction: assay.readyForExtraction,
+                ownerRole: assay.ownerRole
+        )
+
         when:
         service.splitExperimentsFromAssay(assay.id, [experiment])
 
         then:
+        service.assayService.cloneAssay(_) >> {
+            return [assay: newAssay, measureOldToNew: [:]]
+        }
         experiment.assay != assay // the assay is different
         experimentMeasure.resultType == resultType
         experimentMeasure.statsModifier == statsModifier
 
-        Assay newAssay = experiment.assay
-        newAssay.assayContexts.size() == 1
-        newAssay.assayContexts.first().contextName == "alpha"
+
     }
 
     void "test update Experiment Status"() {

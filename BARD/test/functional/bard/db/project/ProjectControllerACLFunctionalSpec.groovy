@@ -401,7 +401,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test reload project steps #desc'() {
         given:
-        Map m = buildProjectExperiments()
+        Map m = buildProjectExperiments(authority)
         RESTClient client = getRestClient(controllerUrl, "reloadProjectSteps", team, teamPassword)
 
         when:
@@ -414,19 +414,18 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert response.text.contains("Link Experiments") == buttonExist
 
         where:
-        desc       | team              | teamPassword      | expectedHttpResponse      | buttonExist
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK | true
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK | false
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK | true
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK | true
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK | false
+        desc       | team              | teamPassword      | authority     | expectedHttpResponse      | buttonExist
+        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_OK | true
+        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_OK | false
+        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_OK | true
+        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | "ROLE_TEAM_A" | HttpServletResponse.SC_OK | true
+        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | "ROLE_TEAM_A" | HttpServletResponse.SC_OK | false
 
     }
 
-
     def 'test update Project Stage #desc'() {
         given:
-        Map m = buildProjectExperiments()
+        Map m = buildProjectExperiments(authority)
         RESTClient client = getRestClient(controllerUrl, "updateProjectStage", team, teamPassword)
         String value = "secondary assay"
         Long projectExperimentId = m.peFromId
@@ -439,17 +438,17 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert response.statusCode == expectedHttpResponse
 
         where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
+        desc       | team              | teamPassword      | authority     | expectedHttpResponse
+        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_OK
+        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_OK
+        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | "ROLE_TEAM_A" | HttpServletResponse.SC_OK
 
     }
 
 
     def 'test remove Experiment From Project #desc'() {
         given:
-        Map m = buildProjectExperiments()
+        Map m = buildProjectExperiments(authority)
         RESTClient client = getRestClient(controllerUrl, "removeExperimentFromProject", team, teamPassword)
         when:
         def response = client.post() {
@@ -460,17 +459,17 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert response.statusCode == expectedHttpResponse
 
         where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
+        desc       | team              | teamPassword      | authority     | expectedHttpResponse
+        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_OK
+        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_OK
+        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | "ROLE_TEAM_A" | HttpServletResponse.SC_OK
 
     }
 
 
     def 'test remove Experiment From Project #desc forbidden'() {
         given:
-        Map m = buildProjectExperiments()
+        Map m = buildProjectExperiments(authority)
         RESTClient client = getRestClient(controllerUrl, "removeExperimentFromProject", team, teamPassword)
         when:
         client.post() {
@@ -482,16 +481,15 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
 
         where:
-        desc      | team              | teamPassword      | expectedHttpResponse
-        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
-
+        desc      | team              | teamPassword      | authority     | expectedHttpResponse
+        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_FORBIDDEN
+        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | "ROLE_TEAM_A" | HttpServletResponse.SC_FORBIDDEN
     }
 
 
     def 'test link Experiment #desc forbidden'() {
         given:
-        Map m = buildExperimentsToLink()
+        Map m = buildExperimentsToLink(authority)
 
         Long fromExperimentId = m.eFromId
         Long toExperimentId = m.eToId
@@ -509,15 +507,15 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
 
         where:
-        desc      | team              | teamPassword      | expectedHttpResponse
-        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+        desc      | team              | teamPassword      | authority     | expectedHttpResponse
+        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_FORBIDDEN
+        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | "ROLE_TEAM_A" | HttpServletResponse.SC_FORBIDDEN
 
     }
 
     def 'test link Experiment #desc'() {
         given:
-        Map m = buildExperimentsToLink()
+        Map m = buildExperimentsToLink(authority)
 
         Long fromExperimentId = m.eFromId
         Long toExperimentId = m.eToId
@@ -533,16 +531,16 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert response.statusCode == expectedHttpResponse
 
         where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
+        desc       | team              | teamPassword      | authority     | expectedHttpResponse
+        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_OK
+        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_OK
+        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | "ROLE_TEAM_A" | HttpServletResponse.SC_OK
 
     }
 
     def 'test remove Edge From Project #desc'() {
         given:
-        Map m = buildProjectExperiments()
+        Map m = buildProjectExperiments(authority)
 
         Long fromExperimentId = m.eFromId
         Long toExperimentId = m.eToId
@@ -558,16 +556,16 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert response.statusCode == expectedHttpResponse
 
         where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
+        desc       | team              | teamPassword      | authority     | expectedHttpResponse
+        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_OK
+        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_OK
+        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | "ROLE_TEAM_A" | HttpServletResponse.SC_OK
 
     }
 
     def 'test remove Edge From Project #desc forbidden'() {
         given:
-        Map m = buildProjectExperiments()
+        Map m = buildProjectExperiments(authority)
 
         Long fromExperimentId = m.eFromId
         Long toExperimentId = m.eToId
@@ -584,15 +582,15 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
 
         where:
-        desc      | team              | teamPassword      | expectedHttpResponse
-        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+        desc      | team              | teamPassword      | authority     | expectedHttpResponse
+        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_FORBIDDEN
+        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | "ROLE_TEAM_A" | HttpServletResponse.SC_FORBIDDEN
 
     }
 
     def 'test update Project Stage #desc forbidden'() {
         given:
-        Map m = buildProjectExperiments()
+        Map m = buildProjectExperiments(authority)
         RESTClient client = getRestClient(controllerUrl, "updateProjectStage", team, teamPassword)
         String value = "secondary assay"
         Long projectExperimentId = m.peFromId
@@ -606,9 +604,9 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
 
         where:
-        desc      | team              | teamPassword      | expectedHttpResponse
-        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+        desc      | team              | teamPassword      | authority     | expectedHttpResponse
+        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_FORBIDDEN
+        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | "ROLE_TEAM_A" | HttpServletResponse.SC_FORBIDDEN
 
     }
 
@@ -649,9 +647,9 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
 
         where:
-        desc      | team              | teamPassword      | expectedHttpResponse
-        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+        desc      | team              | teamPassword      | authority     | expectedHttpResponse
+        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_FORBIDDEN
+        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | "ROLE_TEAM_A" | HttpServletResponse.SC_FORBIDDEN
 
     }
 
@@ -792,12 +790,14 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     }
 
-    Map buildExperimentsToLink() {
+    Map buildExperimentsToLink(String authority) {
         String reauthenticateWithUser = TEAM_A_1_USERNAME
 
         Map m = (Map) remote.exec({
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
-            Project project = Project.build().save(flush: true)
+            Role role = Role.findByAuthority(authority)
+
+            Project project = Project.build(ownerRole: role).save(flush: true)
 
             final String elementFromLabel = "primary assay"
             final String elementToLabel = "secondary assay"
@@ -808,8 +808,9 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             StageTree.findByElement(fromElement) ?: StageTree.build(element: fromElement).save(flush: true)
             StageTree.findByElement(toElement) ?: StageTree.build(element: toElement).save(flush: true)
 
-            Experiment experimentFrom = Experiment.build().save(flush: true)
-            Experiment experimentTo = Experiment.build().save(flush: true)
+
+            Experiment experimentFrom = Experiment.build(ownerRole: role).save(flush: true)
+            Experiment experimentTo = Experiment.build(ownerRole: role).save(flush: true)
 
             final ProjectSingleExperiment projectExperimentFrom = ProjectSingleExperiment.findByProjectAndExperiment(project, experimentFrom) ?:
                 ProjectSingleExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
@@ -824,12 +825,13 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     }
 
-    Map buildProjectExperiments() {
+    Map buildProjectExperiments(String authority) {
         String reauthenticateWithUser = TEAM_A_1_USERNAME
 
         Map m = (Map) remote.exec({
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
-            Project project = Project.build().save(flush: true)
+            Role role = Role.findByAuthority(authority)
+            Project project = Project.build(ownerRole: role).save(flush: true)
 
             final String elementFromLabel = "primary assay"
             final String elementToLabel = "secondary assay"
@@ -839,8 +841,8 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             StageTree.findByElement(fromElement) ?: StageTree.build(element: fromElement).save(flush: true)
             StageTree.findByElement(toElement) ?: StageTree.build(element: toElement).save(flush: true)
 
-            Experiment experimentFrom = Experiment.build().save(flush: true)
-            Experiment experimentTo = Experiment.build().save(flush: true)
+            Experiment experimentFrom = Experiment.build(ownerRole: role).save(flush: true)
+            Experiment experimentTo = Experiment.build(ownerRole: role).save(flush: true)
 
             final ProjectSingleExperiment projectExperimentFrom = ProjectSingleExperiment.findByProjectAndExperiment(project, experimentFrom) ?:
                 ProjectSingleExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
@@ -855,7 +857,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             projectExperimentTo.save(flush: true)
 
             return [peFromId: projectExperimentFrom.id, peToId: projectExperimentTo.id, eFromId: experimentFrom.id, eToId:
-                    experimentTo.id, projectId: project.id, fromElementId: fromElement.id, toElementId: toElement.id]
+                    experimentTo.id, projectId: project.id, fromElementId: fromElement.id, toElementId: toElement.id, roleId: role.id]
         })
         projectIdList.add(m.projectId)
         return m
