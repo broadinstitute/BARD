@@ -10,6 +10,12 @@ class AboutController {
     def aboutBard(){}
 
     // the "how to" pages
+    def howToVisualizeAndCaptureData() {
+        render (view:'howToVisualizeAndCaptureData')
+    }
+    def howToGetTheMostFromBard() {
+        render (view:'howToGetTheMostFromBard')
+    }
     def howToSearch () {
         render (view:'howToSearch')
     }
