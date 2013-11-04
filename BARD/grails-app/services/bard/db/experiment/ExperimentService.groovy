@@ -28,21 +28,37 @@ class ExperimentService {
         ExperimentMeasure refreshedMeasure = experimentMeasure.save(flush: true)
         final Set<AssayContextExperimentMeasure> assayContextExperimentMeasures = refreshedMeasure.getAssayContextExperimentMeasures()
 
-        //remove all the assay context experiment measures and then recreate if there are any contexts
         if (assayContextExperimentMeasures) {
+            List<AssayContextExperimentMeasure> toRemove = []
             for (AssayContextExperimentMeasure assayContextExperimentMeasure : assayContextExperimentMeasures) {
                 final AssayContext assayContext = assayContextExperimentMeasure.assayContext
-                assayContext.removeFromAssayContextExperimentMeasures(assayContextExperimentMeasure)
-                experimentMeasure.removeFromAssayContextExperimentMeasures(assayContextExperimentMeasure)
+                final long assayContextId = assayContext.id
+                if (assayContextIds.contains(assayContextId)) {//means this context already exist, so no need to add it again
+                    assayContextIds.remove(assayContextId)
+
+                }else{ //mark for removal, means that user wants to remove this measure
+                    toRemove.add(assayContextExperimentMeasure)
+                }
+
             }
-            refreshedMeasure = experimentMeasure.save(flush: true)
+            //now loop over all of the measures that we want to remove and then remove each one
+            for (AssayContextExperimentMeasure assayContextExperimentMeasure : toRemove) {
+                final AssayContext assayContext = assayContextExperimentMeasure.assayContext
+                assayContext.removeFromAssayContextExperimentMeasures(assayContextExperimentMeasure)
+                refreshedMeasure.removeFromAssayContextExperimentMeasures(assayContextExperimentMeasure)
+                assayContext.save(flush: true)
+            }
+            refreshedMeasure = refreshedMeasure.save(flush: true)
+            if(!assayContextIds){
+                return refreshedMeasure
+            }
         }
 
-        //Now add back the current selected context
+        //Now add only the newly added context items
         if(assayContextIds){
-            addAssayContextExperimentMeasures(assayContextIds,experimentMeasure)
+            addAssayContextExperimentMeasures(assayContextIds,refreshedMeasure)
         }
-        return experimentMeasure.refresh()
+        return refreshedMeasure
 
     }
 
@@ -55,6 +71,9 @@ class ExperimentService {
                 experimentMeasure.addToAssayContextExperimentMeasures(assayContextExperimentMeasure)
                 assayContextExperimentMeasure.save(flush: true)
             }
+        }
+        if(assayContextIds){
+            experimentMeasure.save(flush:true)
         }
 
     }
