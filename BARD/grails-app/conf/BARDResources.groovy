@@ -285,7 +285,7 @@ modules = {
         resource url: "css/sunburst.css"
     }
     tableSorter {
-        resource url: '/js/jquery-table-sorter/theme.default.css'
+//        resource url: '/js/jquery-table-sorter/theme.default.css'
         resource url: '/js/jquery-table-sorter/stupidtable.min.js'
     }
     twitterBootstrapAffix {

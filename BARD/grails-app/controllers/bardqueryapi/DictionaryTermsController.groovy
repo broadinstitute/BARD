@@ -1,18 +1,17 @@
 package bardqueryapi
-
-import bard.core.rest.spring.DictionaryRestService
-import bard.core.rest.spring.util.CapDictionary
-import bard.db.dictionary.Element
-import grails.plugins.springsecurity.Secured
+import bard.db.dictionary.Descriptor
+import bard.db.dictionary.OntologyDataAccessService
 
 class DictionaryTermsController {
+
+    OntologyDataAccessService ontologyDataAccessService
 
     def index() {
         redirect(action: "dictionaryTerms")
     }
 
     def dictionaryTerms() {
-        final List<Element> elements = Element.list()
-        render view: "dictionaryTerms", model: [capDictionary: elements]
+        final List<Descriptor> descriptors = ontologyDataAccessService.getDescriptors(null, null)
+        render view: "dictionaryTerms", model: [capDictionary: descriptors]
     }
 }

@@ -2,46 +2,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>BARD: Dictionary Terms and Description</title>
-    <r:require modules="dictionaryPage"/>
+    <meta name="layout" content="basic"/>
+    <title>Glossary</title>
+    <r:require  modules="dictionaryPage"/>
 </head>
 
 <body>
 
 <div class="container-fluid">
-    <div class="row-fluid">
-        <g:render template="/layouts/templates/tableSorterTip"/>
-        <table class="table table-striped table-hover table-bordered">
-            <caption>Dictionary Terms and Description</caption>
+    <div class="row-fluid"><div class="span12">
+        <h3>BARD Glossary</h3>
+        <p id="msg">&nbsp;</p>
+        <table class="table table-striped table-bordered">
             <thead>
             <tr>
-                <th>ID</th>
+                <th data-sort="int">ID</th>
                 <th data-sort="string-ins">Term</th>
-                <th>Description</th>
+                <th data-sort="string-ins">Description</th>
                 <th data-sort="string-ins">Units</th>
-                <th>Reference</th>
+                <th>External Ontology References</th>
             </tr>
             </thead>
             <tbody>
-            <g:each in="${capDictionary}" var="dictionaryElement">
-                <g:if test="${dictionaryElement.label}">
+            <g:each in="${capDictionary}" var="descriptor">
+                <g:if test="${descriptor.label}">
                     <tr>
                         <td>
-                            ${dictionaryElement.id}
+                            ${descriptor.id}
                         </td>
                         <td>
-                            <a name="${dictionaryElement.id}"></a>
-                            ${dictionaryElement.label}
+                            <a name="${descriptor.id}"></a>
+                            ${descriptor.label}
                         </td>
                         <td>
-                            ${dictionaryElement.description}
+                            <small class="text-info">${descriptor.fullPath}</small><br/>
+                            ${descriptor.description}
                         </td>
                         <td>
-                            ${dictionaryElement?.unit?.abbreviation}
+                            ${descriptor?.unit?.abbreviation}
                         </td>
                         <td>
                             <%
-                                List<OntologyItem> ontologyItems = dictionaryElement.ontologyItems as List<OntologyItem>
+                                List<OntologyItem> ontologyItems = descriptor.element.ontologyItems as List<OntologyItem>
                             %>
                             <g:each in="${ontologyItems}" var="ontologyItem">
                                 ${ontologyItem.displayValue()}
@@ -52,10 +54,9 @@
             </g:each>
             </tbody>
         </table>
-
+    </div>
     </div>
 </div>
-<r:layoutResources/>
 </body>
 </html>
 

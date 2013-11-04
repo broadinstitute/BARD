@@ -1,7 +1,6 @@
 package bardqueryapi
-
-import bard.db.dictionary.Element
-import grails.buildtestdata.mixin.Build
+import bard.db.dictionary.Descriptor
+import bard.db.dictionary.OntologyDataAccessService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
@@ -9,21 +8,27 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
-
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(DictionaryTermsController)
-@Build(Element)
 @Unroll
 class DictionaryTermsControllerUnitSpec extends Specification {
+
+    OntologyDataAccessService ontologyDataAccessService
+
+    void setup() {
+        ontologyDataAccessService = Mock(OntologyDataAccessService)
+        controller.ontologyDataAccessService = ontologyDataAccessService
+    }
 
     void dictionaryTerms() {
         when:
         controller.dictionaryTerms()
-        Element.metaClass.'static'.list() >> {[Element.build()]}
+
         then:
+        ontologyDataAccessService.getDescriptors(null,null) >> new ArrayList<Descriptor>()
         assert "/dictionaryTerms/dictionaryTerms" == view
     }
     void "index"() {
