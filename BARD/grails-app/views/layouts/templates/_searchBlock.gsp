@@ -1,26 +1,25 @@
-%{--<r:require modules="autocomplete, structureSearch"/>--}%
-<script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js"></script>
-<script src="../js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js"></script>
 <r:require modules="autocomplete"/>
-    <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form">
-        <div class="row-fluid" style="margin-top: 15px;">
-            <div class="search-field input-append">
-                <g:link controller="bardWebInterface" action="jsDrawEditor">
-                %{--<img src="${resource(dir: 'images', file: 'structureEditIcon.png')}"--}%
-                    <img
-                    %{--src="../images/bardHomepage/struct_icon.png" --}%
-                     src="${resource(dir: 'images/bardHomepage', file: 'struct_icon.png')}"
+    <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form" style="border:1px solid rgba(244, 244, 244, 0.2); background:rgba(228, 228, 228, 0.2);">
+            %{-- .search-field is styled as "display: table" so make sure the children are styled with "display: table-row" and grandchildren with "display: table-cell" --}%
+            <div class="search-box">
+                <div class="search-box-row">
+                    <div class="search-box-button-cell" style="width:74px">
+                        <g:link controller="bardWebInterface" action="jsDrawEditor">
+                            <img
+                             src="${resource(dir: 'images/bardHomepage', file: 'struct_icon.png')}"
+                                 alt="Draw or paste a structure"
+                                 title="Draw or paste a structure"/>
+                        </g:link>
+                    </div>
 
-                         alt="Draw or paste a structure"
-                         title="Draw or paste a structure" style="width:74px;float: left;"/>
-                </g:link>
-                <img     src="${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}"
-                        %{--src="../images/bardHomepage/ids_icon.png"--}%
-                     alt="List of IDs for search"
-                     title="List of IDs for search"  data-toggle="modal" href="#idModalDiv"
-                     style="width:44px;float: left;"/>
+                    <div class="search-box-button-cell" style="width:44px">
+                        <img     src="${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}"
+                             alt="List of IDs for search"
+                             title="List of IDs for search" data-toggle="modal" href="#idModalDiv"
+                             />
+                    </div>
 
-                <div class="text-field"  style="width:67%;margin-right: 0px; float:left;">
+                <div class="search-box-text-field-cell">
                     <g:if test="${flash?.searchString}">
                         <g:textField id="searchString" name="searchString" value="${flash.searchString}"/>
                     </g:if>
@@ -32,12 +31,11 @@
                     </g:else>
                 </div>
 
-                <div class="btn-field" style="width:84px;float: right;">
-                    <button type="submit" name="search" class="btn btn-primary"
-                            style="background: #0093d0;"
+                <div class="search-box-button-cell">
+                    <button type="submit" name="search" class="search-button"
                             id="searchButton">SEARCH</button>
                 </div>
-            </div>
+                </div>
         </div>
 
     </g:form>

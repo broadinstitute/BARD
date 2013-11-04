@@ -67,96 +67,13 @@ input:-ms-input-placeholder{color:#000;}
     font-size:16px;
     line-height:24px;
 }
-.search-block{
+
+.header-search-block{
     max-width:660px;
     margin:0 auto;
     padding:0 0 11px;
 }
-.search-form{
-    margin:0 0 26px;
-    padding:8px 9px 10px;
-    border:1px solid rgba(244, 244, 244, 0.8);
-    background:rgba(228, 228, 228, 0.8);
-}
-.search-field{
-    display:table;
-    width:100%;
-    margin: 1px;
-}
-.search-field .text-field,
-.search-field .btn-field{
-    display:inline-block;
-    vertical-align:top;
-}
-.search-form input[type="text"],
-.search-form input[type="search"]{
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-    box-sizing:border-box;
-    width:100%;
-    height:39px;
-    margin:0;
-    padding:9px 11px 7px;
-    border:3px solid #fff;
-    -moz-border-radius:0;
-    -webkit-border-radius:0;
-    border-radius:0;
-    -moz-box-shadow:none;
-    -webkit-box-shadow:none;
-    box-shadow:none;
-    font-size:14px;
-    line-height:17px;
-    background:#e4e4e4;
-}
-.search-field .btn-field{
-    width:1px;
-    white-space:nowrap;
-    padding:0 0 0 2px;
-}
-.search-form .btn{line-height:39px;}
-.search-block .links-holder{
-    padding:0 21px 0 10px;
-    font-weight:bold;
-    font-size:15px;
-    line-height:20px;
-    letter-spacing:1px;
-    overflow:hidden;
-}
-.search-block .links-holder a{
-    position:relative;
-    float:left;
-    padding:0 15px 0 0;
-}
-.search-block .links-holder a:first-child{float:right;}
-.search-block .links-holder a:after{
-    content:'';
-    position:absolute;
-    top:50%;
-    right:0;
-    width:6px;
-    height:8px;
-    margin:-2px 0 0;
-    background:url('../../images/bardHomepage/sprite.png') no-repeat -38px 0;
-}
-.search-block .links-holder a:hover:after{
-    content:' ';
-    background-position:-38px -12px;
-}
-.search-block .links-holder .download-link{padding-left:39px;}
-.search-block .links-holder .download-link:before{
-    content:'';
-    position:absolute;
-    top:50%;
-    left:0;
-    width:25px;
-    height:18px;
-    margin:-9px 0 0;
-    background:url('../../images/bardHomepage/sprite.png') no-repeat -46px 0;
-}
-.search-block .links-holder .download-link:hover:before{
-    content:' ';
-    background-position:-74px 0;
-}
+
 .search-panel{padding:26px 0 20px;}
 .search-panel .head-holder{margin:0 0 17px;}
 .search-panel .head-holder h2{
@@ -358,57 +275,6 @@ input:-ms-input-placeholder{color:#000;}
 .qcart {
     display: inline;
 }
-#footer{
-    padding:0 0 3px;
-    background:#2d2f32;
-}
-.footer-columns{
-    padding:26px 0 33px;
-    color:#fff;
-    font-size:14px;
-    line-height:18px;
-}
-.footer-columns a{color:#fff;}
-.footer-columns a:hover{color:#38d9c1;}
-.footer-columns h3{
-    margin:0 0 13px;
-    font-weight:normal;
-    font-size:18px;
-    line-height:22px;
-    color:#0093d0;
-}
-.footer-columns ul{
-    margin:0 0 20px;
-    list-style:none;
-    font-size:12px;
-    line-height:16px;
-}
-.footer-columns ul li{padding:0 0 8px;}
-.footer-columns .by{
-    padding:13px 0 0;
-    text-align:right;
-    line-height:22px;
-}
-.footer-info{
-    padding:29px 0 33px;
-    font-size:14px;
-    line-height:20px;
-    text-align:center;
-    color:#fff;
-    background:#21495c;
-}
-.footer-info ul{
-    margin:0;
-    list-style:none;
-}
-.footer-info ul li{display:inline;}
-.footer-info ul li:before{
-    content:'·';
-    margin:0 3px 0 0;
-}
-.footer-info ul li:first-child:before{display:none;}
-.footer-info a{color:#fff;}
-.footer-info a:hover{color:#38d9c1;}
 
 @media only screen and (max-width: 767px) {
     body {

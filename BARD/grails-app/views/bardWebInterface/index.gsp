@@ -1,27 +1,15 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta name="layout" content="cartAndFooter"/>
-    <script type="text/javascript">
-
-        //report error messages
-        window.onerror = bardClientErrorHandler;
-        //    Handle javascript errors
-        function bardClientErrorHandler(message, url, line) {
-            $.ajax({
-                cache:false,
-                type:"post",
-                data:{error:message, url:url, line:line, browser:navigator.userAgent},
-                url:"/BARD/ErrorHandling/handleJsErrors",
-                async:true
-            });
-            return true;
-        }
-    </script>
-    <ga:trackPageview />
-</head>
-
 <body>
+<r:require modules="autocomplete"/>
+
+<noscript>
+    <a href="http://www.enable-javascript.com/" target="javascript">
+        <img src="${resource(dir: 'images', file: 'enable_js.png')}"
+             alt="Please enable JavaScript to access the full functionality of this site."/>
+    </a>
+</noscript>
+
 <div class="row-fluid">
     <div class="span6 offset3">
         <a href="${createLink(controller:'BardWebInterface',action:'index')}">
@@ -29,9 +17,30 @@
         </a>
     </div>
 </div>
+
 <div class="row-fluid">
     <div class="span6 offset3">
-        <g:render template="/layouts/templates/searchBox"/>
+        <div class="search-panel">
+            <div class="container-fluid">
+
+                <strong class="logo"><g:link controller="BardWebInterface" action="index">BARD BioAssay Research Database</g:link></strong>
+
+                <div class="search-block">
+                    <g:render template="/layouts/templates/searchBlock"/>
+                </div>
+            </div>
+            <nav class="nav-panel">
+                <div class="center-aligned">
+                    <g:render template="/layouts/templates/loginStrip"/>
+                </div>
+                <div class="visible-desktop">
+                    <g:render template="/layouts/templates/queryCart"/>
+                </div>
+            </nav>
+        </div>
+
+        %{-- render the hidden form for entering IDs into the search field --}%
+        <g:render template="/layouts/templates/IdSearchBox"/>
     </div>
 </div>
 <div class="row-fluid">

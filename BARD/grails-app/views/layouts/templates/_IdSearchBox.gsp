@@ -10,7 +10,7 @@
     </div>
 
     <div class="modal-body">
-        <textarea class="field span12" id="idSearchString" name="idSearchString" rows="15"></textarea>
+        <textarea class="field span9" id="idSearchString" name="idSearchString" rows="15"></textarea>
     </div>
 
     <div class="modal-footer">
@@ -20,16 +20,14 @@
                               values="${IDSearchType.values()}"
                               value="${IDSearchType.ALL}"
                               labels="${IDSearchType.values().label}">
-                    <label class="radio inline">
-                        ${it.radio} ${it.label}
-                    </label>
+                    <label class="radio inline"><%=it.radio%>${it.label}</label>
                 </g:radioGroup>
             </div>
 
             <br>
 
             <div>
-                <a href="#" class="btn" data-dismiss="modal" id="closeButton2">Close</a>
+                <a href="#" class="btn" data-dismiss="modal" id="closeButton21">Close</a>
                 <a href="#" class="idSearchButton btn btn-primary" data-dismiss="modal">Search</a>
             </div>
         </g:form>
