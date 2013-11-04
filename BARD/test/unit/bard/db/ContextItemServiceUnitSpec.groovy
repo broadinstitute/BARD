@@ -23,8 +23,8 @@ import spock.lang.Unroll
  * Time: 8:27 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, AssayContext,  AssayContextItem, Element])
-@Mock([Assay, AssayContext,  AssayContextItem, Element])
+@Build([Assay, AssayContext, AssayContextItem, Element])
+@Mock([Assay, AssayContext, AssayContextItem, Element])
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(ContextItemService)
 @Unroll
@@ -140,5 +140,67 @@ class ContextItemServiceUnitSpec extends Specification {
         item.valueType == ValueType.NONE
         item.attributeType == AttributeType.Free
 
+    }
+
+    def "test create range context item #label"() {
+        ContextItemService service = new ContextItemService()
+
+        Element attribute = Element.build(expectedValueType: ExpectedValueType.NUMERIC)
+        Element value = Element.build(expectedValueType: ExpectedValueType.NONE)
+        AssayContext context = AssayContext.build()
+        BasicContextItemCommand command = new BasicContextItemCommand()
+        command.context = context
+        command.contextClass = "AssayContext"
+        command.attributeElementId = attribute.id
+        command.valueNum = null
+        command.valueMin = valueMin
+        command.valueMax = valueMax
+
+        when:
+        boolean created = service.createAssayContextItem(context.id, command)
+
+        then:
+        assert created == createdSuccessfully
+        if (createdSuccessfully) {
+            AssayContextItem item = context.contextItems.first()
+            assert item.valueType == ValueType.RANGE
+            assert item.valueMin == expectedValMin
+            assert item.valueMax == expectedValMax
+        }
+
+        where:
+        label                                        | valueMin  | valueMax  | expectedValMin | expectedValMax | createdSuccessfully
+        "with valid range fields"                    | 1.0       | 100.0     | 1.0            | 100.0          | true
+        "with invalid range's valueMin"              | "invalid" | 100.0     | "N/A"          | "N/A"          | false
+        "with invalid range's valueMax"              | 1.0       | "invalid" | "N/A"          | "N/A"          | false
+        "with invalid range's valueMin and valueMax" | "invalid" | "invalid" | "N/A"          | "N/A"          | false
+    }
+
+    def "test create numeric context item #label"() {
+        ContextItemService service = new ContextItemService()
+
+        Element attribute = Element.build(expectedValueType: ExpectedValueType.NUMERIC)
+        Element value = Element.build(expectedValueType: ExpectedValueType.NONE)
+        AssayContext context = AssayContext.build()
+        BasicContextItemCommand command = new BasicContextItemCommand()
+        command.context = context
+        command.contextClass = "AssayContext"
+        command.attributeElementId = attribute.id
+        command.valueNum = valueNum
+
+        when:
+        boolean created = service.createAssayContextItem(context.id, command)
+
+        then:
+        assert created == createdSuccessfully
+        if (createdSuccessfully) {
+            AssayContextItem item = context.contextItems.first()
+            assert item.valueType == ValueType.NUMERIC
+        }
+
+        where:
+        label                             | valueNum  | expectedValNum | createdSuccessfully
+        "with valid number field"         | 1.0       | 1.0            | true
+        "with invalid numeric's valueNum" | "invalid" | "N/A"          | false
     }
 }
