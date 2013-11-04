@@ -150,21 +150,18 @@ class BasicContextItemCommand extends BardCommand {
             final AbstractContextOwner owningContext = context.getOwner()
             if (owningContext instanceof Assay) {
                 return contextItemService.createAssayContextItem(owningContext.id, this)
-            }
-            else if (owningContext instanceof Project) {
+            } else if (owningContext instanceof Project) {
                 return contextItemService.createProjectContextItem(owningContext.id, this)
-            }
-            else if (owningContext instanceof Experiment) {
+            } else if (owningContext instanceof Experiment) {
                 return contextItemService.createExperimentContextItem(owningContext.id, this)
-            }
-            else {
+            } else {
                 throw new RuntimeException("Unknown owning context: ${owningContext}")
             }
         }
         return createSuccessful
     }
 
-    void copyFromCmdToDomain(AbstractContextItem contextItem) {
+    boolean copyFromCmdToDomain(AbstractContextItem contextItem) {
         contextItem.attributeElement = attemptFindById(Element, attributeElementId)
 
         // figure out the value type by what was provided.  Eventually it'd be nice to push value type into the
@@ -175,13 +172,20 @@ class BasicContextItemCommand extends BardCommand {
             contextItem.setDictionaryValue(valueElement)
             contextItem.valueElement = valueElement
 
-        } else if(!StringUtils.isBlank(extValueId)) {
+        } else if (!StringUtils.isBlank(extValueId)) {
             contextItem.setExternalOntologyValue(StringUtils.trimToNull(extValueId), StringUtils.trimToNull(valueDisplay))
 
-        } else if(valueNum != null) {
-            contextItem.setNumericValue(StringUtils.isBlank(qualifier)?"= ":qualifier, convertToBigDecimal('valueNum', valueNum, contextItem.attributeElement?.unit)?.toFloat())
-        } else if(valueMin != null) {
-            contextItem.setRange(convertToBigDecimal('valueMin', valueMin, contextItem.attributeElement?.unit)?.toFloat(), convertToBigDecimal('valueMax', valueMax, contextItem.attributeElement?.unit)?.toFloat())
+        } else if (valueNum != null) {
+            BigDecimal valNum = convertToBigDecimal('valueNum', valueNum, contextItem.attributeElement?.unit)
+            if (valNum) {
+                contextItem.setNumericValue(StringUtils.isBlank(qualifier) ? "= " : qualifier, valNum?.toFloat())
+            }
+        } else if (valueMin != null) {
+            BigDecimal valMin = convertToBigDecimal('valueMin', valueMin, contextItem.attributeElement?.unit)
+            BigDecimal valMax = convertToBigDecimal('valueMax', valueMax, contextItem.attributeElement?.unit)
+            if (valMin && valMax) {
+                contextItem.setRange(valMin?.toFloat(), valMax?.toFloat())
+            }
         } else {
             contextItem.setFreeTextValue(valueDisplay)
         }
@@ -191,13 +195,15 @@ class BasicContextItemCommand extends BardCommand {
 
             if (providedWithResults && valueConstraintType != null) {
                 assayContextItem.attributeType = Enum.valueOf(AttributeType, valueConstraintType)
-                if(assayContextItem.attributeType == AttributeType.Free) {
+                if (assayContextItem.attributeType == AttributeType.Free) {
                     assayContextItem.setNoneValue()
                 }
             } else {
                 assayContextItem.attributeType = AttributeType.Fixed;
             }
         }
+
+        return !this.hasErrors()
     }
 
     boolean update() {
@@ -205,7 +211,7 @@ class BasicContextItemCommand extends BardCommand {
         if (owner instanceof Assay) {
             return validate() && contextItemService.updateAssayContextItem(owner.id, this)
         } else if (owner instanceof Project) {
-            return validate() && contextItemService.updateProjectContextItem(owner.id,this)
+            return validate() && contextItemService.updateProjectContextItem(owner.id, this)
         } else if (owner instanceof Experiment) {
             return validate() && contextItemService.updateExperimentContextItem(owner.id, this)
         }
@@ -215,11 +221,11 @@ class BasicContextItemCommand extends BardCommand {
     boolean delete() {
         final AbstractContextOwner owner = this.findContext().owner
         if (owner instanceof Assay) {
-            return contextItemService.deleteAssayContextItem(owner.id,owner, this)
+            return contextItemService.deleteAssayContextItem(owner.id, owner, this)
         } else if (owner instanceof Project) {
             return contextItemService.deleteProjectContextItem(owner.id, owner, this)
         } else if (owner instanceof Experiment) {
-            return contextItemService.deleteExperimentContextItem( owner.id,owner, this)
+            return contextItemService.deleteExperimentContextItem(owner.id, owner, this)
         }
     }
 
