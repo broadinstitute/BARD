@@ -1,7 +1,7 @@
 %{--<g:render template="message"/>--}%
 <div class="row-fluid">
     <div class="offset1 span10">
-        <g:render template="/common/errors" model="['errors': instance?.errors?.globalErrors]"/>
+        <g:render template="/common/errors" model="['errors': instance?.errors?.globalErrors ?: instance?.errors?.allErrors]"/>
     </div>
 </div>
 <g:set var="disabledInput" value="${reviewNewItem ? true : false}"/>

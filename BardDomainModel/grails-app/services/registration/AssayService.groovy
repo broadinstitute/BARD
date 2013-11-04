@@ -35,13 +35,24 @@ class AssayService {
         newAssay = newAssay.save(flush: true)
         Map<AssayContext, AssayContext> assayContextOldToNew = cloneContexts(assay, newAssay, false)
         cloneDocuments(assay, newAssay)
-        // clone all measures
-        //Map<Measure, Measure> measureOldToNew = cloneMeasures(assay, newAssay)
-        //assignParentMeasures(assay, measureOldToNew)
-
-        //cloneContextsMeasures(assay, assayContextOldToNew, measureOldToNew)
-
         return [assay: newAssay, measureOldToNew: [:]]
+    }
+
+    Role findRoleForCloning() {
+        final Collection<Role> authorities = SpringSecurityUtils.getPrincipalAuthorities()
+        for (Role role : authorities) {
+            if (role.authority?.startsWith("ROLE_TEAM_")) {
+                Role foundRole = Role.findByAuthority(role.authority)
+                if (foundRole) {
+                    return foundRole
+                }
+            }
+        }
+
+        if (SpringSecurityUtils?.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')) { //if this is an admin
+            return Role.findByAuthority('ROLE_BARD_ADMINISTRATOR')
+
+        }
     }
     /**
      * Copy an assay new a new object, including all objects owned by this assay (but excluding any experiments and documents)
@@ -51,31 +62,11 @@ class AssayService {
         if (newAssay.assayType == AssayType.TEMPLATE) { //convert templates to regular
             newAssay.assayType = AssayType.REGULAR
         }
-        final Collection<Role> authorities = SpringSecurityUtils.getPrincipalAuthorities()
-        for (Role role : authorities) {
-            if (role.authority?.startsWith("ROLE_TEAM_")) {
-                Role foundRole = Role.findByAuthority(role.authority)
-                if(foundRole){
-                    newAssay.ownerRole = foundRole
-                    break
-                }
-            }
-        }
-        if(!newAssay.ownerRole){
-            if(SpringSecurityUtils?.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')) { //if this is an admin
-                newAssay.ownerRole = Role.findByAuthority('ROLE_BARD_ADMINISTRATOR')
-            }
-        }
+        newAssay.ownerRole =findRoleForCloning()
         newAssay.save(flush: true, validate: false)
 
+        cloneContexts(assay, newAssay, false)
 
-
-        Map<AssayContext, AssayContext> assayContextOldToNew = cloneContexts(assay, newAssay, false)
-        // clone all measures
-        //Map<Measure, Measure> measureOldToNew = cloneMeasures(assay, newAssay)
-        //assignParentMeasures(assay, measureOldToNew)
-
-        //  cloneContextsMeasures(assay, assayContextOldToNew, measureOldToNew)
         newAssay.save(flush: true, failOnError: true, validate: false)
 
         //now call the manage names stored procedure
@@ -105,7 +96,7 @@ class AssayService {
                          ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY) {
         //find the first role that starts with Team
 
-        final Collection<GrantedAuthority> authorities = SpringSecurityUtils.principalAuthorities
+      Role role = findRoleForCloning()
 
         String assayName = assayNamePrefix + assay.assayName
         //we do not want to go over the max number of characters
@@ -119,7 +110,9 @@ class AssayService {
                 assayVersion: "1",
                 designedBy: designedBy,
                 readyForExtraction: readyForExtraction,
-                dateCreated: dateCreated
+                dateCreated: dateCreated,
+                ownerRole: role
+
         )
     }
 

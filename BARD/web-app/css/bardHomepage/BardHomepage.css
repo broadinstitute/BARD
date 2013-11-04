@@ -266,6 +266,33 @@ li{line-height:inherit;}
 	position:relative;
 	z-index:1;
 }
+.lowkey-hero-area{
+    position:relative;
+    min-height:200px;
+    padding:26px 0 30px;
+}
+.lowkey-hero-area:after{
+    content:'';
+    position:absolute;
+    top:-88px;
+    bottom:0;
+    right:-30px;
+    width:1195px;
+}
+.lowkey-hero-area:before{
+    content:'';
+    position:absolute;
+    top:-88px;
+    left:100%;
+    width:9999px;
+    height:550px;
+    margin:0 0 0 30px;
+}
+.lowkey-hero-area .row-fluid{
+    position:relative;
+    z-index:1;
+}
+
 .hero-block h1{
 	margin:0 0 24px;
 	font-weight:normal;
@@ -720,8 +747,23 @@ li{line-height:inherit;}
 	background:url('../../images/bardHomepage/logo-by.png') no-repeat;
 }
 .logo-by a{
-	display:block;
-	height:100%;
+    display:block;
+    height:100%;
+}
+.logo-scilligence{
+    display:inline-block;
+    vertical-align:bottom;
+    width:99px;
+    height:34px;
+    margin:0 0 25px;
+    text-align:left;
+    text-indent:-9999px;
+    overflow:hidden;
+    background:url('../../images/bardHomepage/scill.jpg') no-repeat;
+}
+.logo-silligence a{
+    display:block;
+    height:100%;
 }
 .footer-info{
 	padding:29px 0 33px;
@@ -821,6 +863,13 @@ li{line-height:inherit;}
 		width:767px;
 		background:url('../../images/bardHomepage/decor-hero-tablet.png') no-repeat;
 	}
+    .lowkey-hero-area:before{display:none;}
+    .lowkey-hero-area:after{
+        top:-122px;
+        right:-54px;
+        width:767px;
+        background:url('../../images/bardHomepage/decor-hero-tablet.png') no-repeat;
+    }
 	.hero-block h1{
 		margin:0 0 11px;
 		font-size:28px;
@@ -914,7 +963,8 @@ li{line-height:inherit;}
 		right:0;
 		margin:0;
 	}
-	.hero-area:after{display:none;}
+    .hero-area:after{display:none;}
+    .lowkey-hero-area:after{display:none;}
 	.articles-gallery{display:none;}
 	.news-gallery{margin-right:-20px;}
 	.footer-columns [class*="span"]{
@@ -955,7 +1005,8 @@ li{line-height:inherit;}
 		font-size:16px;
 		line-height:24px;
 	}
-	.hero-area{padding:16px 0 20px;}
+    .hero-area{padding:16px 0 20px;}
+    .lowkey-hero-area{padding:16px 0 20px;}
 	.hero-block h1{
 		margin:0 0 15px;
 		font-size:26px;
@@ -1073,4 +1124,35 @@ li{line-height:inherit;}
 		float:none;
 		width:auto;
 	}
+    .howtoTables   {
+        width: 100%;
+        display:table;
+        text-align:left;
+        font-size:12px;
+        line-height:25px;
+    }
+    .howtoTables tr:nth-child(even) {
+        background-color: lightcyan;
+    }
+    .howtoTables th{
+        border-right  :  1px solid #0000ff;
+        border-left  :  1px solid #0000ff;
+        background-color: lightblue;
+        font-size:18px;
+        line-height:24px;
+    }
+    .howtoTables tr:nth-child(odd) {
+        background-color: white;
+    }
+    .howtoTables tr:first-child {
+        border-top  :  1px solid #0000ff;
+    }
+    .howtoTables tr:last-child {
+        border-bottom  :  1px solid #0000ff;
+    }
+    .howtoTables td {
+        padding-left: 2px;
+        border-right  :  1px solid #0000ff;
+        border-left  :  1px solid #0000ff;
+    }
 }
