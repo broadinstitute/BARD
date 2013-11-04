@@ -7,6 +7,43 @@
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
     <title>How to search</title>
+    <style>
+    .howtoTables   {
+        width: 100%;
+        display:table;
+        text-align:left;
+        font-size:12px;
+        line-height:25px;
+    }
+    .howtoTables tr:nth-child(even) {
+        background-color: lightcyan;
+    }
+    .howtoTables th{
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+        border-top: 0;
+        text-align: center;
+        background-color: lightblue;
+        font-size:18px;
+        line-height:24px;
+
+    }
+    .howtoTables tr:nth-child(odd) {
+        background-color: white;
+    }
+    .howtoTables tr:first-child {
+        border-top  :  1px solid #0000ff;
+    }
+    .howtoTables tr:last-child {
+        border-bottom  :  1px solid #0000ff;
+    }
+    .howtoTables td {
+        padding-left: 2px;
+        border-right  :  1px solid #0000ff;
+        border-left  :  1px solid #0000ff;
+    }
+    </style>
+
 </head>
 
 <body>
@@ -47,7 +84,7 @@
         Already there are three plug-ins live on BARD providing enhanced insights into research data. "Badapple" performs scaffold-based promiscuity analysis of compounds, while “SmartCyp” and “WhichCyp” perform metabolism and binding predictions of cytochrome P450. These are only the beginning. Several more plug-ins are in development and planning stages:
     </p>
 
-    <table>
+    <table class='howtoTables'>
         <thead>
         <th>Name</th>	<th>Lead Author[s]</th>	<th>Institution</th>	<th>Brief Description</th>	<th>Status</th>
         </thead>

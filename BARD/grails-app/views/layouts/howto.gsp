@@ -17,6 +17,28 @@
     <g:layoutHead/>
 
     <r:layoutResources/>
+
+    <style type="text/css">
+    @media (min-width: 768px) {          /* start of modification for 5 columns.  Must follow after bootstrap definitions */
+        .fivecolumns .span2 {
+            width: 18.2%;
+            *width: 18.2%;
+        }
+    }
+    @media (min-width: 1200px) {
+        .fivecolumns .span2 {
+            width: 17.9%;
+            *width: 17.8%;
+        }
+    }
+    @media (min-width: 768px) and (max-width: 979px) {
+        .fivecolumns .span2 {
+            width: 17.7%;
+            *width: 17.7%;
+        }
+    }
+    </style>
+
     <ga:trackPageview/>
 
 </head>
@@ -39,7 +61,7 @@
 
             <div class="row-fluid">
                 <div class="span6">
-                    <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
+                    <strong class="logo"><a href="/BARD">BARD BioAssay Research Database</a></strong>
                 </div>
 
                 <div class="span6">
