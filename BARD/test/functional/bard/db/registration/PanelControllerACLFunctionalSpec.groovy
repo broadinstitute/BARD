@@ -155,12 +155,13 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         }
         then:
 
-        assert  response.statusCode == expectedHttpResponse
+        assert response.statusCode == expectedHttpResponse
 
         where:
-        desc      | panelName | team              | teamPassword      | expectedHttpResponse
-        "CURATOR" | "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
+        desc      | panelName | team             | teamPassword     | expectedHttpResponse
+        "CURATOR" | "CURATOR" | CURATOR_USERNAME | CURATOR_PASSWORD | HttpServletResponse.SC_OK
     }
+
     def 'test edit owner admin #desc'() {
         Long pk = panelAssayData.panelId
         String newRole = "ROLE_TEAM_B"
@@ -202,6 +203,7 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "User B"  | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_BAD_REQUEST
         "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_BAD_REQUEST
     }
+
     def 'test addAssayToPanel #desc'() {
         given:
         RESTClient client = getRestClient(controllerUrl, "addAssayToPanel", team, teamPassword)
@@ -521,16 +523,17 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test delete Panel #desc'() {
         given:
         String reAuthenticateWith = TEAM_A_1_USERNAME
-        List<Long> closAssayIdList = assayIdList
+        List<Long> deleteAssayIdList = assayIdList
         long panelId = (Long) remote.exec({
             SpringSecurityUtils.reauthenticate(reAuthenticateWith, null)
 
-            Panel panel = Panel.build(name: "name")
+            Role role = Role.findByAuthority(authority)
+            Panel panel = Panel.build(name: "name", ownerRole: role)
             panel.save(flush: true)
 
-            Assay assay = Assay.build(assayName: "name")
+            Assay assay = Assay.build(assayName: "name", ownerRole: role)
             assay.save(flush: true)
-            closAssayIdList.add(assay.id)
+            deleteAssayIdList.add(assay.id)
 
             PanelAssay panelAssay = new PanelAssay(panel: panel, assay: assay)
             panelAssay.save(flush: true)
@@ -545,10 +548,9 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         then:
         assert response.statusCode == expectedHttpResponse
         where:
-        desc                | team              | teamPassword      | expectedHttpResponse
-        "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FOUND
-        "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FOUND
-        //  "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
+        desc                  | team              | teamPassword      | authority     | expectedHttpResponse
+        "User A_1 Can delete" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | 'ROLE_TEAM_A' | HttpServletResponse.SC_FOUND
+        "User A_2 Can delete" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | 'ROLE_TEAM_A' | HttpServletResponse.SC_FOUND
     }
 
     private Map getCurrentPanelProperties() {

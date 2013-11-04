@@ -27,9 +27,9 @@ class EntityCountsTagLib {
         out << "${link}"
     }
 
-    def substanceCount = { attrs, body ->
-        long substances = queryService.numberOfSubstances()
-        String link = generateLink(substances, "Tested Substances", "#tab-substances")
+    def exptDataCount = { attrs, body ->
+        long exptData = queryService.numberOfExperimentData()
+        String link = generateLink(exptData, "Number of results", "#tab-results")
         out << "${link}"
     }
 

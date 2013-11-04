@@ -33,8 +33,8 @@ class ContextItemService {
                     getErrors().reject('default.optimistic.locking.failure', [BasicContextItemCommand.getContextItemClass(getContextClass())] as Object[], 'optimistic lock failure')
                     copyFromDomainToCmd(contextItem)
                 } else {
-                    copyFromCmdToDomain(contextItem)
-                    updateSuccessful = attemptSave(contextItem)
+                    updateSuccessful = copyFromCmdToDomain(contextItem)
+                    updateSuccessful &= attemptSave(contextItem)
                     copyFromDomainToCmd(contextItem)
                 }
             }
@@ -49,11 +49,13 @@ class ContextItemService {
         boolean createSuccessful = false
         basicContextItemCommand.with {
             AbstractContextItem contextItem = getContextItemClass(basicContextItemCommand.contextClass).newInstance()
-            copyFromCmdToDomain(contextItem)
-            context.addContextItem(contextItem)
-            if (attemptSave(contextItem)) {
-                copyFromDomainToCmd(contextItem)
-                createSuccessful = true
+            createSuccessful = copyFromCmdToDomain(contextItem)
+            if (createSuccessful) {
+                context.addContextItem(contextItem)
+                if (attemptSave(contextItem)) {
+                    copyFromDomainToCmd(contextItem)
+                    createSuccessful = true
+                }
             }
         }
         return createSuccessful

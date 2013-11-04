@@ -23,25 +23,28 @@
     <r:layoutResources/>
 
     <style type="text/css">
-    /* start of modification for 5 columns */
-    @media (min-width: 768px){
+        /* start of modification for 5 columns */
+    @media (min-width: 768px) {
         .fivecolumns .span2 {
             width: 18.2%;
             *width: 18.2%;
         }
     }
+
     @media (min-width: 1200px) {
         .fivecolumns .span2 {
             width: 17.9%;
             *width: 17.8%;
         }
     }
+
     @media (min-width: 768px) and (max-width: 979px) {
         .fivecolumns .span2 {
             width: 17.7%;
             *width: 17.7%;
         }
     }
+
         /* end of modification for 5 columns */
     </style>
 </head>
@@ -183,7 +186,8 @@
 
             <div class="links-holder">
                 %{--<a href="#">Advanced Search</a>                    We can put this link back when we have an advanced search to present--}%
-                <a href="${createLink(controller: 'queryCart', action: 'toDesktopClient')}" target="_blank" class="download-link hidden-phone">Download the BARD Desktop Client</a>
+                <a href="${createLink(controller: 'queryCart', action: 'toDesktopClient')}" target="_blank"
+                   class="download-link hidden-phone">Download the BARD Desktop Client</a>
             </div>
 
         </div>
@@ -356,7 +360,7 @@
                     <g:experimentCount/>
                 </li>
                 <li>
-                    <g:substanceCount/>
+                    <g:exptDataCount/>
                 </li>
                 <li>
                     <g:probeCount/>
@@ -378,8 +382,8 @@
                 <g:render template="recentlyAddedExperiments"
                           model="['recentlyAddedExperiments': recentlyAddedExperiments]"/>
                 %{--Contents of the "Compounds" tab (of our row of five content boxes) --}%
-                <g:render template="recentlyAddedSubstances"
-                          model="['recentlyAddedSubstances': recentlyAddedSubstances]"/>
+                <g:render template="numberOfExperimentData"
+                          model="['numberOfExperimentData': numberOfExperimentData]"/>
 
                 %{--Contents of the "Probes" tab (of our row of five content boxes) --}%
                 <g:render template="recentlyAddedProbes" model="['recentlyAddedProbes': recentlyAddedProbes]"/>
@@ -418,7 +422,9 @@
                     <ul>
                         <li><a href="../about/bardArchitecture">Architecture &amp; Design</a></li>
                         <li><a href="https://github.com/ncatsdpiprobedev/bard/wiki">REST API</a></li>
-                        <li><a href="#" style="text-decoration: line-through;">Source code on GitHub<img src="${resource(dir: 'images/bardHomepage', file: 'comingSoon2.png')}" alt="coming soon"></a></li>
+                        <li><a href="#" style="text-decoration: line-through;">Source code on GitHub<img
+                                src="${resource(dir: 'images/bardHomepage', file: 'comingSoon2.png')}"
+                                alt="coming soon"></a></li>
                     </ul>
                 </div>
 
@@ -430,7 +436,6 @@
                         <li><a href="../dictionaryTerms/dictionaryTerms">Glossary</a></li>
                     </ul>
                 </div>
-
 
 
                 <div class="span2">

@@ -102,71 +102,15 @@
             <div class="borderlist"><br/>
 
                 <div id="publicationMsg_${publication}"></div><br/>
-                <b>Publication Name:</b> <span data-type="text"
-                                               data-pk="${publication.id}"
-                                               data-server-response-id="publicationMsg_${publication}"
-                                               class="documents ${publication.id}"
-                                               data-url="/BARD/document/editDocumentName"
-                                               data-documentType="${publication.documentType.id}"
-                                               data-documentKind="${documentKind}"
-                                               data-version="${publication.version}"
-                                               data-toggle="manual"
-                                               data-owningEntityId="${owningEntity.id}"
-                                               data-inputclass="input-xxlarge"
-                                               data-document-name="${publication.documentContent}"
-                                               id="${publication.id}_Name">
-                <g:fieldValue bean="${publication}" field="documentName"/>
-            </span>
-                <a href="#" class="icon-pencil documentPencil ${editable}" data-id="${publication.id}_Name"
-                   title="Click to edit name">
-                </a>
                 <br/>
-                <b>Publication URL:</b>
-                <g:if test="${publication.documentContent}">
-                    <a href="${publication.documentContent}"
-                       data-type="url"
-                       data-pk="${publication.id}"
-                       target="publicationURL"
-                       data-server-response-id="publicationMsg_${publication}"
-                       class="documents ${publication.id}"
-                       data-toggle="manual"
-                       data-url="/BARD/document/editDocument"
-                       data-documentType="${publication.documentType.id}"
-                       data-documentKind="${documentKind}"
-                       data-version="${publication.version}"
-                       data-owningEntityId="${owningEntity.id}"
-                       data-inputclass="input-xxlarge"
-                       data-document-name="${publication.documentName}"
-                       id="${publication.id}_URL">
-                        <g:fieldValue bean="${publication}" field="documentContent"/>
-                    </a>
-                </g:if>
-                <g:else>
-                    <span data-type="url"
-                          data-pk="${publication.id}"
-                          target="publicationURL"
-                          data-server-response-id="publicationMsg_${publication}"
-                          class="documents ${publication.id}"
-                          data-toggle="manual"
-                          data-url="/BARD/document/editDocument"
-                          data-documentType="${publication.documentType.id}"
-                          data-documentKind="${documentKind}"
-                          data-version="${publication.version}"
-                          data-owningEntityId="${owningEntity.id}"
-                          data-inputclass="input-xxlarge"
-                          data-document-name="${publication.documentName}"
-                          id="${publication.id}_URL">
-                        <g:fieldValue bean="${publication}" field="documentContent"/>
-                    </span>
-                </g:else>
-                <a href="#" class="icon-pencil documentPencil ${editable}" data-id="${publication.id}_URL"
-                   title="Click to edit name">
-                </a>
+                <b>Publication Name:</b> <span><g:fieldValue bean="${publication}" field="documentName"/></span>
+                <br/>
+                 <b>Publication URL:</b>
+                <a href="${publication.documentContent}">${publication.documentContent}</a>
                 <g:if test="${editable == 'canedit'}">
                     <g:render template="/document/deleteDocumentForm" model="[document: publication]"/>
                 </g:if>
             </div>
-
         </g:each>
     </div>
 </section>

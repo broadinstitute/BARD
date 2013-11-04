@@ -67,7 +67,7 @@ class Project extends AbstractContextOwner implements GuidanceAware {
         lastUpdated(nullable: false)
         ncgcWarehouseId(nullable: true)
         dateCreated(nullable: false)
-        ownerRole(nullable: true)
+        ownerRole(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
     /**

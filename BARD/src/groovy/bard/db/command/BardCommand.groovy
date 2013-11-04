@@ -62,7 +62,11 @@ abstract class BardCommand {
         //if logged in user is an admin , then add all teams
         if (isCurrentUserBARDAdmin()) {
             //Only add the roles with ids
-            roleSet.addAll(Role.list())
+            roleSet.addAll(Role.getTeamRoles())
+            //add BARD Admin
+            final Role bard_admin = Role.findByAuthority(BARD_ADMIN_ROLE_AUTHORITY)
+
+            roleSet.add(bard_admin)
         }
         for (GrantedAuthority grantedAuthority : grantedAuthorities) {
             if ((grantedAuthority.authority?.startsWith("ROLE_TEAM_"))) {

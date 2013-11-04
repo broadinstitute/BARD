@@ -3,7 +3,7 @@ package bard.db.people
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.springframework.security.core.GrantedAuthority
 
-class Role implements GrantedAuthority {
+class Role implements GrantedAuthority, Comparable<Role> {
 
     String authority
     Date dateCreated = new Date()
@@ -11,16 +11,21 @@ class Role implements GrantedAuthority {
     String modifiedBy
     String displayName
 
-    boolean equals(Role other) {
-        if (!(other instanceof Role)) {
-            return false
+    boolean equals(Object other) {
+        if (other instanceof Role) {
+            Role that = (Role) other
+            return that?.authority == this?.authority
         }
-        return other?.authority == this?.authority
+        return false
     }
 
     int hashCode() {
         def builder = new HashCodeBuilder()
         return builder.append(this.authority).toHashCode()
+    }
+
+    int compareTo(Role that) {
+        return this.authority.compareTo(that.authority)
     }
 
     static List<Role> getTeamRoles() {
@@ -48,5 +53,6 @@ class Role implements GrantedAuthority {
         displayName(column: 'DISPLAY_NAME')
         cache true
     }
+
 
 }

@@ -2,6 +2,7 @@ package bard.db.project
 
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.ReadyForExtraction
+import bard.db.people.Role
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import org.junit.Before
@@ -19,8 +20,8 @@ import static test.TestUtils.createString
  * Time: 12:07 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build(Project)
-@Mock(Project)
+@Build([Project,Role])
+@Mock([Project,Role])
 @Unroll
 class ProjectConstraintUnitSpec extends Specification {
 
@@ -198,6 +199,27 @@ class ProjectConstraintUnitSpec extends Specification {
         desc             | valueUnderTest | valid | errorCode
         'null not valid' | null           | false | 'nullable'
         'date valid'     | new Date()     | true  | null
+    }
+
+    void "test ownerRole constraints #desc ownerRole: '#valueUnderTest'"() {
+        final String field = 'ownerRole'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domain can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc               | valueUnderTest   | valid | errorCode
+        'null not valid'   | { null }         | false | 'nullable'
+        'owner role valid' | { Role.build() } | true  | null
     }
 
 }

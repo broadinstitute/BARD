@@ -41,30 +41,26 @@ modules = {
         resource url: '/js/cap/editSummary.js'
     }
     autocomplete {
+        resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js'
+        resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js'
         resource url: "js/autocomplete.js"
     }
     bardHeaderFooter {
         resource url: "css/bardHomepage/BardHeaderFooter.css"
     }
+
     bardHomepage {
-        dependsOn 'core,bootstrap,bootstrap-responsive-css'
+        dependsOn 'core,bootstrap,bootstrap-responsive-css,autocomplete'
         resource url: '/css/bardHomepage/BardHomepage.css'
-        resource url: '/css/bardHomepage/jquery-ui-1.10.3.custom.css'
-        resource url: '/js/bardHomepage/jquery.main.js'
         resource url: '/js/errorReporting.js'
         resource url: '/js/idSearchDialog.js'
-        resource url: '/js/bardHomepage/jquery-ui-1.10.3.custom.js'
-        resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js'
-        resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js'
     }
 
     basic {
-        dependsOn 'core'
+        dependsOn 'core,autocomplete'
         resource url: "/css/layout.css"
         resource url: "/css/table.css"
         resource url: "/css/bardHomepage/BardHeaderFooter.css"
-        resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js'
-        resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js'
     }
 
     bootstrapplus {
@@ -96,8 +92,6 @@ modules = {
     createProject {
         resource url: '/js/cap/createProject.js'
     }
-
-    //D
     d3Library {
         resource url: "js/lib/d3.min.js"
     }
@@ -133,6 +127,7 @@ modules = {
         resource url: '/js/cap/downtime.js'
 
     }
+
     dynatree {
         dependsOn 'jquery, jquery-ui'
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'

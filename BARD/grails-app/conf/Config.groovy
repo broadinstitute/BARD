@@ -185,13 +185,24 @@ grails {
 }
 grails.plugins.springsecurity.rememberMe.cookieName = rememberme.cookieName
 grails.plugins.springsecurity.rememberMe.key = rememberme.key
+//switch (Environment.current) {
+//    case Environment.PRODUCTION:
+//    grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'personaAuthenticationProvider', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+//    break;
+//    default:
+//    //use basic auth and in memory security services in no-production environments
+//    grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'personaAuthenticationProvider', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+//    break;
+//}
+
+
 switch (Environment.current) {
     case Environment.PRODUCTION:
-        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'personaAuthenticationProvider', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
         break;
     default:
         //use basic auth and in memory security services in no-production environments
-        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'personaAuthenticationProvider', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService',  'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
         break;
 }
 

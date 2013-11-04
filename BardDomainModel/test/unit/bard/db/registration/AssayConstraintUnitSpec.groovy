@@ -4,6 +4,7 @@ import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
+import bard.db.people.Role
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import org.junit.Before
@@ -17,8 +18,8 @@ import static test.TestUtils.createString
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@Build([Assay, Element])
-@Mock([Assay, Element])
+@Build([Assay, Element,Role])
+@Mock([Assay, Element,Role])
 @Unroll
 class AssayConstraintUnitSpec extends Specification {
     Assay domainInstance
@@ -254,20 +255,25 @@ class AssayConstraintUnitSpec extends Specification {
         'date valid'     | new Date()     | true  | null
     }
 
-//    void "test getChildrenSorted by displayLabel case insensitive input:#input expected: #expected"() {
-//        when:
-//        for (String label in input) {
-//            //domainInstance.addToMeasures(Measure.build(resultType: Element.build(label: label), assay: domainInstance))
-//        }
-//
-//        then:
-//        domainInstance.getRootMeasuresSorted()*.displayLabel == expected
-//
-//        where:
-//        input           | expected
-//        ['b', 'a']      | ['a', 'b']
-//        ['B', 'a']      | ['a', 'B']
-//        ['c', 'B', 'a'] | ['a', 'B', 'c']
-//    }
+    void "test ownerRole constraints #desc ownerRole: '#valueUnderTest'"() {
+        final String field = 'ownerRole'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domain can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc               | valueUnderTest   | valid | errorCode
+        'null not valid'   | { null }         | false | 'nullable'
+        'owner role valid' | { Role.build() } | true  | null
+    }
 }
 
