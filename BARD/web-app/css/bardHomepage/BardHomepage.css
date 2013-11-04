@@ -747,8 +747,23 @@ li{line-height:inherit;}
 	background:url('../../images/bardHomepage/logo-by.png') no-repeat;
 }
 .logo-by a{
-	display:block;
-	height:100%;
+    display:block;
+    height:100%;
+}
+.logo-scilligence{
+    display:inline-block;
+    vertical-align:bottom;
+    width:99px;
+    height:34px;
+    margin:0 0 25px;
+    text-align:left;
+    text-indent:-9999px;
+    overflow:hidden;
+    background:url('../../images/bardHomepage/scill.jpg') no-repeat;
+}
+.logo-silligence a{
+    display:block;
+    height:100%;
 }
 .footer-info{
 	padding:29px 0 33px;

@@ -82,7 +82,7 @@
                                     <li><a href="../about/howToSearch">Search</a></li>
                                     <li><a href="../about/howToFilterResults">Filter search results</a></li>
                                     <li><a href="../about/howToReadResults">Interpret search results</a></li>
-                                    <li><a href="../about/howToUseSecurely">Use securely</a></li>
+                                    %{--<li><a href="../about/howToUseSecurely">Use securely</a></li>--}%
                                     <li><a href="../about/howToUsePlugins">Create and use plug-ins</a></li>
                                 </ul>
                             </li>
@@ -105,6 +105,7 @@
                         </g:if>
                     </nav>
                 </div>
+
             </div>
         </div>
     </div>
@@ -120,7 +121,7 @@
                     <h1>Enhanced data and advanced tools to accelerate drug discovery.</h1>
 
                     <p>Introducing BARD, the powerful new bioassay database from the NIH Molecular Libraries Program. Now with unprecedented efficiency, scientists can develop and test hypotheses on the influence of different chemical probes on biological functions.</p>
-                    <a href="#" class="btn btn-primary">LEARN MORE</a>
+                    <a href="../about/aboutBard" class="btn btn-primary">LEARN MORE</a>
                 </article>
                 <aside class="span4"></aside>
             </div>
@@ -137,7 +138,7 @@
             <h2>SEARCH BARD</h2>
 
             <p>Search assay, project and experiment data or <a
-                    href="#">learn about BARD’s innovative search features.</a></p>
+                    href="../about/howToSearch">learn about BARD’s innovative search features.</a></p>
         </div>
 
         <div class="search-block">
@@ -149,7 +150,6 @@
                         <g:link controller="bardWebInterface" action="jsDrawEditor">
                         %{--<img src="${resource(dir: 'images', file: 'structureEditIcon.png')}"--}%
                             <img
-                            %{--src="../images/bardHomepage/struct_icon.png" --}%
                                     src="${resource(dir: 'images/bardHomepage', file: 'struct_icon.png')}"
 
                                     alt="Draw or paste a structure"
@@ -221,8 +221,9 @@
     </div>
 
 </div>
-%{--carousel news panel. This will need dynamic content--}%
-<g:if test="${true}">
+%{--carousel news panel. Turn this back on by reversing the conditional below
+    as soon as we have some dynamic content to display --}%
+<g:if test="${false}">
     <section class="news-panel">
         <div class="container-fluid">
             <div class="news-row">
@@ -283,7 +284,7 @@
                             <h1>Search and analyze your own way.</h1>
 
                             <p>Keeping the promise of the MLP, BARD gives you nimble access to most all the program’s data through an array of query, analysis and visualization tools.</p>
-                            <a href="#" class="btn btn-primary">HOW TO WORK WITH RESULTS</a>
+                            <a href="../about/howToReadResults" class="btn btn-primary">HOW TO WORK WITH RESULTS</a>
                         </div>
                     </div>
                 </div>
@@ -301,7 +302,7 @@
                             <h1>The power of a common language.</h1>
 
                             <p>A focused but flexible ontology designed to capture fully annotated preclinical data from multiple scientific disciplines for comprehensive search results.</p>
-                            <a href="#" class="btn btn-primary">HOW TO SEARCH BARD</a>
+                            <a href="../about/howToSearch" class="btn btn-primary">HOW TO SEARCH BARD</a>
                         </div>
                     </div>
                 </div>
@@ -319,7 +320,7 @@
                             <h1>Public bioassay data – organized, standardized and put into context.</h1>
 
                             <p>Public data sets cleaned up, organized and enhanced with assay, experiment and project contextual information for reliable and productive searches.</p>
-                            <a href="#" class="btn btn-primary">Learn More About BARD</a>
+                            <a href="../about/aboutBard" class="btn btn-primary">Learn More About BARD</a>
                         </div>
                     </div>
                 </div>
@@ -390,6 +391,8 @@
 <footer id="footer">
     <div class="footer-columns">
         <div class="container-fluid">
+            %{--<div class="row-fluid">--}%
+            %{--Note:  remove 'fivecolumns' class and go to span3's to move down to four columns--}%
             <div class="row-fluid fivecolumns">
                 <div class="span2">
                     <h3>About</h3>
@@ -402,9 +405,9 @@
                 <div class="span2">
                     <h3>Help</h3>
                     <ul>
-                        <li><a href="#">Forums</a></li>
-                        <li><a href="#">Submit a Bug Report</a></li>
-                        <li><a href="#">Ask a Question</a></li>
+                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!forum/bard-users">Forums</a></li>
+                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Submit a Bug Report</a></li>
+                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Ask a Question</a></li>
                     </ul>
                 </div>
 
@@ -429,8 +432,8 @@
 
 
                 <div class="span2">
-                    <strong class="logo-by"><a href="#" title="Powered by ChemAxon">Powered by ChemAxon</a></strong>
-
+                    <strong class="logo-by"><a href="http://www.chemaxon.com/" title="Powered by ChemAxon">Powered by ChemAxon</a></strong>
+                    <p><strong class="logo-scilligence"><a href="http://www.scilligence.com/web/" title="Scilligence">Scilligence</a></strong></p>
                     <p>&copy; 2013 BARD</p>
                 </div>
             </div>
@@ -441,9 +444,9 @@
     <div class="footer-info">
         <div class="container-fluid">
             <ul>
-                <li><a href="#">National Institutes of Health</a></li>
-                <li><a href="#">U.S. Department of Health and Human Services</a></li>
-                <li><a href="#">USA.gov – Government Made Easy</a></li>
+                <li><a href="http://www.nih.gov/">National Institutes of Health</a></li>
+                <li><a href="http://www.hhs.gov/">U.S. Department of Health and Human Services</a></li>
+                <li><a href="http://www.usa.gov/">USA.gov – Government Made Easy</a></li>
             </ul>
         </div>
     </div>
