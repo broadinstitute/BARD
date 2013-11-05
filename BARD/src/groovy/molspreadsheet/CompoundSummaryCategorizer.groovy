@@ -125,11 +125,11 @@ class CompoundSummaryCategorizer {
         deriveArbitraryIndex (proteinTargetMap,proteinTargets)
     }
 
-    public addNewRecord (long eid, String assayFormat, String assayType, String assayName, String assayCapId, String bardAssayId  ) {
+    public addNewRecord (long eid, String assayFormat, String assayType, String assayName, String assayCapId, String bardAssayId, Long capEid) {
         if (totalContents.keySet().contains(eid)) {
             log.warn("Duplicate data coming from the backend. Repeated experiment ID =: '${eid}'")
         }  else {
-            totalContents[eid] = new SingleEidSummary( eid,  assayFormat,  assayType, assayName, assayCapId, bardAssayId )
+            totalContents[eid] = new SingleEidSummary( eid,  assayFormat,  assayType, assayName, assayCapId, bardAssayId, capEid)
         }
 
     }
@@ -230,7 +230,8 @@ class CompoundSummaryCategorizer {
             stringBuilder << "            \"0\" : \"${singleEidSummary.getGoString()}\",\n"
             stringBuilder << "            \"1\" : \"${singleEidSummary.getAssayFormatString()}\",\n"
             stringBuilder << "            \"2\" : \"${singleEidSummary.getAssayTypeString()}\",\n"
-            stringBuilder << "            \"3\" : \"${singleEidSummary.getTargetString()}\"\n"
+            stringBuilder << "            \"3\" : \"${singleEidSummary.getTargetString()}\",\n"
+            stringBuilder << "            \"4\" : \"${singleEidSummary.getCapEid()}\"\n"
             stringBuilder << "        }"
             stringBuilder << "    }\n"
             if ((++loopingCount) < numberOfElements) {
@@ -435,15 +436,16 @@ class CompoundSummaryCategorizer {
         String assayName
         String assayCapId
         String assayBardId
+        Long capEid
 
-
-        public SingleEidSummary(long eid, String assayFormat, String assayType, String assayName,String assayCapId, String assayBardId ) {
+        public SingleEidSummary(long eid, String assayFormat, String assayType, String assayName,String assayCapId, String assayBardId, Long capEid) {
             this.eid =  eid
             this.assayFormatIndex = deriveAssayFormatIndex (assayFormat)
             this.assayTypeIndex = deriveAssayTypeIndex (assayType)
             this.assayName =  assayName
             this.assayCapId = assayCapId
             this.assayBardId = assayBardId
+            this.capEid = capEid
         }
 
 

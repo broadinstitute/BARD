@@ -126,7 +126,7 @@
         <th style='left: 22.5%; width: 21%;' class="columnsAssociatedWithPies">Assay format</th>
         <th style='left: 44.5%; width: 21%;' class="columnsAssociatedWithPies">Protein class</th>
         <th style='left: 66.5%; width: 21%;' class="columnsAssociatedWithPies">Assay type</th>
-        <th style='left: 88.5%; width: 11.5%;' >ADID</th>
+        <th style='left: 88.5%; width: 11.5%;' >ADID/EID</th>
     </tr>
     </thead>
 </table>
