@@ -28,7 +28,7 @@ class ContextItemPage extends CapScaffoldPage{
 		attributeFromDictionary { module SelectChoicePopupModule, controlGroup, containerId:"s2id_attributeElementId" }
 		integratedSearch { module SelectChoicePopupModule, controlGroup, containerId:"s2id_extValueSearch" } //External Ontology objects
 		externalOntologyId(wait: true, required: false) { controlGroup.find("input#extValueId") }									//External Ontology objects
-		displayValue(wait: true, required: false) { controlGroup.find("input#valueDisplay") }										//External Ontology objects
+		displayValue(wait: true, required: false) { $("#freeTextValueContainer").find("input#valueDisplay") }										//External Ontology objects
 		qualifier(wait: true, required: false) { controlGroup.find("#qualifier") }													//Numeric Value objects
 		numericValue(wait: true, required: false) { controlGroup.find("input#valueNum") }											//Numeric Value objects
 		valueUnit { module SelectChoicePopupModule, controlGroup, containerId:"s2id_valueNumUnitId" }		//Numeric Value objects
@@ -132,82 +132,156 @@ class ContextItemPage extends CapScaffoldPage{
 			cancelBtn.button.click()
 		}
 	}
-	def isElementType(def inputData, def ci){
-		if(inputData.ValueFromDictionary != ""){
-			waitFor{ valueFromDictionary }
-			selectAutoChoiceValue(valueFromDictionary, selectToDrop, inputData.ValueFromDictionary)
-			addOrUpdate(ci)
+	def isElementType(def inputData, def isCreate){
+//		if(inputData.ValueFromDictionary != ""){
+//			waitFor{ valueFromDictionary }
+//			selectAutoChoiceValue(valueFromDictionary, selectToDrop, inputData.dictionaryValue)
+//			addOrUpdate(isCreate)
+//			navigateBackToContext()
+//		}else{
+//			waitFor{ valueFromDictionary }
+//			valueFromDictionary.click()
+//			addOrUpdate(isCreate)
+//			def errorMessageTop = "A value from the dictionary is required."
+//			def errorMessageIn = "When the attribute of an item expects a BARD dictionary element, a dictionary value is required."
+//			alertError(controlError.alertError.find("p")[0], errorMessageTop)
+//			alertError(controlError.alertError.find("p")[1], errorMessageIn)
+//			valueFromDictionary.label.click()
+//			cancelBtn.button.click()
+//		}
+		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ 
+			valueFromDictionary.selectChoice
+		}
+		if(isCreate){
+			selectAutoChoiceValue(valueFromDictionary, selectToDrop, inputData.dictionaryValue)
+			addOrUpdate(isCreate)
 			navigateBackToContext()
 		}else{
-			addOrUpdate(ci)
-			def errorMessageTop = "A value from the dictionary is required."
-			def errorMessageIn = "When the attribute of an item expects a BARD dictionary element, a dictionary value is required."
-			alertError(controlError.alertError.find("p")[0], errorMessageTop)
-			alertError(controlError.alertError.find("p")[1], errorMessageIn)
-			valueFromDictionary.label.click()
-			cancelBtn.button.click()
+			selectAutoChoiceValue(valueFromDictionary, selectToDrop, inputData.dictionaryValueEdit)
+			addOrUpdate(isCreate)
+			navigateBackToContext()
 		}
 	}
-	def isFreeTextTYpe(def inputData, def ci){
-		if(inputData.DiplayValue != ""){
-			waitFor{ displayValue }
+	def isFreeTextTYpe(def inputData, def isCreate){
+//		if(inputData.DiplayValue != ""){
+//			waitFor{ displayValue }
+//			displayValue.value("")
+//			displayValue.value(inputData.DiplayValue)
+//			addOrUpdate(isCreate)
+//			navigateBackToContext()
+//		}else{
+//			waitFor{ displayValue }
+//			addOrUpdate(isCreate)
+//			def displayValueAlert = "The valueDisplay can not be blank, this field is usually populated after using an auto-suggest drop-down."
+//			alertError(controlError.helpInline, displayValueAlert)
+//			cancelBtn.button.click()
+//		}
+		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ displayValue }
+		if(isCreate){
 			displayValue.value("")
-			displayValue.value(inputData.DiplayValue)
-			addOrUpdate(ci)
+			displayValue.value(inputData.valueDisplay)
+			addOrUpdate(isCreate)
 			navigateBackToContext()
 		}else{
-			addOrUpdate(ci)
-			def displayValueAlert = "The valueDisplay can not be blank, this field is usually populated after using an auto-suggest drop-down."
-			alertError(controlError.helpInline, displayValueAlert)
-			cancelBtn.button.click()
+		displayValue.value("")
+		displayValue.value(inputData.valueDisplayEdit)
+		addOrUpdate(isCreate)
+		navigateBackToContext()
 		}
 	}
-	def isNumericType(def inputData, def ci){
-		if(inputData.NumericValue != ""){
-			waitFor{ numericValue }
-			qualifier.value(inputData.Qalifier)
+	def isNumericType(def inputData, def isCreate){
+//		if(inputData.NumericValue != ""){
+//			waitFor{ numericValue }
+//			qualifier.value(inputData.Qalifier)
+//			numericValue.value("")
+//			numericValue.value(inputData.NumericValue)
+//			addOrUpdate(ci)
+//			navigateBackToContext()
+//		}else{
+//		waitFor{ numericValue }
+//			addOrUpdate(ci)
+//			def displayValueAlert = "Please supply all required fields for a numeric value."
+//			alertError(controlError.alertError.find("p")[0], displayValueAlert)
+//			cancelBtn.button.click()
+//		}
+		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ numericValue }
+		if(isCreate){
+			qualifier.value(inputData.qualifier)
 			numericValue.value("")
-			numericValue.value(inputData.NumericValue)
-			addOrUpdate(ci)
+			numericValue.value(inputData.numericValue)
+			addOrUpdate(isCreate)
 			navigateBackToContext()
 		}else{
-			addOrUpdate(ci)
-			def displayValueAlert = "Please supply all required fields for a numeric value."
-			alertError(controlError.alertError.find("p")[0], displayValueAlert)
-			cancelBtn.button.click()
+		waitFor{ numericValue }
+		qualifier.value(inputData.qualifierEdit)
+		numericValue.value("")
+		numericValue.value(inputData.numericValueEdit)
+		addOrUpdate(isCreate)
+		navigateBackToContext()
 		}
+		
 	}
-	def isExternalOntologyType(def inputData, def ci, def integration){
-		if(integration){
-			if(inputData.IntegratedSearch != ""){
-				waitFor{ integratedSearch }
-				selectAutoChoiceValue(integratedSearch, selectToDrop, inputData.IntegratedSearch)
-				addOrUpdate(ci)
+	def isExternalOntologyType(def inputData, def isCreate, def integration){
+//		if(integration){
+//			if(inputData.IntegratedSearch != ""){
+//				waitFor{ integratedSearch }
+//				selectAutoChoiceValue(integratedSearch, selectToDrop, inputData.IntegratedSearch)
+//				addOrUpdate(isCreate)
+//				navigateBackToContext()
+//			}else{
+//			waitFor{ integratedSearch }
+////				integratedSearch.label.click()
+//				addOrUpdate(isCreate)
+//				def ontologyAlert = "When the attribute of an item expects an External Ontology reference, the fields External Ontology Id and Display Value must not be blank."
+//				alertError(controlError.alertError.find("p")[0], ontologyAlert)
+//				cancelBtn.button.click()
+//			}
+//
+//		}else{
+//			if(inputData.OntologyId != "" || inputData.DiplayValue != ""){
+//				waitFor{ externalOntologyId }
+////				integratedSearch.label.click()
+//				externalOntologyId.value("")
+//				displayValue.value("")
+//				externalOntologyId.value(inputData.OntologyId)
+//				displayValue.value(inputData.DiplayValue)
+//				addOrUpdate(isCreate)
+//				navigateBackToContext()
+//			}else{
+//			waitFor{ integratedSearch }
+////				integratedSearch.label.click()
+//				addOrUpdate(isCreate)
+//				def ontologyAlert = "When the attribute of an item expects an External Ontology reference, the fields External Ontology Id and Display Value must not be blank."
+//				alertError(controlError.alertError.find("p")[0], ontologyAlert)
+//				cancelBtn.button.click()
+//			}
+//		}
+		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ integratedSearch }
+		if(isCreate){
+			if(integration){
+				selectAutoChoiceValue(integratedSearch, selectToDrop, inputData.integratedSearch)
+				addOrUpdate(isCreate)
 				navigateBackToContext()
 			}else{
-//				integratedSearch.label.click()
-				addOrUpdate(ci)
-				def ontologyAlert = "When the attribute of an item expects an External Ontology reference, the fields External Ontology Id and Display Value must not be blank."
-				alertError(controlError.alertError.find("p")[0], ontologyAlert)
-				cancelBtn.button.click()
+			externalOntologyId.value("")
+			displayValue.value("")
+			externalOntologyId.value(inputData.ontologyId)
+			displayValue.value(inputData.valueDisplay)
+			addOrUpdate(isCreate)
+			navigateBackToContext()
 			}
-
 		}else{
-			if(inputData.OntologyId != "" || inputData.DiplayValue != ""){
-				waitFor{ externalOntologyId }
-//				integratedSearch.label.click()
-				externalOntologyId.value("")
-				displayValue.value("")
-				externalOntologyId.value(inputData.OntologyId)
-				displayValue.value(inputData.DiplayValue)
-				addOrUpdate(ci)
-				navigateBackToContext()
+		if(integration){
+			selectAutoChoiceValue(integratedSearch, selectToDrop, inputData.integratedSearchEdit)
+			addOrUpdate(isCreate)
+			navigateBackToContext()
 			}else{
-//				integratedSearch.label.click()
-				addOrUpdate(ci)
-				def ontologyAlert = "When the attribute of an item expects an External Ontology reference, the fields External Ontology Id and Display Value must not be blank."
-				alertError(controlError.alertError.find("p")[0], ontologyAlert)
-				cancelBtn.button.click()
+			externalOntologyId.value("")
+			displayValue.value("")
+			externalOntologyId.value(inputData.ontologyIdEdit)
+			displayValue.value(inputData.valueDisplayEdit)
+			addOrUpdate(isCreate)
+			navigateBackToContext()
 			}
 		}
 	}
@@ -237,8 +311,15 @@ class ContextItemPage extends CapScaffoldPage{
 	}
 	
 	def addExternalOntologyItem(def inputData, boolean isCreate=true, def resultUpload=false, def isIntegration = true){
-		waitFor{ !selectToDrop.searchNoResult }
-		selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.AttributeFromDictionary)
+		if(isCreate){
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
+			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
+		}else{
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ integratedSearch
+			attributeFromDictionary.selectClose }
+			attributeFromDictionary.selectClose.click()
+			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
+		}
 		if(resultUpload){
 			providedWithResults.click()
 			if(valuConstraint=="Free"){
@@ -253,8 +334,15 @@ class ContextItemPage extends CapScaffoldPage{
 	}
 	
 	def addNumericValueItem(def inputData, boolean isCreate=true, def resultUpload=false){
-		waitFor{ !selectToDrop.searchNoResult }
-		selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.AttributeFromDictionary)
+		if(isCreate){
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
+			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
+		}else{
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ numericValue
+			attributeFromDictionary.selectClose }
+			attributeFromDictionary.selectClose.click()
+			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
+		}
 		if(resultUpload){
 			providedWithResults.click()
 			if(valuConstraint=="Free"){
@@ -276,8 +364,15 @@ class ContextItemPage extends CapScaffoldPage{
 	}
 	
 	def addFreeTextItem(def inputData, boolean isCreate=true, def resultUpload=false){
-		waitFor{ !selectToDrop.searchNoResult }
-		selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.AttributeFromDictionary)
+		if(isCreate){
+		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
+		selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
+		}else{
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ displayValue
+			attributeFromDictionary.selectClose }
+			attributeFromDictionary.selectClose.click()
+			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
+		}
 		if(resultUpload){
 			providedWithResults.click()
 			if(valuConstraint=="Free"){
@@ -292,8 +387,15 @@ class ContextItemPage extends CapScaffoldPage{
 		}
 	}
 	def addElementContextItem(def inputData, boolean isCreate=true, def resultUpload=false){
-		waitFor{ !selectToDrop.searchNoResult }
-		selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.AttributeFromDictionary)
+		if(isCreate){
+		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
+		selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
+		}else{
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ valueFromDictionary.selectChoice
+			attributeFromDictionary.selectClose }
+			attributeFromDictionary.selectClose.click()
+			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
+		}
 		if(resultUpload){
 			providedWithResults.click()
 			if(valuConstraint=="Free"){
@@ -304,13 +406,45 @@ class ContextItemPage extends CapScaffoldPage{
 			}
 
 		}else{
-			isElementType(inputData, isCreate)
+			isElementType(inputData, isCreate)	
+		}
+	}
+	
+	def addContextItemValidation(def inputData, boolean isCreate=true, def resultUpload=false){
+		waitFor{ !selectToDrop.searchNoResult }
+//		selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.AttributeFromDictionary)
+//		if(resultUpload){
+//			providedWithResults.click()
+//			if(valuConstraint=="Free"){
+//				isFreeConstraint()
+//			}else if(valuConstraint=="List"){
+//				valueConstraintList.click()
+//				isElementType(inputData, isCreate)
+//			}
+//
+//		}else{
+//			isElementType(inputData, isCreate)
+//		}
+		if(inputData == ""){
+			addOrUpdate(isCreate)
+			def alertMessage = "Attribute cannot be null, please select an attribute."
+			waitFor{ !selectToDrop.searchNoResult }
+			alertError(controlError.helpInline, alertMessage)
+//			attributeFromDictionary.label.click()
+			cancelBtn.button.click()
 		}
 	}
 	def selectAutoChoiceValue(def element1, def element2,  def inputValue){
 		int index = 0
-		assert element1.searchInput
-		element1.searchInput.value(inputValue)
+		if(!element2.dropdown){
+			element1.selectChoice.click()
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ 
+				element2.dropdown 
+				element2.searchInput
+			}
+		}
+		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element2.searchResult }
+		element2.searchInput.value(inputValue)
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element2.searchResult[index].text().contains(inputValue)}
 		element2.searchResult[index].click()
 	}
