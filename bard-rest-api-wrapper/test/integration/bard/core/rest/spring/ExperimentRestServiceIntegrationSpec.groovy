@@ -22,9 +22,9 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     @Shared
     List<Long> TEST_SIDS = [14719086, 125082044]
     @Shared
-    List<Long> TEST_ADIDS = [25, 26]
+    List<Long> TEST_ADIDS = [143]
     @Shared
-    List<Long> TEST_EIDS = [1, 2]
+    List<Long> TEST_EIDS = [334, 335]
     @Shared
     List<Long> TEST_EID_LONG_LIST = [1, 2, 3, 4, 5, 6, 7, 8]
 
@@ -44,13 +44,13 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     void "searchExperimentsByCapIds #label"() {
         given:
         SearchParams searchParams = new SearchParams(skip: 0, top: 10)
-        List<Long> capIds = [1011, 5957, 88888888]
+        List<Long> capIds = [5957, 88888888]
         when:
         ExperimentSearchResult experimentSearchResult = experimentRestService.searchExperimentsByCapIds(capIds, searchParams, false)
         then:
         assert (experimentSearchResult != null) == true
         final List<ExperimentSearch> experiments = experimentSearchResult.experiments
-        assert 2 == experiments.size()
+        assert 1 == experiments.size()
         for (ExperimentSearch experimentSearch : experiments) {
             assert experimentSearch.getCapExptId()
             assert experimentSearch.getBardAssayId()
@@ -86,7 +86,6 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
-
     void "test activitiesByCIDsAndEIDs with varying parameters"() {
         when: "generate activities directly via post"
         final ExperimentData experimentData = experimentRestService.activitiesByCIDsAndEIDs(cids, eids)
@@ -96,11 +95,11 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         experimentData.activities.size() <= maxNumOfReturnValues
 
         where:
-        cids                                     | eids                                     | minNumOfReturnValues | maxNumOfReturnValues
-        TEST_CIDS                                | TEST_EIDS                                | 1                    | 100
-        TEST_CIDS.findAll { it == TEST_CIDS[0] } | TEST_EIDS                                | 0                    | 1
-        TEST_CIDS                                | TEST_EIDS.findAll { it == TEST_EIDS[0] } | 0                    | 1
-        TEST_CIDS.findAll { it == TEST_CIDS[0] } | TEST_EIDS.findAll { it == TEST_EIDS[0] } | 0                    | 1
+        cids           | eids           | minNumOfReturnValues | maxNumOfReturnValues
+        TEST_CIDS      | TEST_EIDS      | 1                    | 100
+        [TEST_CIDS[0]] | TEST_EIDS      | 0                    | 1
+        TEST_CIDS      | [TEST_EIDS[1]] | 0                    | 1
+        [TEST_CIDS[0]] | [TEST_EIDS[1]] | 0                    | 1
     }
 
 
@@ -124,11 +123,11 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         experimentData.activities.size() <= maxNumOfReturnValues
 
         where:
-        sids                                     | eids                                     | minNumOfReturnValues | maxNumOfReturnValues
-        TEST_SIDS                                | TEST_EIDS                                | 1                    | 100
-        TEST_SIDS.findAll { it == TEST_SIDS[0] } | TEST_EIDS                                | 0                    | 1
-        TEST_SIDS                                | TEST_EIDS.findAll { it == TEST_EIDS[0] } | 0                    | 1
-        TEST_SIDS.findAll { it == TEST_SIDS[0] } | TEST_EIDS.findAll { it == TEST_EIDS[0] } | 0                    | 1
+        sids           | eids           | minNumOfReturnValues | maxNumOfReturnValues
+        TEST_SIDS      | TEST_EIDS      | 1                    | 100
+        [TEST_SIDS[0]] | TEST_EIDS      | 0                    | 1
+        TEST_SIDS      | [TEST_EIDS[1]] | 0                    | 1
+        [TEST_SIDS[0]] | [TEST_EIDS[1]] | 0                    | 1
     }
 
 
@@ -245,10 +244,10 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         }
 
         where:
-        label                            | experimentid | cids
-        "Search with a list of CIDs"     | new Long(1)  | [2382353, 11958440]
-        "Search with a single of CID"    | new Long(1)  | [11958440]
-        "Search with another set of CID" | new Long(1)  | [11958618, 16745796]
+        label                            | experimentid  | cids
+        "Search with a list of CIDs"     | new Long(557) | [2382353, 11958440]
+        "Search with a single of CID"    | new Long(557) | [11958440]
+        "Search with another set of CID" | new Long(557) | [11958618, 16745796]
     }
 
 
@@ -304,7 +303,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         given: "That an etag is created from a list of compound IDs"
         final String etag = compoundRestService.newETag("foo cids", [2382353L, 11958440L]);
         and: "That an experiment exists"
-        final Long experimentId = 1
+        final Long experimentId = 557
         when: "Experiment with the compound etags"
         final ExperimentData experimentData = experimentRestService.activities(experimentId, etag)
         then:
