@@ -4,7 +4,6 @@ import bard.db.BardIntegrationSpec
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.ReadyForExtraction
 import bard.db.people.Role
-import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
 
