@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <aside class="span2"></aside>
-            <article class="span8 head-holder"><h2>Visualize and Capture Data in BARD</h2></article>
+            <article class="span8 head-holder"><h2>BARD Visualize Data</h2></article>
             <aside class="span2"></aside>
         </div>
 

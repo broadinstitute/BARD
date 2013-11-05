@@ -6,7 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix"/>
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>How to search</title>
+    <title>BARD Architecture</title>
 </head>
 
 <body>
@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <aside class="span2"></aside>
-            <article class="span8 head-holder"><h2>Development team</h2></article>
+            <article class="span8 head-holder"><h2>Architecture &amp; Design</h2></article>
             <aside class="span2"></aside>
         </div>
 
