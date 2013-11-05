@@ -171,7 +171,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         assert project.experimentCount
         where:
         label                                  | pid
-        "Find an existing ProjectSearchResult" | new Integer(2)
+        "Find an existing ProjectSearchResult" | new Integer(25)
     }
     /**
      *

@@ -7,6 +7,8 @@ import bard.core.rest.spring.util.RingNode
 import grails.converters.JSON
 import grails.plugin.spock.IntegrationSpec
 import groovy.json.JsonBuilder
+import spock.lang.IgnoreRest
+
 /**
  * Created with IntelliJ IDEA.
  * User: balexand
@@ -66,7 +68,6 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
 
 
-
     void "test convertBiologyIdsToAscensionNumbers"(){
         given:
         LinkedHashMap activeInactiveDataPriorToConversion = [:]
@@ -75,7 +76,7 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
         def result = this.compoundRestService.getForObject("${ncgcBaseURL}/biology/types/protein?top=10", String.class)
         def resultJSON = JSON.parse(result)
         activeInactiveDataPriorToConversion["hits"] = [(resultJSON[0] - '/biology/').toLong()]
-        activeInactiveDataPriorToConversion["misses"] = [(resultJSON[1] - '/biology/').toLong()]
+        activeInactiveDataPriorToConversion["misses"] = [(resultJSON.last() - '/biology/').toLong()]
 
         when:
         try {
@@ -90,24 +91,22 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
         activeInactiveDataAfterConversion["misses"].size ()   > 0
     }
 
-
     void "test getLinkedAnnotationData"(){
         given:
-        final List<Long> aids = [25, 26, 27]
+        final List<Long> aids = [143, 165]
 
         when:
         LinkedHashMap<Long, LinkedHashMap <String,List<String>>> accumulatedAnnotationInformation = ringManagerService.getLinkedAnnotationData (aids)
 
         then:
         accumulatedAnnotationInformation
-        accumulatedAnnotationInformation.keySet().size()==3
-        accumulatedAnnotationInformation[25L]
-        accumulatedAnnotationInformation[25L]["assay type".replaceAll(/\s/,"_")]
-        accumulatedAnnotationInformation[25L]["assay format".replaceAll(/\s/,"_")]
-        (!accumulatedAnnotationInformation[25L]["GO biological process term".replaceAll(/\s/,"_")])
-        accumulatedAnnotationInformation[26L]["GO biological process term".replaceAll(/\s/,"_")]
-        accumulatedAnnotationInformation[26L].keySet().size()==3
-        accumulatedAnnotationInformation[27L].keySet().size()==3
+        accumulatedAnnotationInformation.keySet().size()==2
+        accumulatedAnnotationInformation[143L]
+        accumulatedAnnotationInformation[143L]["assay type".replaceAll(/\s/,"_")]
+        accumulatedAnnotationInformation[143L]["assay format".replaceAll(/\s/,"_")]
+        (!accumulatedAnnotationInformation[143L]["GO biological process term".replaceAll(/\s/,"_")])
+        accumulatedAnnotationInformation[165L]["GO biological process term".replaceAll(/\s/,"_")]
+        accumulatedAnnotationInformation[165L].keySet().size()==3
     }
 
 

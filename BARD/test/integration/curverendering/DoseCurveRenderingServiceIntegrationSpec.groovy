@@ -106,7 +106,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                                    | cids        | experimentId
-        "An existing experiment with activities" | [46897918L] | 22
+        "An existing experiment with activities" | [46897918L] | 551
 
     }
 
@@ -150,7 +150,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                                    | cids        | experimentId
-        "An existing experiment with activities" | [46897918L] | 22
+        "An existing experiment with activities" | [46897918L] | 551
 
     }
     @Ignore
@@ -246,7 +246,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                                    | cids        | experimentId
-        "An existing experiment with activities" | [46897918L] | 22
+        "An existing experiment with activities" | [46897918L] | 551
 
     }
 

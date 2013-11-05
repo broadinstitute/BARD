@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue
 class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     AssayRestService assayRestService
     @Shared
-    List<Long> ADIDS_FOR_TESTS = [25, 26, 27]
+    List<Long> ADIDS_FOR_TESTS = [143]
 
     @Shared
     List<Long> CAP_ADIDS = [5168, 5981, 5982]
@@ -89,20 +89,17 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         final List<Context> contexts1 = layouts.get(0)
         assert contexts1
         assert annotation.docs
-        assert annotation.measures
     }
 
     void "getAssayAnnotationFromId"() {
         given:
-        final ExpandedAssay assay = assayRestService.getAssayById(27);
+        final ExpandedAssay assay = assayRestService.getAssayById(ADIDS_FOR_TESTS.last());
         when:
         final BardAnnotation annotation = assayRestService.findAnnotations(assay.id)
         then:
         assert annotation
         assert annotation.contexts
 //         assert annotation.docs
-        assert annotation.measures
-
     }
 
     void "getAssayAnnotationFromIds"() {
@@ -116,8 +113,6 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         assert annotation
         assert annotation.contexts
         assert annotation.docs
-        assert annotation.measures
-
     }
 
     /**
