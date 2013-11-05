@@ -6,7 +6,9 @@
 
     <div>
         <g:if test="${editable == 'canedit'}">
-            <div class="span12"><button id="addExperimentToProject" class="btn">Add Experiment</button>
+            <div class="span12">
+            <g:link controller="project" action="showExperimentsToAddProject" class="btn" params='[projectId: "${instanceId}"]'>Add Experiment</g:link>
+            %{--<button id="addExperimentToProject" class="btn" type="submit">Add Experiment</button>--}%
                 <button id="linkExperiment" class="btn">Link Experiments</button></div>
         </g:if>
     </div>

@@ -5,6 +5,7 @@ import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
 import bard.db.enums.ContextType
+import bard.db.enums.ExperimentStatus
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
@@ -12,13 +13,14 @@ import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.EditingHelper
+import bard.db.registration.IdType
+import bard.db.registration.MergeAssayDefinitionService
 import bardqueryapi.IQueryService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
-import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.web.client.HttpClientErrorException
@@ -37,7 +39,7 @@ class ProjectController {
 
     @Secured(['isAuthenticated()'])
     def myProjects() {
-        List<Project> projects =capPermissionService.findAllByOwnerRolesAndClass(Project)
+        List<Project> projects = capPermissionService.findAllByOwnerRolesAndClass(Project)
         Set<Project> uniqueProjects = new HashSet<Project>(projects)
         render(view: "myProjects", model: [projects: uniqueProjects])
     }
@@ -145,7 +147,7 @@ class ProjectController {
             log.error(ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee, ee)
             editErrorMessage()
         }
     }
@@ -275,6 +277,7 @@ class ProjectController {
             boolean editable = canEdit(permissionEvaluator, springSecurityService, project)
             render(template: "showstep", model: [experiments: project.projectExperiments, editable: editable ? 'canedit' : 'cannotedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (Exception e) {
+            log.error(e, e)
             render 'serviceError:' + e.message
         }
     }
@@ -287,9 +290,10 @@ class ProjectController {
             Project project = Project.findById(projectId)
             render(template: "showstep", model: [experiments: project.projectExperiments, editable: 'canedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         } catch (UserFixableException e) {
+            log.error(e, e)
             render 'serviceError:' + e.message
         }
     }
@@ -304,9 +308,10 @@ class ProjectController {
             project = Project.findById(projectId)
             render(template: "showstep", model: [experiments: project.projectExperiments, editable: 'canedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         } catch (UserFixableException e) {
+            log.error(e, e)
             render 'serviceError:' + e.message
         }
     }
@@ -326,45 +331,15 @@ class ProjectController {
             Project project = Project.findById(projectId)
             render(template: "showstep", model: [experiments: project.projectExperiments, editable: 'canedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         } catch (UserFixableException e) {
-            log.error(e)
+            log.error(e, e)
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: e.message
         }
     }
 
-    @Secured(['isAuthenticated()'])
-    def associateExperimentsToProject() {
-        // get all values regardless none, single, or multiple, ajax seemed serialized array and passed [] at the end of the param name.
-        Set<String> selectedExperiments = request.getParameterValues('selectedExperiments[]') as Set<String>
-        Long projectId = params.getLong('projectId')
-        Project project = Project.findById(projectId)
-        Long stageId = params.getLong('stageId')
-        Element element = Element.findById(stageId)
 
-        if (selectedExperiments?.isEmpty()) {
-            render status: HttpServletResponse.SC_BAD_REQUEST, text: 'Experiment must be selected'
-        } else {
-            try {
-                selectedExperiments?.each { String experimentDisplayName ->
-                    String experimentId = experimentDisplayName.split("-")[0]
-                    Experiment experiment = Experiment.findById(experimentId as Long)
-                    projectService.addExperimentToProject(experiment, projectId, element)
-                    render(template: "showstep", model: [editable: 'canedit', experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
-                }
-            }
-            catch (AccessDeniedException ade) {
-                log.error("Associate Experiments to Project", ade)
-                render accessDeniedErrorMessage()
-            } catch (UserFixableException e) {
-                render 'serviceError:' + e.message
-            } catch (Exception ee) {
-                log.error(ee)
-                render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "Server error occurred."
-            }
-        }
-    }
 
     @Secured(['isAuthenticated()'])
     def editSummary(Long instanceId, String projectName, String description, String projectStatus) {
@@ -431,9 +406,10 @@ class ProjectController {
             }
             render text: "${projectExperiment.stage.label}", contentType: 'text/plain', template: null
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
+            log.error(ee, ee)
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "An internal Server error happend while you were performing this task. Contact the BARD team to help resove this issue", contentType: 'text/plain', template: null
         }
     }
@@ -476,7 +452,192 @@ class ProjectController {
         render exps.collect { it.displayName } as JSON
     }
 
+    def ajaxFindAvailableExperimentsForProject(AssociateExperimentsCommand command) {
+        command.clearErrors()
+        command.findAvailableExperiments()
+        render template: "selectExperimentsToAddToProjects", model: [command: command]
+    }
 
+    @Secured(['isAuthenticated()'])
+    def showExperimentsToAddProject(AssociateExperimentsCommand command) {
+        if (!command.fromAddPage) { //if we going to this page from a different page, then we need to clear
+            //all errors
+            command.clearErrors()
+            return [command: command]
+        }
+        if (command.hasErrors()) {
+            return [command: command]
+        }
+
+        if (command.idType == IdType.ADID && !command.experimentIds) {
+            command.findAvailableExperiments()
+            return [command: command]
+        }
+        try {
+            command.addExperimentsToProject()
+            redirect(action: "show", id: command.projectId, fragment: "experiment-and-step-header")
+        }
+        catch (AccessDeniedException ade) {
+            command.errorMessages.add(ade.message)
+            log.error("Access denied Experiments to Project", ade)
+            return [command: command]
+        } catch (UserFixableException e) {
+            log.error(e, e)
+            command.errorMessages.add(e.message)
+            return [command: command]
+        } catch (Exception ee) {
+            log.error(ee, ee)
+            flash.message = "Please log an issue with the BARD team at bard-users@broadinstitute.org to fix this assay"
+            command.errorMessages.add("An error has occurred, Please log an issue with the BARD team at bard-users@broadinstitute.org to fix this issue")
+            return [command: command]
+        }
+
+    }
+}
+
+@InheritConstructors
+@Validateable
+class AssociateExperimentsCommand extends BardCommand {
+    Long projectId
+    List<Long> experimentIds = []
+    Long stageId
+    boolean fromAddPage = false
+    String sourceEntityIds
+    IdType idType = IdType.EID
+    List<String> errorMessages = []
+    Set<Experiment> availableExperiments = [] as HashSet<Experiment>
+    MergeAssayDefinitionService mergeAssayDefinitionService
+    ProjectService projectService
+    boolean validateExperimentIds = false
+
+    static constraints = {
+        projectId(nullable: false, validator: { value, command, err ->
+            if (!Project.get(value)) {
+                err.rejectValue('projectId', "message.code", "Could not find PID : ${value}");
+            }
+        })
+        stageId(nullable: true, validator: { value, command, err ->
+            if (command.fromAddPage && value) {
+                if (!Element.get(value.toLong())) {
+                    err.rejectValue('stageId', "message.code", "Could not find Stage with ID : ${value}");
+                }
+            }
+        })
+        experimentIds(nullable: true, validator: { value, command, err ->
+            if (command.fromAddPage && command.idType == IdType.ADID && command.validateExperimentIds) {
+                if (!value) {
+                    err.rejectValue('experimentIds', "message.code", "Select at least one experiment to add");
+                } else {
+                    for (Long experimentId : value) {
+                        if (!Experiment.get(experimentId)) {
+                            err.rejectValue('experimentIds', "message.code", "Could not find Experiment with ID: ${experimentId}");
+                        }
+                    }
+                }
+            }
+        })
+        sourceEntityIds(nullable: false, blank: false, validator: { value, command, err ->
+
+            if (command.fromAddPage) {
+                final List<Long> entityIds = MergeAssayDefinitionService.convertStringToIdList(value)
+                final Project project = command.getProject()
+                for (Long entityId : entityIds) {
+                    final def entity = command.mergeAssayDefinitionService.convertIdToEntity(command.idType, entityId)
+                    if (!entity) {
+                        if (command.idType == IdType.ADID) {
+                            err.rejectValue('sourceEntityIds', "message.code", "Assay Definition ADID: ${entityId} cannot be found")
+                        } else if (command.idType == IdType.AID) {
+                            err.rejectValue('sourceEntityIds', "message.code", "Experiment AID: ${entityId} cannot be found")
+                        } else {
+                            err.rejectValue('sourceEntityIds', "message.code", "Experiment EID: ${entityId} cannot be found")
+                        }
+                    } else if (entity instanceof Experiment) {
+                        final Experiment experiment = (Experiment) entity
+                        if (command.projectService.isExperimentAssociatedWithProject(experiment, project)) {
+                            if (command.idType == IdType.AID) {
+                                err.rejectValue('sourceEntityIds', "message.code", "Experiment AID: ${entityId} is already part of this Project");
+                            } else {
+                                err.rejectValue('sourceEntityIds', "message.code", "Experiment EID: ${entityId} is already part of this Project");
+                            }
+
+                        } else if (experiment.experimentStatus == ExperimentStatus.RETIRED) {
+                            if (command.idType == IdType.AID) {
+                                err.rejectValue('sourceEntityIds', "message.code", "Experiment AID: ${entityId} is retired and cannot be added to this project");
+                            } else {
+                                err.rejectValue('sourceEntityIds', "message.code", "Experiment EID: ${experiment.id} is retired and cannot be added to this project");
+                            }
+
+                        }
+                    }
+                }
+            }
+        })
+        idType(nullable: false)
+    }
+
+    List<Experiment> getExperiments() {
+        List<Experiment> experiments = []
+
+        if (idType != IdType.ADID) {
+            final List<Long> entityIds = MergeAssayDefinitionService.convertStringToIdList(sourceEntityIds)
+            for (Long entityId : entityIds) {
+                final def entity = mergeAssayDefinitionService.convertIdToEntity(this.idType, entityId)
+                if (entity instanceof Experiment) {
+                    final Experiment experiment = (Experiment) entity
+                    experiments.add(experiment)
+                }
+            }
+        } else {
+            for (Long experimentId : experimentIds) {
+                experiments.add(Experiment.get(experimentId))
+            }
+        }
+        return experiments
+    }
+
+    Project getProject() {
+        return Project.get(projectId)
+    }
+
+    Element getStage() {
+        if (this.stageId) {
+            return Element.get(stageId)
+        }
+    }
+
+    void addExperimentsToProject() {
+        for (Experiment experiment : getExperiments()) {
+            projectService.addExperimentToProject(experiment, projectId, getStage())
+        }
+
+    }
+
+
+    void findAvailableExperiments() {
+
+        if (this.idType != IdType.ADID) {
+            this.errorMessages.add("This method only handles ADID's")
+            return
+        }
+        availableExperiments = [] as HashSet<Experiment>
+        final Project project = getProject()
+        final List<Long> entityIds = MergeAssayDefinitionService.convertStringToIdList(sourceEntityIds)
+
+        for (Long entityId : entityIds) {
+            final def entity = mergeAssayDefinitionService.convertIdToEntity(this.idType, entityId)
+            Set<Experiment> experiments = [] as HashSet<Experiment>
+            if (entity instanceof Assay) {
+                final Assay assay = (Assay) entity
+                experiments = assay.experiments
+            }
+            for (Experiment experiment : experiments) {
+                if (!projectService.isExperimentAssociatedWithProject(experiment, project) &&
+                        experiment.experimentStatus != ExperimentStatus.RETIRED) {
+                    this.availableExperiments.add(experiment)
+                }
+            }
+        }
+    }
 }
 
 @InheritConstructors
