@@ -187,7 +187,8 @@
                                 <td><g:link controller="bardWebInterface" action="search" params='[searchString:"assay_format:\"biochemical format\""]'>assay_format:"biochemical format"</g:link></td> </tr>
                             <tr><td>Assay Definition</td>	<td>assay_type</td>	<td>Y</td>	<td>Search for assay definitions with the given assay type</td>
                                 <td><g:link controller="bardWebInterface" action="search" params='[searchString:"assay_type:\"direct enzyme activity assay\""]'>assay_type:"direct enzyme activity assay"</g:link></td> </tr>
-                            <tr><td>Assay Definition</td>	<td>comment</td>	<td>Y</td>	<td>Search for assay definitions containing the given string in their comment field</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Assay Definition</td>	<td>comment</td>	<td>Y</td>	<td>Search for assay definitions containing the given string in their comment field</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"comment:\"genedata\""]'>comment:"genedata"</g:link></td></tr>
                             <tr><td>Assay Definition</td>	<td>detection_method_type</td>	<td>Y</td>	<td>Search for assay definitions with the given detection method type</td>%{--TODO: Add example--}%<td></td></tr>
                             <tr><td>Assay Definition</td>	<td>protocol</td>	<td>Y</td>	<td>Search for assay definitions containing the given string in their protocol</td><td>%{--TODO: Add example--}%</td> </tr>
                             <tr><td>Assay Definition</td>	<td>target_name_gene</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td> </tr>
@@ -211,7 +212,6 @@
                             <tr><td>Compound</td>	<td>compound_class</td>	<td>Y</td>  <td>Search for compounds of a particular class.  Options are: </td><td>%{--TODO: Add example--}%</td> </tr>
                             <tr><td>Compound</td>	<td>exact</td>		<td>N</td><td>Search for compounds with the exact given structure specified using SMILES</td> <td>%{--TODO: Add example--}%</td>   </tr>
                             <tr><td>Compound</td>	<td>iupacName</td>	<td>Y</td> <td>Search for compounds having the given IUPAC name</td><td>%{--TODO: Add example--}%</td> </tr>
-                            <tr><td>Compound</td>	<td>probeId</td>	<td>Y</td> <td>Search for compounds with the given ML probe id</td><td>%{--TODO: Add example--}%</td>      </tr>
                             <tr><td>Compound</td>	<td>similarity</td>		<td>N</td><td>Search for Compound similar to the given structure specified by SMILES defaulting to a threshold of 90% similarity</td><td>%{--TODO: Add example--}%</td></tr>
                             <tr><td>Compound</td>	<td>substructure</td>	<td>N</td>	<td>Search for Compounds that contain the given substructure specified by SMILES</td>  <td>%{--TODO: Add example--}%</td></tr>
                             <tr><td>Compound</td>	<td>superstructure</td>	<td>N</td>	<td>Search for Compounds that the given structure specified by SMILES contains	</td> <td>%{--TODO: Add example--}%</td></tr>
@@ -219,6 +219,7 @@
                             <tr><td>Compound</td>	<td>target_description</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
                             <tr><td>Compound</td>	<td>target_gene_id</td>	<td>Y</td>  <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
                             <tr><td>Compound</td>	<td>threshold</td>	<td>N</td>	<td>Sets the percent similarity threshold for a Compound similarity search.  Must be combined with a similarity search.	</td>   <td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Compound, Project</td>	<td>probeId</td>	<td>Y</td> <td>Search for compounds with the given ML probe id</td><td>%{--TODO: Add example--}%</td>      </tr>
                             <tr><td>Project</td>	<td>PID</td>	<td>N</td>	<td>Search for Projects by one or more PIDs</td> <td>%{--TODO: Add example--}%</td>   </tr>
                             <tr><td>Project</td>	<td>projectId</td><td>Y</td><td>Find a project by the project identifier assigned by the warehouse</td><td>%{--TODO: Add example--}%</td></tr>
                         </tbody>
