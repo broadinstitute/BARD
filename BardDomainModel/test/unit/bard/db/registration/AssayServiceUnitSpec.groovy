@@ -23,8 +23,8 @@ import spock.lang.Specification
  * Time: 2:07 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, Experiment, AssayContextExperimentMeasure, ExperimentMeasure, AssayContext, AssayContextItem, AssayDocument])
-@Mock([Assay, Experiment, AssayContextExperimentMeasure, ExperimentMeasure, AssayContext, AssayContextItem, AssayDocument])
+@Build([Role, Assay, Experiment, AssayContextExperimentMeasure, ExperimentMeasure, AssayContext, AssayContextItem, AssayDocument])
+@Mock([Role, Assay, Experiment, AssayContextExperimentMeasure, ExperimentMeasure, AssayContext, AssayContextItem, AssayDocument])
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(AssayService)
 public class AssayServiceUnitSpec extends Specification {
@@ -32,7 +32,11 @@ public class AssayServiceUnitSpec extends Specification {
 
     void 'test cloneDocuments'() {
         given:
-        Assay assay = Assay.build(assayName: "assayName")
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return true
+        }
+        Role role = Role.build()
+        Assay assay = Assay.build(assayName: "assayName", ownerRole: role)
         AssayDocument.build(assay: assay)
         Assay clonedAssay = service.cloneAssayOnly(assay, assay.dateCreated, "me", "Clone ")
         assert !clonedAssay.documents
@@ -44,6 +48,9 @@ public class AssayServiceUnitSpec extends Specification {
 
     void 'test cloneContexts'() {
         given:
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return true
+        }
         Assay assay = Assay.build()
         AssayContext context = AssayContext.build(assay: assay, contextName: "alpha")
         AssayContextItem.build(assayContext: context)
@@ -58,6 +65,9 @@ public class AssayServiceUnitSpec extends Specification {
 
     void "test cloneAssayOnly #desc"() {
         given:
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return true
+        }
         Assay assay = assayBuild.call()
         when:
         Assay clonedAssay = service.cloneAssayOnly(assay, assay.dateCreated, "me", assayNamePrefix)
@@ -83,8 +93,8 @@ public class AssayServiceUnitSpec extends Specification {
         SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
             return true
         }
-        Role.metaClass.'static'.findByAuthority={String authority ->
-              new Role()
+        Role.metaClass.'static'.findByAuthority = { String authority ->
+            new Role()
         }
         when:
         Assay newAssay = service.cloneAssayForEditing(assay, assay.designedBy);
@@ -115,22 +125,25 @@ public class AssayServiceUnitSpec extends Specification {
         newContextItem != contextItem
         newContextItem.attributeType == contextItem.attributeType
     }
-
-    void 'test assay clone'() {
+    //Commenting this out and writing an integration test instead
+/*    void 'test assay clone'() {
         setup:
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return true
+        }
         Assay assay = Assay.build()
         AssayContext context = AssayContext.build(assay: assay, contextName: "alpha")
         AssayContextItem contextItem = AssayContextItem.build(assayContext: context)
         AssayDocument document = AssayDocument.build(assay: assay)
         Experiment experiment = Experiment.build(assay: assay)
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(experiment: experiment)
-        AssayContextExperimentMeasure assayContextMeasure = AssayContextExperimentMeasure.build(assayContext: context, experimentMeasure: experimentMeasure)
-
+        AssayContextExperimentMeasure.build(assayContext: context, experimentMeasure: experimentMeasure)
+        and:
+        service.metaClass.cloneAssayOnly = { return [assay: assay, measureOldToNew: [:]]}
         when:
         Assay newAssay = service.cloneAssay(assay).assay;
 
         then:
-        //Experiment newExperiment = newAssay.experiments.first()
         // test assay props are good
         assay != newAssay
         assay.assayName == newAssay.assayName
@@ -158,20 +171,5 @@ public class AssayServiceUnitSpec extends Specification {
         AssayContextItem newContextItem = newContext.assayContextItems.first()
         newContextItem != contextItem
         newContextItem.attributeType == contextItem.attributeType
-
-        // test all measure properties are good
-        /*newExperiment.experimentMeasures.size() == 1
-        ExperimentMeasure newExperimentMeasure = newExperiment.experimentMeasures.first()
-        newExperimentMeasure != experimentMeasure
-        experimentMeasure.resultType == newExperimentMeasure.resultType
-        experimentMeasure.statsModifier == newExperimentMeasure.statsModifier
-        experimentMeasure.parentChildRelationship == newExperimentMeasure.parentChildRelationship
-
-        // test assay context measure props
-        newContext.assayContextExperimentMeasures.size() == 1
-        AssayContextExperimentMeasure newAssayContextExperimentMeasure = newContext.assayContextExperimentMeasures.first()
-        newAssayContextExperimentMeasure != assayContextMeasure
-        newAssayContextExperimentMeasure.experimentMeasure == newExperimentMeasure
-        newAssayContextExperimentMeasure.assayContext == newContext */
-    }
+    } */
 }
