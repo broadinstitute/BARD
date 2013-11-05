@@ -7,20 +7,6 @@
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
     <title>How to search</title>
-    <style>
-    .shiftedSection {
-        padding-left: 25px
-    }
-    .calloutbox {
-        background-color: #eee;
-        border: 2px solid #000;
-        padding: 10px;
-        -moz-border-radius: 20px;
-        -webkit-border-radius: 20px;
-        -khtml-border-radius: 20px;
-        border-radius: 20px;
-    }
-    </style>
 </head>
 
 <body>
@@ -180,7 +166,7 @@
                         As you can see below, there are a wide variety of search formulas available. Advanced users can use these to quickly target specific categories within a particular type of data.
                     </p>
 
-                    <table class='table-striped table-bordered'>
+                    <table class='table table-striped table-bordered'>
                         <thead>
                            <th>Data Type</th>
                            <th>Category</th>
@@ -189,59 +175,55 @@
                            <th>Example Formula</th>
                         </thead>
                         <tbody>
-                            <tr><td>All</td>	<td>name</td>	<td>Y</td>	<td>Search for an entity with the given string in its name</td>	<td>name:"ras"</td></tr>
-                            <tr><td>Assay Definition</td>	<td>accession_gene</td>	<td>Y</td> <td></td><td></td></tr>
-                            <tr><td>Assay Definition</td>	<td>accession_process</td>	<td>Y</td> <td></td><td></td></tr>
-                            <tr><td>Assay Definition</td>	<td>accession_protein</td>	<td>Y</td><td></td><td></td></tr>
-                            <tr><td>Assay Definition</td>	<td>ADID</td>		<td>Search for Assay Definitions by one or more ADIDs</td>	<td>ADID:726,919</td><td></td></tr>
-                            <tr><td>Assay Definition</td>	<td>assay_format</td>	<td>Y</td>	<td>Find by assay format</td>	<td>assay_format:"single protein format"</td> </tr>
-                            <tr><td>Assay Definition</td>	<td>assay_type</td>	<td>Y</td>	<td>Find by assay type</td>	<td>assay_type:"direct enzyme activity assay"</td> </tr>
-                            <tr><td>Assay Definition</td>	<td>bardAssayId</td>	<td>Y</td>	<td>Find by the ID used by the REST API	<td>bardAssayId:"2775"</td> </tr>
-                            <tr><td>Assay Definition</td>	<td>comment</td>	<td>Y</td>	<td>Search for matches using the comment field</td><td></td></tr>
-                            <tr><td>Assay Definition</td>	<td>detection_method_type</td>	<td>Y</td>	<td>Find by detection method type</td><td></td></tr>
-                            <tr><td>Assay Definition</td>	<td>protocol</td>	<td>Y</td>	<td>Search for matches using the protocol field</td><td></td> </tr>
-                            <tr><td>Assay Definition</td>	<td>target_name_gene</td>	<td>Y</td><td></td><td></td> </tr>
-                            <tr><td>Assay Definition</td>	<td>target_name_process</td>	<td>Y</td><td></td><td></td></tr>
-                            <tr><td>Assay Definition</td>	<td>target_name_protein</td>	<td>Y</td><td></td><td></td></tr>
-                            <tr><td>Assay Definition</td>	<td>title</td>	<td>Y</td>	<td>Search for matches using the title field</td><td></td> </tr>
-                            <tr><td>Assay Definition, Compound</td>	<td>target_name</td>	<td>Y</td><td></td><td></td> </tr>
-                            <tr><td>Assay Definition, Compound</td>	<td>timestamp</td>	<td>Y</td> <td></td><td></td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>accession</td>	<td>Y</td> <td></td><td></td>  </tr>
-                            <tr><td>Assay Definition, Project</td>	<td>ak_dict_label</td>	<td>Y</td> <td></td><td></td> </tr>
-                            <tr><td>Assay Definition, Project</td>	<td>biology</td>	<td>Y</td><td></td><td></td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>biology_dict_label</td>	<td>Y</td> <td></td><td></td> </tr>
-                            <tr><td>Assay Definition, Project</td>	<td>description</td>	<td>Y</td> <td></td><td></td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>gobp_id</td>	<td>Y</td> <td></td><td></td> </tr>
-                            <tr><td>Assay Definition, Project</td>	<td>gobp_term</td>	<td>Y</td> <td></td><td></td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>gocc_id</td>	<td>Y</td> <td></td><td></td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>gocc_term</td>	<td>Y</td> <td></td><td></td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>gomf_id</td>	<td>Y</td> <td></td><td></td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>gomf_term</td>	<td>Y</td> <td></td><td></td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>kegg_disease_cat</td>	<td>Y</td><td></td><td></td> </tr>
-                            <tr><td>Assay Definition, Project</td>	<td>kegg_disease_names</td>	<td>Y</td><td></td><td></td> </tr>
-                            <tr><td>Compound</td>	<td>anno_key</td>	<td>Y</td><td></td><td></td>   </tr>
-                            <tr><td>Compound</td>	<td>anno_val</td>	<td>Y</td><td></td><td></td>  </tr>
-                            <tr><td>Compound</td>	<td>cid</td>	<td>Y</td><td></td><td></td>     </tr>
-                            <tr><td>Compound</td>	<td>CID</td>		<td>Search for Compounds by one or more PubChem CIDs</td> <td></td><td></td>   </tr>
-                            <tr><td>Compound</td>	<td>COLLECTION</td>	<td>Y</td>  <td></td><td></td>    </tr>
-                            <tr><td>Compound</td>	<td>compound_class</td>	<td>Y</td>  <td></td><td></td> </tr>
-                            <tr><td>Compound</td>	<td>exact</td>		<td>Search for Compounds with the exact given structure specified using SMILES</td>  <td></td><td></td>   </tr>
-                            <tr><td>Compound</td>	<td>iupacName</td>	<td>Y</td> <td></td><td></td> </tr>
-                            <tr><td>Compound</td>	<td>mwt</td>   <td></td><td></td><td></td>            </tr>
-                            <tr><td>Compound</td>	<td>probeId</td>	<td>Y</td> <td></td><td></td>      </tr>
-                            <tr><td>Compound</td>	<td>similarity</td>		<td>Search for Compound similar to the given structure specified by SMILES defaulting to a threshold of 90% similarity</td><td></td><td></td>  </tr>
-                            <tr><td>Compound</td>	<td>smiles</td>	<td>string</td>  <td></td><td></td>           </tr>
-                            <tr><td>Compound</td>	<td>substructure</td>		<td>Search for Compounds that contain the given substructure specified by SMILES</td>  <td></td><td></td>  </tr>
-                            <tr><td>Compound</td>	<td>superstructure</td>		<td>Search for Compounds that the given structure specified by SMILES contains	</td> <td></td><td></td> </tr>
-                            <tr><td>Compound</td>	<td>target_accession</td>	<td>Y</td> <td></td><td></td>         </tr>
-                            <tr><td>Compound</td>	<td>target_description</td>	<td>Y</td> <td></td><td></td>     </tr>
-                            <tr><td>Compound</td>	<td>target_gene_id</td>	<td>Y	</td>  <td></td><td></td>     </tr>
-                            <tr><td>Compound</td>	<td>threshold</td>		<td>Sets the similarity threshold for a Compound similarity search.  Must be combined with a similarity search.	</td>   <td></td><td></td>  </tr>
-                            <tr><td>Compound</td>	<td>tpsa</td>	<td>tfloat</td><td></td><td></td>  </tr>
-                            <tr><td>Compound</td>	<td>xlogp</td>	<td>tfloat</td> <td></td><td></td> </tr>
-                            <tr><td>Project</td>	<td>num_expt</td>	<td>tint</td> <td></td><td></td>   </tr>
-                            <tr><td>Project</td>	<td>PID</td>		<td>Search for Projects by one or more PIDs</td> <td></td><td></td>   </tr>
-                            <tr><td>Project</td>	<td>projectId</td><td></td><td></td><td></td>        </tr>
+                            <tr><td>All</td>	<td>name</td>	<td>Y</td>	<td>Search for assay definitions, compounds and projects with the given string in their name</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"name:\"ras\""]'>name:"ras"</g:link></td></tr>
+                            <tr><td>Assay Definition</td>	<td>accession_gene</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Assay Definition</td>	<td>accession_process</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Assay Definition</td>	<td>accession_protein</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Assay Definition</td>	<td>ADID</td>	<td>N</td>	<td>Search for assay definitions by one or more ADIDs</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"ADID:1121,1128"]'>ADID:1121,1128</g:link></td></tr>
+                            <tr><td>Assay Definition</td>	<td>assay_format</td>	<td>Y</td>	<td>Search for assay definitions with the given assay format</td>
+                                %{--TODO This search does not work. investigate with NCGC--}%
+                                <td>%{--<g:link controller="bardWebInterface" action="search" params='[searchString:"assay_format:\"biochemical format\""]'>assay_format:"biochemical format"</g:link>--}%</td> </tr>
+                            <tr><td>Assay Definition</td>	<td>assay_type</td>	<td>Y</td>	<td>Search for assay definitions with the given assay type</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"assay_type:\"direct enzyme activity assay\""]'>assay_type:"direct enzyme activity assay"</g:link></td> </tr>
+                            <tr><td>Assay Definition</td>	<td>comment</td>	<td>Y</td>	<td>Search for assay definitions containing the given string in their comment field</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"comment:\"genedata\""]'>comment:"genedata"</g:link></td></tr>
+                            <tr><td>Assay Definition</td>	<td>detection_method_type</td>	<td>Y</td>	<td>Search for assay definitions with the given detection method type</td>%{--TODO: Add example--}%<td></td></tr>
+                            <tr><td>Assay Definition</td>	<td>protocol</td>	<td>Y</td>	<td>Search for assay definitions containing the given string in their protocol</td><td>%{--TODO: Add example--}%</td> </tr>
+                            <tr><td>Assay Definition</td>	<td>target_name_gene</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td> </tr>
+                            <tr><td>Assay Definition</td>	<td>target_name_process</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Assay Definition</td>	<td>target_name_protein</td>	<td>Y</td><td>Search for assay definitions that target the given string as a protein</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"target_name_protein:\"X-box-binding protein 1\""]'>target_name_protein:"X-box-binding protein 1"</g:link></td></tr>
+                            <tr><td>Assay Definition, Compound</td>	<td>target_name</td>	<td>Y</td><td>Search for assay definitions that target the given string as a gene</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"target_name_process:\"regulation of gene expression\""]'>target_name_process:"regulation of gene expression"</g:link></td> </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>accession</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td>  </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>biology</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>biology_dict_label</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td> </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>description</td>	<td>Y</td> <td>Search for assay definitions and projects containing the given string in their description</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gobp_id</td>	<td>Y</td> <td>Search for assay definitions and projects annotated as being related to the given GO Biological Process ID</td><td>%{--TODO: Add example--}%</td> </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gobp_term</td>	<td>Y</td> <td>Search using a GO Biological Process term</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gocc_id</td>	<td>Y</td> <td>Search using a GO Cellular Component ID</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gocc_term</td>	<td>Y</td> <td>Search using a GO Cellular Component Term</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gomf_id</td>	<td>Y</td> <td>Search using a GO Molecular Function ID</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gomf_term</td>	<td>Y</td> <td>Search using a GO Molecular Function Term</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>kegg_disease_cat</td>	<td>Y</td><td>Search by KEGG disease category</td><td>%{--TODO: Add example--}%</td> </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>kegg_disease_names</td>	<td>Y</td><td>Search by KEGG disease name</td><td>%{--TODO: Add example--}%</td> </tr>
+                            <tr><td>Compound</td>	<td>CID</td>	<td>N</td>	<td>Search for Compounds by one or more PubChem CIDs</td> <td>%{--TODO: Add example--}%</td>   </tr>
+                            <tr><td>Compound</td>	<td>COLLECTION</td>	<td>Y</td>  <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Compound</td>	<td>compound_class</td>	<td>Y</td>  <td>Search for compounds of a particular class.  Options are: </td><td>%{--TODO: Add example--}%</td> </tr>
+                            <tr><td>Compound</td>	<td>exact</td>		<td>N</td><td>Search for compounds with the exact given structure specified using SMILES</td> <td>%{--TODO: Add example--}%</td>   </tr>
+                            <tr><td>Compound</td>	<td>iupacName</td>	<td>Y</td> <td>Search for compounds having the given IUPAC name</td><td>%{--TODO: Add example--}%</td> </tr>
+                            <tr><td>Compound</td>	<td>similarity</td>		<td>N</td><td>Search for Compound similar to the given structure specified by SMILES defaulting to a threshold of 90% similarity</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Compound</td>	<td>substructure</td>	<td>N</td>	<td>Search for Compounds that contain the given substructure specified by SMILES</td>  <td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Compound</td>	<td>superstructure</td>	<td>N</td>	<td>Search for Compounds that the given structure specified by SMILES contains	</td> <td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Compound</td>	<td>target_accession</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Compound</td>	<td>target_description</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Compound</td>	<td>target_gene_id</td>	<td>Y</td>  <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Compound</td>	<td>threshold</td>	<td>N</td>	<td>Sets the percent similarity threshold for a Compound similarity search.  Must be combined with a similarity search.	</td>   <td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Compound, Project</td>	<td>probeId</td>	<td>Y</td> <td>Search for compounds with the given ML probe id</td><td>%{--TODO: Add example--}%</td>      </tr>
+                            <tr><td>Project</td>	<td>PID</td>	<td>N</td>	<td>Search for Projects by one or more PIDs</td> <td>%{--TODO: Add example--}%</td>   </tr>
+                            <tr><td>Project</td>	<td>projectId</td><td>Y</td><td>Find a project by the project identifier assigned by the warehouse</td><td>%{--TODO: Add example--}%</td></tr>
                         </tbody>
                     </table>
 

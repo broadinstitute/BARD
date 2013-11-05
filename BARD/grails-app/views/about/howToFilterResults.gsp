@@ -7,6 +7,7 @@
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
     <title>BARD Filter Results</title>
+
 </head>
 
 <body>
@@ -52,18 +53,18 @@
         The filters are grouped by data category and/or other parameters directly relevant to the activated tab and its results. When you first arrive at the results page, or first activate a tab, you will see the filter groups listed by name. The number next to each group name is the number of search results that will remain if you apply all the filters in that group. You will also see a box with a “+” that will reveal the individual filters within that group.
         </p>
 
-    (screen shot of filters)
+    <IMG style="margin: 25px auto 25px;" SRC="${resource(dir: 'images/bardHomepage', file: 'aspect_filters_screen_capture.png')}" ALIGN="top">
 
     <p>
     When you open a group to reveal its filters, you will see each filter listed by name and the number of results that will be displayed if that filter is applied. For example, if a filter in the assay definition tab says, “cell-based format (5),” activating that filter will narrow the results to 5 assay definitions that use a cell-based format.
     </p>
 
-<aside>
+<aside class="calloutbox">
     <h3>
         When the Filter Group Total Doesn’t Agree With the Total of Individual Filters
         </h3>
 <p>
-    Don’t be confused by rare instances when the sum of results from all the individual filters in a group is higher than the number next to the group name. This discrepancy occurs because two filters within that group share the same result, but that shared result is only counted once in the group total. [provide venn diagram?]
+    Don’t be confused by rare instances when the sum of results from all the individual filters in a group is higher than the number next to the group name. This discrepancy occurs because two filters within that group share the same result, but that shared result is only counted once in the group total.
     </p>
 
 </aside>
@@ -103,7 +104,7 @@
         In the upper right corner of the page, the “QUERY CART” button shows the number of items in your cart. Click the button to view a list of those items. You can then choose to “VISUALIZE” those results then select “Molecular Spreadsheet”. You can also open the contents of your cart in the BARD desktop client by selecting the "VIEW IN DESKTOP CLIENT" option instead.
         </p>
 
-    (screen shot of open query cart)
+    <IMG style="margin: 25px auto 25px;" SRC="${resource(dir: 'images/bardHomepage', file: 'query_cart_screen_capture.png')}" ALIGN="top">
 
     <p>
     If you have only compounds in your cart, you will see the results for each of the experiments that the compounds tested active in. If you have compounds and projects or assay definitions in your cart, you will see the results for those compounds filtered to show only the given projects or assay definitions. Currently, a molecular spreadsheet cannot be generated from a cart that contains only assay definitions or projects (this function will be available in early 2014); you must have at least one compound.

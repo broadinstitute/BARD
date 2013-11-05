@@ -64,3 +64,16 @@ form.no-padding {
     margin-bottom: 0px;
     display: inline-block;
 }
+.shiftedSection {
+    padding-left: 25px
+}
+.calloutbox {
+    background-color: #eee;
+    border: 2px solid #000;
+    padding: 10px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -khtml-border-radius: 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
