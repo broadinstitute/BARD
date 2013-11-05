@@ -103,7 +103,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     void "test Show Project"() {
         given:
-        final Integer projectId = 2
+        final Integer projectId = 25
         when: "Client enters a project ID and the showProject method is called"
         Map projectAdapterMap = queryService.showProject(projectId)
         then: "The ProjectSearchResult is found"
@@ -302,9 +302,9 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         //  the Friday before. The nature of the change has still not been adequately explained
         where:
         label                      | capIDs             | skip | top | numberOfAssays | filters
-        "Cap ID List"              | [5168, 5981, 5982] | 0    | 10  | 3              | []
+        "Cap ID List"              | [5499, 5632, 5168] | 0    | 10  | 3              | []
         "Empty Cap ID List"        | []                 | 0    | 10  | 0              | []
-        "Cap ID List with Filters" | [5168, 5981, 5982] | 0    | 10  | 0              | [new SearchFilter("target_name", "import")]
+        "Cap ID List with Filters" | [5499, 5632, 5168] | 0    | 10  | 0              | [new SearchFilter("target_name", "import")]
     }
 
     void "test find Assays By ADIDs #label"() {
