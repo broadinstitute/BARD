@@ -7,20 +7,6 @@
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
     <title>How to search</title>
-    <style>
-    .shiftedSection {
-        padding-left: 25px
-    }
-    .calloutbox {
-        background-color: #eee;
-        border: 2px solid #000;
-        padding: 10px;
-        -moz-border-radius: 20px;
-        -webkit-border-radius: 20px;
-        -khtml-border-radius: 20px;
-        border-radius: 20px;
-    }
-    </style>
 </head>
 
 <body>

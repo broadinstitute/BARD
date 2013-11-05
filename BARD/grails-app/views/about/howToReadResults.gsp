@@ -7,11 +7,6 @@
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
     <title>BARD Interpret Results</title>
-    <style>
-        .shiftedSection {
-            padding-left: 25px
-        }
-    </style>
 </head>
 
 <body>
