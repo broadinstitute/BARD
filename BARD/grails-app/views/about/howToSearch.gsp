@@ -7,6 +7,42 @@
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
     <title>How to search</title>
+    <style>
+    .howtoTables   {
+        width: 100%;
+        display:table;
+        text-align:left;
+        font-size:12px;
+        line-height:25px;
+    }
+    .howtoTables tr:nth-child(even) {
+        background-color: lightcyan;
+    }
+    .howtoTables th{
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+        border-top: 0;
+        text-align: center;
+        background-color: lightblue;
+        font-size:18px;
+        line-height:24px;
+
+    }
+    .howtoTables tr:nth-child(odd) {
+        background-color: white;
+    }
+    .howtoTables tr:first-child {
+        border-top  :  1px solid #0000ff;
+    }
+    .howtoTables tr:last-child {
+        border-bottom  :  1px solid #0000ff;
+    }
+    .howtoTables td {
+        padding-left: 2px;
+        border-right  :  1px solid #0000ff;
+        border-left  :  1px solid #0000ff;
+    }
+    </style>
 </head>
 
 <body>
@@ -159,71 +195,70 @@
                         As you can see below, there are a wide variety of search formulas available. Advanced users can use these to quickly target specific categories within a particular type of data.
                     </p>
 
-                    <table>
-                    <thead>
-                    <th>Data Type</th>	<th>Category</th>	<th>Use Quotes for Term?</th>	<th>Description</th>	<th>Example Formula</th>
+                    <table class='howtoTables'>
+                        <thead>
+                           <th>Data Type</th>
+                           <th>Category</th>
+                           <th>Use Quotes for Term?</th>
+                           <th>Description</th>
+                           <th>Example Formula</th>
                         </thead>
                         <tbody>
-                    <tr>
-                    </tr><td>All</td>	<td>name	<td>Y</td>	<td>Search for an entity with the given string in its name</td>	<td>name:"ras"</td>
-                        </tr>
-
-                    <tr><td>Assay Definition</td>	<td>accession_gene</td>	<td>Y</td> </tr>
-
-
-                    <tr><td>Assay Definition</td>	<td>accession_process</td>	<td>Y</td> </tr>
-                        <tr><td>Assay Definition</td>	<td>accession_protein</td>	<td>Y</td></tr>
-                        <tr><td>Assay Definition</td>	<td>ADID</td>		<td>Search for Assay Definitions by one or more ADIDs</td>	<td>ADID:726,919</td></tr>
-                        <tr><td>Assay Definition</td>	<td>assay_format</td>	<td>Y</td>	<td>Find by assay format</td>	<td>assay_format:"single protein format"</td> </tr>
-                        <tr><td>Assay Definition</td>	<td>assay_type	<td>Y</td>	<td>Find by assay type</td>	<td>assay_type:"direct enzyme activity assay"</td> </tr>
-                        <tr><td>Assay Definition</td>	<td>bardAssayId	<td>Y</td>	<td>Find by the ID used by the REST API	<td>bardAssayId:"2775"</td> </tr>
-                        <tr><td>Assay Definition</td>	<td>comment	<td>Y</td>	<td>Search for matches using the comment field</td></tr>
-                        <tr><td>Assay Definition</td>	<td>detection_method_type</td>	<td>Y</td>	<td>Find by detection method type</td></tr>
-                        <tr><td>Assay Definition</td>	<td>protocol	<td>Y</td>	<td>Search for matches using the protocol field</td> </tr>
-                        <tr><td>Assay Definition</td>	<td>target_name_gene</td>	<td>Y</td> </tr>
-                        <tr><td>Assay Definition</td>	<td>target_name_process</td>	<td>Y</td></tr>
-                        <tr><td>Assay Definition</td>	<td>target_name_protein</td>	<td>Y</td></tr>
-                        <tr><td>Assay Definition</td>	<td>title</td>	<td>Y</td>	<td>Search for matches using the title field</td> </tr>
-                        <tr><td>Assay Definition, Compound</td>	<td>target_name</td>	<td>Y</td> </tr>
-                        <tr><td>Assay Definition, Compound</td>	<td>timestamp</td>	<td>Y</td> </tr>
-                        <tr><td>Assay Definition, Project</td>	<td>accession</td>	<td>Y</td>   </tr>
-                        <tr><td>Assay Definition, Project</td>	<td>ak_dict_label</td>	<td>Y</td>  </tr>
-                        <tr><td>Assay Definition, Project</td>	<td>biology</td>	<td>Y</td></tr>
-                        <tr><td>Assay Definition, Project</td>	<td>biology_dict_label</td>	<td>Y</td>  </tr>
-                        <tr><td>Assay Definition, Project</td>	<td>description</td>	<td>Y</td> </tr>
-                        <tr><td>Assay Definition, Project</td>	<td>gobp_id</td>	<td>Y</td>  </tr>
-                        <tr><td>Assay Definition, Project</td>	<td>gobp_term</td>	<td>Y</td> </tr>
-                        <tr><td>Assay Definition, Project</td>	<td>gocc_id</td>	<td>Y</td> </tr>
-                        <tr><td>Assay Definition, Project</td>	<td>gocc_term</td>	<td>Y</td> </tr>
-                        <tr><td>Assay Definition, Project</td>	<td>gomf_id</td>	<td>Y</td> </tr>
-                        <tr><td>Assay Definition, Project</td>	<td>gomf_term</td>	<td>Y</td> </tr>
-                        <tr><td>Assay Definition, Project</td>	<td>kegg_disease_cat</td>	<td>Y</td> </tr>
-                        <tr><td>Assay Definition, Project</td>	<td>kegg_disease_names</td>	<td>Y</td> </tr>
-                        <tr><td>Compound</td>	<td>anno_key</td>	<td>Y</td>   </tr>
-                        <tr><td>Compound</td>	<td>anno_val</td>	<td>Y</td>  </tr>
-                        <tr><td>Compound</td>	<td>cid</td>	<td>Y</td>     </tr>
-                        <tr><td>Compound</td>	<td>CID</td>		<td>Search for Compounds by one or more PubChem CIDs</td>    </tr>
-                        <tr><td>Compound</td>	<td>COLLECTION</td>	<td>Y</td>      </tr>
-                        <tr><td>Compound</td>	<td>compound_class</td>	<td>Y</td>   </tr>
-                        <tr><td>Compound</td>	<td>exact</td>		<td>Search for Compounds with the exact given structure specified using SMILES</td>     </tr>
-                        <tr><td>Compound</td>	<td>iupacName</td>	<td>Y</td>  </tr>
-                        <tr><td>Compound</td>	<td>mwt</td>               </tr>
-                        <tr><td>Compound</td>	<td>probeId</td>	<td>Y</td>       </tr>
-                        <tr><td>Compound</td>	<td>similarity</td>		<td>Search for Compound similar to the given structure specified by SMILES defaulting to a threshold of 90% similarity</td>  </tr>
-                        <tr><td>Compound</td>	<td>smiles</td>	<td>string</td>             </tr>
-                        <tr><td>Compound</td>	<td>substructure</td>		<td>Search for Compounds that contain the given substructure specified by SMILES</td>    </tr>
-                        <tr><td>Compound</td>	<td>superstructure</td>		<td>Search for Compounds that the given structure specified by SMILES contains	</td>  </tr>
-                        <tr><td>Compound</td>	<td>target_accession</td>	<td>Y</td>          </tr>
-                        <tr><td>Compound</td>	<td>target_description</td>	<td>Y</td>      </tr>
-                        <tr><td>Compound</td>	<td>target_gene_id</td>	<td>Y	</td>       </tr>
-                        <tr><td>Compound</td>	<td>threshold</td>		<td>Sets the similarity threshold for a Compound similarity search.  Must be combined with a similarity search.	</td>     </tr>
-                        <tr><td>Compound</td>	<td>tpsa</td>	<td>tfloat</td>  </tr>
-                        <tr><td>Compound</td>	<td>xlogp</td>	<td>tfloat</td>  </tr>
-                        <tr><td>Project</td>	<td>num_expt</td>	<td>tint</td>    </tr>
-                        <tr><td>Project</td>	<td>PID</td>		<td>Search for Projects by one or more PIDs</td>    </tr>
-                        <tr><td>Project</td>	<td>projectId</td>        </tr>
+                            <tr><td>All</td>	<td>name</td>	<td>Y</td>	<td>Search for an entity with the given string in its name</td>	<td>name:"ras"</td></tr>
+                            <tr><td>Assay Definition</td>	<td>accession_gene</td>	<td>Y</td> <td></td><td></td></tr>
+                            <tr><td>Assay Definition</td>	<td>accession_process</td>	<td>Y</td> <td></td><td></td></tr>
+                            <tr><td>Assay Definition</td>	<td>accession_protein</td>	<td>Y</td><td></td><td></td></tr>
+                            <tr><td>Assay Definition</td>	<td>ADID</td>		<td>Search for Assay Definitions by one or more ADIDs</td>	<td>ADID:726,919</td><td></td></tr>
+                            <tr><td>Assay Definition</td>	<td>assay_format</td>	<td>Y</td>	<td>Find by assay format</td>	<td>assay_format:"single protein format"</td> </tr>
+                            <tr><td>Assay Definition</td>	<td>assay_type</td>	<td>Y</td>	<td>Find by assay type</td>	<td>assay_type:"direct enzyme activity assay"</td> </tr>
+                            <tr><td>Assay Definition</td>	<td>bardAssayId</td>	<td>Y</td>	<td>Find by the ID used by the REST API	<td>bardAssayId:"2775"</td> </tr>
+                            <tr><td>Assay Definition</td>	<td>comment</td>	<td>Y</td>	<td>Search for matches using the comment field</td><td></td></tr>
+                            <tr><td>Assay Definition</td>	<td>detection_method_type</td>	<td>Y</td>	<td>Find by detection method type</td><td></td></tr>
+                            <tr><td>Assay Definition</td>	<td>protocol</td>	<td>Y</td>	<td>Search for matches using the protocol field</td><td></td> </tr>
+                            <tr><td>Assay Definition</td>	<td>target_name_gene</td>	<td>Y</td><td></td><td></td> </tr>
+                            <tr><td>Assay Definition</td>	<td>target_name_process</td>	<td>Y</td><td></td><td></td></tr>
+                            <tr><td>Assay Definition</td>	<td>target_name_protein</td>	<td>Y</td><td></td><td></td></tr>
+                            <tr><td>Assay Definition</td>	<td>title</td>	<td>Y</td>	<td>Search for matches using the title field</td><td></td> </tr>
+                            <tr><td>Assay Definition, Compound</td>	<td>target_name</td>	<td>Y</td><td></td><td></td> </tr>
+                            <tr><td>Assay Definition, Compound</td>	<td>timestamp</td>	<td>Y</td> <td></td><td></td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>accession</td>	<td>Y</td> <td></td><td></td>  </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>ak_dict_label</td>	<td>Y</td> <td></td><td></td> </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>biology</td>	<td>Y</td><td></td><td></td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>biology_dict_label</td>	<td>Y</td> <td></td><td></td> </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>description</td>	<td>Y</td> <td></td><td></td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gobp_id</td>	<td>Y</td> <td></td><td></td> </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gobp_term</td>	<td>Y</td> <td></td><td></td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gocc_id</td>	<td>Y</td> <td></td><td></td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gocc_term</td>	<td>Y</td> <td></td><td></td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gomf_id</td>	<td>Y</td> <td></td><td></td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gomf_term</td>	<td>Y</td> <td></td><td></td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>kegg_disease_cat</td>	<td>Y</td><td></td><td></td> </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>kegg_disease_names</td>	<td>Y</td><td></td><td></td> </tr>
+                            <tr><td>Compound</td>	<td>anno_key</td>	<td>Y</td><td></td><td></td>   </tr>
+                            <tr><td>Compound</td>	<td>anno_val</td>	<td>Y</td><td></td><td></td>  </tr>
+                            <tr><td>Compound</td>	<td>cid</td>	<td>Y</td><td></td><td></td>     </tr>
+                            <tr><td>Compound</td>	<td>CID</td>		<td>Search for Compounds by one or more PubChem CIDs</td> <td></td><td></td>   </tr>
+                            <tr><td>Compound</td>	<td>COLLECTION</td>	<td>Y</td>  <td></td><td></td>    </tr>
+                            <tr><td>Compound</td>	<td>compound_class</td>	<td>Y</td>  <td></td><td></td> </tr>
+                            <tr><td>Compound</td>	<td>exact</td>		<td>Search for Compounds with the exact given structure specified using SMILES</td>  <td></td><td></td>   </tr>
+                            <tr><td>Compound</td>	<td>iupacName</td>	<td>Y</td> <td></td><td></td> </tr>
+                            <tr><td>Compound</td>	<td>mwt</td>   <td></td><td></td><td></td>            </tr>
+                            <tr><td>Compound</td>	<td>probeId</td>	<td>Y</td> <td></td><td></td>      </tr>
+                            <tr><td>Compound</td>	<td>similarity</td>		<td>Search for Compound similar to the given structure specified by SMILES defaulting to a threshold of 90% similarity</td><td></td><td></td>  </tr>
+                            <tr><td>Compound</td>	<td>smiles</td>	<td>string</td>  <td></td><td></td>           </tr>
+                            <tr><td>Compound</td>	<td>substructure</td>		<td>Search for Compounds that contain the given substructure specified by SMILES</td>  <td></td><td></td>  </tr>
+                            <tr><td>Compound</td>	<td>superstructure</td>		<td>Search for Compounds that the given structure specified by SMILES contains	</td> <td></td><td></td> </tr>
+                            <tr><td>Compound</td>	<td>target_accession</td>	<td>Y</td> <td></td><td></td>         </tr>
+                            <tr><td>Compound</td>	<td>target_description</td>	<td>Y</td> <td></td><td></td>     </tr>
+                            <tr><td>Compound</td>	<td>target_gene_id</td>	<td>Y	</td>  <td></td><td></td>     </tr>
+                            <tr><td>Compound</td>	<td>threshold</td>		<td>Sets the similarity threshold for a Compound similarity search.  Must be combined with a similarity search.	</td>   <td></td><td></td>  </tr>
+                            <tr><td>Compound</td>	<td>tpsa</td>	<td>tfloat</td><td></td><td></td>  </tr>
+                            <tr><td>Compound</td>	<td>xlogp</td>	<td>tfloat</td> <td></td><td></td> </tr>
+                            <tr><td>Project</td>	<td>num_expt</td>	<td>tint</td> <td></td><td></td>   </tr>
+                            <tr><td>Project</td>	<td>PID</td>		<td>Search for Projects by one or more PIDs</td> <td></td><td></td>   </tr>
+                            <tr><td>Project</td>	<td>projectId</td><td></td><td></td><td></td>        </tr>
                         </tbody>
-                        </table>
+                    </table>
 
 
                 </article>

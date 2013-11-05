@@ -23,29 +23,24 @@
     <r:layoutResources/>
 
     <style type="text/css">
-        /* start of modification for 5 columns */
-    @media (min-width: 768px) {
-        .fivecolumns .span2 {
-            width: 18.2%;
-            *width: 18.2%;
+        @media (min-width: 768px) {          /* start of modification for 5 columns.  Must follow after bootstrap definitions */
+            .fivecolumns .span2 {
+                width: 18.2%;
+                *width: 18.2%;
+            }
         }
-    }
-
-    @media (min-width: 1200px) {
-        .fivecolumns .span2 {
-            width: 17.9%;
-            *width: 17.8%;
+        @media (min-width: 1200px) {
+            .fivecolumns .span2 {
+                width: 17.9%;
+                *width: 17.8%;
+            }
         }
-    }
-
-    @media (min-width: 768px) and (max-width: 979px) {
-        .fivecolumns .span2 {
-            width: 17.7%;
-            *width: 17.7%;
+        @media (min-width: 768px) and (max-width: 979px) {
+            .fivecolumns .span2 {
+                width: 17.7%;
+                *width: 17.7%;
+            }
         }
-    }
-
-        /* end of modification for 5 columns */
     </style>
 </head>
 
