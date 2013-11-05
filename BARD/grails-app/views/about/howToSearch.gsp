@@ -193,8 +193,10 @@
                             <tr><td>Assay Definition</td>	<td>protocol</td>	<td>Y</td>	<td>Search for assay definitions containing the given string in their protocol</td><td>%{--TODO: Add example--}%</td> </tr>
                             <tr><td>Assay Definition</td>	<td>target_name_gene</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td> </tr>
                             <tr><td>Assay Definition</td>	<td>target_name_process</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Assay Definition</td>	<td>target_name_protein</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td></td></tr>
-                            <tr><td>Assay Definition, Compound</td>	<td>target_name</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td> </tr>
+                            <tr><td>Assay Definition</td>	<td>target_name_protein</td>	<td>Y</td><td>Search for assay definitions that target the given string as a protein</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"target_name_protein:\"X-box-binding protein 1\""]'>target_name_protein:"X-box-binding protein 1"</g:link></td></tr>
+                            <tr><td>Assay Definition, Compound</td>	<td>target_name</td>	<td>Y</td><td>Search for assay definitions that target the given string as a gene</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"target_name_process:\"regulation of gene expression\""]'>target_name_process:"regulation of gene expression"</g:link></td> </tr>
                             <tr><td>Assay Definition, Project</td>	<td>accession</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td>  </tr>
                             <tr><td>Assay Definition, Project</td>	<td>biology</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
                             <tr><td>Assay Definition, Project</td>	<td>biology_dict_label</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td> </tr>
