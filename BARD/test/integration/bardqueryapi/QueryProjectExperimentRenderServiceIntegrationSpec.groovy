@@ -22,9 +22,9 @@ class QueryProjectExperimentRenderServiceIntegrationSpec extends IntegrationSpec
 
         where:
         label                   | pid
-        "With few nodes"        | 3
-        "With a lot of nodes"   | 2
-        "With our flag project" | 75
+        "With few nodes"        | 10
+        "With a lot of nodes"   | 25
+        "With our flag project" | 41
     }
     /**
      * This PID should have isolated nodes, but the REST API does not yet support Isolated nodes

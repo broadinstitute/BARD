@@ -29,13 +29,15 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     ShoppingCartService shoppingCartService
     RingManagerService ringManagerService
     @Shared
-    List<Long> TEST_EIDS = [625, 3]
+    List<Long> TEST_EIDS = [450, 571]
     @Shared
-    List<Long> TEST_ADIDS = [25, 30]
+    List<Long> TEST_ADIDS = [143, 154]
     @Shared
-    Long TEST_PID = 2
+    Long TEST_PID = 25
     @Shared
     Long TEST_CID = 2382353
+    @Shared
+    Long EXPERIMENT_WITH_ACTIVES = 555
 
 
     void "test activitiesByEIDs"() {
@@ -533,8 +535,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert activity.sid
         assert activity.resultData
         where:
-        label                                    | cids    | experimentId
-        "An existing experiment with activities" | [3793L] | 1
+        label                                    | cids        | experimentId
+        "An existing experiment with activities" | [11786594L] | EXPERIMENT_WITH_ACTIVES
 
     }
 

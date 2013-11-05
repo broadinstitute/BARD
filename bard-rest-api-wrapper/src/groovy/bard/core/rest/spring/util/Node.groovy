@@ -24,7 +24,7 @@ public class Node extends JsonUtil implements Serializable {
     @JsonProperty("synonyms")
     private String synonyms;
     @JsonProperty("link")
-    private String link;
+    private List link;
     @JsonProperty("readyForExtraction")
     private String readyForExtraction;
 
@@ -99,12 +99,12 @@ public class Node extends JsonUtil implements Serializable {
     }
 
     @JsonProperty("link")
-    public String getLink() {
+    public List getLink() {
         return link;
     }
 
     @JsonProperty("link")
-    public void setLink(String link) {
+    public void setLink(List link) {
         this.link = link;
     }
 
