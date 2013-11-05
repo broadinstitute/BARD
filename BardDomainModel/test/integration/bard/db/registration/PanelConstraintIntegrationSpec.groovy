@@ -22,7 +22,8 @@ class PanelConstraintIntegrationSpec extends BardIntegrationSpec {
     @Before
     void doSetup() {
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
-        domainInstance = Panel.buildWithoutSave()
+        Role role = Role.build(authority: "authority")
+        domainInstance = Panel.buildWithoutSave(ownerRole: role)
     }
 
 

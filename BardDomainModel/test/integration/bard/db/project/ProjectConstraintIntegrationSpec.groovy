@@ -26,7 +26,8 @@ class ProjectConstraintIntegrationSpec extends BardIntegrationSpec {
 
     @Before
     void doSetup() {
-        domainInstance = Project.buildWithoutSave()
+        Role role = Role.build(authority:"authority")
+        domainInstance = Project.buildWithoutSave(ownerRole:role)
     }
 
     void "test projectName constraints #desc projectName: '#valueUnderTest'"() {

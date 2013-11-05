@@ -1,11 +1,14 @@
 package acl
 
 import bard.db.experiment.Experiment
+import bard.db.people.Role
 import bard.db.project.Project
 import bard.db.registration.Assay
 import grails.plugin.spock.IntegrationSpec
 import grails.plugins.springsecurity.SpringSecurityService
 import org.springframework.security.core.context.SecurityContextHolder
+import spock.lang.IgnoreRest
+import spock.lang.Shared
 import spock.lang.Unroll
 
 /**
@@ -21,16 +24,19 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
     CapPermissionService capPermissionService
     SpringSecurityService springSecurityService
 
-
     void cleanup() {
         // remove authenticated user from context to clean up
         SecurityContextHolder.clearContext();
     }
-    void "test getOwner integration test user"() {
+
+    void "test getOwner integration test user #desc"() {
         given: 'a logged in user creates an assay'
         springSecurityService.reauthenticate(username)
-
-        Assay assay = Assay.build()
+        Role role = Role.findByAuthority(authority)
+        if (!role) {
+            role = Role.build(authority: authority)
+        }
+        Assay assay = Assay.build(ownerRole: role)
         assay.save(flush: true)
 
         when:
@@ -40,17 +46,19 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
         assert actualOwner
 
         where:
-        desc                             | username              | expectedOwner
-        'owner is integration test user' | 'integrationTestUser' | 'BARD Administrator'
-        'owner is teamMember1'           | 'teamA_1'             | 'ROLE_TEAM_A'
-        'owner is teamMember2'           | 'teamA_2'             | 'ROLE_TEAM_A'
+        desc                             | username              | authority                 | expectedOwner
+        'owner is integration test user' | 'integrationTestUser' | "ROLE_BARD_ADMINISTRATOR" | 'BARD Administrator'
     }
+
 
     void "test getOwner #desc"() {
         given: 'a logged in user creates an assay'
         springSecurityService.reauthenticate(username)
-
-        Assay assay = Assay.build()
+        Role role = Role.findByAuthority(authority)
+        if (!role) {
+            role = Role.build(authority: authority, displayName: authority)
+        }
+        Assay assay = Assay.build(ownerRole: role)
         assay.save(flush: true)
 
         when:
@@ -60,9 +68,9 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
         assert actualOwner == expectedOwner
 
         where:
-        desc                             | username              | expectedOwner
-        'owner is teamMember1'           | 'teamA_1'             | 'ROLE_TEAM_A'
-        'owner is teamMember2'           | 'teamA_2'             | 'ROLE_TEAM_A'
+        desc                   | username  | expectedOwner | authority
+        'owner is teamMember1' | 'teamA_1' | 'ROLE_TEAM_A' | 'ROLE_TEAM_A'
+        'owner is teamMember2' | 'teamA_2' | 'ROLE_TEAM_A' | 'ROLE_TEAM_A'
     }
 
 
@@ -90,16 +98,16 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
         desc                                    | numberOfEntities | username  | domainClass | buildClosure
         'no user no assays'                     | 0                | null      | Assay       | {}
         'authenticated user with 0 assays'      | 0                | 'teamA_1' | Assay       | {}
-        'authenticated user with 1 assay'       | 1                | 'teamA_1' | Assay       | { Assay.build() }
-        'authenticated user with 2 assays'      | 2                | 'teamA_1' | Assay       | { Assay.build() }
+        'authenticated user with 1 assay'       | 1                | 'teamA_1' | Assay       | { Assay.build(ownerRole: Role.findByAuthority("ROLE_TEAM_A") ?: Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE_TEAM_A")) }
+        'authenticated user with 2 assays'      | 2                | 'teamA_1' | Assay       | { Assay.build(ownerRole: Role.findByAuthority("ROLE_TEAM_A") ?: Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE_TEAM_A")) }
         'no user no                projects'    | 0                | null      | Project     | {}
         'authenticated user with 0 projects'    | 0                | 'teamA_1' | Project     | {}
-        'authenticated user with 1 projects'    | 1                | 'teamA_1' | Project     | { Project.build() }
-        'authenticated user with 2 projects'    | 2                | 'teamA_1' | Project     | { Project.build() }
+        'authenticated user with 1 projects'    | 1                | 'teamA_1' | Project     | { Project.build(ownerRole: Role.findByAuthority("ROLE_TEAM_A") ?: Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE_TEAM_A")) }
+        'authenticated user with 2 projects'    | 2                | 'teamA_1' | Project     | { Project.build(ownerRole: Role.findByAuthority("ROLE_TEAM_A") ?: Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE_TEAM_A")) }
         'no user no                experiments' | 0                | null      | Experiment  | {}
         'authenticated user with 0 experiments' | 0                | 'teamA_1' | Experiment  | {}
-        'authenticated user with 1 experiments' | 1                | 'teamA_1' | Experiment  | { Experiment.build() }
-        'authenticated user with 2 experiments' | 2                | 'teamA_1' | Experiment  | { Experiment.build() }
+        'authenticated user with 1 experiments' | 1                | 'teamA_1' | Experiment  | { Experiment.build(ownerRole: Role.findByAuthority("ROLE_TEAM_A") ?: Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE_TEAM_A")) }
+        'authenticated user with 2 experiments' | 2                | 'teamA_1' | Experiment  | { Experiment.build(ownerRole: Role.findByAuthority("ROLE_TEAM_A") ?: Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE_TEAM_A")) }
     }
 
     void "test find domain instances for teams when : #desc"() {
@@ -131,11 +139,11 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         desc                                    | num | teamMember1 | teamMember2 | domainClass | buildClosure
-        'authenticated user with 1 assay'       | 1   | 'teamA_1'   | 'teamA_2'   | Assay       | { Assay.build() }
-        'authenticated user with 2 assays'      | 2   | 'teamA_1'   | 'teamA_2'   | Assay       | { Assay.build() }
-        'authenticated user with 1 projects'    | 1   | 'teamA_1'   | 'teamA_2'   | Project     | { Project.build() }
-        'authenticated user with 2 projects'    | 2   | 'teamA_1'   | 'teamA_2'   | Project     | { Project.build() }
-        'authenticated user with 1 experiments' | 1   | 'teamA_1'   | 'teamA_2'   | Experiment  | { Experiment.build() }
-        'authenticated user with 2 experiments' | 2   | 'teamA_1'   | 'teamA_2'   | Experiment  | { Experiment.build() }
+        'authenticated user with 1 assay'       | 1   | 'teamA_1'   | 'teamA_2'   | Assay       | { Assay.build(ownerRole: Role.findByAuthority("ROLE_TEAM_A") ?: Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE_TEAM_A")) }
+        'authenticated user with 2 assays'      | 2   | 'teamA_1'   | 'teamA_2'   | Assay       | { Assay.build(ownerRole: Role.findByAuthority("ROLE_TEAM_A") ?: Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE_TEAM_A")) }
+        'authenticated user with 1 projects'    | 1   | 'teamA_1'   | 'teamA_2'   | Project     | { Project.build(ownerRole: Role.findByAuthority("ROLE_TEAM_A") ?: Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE_TEAM_A")) }
+        'authenticated user with 2 projects'    | 2   | 'teamA_1'   | 'teamA_2'   | Project     | { Project.build(ownerRole: Role.findByAuthority("ROLE_TEAM_A") ?: Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE_TEAM_A")) }
+        'authenticated user with 1 experiments' | 1   | 'teamA_1'   | 'teamA_2'   | Experiment  | { Experiment.build(ownerRole: Role.findByAuthority("ROLE_TEAM_A") ?: Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE_TEAM_A")) }
+        'authenticated user with 2 experiments' | 2   | 'teamA_1'   | 'teamA_2'   | Experiment  | { Experiment.build(ownerRole: Role.findByAuthority("ROLE_TEAM_A") ?: Role.build(authority: "ROLE_TEAM_A", displayName: "ROLE_TEAM_A")) }
     }
 }
