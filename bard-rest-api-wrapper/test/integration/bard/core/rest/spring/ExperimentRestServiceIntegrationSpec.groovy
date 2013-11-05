@@ -22,7 +22,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     @Shared
     List<Long> TEST_SIDS = [14719086, 125082044]
     @Shared
-    List<Long> TEST_ADIDS = [25, 26]
+    List<Long> TEST_ADIDS = [143]
     @Shared
     List<Long> TEST_EIDS = [1, 2]
     @Shared
@@ -44,13 +44,13 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     void "searchExperimentsByCapIds #label"() {
         given:
         SearchParams searchParams = new SearchParams(skip: 0, top: 10)
-        List<Long> capIds = [1011, 5957, 88888888]
+        List<Long> capIds = [5957, 88888888]
         when:
         ExperimentSearchResult experimentSearchResult = experimentRestService.searchExperimentsByCapIds(capIds, searchParams, false)
         then:
         assert (experimentSearchResult != null) == true
         final List<ExperimentSearch> experiments = experimentSearchResult.experiments
-        assert 2 == experiments.size()
+        assert 1 == experiments.size()
         for (ExperimentSearch experimentSearch : experiments) {
             assert experimentSearch.getCapExptId()
             assert experimentSearch.getBardAssayId()
@@ -246,9 +246,9 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                            | experimentid | cids
-        "Search with a list of CIDs"     | new Long(1)  | [2382353, 11958440]
-        "Search with a single of CID"    | new Long(1)  | [11958440]
-        "Search with another set of CID" | new Long(1)  | [11958618, 16745796]
+        "Search with a list of CIDs"     | new Long(557)  | [2382353, 11958440]
+        "Search with a single of CID"    | new Long(557)  | [11958440]
+        "Search with another set of CID" | new Long(557)  | [11958618, 16745796]
     }
 
 
