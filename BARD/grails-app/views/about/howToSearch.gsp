@@ -166,7 +166,7 @@
                         As you can see below, there are a wide variety of search formulas available. Advanced users can use these to quickly target specific categories within a particular type of data.
                     </p>
 
-                    <table class='table-striped table-bordered'>
+                    <table class='table table-striped table-bordered'>
                         <thead>
                            <th>Data Type</th>
                            <th>Category</th>
@@ -175,14 +175,18 @@
                            <th>Example Formula</th>
                         </thead>
                         <tbody>
-                            <tr><td>All</td>	<td>name</td>	<td>Y</td>	<td>Search for assay definitions, compounds and projects with the given string in their name</td>	<td>name:"ras"</td></tr>
+                            <tr><td>All</td>	<td>name</td>	<td>Y</td>	<td>Search for assay definitions, compounds and projects with the given string in their name</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"name:\"ras\""]'>name:"ras"</g:link></td></tr>
                             <tr><td>Assay Definition</td>	<td>accession_gene</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
                             <tr><td>Assay Definition</td>	<td>accession_process</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
                             <tr><td>Assay Definition</td>	<td>accession_protein</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Assay Definition</td>	<td>ADID</td>	<td>N</td>	<td>Search for assay definitions by one or more ADIDs</td>	<td>ADID:726,919</td></tr>
-                            <tr><td>Assay Definition</td>	<td>assay_format</td>	<td>Y</td>	<td>Search for assay definitions with the given assay format</td>	<td>assay_format:"single protein format"</td> </tr>
-                            <tr><td>Assay Definition</td>	<td>assay_type</td>	<td>Y</td>	<td>Search for assay definitions with the given assay type</td>	<td>assay_type:"direct enzyme activity assay"</td> </tr>
-                            <tr><td>Assay Definition</td>	<td>bardAssayId</td>	<td>Y</td>	<td>Search for an assay definition associated with the ID used by the REST API	<td>bardAssayId:"2775"</td> </tr>
+                            <tr><td>Assay Definition</td>	<td>ADID</td>	<td>N</td>	<td>Search for assay definitions by one or more ADIDs</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"ADID:1121,1128"]'>ADID:1121,1128</g:link></td></tr>
+                            <tr><td>Assay Definition</td>	<td>assay_format</td>	<td>Y</td>	<td>Search for assay definitions with the given assay format</td>
+                                %{--TODO This search does not work. investigate with NCGC--}%
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"assay_format:\"biochemical format\""]'>assay_format:"biochemical format"</g:link></td> </tr>
+                            <tr><td>Assay Definition</td>	<td>assay_type</td>	<td>Y</td>	<td>Search for assay definitions with the given assay type</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"assay_type:\"direct enzyme activity assay\""]'>assay_type:"direct enzyme activity assay"</g:link></td> </tr>
                             <tr><td>Assay Definition</td>	<td>comment</td>	<td>Y</td>	<td>Search for assay definitions containing the given string in their comment field</td><td>%{--TODO: Add example--}%</td></tr>
                             <tr><td>Assay Definition</td>	<td>detection_method_type</td>	<td>Y</td>	<td>Search for assay definitions with the given detection method type</td>%{--TODO: Add example--}%<td></td></tr>
                             <tr><td>Assay Definition</td>	<td>protocol</td>	<td>Y</td>	<td>Search for assay definitions containing the given string in their protocol</td><td>%{--TODO: Add example--}%</td> </tr>
@@ -202,7 +206,7 @@
                             <tr><td>Assay Definition, Project</td>	<td>gomf_term</td>	<td>Y</td> <td>Search using a GO Molecular Function Term</td><td>%{--TODO: Add example--}%</td></tr>
                             <tr><td>Assay Definition, Project</td>	<td>kegg_disease_cat</td>	<td>Y</td><td>Search by KEGG disease category</td><td>%{--TODO: Add example--}%</td> </tr>
                             <tr><td>Assay Definition, Project</td>	<td>kegg_disease_names</td>	<td>Y</td><td>Search by KEGG disease name</td><td>%{--TODO: Add example--}%</td> </tr>
-                            <tr><td>Compound</td>	<td>CID</td>		<td>Search for Compounds by one or more PubChem CIDs</td> <td>%{--TODO: Add example--}%</td>   </tr>
+                            <tr><td>Compound</td>	<td>CID</td>	<td>N</td>	<td>Search for Compounds by one or more PubChem CIDs</td> <td>%{--TODO: Add example--}%</td>   </tr>
                             <tr><td>Compound</td>	<td>COLLECTION</td>	<td>Y</td>  <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
                             <tr><td>Compound</td>	<td>compound_class</td>	<td>Y</td>  <td>Search for compounds of a particular class.  Options are: </td><td>%{--TODO: Add example--}%</td> </tr>
                             <tr><td>Compound</td>	<td>exact</td>		<td>N</td><td>Search for compounds with the exact given structure specified using SMILES</td> <td>%{--TODO: Add example--}%</td>   </tr>
