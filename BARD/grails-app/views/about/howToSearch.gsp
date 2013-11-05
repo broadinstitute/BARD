@@ -184,7 +184,7 @@
                                 <td><g:link controller="bardWebInterface" action="search" params='[searchString:"ADID:1121,1128"]'>ADID:1121,1128</g:link></td></tr>
                             <tr><td>Assay Definition</td>	<td>assay_format</td>	<td>Y</td>	<td>Search for assay definitions with the given assay format</td>
                                 %{--TODO This search does not work. investigate with NCGC--}%
-                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"assay_format:\"biochemical format\""]'>assay_format:"biochemical format"</g:link></td> </tr>
+                                <td>%{--<g:link controller="bardWebInterface" action="search" params='[searchString:"assay_format:\"biochemical format\""]'>assay_format:"biochemical format"</g:link>--}%</td> </tr>
                             <tr><td>Assay Definition</td>	<td>assay_type</td>	<td>Y</td>	<td>Search for assay definitions with the given assay type</td>
                                 <td><g:link controller="bardWebInterface" action="search" params='[searchString:"assay_type:\"direct enzyme activity assay\""]'>assay_type:"direct enzyme activity assay"</g:link></td> </tr>
                             <tr><td>Assay Definition</td>	<td>comment</td>	<td>Y</td>	<td>Search for assay definitions containing the given string in their comment field</td>
