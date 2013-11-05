@@ -366,7 +366,8 @@ var linkedVizData = (function () {
                                 GO_biological_process_term: assayCross.data[0],
                                 assay_format: assayCross.data[1],
                                 assay_type: assayCross.data[2],
-                                protein_target: assayCross.data[3]
+                                protein_target: assayCross.data[3],
+                                eid: assayCross.data[4]
                             });
                         }
                     }
@@ -464,7 +465,7 @@ var linkedVizData = (function () {
             findMinimumAndMaximumRatiosByWalkingTheTree(currentNode, returnValue);
             return returnValue;
         },
-        findMinimumAndMaximumRatiosByWalkingTheTree = function (currentNode,returnValue) {
+        findMinimumAndMaximumRatiosByWalkingTheTree = function (currentNode, returnValue) {
 
             // we are expecting inputs of type string
             calcColorNumber = function (activeString, inactiveString) {

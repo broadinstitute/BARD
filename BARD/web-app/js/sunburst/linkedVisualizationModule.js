@@ -385,7 +385,9 @@ var linkedVisualizationModule = (function () {
                             return d.assay_type;
                         },
                         function (d) {
-                            return "<a href='/BARD/assayDefinition/show/" + d.assayId + "'>" + d.assayId + "</a>";
+                            return "<a href='/BARD/assayDefinition/show/" + d.assayId + "'>" + d.assayId + "</a>" +
+                                "/" +
+                                "<a href='/BARD/experiment/show/" + d.eid + "'>" + d.eid + "</a>";
                         }
                     ])
                     .order(d3.ascending)
