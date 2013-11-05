@@ -8,39 +8,17 @@
     <r:external file="css/bootstrap-plus.css"/>
     <title>How to search</title>
     <style>
-    .howtoTables   {
-        width: 100%;
-        display:table;
-        text-align:left;
-        font-size:12px;
-        line-height:25px;
+    .shiftedSection {
+        padding-left: 25px
     }
-    .howtoTables tr:nth-child(even) {
-        background-color: lightcyan;
-    }
-    .howtoTables th{
-        border-left: 1px solid black;
-        border-right: 1px solid black;
-        border-top: 0;
-        text-align: center;
-        background-color: lightblue;
-        font-size:18px;
-        line-height:24px;
-
-    }
-    .howtoTables tr:nth-child(odd) {
-        background-color: white;
-    }
-    .howtoTables tr:first-child {
-        border-top  :  1px solid #0000ff;
-    }
-    .howtoTables tr:last-child {
-        border-bottom  :  1px solid #0000ff;
-    }
-    .howtoTables td {
-        padding-left: 2px;
-        border-right  :  1px solid #0000ff;
-        border-left  :  1px solid #0000ff;
+    .calloutbox {
+        background-color: #eee;
+        border: 2px solid #000;
+        padding: 10px;
+        -moz-border-radius: 20px;
+        -webkit-border-radius: 20px;
+        -khtml-border-radius: 20px;
+        border-radius: 20px;
     }
     </style>
 </head>
@@ -90,21 +68,23 @@
                     The goal of BARD is to help you find what you are looking for as quickly as possible, from the simplest search possible. Here are some of the categories of data that are searchable:
                     </p>
 
-                    <ul>
-                        <li>Target name</li>
-                        <li>Description</li>
-                        <li>GO biological process term </li>
-                        <li>GO molecular function term</li>
-                        <li>KEGG disease category</li>
-                        <li>KEGG disease name</li>
-                        <li>MeSH term</li>
-                        <li>Panther class description </li>
-                        <li>Title  </li>
-                        <li>Protocol </li>
-                        <li>Readout technologies (e.g. fluorescence, bioluminescence) </li>
-                        <li>Cell lines  </li>
-                        <li>Assay components </li>
-                    </ul>
+                    <section class="shiftedSection">
+                        <ul>
+                            <li>Target name</li>
+                            <li>Description</li>
+                            <li>GO biological process term </li>
+                            <li>GO molecular function term</li>
+                            <li>KEGG disease category</li>
+                            <li>KEGG disease name</li>
+                            <li>MeSH term</li>
+                            <li>Panther class description </li>
+                            <li>Title  </li>
+                            <li>Protocol </li>
+                            <li>Readout technologies (e.g. fluorescence, bioluminescence) </li>
+                            <li>Cell lines  </li>
+                            <li>Assay components </li>
+                        </ul>
+                    </section>
 
                     <h3>
                         Auto-Suggest
@@ -115,7 +95,7 @@
                         </p>
 
 
-                    %{--TODO: (screen shot: Dropdown auto-suggest list)--}%
+                    <IMG style="margin: 25px auto 25px;" SRC="${resource(dir: 'images/bardHomepage', file: 'autosuggest_screen_capture.png')}" ALIGN="top">
 
                     <p>
                     You’ll notice that in bold type at the end of each auto-suggest match is the data category in which the match occurs. So even if auto-suggest doesn’t display exactly what you are looking for, you’ll have some idea if the term you are searching is bringing you any closer to what you need.
@@ -152,7 +132,7 @@
                         You can also search multiple ID numbers of the same type of data (assay definition, project and compound) simply by separating them with commas. For a more convenient way to search multiple IDs, click “IDs” near the search box to open a larger search box.  In this box, you can paste a carriage return-separated list of ID numbers copied from a spreadsheet.
                     </p>
 
-                    <aside>
+                    <aside class="calloutbox">
                         <h3>
                          About ID Numbers
                         </h3>
@@ -164,10 +144,15 @@
 
                         <dl>
                             <dt>ADID</dt><dd>Assay Definition ID</dd>
+                            <br/>
                             <dt>CID</dt><dd>PubChem Compound ID</dd>
+                            <br/>
                             <dt>PID</dt><dd>Project ID</dd>
+                            <br/>
                             <dt>EID</dt><dd>Experiment ID (available for ID search in 2014)</dd>
+                            <br/>
                             <dt>PLID</dt><dd>Assay Definition ID</dd>
+                            <br/>
                             <dt>ADID</dt><dd>Panel ID (available for ID search in 2014)</dd>
                             </dl>
                     </aside>
@@ -178,13 +163,13 @@
                         </h3>
 
                     <p>
-                        To search by molecular structure, click “Structure” near the search box. This will open a structure editor where you can paste or draw a structure to search. To learn more about this full-featured editor’s many capabilities, visit http://www.scilligence.com/web/jsdraw.aspx.
+                        To search by molecular structure, click “Structure” near the search box. This will open a structure editor where you can paste or draw a structure to search. To learn more about this full-featured editor’s many capabilities, visit <a href="http://www.scilligence.com/web/jsdraw.aspx">http://www.scilligence.com/web/jsdraw.aspx</a>.
                         </p>
 
-                    (screen shot: molecular structure editor in action)
+                <IMG style="margin: 25px auto 25px;" SRC="${resource(dir: 'images/bardHomepage', file: 'mol_struct_edit_screenshot.png')}" ALIGN="top">
 
                     <p>
-                    With BARD, you can perform a variety molecular structure searches: substructure, superstructure, exact structure, and similarity. Similarity searches require a numeric parameter describing the degree of similarity required for matches, and can be set  between 0 and 100%. For more details on BARD’s molecular structure search, please visit http://tripod.nih.gov/?p=427.
+                    With BARD, you can perform a variety molecular structure searches: substructure, superstructure, exact structure, and similarity. Similarity searches require a numeric parameter describing the degree of similarity required for matches, and can be set  between 0 and 100%. For more details on BARD’s molecular structure search, please visit <a href="http://tripod.nih.gov/?p=427">http://tripod.nih.gov/?p=427</a>.
                     </p>
 
                     <h3>
@@ -195,7 +180,7 @@
                         As you can see below, there are a wide variety of search formulas available. Advanced users can use these to quickly target specific categories within a particular type of data.
                     </p>
 
-                    <table class='howtoTables'>
+                    <table class='table-striped table-bordered'>
                         <thead>
                            <th>Data Type</th>
                            <th>Category</th>

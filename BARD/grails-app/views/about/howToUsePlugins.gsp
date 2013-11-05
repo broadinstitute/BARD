@@ -6,43 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix"/>
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>How to search</title>
-    <style>
-    .howtoTables   {
-        width: 100%;
-        display:table;
-        text-align:left;
-        font-size:12px;
-        line-height:25px;
-    }
-    .howtoTables tr:nth-child(even) {
-        background-color: lightcyan;
-    }
-    .howtoTables th{
-        border-left: 1px solid black;
-        border-right: 1px solid black;
-        border-top: 0;
-        text-align: center;
-        background-color: lightblue;
-        font-size:18px;
-        line-height:24px;
-
-    }
-    .howtoTables tr:nth-child(odd) {
-        background-color: white;
-    }
-    .howtoTables tr:first-child {
-        border-top  :  1px solid #0000ff;
-    }
-    .howtoTables tr:last-child {
-        border-bottom  :  1px solid #0000ff;
-    }
-    .howtoTables td {
-        padding-left: 2px;
-        border-right  :  1px solid #0000ff;
-        border-left  :  1px solid #0000ff;
-    }
-    </style>
+    <title>Create and Use Plug-ins</title>
 
 </head>
 
@@ -84,19 +48,19 @@
         Already there are three plug-ins live on BARD providing enhanced insights into research data. "Badapple" performs scaffold-based promiscuity analysis of compounds, while “SmartCyp” and “WhichCyp” perform metabolism and binding predictions of cytochrome P450. These are only the beginning. Several more plug-ins are in development and planning stages:
     </p>
 
-    <table class='howtoTables'>
+    <table class='table-striped table-bordered'>
         <thead>
         <th>Name</th>	<th>Lead Author[s]</th>	<th>Institution</th>	<th>Brief Description</th>	<th>Status</th>
         </thead>
         <tbody>
         <tr>
-            <td><a href="http://bard.nih.gov/api/latest/plugins/badapple/_manifest">Badapple </a></td>	<td>Jeremy Yang</td><td>UNM</td><td>Evidence-based promiscuity scores</td><td>released Oct 2012</td>
+            <td><a href="http://bard.nih.gov/api/latest/plugins/badapple/_manifest">Badapple</a></td>	<td>Jeremy Yang</td><td>UNM</td><td>Evidence-based promiscuity scores</td><td>released Oct 2012</td>
         </tr>
         <tr>
-            <td><a href="http://bard.nih.gov/api/latest/plugins/smartcyp/_manifest">SmartCyp  </a></td>	<td>Rajarshi Guha</td><td>NCGC</td><td>Prediction of which sites in a molecule that are most liable to metabolism by Cytochrome P450</td><td>released March 2013</td>
+            <td><a href="http://bard.nih.gov/api/latest/plugins/smartcyp/_manifest">SmartCyp</a></td>	<td>Rajarshi Guha</td><td>NCGC</td><td>Prediction of which sites in a molecule that are most liable to metabolism by Cytochrome P450</td><td>released March 2013</td>
         </tr>
         <tr>
-            <td><a href="http://bard.nih.gov/api/latest/plugins/whichcyp/_manifest">WhichCyp   </a></td>	<td>Rajarshi Guha</td><td>NCGC</td><td>Prediction of which Cytochrome P450 isoform(s) is(are) likely to bind a drug-like molecule</td><td>released June 2013</td>
+            <td><a href="http://bard.nih.gov/api/latest/plugins/whichcyp/_manifest">WhichCyp</a></td>	<td>Rajarshi Guha</td><td>NCGC</td><td>Prediction of which Cytochrome P450 isoform(s) is(are) likely to bind a drug-like molecule</td><td>released June 2013</td>
         </tr>
         <tr>
             <td>HScaf</td>	<td>Jeremy Yang</td><td>UNM</td><td>Scaffold analysis</td><td>In development</td>

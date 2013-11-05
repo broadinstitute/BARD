@@ -6,7 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix"/>
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>How to search</title>
+    <title>BARD Report Bug</title>
 </head>
 
 <body>
