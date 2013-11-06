@@ -1,7 +1,9 @@
 package bard.db.experiment
 
 import bard.db.experiment.results.ImportSummary
+import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
+import bard.db.registration.Panel
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.security.access.prepost.PreAuthorize
 
@@ -42,11 +44,15 @@ class PubchemImportService {
         }
 
         List eids = refs.collectAll { it.experiment.id }
+        Panel panel = null;
+
         if(eids.size() != 1) {
             Set expectedEids = map.getPanelEids() as Set
             if((eids as Set) != expectedEids) {
                 throw new RuntimeException("${aid} in DB multiple times: ${eids} but result map only mentioned the following eids: ${expectedEids}")
             }
+
+            panel = derivePanel(eids)
         }
 
         statusCallback("Recreating measures...")
@@ -105,6 +111,46 @@ class PubchemImportService {
             }
         }
 
+        if(panel != null) {
+            PanelExperiment panelExperiment = createPanelExperiment(panel, eids);
+            log.info("Created an experiment panel ${panelExperiment.id}")
+        }
+
         return firstResults;
+    }
+
+    PanelExperiment createPanelExperiment(Panel panel, Collection<Long> eids) {
+        PanelExperiment panelExperiment = new PanelExperiment();
+        eids.each {
+            panelExperiment.addToExperiments(Experiment.get(it))
+        }
+        panelExperiment.panel = panel
+
+        panelExperiment.save(failOnError: true)
+
+        return panelExperiment;
+    }
+
+    Panel derivePanel(Collection<Long> eids) {
+        // find the unique set of assays used by these experiments.
+        Set<Assay> assays = new HashSet( eids.collect { Experiment.get(it).assay } )
+
+        // the unique set of panels that those assays are in
+        Set<Panel> panels = assays.collectMany { it.panelAssays.panel }
+
+        // now, find a panel which has exactly this set of assays in it
+        Set<Panel> matching = panels.findAll { panel ->
+            return new HashSet(panel.panelAssays.collect { it.assay }).equals(assays)
+        }
+
+        if(matching.size() == 0) {
+            throw new RuntimeException("Could not find panel which contain assays ${assays}");
+        }
+
+        if(matching.size() > 1) {
+            throw new RuntimeException("Found multiple panels ${matching} which contain assays ${assays}");
+        }
+
+        return matching.first()
     }
 }
