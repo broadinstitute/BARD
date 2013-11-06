@@ -231,12 +231,14 @@
                                 <td><g:link controller="bardWebInterface" action="search" params='[searchString:"kegg_disease_names:\"crohns disease\""]'>kegg_disease_names:"crohns disease"</g:link></td> </tr>
                             <tr><td>Compound</td>	<td>CID</td>	<td>N</td>	<td>Search for Compounds by one or more PubChem CIDs</td>
                                 <td><g:link controller="bardWebInterface" action="search" params='[searchString:"cid:11972586,16759566"]'>cid:11972586,16759566</g:link></td>   </tr>
-                            <tr><td>Compound</td>	<td>COLLECTION</td>	<td>Y</td>  <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Compound</td>	<td>compound_class</td>	<td>Y</td>  <td>Search for compounds of a particular class.  Options are: </td><td>%{--TODO: Add example--}%</td> </tr>
+                            <tr><td>Compound</td>	<td>collection</td>	<td>Y</td>  <td>%{--TODO: Add description--}%</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"collection:\"mlpcn\""]'>collection:"mlpcn"</g:link></td></tr>
+                            <tr><td>Compound</td>	<td>compound_class</td>	<td>Y</td>  <td>Search for compounds of a particular class.  Options are: drug, probe</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"compound_class:\"drug\""]'>compound_class:"drug"</g:link></td> </tr>
                             <tr><td>Compound</td>	<td>exact</td>		<td>N</td><td>Search for compounds with the exact given structure specified using SMILES</td>
-                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"exact:N.N.Cl[Pt]Cl"]'>exact:N.N.Cl[Pt]Cl</g:link></td>   </tr>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"exact:OC(C1CCNCC1)(C2=CC=CC=C2)C3=CC=CC=C3"]'>exact:OC(C1CCNCC1)(C2=CC=CC=C2)C3=CC=CC=C3</g:link></td>   </tr>
                             <tr><td>Compound</td>	<td>iupacName</td>	<td>Y</td> <td>Search for compounds having the given IUPAC name</td>
-                                <td></td> </tr>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"iupacName:\"[4-[bis(4-chlorophenyl)methyl]piperazin-1-yl]-(5-methyl-4-nitro-1,2-oxazol-3-yl)methanone\""]'>iupacName:"[4-[bis(4-chlorophenyl)methyl]piperazin-1-yl]-(5-methyl-4-nitro-1,2-oxazol-3-yl)methanone"</g:link></td> </tr>
                             <tr><td>Compound</td>	<td>similarity</td>		<td>N</td><td>Search for Compound similar to the given structure specified by SMILES defaulting to a threshold of 90% similarity</td>
                                 <td><g:link controller="bardWebInterface" action="search" params='[searchString:"similarity:N.N.Cl[Pt]Cl"]'>similarity:N.N.Cl[Pt]Cl</g:link></td></tr>
                             <tr><td>Compound</td>	<td>substructure</td>	<td>N</td>	<td>Search for Compounds that contain the given substructure specified by SMILES</td>
@@ -250,9 +252,9 @@
                             <tr><td>Compound</td>	<td>target_gene_id</td>	<td>Y</td>  <td>Search using gene target ID numbers</td>
                                 <td><g:link controller="bardWebInterface" action="search" params='[searchString:"target_gene_id:\"12381848\""]'>target_gene_id:"12381848"</g:link></td></tr>
                             <tr><td>Compound</td>	<td>threshold</td>	<td>N</td>	<td>Sets the percent similarity threshold for a Compound similarity search.  Must be combined with a similarity search.	</td>
-                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"Similarity: NC(=O)NS(=O)(=O)C1=CC=C(N)C=C1  threshold:90"]'>Similarity: NC(=O)NS(=O)(=O)C1=CC=C(N)C=C1  threshold:90</g:link></td></tr>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"similarity: NC(=O)NS(=O)(=O)C1=CC=C(N)C=C1  threshold:90"]'>similarity: NC(=O)NS(=O)(=O)C1=CC=C(N)C=C1  threshold:90</g:link></td></tr>
                             <tr><td>Compound, Project</td>	<td>probeId</td>	<td>Y</td> <td>Search for compounds with the given ML probe id</td>
-                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"probeid:ML329"]'>probeid:ML329</g:link></td>      </tr>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"probeid:\"ML329\""]'>probeid:"ML329"</g:link></td>      </tr>
                             <tr><td>Project</td>	<td>PID</td>	<td>N</td>	<td>Search for Projects by one or more PIDs</td>
                                 <td><g:link controller="bardWebInterface" action="search" params='[searchString:"pid:1244"]'>pid:1244</g:link></td>   </tr>
                             <tr><td>Project</td>	<td>projectId</td><td>Y</td><td>Find a project by the project identifier assigned by the warehouse</td>
