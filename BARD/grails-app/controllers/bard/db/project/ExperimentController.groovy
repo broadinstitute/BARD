@@ -67,12 +67,17 @@ class ExperimentController {
 
         final Object principal = springSecurityService?.principal
         String loggedInUser = null
+        def experimentInstance = Experiment.get(params.id)
         if (principal instanceof String) {
             loggedInUser = null
         } else {
-            loggedInUser = principal?.username
+            //only people with permission can see this
+            boolean editable = canEdit(permissionEvaluator, springSecurityService, experimentInstance)
+            if (editable) {
+                loggedInUser = principal?.username
+            }
         }
-        def experimentInstance = Experiment.get(params.id)
+
         JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance, loggedInUser))
         render text: measuresAsJsonTree, contentType: 'text/json', template: null
     }
@@ -102,7 +107,7 @@ class ExperimentController {
 
         [
                 instance: experiment,
-                contextIds:contextIds,
+                contextIds: contextIds,
                 experimentOwner: owner,
                 editable: editable ? 'canedit' : 'cannotedit',
                 isAdmin: isAdmin
