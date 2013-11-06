@@ -93,7 +93,7 @@ modules = {
         resource url: '/js/cap/createProject.js'
     }
     d3Library {
-        resource url: "js/lib/d3.min.js"
+        resource url: "js/lib/d3.min.js", disposition: 'head'
     }
     dataTables {
         resource url: "js/DataTables-1.9.4/jquery.dataTables.js"
