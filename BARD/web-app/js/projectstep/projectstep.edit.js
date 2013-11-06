@@ -9,74 +9,6 @@ $(document).ready(function () {
         zIndex: 3999,
         title: "Delete item?"
     });
-
-    $("#addByExperimentId").change(function () {
-        var experimentId = $(this).val();
-        if (!experimentId || 0 === experimentId || (/^\s*$/).test(experimentId)) {
-            return false;
-        }
-        var projectId = $("#projectIdForStep").val();
-        var data = {'experimentId': experimentId, 'projectId': projectId};
-        $.ajax
-        ({
-            url: "../ajaxFindAvailableExperimentById",
-            dataType: 'json',
-            data: data,
-            cache: false,
-            success: function (data) {
-                setAvailableExperiment(data)
-            }
-        });
-
-    });
-    $("#addByAssayId").change(function () {
-        var assayId = $(this).val();
-        if (!assayId || 0 === assayId || (/^\s*$/).test(assayId)) {
-            return false;
-        }
-        var projectId = $("#projectIdForStep").val();
-        var data = {'assayId': assayId, 'projectId': projectId};
-        $.ajax
-        ({
-            url: "../ajaxFindAvailableExperimentByAssayId",
-            dataType: 'json',
-            data: data,
-            cache: false,
-            success: function (data) {
-                setAvailableExperiment(data)
-            }
-        });
-
-    });
-
-
-    $("#addByExperimentName").autocomplete({
-        source: function (request, response) {
-            var experimentName = request.term
-            var projectId = $("#projectIdForStep").val();
-            var data = {'experimentName': experimentName, 'projectId': projectId};
-            $.ajax({
-                url: "../ajaxFindAvailableExperimentByName",
-                dataType: 'json',
-                data: data,
-                success: function (data) {
-                    response(data);
-                },
-                minLength: 3
-            });
-        },
-        select: function (event, ui) {
-            setAvailableExperimentAfterSelect(ui.item.label)
-        }
-    });
-
-
-    $("input:radio[name=addExperimentBy]").change(function () {
-        var selected = $(this).val();
-        var allValues = ['addByExperimentId', 'addByAssayId', 'addByExperimentName']
-        findExperimentInput(selected, allValues);
-    });
-
     initProjectEditFunction();
 });
 
@@ -88,56 +20,8 @@ function initProjectEditFunction() {
         })
         .ajaxStop(function () {
             $(this).hide();
-        })
-    ;
-    $("#addExperimentToProject")
-        .button()
-        .click(function () {
-            clearAvailableExperiment();
-            $("#dialog_add_experiment_step").dialog("open");
         });
 
-    $("#dialog_add_experiment_step").dialog({
-        autoOpen: false,
-        height: 400,
-        width: 500,
-        modal: true,
-        buttons: {
-            "Add Experiment": function () {
-                var projectId = $("#projectIdForStep").val();
-                var stageId = $("#stageId").val();
-                var selectedExperiments = [];
-                $("#selectedExperiments option:selected").each(function (i, selected) {
-                    selectedExperiments[i] = $(selected).val();
-                });
-                var data = {'selectedExperiments': selectedExperiments, 'projectId': projectId, 'stageId': stageId};
-                $.ajax
-                ({
-                    url: "../associateExperimentsToProject",
-                    //dataType:'json',
-                    data: data,
-                    cache: false,
-                    success: function (data) {
-
-                        handleSuccess(data)
-                        closeDialogCleanup("displayErrorMessage");
-                        $(this).dialog("close");
-                    },
-                    error: function (response, status, errorThrown) {
-                        addErrorMessageToDialog("displayErrorMessage", response.responseText);
-                     }
-                });
-
-            },
-            Cancel: function () {
-                closeDialogCleanup("displayErrorMessage");
-                $(this).dialog("close");
-            }
-        },
-        close: function () {
-            closeDialogCleanup("displayErrorMessage");
-        }
-    });
 
     $("#linkExperiment")
         .button()
@@ -197,25 +81,9 @@ function addErrorMessageToDialog(errorMessageDivId, errorMessage) {
     $("#" + errorMessageDivId).addClass("alert alert-error");
     $("#" + errorMessageDivId).html(errorMessage);
 }
-// Somehow the setAvailableExperiment added multiple duplicate item selected from dropdown, a hack to get one
-function setAvailableExperimentAfterSelect(data) {
-    $("#selectedExperiments").append("<option value='" + data + "'>" + data + "</option>");
-}
-
-function setAvailableExperiment(data) {
-    for (var i = 0; i < data.length; i++) {
-        $("#selectedExperiments").append("<option value='" + data[i] + "'>" + data[i] + "</option>");
-    }
-}
 
 function clearAvailableExperiment() {
-    $("#selectedExperiments option:gt(0)").remove();
-    $("#selectedExperiments option:eq(0)").remove();
-    $("#addExperimentForm").clearForm();
-    $("#addByExperimentId").hide();
-    $("#addByAssayId").hide();
-    $("#addByExperimentName").hide();
-    $("#serviceResponse").html("");
+
 }
 
 function findExperimentInput(selected, allValues) {
@@ -240,7 +108,6 @@ function handleSuccess(data) {
         $("#showstep").html(data);
         layoutGraph();
         initProjectEditFunction();
-        clearAvailableExperiment();
     }
     $("#serviceResponse").show()
 }

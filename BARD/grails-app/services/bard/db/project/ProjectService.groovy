@@ -75,7 +75,6 @@ class ProjectService {
         projectExperiment.delete(flush: true)
     }
 
-
     /**
      * delete projectsteps having given projectexperiment as start point or end point
      * @param projectExperiment
@@ -144,9 +143,9 @@ class ProjectService {
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void addExperimentToProject(Experiment experiment, Long id, Element stage) {
         Project project = Project.findById(id)
-        if (isExperimentAssociatedWithProject(experiment, project))
-            throw new UserFixableException("Experiement " + experiment.id + " is already associated with Project " + project.id)
-
+        if (isExperimentAssociatedWithProject(experiment, project)) {
+            throw new UserFixableException("Experiment " + experiment.id + " is already associated with Project " + project.id)
+        }
         ProjectSingleExperiment pe = new ProjectSingleExperiment(experiment: experiment, project: project, stage: stage)
         project.addToProjectExperiments(pe)
         experiment.addToProjectExperiments(pe)

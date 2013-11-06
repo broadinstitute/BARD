@@ -6,6 +6,7 @@ import bard.db.enums.ProjectStatus
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.hibernate.ProjectGroupTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
+import bard.db.experiment.Experiment
 import bard.db.guidance.Guidance
 import bard.db.guidance.GuidanceAware
 import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
@@ -44,8 +45,15 @@ class Project extends AbstractContextOwner implements GuidanceAware {
     static belongsTo = [ownerRole: Role]
 
 
-    static transients = [ 'disableUpdateReadyForExtraction']
-
+    static transients = [ 'disableUpdateReadyForExtraction','associatedExperiments']
+    Set<Experiment> getAssociatedExperiments(){
+        Set<Experiment> experiments = new HashSet<Experiment>()
+        //We assume that everything is a single experiment
+        for(ProjectSingleExperiment projectExperiment : projectExperiments){
+            experiments.add(projectExperiment.experiment)
+        }
+        return experiments
+    }
     static hasMany = [projectExperiments: ProjectExperiment,
             externalReferences: ExternalReference,
             contexts: ProjectContext,

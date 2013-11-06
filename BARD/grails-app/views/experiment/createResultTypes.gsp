@@ -4,7 +4,6 @@
 <head>
     <r:require modules="core,bootstrap,resulttype"/>
     <meta name="layout" content="basic"/>
-    <r:external file="css/bootstrap-plus.css"/>
     <title>Add Result Types</title>
 </head>
 
