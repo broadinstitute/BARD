@@ -256,20 +256,6 @@ class ProjectController {
         ]
     }
 
-    @Deprecated //this method is not used anymore. The editing is now done from the SHOW page.
-    def edit() {
-        def projectInstance = Project.get(params.id)
-
-        if (!projectInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), params.id])
-            return
-        } else {
-            flash.message = null
-        }
-
-        [instance: projectInstance, pexperiment: projectExperimentRenderService.contructGraph(projectInstance)]
-    }
-
     @Secured(['isAuthenticated()'])
     def reloadProjectSteps(Long projectId) {
         try {
@@ -420,46 +406,9 @@ class ProjectController {
         render(template: "editSummary", model: [project: instance])
     }
 
-    def ajaxFindAvailableExperimentByName(String experimentName, Long projectId) {
-        List<Experiment> experiments = Experiment.findAllByExperimentNameIlike("%${experimentName}%")
-        Project project = Project.findById(projectId)
-        Set<Experiment> exps = []
-        experiments.each { Experiment experiment ->
-            if (!projectService.isExperimentAssociatedWithProject(experiment, project))
-                exps.add(experiment)
-        }
-        render exps.collect { it.displayName } as JSON
-    }
-
-    def ajaxFindAvailableExperimentByAssayId(Long assayId, Long projectId) {
-        Assay assay = Assay.findById(assayId)
-        Project project = Project.findById(projectId)
-        List<Experiment> experiments = Experiment.findAllByAssay(assay)
-        Set<Experiment> exps = []
-        experiments.each { Experiment experiment ->
-            if (!projectService.isExperimentAssociatedWithProject(experiment, project))
-                exps.add(experiment)
-        }
-        render exps.collect { it.displayName } as JSON
-    }
-
-    def ajaxFindAvailableExperimentById(Long experimentId, Long projectId) {
-        Project project = Project.findById(projectId)
-        Experiment experiment = Experiment.findById(experimentId)
-        Set<Experiment> exps = []
-        if (!projectService.isExperimentAssociatedWithProject(experiment, project))
-            exps.add(experiment)
-        render exps.collect { it.displayName } as JSON
-    }
-
-    def ajaxFindAvailableExperimentsForProject(AssociateExperimentsCommand command) {
-        command.clearErrors()
-        command.findAvailableExperiments()
-        render template: "selectExperimentsToAddToProjects", model: [command: command]
-    }
-
     @Secured(['isAuthenticated()'])
     def showExperimentsToAddProject(AssociateExperimentsCommand command) {
+        command.validate()
         if (!command.fromAddPage) { //if we going to this page from a different page, then we need to clear
             //all errors
             command.clearErrors()
@@ -478,16 +427,14 @@ class ProjectController {
             redirect(action: "show", id: command.projectId, fragment: "experiment-and-step-header")
         }
         catch (AccessDeniedException ade) {
-            command.errorMessages.add(ade.message)
             log.error("Access denied Experiments to Project", ade)
-            return [command: command]
+            render accessDeniedErrorMessage()
         } catch (UserFixableException e) {
             log.error(e, e)
             command.errorMessages.add(e.message)
             return [command: command]
         } catch (Exception ee) {
             log.error(ee, ee)
-            flash.message = "Please log an issue with the BARD team at bard-users@broadinstitute.org to fix this assay"
             command.errorMessages.add("An error has occurred, Please log an issue with the BARD team at bard-users@broadinstitute.org to fix this issue")
             return [command: command]
         }
@@ -501,36 +448,49 @@ class AssociateExperimentsCommand extends BardCommand {
     Long projectId
     List<Long> experimentIds = []
     Long stageId
+    //if this is true then it means this command objetc must be valid
     boolean fromAddPage = false
+
+    //The source entity (Could be ADID, AID or EID)
     String sourceEntityIds
+
     IdType idType = IdType.EID
     List<String> errorMessages = []
     Set<Experiment> availableExperiments = [] as HashSet<Experiment>
     MergeAssayDefinitionService mergeAssayDefinitionService
     ProjectService projectService
+
+    //if this is true then we should validate the experimentIds. This value is set to true in the templae
+    //selectExperimentsToAddToProjects
     boolean validateExperimentIds = false
 
     static constraints = {
         projectId(nullable: false, validator: { value, command, err ->
             if (!Project.get(value)) {
-                err.rejectValue('projectId', "message.code", "Could not find PID : ${value}");
+                err.rejectValue('projectId', "associateExperimentsCommand.project.id.not.found",
+                        ["${value}"] as Object[],
+                        "Could not find Project with PID : ${value}");
             }
         })
         stageId(nullable: true, validator: { value, command, err ->
             if (command.fromAddPage && value) {
                 if (!Element.get(value.toLong())) {
-                    err.rejectValue('stageId', "message.code", "Could not find Stage with ID : ${value}");
+                    err.rejectValue('stageId', "associateExperimentsCommand.stage.id.not.found",
+                            ["${value}"] as Object[],
+                            "Could not find Stage with ID : ${value}");
                 }
             }
         })
         experimentIds(nullable: true, validator: { value, command, err ->
             if (command.fromAddPage && command.idType == IdType.ADID && command.validateExperimentIds) {
                 if (!value) {
-                    err.rejectValue('experimentIds', "message.code", "Select at least one experiment to add");
+                    err.rejectValue('experimentIds', "associateExperimentsCommand.experiment.ids.min.size", "Select at least one experiment to add");
                 } else {
                     for (Long experimentId : value) {
                         if (!Experiment.get(experimentId)) {
-                            err.rejectValue('experimentIds', "message.code", "Could not find Experiment with ID: ${experimentId}");
+                            err.rejectValue('experimentIds', "associateExperimentsCommand.experiment.id.not.found",
+                                    ["${value}"] as Object[],
+                                    "Could not find Experiment with ID: ${experimentId}");
                         }
                     }
                 }
@@ -545,26 +505,41 @@ class AssociateExperimentsCommand extends BardCommand {
                     final def entity = command.mergeAssayDefinitionService.convertIdToEntity(command.idType, entityId)
                     if (!entity) {
                         if (command.idType == IdType.ADID) {
-                            err.rejectValue('sourceEntityIds', "message.code", "Assay Definition ADID: ${entityId} cannot be found")
+                            err.rejectValue('sourceEntityIds', "associateExperimentsCommand.assayDefinition.id.not.found",
+                                    ["${entityId}"] as Object[], "Assay with ADID: ${entityId} cannot be found"
+                            )
                         } else if (command.idType == IdType.AID) {
-                            err.rejectValue('sourceEntityIds', "message.code", "Experiment AID: ${entityId} cannot be found")
+                            err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.aid.not.found",
+                                    ["${entityId}"] as Object[],
+                                    "Experiment AID: ${entityId} cannot be found")
                         } else {
-                            err.rejectValue('sourceEntityIds', "message.code", "Experiment EID: ${entityId} cannot be found")
+                            err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.id.not.found",
+                                    ["${entityId}"] as Object[],
+                                    "Experiment EID: ${entityId} cannot be found")
                         }
                     } else if (entity instanceof Experiment) {
                         final Experiment experiment = (Experiment) entity
                         if (command.projectService.isExperimentAssociatedWithProject(experiment, project)) {
                             if (command.idType == IdType.AID) {
-                                err.rejectValue('sourceEntityIds', "message.code", "Experiment AID: ${entityId} is already part of this Project");
+                                err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.aid.already.part.project",
+                                        ["${entityId}", "${command.projectId}"] as Object[],
+                                        "Experiment AID: ${entityId} is already part of this Project ${command.projectId}");
                             } else {
-                                err.rejectValue('sourceEntityIds', "message.code", "Experiment EID: ${entityId} is already part of this Project");
+                                err.rejectValue('sourceEntityIds',
+                                        "associateExperimentsCommand.experiment.eid.already.part.project",
+                                        ["${entityId}", "${command.projectId}"] as Object[],
+                                        "Experiment EID: ${entityId} is already part of this Project ${command.projectId}");
                             }
 
                         } else if (experiment.experimentStatus == ExperimentStatus.RETIRED) {
                             if (command.idType == IdType.AID) {
-                                err.rejectValue('sourceEntityIds', "message.code", "Experiment AID: ${entityId} is retired and cannot be added to this project");
+                                err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.aid.retired",
+                                        ["${entityId}", "${command.projectId}"] as Object[],
+                                        "Experiment AID: ${entityId} is retired and cannot be added to this project");
                             } else {
-                                err.rejectValue('sourceEntityIds', "message.code", "Experiment EID: ${experiment.id} is retired and cannot be added to this project");
+                                err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.eid.retired",
+                                        ["${entityId}", "${command.projectId}"] as Object[],
+                                        "Experiment EID: ${experiment.id} is retired and cannot be added to this project");
                             }
 
                         }
