@@ -19,8 +19,13 @@ modules = {
     accessontology {
         resource url: "/js/cap/accessOntology.js"
     }
+
     addAllItemsToCarts {
         resource url: "js/addAllItemsToCart.js"
+    }
+    addExperimentsToProject{
+        dependsOn("descriptorSelect2Widget")
+        resource url:"/js/cap/addExperimentsToProject.js"
     }
     assaycards {
         dependsOn('card')
@@ -97,7 +102,7 @@ modules = {
         resource url: '/js/cap/createProject.js'
     }
     d3Library {
-        resource url: "js/lib/d3.min.js"
+        resource url: "js/lib/d3.min.js", disposition: 'head'
     }
     dataTables {
         resource url: "js/DataTables-1.9.4/jquery.dataTables.js"
@@ -239,7 +244,7 @@ modules = {
         resource url: "css/promiscuity.css"
     }
     resulttype {
-        dependsOn("descriptorSelect2Widget")
+        dependsOn('descriptorSelect2Widget','bootstrapplus')
         resource url: "js/resulttypes/resulttype.js"
         resource url: "css/resulttypes/resulttype.css"
     }

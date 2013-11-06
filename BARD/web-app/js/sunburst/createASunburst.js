@@ -181,7 +181,7 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
         },
         sunburstAnimation = SunburstAnimation();
 
-    var pict = d3.select("body")
+    var pict = d3.select("#linkVisualizationContainer")
         .append("div")
         .style("position", "absolute")
         .style("top", "565px")

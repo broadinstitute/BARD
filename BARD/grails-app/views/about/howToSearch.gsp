@@ -177,9 +177,12 @@
                         <tbody>
                             <tr><td>All</td>	<td>name</td>	<td>Y</td>	<td>Search for assay definitions, compounds and projects with the given string in their name</td>
                                 <td><g:link controller="bardWebInterface" action="search" params='[searchString:"name:\"ras\""]'>name:"ras"</g:link></td></tr>
-                            <tr><td>Assay Definition</td>	<td>accession_gene</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Assay Definition</td>	<td>accession_process</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Assay Definition</td>	<td>accession_protein</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Assay Definition</td>	<td>accession_gene</td>	<td>Y</td> <td>Search for assay definitions with gene target ID numbers matching the given string</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"accession_gene:\"12381848\""]'>accession_gene:"12381848"</g:link></td></tr>
+                            <tr><td>Assay Definition</td>	<td>accession_process</td>	<td>Y</td> <td>Search for assay definitions with process target ID numbers matching the given string</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"accession_process:\"GO:0010468\""]'>accession_process:"GO:0010468"</g:link></td></tr>
+                            <tr><td>Assay Definition</td>	<td>accession_protein</td>	<td>Y</td><td>Search for assay definitions with protein target ID numbers matching the given string</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"accession_protein:\"P17861\""]'>accession_protein:"P17861"</g:link></td></tr>
                             <tr><td>Assay Definition</td>	<td>ADID</td>	<td>N</td>	<td>Search for assay definitions by one or more ADIDs</td>
                                 <td><g:link controller="bardWebInterface" action="search" params='[searchString:"ADID:1121,1128"]'>ADID:1121,1128</g:link></td></tr>
                             <tr><td>Assay Definition</td>	<td>assay_format</td>	<td>Y</td>	<td>Search for assay definitions with the given assay format</td>
@@ -189,41 +192,71 @@
                                 <td><g:link controller="bardWebInterface" action="search" params='[searchString:"assay_type:\"direct enzyme activity assay\""]'>assay_type:"direct enzyme activity assay"</g:link></td> </tr>
                             <tr><td>Assay Definition</td>	<td>comment</td>	<td>Y</td>	<td>Search for assay definitions containing the given string in their comment field</td>
                                 <td><g:link controller="bardWebInterface" action="search" params='[searchString:"comment:\"genedata\""]'>comment:"genedata"</g:link></td></tr>
-                            <tr><td>Assay Definition</td>	<td>detection_method_type</td>	<td>Y</td>	<td>Search for assay definitions with the given detection method type</td>%{--TODO: Add example--}%<td></td></tr>
-                            <tr><td>Assay Definition</td>	<td>protocol</td>	<td>Y</td>	<td>Search for assay definitions containing the given string in their protocol</td><td>%{--TODO: Add example--}%</td> </tr>
-                            <tr><td>Assay Definition</td>	<td>target_name_gene</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td> </tr>
-                            <tr><td>Assay Definition</td>	<td>target_name_process</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Assay Definition</td>	<td>target_name_protein</td>	<td>Y</td><td>Search for assay definitions that target the given string as a protein</td>
+                            <tr><td>Assay Definition</td>	<td>detection_method_type</td>	<td>Y</td>	<td>Search for assay definitions with the given detection method type</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"detection_method_type:\"absorbance\""]'>detection_method_type:"absorbance"</g:link></td></tr>
+                            <tr><td>Assay Definition</td>	<td>protocol</td>	<td>Y</td>	<td>Search for assay definitions containing the given string in their protocol</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"prototocol:\"pyoverdine\""]'>prototocol:"pyoverdine"</g:link></td> </tr>
+                            <tr><td>Assay Definition</td>	<td>target_name_gene</td>	<td>Y</td><td>Search for assay definitions with gene target names matching the given string</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"target_gene_process:\"http://www.ncbi.nlm.nih.gov/gquery/?term=12381848\""]'>target_gene_process:"http://www.ncbi.nlm.nih.gov/gquery/?term=12381848"</g:link></td> </tr>
+                            <tr><td>Assay Definition</td>	<td>target_name_process</td>	<td>Y</td><td>Search for assay definitions with process target names matching the given string</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"target_name_process:\"regulation of gene expression\""]'>target_name_process:"regulation of gene expression"</g:link></td></tr>
+                            <tr><td>Assay Definition</td>	<td>target_name_protein</td>	<td>Y</td><td>Search for assay definitions with protein target names matching the given string</td>
                                 <td><g:link controller="bardWebInterface" action="search" params='[searchString:"target_name_protein:\"X-box-binding protein 1\""]'>target_name_protein:"X-box-binding protein 1"</g:link></td></tr>
-                            <tr><td>Assay Definition, Compound</td>	<td>target_name</td>	<td>Y</td><td>Search for assay definitions that target the given string as a gene</td>
-                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"target_name_process:\"regulation of gene expression\""]'>target_name_process:"regulation of gene expression"</g:link></td> </tr>
-                            <tr><td>Assay Definition, Project</td>	<td>accession</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td>  </tr>
-                            <tr><td>Assay Definition, Project</td>	<td>biology</td>	<td>Y</td><td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>biology_dict_label</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td> </tr>
-                            <tr><td>Assay Definition, Project</td>	<td>description</td>	<td>Y</td> <td>Search for assay definitions and projects containing the given string in their description</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>gobp_id</td>	<td>Y</td> <td>Search for assay definitions and projects annotated as being related to the given GO Biological Process ID</td><td>%{--TODO: Add example--}%</td> </tr>
-                            <tr><td>Assay Definition, Project</td>	<td>gobp_term</td>	<td>Y</td> <td>Search using a GO Biological Process term</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>gocc_id</td>	<td>Y</td> <td>Search using a GO Cellular Component ID</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>gocc_term</td>	<td>Y</td> <td>Search using a GO Cellular Component Term</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>gomf_id</td>	<td>Y</td> <td>Search using a GO Molecular Function ID</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>gomf_term</td>	<td>Y</td> <td>Search using a GO Molecular Function Term</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Assay Definition, Project</td>	<td>kegg_disease_cat</td>	<td>Y</td><td>Search by KEGG disease category</td><td>%{--TODO: Add example--}%</td> </tr>
-                            <tr><td>Assay Definition, Project</td>	<td>kegg_disease_names</td>	<td>Y</td><td>Search by KEGG disease name</td><td>%{--TODO: Add example--}%</td> </tr>
-                            <tr><td>Compound</td>	<td>CID</td>	<td>N</td>	<td>Search for Compounds by one or more PubChem CIDs</td> <td>%{--TODO: Add example--}%</td>   </tr>
+                            <tr><td>Assay Definition, Compound</td>	<td>target_name</td>	<td>Y</td><td>Search for assay definitions with target names matching the given string</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"target_name:\"(GO:0008219) cell death\""]'>target_name:"(GO:0008219) cell death"</g:link></td> </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>accession</td>	<td>Y</td> <td>Search for assay definitions with gene target accession numbers that match the given string</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"accession:\"12381848\""]'>accession:"12381848"</g:link></td>  </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>biology</td>	<td>Y</td><td>Search for assay definitions with a target biology matching the given string</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"biology:\"gene\""]'>biology:"gene"</g:link></td></tr>
+                            %{--Question for NCGC: how does the previous call differ from the subsequent one?--}%
+                            <tr><td>Assay Definition, Project</td>	<td>biology_dict_label</td>	<td>Y</td> <td>Search for assay definitions with a target biology matching the given string</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"biology_dict_label:\"process\""]'>biology_dict_label:"process"</g:link></td> </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>description</td>	<td>Y</td> <td>Search for assay definitions and projects containing the given string in their description</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"description:\"affiliation\""]'>description:"affiliation"</g:link></td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gobp_id</td>	<td>Y</td> <td>Search for assay definitions and projects annotated as being related to the given GO Biological Process ID</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"gobp_id:\"GO:0010468\""]'>gobp_id:"GO:0010468"</g:link></td> </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gobp_term</td>	<td>Y</td> <td>Search using a GO Biological Process term</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"gobp_term:\"accession\""]'>gobp_term:"accession"</g:link></td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gocc_id</td>	<td>Y</td> <td>Search using a GO Cellular Component ID</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"gocc_id:\"movement\""]'>gocc_id:"movement"</g:link></td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gocc_term</td>	<td>Y</td> <td>Search using a GO Cellular Component Term</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"gocc_term:\"nucleus\""]'>gocc_term:"nucleus"</g:link></td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gomf_id</td>	<td>Y</td> <td>Search using a GO Molecular Function ID</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"gomf_id:\"endoplasmic reticulum\""]'>gomf_id:"endoplasmic reticulum"</g:link></td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>gomf_term</td>	<td>Y</td> <td>Search using a GO Molecular Function Term</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"gomf_term:\"binding\""]'>gomf_term:"binding"</g:link></td></tr>
+                            <tr><td>Assay Definition, Project</td>	<td>kegg_disease_cat</td>	<td>Y</td><td>Search by KEGG disease category</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"kegg_disease_cat:\"infectious disease\""]'>kegg_disease_cat:"infectious disease"</g:link></td> </tr>
+                            <tr><td>Assay Definition, Project</td>	<td>kegg_disease_names</td>	<td>Y</td><td>Search by KEGG disease name</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"kegg_disease_names:\"crohns disease\""]'>kegg_disease_names:"crohns disease"</g:link></td> </tr>
+                            <tr><td>Compound</td>	<td>CID</td>	<td>N</td>	<td>Search for Compounds by one or more PubChem CIDs</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"cid:11972586,16759566"]'>cid:11972586,16759566</g:link></td>   </tr>
                             <tr><td>Compound</td>	<td>COLLECTION</td>	<td>Y</td>  <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
                             <tr><td>Compound</td>	<td>compound_class</td>	<td>Y</td>  <td>Search for compounds of a particular class.  Options are: </td><td>%{--TODO: Add example--}%</td> </tr>
-                            <tr><td>Compound</td>	<td>exact</td>		<td>N</td><td>Search for compounds with the exact given structure specified using SMILES</td> <td>%{--TODO: Add example--}%</td>   </tr>
-                            <tr><td>Compound</td>	<td>iupacName</td>	<td>Y</td> <td>Search for compounds having the given IUPAC name</td><td>%{--TODO: Add example--}%</td> </tr>
-                            <tr><td>Compound</td>	<td>similarity</td>		<td>N</td><td>Search for Compound similar to the given structure specified by SMILES defaulting to a threshold of 90% similarity</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Compound</td>	<td>substructure</td>	<td>N</td>	<td>Search for Compounds that contain the given substructure specified by SMILES</td>  <td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Compound</td>	<td>superstructure</td>	<td>N</td>	<td>Search for Compounds that the given structure specified by SMILES contains	</td> <td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Compound</td>	<td>target_accession</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Compound</td>	<td>target_description</td>	<td>Y</td> <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Compound</td>	<td>target_gene_id</td>	<td>Y</td>  <td>%{--TODO: Add description--}%</td><td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Compound</td>	<td>threshold</td>	<td>N</td>	<td>Sets the percent similarity threshold for a Compound similarity search.  Must be combined with a similarity search.	</td>   <td>%{--TODO: Add example--}%</td></tr>
-                            <tr><td>Compound, Project</td>	<td>probeId</td>	<td>Y</td> <td>Search for compounds with the given ML probe id</td><td>%{--TODO: Add example--}%</td>      </tr>
-                            <tr><td>Project</td>	<td>PID</td>	<td>N</td>	<td>Search for Projects by one or more PIDs</td> <td>%{--TODO: Add example--}%</td>   </tr>
-                            <tr><td>Project</td>	<td>projectId</td><td>Y</td><td>Find a project by the project identifier assigned by the warehouse</td><td>%{--TODO: Add example--}%</td></tr>
+                            <tr><td>Compound</td>	<td>exact</td>		<td>N</td><td>Search for compounds with the exact given structure specified using SMILES</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"exact:N.N.Cl[Pt]Cl"]'>exact:N.N.Cl[Pt]Cl</g:link></td>   </tr>
+                            <tr><td>Compound</td>	<td>iupacName</td>	<td>Y</td> <td>Search for compounds having the given IUPAC name</td>
+                                <td></td> </tr>
+                            <tr><td>Compound</td>	<td>similarity</td>		<td>N</td><td>Search for Compound similar to the given structure specified by SMILES defaulting to a threshold of 90% similarity</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"similarity:N.N.Cl[Pt]Cl"]'>similarity:N.N.Cl[Pt]Cl</g:link></td></tr>
+                            <tr><td>Compound</td>	<td>substructure</td>	<td>N</td>	<td>Search for Compounds that contain the given substructure specified by SMILES</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"substructure:Cl.OC(CCCN1CCCCC1)(C2=CC=CC=C2)C3=CC=CC=C3"]'>substructure:Cl.OC(CCCN1CCCCC1)(C2=CC=CC=C2)C3=CC=CC=C3</g:link></td></tr>
+                            <tr><td>Compound</td>	<td>superstructure</td>	<td>N</td>	<td>Search for Compounds that the given structure specified by SMILES contains	</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"superstructure:Cl.OC(CCCN1CCCCC1)"]'>superstructure:Cl.OC(CCCN1CCCCC1)</g:link></td></tr>
+                            <tr><td>Compound</td>	<td>target_accession</td>	<td>Y</td> <td>get search using target a session numbers</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"target_accession:\"12381848\""]'>target_accession:"12381848"</g:link></td></tr>
+                            <tr><td>Compound</td>	<td>target_description</td>	<td>Y</td> <td>Search using description of target</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"target_description:\"Acetylcholinesterase\""]'>target_description:"Acetylcholinesterase"</g:link></td></tr>
+                            <tr><td>Compound</td>	<td>target_gene_id</td>	<td>Y</td>  <td>Search using gene target ID numbers</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"target_gene_id:\"12381848\""]'>target_gene_id:"12381848"</g:link></td></tr>
+                            <tr><td>Compound</td>	<td>threshold</td>	<td>N</td>	<td>Sets the percent similarity threshold for a Compound similarity search.  Must be combined with a similarity search.	</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"Similarity: NC(=O)NS(=O)(=O)C1=CC=C(N)C=C1  threshold:90"]'>Similarity: NC(=O)NS(=O)(=O)C1=CC=C(N)C=C1  threshold:90</g:link></td></tr>
+                            <tr><td>Compound, Project</td>	<td>probeId</td>	<td>Y</td> <td>Search for compounds with the given ML probe id</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"probeid:ML329"]'>probeid:ML329</g:link></td>      </tr>
+                            <tr><td>Project</td>	<td>PID</td>	<td>N</td>	<td>Search for Projects by one or more PIDs</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"pid:1244"]'>pid:1244</g:link></td>   </tr>
+                            <tr><td>Project</td>	<td>projectId</td><td>Y</td><td>Find a project by the project identifier assigned by the warehouse</td>
+                                <td><g:link controller="bardWebInterface" action="search" params='[searchString:"projectid:\"17\""]'>projectid:"17"</g:link></td></tr>
                         </tbody>
                     </table>
 
