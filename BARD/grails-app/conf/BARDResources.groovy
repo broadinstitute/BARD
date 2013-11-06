@@ -50,22 +50,26 @@ modules = {
         resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js'
         resource url: "js/autocomplete.js"
     }
+
     bardHeaderFooter {
         resource url: "css/bardHomepage/BardHeaderFooter.css"
+        resource url: "css/bardHomepage/footer.css"
+        resource url: "css/bardHomepage/searchBox.css"
     }
 
     bardHomepage {
         dependsOn 'core,bootstrap,bootstrap-responsive-css,autocomplete'
         resource url: '/css/bardHomepage/BardHomepage.css'
+        resource url: "css/bardHomepage/footer.css"
+        resource url: "css/bardHomepage/searchBox.css"
         resource url: '/js/errorReporting.js'
         resource url: '/js/idSearchDialog.js'
     }
 
     basic {
-        dependsOn 'core,autocomplete'
+        dependsOn 'core,autocomplete,bardHeaderFooter'
         resource url: "/css/layout.css"
         resource url: "/css/table.css"
-        resource url: "/css/bardHomepage/BardHeaderFooter.css"
     }
 
     bootstrapplus {
