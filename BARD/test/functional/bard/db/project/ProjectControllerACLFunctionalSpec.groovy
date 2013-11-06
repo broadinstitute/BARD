@@ -610,48 +610,6 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     }
 
-    def 'test associate Experiments To Project #desc'() {
-
-        given:
-        String selectedExperiments = createUnAssociatedExperiment()
-        RESTClient client = getRestClient(controllerUrl, "associateExperimentsToProject", team, teamPassword)
-
-        when:
-        def response = client.post() {
-            urlenc projectId: projectData.id, 'selectedExperiments[]': selectedExperiments
-        }
-
-        then:
-        assert response.statusCode == expectedHttpResponse
-
-        where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-
-    }
-
-    def 'test associate Experiments To Project #desc forbidden'() {
-
-        given:
-        String selectedExperiments = createUnAssociatedExperiment()
-        RESTClient client = getRestClient(controllerUrl, "associateExperimentsToProject", team, teamPassword)
-        when:
-        client.post() {
-            urlenc projectId: projectData.id, 'selectedExperiments[]': selectedExperiments
-        }
-        then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
-
-
-        where:
-        desc      | team              | teamPassword      | authority     | expectedHttpResponse
-        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | "ROLE_TEAM_A" | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | "ROLE_TEAM_A" | HttpServletResponse.SC_FORBIDDEN
-
-    }
 
 
     def 'test show edit summary #desc'() {
