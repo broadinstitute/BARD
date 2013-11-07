@@ -13,8 +13,7 @@ import db.Project
 
 /**
  * @author Muhammad.Rafique
- * Date Created: 13/02/07
- * Last Updated: 13/10/29
+ * Date Created: 2013/02/07
  */
 class ProjectSummarySpec extends BardFunctionalSpec {
 	int statusIndex = 1
@@ -26,7 +25,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 	}
 
 
-	def "Test Project Summary Status Edit"() {
+	def "Test Edit Project Summary Status"() {
 		given:"Navigating to Show Project page"
 		to ViewProjectDefinitionPage
 
@@ -57,10 +56,10 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		assert uiSummary.Status.equalsIgnoreCase(statusEdited)
 		assert uiSummary.Status.equalsIgnoreCase(dbSummary.Status)
 
-		report "ProjectSummaryStatus"
+		report ""
 	}
 
-	def "Test Project Summary Name Edit"() {
+	def "Test Edit Project Summary Name"() {
 		given:"Navigating to Show Project page"
 		to ViewProjectDefinitionPage
 
@@ -98,10 +97,10 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		assert uiSummary.Name.equalsIgnoreCase(nameOriginal)
 		assert uiSummary.Name.equalsIgnoreCase(dbSummary.Name)
 
-		report "ProjectSummaryName"
+		report ""
 	}
 
-	def "Test Project Summary Name Edit with empty value"() {
+	def "Test Edit Project Summary Name with empty value"() {
 		given:"Navigating to Show Project page"
 		to ViewProjectDefinitionPage
 
@@ -126,10 +125,10 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		assert uiSummary.Name.equalsIgnoreCase(projectNameOriginal)
 		assert uiSummary.Name.equalsIgnoreCase(dbSummary.Name.toString())
 
-		report "ProjectSummaryNameEmpty"
+		report ""
 	}
 
-	def "Test Project Summary Description Edit"() {
+	def "Test Edit Project Summary Description"() {
 		given:"Navigating to Show Project page"
 		to ViewProjectDefinitionPage
 
@@ -167,10 +166,10 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		assert uiSummary.Description.equalsIgnoreCase(projectDescriptionOriginal)
 		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description)
 
-		report "ProjectSummaryDescription"
+		report ""
 	}
 
-	def "Test Project Summary Description Edit with empty value"() {
+	def "Test Edit Project Summary Description with empty value"() {
 		given:"Navigating to Show Project page"
 		to ViewProjectDefinitionPage
 
@@ -195,6 +194,6 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		assert uiSummary.Description.equalsIgnoreCase(projectDescriptionOriginal)
 		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())
 
-		report "ProjectSummaryDescriptionEmpty"
+		report ""
 	}
 }

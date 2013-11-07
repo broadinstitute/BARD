@@ -16,24 +16,21 @@ import db.Assay
 
 /**
  * @author Muhammad.Rafique
- * Date Created: 13/02/07
- * Last Updated: 13/10/07
+ * Date Created: 2013/02/07
  */
-@Ignore
 class AssaySummarySpec extends BardFunctionalSpec {
 //	def testData = TestDataReader.getTestData()
 	int statusIndex = 1
 	int nameIndex = 2
 	int designedByIndex = 4
-	int definitionTypeIndex = 6
+	int definitionTypeIndex = 5
 
 	def setup() {
 		logInSomeUser()
-
 	}
 
 
-	def "Test Assay Summary Status Edit"() {
+	def "Test Edit Assay Summary Status"() {
 		given: "Navigate to Show Assay page"
 		to ViewAssayDefinitionPage
 		
@@ -42,8 +39,13 @@ class AssaySummarySpec extends BardFunctionalSpec {
 		def uiSummary = getUISummaryInfo()
 		def dbSummary = Assay.getAssaySummaryById(TestData.assayId)
 		def statusOriginal = uiSummary.Status
-		def statusEdited = "Approved"
-
+		def statusEdited = ""
+		if(statusOriginal != "Approved"){
+			statusEdited = "Approved"
+		}else{
+			statusEdited = "Retired"
+		}
+		
 		then:"Verify Summary Status before edit on UI & DB"
 		assert uiSummary.Status.equalsIgnoreCase(dbSummary.Status)
 
@@ -58,23 +60,11 @@ class AssaySummarySpec extends BardFunctionalSpec {
 		then:"Verify Summary Status after edit on UI & DB"
 		assert uiSummary.Status.equalsIgnoreCase(statusEdited)
 		assert uiSummary.Status.equalsIgnoreCase(dbSummary.Status)
-
-		and:"Revert Edit/Update Summary Status"
-		editSummary(statusIndex, statusOriginal, true)
-
-		when:"Summary Status is reverted, Fetch Summary info on UI and DB for validation"
-		at ViewAssayDefinitionPage
-		uiSummary = getUISummaryInfo()
-		dbSummary = Assay.getAssaySummaryById(TestData.assayId)
-
-		then:"Verify Summary Status after revert on UI & DB"
-		assert uiSummary.Status.equalsIgnoreCase(statusOriginal)
-		assert uiSummary.Status.equalsIgnoreCase(dbSummary.Status)
 		
-		report "AssaySummaryStatus"
+		report ""
 	}
 
-	def "Test Assay Summary Name Edit"() {
+	def "Test Edit Assay Summary Name"() {
 		given: "Navigate to Show Assay page"
 		to ViewAssayDefinitionPage
 		
@@ -112,10 +102,10 @@ class AssaySummarySpec extends BardFunctionalSpec {
 		assert uiSummary.Name.equalsIgnoreCase(nameOriginal)
 		assert uiSummary.Name.equalsIgnoreCase(dbSummary.Name)
 		
-		report "AssaySummaryName"
+		report ""
 	}
 
-	def "Test Assay Summary Name Edit with empty value"() {
+	def "Test Edit Assay Summary Name with empty value"() {
 		given: "Navigate to Show Assay page"
 		to ViewAssayDefinitionPage
 		
@@ -140,7 +130,7 @@ class AssaySummarySpec extends BardFunctionalSpec {
 		assert uiSummary.Name.equalsIgnoreCase(nameOriginal)
 		assert uiSummary.Name.equalsIgnoreCase(dbSummary.Name.toString())
 		
-		report "AssaySummaryNameEmpty"
+		report ""
 	}
 /*
 	def "Test Assay Summary Designed By Edit"() {
@@ -212,7 +202,7 @@ class AssaySummarySpec extends BardFunctionalSpec {
 		report "SummaryDesignedByEmpty"
 	}
 */
-	def "Test Assay Definition Type Edit"() {
+	def "Test Edit Assay Definition Type"() {
 		given: "Navigate to Show Assay page"
 		to ViewAssayDefinitionPage
 		
@@ -221,8 +211,12 @@ class AssaySummarySpec extends BardFunctionalSpec {
 		def uiSummary = getUISummaryInfo()
 		def dbSummary = Assay.getAssaySummaryById(TestData.assayId)
 		def definitionTypeOriginal = uiSummary.DefinitionType
-		def definitionTypeEdited = "Template"
-
+		def definitionTypeEdited = ""
+		if(definitionTypeOriginal != "Template"){
+			definitionTypeEdited = "Template"
+		}else{
+			definitionTypeEdited = "Regular"
+		}
 		then:"Verify Summary Definition Type before edit on UI & DB"
 		assert uiSummary.DefinitionType.equalsIgnoreCase(dbSummary.DefinitionType)
 
@@ -250,7 +244,7 @@ class AssaySummarySpec extends BardFunctionalSpec {
 		assert uiSummary.DefinitionType.equalsIgnoreCase(definitionTypeOriginal)
 		assert uiSummary.DefinitionType.equalsIgnoreCase(dbSummary.DefinitionType)
 
-		report "AssaySummaryDefinitionType"
+		report ""
 	}
 
 }

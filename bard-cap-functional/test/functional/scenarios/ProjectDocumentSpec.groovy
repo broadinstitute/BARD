@@ -14,17 +14,15 @@ import db.Project
 
 /**
  * @author Muhammad.Rafique
- * Date Created: 13/02/07
- * Last Updated: 13/10/30
+ * Date Created: 2013/02/07
  */
 @Unroll
 class ProjectDocumentSpec extends BardFunctionalSpec {
 	def setup() {
 		logInSomeUser()
-
 	}
 
-	def "Test Project Document Add of type #TestName"(){
+	def "Test Add #TestName Document in Project"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
 
@@ -91,7 +89,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
 	}
 
-	def "Test Project Document Add of type #TestName with empty values"(){
+	def "Test Add #TestName Document in Project with empty values"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
 
@@ -142,7 +140,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
 	}
 
-	def "Test Project Document Edit of type #TestName"(){
+	def "Test #TestName Document in Project"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
 
@@ -225,7 +223,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
 	}
 
-	def "Test Project Document Edit of type #TestName with empty name value"(){
+	def "Test Edit #TestName Document in Project with empty name value"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
 
@@ -302,7 +300,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 	}
 
 
-	def "Test Project Document Delete of type #TestName"(){
+	def "Test Delete #TestName Document in Project"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
 
