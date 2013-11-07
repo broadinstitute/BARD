@@ -26,10 +26,15 @@ class ExperimentService {
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     ExperimentMeasure updateExperimentMeasure(Long id, ExperimentMeasure experimentMeasure, List<Long> assayContextIds) {
         ExperimentMeasure refreshedMeasure = experimentMeasure.save(flush: true)
+
+        if(!assayContextIds){
+            return refreshedMeasure
+        }
         final Set<AssayContextExperimentMeasure> assayContextExperimentMeasures = refreshedMeasure.getAssayContextExperimentMeasures()
 
         if (assayContextExperimentMeasures) {
             List<AssayContextExperimentMeasure> toRemove = []
+
             for (AssayContextExperimentMeasure assayContextExperimentMeasure : assayContextExperimentMeasures) {
                 final AssayContext assayContext = assayContextExperimentMeasure.assayContext
                 final long assayContextId = assayContext.id
