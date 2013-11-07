@@ -26,17 +26,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
     List<Long> cids = [2722L, 5394L]
 
 
-    void "get the last #label compounds"() {
-        when:
-        CompoundResult compoundResult = compoundRestService.findRecentlyAddedCompounds(numberOfCompounds)
-        then:
-        assert compoundResult.getCompounds().size() == numberOfCompounds
-        where:
 
-        label | numberOfCompounds
-        "10"  | 10
-        "5"   | 5
-    }
 
     void "searchCompoundsByCIDs #label"() {
         when:
