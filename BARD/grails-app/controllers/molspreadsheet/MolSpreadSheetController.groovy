@@ -1,12 +1,11 @@
 package molspreadsheet
-
+import bardqueryapi.BardUtilitiesService
+import bardqueryapi.InetAddressUtil
 import de.andreasschmitt.export.ExportService
-import grails.plugins.springsecurity.Secured
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import querycart.QueryCartService
+
 import javax.servlet.http.HttpServletResponse
-import bardqueryapi.InetAddressUtil
-import bardqueryapi.BardUtilitiesService
 
 @Mixin(InetAddressUtil)
 class MolSpreadSheetController {
@@ -18,7 +17,7 @@ class MolSpreadSheetController {
     BardUtilitiesService bardUtilitiesService
 
     def index() {
-        render(view: 'molecularSpreadSheet', model: [transpose: params.transpose, norefresh: params.norefresh, ChangeNorm: params.ChangeNorm] )
+        render(view: 'molecularSpreadSheet', model: [transpose: params.transpose, norefresh: params.norefresh, ChangeNorm: params.ChangeNorm, cid: params.cid] )
     }
 
     def showExperimentDetails(Long pid, Long cid, Boolean transpose) {

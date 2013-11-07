@@ -34,8 +34,15 @@
 
                 <p style="padding-left: 15px;">Hide Promiscuity Scores</p>
             </span>
-            <a href="../molSpreadSheet/index?norefresh=true" class="pull-right tranposeSymbol"
-               title="Transpose columns and rows">
+            <g:if test="${params?.cid?.size()>0}">
+                <a href="../molSpreadSheet/index?norefresh=false&cid=${params.cid}" class="pull-right tranposeSymbol"
+              title="Transpose columns and rows">
+            </g:if>
+            <g:else>
+                <a href="../molSpreadSheet/index?norefresh=true" class="pull-right tranposeSymbol"
+                  title="Transpose columns and rows">
+            </g:else>
+
                 <div class="centerEverything">
                     T<br/>
 
@@ -162,8 +169,8 @@
         </g:else>
 
     </div>
-
+    <% String mycid="${params.cid}" %>
     <div class="span10 pull-right">
-        <export:formats formats="['csv', 'excel', 'pdf']"/>
+        <export:formats formats="['csv', 'excel', 'pdf']" params="['cid':[params.cid]]"/>
     </div>
 </div>
