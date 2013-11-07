@@ -29,26 +29,7 @@ class CapPermissionServiceIntegrationSpec extends IntegrationSpec {
         SecurityContextHolder.clearContext();
     }
 
-    void "test getOwner integration test user #desc"() {
-        given: 'a logged in user creates an assay'
-        springSecurityService.reauthenticate(username)
-        Role role = Role.findByAuthority(authority)
-        if (!role) {
-            role = Role.build(authority: authority)
-        }
-        Assay assay = Assay.build(ownerRole: role)
-        assay.save(flush: true)
 
-        when:
-        String actualOwner = capPermissionService.getOwner(assay)
-
-        then:
-        assert actualOwner
-
-        where:
-        desc                             | username              | authority                 | expectedOwner
-        'owner is integration test user' | 'integrationTestUser' | "ROLE_BARD_ADMINISTRATOR" | 'BARD Administrator'
-    }
 
 
     void "test getOwner #desc"() {
