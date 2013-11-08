@@ -120,7 +120,7 @@ class MolecularSpreadSheetService {
      *
      * @return MolSpreadSheetData
      */
-    MolSpreadSheetData retrieveExperimentalDataFromIds(List<Long> cids, List<Long> adids, List<Long> pids) {
+    MolSpreadSheetData retrieveExperimentalDataFromIds(List<Long> cids, List<Long> adids, List<Long> pids, Boolean showActiveCompoundsOnly) {
 
         MolSpreadSheetDataBuilderDirector molSpreadSheetDataBuilderDirector = new MolSpreadSheetDataBuilderDirector()
 
@@ -128,7 +128,7 @@ class MolecularSpreadSheetService {
 
         molSpreadSheetDataBuilderDirector.setMolSpreadSheetDataBuilder(molSpreadSheetDataBuilder)
 
-        molSpreadSheetDataBuilderDirector.constructMolSpreadSheetDataFromIds(cids, adids, pids)
+        molSpreadSheetDataBuilderDirector.constructMolSpreadSheetDataFromIds(cids, adids, pids,showActiveCompoundsOnly)
 
         return molSpreadSheetDataBuilderDirector.molSpreadSheetData
     }
@@ -530,13 +530,13 @@ class MolecularSpreadSheetService {
      * @param cids
      * @return list of experiments
      */
-    protected List<ExperimentSearch> compoundIdsToExperiments(final List<Long> cids, Map<Long, Long> mapExperimentIdsToCapAssayIds) {
+    protected List<ExperimentSearch> compoundIdsToExperiments(final List<Long> cids, Map<Long, Long> mapExperimentIdsToCapAssayIds, Boolean showActiveCompoundsOnly) {
         if (!cids) {
             return []
         }
         List<Assay> allAssays = []
         for (Long individualCompoundId in cids) {
-            List<Assay> assays = compoundRestService.getTestedAssays(individualCompoundId, true)  // true = active only
+            List<Assay> assays = compoundRestService.getTestedAssays(individualCompoundId, showActiveCompoundsOnly)
             for (Assay assay in assays) {
                 if (!allAssays*.assayId.contains(assay.bardAssayId)) {
                     allAssays.add(assay)

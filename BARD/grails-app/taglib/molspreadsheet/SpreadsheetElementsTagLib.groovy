@@ -32,7 +32,7 @@ class SpreadsheetElementsTagLib {
         if (activeVersusActivePill.size() == 3) {   // our incoming string should always have three elements, but run a test to be sure
             out << """<div>
                       <span class="badge badge-info">
-                          <a   href="${this.createLink(controller: 'molSpreadSheet', action: 'showExperimentDetails', params: [cid: attrs.cid, transpose: "true"])}" style="color: white; text-decoration: underline" >${activeVersusActivePill[0]}</a>
+                          <a   href="${this.createLink(controller: 'molSpreadSheet', action: 'showExperimentDetails', params: [cid: attrs.cid, transpose: "true",showActive: "true"])}" style="color: white; text-decoration: underline" >${activeVersusActivePill[0]}</a>
                           / ${activeVersusActivePill[2]}
                   </div>"""
 

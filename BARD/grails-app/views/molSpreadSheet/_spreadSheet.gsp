@@ -30,6 +30,16 @@
             return ((a < b) ? 1 : ((a > b) ? -1 : 0));
         }
     });
+    function inactiveCheckboxHandler(checkbox){
+
+        if (checkbox.checked){
+            console.log('checked');
+            window.location.href="../molSpreadSheet/index?transpose=false&norefresh=false&showActive=false&cid=${params.cid}";
+        } else {
+            console.log('unchecked');
+            window.location.href="../molSpreadSheet/index?transpose=false&norefresh=false&showActive=true&cid=${params.cid}";
+        }
+    }
 </script>
 
 <script type="text/javascript">
@@ -79,13 +89,24 @@
     <div class="span10">
         <g:if test="${molSpreadSheetData?.getRowCount() > 0}">
             <g:set var="columnWidth" value="${100.0 / ((molSpreadSheetData?.getColumnCount() - 1) as float)}"/>
-            <span>
-                <input type="checkbox" class="pull-left" defaultChecked="checked" checked
-                       name="showPromiscuityScores"
-                       id="showPromiscuityScores">
 
-                <p style="padding-left: 15px;">Hide Promiscuity Scores</p>
-            </span>
+                <span>
+                    <input type="checkbox" class="pull-left" defaultChecked="checked" checked
+                           name="showPromiscuityScores"
+                           id="showPromiscuityScores">
+
+                    <p style="padding-left: 15px;">Hide Promiscuity Scores</p>
+                </span>
+                <span>
+                    <input type="checkbox" class="pull-left"
+                           <%=(showActive)?:'checked'%>
+                           name="showActiveInactiveChoice"
+                           id="showActiveInactiveChoice" <%=(!disableInactiveCheckbox) ?: "disabled"%>
+                           onclick='inactiveCheckboxHandler(this);'>
+                    <p style="padding-left: 15px;">Show Inactive Results</p>
+                </span>
+
+
             <g:if test="${params?.cid?.size()>0}">
                 <a href="../molSpreadSheet/index?transpose=true&norefresh=true&cid=${params.cid}" class="pull-right tranposeSymbol"
                    title="Transpose columns and rows">

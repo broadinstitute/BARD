@@ -37,7 +37,7 @@ class MolSpreadSheetDataBuilder {
      *  This implementation does not require a Query Cart
      * @return
      */
-    Map deriveListOfExperimentsFromIds(List<Long> pids, List<Long> adids, List<Long> cids,  Map<Long, Long> mapExperimentIdsToCapAssayIds) {
+    Map deriveListOfExperimentsFromIds(List<Long> pids, List<Long> adids, List<Long> cids,  Map<Long, Long> mapExperimentIdsToCapAssayIds, Boolean showActiveCompoundsOnly) {
         List<ExperimentSearch> experimentList = []
         MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = null
 
@@ -57,7 +57,7 @@ class MolSpreadSheetDataBuilder {
             // If we get to this point and have no experiments selected but we DO have a compound (s), then the user
             //  may be looking to derive their assays on the basis of compounds. We can do that.
             if ((experimentList.isEmpty()) && (!cids.isEmpty())) {
-                experimentList = molecularSpreadSheetService.compoundIdsToExperiments(cids, mapExperimentIdsToCapAssayIds)
+                experimentList = molecularSpreadSheetService.compoundIdsToExperiments(cids, mapExperimentIdsToCapAssayIds,showActiveCompoundsOnly)
                 molSpreadsheetDerivedMethod = MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects
             }
 
@@ -123,9 +123,10 @@ class MolSpreadSheetDataBuilderDirector {
 
     void constructMolSpreadSheetDataFromIds(final List<Long> cids,
                                             final List<Long> adids,
-                                            final List<Long> pids) {
+                                            final List<Long> pids,
+                                            Boolean showActiveCompoundsOnly) {
 
-        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids, cids, molSpreadSheetDataBuilder.mapExperimentIdsToCapAssayIds)
+        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids, cids, molSpreadSheetDataBuilder.mapExperimentIdsToCapAssayIds,showActiveCompoundsOnly)
         List<ExperimentSearch> experimentList = deriveListOfExperiments.experimentList
         MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = deriveListOfExperiments.molSpreadsheetDerivedMethod
 
