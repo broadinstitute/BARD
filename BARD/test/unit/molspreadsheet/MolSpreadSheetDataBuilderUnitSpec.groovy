@@ -79,7 +79,7 @@ class MolSpreadSheetDataBuilderUnitSpec extends Specification {
         MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
 
         then: "The expected hashCode is returned"
-        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(cartProjectList,cartAssayList,cartCompoundList,mapExperimentIdsToCapAssayIds)
+        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(cartProjectList,cartAssayList,cartCompoundList,mapExperimentIdsToCapAssayIds, true)
         List<ExperimentSearch> experimentList = deriveListOfExperiments.experimentList
         MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = deriveListOfExperiments.molSpreadsheetDerivedMethod
         assertNotNull experimentList

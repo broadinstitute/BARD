@@ -88,7 +88,7 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         "activeVrsTestedCell cell"      | "99/100"            | """<div><spanclass="badgebadge-info">99/100</span></div>""".toString()
         "activeVrsTestedCell cell"      | "1/999"             | """<div><spanclass="badgebadge-info">1/999</span></div>""".toString()
         "bad input handled"             | "garbage"           | """<div><spanclass="badgebadge-info">garbage</span></div>""".toString()
-        "spaces give link"              | "15 / 47"           | """<div><spanclass="badgebadge-info"><ahref="/molSpreadSheet/showExperimentDetails?cid=54&transpose=true"style="color:white;text-decoration:underline">15</a>/47</div>""".toString()
+        "spaces give link"              | "15 / 47"           | """<div><spanclass="badgebadge-info"><ahref="/molSpreadSheet/showExperimentDetails?cid=54&transpose=true&showActive=true"style="color:white;text-decoration:underline">15</a>/47</div>""".toString()
     }
 
     /**

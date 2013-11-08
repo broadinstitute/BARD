@@ -61,8 +61,6 @@ class MolSpreadSheetController {
                 }
                 if (molSpreadSheetData.molSpreadsheetDerivedMethod == MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects) {
                     disableInactiveCheckbox = false
-//                    flash.message = message(code: 'show.only.active.compounds', default:
-//                            "Please note: Only active compounds are shown in the Molecular Spreadsheet")
                 }
                 if (transpose) {
                     render(template: 'tSpreadSheet', model: [molSpreadSheetData: molSpreadSheetData,disableInactiveCheckbox:disableInactiveCheckbox,showActive:  showActiveCompoundsOnly])
