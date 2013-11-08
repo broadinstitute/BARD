@@ -150,7 +150,7 @@ class MergeAssayService {
     /**
      *
      */
-    void handleMeasures(Assay target, List<Assay> originalAssays) {
+    void handleMeasures(Assay target, Collection<Assay> originalAssays) {
         for(assay in originalAssays) {
             for(experiment in assay.experiments) {
                 for(measure in experiment.experimentMeasures) {

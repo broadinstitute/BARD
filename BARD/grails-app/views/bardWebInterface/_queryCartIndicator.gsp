@@ -23,7 +23,7 @@
     <div class="row-fluid">
         <span class="trigger btn btn-primary" style="color:#ffffff; background: #0093d0;">
             QUERY CART &nbsp;
-            <span class="cartContents">
+            <span id="cartContents" class="cartContents">
                 <g:if test="${!totalItemCount}">
                     Empty
                 </g:if>

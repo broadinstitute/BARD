@@ -96,7 +96,7 @@
 
             <div class="rightofline">
 
-                <a class="removeAllFromCart btn" role="button" href="#"
+                <a id="removeAllFromCart" class="removeAllFromCart btn" role="button" href="#"
                    style="background: #0093d0;  color: #ffffff">
                     CLEAR ALL
                 </a>
