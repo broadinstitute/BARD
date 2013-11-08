@@ -37,6 +37,9 @@ class AboutController {
     def howToContactUs() {
         render (view:'howToContactUs')
     }
+    def howToDocumentBard() {
+        render (view:'howToDocumentBard')
+    }
 
     // some pages accessed through the footer
     def bardHistory() {

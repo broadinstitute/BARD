@@ -86,8 +86,19 @@
 
                 <p style="padding-left: 15px;">Hide Promiscuity Scores</p>
             </span>
-            <a href="../molSpreadSheet/index?transpose=true&norefresh=true" class="pull-right tranposeSymbol"
-               title="Transpose columns and rows">
+            <g:if test="${params?.cid?.size()>0}">
+                <a href="../molSpreadSheet/index?transpose=true&norefresh=true&cid=${params.cid}" class="pull-right tranposeSymbol"
+                   title="Transpose columns and rows">
+            </g:if>
+            <g:else>
+                <a href="../molSpreadSheet/index?transpose=true&norefresh=true" class="pull-right tranposeSymbol"
+                   title="Transpose columns and rows">
+            </g:else>
+
+
+
+
+
                 <div class="centerEverything">
                     T<br/>
 
@@ -225,7 +236,7 @@
 
     <div class="span10 pull-right">
         <g:if test="${molSpreadSheetData?.getRowCount() > 0}">
-            <export:formats formats="['csv', 'excel', 'pdf']"/>
+            <export:formats formats="['csv', 'excel', 'pdf']" params="['cid':[params.cid]]"/>
         </g:if>
     </div>
 </div>

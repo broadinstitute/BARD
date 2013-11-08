@@ -91,6 +91,7 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="../about/howToReportABug">Report a bug</a></li>
                                     <li><a href="../about/howToContactUs">Contact us</a></li>
+                                    <li><a href="../about/howToDocumentBard">BARD Documentation</a></li>
                                 </ul>
                             </li>
                             <sec:ifLoggedIn>

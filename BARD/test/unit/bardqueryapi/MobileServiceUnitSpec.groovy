@@ -51,7 +51,7 @@ class MobileServiceUnitSpec extends Specification {
         when:
         HttpServletRequest mockedRequest = new MockHttpServletRequest()
         mockedRequest.session.setAttribute('mobileExperienceDisabled', false)
-        SpringSecurityUtils.metaClass.static.ifAnyGranted = {String role -> return true}
+        SpringSecurityUtils.metaClass.static.ifAnyGranted = { String role -> return true }
         Boolean result = service.detect(mockedRequest)
 
         then:
@@ -62,12 +62,12 @@ class MobileServiceUnitSpec extends Specification {
         when:
         HttpServletRequest mockedRequest = Mock(HttpServletRequest)
         HttpSession httpSession = Mock(HttpSession)
-        mockedRequest.session >> {httpSession}
-        httpSession.getAttribute(_) >> {false}
-        SpringSecurityUtils.metaClass.static.ifAnyGranted = {String role -> return false}
+        mockedRequest.session >> { httpSession }
+        httpSession.getAttribute(_) >> { false }
+        SpringSecurityUtils.metaClass.static.ifAnyGranted = { String role -> return false }
         DummyDevice device = Mock(DummyDevice)
-        mockedRequest.getAttribute('currentDevice') >> {return device}
-        device.isMobile() >> {isMobile}
+        mockedRequest.getAttribute('currentDevice') >> { return device }
+        device.isMobile() >> { isMobile }
         Boolean result = service.detect(mockedRequest)
 
         then:
@@ -83,13 +83,13 @@ class MobileServiceUnitSpec extends Specification {
         when:
         HttpServletRequest mockedRequest = Mock(HttpServletRequest)
         HttpSession httpSession = Mock(HttpSession)
-        mockedRequest.session >> {httpSession}
-        httpSession.getAttribute(_) >> {false}
-        SpringSecurityUtils.metaClass.static.ifAnyGranted = {String role -> return false}
+        mockedRequest.session >> { httpSession }
+        httpSession.getAttribute(_) >> { false }
+        SpringSecurityUtils.metaClass.static.ifAnyGranted = { String role -> return false }
         DummyDevice device = Mock(DummyDevice)
-        mockedRequest.getAttribute('currentDevice') >> {return device}
-        device.isMobile() >> {true}
-        mockedRequest.getHeader('User-Agent') >> {userAgent}
+        mockedRequest.getAttribute('currentDevice') >> { return device }
+        device.isMobile() >> { true }
+        mockedRequest.getHeader('User-Agent') >> { userAgent }
         Boolean result = service.detect(mockedRequest)
 
         then:
@@ -104,9 +104,9 @@ class MobileServiceUnitSpec extends Specification {
 
     void "test gspExists war #label"() {
         when:
-        grailsApplication.isWarDeployed() >> {true}
+        grailsApplication.isWarDeployed() >> { true }
         ServletContext servletContext = Mock(ServletContext)
-        ServletContextHolder.metaClass.static.getServletContext = {servletContext}
+        ServletContextHolder.metaClass.static.getServletContext = { servletContext }
         servletContext.getResourcePaths(_) >>> resourcePaths
         Boolean result = service.gspExists(gspExistName)
         then:
@@ -118,22 +118,23 @@ class MobileServiceUnitSpec extends Specification {
         'no gsp was found' | '/index'     | [['root'], ['search.gsp']] | false
     }
 
+
     void "test gspExists dev #label"() {
         when:
-        grailsApplication.isWarDeployed() >> {false}
+        grailsApplication.isWarDeployed() >> { false }
         Boolean result = service.gspExists(gspExistName)
         then:
         assert result == expectedResult
 
         where:
-        label              | gspExistName              | expectedResult
-        'a gsp was found'  | '/bardWebInterface/index' | true
-        'no gsp was found' | '/noGSP'                  | false
+        label              | gspExistName      | expectedResult
+        'a gsp was found'  | '/about/aboutBard' | true
+        'no gsp was found' | '/noGSP'          | false
     }
 
 }
 
-protected class DummyDevice {
+class DummyDevice {
     Boolean isMobile() {
         return true
     }

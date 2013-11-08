@@ -762,7 +762,7 @@ class ResultTypeCommand extends AbstractResultTypeCommand {
             experimentMeasureToReturn.statsModifier = getStatsModifier()
             experimentMeasureToReturn.parent = getParentExperimentMeasure()
             experimentMeasureToReturn.resultType = this.getResultType()
-            return experimentService.updateExperimentMeasure(this.experimentId, experimentMeasure, this.contextIds)
+            return experimentService.updateExperimentMeasure(this.experimentId, experimentMeasureToReturn, this.contextIds)
         }
         return null
     }

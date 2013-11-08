@@ -32,7 +32,7 @@ class ExperimentMeasure {
     Set<AssayContextExperimentMeasure> assayContextExperimentMeasures = [] as Set
 
 
-    static belongsTo = [parent: ExperimentMeasure]
+    static belongsTo = [experiment: Experiment,parent: ExperimentMeasure]
     static hasMany = [childMeasures: ExperimentMeasure, assayContextExperimentMeasures: AssayContextExperimentMeasure]
 
     static constraints = {
