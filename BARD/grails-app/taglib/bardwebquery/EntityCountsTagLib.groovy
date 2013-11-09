@@ -7,7 +7,6 @@ class EntityCountsTagLib {
 
     QueryService queryService
 
-
     def projectCount = { attrs, body ->
         long projects = queryService.numberOfProjects()
         String link = generateLink(projects, "Projects", "#tab-projects")
@@ -33,15 +32,10 @@ class EntityCountsTagLib {
         out << "${link}"
     }
 
-    def compoundCount = { attrs, body ->
-        long compounds = queryService.numberOfCompounds()
-        String link = generateLink(compounds, "Tested Compounds", "#tab-compounds")
-        out << "${link}"
-    }
 
     def probeCount = { attrs, body ->
         long probes = queryService.numberOfProbes()
-        String link = generateLink(probes, "ML Probes", "#tab-probes")
+        String link = generateLink(probes, "Number of Probes", "#tab-probes")
         out << "${link}"
     }
 

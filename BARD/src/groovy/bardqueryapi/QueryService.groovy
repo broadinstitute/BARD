@@ -17,6 +17,7 @@ import bard.core.rest.spring.substances.Substance
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
 import bard.db.dictionary.BardDescriptor
+import bard.db.project.ProjectService
 import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
 import bardqueryapi.experiment.ExperimentBuilder
 import org.apache.commons.lang3.tuple.ImmutablePair
@@ -36,9 +37,12 @@ class QueryService implements IQueryService {
     SubstanceRestService substanceRestService
     ExperimentRestService experimentRestService
     ExperimentBuilder experimentBuilder
+    ProjectService projectService
+
 //    GOOntologyService goOntologyService
 
     //========================================================== Free Text Searches ================================
+
 
     Map searchCompoundsByCids(final List<Long> cids, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
 
@@ -726,11 +730,11 @@ class QueryService implements IQueryService {
     }
 
     int numberOfProbes() {
-        final CompoundResult compoundResult = compoundRestService.findCompoundsByETag(PROBE_ETAG_ID)
-        return compoundResult.compounds.size()
-
+        return projectService.findApprovedProbeProjects()?.size()
     }
-
+    List<Long> findAllProbeProjects(){
+        return projectService.findApprovedProbeProjects()
+    }
     List<Assay> findRecentlyAddedAssays(int numberOfAssays = 6) {
         final List<Assay> assays = assayRestService.findRecentlyAdded(numberOfAssays)
         return assays

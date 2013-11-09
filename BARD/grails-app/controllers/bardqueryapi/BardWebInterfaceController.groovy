@@ -95,7 +95,9 @@ class BardWebInterfaceController {
         final List<bard.core.rest.spring.project.Project> recentlyAddedProjects = queryService.findRecentlyAddedProjects(6)
 
         final List<ExperimentSearch> recentlyAddedExperiments = queryService.findRecentlyAddedExperiments(6)
-        final List<Compound> recentlyAddedProbes = queryService.findRecentlyAddedProbes(6)
+
+        //link to all probes
+        final List<Long> probeProjectIds = queryService.findAllProbeProjects()
         long numberOfExperimentData = queryService.numberOfExperimentData()
         render(view: 'homepage', model:
                 [
@@ -103,7 +105,7 @@ class BardWebInterfaceController {
                         numberOfExperimentData: numberOfExperimentData,
                         recentlyAddedProjects: recentlyAddedProjects,
                         recentlyAddedExperiments: recentlyAddedExperiments,
-                        recentlyAddedProbes: recentlyAddedProbes,
+                        probeProjectIds: probeProjectIds
 
                 ]
         )
