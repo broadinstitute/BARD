@@ -393,6 +393,9 @@ var linkedVisualizationModule = (function () {
                     .order(d3.ascending)
                     .sortBy(function (d) {
                         return d.GO_biological_process_term;
+                    })
+                    .renderlet(function () {
+                        $.event.trigger('reshuffleElementsAroundTable', [$('#data-table').offset().top]);
                     });
                 //                        This datecount  function below doesn't seem to work for me. What's wrong?
                 //                        dc.dataCount("#data-count")
@@ -412,7 +415,8 @@ var linkedVisualizationModule = (function () {
                 dataTable
                     .transition()
                     .duration(500)
-                    .style("top", newTopPosition);  // Extra spaces for 'click to contract' button
+                    .style("top", newTopPosition + "px");  // Extra spaces for 'click to contract' button
+                $.event.trigger('reshuffleElementsAroundTable', newTopPosition); //Move elements that render after the data-table (e.g., bard-footer)
             },
 
             moveDataTableBackToItsOriginalPosition = function (dataTable, newTopPosition) {
@@ -420,7 +424,8 @@ var linkedVisualizationModule = (function () {
                     .transition()
                     .delay(1000)
                     .duration(500)
-                    .style("top", newTopPosition);  // Extra spaces for 'click to contract' button
+                    .style("top", newTopPosition + "px");  // Extra spaces for 'click to contract' button
+                $.event.trigger('reshuffleElementsAroundTable', newTopPosition); //Move elements that render after the data-table (e.g., bard-footer)
             },
 
 
@@ -792,8 +797,8 @@ var linkedVisualizationModule = (function () {
                 if (!widgetPosition.isAnyWidgetExpanded()) {
                     displayManipulator.disableAllPieClickEffectors();
                     displayManipulator.expandDataAreaForAllPieCharts(d3.select('.pieCharts'));
-                    displayManipulator.moveDataTableOutOfTheWay(d3.select('#data-table'), 50 + displayWidgetY + displayWidgetHeight + "px");
-                    displayManipulator.moveDataTableOutOfTheWay(d3.select('#bard-footer'), "1750px");
+                    displayManipulator.moveDataTableOutOfTheWay(d3.select('#data-table'), 50 + displayWidgetY + displayWidgetHeight);
+//                    displayManipulator.moveDataTableOutOfTheWay(d3.select('#bard-footer'), "1750px");
                     widgetPosition.expandThisWidget(d.index);
                     expandedWidget = widgetPosition.expandedWidget();
                     unexpandedWidget = widgetPosition.unexpandedWidgets();
@@ -824,8 +829,8 @@ var linkedVisualizationModule = (function () {
                         origButton,
                         expandedPos);
                     widgetPosition.unexpandAllWidgets();
-                    displayManipulator.moveDataTableBackToItsOriginalPosition(d3.select('#data-table'), "300px");
-                    displayManipulator.moveDataTableBackToItsOriginalPosition(d3.select('#bard-footer'), "750px");
+                    displayManipulator.moveDataTableBackToItsOriginalPosition(d3.select('#data-table'), 300);
+//                    displayManipulator.moveDataTableBackToItsOriginalPosition(d3.select('#bard-footer'), "750px");
                     displayManipulator.reenableAllPieClickEffectors();
                     displayManipulator.eraseAnyOrphanedTooltips();
                     displayManipulator.cleanUpAnyGraphicsWeAreDoneWith();
