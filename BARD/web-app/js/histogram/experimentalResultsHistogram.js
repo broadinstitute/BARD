@@ -1,3 +1,16 @@
+$(document).ready(function () {
+    var experimentId = $("#experimentId").val();
+    d3.json("/BARD/bardWebInterface/retrieveExperimentResultsSummary/" + experimentId, function (error, dataFromServer) {
+        if (!(dataFromServer === undefined)) {
+            for (var i = 0; i < dataFromServer.length; i++) {
+                if (!(dataFromServer[i] === undefined)) {
+                    drawHistogram(d3.select('#histogramHere'), dataFromServer[i]);
+                }
+            }
+        }
+    });
+});
+
 function drawHistogram(domMarker, oneHistogramsData) {
     "use strict";
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////

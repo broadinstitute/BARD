@@ -15,42 +15,51 @@ class JsonResultUnitSpec extends Specification {
     String expected = """
 {
   "sid" : 100,
-  "rootElem" : [ {
-    "resultId" : 100,
-    "resultTypeId" : 101,
-    "statsModifierId" : 15,
-    "resultType" : "AC50",
-    "valueNum" : 10.0,
-    "valueMin" : 0.0,
-    "valueMax" : 1000.0,
-    "replicateNumber" : 1,
-    "valueDisplay" : "valueDisplay",
-    "qualifier" : "=",
-    "related" : [ {
-      "resultId" : 100,
-      "resultTypeId" : 101,
-      "statsModifierId" : 15,
-      "resultType" : "AC50",
-      "valueNum" : 10.0,
-      "valueMin" : 0.0,
-      "valueMax" : 1000.0,
-      "replicateNumber" : 1,
-      "valueDisplay" : "valueDisplay",
-      "qualifier" : "=",
-      "relationship" : "Derives"
-    } ],
-    "contextItems" : [ {
-      "itemId" : 100,
-      "attribute" : "attribute",
-      "attributeId": 53,
-      "qualifier" : "<",
-      "valueNum" : 102.0,
-      "valueMin" : -200.0,
-      "valueMax" : 200.0,
-      "valueDisplay" : "value",
-      "valueElementId" : 100
-    } ]
-  } ]
+  "rootElem" :
+  [
+    {
+        "resultId" : 100,
+        "resultTypeId" : 101,
+        "statsModifierId" : 15,
+        "resultType" : "AC50",
+        "valueNum" : 10.0,
+        "valueMin" : 0.0,
+        "valueMax" : 1000.0,
+        "replicateNumber" : 1,
+        "valueDisplay" : "valueDisplay",
+        "qualifier" : "=",
+        "related" :
+        [
+            {
+              "resultId" : 100,
+              "resultTypeId" : 101,
+              "statsModifierId" : 15,
+              "resultType" : "AC50",
+              "valueNum" : 10.0,
+              "valueMin" : 0.0,
+              "valueMax" : 1000.0,
+              "replicateNumber" : 1,
+              "valueDisplay" : "valueDisplay",
+              "qualifier" : "=",
+              "relationship" : "Derives"
+            }
+        ],
+        "contextItems" :
+        [
+            {
+              "itemId" : 100,
+              "attribute" : "attribute",
+              "attributeId": 53,
+              "qualifier" : "<",
+              "valueNum" : 102.0,
+              "valueMin" : -200.0,
+              "valueMax" : 200.0,
+              "valueDisplay" : "value",
+              "valueElementId" : 100
+            }
+        ]
+    }
+  ]
 }
 """
     def 'test serialization'() {

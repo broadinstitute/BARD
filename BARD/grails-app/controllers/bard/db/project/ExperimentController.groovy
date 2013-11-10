@@ -340,7 +340,6 @@ class ExperimentController {
             contextIds.add(assayContextExperimentMeasure.assayContext.id);
         }
 
-
         ResultTypeCommand resultTypeCommand =
             new ResultTypeCommand(fromCreatePage: true,
                     experimentMeasureId: experimentMeasure.id,
@@ -350,7 +349,8 @@ class ExperimentController {
                     parentExperimentMeasureId: experimentMeasure.parent?.id?.toString(),
                     parentChildRelationship: experimentMeasure.parentChildRelationship?.id,
                     resultTypeId: experimentMeasure.resultType.id,
-                    contextIds: contextIds
+                    contextIds: contextIds,
+
             )
         Map dataMap = resultTypeCommand.createDataResponseMap()
         render view: "createResultTypes", model: dataMap
@@ -628,7 +628,8 @@ class AbstractResultTypeCommand extends BardCommand {
                                               ExperimentMeasure parentExperimentMeasure,
                                               HierarchyType hierarchyType,
                                               Element statsModifier) {
-        return this.experimentService.createNewExperimentMeasure(experiment.id, parentExperimentMeasure, resultType, statsModifier, this.contextIds, hierarchyType, priorityElement)
+        return this.experimentService.createNewExperimentMeasure(experiment.id, parentExperimentMeasure, resultType, statsModifier, this.contextIds,
+                hierarchyType, priorityElement)
     }
     /**
      *
@@ -645,7 +646,7 @@ class AbstractResultTypeCommand extends BardCommand {
                 experimentMeasure1.resultType.label.compareTo(experimentMeasure2.resultType.label)
             }
         }
-        return [resultTypeCommand: this, currentExperimentMeasures: currentExperimentMeasures]
+        return [resultTypeCommand: this, currentExperimentMeasures: currentExperimentMeasures, canEditMeasures: experiment?.experimentFiles ? false : true]
 
     }
 
@@ -677,19 +678,25 @@ class AbstractResultTypeCommand extends BardCommand {
             //should be present when editing
             if (value) {
                 if (!ExperimentMeasure.get(value)) {
-                    err.rejectValue('experimentMeasureId', "message.code", "Could not find Experiment Measure: ${value}");
+                    err.rejectValue('experimentMeasureId', "command.experimentMeasure.id.not.found",
+                            ["${value}"] as Object[],
+                            "Could not find Experiment Measure: ${value}");
                 }
             }
         })
         experimentId(nullable: false, validator: { value, command, err ->
-            if (!Experiment.get(value)) {
-                err.rejectValue('experimentId', "message.code", "Could not find EID : ${value}");
+            if (!Experiment.get(value.toLong())) {
+                err.rejectValue('experimentId', "associateExperimentsCommand.experiment.id.not.found",
+                        ["${value}"] as Object[],
+                        "Could not find Experiment with EID : ${value}");
             }
         })
         statsModifierId(nullable: true, blank: true, validator: { value, command, err ->
             if (value) {
                 if (!Element.get(value.toLong())) {
-                    err.rejectValue('statsModifierId', "message.code", "Could not find Stats Modifier with ID : ${value}");
+                    err.rejectValue('statsModifierId', "command.statsModifier.id.not.found",
+                            ["${value}"] as Object[],
+                            "Could not find Stats Modifier with ID : ${value}");
                 }
             }
         })
@@ -697,7 +704,9 @@ class AbstractResultTypeCommand extends BardCommand {
             if (value) {
                 for (Long contextId : value) {
                     if (!AssayContext.get(contextId)) {
-                        err.rejectValue('contextIds', "message.code", "Could not Assay Context with ID : ${contextId}");
+                        err.rejectValue('contextIds', "command.context.id.not.found",
+                                ["${value}"] as Object[],
+                                "Could not find Assay Context with ID : ${contextId}");
                     }
                 }
             }
@@ -705,7 +714,9 @@ class AbstractResultTypeCommand extends BardCommand {
         parentExperimentMeasureId(nullable: true, blank: true, validator: { value, command, err ->
             if (value) {
                 if (!ExperimentMeasure.get(value.toLong())) {
-                    err.rejectValue('parentExperimentMeasureId', "message.code", "Could not find Parent Measure with ID : ${value}");
+                    err.rejectValue('parentExperimentMeasureId', "command.parentMeasure.id.not.found",
+                            ["${value}"] as Object[],
+                            "Could not find Parent Measure with ID : ${value}");
                 }
             }
         })
@@ -725,8 +736,13 @@ class ResultTypeCommand extends AbstractResultTypeCommand {
 
     static constraints = {
 
-        resultTypeId(nullable: false, validator: { value, command, err ->
-            if (!Element.get(value)) {
+        resultTypeId(nullable: true, validator: { value, command, err ->
+            if (command?.experiment?.experimentFiles) { //this result type value can be null
+                //user can only update priority elements
+                return
+            } else if (!value) {
+                err.rejectValue('resultTypeId', "command.resultTypeId.nullable");
+            } else if (!Element.get(value)) {
                 err.rejectValue('resultTypeId', "command.resultTypeId.notexists");
             }
         })
@@ -753,15 +769,18 @@ class ResultTypeCommand extends AbstractResultTypeCommand {
     ExperimentMeasure updateExperimentMeasure() {
         if (validate()) {
             ExperimentMeasure experimentMeasureToReturn = getExperimentMeasure()
-            HierarchyType hierarchyType = null
-            if (this.parentChildRelationship) {
-                hierarchyType = HierarchyType.byId(this.parentChildRelationship)
-            }
             experimentMeasureToReturn.priorityElement = this.priorityElement
-            experimentMeasureToReturn.parentChildRelationship = hierarchyType
-            experimentMeasureToReturn.statsModifier = getStatsModifier()
-            experimentMeasureToReturn.parent = getParentExperimentMeasure()
-            experimentMeasureToReturn.resultType = this.getResultType()
+            if (!getExperiment().experimentFiles) {//if this experiment has no results uploaded then you can edit everything else
+                HierarchyType hierarchyType = null
+                if (this.parentChildRelationship) {
+                    hierarchyType = HierarchyType.byId(this.parentChildRelationship)
+                }
+
+                experimentMeasureToReturn.parentChildRelationship = hierarchyType
+                experimentMeasureToReturn.statsModifier = getStatsModifier()
+                experimentMeasureToReturn.parent = getParentExperimentMeasure()
+                experimentMeasureToReturn.resultType = this.getResultType()
+            }
             return experimentService.updateExperimentMeasure(this.experimentId, experimentMeasureToReturn, this.contextIds)
         }
         return null
@@ -808,13 +827,18 @@ class ExperimentCommand extends BardCommand {
         importFrom(Experiment, exclude: ['assay', 'holdUntilDate', 'runDateTo', 'runDateFrom', 'readyForExtraction', 'lastUpdated', 'ownerRole', 'experimentStatus'])
         assayId(nullable: false, validator: { value, command, err ->
             if (!Assay.get(value)) {
-                err.rejectValue('assayId', "message.code", "Could not find ADID : ${value}");
+                err.rejectValue('assayId', "command.assay.id.not.found",
+                        ["${value}"] as Object[],
+                        "Could not find ADID : ${value}");
             }
         })
         ownerRole(nullable: false, blank: false, validator: { value, command, err ->
             Role role = Role.findByAuthority(value)
             if (!BardCommand.isRoleInUsersRoleList(role)) {
-                err.rejectValue('ownerRole', "message.code", "You do not have the privileges to create Assays for this team : ${role.displayName}");
+                err.rejectValue('ownerRole',
+                        "assay.no.create.privileges",
+                        ["${role.displayName}"] as Object[],
+                        "You do not have the privileges to create Assays for this team : ${role.displayName}");
             }
         })
         runDateTo(nullable: true, blank: true, validator: { String field, ExperimentCommand instance, Errors errors ->

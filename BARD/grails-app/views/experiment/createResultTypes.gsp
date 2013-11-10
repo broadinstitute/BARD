@@ -31,110 +31,120 @@
                 </div>
             </g:hasErrors>
 
+            <g:if test="${canEditMeasures}">
+                <h3>Add a result type</h3>
+                <h4>Here you can add a result type which you'll provide in the result submission</h4>
+            </g:if>
+            <g:else>
 
-            <h3>Add a result type</h3>
-            <h4>Here you can add a result type which you'll provide in the result submission</h4>
+                <h3>This experiment already has data loaded. While data exists, you can only change the priority element,
+                but all other fields require reloading the data.</h3>
+            </g:else>
+
 
             <dl class="dl-horizontal" id="extendwidth">
             <dt>
              <b><g:message
                 code="command.priority.element.label"/>:</b>
-                <g:render template="priorityElementDictionary"/>
+            <g:render template="priorityElementDictionary"/>
 
-             </dt>
+            </dt>
 
             <dd>
                 <g:checkBox name="priorityElement" value="${resultTypeCommand.priorityElement}"/>
                 <br/>
             </dd>
-            <dt><g:message
-                    code="command.resultType.label"/>:</dt>
-            <dd>
-                <g:hiddenField id="resultTypeId" name="resultTypeId" class="span11"
-                               value="${resultTypeCommand?.resultType?.id}"/>
-            </dd>
-
-            <dt><g:message
-                    code="command.resultType.description"/>:</dt>
-            <dd>
-                <g:textArea id="resultTypeDescription" name="resultTypeDescription" class="span11"
-                            value="${resultTypeCommand?.resultType?.description}" disabled="disabled"/>
-
-            </dd>
-            <dt><g:message
-                    code="command.statsModifier.label"/>:</dt>
-            <dd>
-
-                <g:hiddenField id="statsModifierId" name="statsModifierId" class="span11"
-                               value="${resultTypeCommand?.statsModifier?.id}"/>
-            </dd>
-
-            <dt><g:message
-                    code="command.statsModifier.description"/>:</dt>
-            <dd>
-                <g:textArea id="statsModifierDescription" name="statsModifierDescription" class="span11"
-                            value="${resultTypeCommand?.statsModifier?.description}" disabled="disabled"/>
-
-            </dd>
-            <g:if test="${currentExperimentMeasures}">
+            <g:if test="${canEditMeasures}">
+                <dt><g:message
+                        code="command.resultType.label"/>:</dt>
+                <dd>
+                    <g:hiddenField id="resultTypeId" name="resultTypeId" class="span11"
+                                   value="${resultTypeCommand?.resultType?.id}"/>
+                </dd>
 
                 <dt><g:message
-                        code="command.parent.resultType.label"/>:</dt>
+                        code="command.resultType.description"/>:</dt>
                 <dd>
-                    <g:select name="parentExperimentMeasureId" id="parentExperimentMeasureId"
-                              class="parentExperimentMeasureId"
-                              noSelection="${['': 'none']}"
-                              from="${currentExperimentMeasures}"
-                              value="${resultTypeCommand?.parentExperimentMeasure?.id}"
-                              optionValue="${{ it.resultType?.label }}" optionKey="id"/>
+                    <g:textArea id="resultTypeDescription" name="resultTypeDescription" class="span11"
+                                value="${resultTypeCommand?.resultType?.description}" disabled="disabled"/>
+
                 </dd>
-                <dd><br/>Relationship to Parent</dd>
-                <dt>
-                 <div id="selectedParentLabelId"></div>
-                </dt>
+                <dt><g:message
+                        code="command.statsModifier.label"/>:</dt>
                 <dd>
-                    <g:select name="parentChildRelationship" id="parentChildRelationshipId"
-                              class="parentChildRelationship"
-                              noSelection="${['': 'none']}"
-                              from="${HierarchyType.values()}"
-                              value="${resultTypeCommand?.parentChildRelationship}"
-                              optionValue="id" optionKey="id"/>
 
-                    <span id="hierarchyLabelId"></span>
+                    <g:hiddenField id="statsModifierId" name="statsModifierId" class="span11"
+                                   value="${resultTypeCommand?.statsModifier?.id}"/>
                 </dd>
-            </g:if>
-            <br/><br/><br/>
+
+                <dt><g:message
+                        code="command.statsModifier.description"/>:</dt>
+                <dd>
+                    <g:textArea id="statsModifierDescription" name="statsModifierDescription" class="span11"
+                                value="${resultTypeCommand?.statsModifier?.description}" disabled="disabled"/>
+
+                </dd>
+                <g:if test="${currentExperimentMeasures}">
+
+                    <dt><g:message
+                            code="command.parent.resultType.label"/>:</dt>
+                    <dd>
+                        <g:select name="parentExperimentMeasureId" id="parentExperimentMeasureId"
+                                  class="parentExperimentMeasureId"
+                                  noSelection="${['': 'none']}"
+                                  from="${currentExperimentMeasures}"
+                                  value="${resultTypeCommand?.parentExperimentMeasure?.id}"
+                                  optionValue="${{ it.resultType?.label }}" optionKey="id"/>
+                    </dd>
+                    <dd><br/>Relationship to Parent</dd>
+                    <dt>
+
+                    <div id="selectedParentLabelId"></div>
+                    </dt>
+                    <dd>
+                        <g:select name="parentChildRelationship" id="parentChildRelationshipId"
+                                  class="parentChildRelationship"
+                                  noSelection="${['': 'none']}"
+                                  from="${HierarchyType.values()}"
+                                  value="${resultTypeCommand?.parentChildRelationship}"
+                                  optionValue="id" optionKey="id"/>
+
+                        <span id="hierarchyLabelId"></span>
+                    </dd>
+                </g:if>
+                <br/><br/><br/>
 
 
-            <div class="row-fluid">
-                <div class="span12">
-                    <b style="text-decoration:underline;">Associated independent variables</b> <br/>
-                    Each result type can provide additional contextual information by linking the result type to one or more contexts defined on the assay.
-                    <br/>Check each context which will have values provided along with this result type.<br/>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <b style="text-decoration:underline;">Associated independent variables</b> <br/>
+                        Each result type can provide additional contextual information by linking the result type to one or more contexts defined on the assay.
+                        <br/>Check each context which will have values provided along with this result type.<br/>
 
-                    <p>
-                        Some results will need specific data to fully describe them.
-                    For example  each "percent activity" will need a "screening concentration (molar)" value.
-                    For an experiment done with different variables for each curve, an "AC50" will need an "assay readout name".
-                    </p>
-                    <p>
-                    In this section you can select which of the pre-defined contexts in the assay definition go with each of the result types.
-                    Some result types do not need any specific context attached to them.
-                    Some results may need to be attached to several different contexts.
-                    </p>
-                    <br/><br/>
+                        <p>
+                            Some results will need specific data to fully describe them.
+                            For example  each "percent activity" will need a "screening concentration (molar)" value.
+                            For an experiment done with different variables for each curve, an "AC50" will need an "assay readout name".
+                        </p>
+
+                        <p>
+                            In this section you can select which of the pre-defined contexts in the assay definition go with each of the result types.
+                            Some result types do not need any specific context attached to them.
+                            Some results may need to be attached to several different contexts.
+                        </p>
+                        <br/><br/>
+                    </div>
+
+                    <g:render template="../context/show"
+                              model="[contextOwner: contextOwner, contexts: contextOwner.groupContexts(),
+                                      uneditable: true, showCheckBoxes: true, existingContextIds: resultTypeCommand.contextIds]"/>
+                    <g:render template="../context/currentCard"
+                              model="[contextOwner: contextOwner, currentCard: contextOwner.groupExperimentalVariables(), subTemplate: 'show', renderEmptyGroups: false,
+                                      showCheckBoxes: true, existingContextIds: resultTypeCommand.contextIds
+                              ]"/>
+
                 </div>
-
-                <g:render template="../context/show"
-                          model="[contextOwner: contextOwner, contexts: contextOwner.groupContexts(),
-                                  uneditable: true, showCheckBoxes: true, existingContextIds: resultTypeCommand.contextIds]"/>
-                <g:render template="../context/currentCard"
-                          model="[contextOwner: contextOwner, currentCard: contextOwner.groupExperimentalVariables(), subTemplate: 'show', renderEmptyGroups: false,
-                                  showCheckBoxes: true, existingContextIds: resultTypeCommand.contextIds
-                          ]"/>
-
-            </div>
-
+            </g:if>
             <dd>
                 <br/>
 
