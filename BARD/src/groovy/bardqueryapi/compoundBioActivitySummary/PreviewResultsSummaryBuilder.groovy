@@ -245,7 +245,12 @@ class PreviewResultsSummaryBuilder {
 
         final Long resultTypeId = jsonResult.resultTypeId
         if (HIGH_PRIORITY_DICT_ELEM.contains(resultTypeId)) { //TODO: refactor to read from Result_Type_Tree . We need the elements that could contain dose curves
-            values << handleConcentrationResponsePoints(jsonResult, childElements, yNormMin, yNormMax)
+          //if this has no child nodes then it cannot be a dose
+            if (!jsonResult.related) {
+                childElements << new StringValue(value: jsonResult.resultType + ":" + jsonResult.valueDisplay)
+            } else {
+                values << handleConcentrationResponsePoints(jsonResult, childElements, yNormMin, yNormMax)
+            }
         } else if (isPercentResponse(resultTypeId)) {
             values << handleEfficacyMeasures(jsonResult)
         } else {  //everything else is a child element
