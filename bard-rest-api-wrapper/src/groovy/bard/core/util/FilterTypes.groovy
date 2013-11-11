@@ -11,7 +11,9 @@ enum FilterTypes {
     TESTED("Tested Assays"),
     SHOW_OTHERS("Show Single Point, Primary, UnMapped Assays"),
     Y_DENORM_AXIS('DeNormalize Y-Axis'),
-    SINGLE_POINT_RESULT('Single-point result type');
+    SINGLE_POINT_RESULT('Single-point result type'),
+    ACTIVE('Active compounds'),
+    INACTIVE('Inactive compounds');
 
     String description
     FilterTypes(String description){

@@ -4,14 +4,27 @@ import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
-import bard.db.people.Person
 import bard.db.people.Role
-import org.hibernate.Query
-import org.hibernate.Session
 import org.springframework.security.access.prepost.PreAuthorize
 
 class ProjectService {
     CapPermissionService capPermissionService
+    final static String BARD_PROBE_URI = "http://www.bard.nih.gov/ontology/bard#BARD_0001682"
+
+    List<Long> findApprovedProbeProjects() {
+
+        final String PROBES_QUERY = '''
+                SELECT DISTINCT project.id FROM Project project inner join project.contexts context
+                inner join context.contextItems contextItem
+                inner join contextItem.attributeElement element WHERE element.bardURI=? and
+                project.ncgcWarehouseId is not null and project.projectStatus=?
+                '''
+
+        final List<Long> projectIds = Project.executeQuery(PROBES_QUERY,
+                [BARD_PROBE_URI, ProjectStatus.APPROVED])
+
+        return projectIds
+    }
 
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Project updateOwnerRole(Long id, Role ownerRole) {

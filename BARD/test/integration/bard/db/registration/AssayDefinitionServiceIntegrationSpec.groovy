@@ -29,13 +29,6 @@ class AssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
     }
-//    @IgnoreRest
-//    void 'test assay definition integrationxs'(){
-//        when:
-//        assayDefinitionService.loadNCGCAssayIds()
-//        then:
-//        assert 1==1
-//    }
     void "test update designed By"() {
         given:
         final Assay assay = Assay.build(assayName: 'assayName20', designedBy: "BARD")
@@ -64,13 +57,4 @@ class AssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert AssayType.TEMPLATE == updatedAssay.assayType
     }
-
-//    void "test save new Assay"() {
-//        given:
-//        final Assay assay = Assay.build(assayName: 'assayName40', assayType: AssayType.PANEL_GROUP)
-//        when:
-//        final Assay updatedAssay = assayDefinitionService.saveNewAssay(assay)
-//        then:
-//        assert AssayType.PANEL_GROUP == updatedAssay.assayType
-//    }
 }

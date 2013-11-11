@@ -11,6 +11,13 @@
         $('tr:nth-child(3)').toggle();
         $("[rel=tooltip]").tooltip();
     });
+    function inactiveCheckboxHandler(checkbox){
+        if (checkbox.checked){
+            window.location.href="../molSpreadSheet/index?transpose=true&norefresh=false&cid=${params.cid}&showActive=false";
+        } else {
+            window.location.href="../molSpreadSheet/index?transpose=true&norefresh=false&cid=${params.cid}&showActive=true";
+        }
+    }
 </script>
 
 <div class="row-fluid">
@@ -34,6 +41,14 @@
 
                 <p style="padding-left: 15px;">Hide Promiscuity Scores</p>
             </span>
+            <span>
+                <input type="checkbox" class="pull-left"
+                       <%=(showActive)?:'checked'%>
+                       name="showActiveInactiveChoice"
+                       id="showActiveInactiveChoice" <%=(!disableInactiveCheckbox) ?: "disabled"%>
+                       onclick='inactiveCheckboxHandler(this);'>
+                <p style="padding-left: 15px;">Show Inactive Results</p>
+            </span>
             <g:if test="${params?.cid?.size()>0}">
                 <a href="../molSpreadSheet/index?norefresh=false&cid=${params.cid}" class="pull-right tranposeSymbol"
               title="Transpose columns and rows">
@@ -42,7 +57,6 @@
                 <a href="../molSpreadSheet/index?norefresh=true" class="pull-right tranposeSymbol"
                   title="Transpose columns and rows">
             </g:else>
-
                 <div class="centerEverything">
                     T<br/>
 

@@ -176,6 +176,7 @@ beans = {
             break;
         default:
             queryService(QueryService) {
+                projectService=ref('projectService')
                 queryHelperService = ref('queryHelperService')
                 compoundRestService = ref('compoundRestService')
                 projectRestService = ref('projectRestService')

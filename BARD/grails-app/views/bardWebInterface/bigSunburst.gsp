@@ -23,6 +23,11 @@
         linkedVisualizationModule(${cid});
 //        push the footer down, leaving room for the sunburst graphs to grow
         $('#bard-footer').css({position: "absolute", top: "750px", left: "0px", width: "100%"})
+                .on('reshuffleElementsAroundTable', function (event, dataTableTop) {
+                    var dataTableHeight = $('#data-table').height();
+                    var footerTopPosition = dataTableTop + dataTableHeight + 250;
+                    $(this).css({position: "absolute", top:  footerTopPosition + "px", left: "0px", width: "100%"})
+                });
     });
 </script>
 

@@ -34,7 +34,6 @@ class ResultTypeCommandUnitSpec extends ResultTypeCommandAbstractUnitSpec {
         'experiment id is null'                                   | { null }                          | false | 'nullable'                                     | "experimentId"              | { [resultTypeId: Element.build().id] }
         'experiment id is valid'                                  | { Experiment.build() }            | true  | null                                           | "experimentId"              | { [resultTypeId: Element.build().id] }
 
-        'resultType id is null'                                   | { null }                          | false | 'nullable'                                     | "resultTypeId"              | { [experimentId: Experiment.build().id] }
         'resultType id is valid'                                  | { Element.build() }               | true  | null                                           | "resultTypeId"              | { [experimentId: Experiment.build().id] }
         'resultType id is invalid'                                | { [id: 6000] }                    | false | 'command.resultTypeId.notexists'               | "resultTypeId"              | { [experimentId: Experiment.build().id] }
 
