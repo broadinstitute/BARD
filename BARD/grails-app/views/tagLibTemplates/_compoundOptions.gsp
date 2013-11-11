@@ -9,6 +9,14 @@
         <img alt="SID: ${sid}" title="SID: ${sid}"
              src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromCID', params: [cid: cid, width: imageWidth, height: imageHeight])}"/>
     </g:else>
+    <g:if test="${name}">
+        <g:if test="${name.size() <= 15}">
+            <div class="compound-info-name">${name}</div>
+        </g:if>
+        <g:else>
+            <div title="${name}" rel="tooltip" class="compound-info-name">${name.substring(0,14)}...</div>
+        </g:else>
+    </g:if>
     <div class="compound-info-dropdown">
         <span class="btn-group">
             <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-info-sign"></i> <span
