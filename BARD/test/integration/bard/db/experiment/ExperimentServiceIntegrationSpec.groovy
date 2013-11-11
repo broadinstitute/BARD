@@ -64,7 +64,7 @@ class ExperimentServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert tableModel
         assert tableModel.additionalProperties.size() == 8
-        assert tableModel.columnHeaders.size() == 6
+        assert tableModel.columnHeaders.size() == 8
         assert tableModel.data.size() == 3
     }
 

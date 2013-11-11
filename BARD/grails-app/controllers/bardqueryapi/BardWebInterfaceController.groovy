@@ -114,6 +114,7 @@ class BardWebInterfaceController {
     def redirectToIndex() {
         redirect(controller: 'bardWebInterface', action: 'index')
     }
+
     @Secured(['isAuthenticated()'])
     def navigationPage() {
         render(view: 'navigationPage', model: {})
@@ -238,7 +239,12 @@ class BardWebInterfaceController {
 
     def retrieveExperimentResultsSummary(Long id, SearchCommand searchCommand) {
         Experiment experiment = Experiment.get(id)
-        render queryService.histogramDataByEID(experiment.ncgcWarehouseId)
+        final Long ncgcWarehouseId = experiment.ncgcWarehouseId
+        if (ncgcWarehouseId) {
+            render queryService.histogramDataByEID(ncgcWarehouseId)
+        } else {
+            render(text: "")
+        }
     }
 
     def probe(String probeId) {

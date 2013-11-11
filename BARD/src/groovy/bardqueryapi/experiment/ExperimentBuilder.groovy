@@ -5,6 +5,7 @@ import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.experiment.*
 import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentMeasure
 import bard.db.experiment.JsonSubstanceResults
 import bardqueryapi.*
 import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
@@ -28,6 +29,22 @@ class ExperimentBuilder {
         }
         return columnHeaders
     }
+
+    List<WebQueryValue> buildHeaderPreview(final boolean hasPlot) {
+        List<WebQueryValue> columnHeaders = []
+        columnHeaders.add(new StringValue(value: "SID"))
+        columnHeaders.add(new StringValue(value: "CID"))
+        columnHeaders.add(new StringValue(value: "Structure"))
+        columnHeaders.add(new StringValue(value: "Outcome"))
+        columnHeaders.add(new StringValue(value: "PubChem Activity Score"))
+        columnHeaders.add(new StringValue(value: "Summary Result"))
+        columnHeaders.add(new StringValue(value: "Dose Response"))
+        columnHeaders.add(new StringValue(value: "Supplemental Information"))
+//        if (hasChildElements) {
+//            columnHeaders.add(new StringValue(value: "Child Elements"))
+//        }
+        return columnHeaders
+    }
     /**
      *
      * Builds the tableModel's row based on the result set and types.
@@ -40,6 +57,7 @@ class ExperimentBuilder {
      * @return
      */
     List<WebQueryValue> addRowForResultsPreview(final JsonSubstanceResults substanceResults,
+                                                final Set<String> priorityElements,
                                                 final Double yNormMin,
                                                 final Double yNormMax, CompoundAdapter compoundAdapter) {
 
@@ -77,9 +95,15 @@ class ExperimentBuilder {
             rowData.add(new StringValue(value: 'Not Available'))
         }
         PreviewResultsSummaryBuilder previewResultsSummaryBuilder = new PreviewResultsSummaryBuilder()
-        Map m = previewResultsSummaryBuilder.convertExperimentResultsToTableModelCellsAndRows(substanceResults.rootElem, yNormMin, yNormMax)
+        Map m = previewResultsSummaryBuilder.convertExperimentResultsToTableModelCellsAndRows(substanceResults.rootElem, priorityElements, yNormMin, yNormMax)
         StringValue outcome = m.outcome
+        final List<WebQueryValue> pubChemActivityScores = m.pubChemActivityScores
+        StringValue pubChemActivityScore = pubChemActivityScores ? pubChemActivityScores.get(0) : new StringValue()
+        final Set<StringValue> priorityElementValues = m.priorityElements
+
         rowData.add(outcome)
+        rowData.add(pubChemActivityScore)
+        rowData.add(new ListValue(value: priorityElementValues as List))
 
         List<WebQueryValue> experimentValues = m.experimentalvalues
         //if the result type is a concentration series, we want to add the normalization values to each curve.
@@ -92,12 +116,25 @@ class ExperimentBuilder {
         if (experimentValues) {
             ListValue listValue = new ListValue(value: experimentValues)
             rowData.add(listValue)
+        } else{
+            rowData.add(new StringValue())
         }
 
         //Add all rootElements from the JsonResponse
-        List<StringValue> rootElements = m.childElements
-        rowData.add(new ListValue(value: rootElements))
-
+        // List<StringValue> rootElements = []
+        List<StringValue> expandChildElements = []
+        final List<WebQueryValue> elements = m.childElements
+        for (def childElement : elements) {
+            if (childElement instanceof StringValue) {
+                expandChildElements << childElement
+            }
+            else if (childElement instanceof List) {
+                for (StringValue stringValue : childElement) {
+                    expandChildElements << stringValue
+                }
+            }
+        }
+        rowData.add(new ListValue(value: expandChildElements))
         return rowData;
     }
 
@@ -269,11 +306,18 @@ class ExperimentBuilder {
 
 
 
-        final boolean hasPlot = true //TODO: refactor to be dynamic. Tell from the number of points returned by after processing
-        final boolean hasChildElements = false
+        final boolean hasPlot = true
         Double yNormMin = null
         Double yNormMax = null
-        tableModel.setColumnHeaders(buildHeader(hasPlot, hasChildElements))
+        tableModel.setColumnHeaders(buildHeaderPreview(hasPlot))
+
+        Set<String> priorityElements = [] as Set
+
+        for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
+            if (experimentMeasure.priorityElement) {
+                priorityElements.add(experimentMeasure.displayLabel)
+            }
+        }
 
         for (JsonSubstanceResults jsonSubstanceResults : jsonSubstanceResultList) {
             Long sid = jsonSubstanceResults.getSid()
@@ -284,7 +328,7 @@ class ExperimentBuilder {
             } catch (Exception ee) {
                 log.error(ee)
             }
-            final List<WebQueryValue> rowData = addRowForResultsPreview(jsonSubstanceResults, yNormMin, yNormMax, compoundAdapter)
+            final List<WebQueryValue> rowData = addRowForResultsPreview(jsonSubstanceResults, priorityElements, yNormMin, yNormMax, compoundAdapter)
             tableModel.addRowData(rowData)
         }
         tableModel.additionalProperties.put("total", tableModel.rowCount)
