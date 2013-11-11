@@ -154,17 +154,19 @@ class CompoundBioActivitySummaryBuilderUnitSpec extends Specification {
         then:
         this.queryService.findProjectsByPIDs(_) >> { ['projectAdapters': [new ProjectAdapter(project1)]] }
 
-        assert tableModel.columnHeaders.size() == 2
-        assert tableModel.data.size() == expectedTableModelDataSize
-        assert tableModel.data.first().first().class == expectedResourceType
+        assert tableModel?.columnHeaders?.size() == 2
+        assert tableModel?.data?.size() == expectedTableModelDataSize
+        assert (tableModel?.data ? tableModel?.data?.first()?.first()?.class : null) == expectedResourceType
 
         where:
-        label                            | sortedKeys | groupBy              | filterTypes                                           | expectedTableModelDataSize | expectedResourceType
-        "group-by assay, tested"         | [1, 2]     | GroupByTypes.ASSAY   | [FilterTypes.TESTED]                                  | 2                          | AssayValue
-        "group-by assay, actives-only"   | [1]        | GroupByTypes.ASSAY   | []                                                    | 1                          | AssayValue
-        "group-by project, tested"       | [1, 2]     | GroupByTypes.PROJECT | [FilterTypes.TESTED]                                  | 2                          | ProjectValue
-        "group-by project, actives-pnly" | [1]        | GroupByTypes.PROJECT | []                                                    | 1                          | ProjectValue
-        "group-by assay, single-point"   | [1, 2]     | GroupByTypes.ASSAY   | [FilterTypes.TESTED, FilterTypes.SINGLE_POINT_RESULT] | 1                          | AssayValue
+        label                            | sortedKeys | groupBy              | filterTypes                                                                 | expectedTableModelDataSize | expectedResourceType
+        "group-by assay, all"            | [1, 2]     | GroupByTypes.ASSAY   | [FilterTypes.ACTIVE, FilterTypes.INACTIVE]                                  | 2                          | AssayValue
+        "group-by assay, actives-only"   | [1]        | GroupByTypes.ASSAY   | [FilterTypes.ACTIVE]                                                        | 1                          | AssayValue
+        "group-by assay, inactives"      | [2]        | GroupByTypes.ASSAY   | [FilterTypes.INACTIVE]                                                      | 1                          | AssayValue
+        "group-by assay, none"           | [1, 2]     | GroupByTypes.ASSAY   | []                                                                          | 0                          | null
+        "group-by project, all"          | [1, 2]     | GroupByTypes.PROJECT | [FilterTypes.ACTIVE, FilterTypes.INACTIVE]                                  | 2                          | ProjectValue
+        "group-by project, actives-only" | [1]        | GroupByTypes.PROJECT | [FilterTypes.ACTIVE]                                                        | 1                          | ProjectValue
+        "group-by assay, single-point"   | [1, 2]     | GroupByTypes.ASSAY   | [FilterTypes.ACTIVE, FilterTypes.INACTIVE, FilterTypes.SINGLE_POINT_RESULT] | 1                          | AssayValue
     }
 
     void "test convertExperimentResultsToValues #label"() {
