@@ -356,12 +356,18 @@ class QueryService implements IQueryService {
 
         List<Activity> experimentalData
 
-        if (filterTypes.contains(FilterTypes.TESTED)) {
-            //Get all tested assays and exptData
+        if (filterTypes.containsAll([FilterTypes.ACTIVE, FilterTypes.INACTIVE])) {
+            //Get all (actives + inactives = tested)
             experimentalData = compoundSummary.testedExptdata
-        } else {
+        } else if (filterTypes.contains(FilterTypes.ACTIVE)) {
             //Get only the hits
             experimentalData = compoundSummary.hitExptdata
+        } else if (filterTypes.contains(FilterTypes.INACTIVE)) {
+            //We need to subtract the hitAssays from the testedAssays to get the inactive ones.
+            List<Long> inactiveExpDataIds = compoundSummary.testedExptdata*.exptDataId - compoundSummary.hitExptdata*.exptDataId
+            experimentalData = compoundSummary.testedExptdata.findAll { Activity activity -> inactiveExpDataIds.contains(activity.exptDataId) }
+        } else {
+            experimentalData = []
         }
 
         NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
