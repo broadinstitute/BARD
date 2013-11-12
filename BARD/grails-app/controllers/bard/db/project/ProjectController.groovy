@@ -76,8 +76,15 @@ class ProjectController {
                 conflictMessage(message)
                 return
             }
-            project = projectService.updateProjectStatus(inlineEditableCommand.pk, projectStatus)
-            generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.projectStatus.id)
+
+            final List<Experiment> unApprovedExperiments = project.findUnApprovedExperiments() as List<Experiment>
+            if (!unApprovedExperiments) {
+                project = projectService.updateProjectStatus(inlineEditableCommand.pk, projectStatus)
+                generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.projectStatus.id)
+            }else{
+                List<Long> unApprovedIds = unApprovedExperiments.collect {it.id}
+                render(status: HttpServletResponse.SC_BAD_REQUEST, text: "Before you can approve this project, you must approve the following experiments: " + unApprovedIds.sort().join(","), contentType: 'text/plain', template: null)
+            }
         }
         catch (AccessDeniedException ade) {
             log.error(ade)

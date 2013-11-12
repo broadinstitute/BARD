@@ -116,10 +116,53 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test edit Project Status success'() {
         given:
-        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)  //no designer
+        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)
         Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: ProjectStatus.APPROVED)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
                 version: newProject.version, name: newProject.name, value: updatedProject.projectStatus.id)
+        when:
+        controller.editProjectStatus(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectStatus(_, _) >> { return updatedProject }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedProject.projectStatus.id
+        assert responseJSON.get("lastUpdated").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+
+
+    void 'test edit Project Status has unapproved experiments'() {
+        given:
+        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)
+        Experiment experimentFrom = Experiment.build(experimentStatus: ExperimentStatus.APPROVED)
+        Experiment experimentTo = Experiment.build(experimentStatus: ExperimentStatus.DRAFT)
+        ProjectSingleExperiment.build(project: newProject, experiment: experimentFrom)
+        ProjectSingleExperiment.build(project: newProject, experiment: experimentTo)
+
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: ProjectStatus.APPROVED.id)
+        when:
+        controller.editProjectStatus(inlineEditableCommand)
+        then:
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+        assert "Before you can approve this project, you must approve the following experiments: ${experimentTo.id}" == response.text
+    }
+
+    void 'test edit Project Status has retired experiments'() {
+        given:
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: ProjectStatus.APPROVED)
+        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)
+        Experiment experimentFrom = Experiment.build(experimentStatus: ExperimentStatus.APPROVED)
+        Experiment experimentTo = Experiment.build(experimentStatus: ExperimentStatus.RETIRED)
+        ProjectSingleExperiment.build(project: newProject, experiment: experimentFrom)
+        ProjectSingleExperiment.build(project: newProject, experiment: experimentTo)
+
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: ProjectStatus.APPROVED.id)
         when:
         controller.editProjectStatus(inlineEditableCommand)
         then:
@@ -800,6 +843,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
         assert model.command.errorMessages == ["An error has occurred, Please log an issue with the BARD team at bard-users@broadinstitute.org to fix this issue"]
     }
+
     void 'test show Experiments To Add Project - UserFixableException'() {
         given:
         accessDeniedRoleMock()
@@ -865,7 +909,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         controller.showExperimentsToAddProject(associateExperimentsCommand)
         then:
         associateExperimentsCommand.mergeAssayDefinitionService.convertIdToEntity(_, _) >> { experiment }
-        associateExperimentsCommand.projectService.addExperimentToProject(_, _, _) >> { }
+        associateExperimentsCommand.projectService.addExperimentToProject(_, _, _) >> {}
         assert response.status == HttpServletResponse.SC_FOUND
         assert response.redirectedUrl == "/project/show/${project.id}#experiment-and-step-header"
     }
