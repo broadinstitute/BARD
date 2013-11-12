@@ -26,7 +26,7 @@ $(document).on('click', '#searchButton', function (event) {
 });
 
 $(document).ready(function () {
-    jsDrawEditor = new JSDraw2.Editor("jsDrawEditorDiv", {popup:false, rxn: false, biology: false});
+    jsDrawEditor = new JSDraw2.Editor("jsDrawEditorDiv", {popup: false, rxn: false, biology: false});
     adjustJSDrawEditorWindow()
     //Read cached structure
     jsDrawEditor.readCookie();
@@ -38,7 +38,7 @@ $(document).ready(function () {
 
 function adjustJSDrawEditorWindow() {
     var width = Math.max(($(window).width() - 30), 200);
-    var height = Math.max(($(window).height() - 150), 200);
+    var height = Math.max(($(window).height() - 200), 200);
     if (width && height && jsDrawEditor) {
         jsDrawEditor.setSize(width, height)
     }
@@ -59,3 +59,33 @@ function isSimilarityThresholdValueValid(cutoff) {
     var intRegex = /^\d+(\.\d+)?$/;
     return (intRegex.test(cutoff.trim()) && cutoff <= 100 && cutoff >= 0)
 }
+
+//Converts a SMILES string to MolFile using an AJAX call
+$('#smilesToMolBtn').on('click', function () {
+    event.preventDefault();
+    event.stopPropagation();
+
+    var smiles = $('#convertSmilesTextfield').val();
+    $.ajax({
+        url: '/BARD/chemAxon/convertSmilesToMolFormat',
+        type: 'POST',
+        cache: false,
+        data: {smiles: smiles},
+        timeout: 10000,
+        beforeSend: function () {
+            //Clear error message and restore textfield's placeholder
+            $('#smilesImportErrorLabel').html('');
+        },
+        success: function (data) {
+            jsDrawEditor.clear();
+            jsDrawEditor.setMolfile(data);
+        },
+        error: function (XMLHTTPRequest, textStatus, errorThrown) {
+            $('#smilesImportErrorLabel').html('<i class="icon-exclamation-sign"/>There was a problem with that SMILES')
+        },
+        complete: function () {
+            //Clear the textfield
+            $('#convertSmilesTextfield').val('');
+        }
+    });
+})
