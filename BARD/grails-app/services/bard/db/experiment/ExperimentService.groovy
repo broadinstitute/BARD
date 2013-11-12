@@ -122,9 +122,9 @@ class ExperimentService {
     }
 
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    TableModel previewResults(final Long id) {
+    TableModel previewResults(final Long id, final int numberOfRecords=10) {
         Experiment experiment = Experiment.findById(id)
-        List<JsonSubstanceResults> results = resultsExportService.readResultsForSubstances(experiment)
+        List<JsonSubstanceResults> results = resultsExportService.readResultsForSubstances(experiment,numberOfRecords)
         return experimentBuilder.buildModelForPreview(experiment, results)
     }
 

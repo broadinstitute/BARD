@@ -99,11 +99,11 @@ class ExperimentBuilder {
         StringValue outcome = m.outcome
         final List<WebQueryValue> pubChemActivityScores = m.pubChemActivityScores
         StringValue pubChemActivityScore = pubChemActivityScores ? pubChemActivityScores.get(0) : new StringValue()
-        final Set<StringValue> priorityElementValues = m.priorityElements
+        final List<StringValue> summaryResults = m.priorityElements as List
 
         rowData.add(outcome)
         rowData.add(pubChemActivityScore)
-        rowData.add(new ListValue(value: priorityElementValues as List))
+        rowData.add(new ListValue(value: summaryResults.sort()))
 
         List<WebQueryValue> experimentValues = m.experimentalvalues
         //if the result type is a concentration series, we want to add the normalization values to each curve.
@@ -119,22 +119,20 @@ class ExperimentBuilder {
         } else{
             rowData.add(new StringValue())
         }
-
-        //Add all rootElements from the JsonResponse
-        // List<StringValue> rootElements = []
-        List<StringValue> expandChildElements = []
+        List<StringValue> supplementalInformation = []
         final List<WebQueryValue> elements = m.childElements
         for (def childElement : elements) {
             if (childElement instanceof StringValue) {
-                expandChildElements << childElement
+                supplementalInformation << childElement
             }
             else if (childElement instanceof List) {
                 for (StringValue stringValue : childElement) {
-                    expandChildElements << stringValue
+                    supplementalInformation << stringValue
                 }
             }
         }
-        rowData.add(new ListValue(value: expandChildElements))
+
+        rowData.add(new ListValue(value: supplementalInformation.sort()))
         return rowData;
     }
 
