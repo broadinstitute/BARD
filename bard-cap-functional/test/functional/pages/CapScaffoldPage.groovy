@@ -12,8 +12,7 @@ import modules.SummaryModule
 
 /**
  * @author Muhammad.Rafique
- * Date Created: 13/02/07
- * Date Updated: 13/10/07
+ * Date Created: 2013/02/07
  */
 class CapScaffoldPage extends CommonFunctionalPage {
 	static content = {
@@ -22,15 +21,16 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		editableForm { module EditableFormModule }
 		viewSummary { module SummaryModule, summaryHeader }
 		
-		cardContainer { groupName -> $("div", id:groupName) }
+		cardContainer { groupName -> $("#$groupName") }
 		contextTable { groupName -> cardContainer(groupName).find("table.table.table-hover")}
 		cardTable{ groupName, contextTitle -> module CardsHolderModule, contextTable(groupName), contextCard:contextTitle }
 		contextCards{ groupName -> module CardsHolderModule, cardContainer(groupName) }
 		controlError { module ErrorInlineModule }
 		documentHeaders{ docType -> module DocumentSectionModule, documentType:docType }
 		
-		header { sectionName -> $("#"+sectionName+"-header") }
-		editContext {sectionName -> module EditIconModule, header(sectionName) }
+//		header { sectionName -> $("#"+sectionName+"-header") }
+//		editContext {sectionName -> module EditIconModule, header(sectionName) }
+		editContext {sectionName -> module EditIconModule, $("#$sectionName") }
 	}
 	def navigateToEditContext(def section){
 		editContext(section).iconPencil.click()

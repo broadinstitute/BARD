@@ -4,24 +4,21 @@ import pages.ContextItemPage
 import pages.EditContextPage
 import pages.HomePage
 import pages.ViewProjectDefinitionPage
-import spock.lang.Unroll;
+import spock.lang.Unroll
 import base.BardFunctionalSpec
+
 import common.Constants
 import common.TestData
-import common.Constants.ContextItem
-import common.Constants.ExpectedValueType
+
 import db.Project
 
 /**
  * @author Muhammad.Rafique
- * Date Created: 13/02/07
- * Last Updated: 13/10/10
+ * Date Created: 2013/02/07
  */
 @Unroll
 class ProjectContextSpec extends BardFunctionalSpec {
-	//	def testData = TestDataReader.getTestData()
-	def section = "annotations"
-	def cardGroup = "cardHolderAssayComponents"
+	def section = "annotations-header"
 	def editContextGroup = "Unclassified"
 	def contextCard = "test card"
 	def dbContextType = "Unclassified"
@@ -36,7 +33,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
-		def uiContentsBefore = getUIContexts(cardGroup)
+		def uiContentsBefore = getUIContexts(section)
 		def dbContentsBefore = Project.getProjectContext(dbContextType, TestData.projectId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -70,7 +67,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
-		uiContentsAfterAdd = getUIContexts(cardGroup)
+		uiContentsAfterAdd = getUIContexts(section)
 		dbContentsAfterAdd = Project.getProjectContext(dbContextType, TestData.projectId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -94,13 +91,13 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
-		def uiContents = getUIContexts(cardGroup)
+		def uiContents = getUIContexts(section)
 		def dbContents = Project.getProjectContext(dbContextType, TestData.projectId)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContents.sort() == dbContents.sort()
 
-		report "ProjectContextCardAdd"
+		report ""
 	}
 
 	def "Test Edit Context Card in Project"(){
@@ -110,7 +107,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
 		def editedContext = contextCard+Constants.edited
-		def uiContentsBefore = getUIContexts(cardGroup)
+		def uiContentsBefore = getUIContexts(section)
 		def dbContentsBefore = Project.getProjectContext(dbContextType, TestData.projectId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -149,7 +146,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
-		uiContentsAfterAdd = getUIContexts(cardGroup)
+		uiContentsAfterAdd = getUIContexts(section)
 		dbContentsAfterAdd = Project.getProjectContext(dbContextType, TestData.projectId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -173,13 +170,13 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
-		def uiContents = getUIContexts(cardGroup)
+		def uiContents = getUIContexts(section)
 		def dbContents = Project.getProjectContext(dbContextType, TestData.projectId)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContents.sort() == dbContents.sort()
 
-		report "ProjectContextCardEdit"
+		report ""
 	}
 
 	def "Test Delete Context Card in Project"(){
@@ -188,7 +185,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
-		def uiContentsBefore = getUIContexts(cardGroup)
+		def uiContentsBefore = getUIContexts(section)
 		def dbContentsBefore = Project.getProjectContext(dbContextType, TestData.projectId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -232,13 +229,13 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
-		uiContentsAfterDelete = getUIContexts(cardGroup)
+		uiContentsAfterDelete = getUIContexts(section)
 		dbContentsAfterDelete = Project.getProjectContext(dbContextType, TestData.projectId)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 
-		report "ProjectContextCardDelete"
+		report ""
 	}
 
 	def "Test Add #TestName Type Context Item in Project"(){
@@ -248,7 +245,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
 
-		def uiContentsBefore = getUIContexts(cardGroup)
+		def uiContentsBefore = getUIContexts(section)
 		def dbContentsBefore = Project.getProjectContext(dbContextType, TestData.projectId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -303,7 +300,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
-		uiContentsAfterAdd = getUIContextItems(cardGroup, contextCard)
+		uiContentsAfterAdd = getUIContextItems(section, contextCard)
 		dbContentsAfterAdd = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
 
 		then:"Verifying Context Info with UI & DB"
@@ -332,11 +329,10 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
-		assert !isContext(cardGroup, contextCard)
+		assert !isContext(section, contextCard)
 
 		report "$TestName"
 
-		where:
 		where:
 		TestName					| inputData						| contextItem
 		"Element"					| TestData.contexts.Element		| TestData.contexts.Element.attribute
@@ -352,7 +348,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
-		def uiContentsBefore = getUIContexts(cardGroup)
+		def uiContentsBefore = getUIContexts(section)
 		def dbContentsBefore = Project.getProjectContext(dbContextType, TestData.projectId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -414,7 +410,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
-		assert !isContext(cardGroup, contextCard)
+		assert !isContext(section, contextCard)
 
 		report "$TestName"
 
@@ -434,7 +430,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
-		def uiContentsBefore = getUIContextItems(cardGroup, contextCard)
+		def uiContentsBefore = getUIContextItems(section, contextCard)
 		def dbContentsBefore = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
 
 		then:"Verifying Context Info with UI & DB"
@@ -513,7 +509,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
-		uiContentsAfterAdd = getUIContextItems(cardGroup, contextCard)
+		uiContentsAfterAdd = getUIContextItems(section, contextCard)
 		dbContentsAfterAdd = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
 
 		then:"Verifying Context Info with UI & DB"
@@ -542,7 +538,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
-		assert !isContext(cardGroup, contextCard)
+		assert !isContext(section, contextCard)
 
 		report "$TestName"
 
@@ -561,7 +557,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		when:"At View Project Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
-		def uiContentsBefore = getUIContextItems(cardGroup, contextCard)
+		def uiContentsBefore = getUIContextItems(section, contextCard)
 		def dbContentsBefore = Project.getProjectContextItem(TestData.projectId, dbContextType, contextCard)
 
 		then:"Verifying Context Info with UI & DB"
@@ -610,7 +606,9 @@ class ProjectContextSpec extends BardFunctionalSpec {
 			}
 		}
 
+		and:"Verify that Context Item deleted succesfully"
 		assert !isContextItem(editContextGroup, contextCard, contextItem)
+		
 		when:"Context Item  is cleaned up, Fetching Contexts Info from UI and DB for validation"
 		at EditContextPage
 		def uiContentsAfterDelete = getUIContextItems(editContextGroup, contextCard)
@@ -629,7 +627,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
-		assert !isContext(cardGroup, contextCard)
+		assert !isContext(section, contextCard)
 
 		report "$TestName"
 

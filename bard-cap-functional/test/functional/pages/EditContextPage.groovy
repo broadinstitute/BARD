@@ -6,7 +6,10 @@ import modules.CardsHolderModule
 import modules.LoadingModule
 
 import common.Constants
-
+/**
+ * @author Muhammad.Rafique
+ * Date Created: 2013/02/07
+ */
 class EditContextPage extends CapScaffoldPage{
 	final static SLEEP_INTERVAL = 2000
 	static url=""

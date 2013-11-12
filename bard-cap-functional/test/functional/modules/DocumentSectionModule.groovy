@@ -3,7 +3,10 @@ package modules
 import geb.Module
 import modules.EditIconModule
 import geb.navigator.Navigator
-
+/**
+ * @author Muhammad.Rafique
+ * Date Created: 2013/02/07
+ */
 class DocumentSectionModule extends Module {
 	def documentType
 	static content = {

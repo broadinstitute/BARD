@@ -2,7 +2,10 @@ package modules
 
 import geb.Module
 import geb.navigator.Navigator
-
+/**
+ * @author Muhammad.Rafique
+ * Date Created: 2013/02/07
+ */
 class CardsHolderModule extends Module {
 	def contextCard
 	static content = {

@@ -1,17 +1,14 @@
 package scenarios
-import pages.CapSearchPage
+
 import pages.DocumentPage
 import pages.HomePage
 import pages.ViewAssayDefinitionPage
-import spock.lang.Ignore;
-import spock.lang.Unroll;
+import spock.lang.Unroll
 import base.BardFunctionalSpec
+
 import common.Constants
-import common.TestData;
-import common.TestDataReader
-import common.Constants.DocumentAs
-import common.Constants.NavigateTo
-import common.Constants.SearchBy
+import common.TestData
+
 import db.Assay
 /**
  * @author Muhammad.Rafique
@@ -20,7 +17,6 @@ import db.Assay
 @Unroll
 class AssayDocumentSpec extends BardFunctionalSpec {
 
-//	def TestData = TestDataReader.getTestData()
 	def setup() {
 		logInSomeUser()
 	}
@@ -46,7 +42,6 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 
 		when:"At Create Document Page, Creating Description Document"
 		at DocumentPage
-//		createDocument(DocumentAs.CONTENTS,testData.documentName, TestData.documentDescriptionContent)
 		if(docType == "publication" || docType == "external url"){
 			createDocument(testData.documentName, testData.documentUrl)
 		}else{
@@ -114,7 +109,6 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 
 		when:"At Create Document Page, Creating Description Document"
 		at DocumentPage
-//		createDocument(DocumentAs.CONTENTS,"", TestData.documentDescriptionContent)
 		if(docType == "publication" || docType == "external url"){
 			createDocument("", testData.documentUrl)
 		}else{
@@ -133,20 +127,6 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
 
-//		and:"Cleaning up documents"
-//		while(isDocument(documentHeaders(Constants.documentHeader.Description), testData.documentName)){
-//			deleteDocument(documentHeaders(Constants.documentHeader.Description), testData.documentName)
-//
-//			when:"Document is cleaned up, Fetching Document Info from UI and DB for validation"
-//			def uiDocumetnsAfterDelete = getUIDucuments(documentHeaders(Constants.documentHeader.Description))
-//			def dbDocumentsAfterDelete = Assay.getAssayDocuments(TestData.assayId, Constants.documentType.Description)
-//
-//			then:"Verifying Document Info with UI & DB"
-//			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
-//			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
-//			assert uiDocumetnsAfterDelete.size() < uiDocumetnsAfter.size()
-//			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
-//		}
 		report "$TestName"
 		
 		where:
@@ -181,7 +161,6 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 
 			and:"At Create Document Page, Creating New Document"
 			at DocumentPage
-//			createDocument(DocumentAs.CONTENTS,testData.documentName, TestData.documentDescriptionContent)
 			if(docType == "publication" || docType == "external url"){
 				createDocument(testData.documentName, testData.documentUrl)
 			}else{
@@ -202,9 +181,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 					createDocument(testData.documentName+Constants.edited, testData.documentContent, true)
 				}
 			}
-//			editDocument(documentHeaders(docHeader), testData.documentName, testData.documentName+Constants.edited)
 		}else{
-//			editDocument(documentHeaders(docHeader), testData.documentName, testData.documentName+Constants.edited)
 			if(docType == "external url"){
 				editDocument(documentHeaders(docHeader), testData.documentName+Constants.edited, testData.documentUrl)
 			}else{
@@ -220,6 +197,8 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 
 		and:"Fetching Document Info from UI and DB for validation"
 		to ViewAssayDefinitionPage
+		and:"At View Assay Definition Page"
+		at ViewAssayDefinitionPage
 		assert isDocument(documentHeaders(docHeader), testData.documentName+Constants.edited)
 		def uiDocumetnsAfter= getUIDucuments(documentHeaders(docHeader))
 		def dbDocumentsAfter= Assay.getAssayDocuments(TestData.assayId, docType)
@@ -261,7 +240,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
 			deleteDocument(documentHeaders(docHeader), testData.documentName)
 		}
-		def uiDocumetnsBefore = getUIDucuments(documentHeaders(TestName))
+		def uiDocumetnsBefore = getUIDucuments(documentHeaders(docHeader))
 		def dbDocumentsBefore = Assay.getAssayDocuments(TestData.assayId, docType)
 
 		then:"Verifying Document Info with UI & DB"
@@ -270,7 +249,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 
 		and:"If document does nto exists, add new before updating"
 		if(!isDocument(documentHeaders(TestName), testData.documentName)){
-			navigateToCreateDocument(documentHeaders(TestName))
+			navigateToCreateDocument(documentHeaders(docHeader))
 
 			and:"At Create Document Page, Creating New Document"
 			at DocumentPage
@@ -279,7 +258,6 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 			}else{
 				createDocument(testData.documentName, testData.documentContent)
 			}
-//			createDocument(DocumentAs.CONTENTS,testData.documentName, TestData.documentDescriptionContent)
 
 			and:"Navigating to View Assay Page"
 			at ViewAssayDefinitionPage
@@ -295,16 +273,12 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 				createDocument("", testData.documentContent, true)
 				}
 			}
-//			assert isDocument(documentHeaders(TestName), testData.documentName)
-//			editDocument(documentHeaders(TestName), testData.documentName, "")
-		}else{
-//			editDocument(documentHeaders(TestName), testData.documentName, "")
 		}
 
 		and:"Fetching Document Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
 		assert isDocument(documentHeaders(docHeader), testData.documentName)
-		def uiDocumetnsAfter= getUIDucuments(documentHeaders(TestName))
+		def uiDocumetnsAfter= getUIDucuments(documentHeaders(docHeader))
 		def dbDocumentsAfter= Assay.getAssayDocuments(TestData.assayId, docType)
 
 		and:"Verifying Document Info with UI & DB"
@@ -316,7 +290,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 			deleteDocument(documentHeaders(TestName), testData.documentName)
 
 			when:"Document is cleaned up, Fetching Document Info from UI and DB for validation"
-			def uiDocumetnsAfterDelete = getUIDucuments(documentHeaders(TestName))
+			def uiDocumetnsAfterDelete = getUIDucuments(documentHeaders(docHeader))
 			def dbDocumentsAfterDelete = Assay.getAssayDocuments(TestData.assayId, docType)
 
 			then:"Verifying Document Info with UI & DB"
@@ -357,7 +331,6 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 
 			and:"At Create Document Page, Creating New Document"
 			at DocumentPage
-//			createDocument(DocumentAs.CONTENTS,testData.documentName, TestData.documentDescriptionContent)
 			if(docType == "publication" || docType == "external url"){
 				createDocument(testData.documentName, testData.documentUrl)
 			}else{

@@ -6,8 +6,7 @@ import common.Constants
 import common.TestData;
 /**
  * @author Muhammad.Rafique
- * Date Created: 13/02/07
- * Last Updated: 13/10/10
+ * Date Created: 2013/02/07
  */
 class ViewAssayDefinitionPage extends CapScaffoldPage{
 	static url="assayDefinition/show/"+TestData.assayId

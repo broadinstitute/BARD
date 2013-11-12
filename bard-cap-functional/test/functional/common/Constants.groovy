@@ -2,8 +2,7 @@ package common
 
 /**
  * @author Muhammad.Rafique
- * Date Created: 13/02/07
- * Last Updated: 13/10/07
+ * Date Created: 2013/02/07
  */
 class Constants {
 	//Enumerations
