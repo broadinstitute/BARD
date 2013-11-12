@@ -45,7 +45,7 @@ class SpreadSheetActivity {
             resultTypeNames << new MolSpreadSheetColSubHeader( columnTitle:  DEFAULT_DATATYPE)
         }
         ArrayList<ActivityConcentration>  activityConcentrationArrayList = []
-        activityConcentrationArrayList.add(new ActivityConcentration(value:this.potency, pubChemDisplayName:  DEFAULT_DATATYPE, qualifier: "", dictElemId: 959))
+        activityConcentrationArrayList.add(new ActivityConcentration(value:this.potency, displayName:  DEFAULT_DATATYPE, qualifier: "", dictElemId: 959))
 //        this.priorityElementList << new PriorityElement(primaryElements: activityConcentrationArrayList)
     }
 

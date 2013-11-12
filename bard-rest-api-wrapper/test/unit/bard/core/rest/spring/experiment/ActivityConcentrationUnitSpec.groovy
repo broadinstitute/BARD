@@ -187,7 +187,7 @@ class ActivityConcentrationUnitSpec extends Specification {
         assert activityConcentration.getSlope()
         assert activityConcentration.hasChildElements() == hasChildElements
         assert activityConcentration.toDisplay()
-        assert activityConcentration.pubChemDisplayName
+        assert activityConcentration.displayName
         final ConcentrationResponseSeries concResponseSeries = activityConcentration.concentrationResponseSeries
         assert concResponseSeries
         assert concResponseSeries.testConcentrationUnit
@@ -201,7 +201,7 @@ class ActivityConcentrationUnitSpec extends Specification {
         }
         assert concResponseSeries.miscData
         for (ActivityData miscData in concResponseSeries.miscData) {
-            assert miscData.pubChemDisplayName
+            assert miscData.displayName
         }
         if (hasChildElements) {
 
@@ -210,7 +210,7 @@ class ActivityConcentrationUnitSpec extends Specification {
             assert childElements
             assert childElements.size() == 3
             for (ActivityData childElement in childElements) {
-                assert childElement.pubChemDisplayName
+                assert childElement.displayName
             }
         } else {
             assert activityConcentration.getDictionaryLabel()

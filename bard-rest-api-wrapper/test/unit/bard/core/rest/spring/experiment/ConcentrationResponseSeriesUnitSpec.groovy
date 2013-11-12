@@ -75,7 +75,7 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
         assert childElements
         assert childElements.size() == 1
         for (ActivityData childElement in childElements) {
-            assert childElement.pubChemDisplayName
+            assert childElement.displayName
             assert childElement.dictElemId
             assert childElement.testConcentration
             assert childElement.testConcentrationUnit
@@ -85,7 +85,7 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
         assert miscDataList
         assert miscDataList.size() == 5
         for (ActivityData activityData in miscDataList) {
-            assert activityData.pubChemDisplayName
+            assert activityData.displayName
             assert activityData.value
         }
 

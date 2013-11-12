@@ -32,7 +32,7 @@
     <div class="row-fluid">
     <g:hiddenField name="paginationUrl"
                    id="paginationUrl"/> %{--Used to hold the pagination url, if a paging link has been clicked--}%
-    <div class="pagination offset3">
+    <div class="pagination offset2">
 
         <g:paginate
                 total="${totalNumOfCmpds}"
@@ -45,7 +45,7 @@
                   model="[tableModel: tableModel, landscapeLayout: true, innerBorder: innerBorder]"/>
     </div>
 
-    <div class="pagination offset3">
+    <div class="pagination offset2">
         <g:paginate
                 total="${totalNumOfCmpds}"
                 params='[id: "${params?.id}", normalizeYAxis: "${tableModel?.additionalProperties.normalizeYAxis}"]'/>

@@ -10,7 +10,7 @@ import bard.core.rest.spring.util.Node
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ActivityData extends JsonUtil {
     @JsonProperty("displayName")
-    private String pubChemDisplayName;
+    private String displayName;
     @JsonProperty("dictElemId")
     private long dictElemId;
     @JsonProperty("value")
@@ -33,7 +33,7 @@ public class ActivityData extends JsonUtil {
                 return dictionaryElement.label
             }
         }
-        return pubChemDisplayName
+        return displayName
 
     }
 
@@ -50,44 +50,30 @@ public class ActivityData extends JsonUtil {
 
     public String toDisplay() {
         //look up the element in the CAP
-        String displayName = getDictionaryLabel()
-
-
-        //  begin WORK AROUND ALERT
-        //  WORK AROUND ALERT
-        //
-        // TODO: OK, the right way to do this would be to use the display name we got from the dictionary label.  HOWEVER, we currently ( July 12, 2013)
-        //  have some discrepancies between the dictionary IDs we want to use and the strings that more accurately reflect the desired values. Therefore
-        //  for the time being let's say that IF the pubChemDisplayName has anything in it then we will prefer it over the dictionary label
-        if ((pubChemDisplayName != null) && (pubChemDisplayName.length()> 0))  {
-            displayName =   pubChemDisplayName
+        String displayName = getDisplayName()
+        if (displayName) {
+            displayName = displayName
         }
-        //
-        //  WORK AROUND ALERT
-        //  end WORK AROUND ALERT
-
 
         final StringBuilder stringBuilder = new StringBuilder()
-       // if ("Score" != displayName && "Activity_Score" != displayName && "Outcome" != displayName && "PubChem activity score" != displayName) {
-            stringBuilder.append(displayName ? displayName + " : " : '')
+        stringBuilder.append(displayName ? displayName + " : " : '')
 
-            stringBuilder.append(qualifier ?: '').append(value ?: '').append(" ").append(responseUnit ?: "").append(" ");
-            if (testConcentration) {
-                stringBuilder.append("  Test Concentration:").append(testConcentration).append(" ").append(testConcentrationUnit)
-            }
-       // }
+        stringBuilder.append(qualifier ?: '').append(value ?: '').append(" ").append(responseUnit ?: "").append(" ");
+        if (testConcentration) {
+            stringBuilder.append("  Test Concentration:").append(testConcentration).append(" ").append(testConcentrationUnit)
+        }
         return stringBuilder.toString()
 
     }
 
     @JsonProperty("displayName")
-    public String getPubChemDisplayName() {
-        return pubChemDisplayName;
+    public String getDisplayName() {
+        return displayName;
     }
 
     @JsonProperty("displayName")
-    public void setPubChemDisplayName(String pubChemDisplayName) {
-        this.pubChemDisplayName = pubChemDisplayName;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     @JsonProperty("dictElemId")

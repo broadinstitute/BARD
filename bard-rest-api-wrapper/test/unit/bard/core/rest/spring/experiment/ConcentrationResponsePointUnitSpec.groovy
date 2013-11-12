@@ -55,7 +55,7 @@ class ConcentrationResponsePointUnitSpec extends Specification {
         assert childElements
         assert childElements.size() == 3
         for (ActivityData childElement in childElements) {
-            assert childElement.pubChemDisplayName
+            assert childElement.displayName
             assert childElement.dictElemId
             assert childElement.testConcentration
             assert childElement.testConcentrationUnit

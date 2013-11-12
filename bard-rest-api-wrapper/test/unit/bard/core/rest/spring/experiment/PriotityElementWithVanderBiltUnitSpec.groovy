@@ -954,7 +954,7 @@ class PriotityElementWithVanderBiltUnitSpec extends Specification {
     }
 
     void assertActivityData(final ActivityData activityData) {
-        assert activityData.pubChemDisplayName
+        assert activityData.displayName
         assert activityData.dictElemId
         assert activityData.value
     }
@@ -972,7 +972,7 @@ class PriotityElementWithVanderBiltUnitSpec extends Specification {
         servletContext.getAttribute(_)>>{ctx}
         ctx.dictionaryRestService()>>{dictionaryRestService}
 
-        assert priorityElement.pubChemDisplayName == "AvgGluPotency"
+        assert priorityElement.displayName == "AvgGluPotency"
         assert priorityElement.dictElemId == 961
         assert priorityElement.responseUnit == "um"
         assert priorityElement.testConcentrationUnit == "uM"
