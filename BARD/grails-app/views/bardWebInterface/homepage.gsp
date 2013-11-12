@@ -23,24 +23,27 @@
     <r:layoutResources/>
 
     <style type="text/css">
-        @media (min-width: 768px) {          /* start of modification for 5 columns.  Must follow after bootstrap definitions */
-            .fivecolumns .span2 {
-                width: 18.2%;
-                *width: 18.2%;
-            }
+    @media (min-width: 768px) {
+        /* start of modification for 5 columns.  Must follow after bootstrap definitions */
+        .fivecolumns .span2 {
+            width: 18.2%;
+            *width: 18.2%;
         }
-        @media (min-width: 1200px) {
-            .fivecolumns .span2 {
-                width: 17.9%;
-                *width: 17.8%;
-            }
+    }
+
+    @media (min-width: 1200px) {
+        .fivecolumns .span2 {
+            width: 17.9%;
+            *width: 17.8%;
         }
-        @media (min-width: 768px) and (max-width: 979px) {
-            .fivecolumns .span2 {
-                width: 17.7%;
-                *width: 17.7%;
-            }
+    }
+
+    @media (min-width: 768px) and (max-width: 979px) {
+        .fivecolumns .span2 {
+            width: 17.7%;
+            *width: 17.7%;
         }
+    }
     </style>
 </head>
 
@@ -72,40 +75,42 @@
                 </div>
 
                 <div class="row-fluid">
-                    <nav class="nav-panel span12 right-aligned">
-                        <ul class="nav">
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="../about/howToSearch">Search</a></li>
-                                    <li><a href="../about/howToFilterResults">Filter search results</a></li>
-                                    <li><a href="../about/howToReadResults">Interpret search results</a></li>
-                                    %{--<li><a href="../about/howToUseSecurely">Use securely</a></li>--}%
-                                    <li><a href="../about/howToUsePlugins">Create and use plug-ins</a></li>
-                                    <li><a href="../about/howToVisualizeAndCaptureData">Visualize and Capture Data</a></li>
-                                    <li><a href="../about/howToGetTheMostFromBard">Get the Most From Bard</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="../about/howToReportABug">Report a bug</a></li>
-                                    <li><a href="../about/howToContactUs">Contact us</a></li>
-                                </ul>
-                            </li>
-                            <sec:ifLoggedIn>
-                                <li><a href="/BARD/bardWebInterface/navigationPage">My BARD</a></li>
-                            </sec:ifLoggedIn>
-                        </ul>
-                        <g:if test="${false}">
-                            <ul class="login-nav">
-                                <li><a href="#">Sign up</a></li>
-                                <li><a href="#">Sign in</a></li>
+                    <div class="span12">
+                        <nav class="nav-panel right-aligned">
+                            <ul class="nav">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="../about/howToSearch">Search</a></li>
+                                        <li><a href="../about/howToFilterResults">Filter search results</a></li>
+                                        <li><a href="../about/howToReadResults">Interpret search results</a></li>
+                                        %{--<li><a href="../about/howToUseSecurely">Use securely</a></li>--}%
+                                        <li><a href="../about/howToUsePlugins">Create and use plug-ins</a></li>
+                                        <li><a href="../about/howToVisualizeAndCaptureData">Visualize and Capture Data</a>
+                                        </li>
+                                        <li><a href="../about/howToGetTheMostFromBard">Get the Most From Bard</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="../about/howToReportABug">Report a bug</a></li>
+                                        <li><a href="../about/howToContactUs">Contact us</a></li>
+                                    </ul>
+                                </li>
+                                <sec:ifLoggedIn>
+                                    <li><a href="/BARD/bardWebInterface/navigationPage">My BARD</a></li>
+                                </sec:ifLoggedIn>
                             </ul>
-                        </g:if>
-                    </nav>
+                            <g:if test="${false}">
+                                <ul class="login-nav">
+                                    <li><a href="#">Sign up</a></li>
+                                    <li><a href="#">Sign in</a></li>
+                                </ul>
+                            </g:if>
+                        </nav>
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -406,9 +411,12 @@
                 <div class="span2">
                     <h3>Help</h3>
                     <ul>
-                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!forum/bard-users">Forums</a></li>
-                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Submit a Bug Report</a></li>
-                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Ask a Question</a></li>
+                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!forum/bard-users">Forums</a>
+                        </li>
+                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Submit a Bug Report</a>
+                        </li>
+                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Ask a Question</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -434,8 +442,12 @@
 
 
                 <div class="span2">
-                    <strong class="logo-by"><a href="http://www.chemaxon.com/" title="Powered by ChemAxon">Powered by ChemAxon</a></strong>
-                    <p><strong class="logo-scilligence"><a href="http://www.scilligence.com/web/" title="Scilligence">Scilligence</a></strong></p>
+                    <strong class="logo-by"><a href="http://www.chemaxon.com/"
+                                               title="Powered by ChemAxon">Powered by ChemAxon</a></strong>
+
+                    <p><strong class="logo-scilligence"><a href="http://www.scilligence.com/web/"
+                                                           title="Scilligence">Scilligence</a></strong></p>
+
                     <p>&copy; 2013 BARD</p>
                 </div>
             </div>
