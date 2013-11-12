@@ -4,6 +4,8 @@ import chemaxon.formats.MolExporter
 import chemaxon.formats.MolFormatException
 import chemaxon.formats.MolImporter
 import chemaxon.struc.Molecule
+import org.apache.commons.lang3.StringUtils
+
 import java.awt.image.BufferedImage
 import java.awt.Graphics2D
 import java.awt.AlphaComposite
@@ -54,7 +56,29 @@ class ChemAxonService {
         return resizedImage;
     }
 
-
+    /**
+     * Converts a SMILES structure-string into a different string-format, specified by the fmt string.
+     *
+     * @param smiles
+     * @param fmt Standard structure format such as: "mol", "sdf", "smiles", etc.
+     * @return
+     */
+    public String convertSmilesToAnotherFormat(String smiles, String format) {
+        Molecule mol;
+        String smls = StringUtils.trimToNull(smiles)
+        String frmt = StringUtils.trimToNull(format)
+        if (smls && frmt) {
+            try {
+                mol = MolImporter.importMol(smls);
+                return MolExporter.exportToFormat(mol, frmt);
+            }
+            catch (MolFormatException e) {
+                log.error(e)
+                throw e;
+            }
+        }
+        return null
+    }
 }
 
 
