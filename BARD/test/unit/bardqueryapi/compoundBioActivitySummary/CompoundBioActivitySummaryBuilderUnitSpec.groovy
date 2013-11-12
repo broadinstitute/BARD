@@ -159,14 +159,13 @@ class CompoundBioActivitySummaryBuilderUnitSpec extends Specification {
         assert (tableModel?.data ? tableModel?.data?.first()?.first()?.class : null) == expectedResourceType
 
         where:
-        label                          | sortedKeys | groupBy            | filterTypes                                | expectedTableModelDataSize | expectedResourceType
-        "group-by assay, all"          | [1, 2]     | GroupByTypes.ASSAY | [FilterTypes.ACTIVE, FilterTypes.INACTIVE] | 1                          | AssayValue
-        "group-by assay, actives-only" | [1]        | GroupByTypes.ASSAY | [FilterTypes.ACTIVE]                       | 1                          | AssayValue
-        //    "group-by assay, inactives"      | [2]        | GroupByTypes.ASSAY   | [FilterTypes.INACTIVE]                                                      | 0                          | AssayValue
-        "group-by assay, none" | [1, 2] | GroupByTypes.ASSAY | [] | 0 | null
-        "group-by project, all" | [1, 2] | GroupByTypes.PROJECT | [FilterTypes.ACTIVE, FilterTypes.INACTIVE] | 1 | ProjectValue
-        "group-by project, actives-only" | [1] | GroupByTypes.PROJECT | [FilterTypes.ACTIVE] | 1 | ProjectValue
-        "group-by assay, single-point" | [1, 2] | GroupByTypes.ASSAY | [FilterTypes.ACTIVE, FilterTypes.INACTIVE, FilterTypes.SINGLE_POINT_RESULT] | 1 | AssayValue
+        label                            | sortedKeys | groupBy              | filterTypes                                                                 | expectedTableModelDataSize | expectedResourceType
+        "group-by assay, all"            | [1, 2]     | GroupByTypes.ASSAY   | [FilterTypes.ACTIVE, FilterTypes.INACTIVE]                                  | 1                          | AssayValue
+        "group-by assay, actives-only"   | [1]        | GroupByTypes.ASSAY   | [FilterTypes.ACTIVE]                                                        | 1                          | AssayValue
+        "group-by assay, none"           | [1, 2]     | GroupByTypes.ASSAY   | []                                                                          | 0                          | null
+        "group-by project, all"          | [1, 2]     | GroupByTypes.PROJECT | [FilterTypes.ACTIVE, FilterTypes.INACTIVE]                                  | 1                          | ProjectValue
+        "group-by project, actives-only" | [1]        | GroupByTypes.PROJECT | [FilterTypes.ACTIVE]                                                        | 1                          | ProjectValue
+        "group-by assay, single-point"   | [1, 2]     | GroupByTypes.ASSAY   | [FilterTypes.ACTIVE, FilterTypes.INACTIVE, FilterTypes.SINGLE_POINT_RESULT] | 1                          | AssayValue
     }
 
     void "test convertExperimentResultsToValues #label"() {
@@ -175,7 +174,9 @@ class CompoundBioActivitySummaryBuilderUnitSpec extends Specification {
 
         then:
         assert values.size() == expectedDataSize
-        assert values.first().class == expectedWebQueryValueClass
+        if (expectedDataSize > 0) {
+            assert values.first().class == expectedWebQueryValueClass
+        }
 
         where:
         label                | exptData      | expectedWebQueryValueClass             | expectedDataSize

@@ -30,7 +30,13 @@ class PreviewResultsSummaryBuilder {
 
     final static String PUBCHEM_OUTCOME_DICT_URI = "http://www.bard.nih.gov/ontology/bard#BARD_0000998"
 
-
+    final static List<Long> SCREENING_CONCENTRATION = [
+            new Long(1943),
+            new Long(1948),
+            new Long(1949),
+            new Long(1950),
+            new Long(971)
+    ]
     /**
      * So called high priority elements
      */
@@ -162,8 +168,8 @@ class PreviewResultsSummaryBuilder {
      * @param jsonResults
      * @return
      */
-    protected Map convertToDoseResponse(List<JsonResult> jsonResults,final Set<String> priorityElements,
-    final Set<StringValue> priorityElementValues) {
+    protected Map convertToDoseResponse(List<JsonResult> jsonResults, final Set<String> priorityElements,
+                                        final Set<StringValue> priorityElementValues) {
 
         List<Double> concentrations = []
         List<Double> activities = []
@@ -183,38 +189,65 @@ class PreviewResultsSummaryBuilder {
             } else if (jsonResult.valueNum && jsonResult.contextItems) {
                 final float activity = jsonResult.valueNum
                 final List<JsonResultContextItem> items = jsonResult.getContextItems()
-                final JsonResultContextItem resultContextItem = items.get(0)
-                final float concentration = resultContextItem.valueNum
 
+                for (JsonResultContextItem resultContextItem : items) {
+                    if (SCREENING_CONCENTRATION.contains(resultContextItem.attributeId)) { //this is a screening concentration
+                        if (!responseUnits) {
+                            responseUnits = jsonResult.resultType
+                        }
+                        final float concentration = resultContextItem.valueNum
+                        //get concentration units
+                        String valueDisplay = resultContextItem.valueDisplay
+                        if (!concentrationUnits) {
+                            concentrationUnits = parseUnits(valueDisplay)
+                        }
 
-                if (!responseUnits) {
-                    responseUnits = jsonResult.resultType
+                        activities.add(activity.doubleValue())
+                        concentrations.add(concentration.doubleValue())
+                    } else {
+                        //this is a child element                               qualifier
+                        childElements << contextItemToChildElement(resultContextItem)
+                    }
                 }
-
-                //get concentration units
-                String valueDisplay = resultContextItem.valueDisplay
-                if (!concentrationUnits) {
-                    concentrationUnits = parseUnits(valueDisplay)
+                if (jsonResult.related) {
+                    handleRelatedElements(jsonResult, childElements)
                 }
-
-                activities.add(activity.doubleValue())
-                concentrations.add(concentration.doubleValue())
             } else {
                 childElements << new StringValue(value: jsonResult.resultType + ":" + jsonResult.valueDisplay)
             }
 
         }
+        if (activities && concentrations) {
+            return [
+                    activityConcentrationMap: new ActivityConcentrationMap(activities: activities, concentrations: concentrations),
+                    curveFitParameters: curveFitParameters, responseUnit: responseUnits,
+                    testConcentrationUnit: concentrationUnits,
+                    childElements: childElements
+            ]
+        }
         return [
-                activityConcentrationMap: new ActivityConcentrationMap(activities: activities, concentrations: concentrations),
-                curveFitParameters: curveFitParameters, responseUnit: responseUnits,
+                activityConcentrationMap: null,
+                curveFitParameters: null,
+                responseUnit: responseUnits,
                 testConcentrationUnit: concentrationUnits,
                 childElements: childElements
         ]
 
     }
 
+    void handleRelatedElements(JsonResult jsonResult, List<WebQueryValue> childElements) {
+        for (JsonResult relatedElement : jsonResult.related) {
+            String display = relatedElement.valueDisplay
+            String resultType = relatedElement.resultType
+            childElements << new StringValue(value: resultType + ":" + display)
 
-    protected ConcentrationResponseSeriesValue handleConcentrationResponsePoints(final JsonResult jsonResult,final Set<String> priorityElements,
+            if (relatedElement.contextItems) {
+                childElements << contextItemsToChildElements(relatedElement.contextItems)
+            }
+        }
+    }
+
+    protected ConcentrationResponseSeriesValue handleConcentrationResponsePoints(final JsonResult jsonResult, final Set<String> priorityElements,
                                                                                  final Set<StringValue> priorityElementValues,
                                                                                  List<WebQueryValue> childElements = [], Double yNormMin = null,
                                                                                  Double yNormMax = null) {
@@ -230,28 +263,30 @@ class PreviewResultsSummaryBuilder {
 
         String qualifier = jsonResult.qualifier ?: ""
 
-        Map concentrationResponseMap = convertToDoseResponse(jsonResult.related,priorityElements,priorityElementValues)
+        Map concentrationResponseMap = convertToDoseResponse(jsonResult.related, priorityElements, priorityElementValues)
         childElements << concentrationResponseMap.childElements
         ActivityConcentrationMap doseResponsePointsMap = concentrationResponseMap.activityConcentrationMap
-        CurveFitParameters curveFitParameters = concentrationResponseMap.curveFitParameters
-        String responseUnits = concentrationResponseMap.responseUnit
-        String concentrationUnits = concentrationResponseMap.testConcentrationUnit
+        if (doseResponsePointsMap) {
+            CurveFitParameters curveFitParameters = concentrationResponseMap.curveFitParameters
+            String responseUnits = concentrationResponseMap.responseUnit
+            String concentrationUnits = concentrationResponseMap.testConcentrationUnit
 
-        ConcentrationResponseSeriesValue concentrationResponseSeriesValue = new ConcentrationResponseSeriesValue(value: doseResponsePointsMap,
-                title: new PairValue(value: title, dictionaryElement: dictionaryElement),
-                curveFitParameters: curveFitParameters,
-                slope: jsonResult.valueNum,
-                responseUnit: responseUnits,
-                testConcentrationUnit: concentrationUnits,
-                qualifier: qualifier,
-                yNormMin: yNormMin,
-                yNormMax: yNormMax)
-        concentrationResponseSeriesValue.yAxisLabel = responseUnits
-        concentrationResponseSeriesValue.xAxisLabel = concentrationUnits ? "Concentration (log [${concentrationUnits}])" : ""
-
+            ConcentrationResponseSeriesValue concentrationResponseSeriesValue = new ConcentrationResponseSeriesValue(value: doseResponsePointsMap,
+                    title: new PairValue(value: title, dictionaryElement: dictionaryElement),
+                    curveFitParameters: curveFitParameters,
+                    slope: jsonResult.valueNum,
+                    responseUnit: responseUnits,
+                    testConcentrationUnit: concentrationUnits,
+                    qualifier: qualifier,
+                    yNormMin: yNormMin,
+                    yNormMax: yNormMax)
+            concentrationResponseSeriesValue.yAxisLabel = responseUnits
+            concentrationResponseSeriesValue.xAxisLabel = concentrationUnits ? "Concentration (log [${concentrationUnits}])" : ""
+            return concentrationResponseSeriesValue
+        }
         //add context items , they are child elements
 
-        return concentrationResponseSeriesValue
+        return null
 
     }
 
@@ -265,18 +300,28 @@ class PreviewResultsSummaryBuilder {
 
         final Long resultTypeId = jsonResult.resultTypeId
         final String resultType = jsonResult.resultType
+        //if it has a qualifier then do not try to fit the curve
         if (priorityElements.contains(resultType.trim())) {
             priorityElementValues.add(new StringValue(value: resultType + ":" + jsonResult.valueDisplay))
         }
 
         if (HIGH_PRIORITY_DICT_ELEM.contains(resultTypeId)) {
-
+            String qualifier = jsonResult.qualifier ?: ""
 
             //if this has no child nodes then it cannot be a dose
             if (!jsonResult.related) {
                 childElements << new StringValue(value: resultType + ":" + jsonResult.valueDisplay)
             } else {
-                values << handleConcentrationResponsePoints(jsonResult, priorityElements,priorityElementValues,childElements, yNormMin, yNormMax)
+                    final ConcentrationResponseSeriesValue concentrationResponsePoints = handleConcentrationResponsePoints(jsonResult, priorityElements, priorityElementValues, childElements, yNormMin, yNormMax)
+                    if (concentrationResponsePoints) {
+                        values << concentrationResponsePoints
+                    }else{
+                        if (!priorityElements.contains(resultType.trim())) {
+                            childElements << new StringValue(value: resultType + ":" + jsonResult.valueDisplay)
+                        }
+                        handleRelatedElements(jsonResult,childElements)
+                    }
+               // }
             }
         } else if (isPercentResponse(resultTypeId)) {
             values << handleEfficacyMeasures(jsonResult)
@@ -301,9 +346,13 @@ class PreviewResultsSummaryBuilder {
     protected List<WebQueryValue> contextItemsToChildElements(List<JsonResultContextItem> jsonResultContextItems) {
         List<WebQueryValue> childElements = []
         for (JsonResultContextItem jsonResultContextItem : jsonResultContextItems) {
-            childElements << new StringValue(value: jsonResultContextItem.attribute + ":" + jsonResultContextItem.valueDisplay)
+            childElements << contextItemToChildElement(jsonResultContextItem)
         }
         return childElements
+    }
+
+    protected StringValue contextItemToChildElement(JsonResultContextItem jsonResultContextItem) {
+        return new StringValue(value: jsonResultContextItem.attribute + ":" + jsonResultContextItem.valueDisplay)
     }
     /**
      *
@@ -338,19 +387,19 @@ class PreviewResultsSummaryBuilder {
                         priorityElementValues.add(new StringValue(value: resultType + ":" + display))
                     }
                     if (isPubChemActivityScore(relatedElement.resultTypeId)) {
-                        childElements  << new StringValue(value: relatedElement.resultType + ":" + relatedElement.valueDisplay)
+                        childElements << new StringValue(value: relatedElement.resultType + ":" + relatedElement.valueDisplay)
                     } else {
-                        processJsonResults(relatedElement, priorityElements,priorityElementValues, childElements, values, yNormMin, yNormMax)
+                        processJsonResults(relatedElement, priorityElements, priorityElementValues, childElements, values, yNormMin, yNormMax)
                     }
                     if (relatedElement.contextItems) {
                         childElements << contextItemsToChildElements(relatedElement.contextItems)
                     }
                 }
             } else if (isPubChemActivityScore(resultTypeId)) {
-                childElements  << new StringValue(value:resultType + ":" + display)
+                childElements << new StringValue(value: resultType + ":" + display)
             } else {
 
-                processJsonResults(jsonResult, priorityElements,priorityElementValues, childElements, values, yNormMin, yNormMax)
+                processJsonResults(jsonResult, priorityElements, priorityElementValues, childElements, values, yNormMin, yNormMax)
                 if (jsonResult.contextItems) {
                     childElements << contextItemsToChildElements(jsonResult.contextItems)
                 }
