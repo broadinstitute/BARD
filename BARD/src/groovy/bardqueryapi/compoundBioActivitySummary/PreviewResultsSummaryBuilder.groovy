@@ -318,7 +318,6 @@ class PreviewResultsSummaryBuilder {
                                                                 Double yNormMax = null) {
         List<WebQueryValue> values = []
         List<WebQueryValue> childElements = []
-        List<WebQueryValue> pubChemActivityScores = []
         StringValue outcome = null
         Set<StringValue> priorityElementValues = [] as Set<StringValue>
         for (JsonResult jsonResult : rootElements) {
@@ -339,7 +338,7 @@ class PreviewResultsSummaryBuilder {
                         priorityElementValues.add(new StringValue(value: resultType + ":" + display))
                     }
                     if (isPubChemActivityScore(relatedElement.resultTypeId)) {
-                        pubChemActivityScores << new StringValue(value: relatedElement.valueDisplay)
+                        childElements  << new StringValue(value: relatedElement.resultType + ":" + relatedElement.valueDisplay)
                     } else {
                         processJsonResults(relatedElement, priorityElements,priorityElementValues, childElements, values, yNormMin, yNormMax)
                     }
@@ -348,7 +347,7 @@ class PreviewResultsSummaryBuilder {
                     }
                 }
             } else if (isPubChemActivityScore(resultTypeId)) {
-                pubChemActivityScores << new StringValue(value: display)
+                childElements  << new StringValue(value:resultType + ":" + display)
             } else {
 
                 processJsonResults(jsonResult, priorityElements,priorityElementValues, childElements, values, yNormMin, yNormMax)
@@ -362,7 +361,6 @@ class PreviewResultsSummaryBuilder {
                 experimentalvalues: sortedValues,
                 outcome: outcome,
                 childElements: childElements,
-                pubChemActivityScores: pubChemActivityScores,
                 priorityElements: priorityElementValues
         ]
     }

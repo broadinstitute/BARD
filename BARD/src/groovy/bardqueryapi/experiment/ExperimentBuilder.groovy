@@ -36,13 +36,10 @@ class ExperimentBuilder {
         columnHeaders.add(new StringValue(value: "CID"))
         columnHeaders.add(new StringValue(value: "Structure"))
         columnHeaders.add(new StringValue(value: "Outcome"))
-        columnHeaders.add(new StringValue(value: "PubChem Activity Score"))
         columnHeaders.add(new StringValue(value: "Summary Result"))
         columnHeaders.add(new StringValue(value: "Dose Response"))
         columnHeaders.add(new StringValue(value: "Supplemental Information"))
-//        if (hasChildElements) {
-//            columnHeaders.add(new StringValue(value: "Child Elements"))
-//        }
+
         return columnHeaders
     }
     /**
@@ -97,12 +94,9 @@ class ExperimentBuilder {
         PreviewResultsSummaryBuilder previewResultsSummaryBuilder = new PreviewResultsSummaryBuilder()
         Map m = previewResultsSummaryBuilder.convertExperimentResultsToTableModelCellsAndRows(substanceResults.rootElem, priorityElements, yNormMin, yNormMax)
         StringValue outcome = m.outcome
-        final List<WebQueryValue> pubChemActivityScores = m.pubChemActivityScores
-        StringValue pubChemActivityScore = pubChemActivityScores ? pubChemActivityScores.get(0) : new StringValue()
         final List<StringValue> summaryResults = m.priorityElements as List
 
         rowData.add(outcome)
-        rowData.add(pubChemActivityScore)
         rowData.add(new ListValue(value: summaryResults.sort()))
 
         List<WebQueryValue> experimentValues = m.experimentalvalues
@@ -212,6 +206,8 @@ class ExperimentBuilder {
             ListValue listValue = new ListValue(value: experimentValues)
             rowData.add(listValue)
         }
+        //Add all childElements of the priorityElements, if any.
+        List<WebQueryValue> childElements = []
 
         //Add all rootElements from the JsonResponse
         List<StringValue> rootElements = []
@@ -221,12 +217,17 @@ class ExperimentBuilder {
         for (RootElement rootElement : resultData.rootElements) {
             if (rootElement.toDisplay()) {
                 rootElements.add(new StringValue(value: rootElement.toDisplay()))
+                if(rootElement.childElements){
+                    for (ActivityData activityData : rootElement.childElements) {
+                        if (activityData.toDisplay()) {
+                            childElements << new StringValue(value: activityData.toDisplay())
+                        }
+                    }
+                }
             }
         }
         rowData.add(new ListValue(value: rootElements))
 
-        //Add all childElements of the priorityElements, if any.
-        List<WebQueryValue> childElements = []
         for (PriorityElement priorityElement in resultData.priorityElements) {
             if (priorityElement?.hasChildElements()) {
                 for (ActivityData activityData : priorityElement.childElements) {

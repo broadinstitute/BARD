@@ -68,14 +68,14 @@ public class ActivityData extends JsonUtil {
 
 
         final StringBuilder stringBuilder = new StringBuilder()
-        if ("Score" != displayName && "Activity_Score" != displayName && "Outcome" != displayName && "PubChem activity score" != displayName) {
+       // if ("Score" != displayName && "Activity_Score" != displayName && "Outcome" != displayName && "PubChem activity score" != displayName) {
             stringBuilder.append(displayName ? displayName + " : " : '')
 
             stringBuilder.append(qualifier ?: '').append(value ?: '').append(" ").append(responseUnit ?: "").append(" ");
             if (testConcentration) {
                 stringBuilder.append("  Test Concentration:").append(testConcentration).append(" ").append(testConcentrationUnit)
             }
-        }
+       // }
         return stringBuilder.toString()
 
     }
