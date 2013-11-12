@@ -278,7 +278,11 @@ class CompoundBioActivitySummaryBuilder {
     }
 
     static WebQueryValue createPairValueFromPriorityElement(PriorityElement priorityElement) {
-        Pair<String, String> pair = new ImmutablePair<String, String>(priorityElement.displayName, "${priorityElement.qualifier ?: ''} ${priorityElement.value}")
+        final String valueDisplay = "${priorityElement.qualifier ?: ''} ${priorityElement.value} }"
+        if(priorityElement.responseUnit && priorityElement.responseUnit == 'null'){
+            valueDisplay = valueDisplay + " ${priorityElement.responseUnit}"
+        }
+        Pair<String, String> pair = new ImmutablePair<String, String>(priorityElement.displayName, valueDisplay)
         LinkValue dictionaryElement
 
         if (priorityElement.dictElemId) {

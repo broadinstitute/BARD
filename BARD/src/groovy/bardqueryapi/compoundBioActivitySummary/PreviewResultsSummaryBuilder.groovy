@@ -205,15 +205,18 @@ class PreviewResultsSummaryBuilder {
                         activities.add(activity.doubleValue())
                         concentrations.add(concentration.doubleValue())
                     } else {
-                        //this is a child element                               qualifier
-                        childElements << contextItemToChildElement(resultContextItem)
+                        if (!priorityElements.contains(resultType.trim())) {
+                            childElements << contextItemToChildElement(resultContextItem)
+                        }
                     }
                 }
                 if (jsonResult.related) {
                     handleRelatedElements(jsonResult, childElements)
                 }
             } else {
-                childElements << new StringValue(value: jsonResult.resultType + ":" + jsonResult.valueDisplay)
+                if (!priorityElements.contains(resultType.trim())) {
+                    childElements << new StringValue(value: jsonResult.resultType + ":" + jsonResult.valueDisplay)
+                }
             }
 
         }
@@ -306,27 +309,30 @@ class PreviewResultsSummaryBuilder {
         }
 
         if (HIGH_PRIORITY_DICT_ELEM.contains(resultTypeId)) {
-            String qualifier = jsonResult.qualifier ?: ""
 
             //if this has no child nodes then it cannot be a dose
             if (!jsonResult.related) {
-                childElements << new StringValue(value: resultType + ":" + jsonResult.valueDisplay)
+                if (!priorityElements.contains(resultType.trim())) {
+                    childElements << new StringValue(value: resultType + ":" + jsonResult.valueDisplay)
+                }
             } else {
-                    final ConcentrationResponseSeriesValue concentrationResponsePoints = handleConcentrationResponsePoints(jsonResult, priorityElements, priorityElementValues, childElements, yNormMin, yNormMax)
-                    if (concentrationResponsePoints) {
-                        values << concentrationResponsePoints
-                    }else{
-                        if (!priorityElements.contains(resultType.trim())) {
-                            childElements << new StringValue(value: resultType + ":" + jsonResult.valueDisplay)
-                        }
-                        handleRelatedElements(jsonResult,childElements)
+                final ConcentrationResponseSeriesValue concentrationResponsePoints = handleConcentrationResponsePoints(jsonResult, priorityElements, priorityElementValues, childElements, yNormMin, yNormMax)
+                if (concentrationResponsePoints) {
+                    values << concentrationResponsePoints
+                } else {
+                    if (!priorityElements.contains(resultType.trim())) {
+                        childElements << new StringValue(value: resultType + ":" + jsonResult.valueDisplay)
                     }
-               // }
+                    handleRelatedElements(jsonResult, childElements)
+                }
+                // }
             }
         } else if (isPercentResponse(resultTypeId)) {
             values << handleEfficacyMeasures(jsonResult)
         } else {  //everything else is a child element
-            childElements << new StringValue(value: resultType + ":" + jsonResult.valueDisplay)
+            if (!priorityElements.contains(resultType.trim())) {
+                childElements << new StringValue(value: resultType + ":" + jsonResult.valueDisplay)
+            }
         }
     }
 
@@ -387,7 +393,9 @@ class PreviewResultsSummaryBuilder {
                         priorityElementValues.add(new StringValue(value: resultType + ":" + display))
                     }
                     if (isPubChemActivityScore(relatedElement.resultTypeId)) {
-                        childElements << new StringValue(value: relatedElement.resultType + ":" + relatedElement.valueDisplay)
+                        if (!priorityElements.contains(resultType.trim())) {
+                            childElements << new StringValue(value: relatedElement.resultType + ":" + relatedElement.valueDisplay)
+                        }
                     } else {
                         processJsonResults(relatedElement, priorityElements, priorityElementValues, childElements, values, yNormMin, yNormMax)
                     }
@@ -396,7 +404,10 @@ class PreviewResultsSummaryBuilder {
                     }
                 }
             } else if (isPubChemActivityScore(resultTypeId)) {
-                childElements << new StringValue(value: resultType + ":" + display)
+
+                if (!priorityElements.contains(resultType.trim())) {
+                    childElements << new StringValue(value: resultType + ":" + display)
+                }
             } else {
 
                 processJsonResults(jsonResult, priorityElements, priorityElementValues, childElements, values, yNormMin, yNormMax)
