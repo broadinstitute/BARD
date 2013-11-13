@@ -15,8 +15,6 @@ class AssayContextExperimentalVariablesSpec extends AssayBaseContextSpec{
 	@Override
 	def setup() {
 		section = "experimental-variables-header"
-//		cardGroup = "cardHolderExperimentalVariables"
-		cardGroup = "experimental-variables-header"
 		editContextGroup = "Experimental-Variables"
 		dbContextType = "Experimental Variables"
 		
