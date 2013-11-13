@@ -4,7 +4,7 @@ import bard.db.dictionary.Element
 import bard.db.enums.ExperimentStatus
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
-
+import bard.db.people.Role
 import bard.db.registration.ExternalReference
 import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
@@ -70,6 +70,7 @@ class ProjectExportService extends ExportAbstractService {
     protected void generateProject(final MarkupBuilder markupBuilder, final Project project) {
         def attributes = [:]
         attributes.put('projectId', project.id)
+        extractOwner(project, attributes)
         if (project.readyForExtraction) {
             attributes.put('readyForExtraction', project.readyForExtraction.getId())
         }
@@ -86,7 +87,7 @@ class ProjectExportService extends ExportAbstractService {
         if (StringUtils.isNotBlank(project.modifiedBy)) {
             attributes.put('modifiedBy', project.modifiedBy)
         }
-        attributes.put('status',project.projectStatus.id)
+        attributes.put('status', project.projectStatus.id)
         markupBuilder.project(attributes) {
             if (project.name) {
                 projectName(project.name)
@@ -104,7 +105,7 @@ class ProjectExportService extends ExportAbstractService {
                 if (projectExperiment.experiment?.readyForExtraction == ReadyForExtraction.READY ||
                         projectExperiment.experiment.experimentStatus == ExperimentStatus.APPROVED ||
                         projectExperiment.experiment.experimentStatus == ExperimentStatus.RETIRED) {
-                  projectExperimentsReadyForExraction.add(projectExperiment)
+                    projectExperimentsReadyForExraction.add(projectExperiment)
                 }
             }
             if (projectExperimentsReadyForExraction) {
@@ -302,12 +303,12 @@ class ProjectExportService extends ExportAbstractService {
     }
 
     protected void generateProjectExperiment(MarkupBuilder markupBuilder, ProjectExperiment projectExperiment) {
-        if(projectExperiment instanceof ProjectSingleExperiment) {
-            Experiment experiment = ((ProjectSingleExperiment)projectExperiment).experiment
-            generateProjectSingleExperiment(markupBuilder, projectExperiment.id, projectExperiment.stage, experiment, )
+        if (projectExperiment instanceof ProjectSingleExperiment) {
+            Experiment experiment = ((ProjectSingleExperiment) projectExperiment).experiment
+            generateProjectSingleExperiment(markupBuilder, projectExperiment.id, projectExperiment.stage, experiment,)
         } else {
-            ProjectPanelExperiment panel = (ProjectPanelExperiment)projectExperiment;
-            for(experiment in panel.panelExperiment.experiments) {
+            ProjectPanelExperiment panel = (ProjectPanelExperiment) projectExperiment;
+            for (experiment in panel.panelExperiment.experiments) {
                 generateProjectSingleExperiment(markupBuilder, projectExperiment.id, projectExperiment.stage, experiment)
             }
         }

@@ -229,4 +229,8 @@
     <xs:attribute name="lastUpdated" type="xs:dateTime"> </xs:attribute>
     <xs:attribute name="modifiedBy" type="xs:string"> </xs:attribute>
     <xs:attribute name="parentChildRelationship" type="xs:string"/>
+    <xs:attributeGroup name="ownerGroup">
+        <xs:attribute name="owner" type="xs:string" use="required"/>
+        <xs:attribute name="ownerId" type="bardID" use="required"/>
+    </xs:attributeGroup>
 </xs:schema>

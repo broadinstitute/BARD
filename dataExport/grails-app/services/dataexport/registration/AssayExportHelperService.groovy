@@ -191,6 +191,7 @@ class AssayExportHelperService extends ExportAbstractService {
 
         final Map<String, String> attributes = [:]
         attributes.put("assayId", assay.id.toString())
+        extractOwner(assay, attributes)
         attributes.put('readyForExtraction', assay.readyForExtraction.id)
         if (assay.assayVersion) {
             attributes.put('assayVersion', assay.assayVersion)
