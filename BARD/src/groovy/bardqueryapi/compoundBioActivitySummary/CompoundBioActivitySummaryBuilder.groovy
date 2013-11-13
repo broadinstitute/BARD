@@ -212,7 +212,7 @@ class CompoundBioActivitySummaryBuilder {
                     case ResponseClassEnum.MULTCONC: //MULTCONC has a list of pair/value result type and the tested concentration.
                         //The result-type is a single-point, key/value pair.
                         //Priority elements are now handled separately so this code is redundant
-                               WebQueryValue pairValue = createPairValueFromPriorityElement(priorityElement)
+                              // WebQueryValue pairValue = createPairValueFromPriorityElement(priorityElement)
                         // values << pairValue
                         break;
                     case ResponseClassEnum.CR_SER:

@@ -26,6 +26,10 @@ class ExperimentService {
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     ExperimentMeasure updateExperimentMeasure(Long id, ExperimentMeasure experimentMeasure, List<Long> assayContextIds) {
         ExperimentMeasure refreshedMeasure = experimentMeasure.save(flush: true)
+        Experiment experiment = Experiment.get(id)
+        if (experiment.experimentFiles) {  //no need to continue because we have already uploaded data
+            return refreshedMeasure
+        }
 
         final Set<AssayContextExperimentMeasure> assayContextExperimentMeasures = refreshedMeasure.getAssayContextExperimentMeasures()
 
