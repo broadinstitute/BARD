@@ -278,7 +278,7 @@ class CompoundBioActivitySummaryBuilder {
     }
 
     static WebQueryValue createPairValueFromPriorityElement(PriorityElement priorityElement) {
-        final String valueDisplay = "${priorityElement.qualifier ?: ''} ${priorityElement.value} }"
+        final String valueDisplay = "${priorityElement.qualifier ?: ''} ${priorityElement.value}"
         if(priorityElement.responseUnit && priorityElement.responseUnit == 'null'){
             valueDisplay = valueDisplay + " ${priorityElement.responseUnit}"
         }
