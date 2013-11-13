@@ -3,6 +3,7 @@ package bard.db.registration
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
+import bard.db.enums.ExpectedValueType
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import spock.lang.Specification
@@ -39,14 +40,15 @@ class AssayUnitSpec extends Specification {
     void 'test guidance for Assay #desc'() {
         given:
         final Assay assay = Assay.build()
-        List<Map> itemMaps = attributeElementMaps.call()
+        List<List<Map>> itemMaps = attributeElementValueElementMaps.call() //[[attribute1 element pairMaps], [value1 element pairMaps]]
         // putting each item in it's own context
         if (itemMaps) {
-            itemMaps.each { Map map ->
+            itemMaps.each { List<Map> pairMaps ->
                 final AssayContext assayContext = AssayContext.build(assay: assay)
                 assay.addToAssayContexts(assayContext)
-                final Element attribute = Element.findByLabel(map.label) ?: Element.build(map)
-                assayContext.addContextItem(AssayContextItem.build(attributeElement: attribute, valueDisplay: null))
+                final Element attribute = Element.findByLabel(pairMaps.first().label) ?: Element.build(pairMaps.first())
+                final Element valueElement = pairMaps.last() ? (Element.findByLabel(pairMaps.last()?.label) ?: Element.build(pairMaps.last())) : null
+                assayContext.addContextItem(AssayContextItem.build(attributeElement: attribute, valueElement: valueElement, valueDisplay: valueDisplay))
 
             }
         }
@@ -58,10 +60,11 @@ class AssayUnitSpec extends Specification {
         actualGuidanceMessages == expectedGuidanceMessages
 
         where:
-        desc                     | attributeElementMaps                         | expectedGuidanceMessages
-        'biology required'       | { null }                                     | [ONE_BIOLOGY_ATTRIBUTE_REQUIRED]
-        'biology required'       | { [[label: 'biology']] }                     | []
-        'more than 1 biology ok' | { [[label: 'biology'], [label: 'biology']] } | []
+        desc                                                        | attributeElementValueElementMaps                                                                                | valueDisplay | expectedGuidanceMessages
+        'biology required (true)'                                   | { null }                                                                                                        | null         | [ONE_BIOLOGY_ATTRIBUTE_REQUIRED]
+        'biology required (false)'                                  | { [[[label: 'biology'], []]] }                                                                                  | null         | []
+        'biology required with valueElement==small-molecule format' | { [[[label: 'assay format', expectedValueType: ExpectedValueType.ELEMENT], [label: 'small-molecule format']]] } | 'not null'   | []
+        'more than 1 biology ok'                                    | { [[[label: 'biology'], []], [[label: 'biology'], []]] }                                                        | null         | []
 
     }
 }
