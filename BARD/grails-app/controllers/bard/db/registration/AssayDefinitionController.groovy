@@ -17,6 +17,7 @@ import grails.validation.Validateable
 import grails.validation.ValidationException
 import groovy.transform.InheritConstructors
 import org.apache.commons.lang3.tuple.Pair
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.access.PermissionEvaluator
@@ -38,6 +39,7 @@ class AssayDefinitionController {
     AssayDefinitionService assayDefinitionService
     CapPermissionService capPermissionService
     IQueryService queryService
+    GrailsApplication grailsApplication
 
     @Secured(['isAuthenticated()'])
     def myAssays() {
@@ -306,7 +308,7 @@ class AssayDefinitionController {
         }
         catch (ValidationException ee) {
             assay = Assay.get(id)
-            flash.message = "Cannot clone assay definition with id \"${id}\" probably because of data migration issues. Please email the BARD team at bard-users@broadinstitute.org to fix this assay"
+            flash.message = "Cannot clone assay definition with id \"${id}\" probably because of data migration issues. Please email the BARD team at ${grailsApplication.config.bard.users.email} to fix this assay"
 
             log.error("Clone assay failed", ee);
         }

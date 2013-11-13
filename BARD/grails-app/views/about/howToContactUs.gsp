@@ -40,11 +40,13 @@
                     <br/>
                     <dl>
                         <dt>General Feedback</dt>
-                        <dd>Tell us about your experience using BARD. Which features are helpful? Which could use improvement? What functionality would you like to see in the future? Please tell us at bard-users@broadinstitute.org.</dd>
+                        <dd>Tell us about your experience using BARD. Which features are helpful? Which could use improvement? What functionality would you like to see in the future?
+                        Please tell us at ${grailsApplication.config.bard.users.email}.</dd>
 
                         <br/>
                         <dt>Report a Bug</dt>
-                        <dd>We despise bugs too! If you find one, please be sure to tell us what you see, exactly where you see it, and step-by-step what you are doing when it occurs. Please complete the simple form on our Report a Bug page or email bard-users@broadinstitute.org.</dd>
+                        <dd>We despise bugs too! If you find one, please be sure to tell us what you see, exactly where you see it, and step-by-step what you are doing when it occurs. Please complete the simple form on our Report a Bug page or email
+                        ${grailsApplication.config.bard.users.email}.</dd>
 
                         <br/>
                         <dt>Support Community</dt>
@@ -52,7 +54,8 @@
 
                         <br/>
                         <dt>Collaborate with Us</dt>
-                        <dd>Do you foresee an opportunity for collaboration between your institution and the BARD team? Do you need to request a local installation of the BARD data warehouse and REST API for plug-in development? Just let us know at bard-users@broadinstitute.org</dd>
+                        <dd>Do you foresee an opportunity for collaboration between your institution and the BARD team? Do you need to request a local installation of
+                        the BARD data warehouse and REST API for plug-in development? Just let us know at ${grailsApplication.config.bard.users.email}.</dd>
 
                     </dl>
 
