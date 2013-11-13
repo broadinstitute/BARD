@@ -74,6 +74,7 @@
             </xs:attribute>
             <xs:attribute ref="lastUpdated"/>
             <xs:attribute ref="modifiedBy"/>
+            <xs:attributeGroup ref="ownerGroup"/>
         </xs:complexType>
         <xs:key name="AssayContext_Key">
             <xs:selector xpath="assayContexts/assayContext"/>

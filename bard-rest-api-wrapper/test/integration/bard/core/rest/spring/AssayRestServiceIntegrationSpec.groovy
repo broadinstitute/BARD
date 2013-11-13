@@ -1,20 +1,16 @@
 package bard.core.rest.spring
-
 import bard.core.SearchParams
 import bard.core.SuggestParams
 import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.assays.*
+import bard.core.rest.spring.biology.BiologyEntity
 import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.Facet
-import bard.core.rest.spring.util.Target
-import bard.core.rest.spring.util.TargetClassification
 import grails.plugin.spock.IntegrationSpec
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 
 import static org.junit.Assert.assertTrue
-
 /**
  * Tests for RESTAssayService in JDO
  */
@@ -23,7 +19,7 @@ import static org.junit.Assert.assertTrue
 class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     AssayRestService assayRestService
     @Shared
-    List<Long> ADIDS_FOR_TESTS = [25, 26, 27]
+    List<Long> ADIDS_FOR_TESTS = [143]
 
     @Shared
     List<Long> CAP_ADIDS = [5168, 5981, 5982]
@@ -89,20 +85,17 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         final List<Context> contexts1 = layouts.get(0)
         assert contexts1
         assert annotation.docs
-        assert annotation.measures
     }
 
     void "getAssayAnnotationFromId"() {
         given:
-        final ExpandedAssay assay = assayRestService.getAssayById(27);
+        final ExpandedAssay assay = assayRestService.getAssayById(ADIDS_FOR_TESTS.last());
         when:
         final BardAnnotation annotation = assayRestService.findAnnotations(assay.id)
         then:
         assert annotation
         assert annotation.contexts
 //         assert annotation.docs
-        assert annotation.measures
-
     }
 
     void "getAssayAnnotationFromIds"() {
@@ -116,8 +109,6 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         assert annotation
         assert annotation.contexts
         assert annotation.docs
-        assert annotation.measures
-
     }
 
     /**
@@ -333,32 +324,16 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         final ExpandedAssay assay = this.assayRestService.getAssayById(adid)
         then: "An Assay is returned with the expected information"
         assert assay
-        final List<Target> targets = assay.getBiology()
-//        assert targets
-        int counter = 0  //to count the number of classifications
-        for (Target target : targets) {
-            assert target.acc
-            if (target.getTargetClassifications()) {
-                final List<TargetClassification> classifications = target.getTargetClassifications()
-                assert classifications
-                for (TargetClassification targetClassification : classifications) {
-                    assert targetClassification.id
-                    assert targetClassification.source
-                    assert targetClassification.description
-                    assert targetClassification.levelIdentifier
-                    assert targetClassification.name
-                    ++counter
-                }
-            }
-        }
-
-        if (targets) {
-            assert counter > 0
+        final List<BiologyEntity> biologyEntities = assay.getBiology()
+        assert biologyEntities
+        assert biologyEntities.size() == 1
+        for (BiologyEntity entity : biologyEntities) {
+            assert entity.biology == "PROCESS"
         }
 
         where:
         label         | adid
-        "with Target" | 25
+        "with Biology" | 25
     }
 
     void "test  getETags(long top, long skip)"() {

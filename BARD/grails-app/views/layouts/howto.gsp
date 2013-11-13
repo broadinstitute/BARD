@@ -17,6 +17,28 @@
     <g:layoutHead/>
 
     <r:layoutResources/>
+
+    <style type="text/css">
+    @media (min-width: 768px) {          /* start of modification for 5 columns.  Must follow after bootstrap definitions */
+        .fivecolumns .span2 {
+            width: 18.2%;
+            *width: 18.2%;
+        }
+    }
+    @media (min-width: 1200px) {
+        .fivecolumns .span2 {
+            width: 17.9%;
+            *width: 17.8%;
+        }
+    }
+    @media (min-width: 768px) and (max-width: 979px) {
+        .fivecolumns .span2 {
+            width: 17.7%;
+            *width: 17.7%;
+        }
+    }
+    </style>
+
     <ga:trackPageview/>
 
 </head>
@@ -39,7 +61,7 @@
 
             <div class="row-fluid">
                 <div class="span6">
-                    <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
+                    <strong class="logo"><a href="/BARD">BARD BioAssay Research Database</a></strong>
                 </div>
 
                 <div class="span6">
@@ -59,19 +81,21 @@
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#">Search</a></li>
-                                        <li><a href="#">Work with results</a></li>
-                                        <li><a href="#">Submit data</a></li>
-                                        <li><a href="#">Use securely</a></li>
-                                        <li><a href="#">Create and use plug-ins</a></li>
+                                        <li><a href="../about/howToSearch">Search</a></li>
+                                        <li><a href="../about/howToFilterResults">Filter search results</a></li>
+                                        <li><a href="../about/howToReadResults">Interpret search results</a></li>
+                                        %{--<li><a href="../about/howToUseSecurely">Use securely</a></li>--}%
+                                        <li><a href="../about/howToUsePlugins">Create and use plug-ins</a></li>
+                                        <li><a href="../about/howToVisualizeAndCaptureData">Visualize and Capture Data</a></li>
+                                        <li><a href="../about/howToGetTheMostFromBard">Get the Most From Bard</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#">Community</a></li>
-                                        <li><a href="#">Report a bug</a></li>
-                                        <li><a href="#">Contact us</a></li>
+                                        <li><a href="../about/howToReportABug">Report a bug</a></li>
+                                        <li><a href="../about/howToContactUs">Contact us</a></li>
+                                        <li><a href="../about/howToDocumentBard">BARD Documentation</a></li>
                                     </ul>
                                 </li>
                                 <sec:ifLoggedIn>
@@ -86,6 +110,8 @@
                             </g:if>
                         </nav>
                     </div>
+
+
                 </div>
             </div>
         </div>
@@ -126,22 +152,50 @@
             <footer id="footer">
                 <div class="footer-columns">
                     <div class="container-fluid">
-                        <div class="row-fluid">
-
-                            <div class="span5 bard-footer-versioninfo muted">
-                                <div>
-                                    <b>Created:</b> ${grailsApplication.metadata['war.created']} <b>branch:</b> ${grailsApplication?.metadata['git.branch.name']} <b>revision:</b> ${grailsApplication?.metadata['git.branch.version']}
-                                </div>
+                        %{--<div class="row-fluid">--}%
+                        %{--Note:  remove 'fivecolumns' class and go to span3's to move down to four columns--}%
+                        <div class="row-fluid fivecolumns">
+                            <div class="span2">
+                                <h3>About</h3>
+                                <ul>
+                                    <li><a href="../about/bardHistory">History</a></li>
+                                    <li><a href="../about/bardDevelopmentTeam">Development Team</a></li>
+                                </ul>
                             </div>
 
-                            <div class="span5">
+                            <div class="span2">
+                                <h3>Help</h3>
+                                <ul>
+                                    <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!forum/bard-users">Forums</a></li>
+                                    <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Submit a Bug Report</a></li>
+                                    <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Ask a Question</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="span2">
+                                <h3>Technology</h3>
+                                <ul>
+                                    <li><a href="../about/bardArchitecture">Architecture &amp; Design</a></li>
+                                    <li><a href="https://github.com/ncatsdpiprobedev/bard/wiki">REST API</a></li>
+                                    <li><a href="#" style="text-decoration: line-through;">Source code on GitHub<img src="${resource(dir: 'images/bardHomepage', file: 'comingSoon2.png')}" alt="coming soon"></a></li>
+                                </ul>
+                            </div>
+
+                            <div class="span2">
+                                <h3>RDM</h3>
+                                <ul>
+                                    <li><a href="../about/bardOrganizingPrinciples">Organizing principles</a></li>
+                                    <li><a href="../element/showTopLevelHierarchyHelp">Top-level concepts</a></li>
+                                    <li><a href="../dictionaryTerms/dictionaryTerms">Glossary</a></li>
+                                </ul>
                             </div>
 
 
-                            <div class="span2 right-aligned">
-                                <a href="http://www.chemaxon.com/" target="chemAxon"><img
-                                        src="${resource(dir: 'images/bardHomepage', file: 'logo-by.png')}"
-                                        alt="Powered by ChemAxon"/></a>
+
+                            <div class="span2">
+                                <strong class="logo-by"><a href="http://www.chemaxon.com/" title="Powered by ChemAxon">Powered by ChemAxon</a></strong>
+                                <p><strong class="logo-scilligence"><a href="http://www.scilligence.com/web/" title="Scilligence">Scilligence</a></strong></p>
+                                <p>&copy; 2013 BARD</p>
                             </div>
                         </div>
                     </div>
@@ -151,9 +205,9 @@
                 <div class="footer-info">
                     <div class="container-fluid">
                         <ul>
-                            <li><a href="#">National Institutes of Health</a></li>
-                            <li><a href="#">U.S. Department of Health and Human Services</a></li>
-                            <li><a href="#">USA.gov – Government Made Easy</a></li>
+                            <li><a href="http://www.nih.gov/">National Institutes of Health</a></li>
+                            <li><a href="http://www.hhs.gov/">U.S. Department of Health and Human Services</a></li>
+                            <li><a href="http://www.usa.gov/">USA.gov – Government Made Easy</a></li>
                         </ul>
                     </div>
                 </div>

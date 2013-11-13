@@ -2,6 +2,7 @@ package bard.db.project
 
 import bard.db.BardIntegrationSpec
 import bard.db.experiment.Experiment
+import bard.db.people.Role
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -27,10 +28,11 @@ class ProjectStepConstraintIntegrationSpec extends BardIntegrationSpec {
     @Before
     void doSetup() {
         def fixture = fixtureLoader.build {
-            project(Project)
-            nextExperiment(Experiment)
+            role1(Role, authority:"ROLE_1",displayName:'ROLE_1')
+            project(Project, ownerRole:role1)
+            nextExperiment(Experiment, ownerRole:role1)
             nextProjectExperiment(ProjectSingleExperiment, project: project, experiment: nextExperiment)
-            previousExperiment(Experiment)
+            previousExperiment(Experiment, ownerRole:role1)
             previousProjectExperiment(ProjectSingleExperiment, project: project, experiment: previousExperiment)
         }
         def props = [nextProjectExperiment: fixture.nextProjectExperiment, previousProjectExperiment: fixture.previousProjectExperiment]

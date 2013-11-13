@@ -6,17 +6,22 @@
 
     <div>
         <g:if test="${editable == 'canedit'}">
-            <div class="span12"><button id="addExperimentToProject" class="btn">Add Experiment</button>
+            <div class="span12">
+            <g:link controller="project" action="showExperimentsToAddProject" class="btn" params='[projectId: "${instanceId}"]'>Add Experiment</g:link>
                 <button id="linkExperiment" class="btn">Link Experiments</button></div>
+            <br/><br/>
         </g:if>
     </div>
-
+     <br/>
     <div id="serviceResponse" style="display: none"></div>
 
     <div id="ajaxProgress" style="color:#5bb75b">Please wait ...</div>
 
     <div id="canvas-container" style="overflow: hidden; cursor: default ; border: 2px dotted black; width: 100%; clear: left">
-        <div id="canvas"><p>Click and drag on background to pan in graph</p></div>
+        <div id="canvas">
+            <p><b>Experiments with the same color have the same assay definition</b></p>
+
+            <p>Click and drag on background to pan in graph</p></div>
     </div>
 
     <div id="nicedisplay"></div>

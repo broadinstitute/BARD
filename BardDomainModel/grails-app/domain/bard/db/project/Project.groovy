@@ -1,11 +1,13 @@
 package bard.db.project
 
 import bard.db.enums.DocumentType
+import bard.db.enums.ExperimentStatus
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.hibernate.ProjectGroupTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
+import bard.db.experiment.Experiment
 import bard.db.guidance.Guidance
 import bard.db.guidance.GuidanceAware
 import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
@@ -44,7 +46,27 @@ class Project extends AbstractContextOwner implements GuidanceAware {
     static belongsTo = [ownerRole: Role]
 
 
-    static transients = [ 'disableUpdateReadyForExtraction']
+    static transients = ['disableUpdateReadyForExtraction', 'associatedExperiments', 'findUnApprovedExperiments']
+
+    Set<Experiment> findUnApprovedExperiments() {
+        Set<Experiment> unApprovedExperiments = new HashSet<Experiment>()
+        projectExperiments.each { ProjectSingleExperiment projectExperiment ->
+            final Experiment experiment = projectExperiment.experiment
+            if (experiment.experimentStatus != ExperimentStatus.APPROVED && experiment.experimentStatus != ExperimentStatus.RETIRED) {
+                unApprovedExperiments.add(experiment)
+            }
+        }
+        return unApprovedExperiments
+    }
+
+    Set<Experiment> getAssociatedExperiments() {
+        Set<Experiment> experiments = new HashSet<Experiment>()
+        //We assume that everything is a single experiment
+        for (ProjectSingleExperiment projectExperiment : projectExperiments) {
+            experiments.add(projectExperiment.experiment)
+        }
+        return experiments
+    }
 
     static hasMany = [projectExperiments: ProjectExperiment,
             externalReferences: ExternalReference,

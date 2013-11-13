@@ -37,6 +37,10 @@ public class ActivityConcentration extends ActivityData {
         return false
     }
     public Double getSlope(){
+        //if it has a qualifier that is not zero set to null
+        if(this.qualifier && this.qualifier != "="){
+             return null
+        }
         if(hasPlot() && this.value?.isDouble()){
             return new Double(this.value)
         }

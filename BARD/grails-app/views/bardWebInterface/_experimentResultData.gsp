@@ -23,30 +23,16 @@
 <div class="row-fluid">
 <g:if test="${tableModel.data}">
     <g:if test="${!preview}">
-        <script>
-            /* Retrieve JSON data to build a histogram */
-            $(document).ready(function () {
-                d3.json("/BARD/bardWebInterface/retrieveExperimentResultsSummary/${tableModel?.additionalProperties?.capExptId}", function (error, dataFromServer) {
-                    if (!(dataFromServer === undefined)) {
-                        for (var i = 0; i < dataFromServer.length; i++) {
-                            if (!(dataFromServer[i] === undefined)) {
-                                drawHistogram(d3.select('#histogramHere'), dataFromServer[i]);
-                            }
-                        }
-                    }
-                });
-            });
-        </script>
+        <div class="row-fluid ">
+            <div id="histogramHere" class="span12"></div>
+        </div>
     </g:if>
 
-    <div class="row-fluid ">
-        <div id="histogramHere" class="span12"></div>
-    </div>
-    </div>
+
     <div class="row-fluid">
     <g:hiddenField name="paginationUrl"
                    id="paginationUrl"/> %{--Used to hold the pagination url, if a paging link has been clicked--}%
-    <div class="pagination offset3">
+    <div class="pagination offset2">
 
         <g:paginate
                 total="${totalNumOfCmpds}"
@@ -59,7 +45,7 @@
                   model="[tableModel: tableModel, landscapeLayout: true, innerBorder: innerBorder]"/>
     </div>
 
-    <div class="pagination offset3">
+    <div class="pagination offset2">
         <g:paginate
                 total="${totalNumOfCmpds}"
                 params='[id: "${params?.id}", normalizeYAxis: "${tableModel?.additionalProperties.normalizeYAxis}"]'/>

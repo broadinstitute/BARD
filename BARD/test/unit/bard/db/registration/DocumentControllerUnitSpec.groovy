@@ -14,6 +14,7 @@ import grails.test.mixin.support.GrailsUnitTestMixin
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import org.springframework.security.access.PermissionEvaluator
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -21,7 +22,6 @@ import javax.servlet.http.HttpServletResponse
 
 import static test.TestUtils.assertFieldValidationExpectations
 import static javax.servlet.http.HttpServletResponse.*
-import static bard.db.registration.DocumentHelper.DOCUMENT_INTERNAL_SERVER_ERROR
 import static bard.db.enums.DocumentType.*
 
 /**
@@ -70,21 +70,20 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
 
         when: 'a specific field is modified'
         documentCommand."$fieldUnderTest" = value
-        Map map = controller.renderDocument(documentCommand)
+        Map map = controller.renderDocument(documentCommand, grailsApplication)
 
         then: 'we see expected return values'
         map == expectedMap
-
         where:
         desc                 | fieldUnderTest    | value            | docType                    | expectedMap
-        'missing assayId'    | 'assayId'         | null             | DOCUMENT_TYPE_PUBLICATION  | [status: SC_INTERNAL_SERVER_ERROR, template: null, text: DocumentHelper.DOCUMENT_INTERNAL_SERVER_ERROR, contentType: 'text/plain']
+        'missing assayId'    | 'assayId'         | null             | DOCUMENT_TYPE_PUBLICATION  | [status: SC_INTERNAL_SERVER_ERROR, template: null, text: "An internal server error occurred while you were editing this page. Please refresh your browser and try again. If you still encounter issues please report it to the BARD team bard-users.REMOVE-ME@REMOVE-ME.broadinstitute.org", contentType: 'text/plain']
         'null documentName'  | 'documentName'    | null             | DOCUMENT_TYPE_PUBLICATION  | [status: SC_BAD_REQUEST, template: null, text: 'nullable', contentType: 'text/plain']
         'blank documentName' | 'documentName'    | ''               | DOCUMENT_TYPE_PUBLICATION  | [status: SC_BAD_REQUEST, template: null, text: 'blank', contentType: 'text/plain']
         'blank documentName' | 'documentName'    | ' '              | DOCUMENT_TYPE_PUBLICATION  | [status: SC_BAD_REQUEST, template: null, text: 'blank', contentType: 'text/plain']
         'ok documentName'    | 'documentName'    | 'foo'            | DOCUMENT_TYPE_PUBLICATION  | [status: SC_OK, template: null, text: 'foo', contentType: 'text/plain']
         'bad url'            | 'documentContent' | 'a.b'            | DOCUMENT_TYPE_EXTERNAL_URL | [status: SC_BAD_REQUEST, template: null, text: 'document.invalid.url.message', contentType: 'text/plain']
         'bad url'            | 'documentContent' | 'http://a.b foo' | DOCUMENT_TYPE_EXTERNAL_URL | [status: SC_BAD_REQUEST, template: null, text: 'document.invalid.url.message', contentType: 'text/plain']
-        'good url'           | 'documentContent' | 'http://a.com'     | DOCUMENT_TYPE_EXTERNAL_URL | [status: SC_OK, template: null, text: 'documentName', contentType: 'text/plain']
+        'good url'           | 'documentContent' | 'http://a.com'   | DOCUMENT_TYPE_EXTERNAL_URL | [status: SC_OK, template: null, text: 'documentName', contentType: 'text/plain']
     }
 
     void 'test render Assay Document - Success #desc'() {
@@ -113,7 +112,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
                     modifiedBy: modifiedBy
             )
         when:
-        Map map = controller.renderDocument(documentCommand)
+        Map map = controller.renderDocument(documentCommand, grailsApplication)
         then:
         assert response.headers("version").get(0) == "1"
         assert response.headers("entityId").get(0)

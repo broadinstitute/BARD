@@ -1,6 +1,7 @@
 package bard.db.project
 
 import bard.db.BardIntegrationSpec
+import bard.db.people.Role
 import bard.db.registration.ExternalReference
 import project.ProjectService
 import spock.lang.Unroll
@@ -22,12 +23,13 @@ class ProjectServiceIntegrationSpec extends BardIntegrationSpec {
 
         given:
         def fixture = fixtureLoader.build {
-            project1(Project, name: 'project1')
+            role1(Role, authority:"ROLE_1",displayName:'ROLE_1')
+            project1(Project, name: 'project1', ownerRole:role1)
             for (int i in 1..2) {
                 "extRef${i}"(ExternalReference, extAssayRef: "aid=-${i}", project: project1)
             }
 
-            project2(Project, name: 'project2')
+            project2(Project, name: 'project2',ownerRole:role1)
             extRef3(ExternalReference, extAssayRef: 'aid=-1', project: project2)
         }
 

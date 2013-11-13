@@ -7,6 +7,15 @@ class AboutController {
     }
     def termsOfUse(){}
     def privacyPolicy(){}
+    def aboutBard(){}
+
+    // the "how to" pages
+    def howToVisualizeAndCaptureData() {
+        render (view:'howToVisualizeAndCaptureData')
+    }
+    def howToGetTheMostFromBard() {
+        render (view:'howToGetTheMostFromBard')
+    }
     def howToSearch () {
         render (view:'howToSearch')
     }
@@ -28,6 +37,11 @@ class AboutController {
     def howToContactUs() {
         render (view:'howToContactUs')
     }
+    def howToDocumentBard() {
+        render (view:'howToDocumentBard')
+    }
+
+    // some pages accessed through the footer
     def bardHistory() {
         render (view:'footerHistory')
     }

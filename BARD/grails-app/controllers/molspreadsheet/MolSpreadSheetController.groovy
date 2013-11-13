@@ -1,12 +1,11 @@
 package molspreadsheet
-
+import bardqueryapi.BardUtilitiesService
+import bardqueryapi.InetAddressUtil
 import de.andreasschmitt.export.ExportService
-import grails.plugins.springsecurity.Secured
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import querycart.QueryCartService
+
 import javax.servlet.http.HttpServletResponse
-import bardqueryapi.InetAddressUtil
-import bardqueryapi.BardUtilitiesService
 
 @Mixin(InetAddressUtil)
 class MolSpreadSheetController {
@@ -18,17 +17,19 @@ class MolSpreadSheetController {
     BardUtilitiesService bardUtilitiesService
 
     def index() {
-        render(view: 'molecularSpreadSheet', model: [transpose: params.transpose, norefresh: params.norefresh, ChangeNorm: params.ChangeNorm] )
+        render(view: 'molecularSpreadSheet', model: [transpose: params.transpose, norefresh: params.norefresh, ChangeNorm: params.ChangeNorm, cid: params.cid, showActive: params.showActive] )
     }
 
-    def showExperimentDetails(Long pid, Long cid, Boolean transpose) {
-        render(view: 'molecularSpreadSheet', model: [cid: cid, pid: pid, transpose: transpose])
+    def showExperimentDetails(Long pid, Long cid, Boolean transpose, Boolean showActive) {
+        render(view: 'molecularSpreadSheet', model: [cid: cid, pid: pid, transpose: transpose, showActive:showActive])
     }
 
     def molecularSpreadSheet() {
         MolSpreadSheetData molSpreadSheetData
         Boolean transpose = (params.transpose=="true")
         Boolean noRefreshNeeded = (params.norefresh=="true")
+        Boolean showActiveCompoundsOnly = (params.showActive!="false")
+        Boolean disableInactiveCheckbox = true
         String assayNormalizationSwap = params.ChangeNorm ?: "0"
         try {
             List<Long> cids = []
@@ -47,7 +48,7 @@ class MolSpreadSheetController {
             if (noRefreshNeeded && (retainSpreadsheetService.molSpreadSheetData!=null)){
                 molSpreadSheetData = retainSpreadsheetService.molSpreadSheetData
             } else {
-                molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalDataFromIds(cids, adids, pids)
+                molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalDataFromIds(cids, adids, pids,showActiveCompoundsOnly)
             }
             retainSpreadsheetService.molSpreadSheetData = molSpreadSheetData
             if (molSpreadSheetData) {
@@ -59,16 +60,15 @@ class MolSpreadSheetController {
                     return
                 }
                 if (molSpreadSheetData.molSpreadsheetDerivedMethod == MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects) {
-                    flash.message = message(code: 'show.only.active.compounds', default:
-                            "Please note: Only active compounds are shown in the Molecular Spreadsheet")
+                    disableInactiveCheckbox = false
                 }
                 if (transpose) {
-                    render(template: 'tSpreadSheet', model: [molSpreadSheetData: molSpreadSheetData])
+                    render(template: 'tSpreadSheet', model: [molSpreadSheetData: molSpreadSheetData,disableInactiveCheckbox:disableInactiveCheckbox,showActive:  showActiveCompoundsOnly])
                 } else {
-                    render(template: 'spreadSheet', model: [molSpreadSheetData: molSpreadSheetData,assayNormalizationSwap:assayNormalizationSwap])
+                    render(template: 'spreadSheet', model: [molSpreadSheetData: molSpreadSheetData,assayNormalizationSwap:assayNormalizationSwap,disableInactiveCheckbox:disableInactiveCheckbox,showActive:  showActiveCompoundsOnly])
                 }
             } else {
-                render(template: 'spreadSheet', model: [molSpreadSheetData: new MolSpreadSheetData(),assayNormalizationSwap:assayNormalizationSwap])
+                render(template: 'spreadSheet', model: [molSpreadSheetData: new MolSpreadSheetData(),assayNormalizationSwap:assayNormalizationSwap,disableInactiveCheckbox:disableInactiveCheckbox,showActive:  showActiveCompoundsOnly])
             }
         } catch (Exception ee) {
             String errorMessage = "Could not generate SpreadSheet for current Query Cart Contents"

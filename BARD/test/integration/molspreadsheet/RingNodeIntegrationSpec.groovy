@@ -7,6 +7,9 @@ import bard.core.rest.spring.util.RingNode
 import grails.converters.JSON
 import grails.plugin.spock.IntegrationSpec
 import groovy.json.JsonBuilder
+import org.codehaus.groovy.grails.web.json.JSONArray
+import spock.lang.IgnoreRest
+
 /**
  * Created with IntelliJ IDEA.
  * User: balexand
@@ -66,16 +69,28 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
 
 
-
     void "test convertBiologyIdsToAscensionNumbers"(){
         given:
         LinkedHashMap activeInactiveDataPriorToConversion = [:]
         LinkedHashMap activeInactiveDataAfterConversion
         String ncgcBaseURL = applicationContext.getBean("grailsApplication").config.ncgc.server.root.url
-        def result = this.compoundRestService.getForObject("${ncgcBaseURL}/biology/types/protein?top=10", String.class)
-        def resultJSON = JSON.parse(result)
-        activeInactiveDataPriorToConversion["hits"] = [(resultJSON[0] - '/biology/').toLong()]
-        activeInactiveDataPriorToConversion["misses"] = [(resultJSON[1] - '/biology/').toLong()]
+        def result = this.compoundRestService.getForObject("${ncgcBaseURL}/biology/types/protein?top=20", String.class)
+        JSONArray resultJSON = JSON.parse(result)
+        activeInactiveDataPriorToConversion["hits"] = []
+        activeInactiveDataPriorToConversion["misses"] = []
+        for (int i = 0 ; (i < 20) && (i<resultJSON.size()) ; i++ ){  // One protein biology ID should in principle
+                                                                     //  be sufficient. However, we found that the one we were testing
+                                                                     //  had bad data ( a mis-formed unitprot identifier) so for now
+                                                                     //  we can send an array ( I'm using 10 in each category) to make
+                                                                     //  certain that we get at least one that works.
+            if ((i%2)==0){
+                activeInactiveDataPriorToConversion["hits"] << (resultJSON[i] - '/biology/').toLong()
+            }   else {
+                activeInactiveDataPriorToConversion["misses"] << (resultJSON[i] - '/biology/').toLong()
+            }
+        }
+
+
 
         when:
         try {
@@ -90,24 +105,22 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
         activeInactiveDataAfterConversion["misses"].size ()   > 0
     }
 
-
     void "test getLinkedAnnotationData"(){
         given:
-        final List<Long> aids = [25, 26, 27]
+        final List<Long> aids = [143, 165]
 
         when:
         LinkedHashMap<Long, LinkedHashMap <String,List<String>>> accumulatedAnnotationInformation = ringManagerService.getLinkedAnnotationData (aids)
 
         then:
         accumulatedAnnotationInformation
-        accumulatedAnnotationInformation.keySet().size()==3
-        accumulatedAnnotationInformation[25L]
-        accumulatedAnnotationInformation[25L]["assay type".replaceAll(/\s/,"_")]
-        accumulatedAnnotationInformation[25L]["assay format".replaceAll(/\s/,"_")]
-        (!accumulatedAnnotationInformation[25L]["GO biological process term".replaceAll(/\s/,"_")])
-        accumulatedAnnotationInformation[26L]["GO biological process term".replaceAll(/\s/,"_")]
-        accumulatedAnnotationInformation[26L].keySet().size()==3
-        accumulatedAnnotationInformation[27L].keySet().size()==3
+        accumulatedAnnotationInformation.keySet().size()==2
+        accumulatedAnnotationInformation[143L]
+        accumulatedAnnotationInformation[143L]["assay type".replaceAll(/\s/,"_")]
+        accumulatedAnnotationInformation[143L]["assay format".replaceAll(/\s/,"_")]
+        (!accumulatedAnnotationInformation[143L]["GO biological process term".replaceAll(/\s/,"_")])
+        accumulatedAnnotationInformation[165L]["GO biological process term".replaceAll(/\s/,"_")]
+        accumulatedAnnotationInformation[165L].keySet().size()==3
     }
 
 

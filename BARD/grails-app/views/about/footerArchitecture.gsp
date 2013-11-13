@@ -6,7 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix"/>
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>How to search</title>
+    <title>BARD Architecture</title>
 </head>
 
 <body>
@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <aside class="span2"></aside>
-            <article class="span8 head-holder"><h2>Development team</h2></article>
+            <article class="span8 head-holder"><h2>Architecture &amp; Design</h2></article>
             <aside class="span2"></aside>
         </div>
 
@@ -40,21 +40,16 @@
                     <p>
                     <dl>
                         <dt>Data Dictionary component</dt>
-                        <dd>used by Dictionary Curators to manage BARD’s hierarchical dictionary of terms
-                        </dd>
-
+                        <dd>used by Dictionary Curators to manage BARD’s hierarchical dictionary of terms/dd>
+                        <br/>
                         <dt>Catalog of Assay Protocols component</dt>
-                        <dd>used by Data Generators to register assays and upload result data
-                        </dd>
-
+                        <dd>used by Data Generators to register assays and upload result data</dd>
+                        <br/>
                         <dt>Warehouse component</dt>
-                        <dd>provides persistent storage of result data in a form that is fast and simple to query via a REST API.  Relies on the controlled terms from the dictionary for effective and accurate searching.  Links to data from GO and other sources.  Used by query tool components and by Informatics Data Consumers.  The API can be extended using plug-ins contributed by the community.
-                        </dd>
-
+                        <dd>provides persistent storage of result data in a form that is fast and simple to query via a REST API.  Relies on the controlled terms from the dictionary for effective and accurate searching.  Links to data from GO and other sources.  Used by query tool components and by Informatics Data Consumers.  The API can be extended using plug-ins contributed by the community.</dd>
+                        <br/>
                         <dt>Query tool components</dt>
-                        <dd>Web Query and Desktop Client – provide methods for novice and experienced users to browse and find the information they need.
-                        </dd>
-
+                        <dd>Web Query and Desktop Client – provide methods for novice and experienced users to browse and find the information they need.</dd>
                     </dl>
 
                 </p>

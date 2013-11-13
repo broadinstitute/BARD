@@ -1,9 +1,11 @@
 package bardqueryapi
 
 import bard.core.adapter.CompoundAdapter
+import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 
+import javax.servlet.http.HttpServletResponse
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 
@@ -53,5 +55,15 @@ class ChemAxonController {
 
     def marvinSketch() {}
 
-
+    def convertSmilesToMolFormat(String smiles) {
+        String molFormat = chemAxonService.convertSmilesToAnotherFormat(smiles, 'mol')
+        if (molFormat) {
+            render molFormat
+            return
+        } else {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Could not generate a Mol-format string for the specified SMILES: '${smiles}'")
+            return
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package bard.db.project
 
 import bard.db.BardIntegrationSpec
+import bard.db.people.Role
 import bard.db.registration.ExternalReference
 import org.junit.Before
 import org.springframework.dao.DataIntegrityViolationException
@@ -24,7 +25,8 @@ class ProjectIntegrationSpec extends BardIntegrationSpec {
 
     @Before
     void doSetup() {
-        domainInstance = Project.buildWithoutSave()
+        Role role = Role.build(authority: "authority")
+        domainInstance = Project.buildWithoutSave(ownerRole: role)
     }
 
     public initializeProjectExperiment() {

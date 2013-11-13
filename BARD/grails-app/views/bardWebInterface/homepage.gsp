@@ -23,8 +23,8 @@
     <r:layoutResources/>
 
     <style type="text/css">
-        /* start of modification for 5 columns */
     @media (min-width: 768px) {
+        /* start of modification for 5 columns.  Must follow after bootstrap definitions */
         .fivecolumns .span2 {
             width: 18.2%;
             *width: 18.2%;
@@ -44,8 +44,6 @@
             *width: 17.7%;
         }
     }
-
-        /* end of modification for 5 columns */
     </style>
 </head>
 
@@ -83,22 +81,40 @@
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="../about/howToSearch">Search</a></li>
-                                        <li><a href="../about/howToFilterResults">Filter search results</a></li>
-                                        <li><a href="../about/howToReadResults">Interpret search results</a></li>
-                                        <li><a href="../about/howToUseSecurely">Use securely</a></li>
-                                        <li><a href="../about/howToUsePlugins">Create and use plug-ins</a></li>
+                                        <li>
+                                            <g:link controller="about" action="howToSearch">Search</g:link>
+                                        </li>
+                                        <li>
+                                            <g:link controller="about"
+                                                    action="howToFilterResults">Filter search results</g:link>
+                                        </li>
+                                        <li>
+                                            <g:link controller="about" action="howToReadResults">
+                                                Interpret search results</g:link>
+                                        </li>
+                                        %{--<li><a href="../about/howToUseSecurely">Use securely</a></li>--}%
+                                        <li><g:link controller="about"
+                                                    action="howToUsePlugins">Create and use plug-ins</g:link></li>
+                                        <li><g:link controller="about"
+                                                    action="howToVisualizeAndCaptureData">Visualize and Capture Data</g:link>
+                                        </li>
+                                        <li><g:link controller="about"
+                                                    action="howToGetTheMostFromBard">Get the Most From Bard</g:link></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="../about/howToReportABug">Report a bug</a></li>
-                                        <li><a href="../about/howToContactUs">Contact us</a></li>
+                                        <li><g:link controller="about"
+                                                    action="howToReportABug">Report a bug</g:link></li>
+                                        <li><g:link controller="about" action="howToContactUs">Contact us</g:link></li>
+                                        <li><g:link controller="about"
+                                                    action="howToDocumentBard">BARD Documentation</g:link></li>
                                     </ul>
                                 </li>
                                 <sec:ifLoggedIn>
-                                    <li><a href="/BARD/bardWebInterface/navigationPage">My BARD</a></li>
+                                    <li><g:link controller="bardWebInterface"
+                                                action="navigationPage">My BARD</g:link></li>
                                 </sec:ifLoggedIn>
                             </ul>
                             <g:if test="${false}">
@@ -125,7 +141,7 @@
                     <h1>Enhanced data and advanced tools to accelerate drug discovery.</h1>
 
                     <p>Introducing BARD, the powerful new bioassay database from the NIH Molecular Libraries Program. Now with unprecedented efficiency, scientists can develop and test hypotheses on the influence of different chemical probes on biological functions.</p>
-                    <a href="#" class="btn btn-primary">LEARN MORE</a>
+                    <g:link controller="about" action="aboutBard" class="btn btn-primary">LEARN MORE</g:link>
                 </article>
                 <aside class="span4"></aside>
             </div>
@@ -141,94 +157,30 @@
         <div class="head-holder">
             <h2>SEARCH BARD</h2>
 
-            <p>Search assay, project and experiment data or <a
-                    href="#">learn about BARD’s innovative search features.</a></p>
+            <p>Search assay, project and experiment data or <g:link controller="about"
+                                                                    action="howToSearch">learn about BARD’s innovative search features.</g:link></p>
         </div>
 
         <div class="search-block">
-
-            <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm"
-                    class="search-form">
-                <fieldset>
-                    <div class="search-field input-append">
-                        <g:link controller="bardWebInterface" action="jsDrawEditor">
-                        %{--<img src="${resource(dir: 'images', file: 'structureEditIcon.png')}"--}%
-                            <img
-                            %{--src="../images/bardHomepage/struct_icon.png" --}%
-                                    src="${resource(dir: 'images/bardHomepage', file: 'struct_icon.png')}"
-
-                                    alt="Draw or paste a structure"
-                                    title="Draw or paste a structure" style="width:74px;float: left;"/>
-                        </g:link>
-                        <img src="${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}"
-                        %{--src="../images/bardHomepage/ids_icon.png"--}%
-                             alt="List of IDs for search"
-                             title="List of IDs for search" data-toggle="modal" href="#idModalDiv"
-                             style="width:44px;float: left;"/>
-
-                        <div class="text-field">
-                            <g:textField id="searchString" name="searchString"
-                                         placeholder="Search by Chemistry, Biology, Structure and More"
-                                         value="${flash.searchString}"/>
-                        </div>
-
-                        <div class="btn-field">
-                            <button name="search" class="btn btn-primary" id="searchButton"
-                                    type="submit">Search <span
-                                    class="hidden-phone">BARD</span>
-                            </button>
-                        </div>
-                    </div>
-                </fieldset>
-            </g:form>
-
-
+            <div class="row-fluid">
+                <g:render template="../layouts/templates/searchBlock"></g:render>
+            </div class="row-fluid">
 
             <div class="links-holder">
                 %{--<a href="#">Advanced Search</a>                    We can put this link back when we have an advanced search to present--}%
-                <a href="${createLink(controller: 'queryCart', action: 'toDesktopClient')}" target="_blank"
-                   class="download-link hidden-phone">Download the BARD Desktop Client</a>
+                <g:link controller="queryCart" action="toDesktopClient" target="_blank"
+                        class="download-link hidden-phone">Download the BARD Desktop Client</g:link>
             </div>
-
         </div>
 
     </div>
 </div>
 
-<div class="modal hide" id="idModalDiv">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
+<g:render template="/layouts/templates/IdSearchBox"></g:render>
 
-        <h3>Enter a Comma separated list of IDs</h3>
-    </div>
-
-    <div class="modal-body">
-        <textarea class="field span9" id="idSearchString" name="idSearchString" rows="15"></textarea>
-    </div>
-
-    <div class="modal-footer">
-        <g:form name="idSearchForm" class="form-inline">
-            <div>
-                <g:radioGroup name="idSearchType"
-                              values="${IDSearchType.values()}"
-                              value="${IDSearchType.ALL}"
-                              labels="${IDSearchType.values().label}">
-                    <label class="radio inline"><%=it.radio%>${it.label}</label>
-                </g:radioGroup>
-            </div>
-
-            <br>
-
-            <div>
-                <a href="#" class="btn" data-dismiss="modal" id="closeButton21">Close</a>
-                <a href="#" class="idSearchButton btn btn-primary" data-dismiss="modal">Search</a>
-            </div>
-        </g:form>
-    </div>
-
-</div>
-%{--carousel news panel. This will need dynamic content--}%
-<g:if test="${true}">
+%{--carousel news panel. Turn this back on by reversing the conditional below
+    as soon as we have some dynamic content to display --}%
+<g:if test="${false}">
     <section class="news-panel">
         <div class="container-fluid">
             <div class="news-row">
@@ -289,7 +241,7 @@
                             <h1>Search and analyze your own way.</h1>
 
                             <p>Keeping the promise of the MLP, BARD gives you nimble access to most all the program’s data through an array of query, analysis and visualization tools.</p>
-                            <a href="#" class="btn btn-primary">HOW TO WORK WITH RESULTS</a>
+                            <a href="../about/howToReadResults" class="btn btn-primary">HOW TO WORK WITH RESULTS</a>
                         </div>
                     </div>
                 </div>
@@ -307,7 +259,8 @@
                             <h1>The power of a common language.</h1>
 
                             <p>A focused but flexible ontology designed to capture fully annotated preclinical data from multiple scientific disciplines for comprehensive search results.</p>
-                            <a href="#" class="btn btn-primary">HOW TO SEARCH BARD</a>
+                            <g:link controller="about" action="howToSearch"
+                                    class="btn btn-primary">HOW TO SEARCH BARD</g:link>
                         </div>
                     </div>
                 </div>
@@ -325,7 +278,8 @@
                             <h1>Public bioassay data – organized, standardized and put into context.</h1>
 
                             <p>Public data sets cleaned up, organized and enhanced with assay, experiment and project contextual information for reliable and productive searches.</p>
-                            <a href="#" class="btn btn-primary">Learn More About BARD</a>
+                            <g:link controller="about" action="aboutBard"
+                                    class="btn btn-primary">Learn More About BARD</g:link>
                         </div>
                     </div>
                 </div>
@@ -385,7 +339,7 @@
                           model="['numberOfExperimentData': numberOfExperimentData]"/>
 
                 %{--Contents of the "Probes" tab (of our row of five content boxes) --}%
-                <g:render template="recentlyAddedProbes" model="['recentlyAddedProbes': recentlyAddedProbes]"/>
+                <g:render template="probeProjects" model="['probeProjectIds': probeProjectIds]"/>
             </div>
         </div>
     </section>
@@ -396,28 +350,33 @@
 <footer id="footer">
     <div class="footer-columns">
         <div class="container-fluid">
+            %{--<div class="row-fluid">--}%
+            %{--Note:  remove 'fivecolumns' class and go to span3's to move down to four columns--}%
             <div class="row-fluid fivecolumns">
                 <div class="span2">
                     <h3>About</h3>
                     <ul>
-                        <li><a href="../about/bardHistory">History</a></li>
-                        <li><a href="../about/bardDevelopmentTeam">Development Team</a></li>
+                        <li><g:link controller="about" action="bardHistory">History</g:link></li>
+                        <li><g:link controller="about" action="bardDevelopmentTeam">Development Team</g:link></li>
                     </ul>
                 </div>
 
                 <div class="span2">
                     <h3>Help</h3>
                     <ul>
-                        <li><a href="#">Forums</a></li>
-                        <li><a href="#">Submit a Bug Report</a></li>
-                        <li><a href="#">Ask a Question</a></li>
+                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!forum/bard-users">Forums</a>
+                        </li>
+                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Submit a Bug Report</a>
+                        </li>
+                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Ask a Question</a>
+                        </li>
                     </ul>
                 </div>
 
                 <div class="span2">
                     <h3>Technology</h3>
                     <ul>
-                        <li><a href="../about/bardArchitecture">Architecture &amp; Design</a></li>
+                        <li><g:link controller="about" action="bardArchitecture">Architecture &amp; Design</g:link></li>
                         <li><a href="https://github.com/ncatsdpiprobedev/bard/wiki">REST API</a></li>
                         <li><a href="#" style="text-decoration: line-through;">Source code on GitHub<img
                                 src="${resource(dir: 'images/bardHomepage', file: 'comingSoon2.png')}"
@@ -428,15 +387,21 @@
                 <div class="span2">
                     <h3>RDM</h3>
                     <ul>
-                        <li><a href="../about/bardOrganizingPrinciples">Organizing principles</a></li>
-                        <li><a href="../element/showTopLevelHierarchyHelp">Top-level concepts</a></li>
-                        <li><a href="../dictionaryTerms/dictionaryTerms">Glossary</a></li>
+                        <li><g:link controller="about"
+                                    action="bardOrganizingPrinciples">Organizing principles</g:link></li>
+                        <li><g:link controller="element"
+                                    action="showTopLevelHierarchyHelp">Top-level concepts</g:link></li>
+                        <li><g:link controller="dictionaryTerms" action="dictionaryTerms">Glossary</g:link></li>
                     </ul>
                 </div>
 
 
                 <div class="span2">
-                    <strong class="logo-by"><a href="#" title="Powered by ChemAxon">Powered by ChemAxon</a></strong>
+                    <strong class="logo-by"><a href="http://www.chemaxon.com/"
+                                               title="Powered by ChemAxon">Powered by ChemAxon</a></strong>
+
+                    <p><strong class="logo-scilligence"><a href="http://www.scilligence.com/web/"
+                                                           title="Scilligence">Scilligence</a></strong></p>
 
                     <p>&copy; 2013 BARD</p>
                 </div>
@@ -448,9 +413,9 @@
     <div class="footer-info">
         <div class="container-fluid">
             <ul>
-                <li><a href="#">National Institutes of Health</a></li>
-                <li><a href="#">U.S. Department of Health and Human Services</a></li>
-                <li><a href="#">USA.gov – Government Made Easy</a></li>
+                <li><a href="http://www.nih.gov/">National Institutes of Health</a></li>
+                <li><a href="http://www.hhs.gov/">U.S. Department of Health and Human Services</a></li>
+                <li><a href="http://www.usa.gov/">USA.gov – Government Made Easy</a></li>
             </ul>
         </div>
     </div>

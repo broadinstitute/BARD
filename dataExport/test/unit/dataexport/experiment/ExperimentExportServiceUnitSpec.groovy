@@ -24,16 +24,17 @@ import spock.lang.Unroll
 import static common.tests.XmlTestSamples.*
 import bard.db.enums.HierarchyType
 
-@Unroll
 /**
  * Created with IntelliJ IDEA.
  * User: jasiedu
  * Date: 6/19/12
  * Time: 12:52 PM
  * To change this template use File | Settings | File Templates.
- */ @TestFor(ExperimentExportService)
+ */
+@TestFor(ExperimentExportService)
 @Build([Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExternalReference, AssayContextExperimentMeasure])
 @Mock([Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExternalReference, AssayContextExperimentMeasure])
+@Unroll
 class ExperimentExportServiceUnitSpec extends Specification {
     Writer writer
     MarkupBuilder markupBuilder
@@ -83,7 +84,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
         where:
         label                         | results                        | numItems | map
         "Minimal"                     | CONTEXT_MINIMAL                | 0        | [contextType: ContextType.UNCLASSIFIED]
-        "Minimal with name"           | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextType: ContextType.UNCLASSIFIED,contextName: 'contextName']
+        "Minimal with name"           | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextType: ContextType.UNCLASSIFIED, contextName: 'contextName']
         "Minimal with group"          | CONTEXT_MINIMAL_WITH_GROUP     | 0        | [contextType: ContextType.BIOLOGY]
         "Minimal with 1 contextItem"  | CONTEXT_MINIMAL_WITH_ONE_ITEM  | 1        | [contextType: ContextType.UNCLASSIFIED]
         "Minimal with 2 contextItems" | CONTEXT_MINIMAL_WITH_TWO_ITEMS | 2        | [contextType: ContextType.UNCLASSIFIED]
@@ -105,7 +106,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
         where:
         label                             | results                                             | mapClosure                                                                                   | numAssayContextMeasureRefs
         "minimal"                         | EXPERIMENT_MEASURE_MINIMAL                          | { [:] }                                                                                      | 0
-        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF                  | { [parent: ExperimentMeasure.build(),priorityElement: true] }                                                      | 0
+        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF                  | { [parent: ExperimentMeasure.build(), priorityElement: true] }                               | 0
         "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP | { [parent: ExperimentMeasure.build(), parentChildRelationship: HierarchyType.SUPPORTED_BY] } | 0
     }
 
@@ -115,30 +116,30 @@ class ExperimentExportServiceUnitSpec extends Specification {
         numExtRef.times { ExternalReference.build(experiment: experiment) }
         numExpCtx.times { ExperimentContext.build(experiment: experiment, contextType: ContextType.UNCLASSIFIED) }
         numExpMsr.times { ExperimentMeasure.build(experiment: experiment) }
-
+        experiment.lastUpdated = new Date(0)
         when: "We attempt to generate an experiment XML document"
         this.experimentExportService.generateExperiment(this.markupBuilder, experiment)
 
         then: "A valid xml document is generated and is similar to the expected document"
         String actualXml = this.writer.toString()
-        //XmlTestAssertions.assertResultsWithOverrideAttributes(results, actualXml)
+        XmlTestAssertions.assertResultsWithOverrideAttributes(results, actualXml)
         XmlTestAssertions.validate(schemaResource, actualXml)
 
         where:
         label                                    | results                                            | numExtRef | numExpCtx | numExpMsr | map
-        "Minimal"                                | EXPERIMENT_MINIMAL                                 | 0         | 0         | 0         | [:]
+        "Minimal"                                | EXPERIMENT_MINIMAL                                 | 0         | 0         | 0         | [lastUpdated: new Date(0)]
         "with optional properties"               | EXPERIMENT_WITH_OPTIONAL_PROPERTIES                | 0         | 0         | 0         | [lastUpdated: new Date(0), holdUntilDate: new Date(0), runDateFrom: new Date(0), runDateTo: new Date(0), description: 'description']
 
-        "with 1 ExternalReference"               | EXPERIMENT_WITH_ONE_EXT_REF                        | 1         | 0         | 0         | [:]
-        "with 2 ExternalReferences"              | EXPERIMENT_WITH_TWO_EXT_REF                        | 2         | 0         | 0         | [:]
+        "with 1 ExternalReference"               | EXPERIMENT_WITH_ONE_EXT_REF                        | 1         | 0         | 0         | [lastUpdated: new Date(0)]
+        "with 2 ExternalReferences"              | EXPERIMENT_WITH_TWO_EXT_REF                        | 2         | 0         | 0         | [lastUpdated: new Date(0)]
 
-        "with 1 context"                         | EXPERIMENT_WITH_ONE_CONTEXT                        | 0         | 1         | 0         | [:]
-        "with 2 contexts"                        | EXPERIMENT_WITH_TWO_CONTEXT                        | 0         | 2         | 0         | [:]
+        "with 1 context"                         | EXPERIMENT_WITH_ONE_CONTEXT                        | 0         | 1         | 0         | [lastUpdated: new Date(0)]
+        "with 2 contexts"                        | EXPERIMENT_WITH_TWO_CONTEXT                        | 0         | 2         | 0         | [lastUpdated: new Date(0)]
 
         "with 1 context and 1 ExperimentMeasure" | EXPERIMENT_WITH_ONE_CONTEXT_ONE_EXPERIMENT_MEASURE | 0         | 1         | 1         | [lastUpdated: new Date(0)]
 
-        "with 1 ExperimentMeasure"               | EXPERIMENT_WITH_ONE_EXPERIMENT_MEASURE             | 0         | 0         | 1         | [:]
-        "with 2 ExperimentMeasures"              | EXPERIMENT_WITH_TWO_EXPERIMENT_MEASURE             | 0         | 0         | 2         | [:]
+        "with 1 ExperimentMeasure"               | EXPERIMENT_WITH_ONE_EXPERIMENT_MEASURE             | 0         | 0         | 1         | [lastUpdated: new Date(0)]
+        "with 2 ExperimentMeasures"              | EXPERIMENT_WITH_TWO_EXPERIMENT_MEASURE             | 0         | 0         | 2         | [lastUpdated: new Date(0)]
     }
 
     void "test Generate Experiment Not Found Exception"() {

@@ -19,8 +19,13 @@ modules = {
     accessontology {
         resource url: "/js/cap/accessOntology.js"
     }
+
     addAllItemsToCarts {
         resource url: "js/addAllItemsToCart.js"
+    }
+    addExperimentsToProject{
+        dependsOn("descriptorSelect2Widget")
+        resource url:"/js/cap/addExperimentsToProject.js"
     }
     assaycards {
         dependsOn('card')
@@ -45,22 +50,26 @@ modules = {
         resource url: '/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js'
         resource url: "js/autocomplete.js"
     }
+
     bardHeaderFooter {
         resource url: "css/bardHomepage/BardHeaderFooter.css"
+        resource url: "css/bardHomepage/footer.css"
+        resource url: "css/bardHomepage/searchBox.css"
     }
 
     bardHomepage {
         dependsOn 'core,bootstrap,bootstrap-responsive-css,autocomplete'
         resource url: '/css/bardHomepage/BardHomepage.css'
+        resource url: "css/bardHomepage/footer.css"
+        resource url: "css/bardHomepage/searchBox.css"
         resource url: '/js/errorReporting.js'
         resource url: '/js/idSearchDialog.js'
     }
 
     basic {
-        dependsOn 'core,autocomplete'
+        dependsOn 'core,autocomplete,bardHeaderFooter'
         resource url: "/css/layout.css"
         resource url: "/css/table.css"
-        resource url: "/css/bardHomepage/BardHeaderFooter.css"
     }
 
     bootstrapplus {
@@ -93,7 +102,7 @@ modules = {
         resource url: '/js/cap/createProject.js'
     }
     d3Library {
-        resource url: "js/lib/d3.min.js"
+        resource url: "js/lib/d3.min.js", disposition: 'head'
     }
     dataTables {
         resource url: "js/DataTables-1.9.4/jquery.dataTables.js"
@@ -235,7 +244,7 @@ modules = {
         resource url: "css/promiscuity.css"
     }
     resulttype {
-        dependsOn("descriptorSelect2Widget")
+        dependsOn('descriptorSelect2Widget','bootstrapplus')
         resource url: "js/resulttypes/resulttype.js"
         resource url: "css/resulttypes/resulttype.css"
     }
@@ -285,7 +294,7 @@ modules = {
         resource url: "css/sunburst.css"
     }
     tableSorter {
-        resource url: '/js/jquery-table-sorter/theme.default.css'
+//        resource url: '/js/jquery-table-sorter/theme.default.css'
         resource url: '/js/jquery-table-sorter/stupidtable.min.js'
     }
     twitterBootstrapAffix {

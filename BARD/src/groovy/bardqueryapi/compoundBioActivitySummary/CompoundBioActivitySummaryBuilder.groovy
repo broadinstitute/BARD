@@ -129,10 +129,20 @@ class CompoundBioActivitySummaryBuilder {
             case GroupByTypes.ASSAY:
                 List<AssayAdapter> assayAdapters
                 //For assays, we can use the testedAssays/hitAssays properties in the compoundSummary resource.
-                List<Assay> assays = filterTypes.contains(FilterTypes.TESTED) ? testedAssays : hitAssays
-                assayAdapters = assays.unique().findAll { Assay assay -> assay.id == resourceId }.collect { Assay assay -> return new AssayAdapter(assay) }
+                List<Assay> assays
+                if (filterTypes.containsAll([FilterTypes.ACTIVE, FilterTypes.INACTIVE])) {
+                    assays = testedAssays
+                } else if (filterTypes.contains(FilterTypes.ACTIVE)) {
+                    assays = hitAssays
+                } else if (filterTypes.contains(FilterTypes.INACTIVE)) {
+                    //We need to subtract the hitAssays from the testedAssays to get the inactive ones.
+                    List<Long> inactiveBardAssayIds = testedAssays*.bardAssayId - hitAssays*.bardAssayId
+                    assays = testedAssays.findAll { Assay assay -> inactiveBardAssayIds.contains(assay.bardAssayId) }
+                }
 
-                if (assayAdapters.size() == 1) {
+                assayAdapters = assays?.unique()?.findAll { Assay assay -> assay.id == resourceId }?.collect { Assay assay -> return new AssayAdapter(assay) }
+
+                if (assayAdapters?.size() == 1) {
                     resource = new AssayValue(value: assayAdapters.first())
                 } else {
                     log.error("Could not find Assay with ADID=${resourceId}")
@@ -162,6 +172,20 @@ class CompoundBioActivitySummaryBuilder {
         return resource
     }
 
+    static boolean hasDoseCurve(Activity exptData) {
+        String respClss = exptData?.resultData?.responseClass
+        ResponseClassEnum responseClass = respClss ? ResponseClassEnum.toEnum(respClss) : null
+        for (PriorityElement priorityElement in exptData?.resultData?.priorityElements) {
+            switch (responseClass) {
+                case ResponseClassEnum.CR_SER:
+                    return true
+                default:
+                    return false
+            }
+        }
+        return false
+
+    }
     /**
      * Map an experiment (exptData) into a list of table-model 'Values'.
      * The main result data is in the experiment's priority elements.
@@ -181,14 +205,15 @@ class CompoundBioActivitySummaryBuilder {
         List<SearchFilter> resultTypeFilters = appliedSearchFilters.findAll { SearchFilter filter -> filter.filterName == 'result_type' }
 
         for (PriorityElement priorityElement in exptData?.resultData?.priorityElements) {
-            if (!resultTypeFilters || resultTypeFilters*.filterValue?.contains(priorityElement.pubChemDisplayName)) {//only add the results that match the result-type filter(s).
+            if (!resultTypeFilters || resultTypeFilters*.filterValue?.contains(priorityElement.displayName)) {//only add the results that match the result-type filter(s).
                 switch (responseClass) {
                     case ResponseClassEnum.SP:
                     case ResponseClassEnum.CR_NO_SER: //CR_NO_SER has an EC50 result type but without the concentration points.
                     case ResponseClassEnum.MULTCONC: //MULTCONC has a list of pair/value result type and the tested concentration.
                         //The result-type is a single-point, key/value pair.
-                        WebQueryValue pairValue = createPairValueFromPriorityElement(priorityElement)
-                        values << pairValue
+                        //Priority elements are now handled separately so this code is redundant
+                               WebQueryValue pairValue = createPairValueFromPriorityElement(priorityElement)
+                        // values << pairValue
                         break;
                     case ResponseClassEnum.CR_SER:
                         //the result type is a curve.
@@ -198,7 +223,7 @@ class CompoundBioActivitySummaryBuilder {
                             List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
                             ActivityConcentrationMap doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
                             CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
-                            Pair<StringValue, StringValue> title = new ImmutablePair<StringValue, StringValue>(new StringValue(value: priorityElement.dictionaryLabel), new StringValue(value: "${priorityElement.qualifier ?: ''} ${priorityElement.value}"))
+                            Pair<StringValue, StringValue> title = new ImmutablePair<StringValue, StringValue>(new StringValue(value: priorityElement.displayName), new StringValue(value: "${priorityElement.qualifier ?: ''} ${priorityElement.value}"))
                             LinkValue dictionaryElement
                             if (priorityElement.dictElemId) {
                                 dictionaryElement = new LinkValue(value: "/BARD/dictionaryTerms/#${priorityElement.dictElemId}")
@@ -221,16 +246,12 @@ class CompoundBioActivitySummaryBuilder {
                             values << pairValue
                         }
                         break;
-                    case ResponseClassEnum.MULTCONC:
-                        //Multiple concentrations but no curve has been fitted.
-
-                        break;
                     default:
                         log.info("Response-class not supported: ${responseClass}")
                         continue
                 }
                 //add the result-type to the map tally.
-                String resultTypeName = priorityElement.pubChemDisplayName
+                String resultTypeName = priorityElement.displayName
                 resultTypesMap.containsKey(resultTypeName) ? resultTypesMap[resultTypeName]++ : resultTypesMap.put(resultTypeName, 1)
             }
         }
@@ -257,7 +278,11 @@ class CompoundBioActivitySummaryBuilder {
     }
 
     static WebQueryValue createPairValueFromPriorityElement(PriorityElement priorityElement) {
-        Pair<String, String> pair = new ImmutablePair<String, String>(priorityElement.dictionaryLabel, "${priorityElement.qualifier ?: ''} ${priorityElement.value}")
+        final String valueDisplay = "${priorityElement.qualifier ?: ''} ${priorityElement.value}"
+        if(priorityElement.responseUnit && priorityElement.responseUnit != 'null'){
+            valueDisplay = valueDisplay + " ${priorityElement.responseUnit}"
+        }
+        Pair<String, String> pair = new ImmutablePair<String, String>(priorityElement.displayName, valueDisplay)
         LinkValue dictionaryElement
 
         if (priorityElement.dictElemId) {

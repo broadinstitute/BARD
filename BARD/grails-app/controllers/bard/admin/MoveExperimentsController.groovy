@@ -34,7 +34,7 @@ class MoveExperimentsController {
         try {
             mergeAssayDefinitionService.validateConfirmMergeInputs(confirmMoveExperimentsCommand.targetAssayId, confirmMoveExperimentsCommand.sourceEntityIds, confirmMoveExperimentsCommand.idType)
 
-            final List<Long> entityIdsToMove = mergeAssayDefinitionService.convertStringToIdList(confirmMoveExperimentsCommand.sourceEntityIds)
+            final List<Long> entityIdsToMove = MergeAssayDefinitionService.convertStringToIdList(confirmMoveExperimentsCommand.sourceEntityIds)
 
             final Assay targetAssay = mergeAssayDefinitionService.convertIdToEntity(IdType.ADID, confirmMoveExperimentsCommand.targetAssayId)
 

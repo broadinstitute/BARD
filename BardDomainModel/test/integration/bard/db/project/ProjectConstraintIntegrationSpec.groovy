@@ -4,7 +4,6 @@ import bard.db.BardIntegrationSpec
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.ReadyForExtraction
 import bard.db.people.Role
-import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
 
@@ -26,7 +25,8 @@ class ProjectConstraintIntegrationSpec extends BardIntegrationSpec {
 
     @Before
     void doSetup() {
-        domainInstance = Project.buildWithoutSave()
+        Role role = Role.build(authority:"authority")
+        domainInstance = Project.buildWithoutSave(ownerRole:role)
     }
 
     void "test projectName constraints #desc projectName: '#valueUnderTest'"() {

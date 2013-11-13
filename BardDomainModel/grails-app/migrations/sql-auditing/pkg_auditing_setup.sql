@@ -119,6 +119,20 @@ AS
       end IF;
     END setup_tables;
 
+    procedure drop_table_if_exists(p_table_name varchar2) is
+      ln_table_exists integer;
+      l_sql varchar2(1000);
+    begin
+      select count(1) into ln_table_exists from tabs where table_name = p_table_name;
+
+      if ln_table_exists = 1 then
+        l_sql := 'drop table '||p_table_name;
+        execute immediate l_sql;
+      end if;
+
+    end;
+
+
     proCEDURE update_settings(avi_table_name VARCHAR2 DEFAULT NULL,
                               avi_Increment VARCHAR2 DEFAULT 'Increment')
     AS
@@ -133,6 +147,13 @@ AS
         END IF;
         EXECUTE IMMEDIATE lv_sql;
 
+        drop_table_if_exists('TEMP_COLS');
+        EXECUTE IMMEDIATE 'create table temp_cols as select TABLE_NAME,COLUMN_NAME, data_type from cols';
+        drop_table_if_exists('TEMP_CONS');
+        EXECUTE IMMEDIATE 'create table temp_cons as select owner, table_name, constraint_name, CONSTRAINT_TYPE, INDEX_NAME from user_constraints where constraint_type = ''P''';
+        --drop_table_if_exists('temp_ind_columns');
+        --EXECUTE IMMEDIATE 'create table temp_ind_columns as select index_name, column_name from user_ind_columns';
+
         -- Populate with default value
         -- do not track PK, LOB, any columns that are unchanging (date_created)
         -- edit to suit the schema and important tables you want to track
@@ -144,8 +165,8 @@ SELECT user,
     ''N'' AUDIT_INSERT,
     Decode(ac.constraint_name, NULL, Decode (DATA_TYPE, ''CLOB'', ''N'', Decode(cols.COLUMN_NAME, ''VERSION'', ''N'', ''Y'')),''N'') AUDIT_UPDATE,
     Decode(ac.constraint_name, NULL, Decode (DATA_TYPE, ''CLOB'', ''N'', ''Y''), ''N'') AUDIT_DELETE
-FROM cols
-left OUTER JOIN (user_constraints ac
+FROM temp_cols cols
+left OUTER JOIN (temp_cons ac
                 JOIN user_ind_columns aic
                 ON aic.index_name = ac.index_name
                    AND AC.CONSTRAINT_TYPE = ''P'')

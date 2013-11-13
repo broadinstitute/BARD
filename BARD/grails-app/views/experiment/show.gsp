@@ -47,7 +47,12 @@
         <li><a href="#results-header"><i class="icon-chevron-right"></i>Results</a>
             <ul class="nav nav-list bs-docs-sidenav" style="padding-left: 0; margin: 0;">
                 <li><a href="#result-type-header"><i class="icon-chevron-right"></i>Result Types</a></li>
-                <li><a href="#results-summary-header"><i class="icon-chevron-right"></i>Result Summary</a></li>
+                <g:if test="${instance.ncgcWarehouseId && instance.experimentFiles}">
+                    <li><a href="#results-summary-histogram"><i class="icon-chevron-right"></i>Result Summary- Histogram
+                    </a></li>
+                </g:if>
+                <li><a href="#results-summary-details"><i class="icon-chevron-right"></i>Result Summary - Details
+                </a></li>
             </ul>
         </li>
 
@@ -67,6 +72,10 @@
 </div>
 <g:hiddenField name="version" id="versionId" value="${instance.version}"/>
 <div class="span9">
+<a class="btn"
+   href="mailto:${grailsApplication.config.bard.users.email}?Subject=Question about EID: ${instance.id}"
+   target="_top"><i class="icon-envelope"></i> Ask a question about this Experiment</a>
+<br/>
 <section id="summary-header">
     <div class="page-header">
         <h3 class="sect">Overview</h3>
@@ -264,7 +273,7 @@
 
 <section id="referenced-contexts-header">
     <h3 class="sect">Experimental Variables <g:link target="dictionary" controller="element"
-                                                       action="showTopLevelHierarchyHelp"><i
+                                                    action="showTopLevelHierarchyHelp"><i
                 class="icon-question-sign"></i></g:link></h3>
 
     <div class="row-fluid">
@@ -316,46 +325,39 @@
             <br/>
             <br/>
         </section>
+        <g:if test="${instance.ncgcWarehouseId && instance.experimentFiles}">
+            <section id="results-summary-histogram">
+                <h4 class="subsect">Result Summary - Histogram</h4>
 
-        <section id="results-summary-header">
-            <h4 class="subsect">Result Summary</h4>
+                <div class="row-fluid">
+                    <div id="histogramHere" class="span12"></div>
+                </div>
+
+            </section>
+        </g:if>
+        <section id="results-summary-details">
+            <h4 class="subsect">Result Summary - Details</h4>
 
             <div class="row-fluid">
                 <g:if test="${instance.ncgcWarehouseId && instance.experimentFiles}">
-                    <script>
-                        /* Retrieve JSON data to build a histogram */
-                        $(document).ready(function () {
-                            d3.json("/BARD/bardWebInterface/retrieveExperimentResultsSummary/${instance.id}", function (error, dataFromServer) {
-                                if (!(dataFromServer === undefined)) {
-                                    for (var i = 0; i < dataFromServer.length; i++) {
-                                        if (!(dataFromServer[i] === undefined)) {
-                                            drawHistogram(d3.select('#histogramHere'), dataFromServer[i]);
-                                        }
-                                    }
-                                }
-                            });
-                        });
-                    </script>
-
-                    <div id="histogramHere" class="span12"></div>
                     <g:link controller="bardWebInterface" action="showExperiment"
-                            id="${instance.id}">View all results for this experiment</g:link>
+                            id="${instance.id}"><h4>View all results for this experiment</h4></g:link>
                 </g:if>
                 <g:elseif test="${!instance.experimentFiles}">
-                    <p>No results uploaded for this experiment</p>
+                    <h4>No results uploaded for this experiment</h4>
                 </g:elseif>
                 <g:else>
                     <g:if test="${instance.experimentStatus == ExperimentStatus.APPROVED}">
-                        <p>Results for this experiment aren't available for querying because this experiment is waiting to be loaded to the warehouse.</p>
+                        <h4>Results for this experiment aren't available for querying because this experiment is waiting to be loaded to the warehouse.</h4>
                     </g:if>
                     <g:elseif test="${instance.experimentStatus == ExperimentStatus.RETIRED}">
-                        <p>Results for this experiment aren't available for querying because this experiment has a Retired status</p>
+                        <h4>Results for this experiment aren't available for querying because this experiment has a Retired status</h4>
                     </g:elseif>
                     <g:else>
-                        <p>Results for this experiment aren't available for querying because this experiment has a Draft status and needs to be approved</p>
+                        <h4>Results for this experiment aren't available for querying because this experiment has a Draft status and needs to be approved</h4>
                     </g:else>
                     <g:link controller="bardWebInterface" action="previewResults"
-                            id="${instance.id}">Preview results</g:link>
+                            id="${instance.id}"><h4>Preview results</h4></g:link>
                 </g:else>
 
             </div>

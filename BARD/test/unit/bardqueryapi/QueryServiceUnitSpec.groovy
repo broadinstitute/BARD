@@ -18,6 +18,7 @@ import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
 import grails.test.mixin.TestFor
 import org.apache.commons.lang.time.StopWatch
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -959,16 +960,16 @@ class QueryServiceUnitSpec extends Specification {
         this.queryHelperService.projectsToAdapters(_) >>> [[new ProjectAdapter(project2)], [new ProjectAdapter(project3)]]
         this.compoundRestService.getSummaryForCompound(_) >> { this.compoundSummary2 }
 
-        assert tableModel.columnHeaders.size() == 2
-        assert tableModel.data.size() == expectedTableModelDataSize
-        assert tableModel.data.first().first().class == expectedResourceType
+        assert tableModel?.columnHeaders?.size() == (expectedTableModelHeaderSize ? 2 : null)
+        assert tableModel?.data?.size() == expectedTableModelDataSize
+        assert tableModel?.data?.first()?.first()?.class == expectedResourceType
 
         where:
-        label                            | cid  | groupBy              | filterTypes          | expectedTableModelDataSize | expectedResourceType
-        "group-by assay, tested"         | 1234 | GroupByTypes.ASSAY   | [FilterTypes.TESTED] | 2                          | AssayValue
-        "group-by assay, actives-only"   | 1234 | GroupByTypes.ASSAY   | []                   | 1                          | AssayValue
-        "group-by project, tested"       | 1234 | GroupByTypes.PROJECT | [FilterTypes.TESTED] | 2                          | ProjectValue
-        "group-by project, actives-pnly" | 1234 | GroupByTypes.PROJECT | []                   | 1                          | ProjectValue
+        label                            | cid  | groupBy              | filterTypes                                | expectedTableModelDataSize | expectedTableModelHeaderSize | expectedResourceType
+        "group-by assay, all"            | 1234 | GroupByTypes.ASSAY   | [FilterTypes.ACTIVE, FilterTypes.INACTIVE] | 1                          | 2                            | AssayValue
+        "group-by assay, inactives-only" | 1234 | GroupByTypes.ASSAY   | [FilterTypes.INACTIVE]                     | 1                          | 1                            | AssayValue
+        "group-by assay, none"           | 1234 | GroupByTypes.ASSAY   | []                                         | null                       | null                         | null
+        "group-by project, all"          | 1234 | GroupByTypes.PROJECT | [FilterTypes.ACTIVE, FilterTypes.INACTIVE] | 1                          | 1                            | ProjectValue
     }
 
 }

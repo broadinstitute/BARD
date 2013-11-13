@@ -11,11 +11,6 @@ class BiologyRestService  extends AbstractRestService  {
         return RestApiConstants.BIOLOGY_RESOURCE;
     }
 
-    public void  convertBiologyId() {
-
-    }
-
-
     public List<BiologyEntity> convertBiologyId(final List<Long> bids) {
         if (bids) {
             MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();

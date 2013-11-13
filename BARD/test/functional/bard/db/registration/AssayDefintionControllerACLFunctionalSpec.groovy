@@ -299,7 +299,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
         then:
         assert response.statusCode == expectedHttpResponse
-        assert response.text.contains("Edit Assay (${assayId}) Contexts")
+        assert response.text.contains("Edit Assay (ADID:${assayId}) Contexts")
 
         where:
         desc       | team              | teamPassword      | expectedHttpResponse

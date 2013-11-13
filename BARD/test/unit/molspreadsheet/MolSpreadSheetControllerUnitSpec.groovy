@@ -143,14 +143,17 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
 
         then:
 
-        molecularSpreadSheetService.retrieveExperimentalDataFromIds(_, _, _) >> {new MolSpreadSheetData()}
+        molecularSpreadSheetService.retrieveExperimentalDataFromIds(_, _, _,_) >> {new MolSpreadSheetData()}
         assert response.contentAsString.contains("molecular spreadsheet")
         assert response.status == 200
         where:
-        label       | cid | adid | pid
-        "With CID"  | "2" | ""   | ""
-        "With PID"  | ""  | ""   | "2"
-        "With ADID" | ""  | "2"  | ""
+        label       | cid | adid | pid  | activeCompoundsOnly
+        "With CID"  | "2" | ""   | ""   | true
+        "With PID"  | ""  | ""   | "2"  | true
+        "With ADID" | ""  | "2"  | ""   | true
+        "With CID"  | "2" | ""   | ""   | false
+        "With PID"  | ""  | ""   | "2"  | false
+        "With ADID" | ""  | "2"  | ""   | false
     }
 
 
@@ -160,7 +163,7 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
 
         then:
         queryCartService.weHaveEnoughDataToMakeASpreadsheet() >> {true}
-        molecularSpreadSheetService.retrieveExperimentalDataFromIds(_, _, _) >> {new MolSpreadSheetData()}
+        molecularSpreadSheetService.retrieveExperimentalDataFromIds(_, _, _, _) >> {new MolSpreadSheetData()}
         assert response.contentAsString.contains("molecular spreadsheet")
         assert response.status == 200
     }
@@ -170,7 +173,7 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         controller.molecularSpreadSheet()
 
         then:
-        molecularSpreadSheetService.retrieveExperimentalDataFromIds(_, _, _) >> {new Exception()}
+        molecularSpreadSheetService.retrieveExperimentalDataFromIds(_, _, _, _) >> {new Exception()}
         assert response.status == 400
         assert flash.message == "Could not generate SpreadSheet for current Query Cart Contents"
     }
@@ -181,10 +184,9 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
 
         then:
         queryCartService.weHaveEnoughDataToMakeASpreadsheet() >> {true}
-        molecularSpreadSheetService.retrieveExperimentalDataFromIds(_, _, _) >> {molSpreadSheetData}
+        molecularSpreadSheetService.retrieveExperimentalDataFromIds(_, _, _, _) >> {molSpreadSheetData}
         assert response.contentAsString.contains("molecular spreadsheet")
         assert response.status == 200
-        assert flash.message == "Please note: Only active compounds are shown in the Molecular Spreadsheet"
     }
 
 
@@ -199,7 +201,7 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
 
         then:
         queryCartService.weHaveEnoughDataToMakeASpreadsheet() >> {true}
-        molecularSpreadSheetService.retrieveExperimentalDataFromIds(_, _, _) >> {molSpreadSheetData}
+        molecularSpreadSheetService.retrieveExperimentalDataFromIds(_, _, _,_) >> {molSpreadSheetData}
         molecularSpreadSheetService.prepareForExport(_) >> {fakeMap}
         exportService.export(_, _, _, _, _, _, _) >> {}
         assert response.status == 200
@@ -218,7 +220,7 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
 
     void "test showExperimentDetails() #label"() {
         when:
-        controller.showExperimentDetails(pid, cid, transpose)
+        controller.showExperimentDetails(pid, cid, transpose,true)
 
         then:
 

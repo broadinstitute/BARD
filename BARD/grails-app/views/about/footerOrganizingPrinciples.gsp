@@ -6,7 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix"/>
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>How to search</title>
+    <title>BARD Organizing Principles</title>
 </head>
 
 <body>
@@ -35,7 +35,7 @@
                     </h3>
 
                     <p>
-                        BARD is organized in a novel way that lets users easily find information about projects, protocols, and experimental results, all while keeping the data organized in a manner that facilitates broader analyses across many datasets. The organizing principle is based around three entities that serve different purposes: Projects, Assay Definitions, and Experiments. The relationship of these entities provides both the experimental details associated with any given data point while also providing context for the intended purpose of experiments that were run by data depositors.
+                        BARD is organized in a novel way that lets users easily find information about projects, protocols, and experimental results, all while keeping the data organized in a manner that facilitates broader analyses across many datasets. The organizing principle is based around three entities that serve different purposes: <strong>Projects</strong>, <strong>Assay Definitions</strong>, and <strong>Experiments</strong>. The relationship of these entities provides both the experimental details associated with any given data point while also providing context for the intended purpose of experiments that were run by data depositors.
                     </p>
 
 
@@ -44,15 +44,15 @@
                     </h3>
 
                     <p>
-                        Assay definitions are the descriptions associated with the generation of assay data. An assay definition contains information about the protocol used to generate data, as well as the intended biological purpose of that protocol. Assay definitions are a unique, abstract description of a protocol that can be used to gain a particular biological insight; therefore they do not directly have data attached to the assay definition and do not have any fixed relationship to other protocols. For example, an assay definition would not be termed a “counterscreen assay” or a “confirmatory assay” because depending on how the assay definition is used in relation to others it could be either; it is also not directly associated with any particular set of compounds tested. Thus, the same assay definition can be used across many screening campaigns (e.g., a standard cytotoxicity protocol). The biology target associated with an assay definition only describes the hypothesis tested by that specific protocol, and additional inferences (such as the specificity of a tested compound) require additional information obtained by executing other assay definitions.
+                        Assay definitions are the descriptions associated with the generation of assay data. An assay definition contains information about the protocol used to generate data, as well as the intended biological purpose of that protocol. Assay definitions are a <strong>unique</strong>, abstract description of a protocol that can be used to gain a particular biological insight; therefore they do not directly have data attached to the assay definition and do not have any fixed relationship to other protocols. For example, an assay definition would <strong>not</strong> be termed a “counterscreen assay” or a “confirmatory assay” because depending on how the assay definition is used in relation to others it could be either; it is also <strong>not</strong> directly associated with any particular set of compounds tested. Thus, the same assay definition can be used across many screening campaigns (e.g., a standard cytotoxicity protocol). The biology target associated with an assay definition only describes the hypothesis tested by that specific protocol, and additional inferences (such as the specificity of a tested compound) require additional information obtained by executing other assay definitions.
                     </p>
 
                     <p>
-                        Assay definitions include details such as what was added to each reaction container or well (termed assay components); treatment variables such as time, temperature, or volume; how the signal was detected; and the information content of the measured signal (single parameter vs. multiplex, ratio, profile, etc.) In some cases, users can choose to define certain details at the time of data deposition instead of setting one fixed description, such as when the same protocol is sometimes run in 384 well format or 1536 well format.
+                        Assay definitions include details such as what was added to each reaction container or well (termed <strong>assay components</strong>); treatment variables such as time, temperature, or volume; how the signal was detected; and the information content of the measured signal (single parameter vs. multiplex, ratio, profile, etc.) In some cases, users can choose to define certain details at the time of data deposition instead of setting one fixed description, such as when the same protocol is sometimes run in 384 well format or 1536 well format.
                     </p>
 
                     <p>
-                        Assay definitions are identified by an ADID.
+                        Assay definitions are identified by an <strong>ADID</strong>.
                     </p>
 
 
@@ -60,12 +60,17 @@
                     <h3>
                         Experiments
                     </h3>
+
                     <p>
-                        Experiments have one or more PubChem SIDs that identify which molecular substances were tested. Each submitted data point will include at the minimum an [PAC: ???]. In addition, experiments have measurement identifiers that specify what calculated values are being reported for those results, such as percent inhibition, IC50, etc. In most cases these measurements are related: in the case of IC50, many percent measurement values are aggregated to report an IC50. This relationship is important to define when planning to submit results for an experiment. It is used to generate the template for depositing results to BARD and indicates which of these results is considered the priority measurement(s) displayed by BARD. Often, the priority measurement is the result value(s) that a user would examine to determine whether they consider a compound “active.”
+                        Experiments are the primary way in which data points are deposited and grouped together in BARD. An experiment is one discrete dataset as defined by the submitter, describing the measurements generated by executing a protocol against a set of compounds. Each experiment is therefore associated with exactly one <strong>assay definition</strong> that provides the context for all the results deposited in that experiment. This association is how BARD finds the experimental results associated with search terms used in queries.
                     </p>
 
                     <p>
-                        Experiments are identified by an EID. Compounds tested in experiments are identified by their PubChem substance ID, SID, and associated PubChem compound structure ID, CID.
+                        Experiments have one or more PubChem SIDs that identify which molecular substances were tested.  In addition, experiments have measurement identifiers that specify what calculated values are being reported for those results, such as percent inhibition, IC50, etc. In most cases these measurements are related: in the case of IC50, many percent measurement values are aggregated to report an IC50. This relationship is important to define when planning to submit results for an experiment. It is used to generate the template for depositing results to BARD and indicates which of these results is considered the priority measurement(s) displayed by BARD. Often, the priority measurement is the result value(s) that a user would examine to determine whether they consider a compound “active.”
+                    </p>
+
+                    <p>
+                        Experiments are identified by an <strong>EID</strong>. Compounds tested in experiments are identified by their PubChem substance ID, <strong>SID</strong>, and associated PubChem compound structure ID, <strong>CID</strong>.
                     </p>
 
 
@@ -83,7 +88,7 @@
 
 
                     <p>
-                        Projects are identified by a PID.
+                        Projects are identified by a <strong>PID</strong>.
                     </p>
 
                     <IMG SRC="${resource(dir: 'images/bardHomepage', file: 'rdm_overview.png')}" ALIGN="top">
@@ -98,7 +103,7 @@
                     </p>
 
                     <p>
-                        Panels are identified by a PLID.
+                        Panels are identified by a <strong>PLID</strong>.
                     </p>
 
 

@@ -87,79 +87,78 @@ var linkedVisualizationModule = (function () {
             '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
             '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'],
         blueColors = [
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
-            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF'],
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF', '#82B6FA', '#00FFFF'],
 
 
         reddishColors = [
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
-            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500'],
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546', '#E6933C', '#FFA500'],
 
         greenishColors = [
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
-            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100'],
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74', '#00E100'],
 
 
         brownishColors = [
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
-            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74'],
-
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E', '#FFFFA6', '#CFBC56', '#EDDA74'],
 
 
     // below are some names and text strings
@@ -326,20 +325,21 @@ var linkedVisualizationModule = (function () {
                     };
 
                 var colorSet = {};
-                switch(id){
+                switch (id) {
                     case 'a0-chart':
-                        colorSet=blueColors;
+                        colorSet = blueColors;
                         break;
                     case 'a1-chart':
-                        colorSet=greenishColors ;
+                        colorSet = greenishColors;
                         break;
                     case 'a2-chart':
-                        colorSet=reddishColors ;
+                        colorSet = reddishColors;
                         break;
                     case 'a3-chart':
-                        colorSet=brownishColors ;
+                        colorSet = brownishColors;
                         break;
-                    default:;
+                    default:
+                        ;
                 }
 
                 return dc.pieChart("#" + id)
@@ -385,12 +385,17 @@ var linkedVisualizationModule = (function () {
                             return d.assay_type;
                         },
                         function (d) {
-                            return "<a href='/BARD/assayDefinition/show/" + d.assayId + "'>" + d.assayId + "</a>";
+                            return "<a href='/BARD/assayDefinition/show/" + d.assayId + "'>" + d.assayId + "</a>" +
+                                "/" +
+                                "<a href='/BARD/experiment/show/" + d.eid + "'>" + d.eid + "</a>";
                         }
                     ])
                     .order(d3.ascending)
                     .sortBy(function (d) {
                         return d.GO_biological_process_term;
+                    })
+                    .renderlet(function () {
+                        $.event.trigger('reshuffleElementsAroundTable', [$('#data-table').offset().top]);
                     });
                 //                        This datecount  function below doesn't seem to work for me. What's wrong?
                 //                        dc.dataCount("#data-count")
@@ -406,19 +411,21 @@ var linkedVisualizationModule = (function () {
             },
 
 
-            moveDataTableOutOfTheWay = function (dataTable) {
+            moveDataTableOutOfTheWay = function (dataTable, newTopPosition) {
                 dataTable
                     .transition()
                     .duration(500)
-                    .style("top", 50 + displayWidgetY + displayWidgetHeight + "px");  // Extra spaces for 'click to contract' button
+                    .style("top", newTopPosition + "px");  // Extra spaces for 'click to contract' button
+                $.event.trigger('reshuffleElementsAroundTable', newTopPosition); //Move elements that render after the data-table (e.g., bard-footer)
             },
 
-            moveDataTableBackToItsOriginalPosition = function (dataTable) {
+            moveDataTableBackToItsOriginalPosition = function (dataTable, newTopPosition) {
                 dataTable
                     .transition()
                     .delay(1000)
                     .duration(500)
-                    .style("top", "300px");  // Extra spaces for 'click to contract' button
+                    .style("top", newTopPosition + "px");  // Extra spaces for 'click to contract' button
+                $.event.trigger('reshuffleElementsAroundTable', newTopPosition); //Move elements that render after the data-table (e.g., bard-footer)
             },
 
 
@@ -513,23 +520,23 @@ var linkedVisualizationModule = (function () {
                     .style('height', widgetsGoHere[index].display.size.height + "px")
                     .style('max-width', widgetsGoHere[index].display.size.width + "px")
                     .style('width', '100%');
-                shiftBackgroundWidgets(d3.select('#a' +backgroundIndex1), expandedPos[0].x);
-                shiftBackgroundWidgets(d3.select('#a' +backgroundIndex2), expandedPos[1].x);
-                shiftBackgroundWidgets(d3.select('#a' +backgroundIndex3), expandedPos[2].x);
+                shiftBackgroundWidgets(d3.select('#a' + backgroundIndex1), expandedPos[0].x);
+                shiftBackgroundWidgets(d3.select('#a' + backgroundIndex2), expandedPos[1].x);
+                shiftBackgroundWidgets(d3.select('#a' + backgroundIndex3), expandedPos[2].x);
 
                 //   Turn off the text label based on click event for background widgets
-                d3.select('#a' +backgroundIndex1).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
-                d3.select('#a' +backgroundIndex2).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
-                d3.select('#a' +backgroundIndex3).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
+                d3.select('#a' + backgroundIndex1).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
+                d3.select('#a' + backgroundIndex2).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
+                d3.select('#a' + backgroundIndex3).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
 
                 //  Turn off the expander button, since the user needs to contract the expanded
                 //  widget before they try to expand the new one. It would be nice to click that
                 //  button for them, but D three does not support that sort of activation is you are
                 //  using bound data. I should probably connect to those data dynamically to get around
                 //  this problem.
-                d3.select('#expbutton' +backgroundIndex1).style('pointer-events', 'none').style('opacity', 0.5);
-                d3.select('#expbutton' +backgroundIndex2).style('pointer-events', 'none').style('opacity', 0.5);
-                d3.select('#expbutton' +backgroundIndex3).style('pointer-events', 'none').style('opacity', 0.5);
+                d3.select('#expbutton' + backgroundIndex1).style('pointer-events', 'none').style('opacity', 0.5);
+                d3.select('#expbutton' + backgroundIndex2).style('pointer-events', 'none').style('opacity', 0.5);
+                d3.select('#expbutton' + backgroundIndex3).style('pointer-events', 'none').style('opacity', 0.5);
 
                 d3.select('#sunburstContractor')
                     .style('opacity', 1);
@@ -559,12 +566,12 @@ var linkedVisualizationModule = (function () {
                     .style("top", widgetsGoHere[index].orig.coords.y + "px");
 
 
-                shiftBackgroundWidgets(d3.select('#a'+backgroundIndex1), widgetsGoHere[backgroundIndex1].orig.coords.x);
-                shiftBackgroundWidgets(d3.select('#a'+backgroundIndex2), widgetsGoHere[backgroundIndex2].orig.coords.x);
-                shiftBackgroundWidgets(d3.select('#a'+backgroundIndex3), widgetsGoHere[backgroundIndex3].orig.coords.x);
-                d3.select('#a'+backgroundIndex1).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
-                d3.select('#a'+backgroundIndex2).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
-                d3.select('#a'+backgroundIndex3).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
+                shiftBackgroundWidgets(d3.select('#a' + backgroundIndex1), widgetsGoHere[backgroundIndex1].orig.coords.x);
+                shiftBackgroundWidgets(d3.select('#a' + backgroundIndex2), widgetsGoHere[backgroundIndex2].orig.coords.x);
+                shiftBackgroundWidgets(d3.select('#a' + backgroundIndex3), widgetsGoHere[backgroundIndex3].orig.coords.x);
+                d3.select('#a' + backgroundIndex1).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
+                d3.select('#a' + backgroundIndex2).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
+                d3.select('#a' + backgroundIndex3).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
                 //  Turn back on the expander buttons
                 //  widget before they try to expand the new one. It would be nice to click that
                 //  button for them, but D three does not support that sort of activation is you are
@@ -754,7 +761,8 @@ var linkedVisualizationModule = (function () {
             { index: 0 },
             { index: 1 },
             { index: 2 },
-            { index: 3 }]  ;
+            { index: 3 }
+        ];
 
 
         // Private method used to pull the data in from the remote site
@@ -769,12 +777,12 @@ var linkedVisualizationModule = (function () {
              *  the 'we are still loading' spinner so that users might see the display.
              *               *
              */
-         removeTheLoadingSpinner = function (spinnerId) {
-            var onScreenSpinnerElement = d3.select(spinnerId);
-            if (!(onScreenSpinnerElement.empty ()))   {
-                onScreenSpinnerElement.style ('opacity', 0) ;
-            }
-        },
+                removeTheLoadingSpinner = function (spinnerId) {
+                var onScreenSpinnerElement = d3.select(spinnerId);
+                if (!(onScreenSpinnerElement.empty())) {
+                    onScreenSpinnerElement.style('opacity', 0);
+                }
+            },
 
 
         // Our main button handler callback
@@ -789,7 +797,8 @@ var linkedVisualizationModule = (function () {
                 if (!widgetPosition.isAnyWidgetExpanded()) {
                     displayManipulator.disableAllPieClickEffectors();
                     displayManipulator.expandDataAreaForAllPieCharts(d3.select('.pieCharts'));
-                    displayManipulator.moveDataTableOutOfTheWay(d3.select('#data-table'));
+                    displayManipulator.moveDataTableOutOfTheWay(d3.select('#data-table'), 50 + displayWidgetY + displayWidgetHeight);
+//                    displayManipulator.moveDataTableOutOfTheWay(d3.select('#bard-footer'), "1750px");
                     widgetPosition.expandThisWidget(d.index);
                     expandedWidget = widgetPosition.expandedWidget();
                     unexpandedWidget = widgetPosition.unexpandedWidgets();
@@ -820,7 +829,8 @@ var linkedVisualizationModule = (function () {
                         origButton,
                         expandedPos);
                     widgetPosition.unexpandAllWidgets();
-                    displayManipulator.moveDataTableBackToItsOriginalPosition(d3.select('#data-table'));
+                    displayManipulator.moveDataTableBackToItsOriginalPosition(d3.select('#data-table'), 300);
+//                    displayManipulator.moveDataTableBackToItsOriginalPosition(d3.select('#bard-footer'), "750px");
                     displayManipulator.reenableAllPieClickEffectors();
                     displayManipulator.eraseAnyOrphanedTooltips();
                     displayManipulator.cleanUpAnyGraphicsWeAreDoneWith();
@@ -859,13 +869,13 @@ var linkedVisualizationModule = (function () {
 
                 sunburstContainer.select('#sunburstContractor')
                     .text(textForContractingButton)
-                    .style('opacity','0');
+                    .style('opacity', '0');
 
             },
 
             verifyLinkedData = function (cid) {
-                console.log('beginning Linked Hierarchy with cid = '+cid+'.');
-                d3.json("/BARD/bardWebInterface/linkedData/"+cid, function (incomingData) {
+                console.log('beginning Linked Hierarchy with cid = ' + cid + '.');
+                d3.json("/BARD/bardWebInterface/linkedData/" + cid, function (incomingData) {
                     // create an empty list, Just in case we get null data
                     linkedVizData.parseData(incomingData);
                     if (!linkedVizData.validateLinkedData()) {
@@ -877,7 +887,7 @@ var linkedVisualizationModule = (function () {
                     }
                     presentLinkedData();
                     linkedVizData.cleanupOriginalHierarchyData(2);
-                    removeTheLoadingSpinner ( '#still_loading' );
+                    removeTheLoadingSpinner('#still_loading');
 
                 });// d3.json
 
@@ -892,16 +902,16 @@ var linkedVisualizationModule = (function () {
                 assays = readInData();
 
                 // Create the crossfilter for the relevant dimensions and groups.
-                sharedStructures.setAssay( crossfilter(assays) );
+                sharedStructures.setAssay(crossfilter(assays));
 
                 // Build everything were going to display
                 sharedStructures.setAllDataDcTable(displayManipulator.addDcTable(assay, 'data-table', 'assayId'));
-                sharedStructures.setBiologicalProcessPieChart (displayManipulator.addPieChart(assay, 'a0-chart', 'GO_biological_process_term', colors, pieChartWidth, pieChartRadius, innerRadius));
-                sharedStructures.setAssayFormatPieChart (displayManipulator.addPieChart(assay, 'a1-chart', 'assay_format', colors, pieChartWidth, pieChartRadius, innerRadius));
-                sharedStructures.setAssayIdDimensionPieChart (displayManipulator.addPieChart(assay, 'a2-chart', 'protein_target', colors, pieChartWidth, pieChartRadius, innerRadius));
-                sharedStructures.setAssayTypePieChart (displayManipulator.addPieChart(assay, 'a3-chart', 'assay_type', colors, pieChartWidth, pieChartRadius, innerRadius));
+                sharedStructures.setBiologicalProcessPieChart(displayManipulator.addPieChart(assay, 'a0-chart', 'GO_biological_process_term', colors, pieChartWidth, pieChartRadius, innerRadius));
+                sharedStructures.setAssayFormatPieChart(displayManipulator.addPieChart(assay, 'a1-chart', 'assay_format', colors, pieChartWidth, pieChartRadius, innerRadius));
+                sharedStructures.setAssayIdDimensionPieChart(displayManipulator.addPieChart(assay, 'a2-chart', 'protein_target', colors, pieChartWidth, pieChartRadius, innerRadius));
+                sharedStructures.setAssayTypePieChart(displayManipulator.addPieChart(assay, 'a3-chart', 'assay_type', colors, pieChartWidth, pieChartRadius, innerRadius));
 
-                sharedStructures.setAssayIndex( assay.dimension(function (d) {
+                sharedStructures.setAssayIndex(assay.dimension(function (d) {
                     return d['index'];
                 }));
 

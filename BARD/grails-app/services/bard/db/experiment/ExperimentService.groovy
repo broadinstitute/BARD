@@ -26,43 +26,50 @@ class ExperimentService {
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     ExperimentMeasure updateExperimentMeasure(Long id, ExperimentMeasure experimentMeasure, List<Long> assayContextIds) {
         ExperimentMeasure refreshedMeasure = experimentMeasure.save(flush: true)
+
         final Set<AssayContextExperimentMeasure> assayContextExperimentMeasures = refreshedMeasure.getAssayContextExperimentMeasures()
 
         if (assayContextExperimentMeasures) {
-            List<AssayContextExperimentMeasure> toRemove = []
+
+
+            List<AssayContextExperimentMeasure> assayContextExperimentMeasuresToRemove = []
+
             for (AssayContextExperimentMeasure assayContextExperimentMeasure : assayContextExperimentMeasures) {
                 final AssayContext assayContext = assayContextExperimentMeasure.assayContext
                 final long assayContextId = assayContext.id
-                if (assayContextIds.contains(assayContextId)) {//means this context already exist, so no need to add it again
+                if (assayContextIds?.contains(assayContextId)) {//means this context already exist, so no need to add it again
                     assayContextIds.remove(assayContextId)
 
-                }else{ //mark for removal, means that user wants to remove this measure
-                    toRemove.add(assayContextExperimentMeasure)
+                } else { //mark for removal, means that user wants to remove this measure
+                    assayContextExperimentMeasuresToRemove.add(assayContextExperimentMeasure)
                 }
 
             }
-            //now loop over all of the measures that we want to remove and then remove each one
-            for (AssayContextExperimentMeasure assayContextExperimentMeasure : toRemove) {
-                final AssayContext assayContext = assayContextExperimentMeasure.assayContext
-                assayContext.removeFromAssayContextExperimentMeasures(assayContextExperimentMeasure)
-                refreshedMeasure.removeFromAssayContextExperimentMeasures(assayContextExperimentMeasure)
-                assayContext.save(flush: true)
+            assayContextExperimentMeasuresToRemove.each{ AssayContextExperimentMeasure assayContextExperimentMeasure ->
+                disassociateMeasureFromContext(assayContextExperimentMeasure,refreshedMeasure,assayContextExperimentMeasure.assayContext)
             }
             refreshedMeasure = refreshedMeasure.save(flush: true)
-            if(!assayContextIds){
+            if (!assayContextIds) {
                 return refreshedMeasure
             }
         }
 
         //Now add only the newly added context items
-        if(assayContextIds){
-            addAssayContextExperimentMeasures(assayContextIds,refreshedMeasure)
+        if (assayContextIds) {
+            addAssayContextExperimentMeasures(assayContextIds, refreshedMeasure)
         }
         return refreshedMeasure
 
     }
 
-    void addAssayContextExperimentMeasures(List<Long> assayContextIds, ExperimentMeasure experimentMeasure){
+    void disassociateMeasureFromContext(AssayContextExperimentMeasure assayContextExperimentMeasure,ExperimentMeasure measure, AssayContext assayContext) {
+        assayContext.removeFromAssayContextExperimentMeasures(assayContextExperimentMeasure)
+        measure.removeFromAssayContextExperimentMeasures(assayContextExperimentMeasure)
+        assayContextExperimentMeasure.delete(flush: true)
+
+    }
+
+    void addAssayContextExperimentMeasures(List<Long> assayContextIds, ExperimentMeasure experimentMeasure) {
         for (Long contextId : assayContextIds) {
             AssayContext assayContext = AssayContext.get(contextId)
             if (assayContext) {
@@ -72,11 +79,12 @@ class ExperimentService {
                 assayContextExperimentMeasure.save(flush: true)
             }
         }
-        if(assayContextIds){
-            experimentMeasure.save(flush:true)
+        if (assayContextIds) {
+            experimentMeasure.save(flush: true)
         }
 
     }
+
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void deleteExperimentMeasure(final Long id, final ExperimentMeasure experimentMeasure) {
 
@@ -107,16 +115,16 @@ class ExperimentService {
             parentExperimentMeasure.save(flush: true)
         }
         //Now add the selected context
-        if(assayContextIds){
-            addAssayContextExperimentMeasures(assayContextIds,experimentMeasure)
+        if (assayContextIds) {
+            addAssayContextExperimentMeasures(assayContextIds, experimentMeasure)
         }
         return experimentMeasure.refresh()
     }
 
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    TableModel previewResults(final Long id) {
+    TableModel previewResults(final Long id, final int numberOfRecords=10) {
         Experiment experiment = Experiment.findById(id)
-        List<JsonSubstanceResults> results = resultsExportService.readResultsForSubstances(experiment)
+        List<JsonSubstanceResults> results = resultsExportService.readResultsForSubstances(experiment,numberOfRecords)
         return experimentBuilder.buildModelForPreview(experiment, results)
     }
 

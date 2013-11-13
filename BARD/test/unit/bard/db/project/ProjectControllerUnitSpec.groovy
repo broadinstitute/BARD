@@ -3,14 +3,12 @@ package bard.db.project
 import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
+import bard.db.enums.ExperimentStatus
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import bard.db.people.Role
-import bard.db.registration.AbstractInlineEditingControllerUnitSpec
-import bard.db.registration.Assay
-import bard.db.registration.EditingHelper
-import bard.db.registration.ExternalReference
+import bard.db.registration.*
 import bardqueryapi.IQueryService
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -37,8 +35,8 @@ import javax.servlet.http.HttpServletResponse
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(ProjectController)
-@Build([Role, Project, ProjectSingleExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
-@Mock([Role, Project, ProjectSingleExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
+@Build([Role, Assay, Project, ProjectSingleExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
+@Mock([Role, Assay, Project, ProjectSingleExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
 class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
@@ -51,6 +49,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
     SpringSecurityService springSecurityService
     Role role
     Role otherRole
+
     @Before
     void setup() {
         SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
@@ -100,8 +99,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         projectCommand.springSecurityService = controller.springSecurityService
 
         projectCommand.ownerRole = this.role.authority
-        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
-            return [this.role,this.otherRole]
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
+            return [this.role, this.otherRole]
         }
         when:
 
@@ -117,10 +116,53 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test edit Project Status success'() {
         given:
-        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)  //no designer
+        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)
         Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: ProjectStatus.APPROVED)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
                 version: newProject.version, name: newProject.name, value: updatedProject.projectStatus.id)
+        when:
+        controller.editProjectStatus(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectStatus(_, _) >> { return updatedProject }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedProject.projectStatus.id
+        assert responseJSON.get("lastUpdated").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+
+
+    void 'test edit Project Status has unapproved experiments'() {
+        given:
+        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)
+        Experiment experimentFrom = Experiment.build(experimentStatus: ExperimentStatus.APPROVED)
+        Experiment experimentTo = Experiment.build(experimentStatus: ExperimentStatus.DRAFT)
+        ProjectSingleExperiment.build(project: newProject, experiment: experimentFrom)
+        ProjectSingleExperiment.build(project: newProject, experiment: experimentTo)
+
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: ProjectStatus.APPROVED.id)
+        when:
+        controller.editProjectStatus(inlineEditableCommand)
+        then:
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+        assert "Before you can approve this project, you must approve the following experiments: ${experimentTo.id}" == response.text
+    }
+
+    void 'test edit Project Status has retired experiments'() {
+        given:
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: ProjectStatus.APPROVED)
+        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)
+        Experiment experimentFrom = Experiment.build(experimentStatus: ExperimentStatus.APPROVED)
+        Experiment experimentTo = Experiment.build(experimentStatus: ExperimentStatus.RETIRED)
+        ProjectSingleExperiment.build(project: newProject, experiment: experimentFrom)
+        ProjectSingleExperiment.build(project: newProject, experiment: experimentTo)
+
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: ProjectStatus.APPROVED.id)
         when:
         controller.editProjectStatus(inlineEditableCommand)
         then:
@@ -171,8 +213,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: this.otherRole)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
                 version: newProject.version, name: newProject.name, value: updatedProject.ownerRole.displayName)
-        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
-            return [this.role,this.otherRole]
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
+            return [this.role, this.otherRole]
         }
         when:
         controller.editOwnerRole(inlineEditableCommand)
@@ -205,6 +247,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.status == HttpServletResponse.SC_BAD_REQUEST
 
     }
+
     void 'test edit Project owner - access denied'() {
         given:
         accessDeniedRoleMock()
@@ -213,8 +256,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
                 version: newProject.version, name: newProject.name, value: updatedProject.ownerRole.displayName)
 
-        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
-            return [this.role,this.otherRole]
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
+            return [this.role, this.otherRole]
         }
         when:
         controller.editOwnerRole(inlineEditableCommand)
@@ -328,7 +371,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.text
     }
 
-    void 'test projectStatus only has Approved and Retired '(){
+    void 'test projectStatus only has Approved and Retired '() {
         when:
         controller.projectStatus()
 
@@ -362,7 +405,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.status == 200
 
         where:
-        desc                                                  | stage  | expectedStage
+        desc                                                        | stage  | expectedStage
         "ProjectSingleExperiment has null stage element ID"         | null   | "secondary assay"
         "ProjectSingleExperiment has stage ID that is not a number" | "name" | "secondary assay"
     }
@@ -380,7 +423,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         projectService.updateProjectStage(_, _, _) >> { throw new AccessDeniedException("msg") }
         assertAccesDeniedErrorMessage()
         where:
-        desc                                                  | stage  | expectedStage
+        desc                                                        | stage  | expectedStage
         "ProjectSingleExperiment has null stage element ID"         | null   | "secondary assay"
         "ProjectSingleExperiment has stage ID that is not a number" | "name" | "secondary assay"
     }
@@ -695,132 +738,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         "failed due to toExperiment not found"   | { projectExperimentFrom.id } | { null }
     }
 
-    void 'test associate experiment with project success'() {
-        given:
-        views['/project/_showstep.gsp'] = 'mock contents'
-        Element stage1 = Element.build()
 
-        when:
-        params.stageId = stage1.id.toString()
-        request.setParameter('selectedExperiments[]', projectExperimentFrom.experiment.id + "-experiment name")
-        params.projectId = project.id.toString()
-        controller.projectService = projectService
-        controller.associateExperimentsToProject()
-
-        then:
-        1 * projectService.addExperimentToProject(projectExperimentFrom.experiment, project.id, stage1) >> {}
-        0 * projectService.addExperimentToProject(_, _, _) >> {}
-        assert response.text == 'mock contents'
-    }
-
-    void 'test associate experiment with project - access denied'() {
-        given:
-        accessDeniedRoleMock()
-
-        views['/project/_showstep.gsp'] = 'mock contents'
-
-        Element stage1 = Element.build()
-
-        when:
-        params.stageId = stage1.id
-        request.setParameter('selectedExperiments[]', projectExperimentFrom.experiment.id + "-experiment name")
-        params.projectId = project.id
-        controller.projectService = projectService
-
-        controller.associateExperimentsToProject()
-
-        then:
-        projectService.addExperimentToProject(_, _, _) >> { throw new AccessDeniedException("msg") }
-        assertAccesDeniedErrorMessage()
-    }
-
-    void 'test associate experiment with project fail'() {
-        given:
-        projectService.addExperimentToProject(_, _, _) >> { throw new UserFixableException() }
-
-        Element stage1 = Element.build()
-
-        when:
-        params.stageId = stage1.id
-        request.setParameter('selectedExperiments[]', "200-experiment name")
-        params.projectId = project.id
-        controller.projectService = projectService
-
-        controller.associateExperimentsToProject()
-
-        then:
-        println(response.text)
-        assert response.text.startsWith('serviceError')
-    }
-
-    void 'test ajaxFindAvailableExperimentByName'() {
-        given:
-        projectService.isExperimentAssociatedWithProject(_, _) >> { false }
-
-        when:
-        params.experimentName = projectExperimentFrom.experiment.experimentName
-        params.projectid = project.id
-        controller.projectService = projectService
-
-        controller.ajaxFindAvailableExperimentByName(params.experimentName, params.projectid)
-
-        then:
-        assert response.text.contains(projectExperimentFrom.experiment.displayName)
-    }
-
-    void 'test ajaxFindAvailableExperimentByAssayId'() {
-        given:
-        projectService.isExperimentAssociatedWithProject(_, _) >> { false }
-        Assay assay = Assay.build()
-        Experiment ex = Experiment.build(assay: assay)
-        assay.addToExperiments(ex)
-
-        when:
-        params.assayId = assay.id
-        params.projectid = project.id
-        controller.projectService = projectService
-
-        controller.ajaxFindAvailableExperimentByAssayId(params.assayId, params.projectid)
-
-        then:
-        assert response.text.contains(ex.displayName)
-    }
-
-    void 'test ajaxFindAvailableExperimentById'() {
-        given:
-        projectService.isExperimentAssociatedWithProject(_, _) >> { false }
-        Assay assay = Assay.build()
-        Experiment ex = Experiment.build(assay: assay)
-        assay.addToExperiments(ex)
-
-        when:
-        params.experimentId = ex.id
-        params.projectid = project.id
-        controller.projectService = projectService
-
-        controller.ajaxFindAvailableExperimentById(params.experimentId, params.projectid)
-
-        then:
-        assert response.text.contains(ex.displayName)
-    }
-
-    void 'test editSummary'() {
-        given:
-        Assay assay = Assay.build()
-        Experiment ex = Experiment.build(assay: assay)
-        assay.addToExperiments(ex)
-        views['/project/_summaryDetail.gsp'] = 'mock contents'
-
-        when:
-        params.experimentId = ex.id
-        params.projectid = project.id
-        controller.projectService = projectService
-
-        controller.ajaxFindAvailableExperimentById(params.experimentId, params.projectid)
-
-        then:
-        assert response.text.contains(ex.displayName)
-    }
 
 
     void 'test getProjectNames'() {
@@ -831,4 +749,169 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         then:
         assert response.text.contains(project.name)
     }
+
+
+    void "test show Experiments To Add Project With ADID Type #desc"() {
+        given:
+        AssociateExperimentsCommand associateExperimentsCommand = new AssociateExperimentsCommand(fromAddPage: fromPage, idType: idType)
+        associateExperimentsCommand.validate()
+
+        when:
+        controller.showExperimentsToAddProject(associateExperimentsCommand)
+        then:
+        assert associateExperimentsCommand.hasErrors() == hasErrors
+        where:
+        desc                               | idType      | hasErrors | fromPage
+        "No Errors From Show Project Page" | IdType.ADID | true      | true
+        "Errors From Add Experiment Page"  | IdType.EID  | false     | false
+    }
+
+
+    void "test show Experiments To Add Project with #desc"() {
+
+        given:
+
+        Assay assay = Assay.build(ownerRole: role)
+        Project project = Project.build(ownerRole: role)
+        Experiment.build(assay: assay, experimentStatus: experimentStatus, ownerRole: role)
+        String sourceEntityIds = assay.id.toString()
+        AssociateExperimentsCommand associateExperimentsCommand =
+            new AssociateExperimentsCommand(fromAddPage: true,
+                    projectId: project.id,
+                    idType: idType,
+                    sourceEntityIds: sourceEntityIds,
+                    mergeAssayDefinitionService: Mock(MergeAssayDefinitionService),
+                    projectService: Mock(ProjectService))
+
+        when:
+        def model = controller.showExperimentsToAddProject(associateExperimentsCommand)
+        then:
+        associateExperimentsCommand.mergeAssayDefinitionService.convertIdToEntity(_, _) >> { assay }
+        associateExperimentsCommand.projectService.isExperimentAssociatedWithProject(_, _) >> { isAlreadyAssociatedToProject }
+        assert model.command
+        AssociateExperimentsCommand command = model.command
+        assert command.availableExperiments.size() == expectedNumExperiments
+        assert command.errorMessages == errorMessages
+
+        where:
+        desc                                                           | idType      | experimentStatus          | errorMessages | expectedNumExperiments | isAlreadyAssociatedToProject
+        "ADID with approved experiment"                                | IdType.ADID | ExperimentStatus.APPROVED | []            | 1                      | false
+        "ADID with approved experiment, already associated to Project" | IdType.ADID | ExperimentStatus.APPROVED | []            | 0                      | true
+        "ADID with retired experiment"                                 | IdType.ADID | ExperimentStatus.RETIRED  | []            | 0                      | false
+    }
+
+    void "test show Experiments To Add Project #desc"() {
+
+        given:
+        AssociateExperimentsCommand associateExperimentsCommand = new AssociateExperimentsCommand(fromAddPage: fromPage)
+
+        when:
+        def model = controller.showExperimentsToAddProject(associateExperimentsCommand)
+        then:
+        assert model.command
+        AssociateExperimentsCommand command = model.command
+        assert command.hasErrors() == hasErrors
+
+        where:
+        desc                               | idType     | hasErrors | fromPage
+        "No Errors From Show Project Page" | IdType.EID | false     | false
+        "Errors From Add Experiment Page"  | IdType.EID | true      | true
+    }
+
+
+
+    void 'test show Experiments To Add Project - Runtime Exception'() {
+        given:
+        accessDeniedRoleMock()
+        Assay assay = Assay.build(ownerRole: role)
+        Project project = Project.build(ownerRole: role)
+        Experiment experiment = Experiment.build(assay: assay, experimentStatus: ExperimentStatus.APPROVED, ownerRole: role)
+        String sourceEntityIds = experiment.id.toString()
+
+        AssociateExperimentsCommand associateExperimentsCommand =
+            new AssociateExperimentsCommand(fromAddPage: true,
+                    projectId: project.id,
+                    idType: IdType.EID,
+                    sourceEntityIds: sourceEntityIds,
+                    mergeAssayDefinitionService: Mock(MergeAssayDefinitionService),
+                    projectService: Mock(ProjectService))
+        when:
+        def model = controller.showExperimentsToAddProject(associateExperimentsCommand)
+        then:
+        associateExperimentsCommand.mergeAssayDefinitionService.convertIdToEntity(_, _) >> { experiment }
+        associateExperimentsCommand.projectService.addExperimentToProject(_, _, _) >> { throw new RuntimeException("msg") }
+
+        assert model.command.errorMessages == ["An error has occurred, Please log an issue with the BARD team at bard-users.REMOVE-ME@REMOVE-ME.broadinstitute.org to fix this issue"]
+    }
+
+    void 'test show Experiments To Add Project - UserFixableException'() {
+        given:
+        accessDeniedRoleMock()
+        Assay assay = Assay.build(ownerRole: role)
+        Project project = Project.build(ownerRole: role)
+        Experiment experiment = Experiment.build(assay: assay, experimentStatus: ExperimentStatus.APPROVED, ownerRole: role)
+        String sourceEntityIds = experiment.id.toString()
+
+        AssociateExperimentsCommand associateExperimentsCommand =
+            new AssociateExperimentsCommand(fromAddPage: true,
+                    projectId: project.id,
+                    idType: IdType.EID,
+                    sourceEntityIds: sourceEntityIds,
+                    mergeAssayDefinitionService: Mock(MergeAssayDefinitionService),
+                    projectService: Mock(ProjectService))
+        when:
+        def model = controller.showExperimentsToAddProject(associateExperimentsCommand)
+        then:
+        associateExperimentsCommand.mergeAssayDefinitionService.convertIdToEntity(_, _) >> { experiment }
+        associateExperimentsCommand.projectService.addExperimentToProject(_, _, _) >> { throw new UserFixableException("msg") }
+
+        assert model.command.errorMessages == ["msg"]
+    }
+
+    void 'test show Experiments To Add Project - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        Assay assay = Assay.build(ownerRole: role)
+        Project project = Project.build(ownerRole: role)
+        Experiment experiment = Experiment.build(assay: assay, experimentStatus: ExperimentStatus.APPROVED, ownerRole: role)
+        String sourceEntityIds = experiment.id.toString()
+
+        AssociateExperimentsCommand associateExperimentsCommand =
+            new AssociateExperimentsCommand(fromAddPage: true,
+                    projectId: project.id,
+                    idType: IdType.EID,
+                    sourceEntityIds: sourceEntityIds,
+                    mergeAssayDefinitionService: Mock(MergeAssayDefinitionService),
+                    projectService: Mock(ProjectService))
+        when:
+        controller.showExperimentsToAddProject(associateExperimentsCommand)
+        then:
+        associateExperimentsCommand.mergeAssayDefinitionService.convertIdToEntity(_, _) >> { experiment }
+        associateExperimentsCommand.projectService.addExperimentToProject(_, _, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
+    }
+
+    void 'test show Experiments To Add Project'() {
+        given:
+        Assay assay = Assay.build(ownerRole: role)
+        Project project = Project.build(ownerRole: role)
+        Experiment experiment = Experiment.build(assay: assay, experimentStatus: ExperimentStatus.APPROVED, ownerRole: role)
+        String sourceEntityIds = experiment.id.toString()
+
+        AssociateExperimentsCommand associateExperimentsCommand =
+            new AssociateExperimentsCommand(fromAddPage: true,
+                    projectId: project.id,
+                    idType: IdType.EID,
+                    sourceEntityIds: sourceEntityIds,
+                    mergeAssayDefinitionService: Mock(MergeAssayDefinitionService),
+                    projectService: Mock(ProjectService))
+        when:
+        controller.showExperimentsToAddProject(associateExperimentsCommand)
+        then:
+        associateExperimentsCommand.mergeAssayDefinitionService.convertIdToEntity(_, _) >> { experiment }
+        associateExperimentsCommand.projectService.addExperimentToProject(_, _, _) >> {}
+        assert response.status == HttpServletResponse.SC_FOUND
+        assert response.redirectedUrl == "/project/show/${project.id}#experiment-and-step-header"
+    }
+
 }

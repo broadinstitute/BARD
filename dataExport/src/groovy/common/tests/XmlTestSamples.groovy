@@ -50,7 +50,7 @@ class XmlTestSamples {
 
 
     static final String EXPERIMENT_MINIMAL = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
+        <experiment experimentId='1' ownerId='1' owner='' status='Draft'  readyForExtraction='Not Ready' confidenceLevel='1'  lastUpdated='1969-12-31T19:00:00.000-05:00'>
             <experimentName>experimentName</experimentName>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
@@ -60,7 +60,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_OPTIONAL_PROPERTIES = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1' lastUpdated='1969-12-31T19:00:00.000-05:00' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+        <experiment experimentId='1' ownerId='1' owner='' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1' lastUpdated='1969-12-31T19:00:00.000-05:00' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
             <experimentName>experimentName</experimentName>
             <description>description</description>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
@@ -71,7 +71,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_ONE_EXT_REF = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
+        <experiment experimentId='1' ownerId='1' owner='' status='Draft' readyForExtraction='Not Ready' confidenceLevel='1' lastUpdated='1969-12-31T19:00:00.000-05:00'>
             <experimentName>experimentName</experimentName>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
@@ -82,7 +82,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_TWO_EXT_REF = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
+        <experiment experimentId='1' ownerId='1' owner='' status='Draft' readyForExtraction='Not Ready' confidenceLevel='1' lastUpdated='1969-12-31T19:00:00.000-05:00'>
             <experimentName>experimentName</experimentName>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
@@ -94,7 +94,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_ONE_CONTEXT = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
+        <experiment experimentId='1' ownerId='1' owner='' status='Draft' readyForExtraction='Not Ready' confidenceLevel='1' lastUpdated='1969-12-31T19:00:00.000-05:00'>
             <experimentName>experimentName</experimentName>
             <contexts>
                 <context id='1' displayOrder='0'>
@@ -109,7 +109,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_TWO_CONTEXT = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
+        <experiment experimentId='1' ownerId='1' owner='' status='Draft' readyForExtraction='Not Ready' confidenceLevel='1' lastUpdated='1969-12-31T19:00:00.000-05:00'>
             <experimentName>experimentName</experimentName>
             <contexts>
                 <context id='1' displayOrder='0'>
@@ -127,16 +127,20 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_ONE_CONTEXT_ONE_EXPERIMENT_MEASURE = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
+        <experiment experimentId='1' ownerId='1' owner='' status='Draft' readyForExtraction='Not Ready' confidenceLevel='1' lastUpdated='1969-12-31T19:00:00.000-05:00'>
             <experimentName>experimentName</experimentName>
             <contexts>
                 <context id='1' displayOrder='0'>
                   <contextName />
                 </context>
             </contexts>
-            <experimentMeasures>
-                <experimentMeasure experimentMeasureId='1' measureRef='1'/>
-            </experimentMeasures>
+             <experimentMeasures>
+                <experimentMeasure experimentMeasureId='1' priorityElement='false'>
+                  <resultTypeRef label='label1'>
+                    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+                  </resultTypeRef>
+                </experimentMeasure>
+              </experimentMeasures>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
@@ -146,11 +150,15 @@ class XmlTestSamples {
     '''
 
     static final String EXPERIMENT_WITH_ONE_EXPERIMENT_MEASURE = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
+        <experiment experimentId='1' ownerId='1' owner='' status='Draft' readyForExtraction='Not Ready' confidenceLevel='1' lastUpdated='1969-12-31T19:00:00.000-05:00'>
             <experimentName>experimentName</experimentName>
-            <experimentMeasures>
-                <experimentMeasure experimentMeasureId='1' measureRef='1'/>
-            </experimentMeasures>
+          <experimentMeasures>
+            <experimentMeasure experimentMeasureId='1' priorityElement='false'>
+              <resultTypeRef label='label1'>
+                <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+              </resultTypeRef>
+            </experimentMeasure>
+          </experimentMeasures>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
@@ -159,18 +167,26 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_TWO_EXPERIMENT_MEASURE = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
-            <experimentName>experimentName</experimentName>
-            <experimentMeasures>
-                <experimentMeasure experimentMeasureId='1' measureRef='1'/>
-                <experimentMeasure experimentMeasureId='2' measureRef='2'/>
-            </experimentMeasures>
-            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
-            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
-            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
-             <link rel='related' href='null' type='application/json;type=results' />
-            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
-        </experiment>
+    <experiment experimentId='1' ownerId='1' owner='' status='Draft' readyForExtraction='Not Ready' confidenceLevel='1' lastUpdated='1969-12-31T19:00:00.000-05:00'>
+      <experimentName>experimentName</experimentName>
+      <experimentMeasures>
+        <experimentMeasure experimentMeasureId='1' priorityElement='false'>
+          <resultTypeRef label='label1'>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+          </resultTypeRef>
+        </experimentMeasure>
+        <experimentMeasure experimentMeasureId='2' priorityElement='false'>
+          <resultTypeRef label='label2'>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+          </resultTypeRef>
+        </experimentMeasure>
+      </experimentMeasures>
+      <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
+      <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
+      <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+      <link rel='related' href='null' type='application/json;type=results' />
+      <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+    </experiment>
     '''
 
     static final String PROJECTS_NO_PROJECTS_READY = '''
@@ -282,14 +298,14 @@ class XmlTestSamples {
     '''
 
     static final String PROJECT_MINIMAL = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
+        <project projectId='1' ownerId='1' owner='' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
         </project>
     '''
     static final String PROJECT_WITH_DESCRIPTION = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
+        <project projectId='1' ownerId='1' owner='' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <description>description</description>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
@@ -297,7 +313,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_ONE_EXTERNAL_REFERENCE = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
+        <project projectId='1' ownerId='1' owner='' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
@@ -305,7 +321,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_TWO_EXTERNAL_REFERENCES = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
+        <project projectId='1' ownerId='1' owner='' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
@@ -314,7 +330,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_ONE_DOCUMENT = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
+        <project projectId='1' ownerId='1' owner='' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
@@ -322,7 +338,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_TWO_DOCUMENTS = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
+        <project projectId='1' ownerId='1' owner='' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
@@ -331,7 +347,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_WITH_ONE_CONTEXT = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
+        <project projectId='1' ownerId='1' owner='' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <contexts>
                 <context id='1' displayOrder='0'>
@@ -343,7 +359,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_WITH_TWO_CONTEXT = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
+        <project projectId='1' ownerId='1' owner='' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <contexts>
                 <context id='1' displayOrder='0'>
@@ -358,7 +374,7 @@ class XmlTestSamples {
         </project>
     '''
     static final String PROJECT_WITH_ONE_CONTEXT_ONE_EXPERIMENT = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
+        <project projectId='1' ownerId='1' owner='' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <contexts>
                 <context id='1' displayOrder='0'>
@@ -378,7 +394,7 @@ class XmlTestSamples {
     '''
 
     static final String PROJECT_WITH_EXPERIMENT = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
+        <project projectId='1' ownerId='1' owner='' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <projectExperiments>
                 <projectExperiment projectExperimentId='1'>
@@ -392,14 +408,15 @@ class XmlTestSamples {
         </project>
     '''
 
-    static final String PRJECT_WITH_NO_PROJECT_EXPERIMENT = '''<project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-10-21T13:35:12.365-04:00' status='Draft'>
+    static final String PRJECT_WITH_NO_PROJECT_EXPERIMENT = '''
+<project projectId='1' ownerId='1' owner='' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-10-21T13:35:12.365-04:00' status='Draft'>
     <projectName>name</projectName>
   <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
     <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
     </project>
     '''
     static final String PROJECT_WITH_TWO_EXPERIMENTS_ONE_PROJECT_STEP = '''
-        <project projectId='1' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
+        <project projectId='1' ownerId='1' owner='' readyForExtraction='Ready' groupType='Project' lastUpdated='2013-06-17T22:45:13.910-04:00' status='Draft'>
             <projectName>name</projectName>
             <projectExperiments>
                 <projectExperiment projectExperimentId='1'>
@@ -422,7 +439,7 @@ class XmlTestSamples {
     '''
 
     static final String ASSAY_NO_DESIGNER_UNIT = '''
-        <assay assayId='1' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft'  lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <assay assayId='1' ownerId='1' owner='' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft'  lastUpdated='2013-06-17T22:45:13.910-04:00'>
           <assayName>assayName</assayName>
           <link rel='edit' href='null' type='xml' />
           <link rel='self' href='null' type='xml' />
@@ -460,7 +477,7 @@ class XmlTestSamples {
     </externalReference>
     '''
     static final String ASSAY_WITH_DESIGNER_NAME = '''
-        <assay assayId='1' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft'  lastUpdated='2013-06-17T22:45:13.910-04:00'>
+        <assay assayId='1'  ownerId='1' owner='' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft'  lastUpdated='2013-06-17T22:45:13.910-04:00'>
           <assayName>assayName</assayName>
           <designedBy>Broad</designedBy>
           <link rel='edit' href='null' type='xml' />
@@ -468,7 +485,7 @@ class XmlTestSamples {
           <link rel='up' href='null' type='xml' />
         </assay> '''
     static final String ASSAY_WITH_DOCUMENT = '''
-         <assay assayId='1' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft'  lastUpdated='2013-06-17T22:45:13.910-04:00'>
+         <assay assayId='1'  ownerId='1' owner='' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft'  lastUpdated='2013-06-17T22:45:13.910-04:00'>
           <assayName>assayName</assayName>
           <link rel='edit' href='null' type='xml' />
           <link rel='self' href='null' type='xml' />
@@ -593,7 +610,7 @@ class XmlTestSamples {
 
 
     static String ASSAY_FULL_DOC = '''
-<assay assayId='1' readyForExtraction='Ready' assayVersion='assayVersi' assayType='Regular' status='Draft' lastUpdated='2013-10-21T17:54:16.257-04:00'>
+<assay assayId='1' ownerId='1612' owner='' readyForExtraction='Ready' assayVersion='assayVersi' assayType='Regular' status='Draft' lastUpdated='2013-11-12T19:16:57.604-05:00'>
   <assayName>assayName</assayName>
   <assayContexts>
     <assayContext assayContextId='1' displayOrder='0'>
@@ -601,7 +618,7 @@ class XmlTestSamples {
       <assayContextItems>
         <assayContextItem displayOrder='0' attributeType='Fixed' valueDisplay='valueDisplay'>
           <attributeId label='label1'>
-            <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
+            <link rel='related' href='http://localhost:8081/BARD/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
           </attributeId>
         </assayContextItem>
       </assayContextItems>
@@ -612,10 +629,10 @@ class XmlTestSamples {
       <name>name</name>
     </panel>
   </panels>
-  <link rel='edit' href='http://localhost:8080/dataExport/api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
-  <link rel='self' href='http://localhost:8080/dataExport/api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
-  <link rel='up' href='http://localhost:8080/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
-  <link rel='item' href='http://localhost:8080/dataExport/api/assayDocument/1' type='application/vnd.bard.cap+xml;type=assayDoc' />
+  <link rel='edit' href='http://localhost:8081/BARD//api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
+  <link rel='self' href='http://localhost:8081/BARD//api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
+  <link rel='up' href='http://localhost:8081/BARD//api/assays' type='application/vnd.bard.cap+xml;type=assays' />
+  <link rel='item' href='http://localhost:8081/BARD//api/assayDocument/1' type='application/vnd.bard.cap+xml;type=assayDoc' />
 </assay>
      '''
 

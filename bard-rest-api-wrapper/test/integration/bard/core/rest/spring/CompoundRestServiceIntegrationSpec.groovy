@@ -26,17 +26,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
     List<Long> cids = [2722L, 5394L]
 
 
-    void "get the last #label compounds"() {
-        when:
-        CompoundResult compoundResult = compoundRestService.findRecentlyAddedCompounds(numberOfCompounds)
-        then:
-        assert compoundResult.getCompounds().size() == numberOfCompounds
-        where:
 
-        label | numberOfCompounds
-        "10"  | 10
-        "5"   | 5
-    }
 
     void "searchCompoundsByCIDs #label"() {
         when:
@@ -82,24 +72,6 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         assert compoundSummary.testedExptdata.resultData
     }
 
-//    void "test retrieving assays from a compound #label"() {
-//
-//        when: "The get method is called with the given CID: #cid"
-//        List<Assay> allAssaysForThisCompound = this.compoundRestService.getTestedAssays(cid, false)
-//        for (Assay assay : allAssaysForThisCompound) {
-//            assert assay
-//        }
-//        and:
-//        Collection<Assay> activeAssaysForThisCompound = this.compoundRestService.getTestedAssays(cid, true)
-//        for (Assay assay : activeAssaysForThisCompound) {
-//            assert assay
-//        }
-//        then:
-//        assert allAssaysForThisCompound.size() > activeAssaysForThisCompound.size()   // might not hold for all compounds, but it holds for these
-//        where:
-//        label                     | cid
-//        "Find a compound 9660191" | new Long(9660191)
-//    }
 
     void "getTested Assays"() {
         when:
@@ -504,10 +476,10 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         assert foundCompound.isDrug() == isDrug
         assert foundCompound.isProbe() == isProbe
         where:
-        label                 | cid     | isDrug | isProbe
-        "An existing Drug"    | 2722    | true   | false
-        "An existing Probe"   | 9795907 | false  | true
-        "Not a Drug or Probe" | 666     | false  | false
+        label                 | cid      | isDrug | isProbe
+        "An existing Drug"    | 2722     | true   | false
+        "An existing Probe"   | 53377439 | false  | true
+        "Not a Drug or Probe" | 666      | false  | false
     }
     /**
      *
@@ -521,17 +493,9 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         assert foundCompound
         assert foundCompound.cid == cid
         assert foundCompound.isProbe()
-        final List<ProbeAnnotation> probeAnnotations = foundCompound.getProbeAnnotations()
-//        assert !probeAnnotations.isEmpty()
-        final ProbeAnnotation probe = foundCompound.getProbe()
-//        assert probe
-//        assert foundCompound.getProbeCid()
-//        assert foundCompound.getProbeSid()
-
-
         where:
         label               | cid
-        "An existing Probe" | 3236979
+        "An existing Probe" | 53377439
     }
 
     void "getSynonyms #label"() {

@@ -75,13 +75,18 @@ class BardWebInterfaceController {
     }
 
     def previewResults(Long id) {
+
         Experiment experiment = Experiment.get(id)
         if (!experiment.experimentFiles) {
             flash.message = "Experiment does not have result files"
             redirect(action: "show")
             return
         }
-        final TableModel tableModel = experimentService.previewResults(id)
+        int records = 10
+        if(params.records){
+          records = new Integer(params.records)
+        }
+        final TableModel tableModel = experimentService.previewResults(id,records)
         //this should do a full page reload
         render(view: 'showExperimentalResultsPreview',
                 model: [tableModel: tableModel,
@@ -95,7 +100,9 @@ class BardWebInterfaceController {
         final List<bard.core.rest.spring.project.Project> recentlyAddedProjects = queryService.findRecentlyAddedProjects(6)
 
         final List<ExperimentSearch> recentlyAddedExperiments = queryService.findRecentlyAddedExperiments(6)
-        final List<Compound> recentlyAddedProbes = queryService.findRecentlyAddedProbes(6)
+
+        //link to all probes
+        final List<Long> probeProjectIds = queryService.findAllProbeProjects()
         long numberOfExperimentData = queryService.numberOfExperimentData()
         render(view: 'homepage', model:
                 [
@@ -103,7 +110,7 @@ class BardWebInterfaceController {
                         numberOfExperimentData: numberOfExperimentData,
                         recentlyAddedProjects: recentlyAddedProjects,
                         recentlyAddedExperiments: recentlyAddedExperiments,
-                        recentlyAddedProbes: recentlyAddedProbes,
+                        probeProjectIds: probeProjectIds
 
                 ]
         )
@@ -112,6 +119,7 @@ class BardWebInterfaceController {
     def redirectToIndex() {
         redirect(controller: 'bardWebInterface', action: 'index')
     }
+
     @Secured(['isAuthenticated()'])
     def navigationPage() {
         render(view: 'navigationPage', model: {})
@@ -236,7 +244,12 @@ class BardWebInterfaceController {
 
     def retrieveExperimentResultsSummary(Long id, SearchCommand searchCommand) {
         Experiment experiment = Experiment.get(id)
-        render queryService.histogramDataByEID(experiment.ncgcWarehouseId)
+        final Long ncgcWarehouseId = experiment.ncgcWarehouseId
+        if (ncgcWarehouseId) {
+            render queryService.histogramDataByEID(ncgcWarehouseId)
+        } else {
+            render(text: "")
+        }
     }
 
     def probe(String probeId) {
@@ -675,6 +688,8 @@ class BardWebInterfaceController {
                 noFiltersFromPage = true
                 searchCommand.filters << new SearchFilter(filterName: 'plot_axis', filterValue: 'Normalize Y-Axis')
                 searchCommand.filters << new SearchFilter(filterName: 'single-point_measurement', filterValue: 'Hide single-point data')
+                searchCommand.filters << new SearchFilter(filterName: 'activity_outcome', filterValue: 'Active')
+                searchCommand.filters << new SearchFilter(filterName: 'activity_outcome', filterValue: 'Inactive')
             }
 
             final List<FilterTypes> filters = []
@@ -688,8 +703,20 @@ class BardWebInterfaceController {
             if (singlePointResultData) {
                 filters.add(FilterTypes.SINGLE_POINT_RESULT)
             }
-
-            ActivityOutcome activityOutcome = ActivityOutcome.ACTIVE
+            List<String> activeCompoundSearchFilters = searchCommand.filters.findAll { SearchFilter searchFilter -> return searchFilter.filterName == 'activity_outcome' }*.filterValue
+            ActivityOutcome activityOutcome
+            if (activeCompoundSearchFilters.containsAll(['Active', 'Inactive'])) {
+                filters.addAll([FilterTypes.ACTIVE, FilterTypes.INACTIVE])
+                activityOutcome = ActivityOutcome.ALL
+            } else if (activeCompoundSearchFilters.contains('Active')) {
+                activityOutcome = ActivityOutcome.ACTIVE
+                filters.add(FilterTypes.ACTIVE)
+            } else if (activeCompoundSearchFilters.contains('Inactive')) {
+                activityOutcome = ActivityOutcome.INACTIVE
+                filters.add(FilterTypes.INACTIVE)
+            } else {
+                activityOutcome = ActivityOutcome.UNSPECIFIED
+            }
 
             //Create the table-model
             GroupByTypes resourceType = params.groupByType ? params.groupByType as GroupByTypes : GroupByTypes.ASSAY
@@ -718,6 +745,7 @@ class BardWebInterfaceController {
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
             List facetValues = [new Value(id: 'plot_axis', children: [new IntValue(id: 'Normalize Y-Axis', value: -1)])]//disable facet count
             facetValues << new Value(id: 'single-point_measurement', children: [new IntValue(id: 'Hide single-point data', value: -1)])//disable facet count
+            facetValues << new Value(id: 'activity_outcome', children: [new IntValue(id: 'Active', value: -1), new IntValue(id: 'Inactive', value: -1)])//disable facet count
             //Add all the result-type facets
             facetValues.addAll(tableModel?.additionalProperties?.facets ?: [])
 
@@ -728,6 +756,7 @@ class BardWebInterfaceController {
                             appliedFilters: getAppliedFilters(searchFilters, facetValues),
                             sidebarTitle: 'Options'])
         }
+
         catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request
             String message = "Error building Compound Bio Activity Summary TableModel for CID ${id}"
             handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)

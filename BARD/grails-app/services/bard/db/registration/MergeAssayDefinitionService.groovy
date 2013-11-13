@@ -84,7 +84,7 @@ class MergeAssayDefinitionService {
     static List<Long> convertStringToIdList(final String idsAsString) {
         final List<Long> ids = []
 
-        final List<String> idsAsList = idsAsString.trim().split("\\W+") as List<String>
+        final List<String> idsAsList = idsAsString?.trim()?.split("\\W+") as List<String>
 
         idsAsList.each {
             ids << Long.valueOf(it.trim())
@@ -220,7 +220,7 @@ class MergeAssayDefinitionService {
         println("end handleExperiments")
         sessionFactory.currentSession.flush()
         // def session, Assay sourceAssay, Assay targetAssay, List<Experiment> sourceExperiments, String modifiedBy
-        mergeAssayService.handleMeasuresForMovedExperiments(sessionFactory.currentSession, sourceAssay, targetAssay, experiments, modifiedBy)
+        mergeAssayService.handleMeasures(targetAssay, experiments.collect { it.assay } as Set)
         sessionFactory.currentSession.flush()
 
         return Assay.findById(targetAssay.id)
@@ -233,7 +233,7 @@ class MergeAssayDefinitionService {
         String modifiedBy = springSecurityService.principal?.username
 
         sessionFactory.currentSession.flush()
-        mergeAssayService.handleMeasuresForMovedExperiments(sessionFactory.currentSession, targetAssay, experiments, modifiedBy)
+        mergeAssayService.handleMeasures(targetAssay, experiments.collect { it.assay } as Set)
         sessionFactory.currentSession.flush()
 
         mergeAssayService.moveExperiments(experiments, targetAssay, modifiedBy)
@@ -263,6 +263,7 @@ class MergeAssayDefinitionService {
         return Assay.findById(targetAssay.id)
     }
 }
+
 enum IdType {
     ADID('Assay Definition ID'),
     AID('PubChem AID'),

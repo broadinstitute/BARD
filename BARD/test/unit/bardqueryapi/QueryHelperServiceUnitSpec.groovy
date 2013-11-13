@@ -60,9 +60,9 @@ class QueryHelperServiceUnitSpec extends Specification {
 
         where:
         label                                                  | normalizeYAxis              | resultData                                                                                                       | expectedMap
-        "Has Priority, ResponseClass=CR_SER"                   | NormalizeAxis.Y_DENORM_AXIS | new ResultData(responseClass: "CR_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)])    | [yNormMin: null, yNormMax: null, hasPlot: true, hasChildElements: false]
-        "Has Priority, ResponseClass=CR_SER, Normalize Y-Axis" | NormalizeAxis.Y_NORM_AXIS   | new ResultData(responseClass: "CR_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)])    | [hasPlot: true, hasChildElements: false]
-        "Has Priority, ResponseClass=CR_NO_SER"                | NormalizeAxis.Y_DENORM_AXIS | new ResultData(responseClass: "CR_NO_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)]) | [yNormMin: null, yNormMax: null, hasPlot: false, hasChildElements: false]
+        "Has Priority, ResponseClass=CR_SER"                   | NormalizeAxis.Y_DENORM_AXIS | new ResultData(responseClass: "CR_SER", priorityElements: [new PriorityElement(displayName: display)])    | [yNormMin: null, yNormMax: null, hasPlot: true, hasChildElements: false]
+        "Has Priority, ResponseClass=CR_SER, Normalize Y-Axis" | NormalizeAxis.Y_NORM_AXIS   | new ResultData(responseClass: "CR_SER", priorityElements: [new PriorityElement(displayName: display)])    | [hasPlot: true, hasChildElements: false]
+        "Has Priority, ResponseClass=CR_NO_SER"                | NormalizeAxis.Y_DENORM_AXIS | new ResultData(responseClass: "CR_NO_SER", priorityElements: [new PriorityElement(displayName: display)]) | [yNormMin: null, yNormMax: null, hasPlot: false, hasChildElements: false]
         "No Priority, ResponseClass=CR_NO_SER"                 | NormalizeAxis.Y_DENORM_AXIS | new ResultData(responseClass: "CR_NO_SER", priorityElements: [])                                                 | [hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
 
     }
@@ -84,8 +84,8 @@ class QueryHelperServiceUnitSpec extends Specification {
 
         where:
         label                      | normalizeYAxis              | priorityElement                                                                                               | expectedMap
-        "with Normalized Y Axis"   | NormalizeAxis.Y_NORM_AXIS   | new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [hasPlot: true, hasChildElements: true, yNormMin: null, yNormMax: null]
-        "with DeNormalized Y Axis" | NormalizeAxis.Y_DENORM_AXIS | new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [hasPlot: true, hasChildElements: true, yNormMin: null, yNormMax: null]
+        "with Normalized Y Axis"   | NormalizeAxis.Y_NORM_AXIS   | new PriorityElement(displayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [hasPlot: true, hasChildElements: true, yNormMin: null, yNormMax: null]
+        "with DeNormalized Y Axis" | NormalizeAxis.Y_DENORM_AXIS | new PriorityElement(displayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [hasPlot: true, hasChildElements: true, yNormMin: null, yNormMax: null]
     }
 
     void "matchMLProbe #label"() {

@@ -29,7 +29,7 @@ class MolSpreadSheetDataBuilderDirectorUnitSpec extends Specification {
         MolecularSpreadSheetService molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
         molSpreadSheetDataBuilder.molecularSpreadSheetService = molecularSpreadSheetService
         when:
-        Map map = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, cids, adids, mapExperimentIdsToCapAssayIds)
+        Map map = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, cids, adids, mapExperimentIdsToCapAssayIds,true)
         then:
         1 * molecularSpreadSheetService.projectIdsToExperiments(pids,mapExperimentIdsToCapAssayIds) >> {new RuntimeException()}
         assert map
@@ -55,7 +55,7 @@ class MolSpreadSheetDataBuilderDirectorUnitSpec extends Specification {
         MolecularSpreadSheetService molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
         molSpreadSheetDataBuilder.molecularSpreadSheetService = molecularSpreadSheetService
         when:
-        Map map = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids,cids, mapExperimentIdsToCapAssayIds)
+        Map map = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids,cids, mapExperimentIdsToCapAssayIds, true)
         then:
         1 * molecularSpreadSheetService.assayIdsToExperiments(experimentList,adids,mapExperimentIdsToCapAssayIds) >> {new RuntimeException()}
         assert map
@@ -79,9 +79,9 @@ class MolSpreadSheetDataBuilderDirectorUnitSpec extends Specification {
         MolecularSpreadSheetService molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
         molSpreadSheetDataBuilder.molecularSpreadSheetService = molecularSpreadSheetService
         when:
-        Map map = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids, cids, mapExperimentIdsToCapAssayIds)
+        Map map = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids, cids, mapExperimentIdsToCapAssayIds, true)
         then:
-        1 * molecularSpreadSheetService.compoundIdsToExperiments(cids,mapExperimentIdsToCapAssayIds) >> {new RuntimeException()}
+        1 * molecularSpreadSheetService.compoundIdsToExperiments(cids,mapExperimentIdsToCapAssayIds, true) >> {new RuntimeException()}
         assert map
         assert !map.experimentList
         assert !map.molSpreadsheetDerivedMethod

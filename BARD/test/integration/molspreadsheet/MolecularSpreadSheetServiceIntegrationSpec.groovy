@@ -29,13 +29,15 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     ShoppingCartService shoppingCartService
     RingManagerService ringManagerService
     @Shared
-    List<Long> TEST_EIDS = [625, 3]
+    List<Long> TEST_EIDS = [450, 571]
     @Shared
-    List<Long> TEST_ADIDS = [25, 30]
+    List<Long> TEST_ADIDS = [143, 154]
     @Shared
-    Long TEST_PID = 2
+    Long TEST_PID = 25
     @Shared
     Long TEST_CID = 2382353
+    @Shared
+    Long EXPERIMENT_WITH_ACTIVES = 555
 
 
     void "test activitiesByEIDs"() {
@@ -88,7 +90,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
     void "test retrieveExperimentalData degenerate case"() {
         when: "we have a molecularSpreadSheetService"
-        MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalDataFromIds([], [], [])
+        MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalDataFromIds([], [], [], false)
 
         then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
         assertNotNull molSpreadSheetData
@@ -228,7 +230,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert !compound1.hasErrors()
         MolSpreadSheetData molSpreadSheetData = null
         if (queryCartService.weHaveEnoughDataToMakeASpreadsheet()) {
-            molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalDataFromIds([compound.externalId], [assay1.externalId, assay.externalId], [])
+            molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalDataFromIds([compound.externalId], [assay1.externalId, assay.externalId], [], false)
         }
         assertNotNull molSpreadSheetData
 
@@ -428,7 +430,20 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
         cartCompoundList.add(new CartCompound("CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", "Rottlerin", 5281847, 0, 0))
         //List<Experiment> originalExperimentList =  []
-        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.compoundIdsToExperiments(cartCompoundList*.externalId, mapExperimentIdsToCapAssayIds)
+        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.compoundIdsToExperiments(cartCompoundList*.externalId, mapExperimentIdsToCapAssayIds, true)
+
+        then: "we should be able to generate a list of spreadsheet activity elements"
+        assertNotNull finalExperimentList
+    }
+
+
+    void "test cartCompoundsToExperiments asking for inactives too"() {
+        when: "we have a molecularSpreadSheetService"
+        List<CartCompound> cartCompoundList = []
+        Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
+        cartCompoundList.add(new CartCompound("CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", "Rottlerin", 5281847, 0, 0))
+        //List<Experiment> originalExperimentList =  []
+        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.compoundIdsToExperiments(cartCompoundList*.externalId, mapExperimentIdsToCapAssayIds, false)
 
         then: "we should be able to generate a list of spreadsheet activity elements"
         assertNotNull finalExperimentList
@@ -440,7 +455,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         List<Long> cartCompoundList = []
         Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
-        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.compoundIdsToExperiments(cartCompoundList, mapExperimentIdsToCapAssayIds)
+        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.compoundIdsToExperiments(cartCompoundList, mapExperimentIdsToCapAssayIds, true)
 
         then: "we should be able to generate a list of spreadsheet activity elements"
         assert finalExperimentList.size() == 0
@@ -533,8 +548,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert activity.sid
         assert activity.resultData
         where:
-        label                                    | cids    | experimentId
-        "An existing experiment with activities" | [3793L] | 1
+        label                                    | cids        | experimentId
+        "An existing experiment with activities" | [11786594L] | EXPERIMENT_WITH_ACTIVES
 
     }
 

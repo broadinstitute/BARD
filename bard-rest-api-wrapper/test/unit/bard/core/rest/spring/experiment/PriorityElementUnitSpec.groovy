@@ -198,7 +198,7 @@ class PriorityElementUnitSpec extends Specification {
 
             assert miscDataList
             for(ActivityData miscData in miscDataList){
-                assert miscData.pubChemDisplayName
+                assert miscData.displayName
                 assert miscData.value
             }
 
@@ -211,7 +211,7 @@ class PriorityElementUnitSpec extends Specification {
             assert childElements
             assert childElements.size() == 4
             for (ActivityData activityData : childElements) {
-                assert activityData.pubChemDisplayName
+                assert activityData.displayName
                 assert activityData.dictElemId
                 assert activityData.testConcentration
                 assert activityData.testConcentrationUnit

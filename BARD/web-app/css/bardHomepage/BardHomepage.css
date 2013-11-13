@@ -91,19 +91,23 @@ li{line-height:inherit;}
 	overflow:hidden;
 	background:url('/BARD/images/bardHomepage/logo.png') no-repeat;
 }
+
 .logo a{
 	display:block;
 	height:100%;
 }
+
 .social-networks{
 	float:right;
 	margin:-6px -12px 0 0;
 	list-style:none;
 }
+
 .social-networks li{
 	float:left;
 	margin:0 0 0 4px;
 }
+
 .social-networks a{
 	display:block;
 	width:16px;
@@ -118,6 +122,7 @@ li{line-height:inherit;}
 	right:0;
 	bottom:0;
 }
+
 .nav-panel .nav{
 	float:none;
 	display:inline-block;
@@ -133,6 +138,7 @@ li{line-height:inherit;}
 	text-transform:uppercase;
 	color:#100d0d;
 }
+
 .nav-panel .nav > li:hover > a,
 .nav-panel .nav > .active > a,
 .nav-panel .nav > .active:hover > a,
@@ -145,6 +151,7 @@ li{line-height:inherit;}
 	box-shadow:10px 10px 5px -8px rgba(6, 42, 59, 0.1) inset, -10px 0 5px -8px rgba(6, 42, 59, 0.1) inset, 4px 1px 2px -4px rgba(0, 0, 0, 0.2), -4px 1px 2px -4px rgba(0, 0, 0, 0.2);
 	background:#fff;
 }
+
 .nav-panel .nav > li > .dropdown-toggle:after{
 	content:'';
 	display:inline-block;
@@ -154,18 +161,21 @@ li{line-height:inherit;}
 	margin:-1px 0 0 10px;
 	background:url('../../images/bardHomepage/sprite.png') no-repeat -46px -20px;
 }
+
 .nav-panel .nav > li:hover > .dropdown-toggle:after,
 .nav-panel .nav li.dropdown.open > .dropdown-toggle:after,
 .nav-panel .nav li.dropdown.active > .dropdown-toggle:after{
 	content:' ';
 	background-position:-56px -20px;
 }
+
 .nav-panel .nav > li.open > .dropdown-toggle{
 	position:relative;
 	z-index:1001;
 	margin-bottom:-8px;
 	padding-bottom:22px;
 }
+
 .nav-panel .nav > li.open > .dropdown-toggle:before{
 	content:'';
 	position:absolute;
@@ -175,6 +185,7 @@ li{line-height:inherit;}
 	height:18px;
 	background:url('../../images/bardHomepage/sprite.png') no-repeat -320px 0;
 }
+
 .nav-panel .nav > li > .dropdown-menu{
 	min-width:197px;
 	border:0;
@@ -188,6 +199,7 @@ li{line-height:inherit;}
 	-webkit-box-shadow:0 0 6px rgba(6, 42, 59, 0.2) inset, 0 4px 2px rgba(0, 0, 0, 0.2);
 	box-shadow:0 0 6px rgba(6, 42, 59, 0.2) inset, 0 4px 2px rgba(0, 0, 0, 0.2);
 }
+
 .nav-panel .nav > li > .dropdown-menu:before,
 .nav-panel .nav > li > .dropdown-menu:after{display:none;}
 .dropdown-menu > li{
@@ -332,95 +344,6 @@ li{line-height:inherit;}
 	padding:3px 0 0;
 	font-size:16px;
 	line-height:24px;
-}
-.search-block{
-	max-width:660px;
-	margin:0 auto;
-	padding:0 0 11px;
-}
-.search-form{
-	margin:0 0 26px;
-	padding:8px 9px 10px;
-	border:1px solid rgba(244, 244, 244, 0.2);
-	background:rgba(228, 228, 228, 0.2);
-}
-.search-field{
-	display:table;
-	width:100%;
-}
-.search-field .text-field,
-.search-field .btn-field{
-	display:table-cell;
-	vertical-align:top;
-}
-.search-form input[type="text"],
-.search-form input[type="search"]{
-	-moz-box-sizing:border-box;
-	-webkit-box-sizing:border-box;
-	box-sizing:border-box;
-	width:100%;
-	height:39px;
-	margin:0;
-	padding:9px 11px 7px;
-	border:3px solid #fff;
-	-moz-border-radius:0;
-	-webkit-border-radius:0;
-	border-radius:0;
-	-moz-box-shadow:none;
-	-webkit-box-shadow:none;
-	box-shadow:none;
-	font-size:14px;
-	line-height:17px;
-	background:#e4e4e4;
-}
-.search-field .btn-field{
-	width:1px;
-	white-space:nowrap;
-	padding:0 0 0 2px;
-}
-.search-form .btn{line-height:39px;}
-.search-block .links-holder{
-	padding:0 21px 0 10px;
-	font-weight:bold;
-	font-size:15px;
-	line-height:20px;
-	letter-spacing:1px;
-	overflow:hidden;
-}
-.search-block .links-holder a{
-	position:relative;
-	float:left;
-	padding:0 15px 0 0;
-}
-.search-block .links-holder a:first-child{float:right;}
-.search-block .links-holder a:after{
-	content:'';
-	position:absolute;
-	top:50%;
-	right:0;
-	width:6px;
-	height:8px;
-	margin:-2px 0 0;
-	background:url('../../images/bardHomepage/sprite.png') no-repeat -38px 0;
-}
-.search-block .links-holder a:hover:after{
-	content:' ';
-	background-position:-38px -12px;
-}
-.search-block .links-holder .download-link{padding-left:39px;}
-.search-block .links-holder .download-link:before{
-	content:'';
-	position:absolute;
-	top:50%;
-	left:0;
-	width:25px;
-	height:18px;
-	margin:-9px 0 0;
-	background:url('../../images/bardHomepage/sprite.png') no-repeat -46px 0;
-}
-.search-block .links-holder .download-link:hover:before{
-	content:' ';
-	background-position:-74px 0;
 }
 .news-panel{
 	position:relative;
@@ -704,37 +627,6 @@ li{line-height:inherit;}
 	color:#38d9c1;
 }
 .items-gallery p{margin:0 0 5px;}
-#footer{
-	padding:0 0 3px;
-	background:#2d2f32;
-}
-.footer-columns{
-	padding:26px 0 33px;
-	color:#fff;
-	font-size:14px;
-	line-height:18px;
-}
-.footer-columns a{color:#fff;}
-.footer-columns a:hover{color:#38d9c1;}
-.footer-columns h3{
-	margin:0 0 13px;
-	font-weight:normal;
-	font-size:18px;
-	line-height:22px;
-	color:#0093d0;
-}
-.footer-columns ul{
-	margin:0 0 20px;
-	list-style:none;
-	font-size:12px;
-	line-height:16px;
-}
-.footer-columns ul li{padding:0 0 8px;}
-.footer-columns .by{
-	padding:13px 0 0;
-	text-align:right;
-	line-height:22px;
-}
 .logo-by{
 	display:inline-block;
 	vertical-align:top;
@@ -747,29 +639,9 @@ li{line-height:inherit;}
 	background:url('../../images/bardHomepage/logo-by.png') no-repeat;
 }
 .logo-by a{
-	display:block;
-	height:100%;
+    display:block;
+    height:100%;
 }
-.footer-info{
-	padding:29px 0 33px;
-	font-size:14px;
-	line-height:20px;
-	text-align:center;
-	color:#fff;
-	background:#21495c;
-}
-.footer-info ul{
-	margin:0;
-	list-style:none;
-}
-.footer-info ul li{display:inline;}
-.footer-info ul li:before{
-	content:'·';
-	margin:0 3px 0 0;
-}
-.footer-info ul li:first-child:before{display:none;}
-.footer-info a{color:#fff;}
-.footer-info a:hover{color:#38d9c1;}
 /* media queries */
 @media only screen and (max-width: 1240px){
 	.items-gallery .btn-prev,
@@ -956,6 +828,7 @@ li{line-height:inherit;}
 		float:left;
 		width:33.3%;
 	}
+
 	.footer-columns .by{
 		float:none;
 		clear:both;
@@ -963,6 +836,7 @@ li{line-height:inherit;}
 		text-align:left;
 		overflow:hidden;
 	}
+
 	.footer-columns .logo-by{
 		float:right;
 		margin:0 0 0 20px;
@@ -980,6 +854,7 @@ li{line-height:inherit;}
 		letter-spacing:normal;
 		text-shadow:none;
 	}
+
 	.nav-panel .nav > li.open > .dropdown-toggle{
 		margin-bottom:-8px;
 		padding-bottom:19px;
@@ -1079,6 +954,7 @@ li{line-height:inherit;}
 		margin-bottom:-8px;
 		padding-bottom:13px;
 	}
+
 	.nav-panel .nav > li > .dropdown-menu{
 		padding:10px 0;
 		min-width:150px;
@@ -1110,3 +986,5 @@ li{line-height:inherit;}
 		width:auto;
 	}
 }
+
+
