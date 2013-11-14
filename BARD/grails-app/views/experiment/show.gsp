@@ -244,9 +244,11 @@
 
     <div class="row-fluid">
         %{--Add the linked measures to the experiment annotations section IN ADDITION to their card in the Experimental Variables section.--}%
-        %{--The linked measures is always the first contexts in the experimental variable group.--}%
+        <%
+            List<AbstractContext> assayExperimentMeasuresContexts = instance.assay.groupExperimentalVariables().value.findAll { AbstractContext context -> context.hasProperty('assayContextExperimentMeasures') && context.assayContextExperimentMeasures }
+        %>
         <g:render template="../context/show"
-                  model="[contextOwner: instance, additionalContexts: instance.assay.groupExperimentalVariables().value.first(), uneditable: true]"/>
+                  model="[contextOwner: instance, additionalContexts: assayExperimentMeasuresContexts, uneditable: true]"/>
     </div>
     <br/>
 
