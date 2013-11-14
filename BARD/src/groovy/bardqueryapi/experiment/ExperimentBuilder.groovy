@@ -4,16 +4,20 @@ import bard.core.adapter.CompoundAdapter
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.experiment.*
+import bard.db.dictionary.OntologyDataAccessService
 import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentMeasure
 import bard.db.experiment.JsonSubstanceResults
 import bardqueryapi.*
 import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
+import bardqueryapi.compoundBioActivitySummary.PreviewExperimentResultsSummaryBuilder
 import bardqueryapi.compoundBioActivitySummary.PreviewResultsSummaryBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
 class ExperimentBuilder {
     GrailsApplication grailsApplication
     CompoundRestService compoundRestService
+    OntologyDataAccessService ontologyDataAccessService
 
     List<WebQueryValue> buildHeader(final boolean hasPlot, final boolean hasChildElements) {
         List<WebQueryValue> columnHeaders = []
@@ -27,6 +31,91 @@ class ExperimentBuilder {
             columnHeaders.add(new StringValue(value: "Child Elements"))
         }
         return columnHeaders
+    }
+
+    /**
+     *
+     * Builds the tableModel's row based on the result set and types.
+     *
+     * @param activity
+     * @param normalizeYAxis
+     * @param yNormMin
+     * @param yNormMax
+     * @param compoundAdapterMap
+     * @return
+     */
+    List<WebQueryValue> addRowPreview(final JsonSubstanceResults substanceResults,
+                                      final Double yNormMin,
+                                      final Double yNormMax, CompoundAdapter compoundAdapter,Set<String> priorityElements ) {
+
+        //A row is a list of table cells, each implements WebQueryValue.
+        List<WebQueryValue> rowData = []
+
+        //SID
+        Long sid = substanceResults.sid
+        LinkValue sidValue = new LinkValue(value: "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${sid.toString()}",
+                text: sid.toString(),
+                imgFile: 'pubchem.png',
+                imgAlt: 'PubChem')
+
+        rowData.add(sidValue)
+        //CID - Look up CID and Structure image
+        if (compoundAdapter) {
+            Long cid = compoundAdapter?.id
+            def grailsApplicationTagLib = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+            String linkValue = grailsApplicationTagLib.createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: cid.toString()])
+            LinkValue cidValue = new LinkValue(value: linkValue, text: cid.toString())
+            rowData.add(cidValue)
+
+            StructureValue structureValue =
+                new StructureValue(
+                        cid: cid,
+                        sid: sid,
+                        smiles: compoundAdapter?.compound?.smiles,
+                        name: compoundAdapter?.name,
+                        numActive: compoundAdapter?.numberOfActiveAssays,
+                        numAssays: compoundAdapter?.numberOfAssays
+                )
+            rowData.add(structureValue)
+        } else {
+            rowData.add(new StringValue(value: 'Not Available'))
+            rowData.add(new StringValue(value: 'Not Available'))
+        }
+        PreviewExperimentResultsSummaryBuilder previewResultsSummaryBuilder = new PreviewExperimentResultsSummaryBuilder()
+        previewResultsSummaryBuilder.ontologyDataAccessService = this.ontologyDataAccessService
+
+        Map resultsMap = [:]
+        resultsMap.priorityElements = priorityElements
+        resultsMap.priorityElementValues = []
+        resultsMap.yNormMin = yNormMin
+        resultsMap.yNormMax = yNormMax
+        resultsMap.outcome = null
+        resultsMap.experimentalValues = []
+        resultsMap.childElements = []
+
+       previewResultsSummaryBuilder.convertExperimentResultsToTableModelCellsAndRows(resultsMap,substanceResults.rootElem)
+
+        StringValue outcome = resultsMap.outcome
+        rowData.add(outcome)
+
+        List<WebQueryValue> experimentValues = previewResultsSummaryBuilder.sortWebQueryValues(resultsMap.experimentalValues)
+        //if the result type is a concentration series, we want to add the normalization values to each curve.
+        experimentValues.findAll({ WebQueryValue experimentResult ->
+            experimentResult instanceof ConcentrationResponseSeriesValue
+        }).each { ConcentrationResponseSeriesValue concResSer ->
+            concResSer.yNormMax = yNormMax
+            concResSer.yNormMin = yNormMin
+        }
+        if (experimentValues) {
+            ListValue listValue = new ListValue(value: experimentValues)
+            rowData.add(listValue)
+        }
+
+        //Add all rootElements from the JsonResponse
+        List<StringValue> rootElements = resultsMap.childElements
+        rowData.add(new ListValue(value: rootElements))
+
+        return rowData;
     }
     /**
      *
@@ -257,6 +346,52 @@ class ExperimentBuilder {
     }
 
     public TableModel buildModelForPreview(Experiment experiment, List<JsonSubstanceResults> jsonSubstanceResultList) {
+        final TableModel tableModel = new TableModel()
+        int numberOfActives = 0 //loop through and extract from the the list
+        tableModel.additionalProperties.put("experimentName", experiment?.experimentName)
+        tableModel.additionalProperties.put("bardExptId", experiment?.ncgcWarehouseId)
+        tableModel.additionalProperties.put("capExptId", experiment.id)
+        tableModel.additionalProperties.put("bardAssayId", experiment.assay.ncgcWarehouseId)
+        tableModel.additionalProperties.put("capAssayId", experiment.assay.id)
+        tableModel.additionalProperties.put("actives", numberOfActives)
+        tableModel.additionalProperties.put("confidenceLevel", experiment?.confidenceLevel)
+
+
+
+        final boolean hasPlot = true //TODO: refactor to be dynamic. Tell from the number of points returned by after processing
+        final boolean hasChildElements = false
+        Double yNormMin = null
+        Double yNormMax = null
+        tableModel.setColumnHeaders(buildHeader(hasPlot, hasChildElements))
+
+
+        Set<String> priorityElements = [] as Set
+
+        for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
+            if (experimentMeasure.priorityElement) {
+                priorityElements.add(experimentMeasure.displayLabel)
+            }
+        }
+        for (JsonSubstanceResults jsonSubstanceResults : jsonSubstanceResultList) {
+            Long sid = jsonSubstanceResults.getSid()
+            CompoundAdapter compoundAdapter = null
+            try {
+                final Compound compound = this.compoundRestService.getCompoundBySid(sid)
+                compoundAdapter = new CompoundAdapter(compound)
+            } catch (Exception ee) {
+                log.error(ee)
+            }
+            final List<WebQueryValue> rowData = addRowPreview(jsonSubstanceResults, yNormMin, yNormMax, compoundAdapter,priorityElements)
+            tableModel.addRowData(rowData)
+        }
+        tableModel.additionalProperties.put("total", tableModel.rowCount)
+
+
+        return tableModel
+
+    }
+
+    public TableModel buildModelForPreviewOld(Experiment experiment, List<JsonSubstanceResults> jsonSubstanceResultList) {
         final TableModel tableModel = new TableModel()
         int numberOfActives = 0 //loop through and extract from the the list
         tableModel.additionalProperties.put("experimentName", experiment?.experimentName)
