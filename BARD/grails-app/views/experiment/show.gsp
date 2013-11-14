@@ -1,4 +1,4 @@
-<%@ page import="bard.db.enums.ExperimentStatus; bard.db.enums.ContextType; bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
+<%@ page import="bard.db.dictionary.Element; bard.db.model.AbstractContextItem; bard.db.model.AbstractContext; bard.db.enums.ExperimentStatus; bard.db.enums.ContextType; bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -264,13 +264,36 @@
 
 <section id="referenced-contexts-header">
     <h3 class="sect">Experimental Variables <g:link target="dictionary" controller="element"
-                                                       action="showTopLevelHierarchyHelp"><i
+                                                    action="showTopLevelHierarchyHelp"><i
                 class="icon-question-sign"></i></g:link></h3>
 
     <div class="row-fluid">
+        <%
+            //This relates to assay's experimental-variables that are displayed in the experiment show page.
+            //If the attribute/value pair is provided by the experiment annotation, at the experiment level, we don't want to display its (duplicated) counterpart at experimental varibales section as well.
+            //We are detecting the duplicates by comparing context-item attributes between the two contexts (experiment annotation and assay's experimental-variables contexts).
+            //If two contexts have the same set of attribute elements (ignoring attribute values) we will remove that context from the assay's experimental variables contexts set.
+            //See: https://www.pivotaltracker.com/story/show/60411318
+            //
+            //Get all assay's experimental variables contexts.
+            AbstractContextOwner.ContextGroup assayExperimentalVariablesContextGroup = instance.assay.groupExperimentalVariables()
+            //Experiment's list of annotations attributes.
+            List<Element> experimentAnnotationsAttributeList = instance.contexts*.contextItems.attributeElement.flatten()
+
+            // Remove all the experimental-variables context cards that have ALL their context-items already populated in experiment's annotations.
+            assayExperimentalVariablesContextGroup.value.removeAll { AbstractContext context ->
+                experimentAnnotationsAttributeList.containsAll(context.contextItems*.attributeElement)
+            }
+
+//            //Find and kepp only the contexts that have at least one context-item attribute not being defined in the experiment annotations.
+//            List<AbstractContext> currentCard = assayExperimentalVariablesContextGroup.value.findAll { AbstractContext context ->
+//                context.contextItems.find { AbstractContextItem contextItem ->
+//                    return !experimentAnnotationsAttributeList.contains(contextItem.attributeElement) } }
+//            assayExperimentalVariablesContextGroup.value = currentCard
+        %>
         <g:render template="/context/currentCard"
                   model="[contextOwner: instance.assay,
-                          currentCard: instance.assay.groupExperimentalVariables(),
+                          currentCard: assayExperimentalVariablesContextGroup,
                           subTemplate: 'show',
                           uneditable: true,
                           showCheckBoxes: false,
