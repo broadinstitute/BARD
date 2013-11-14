@@ -115,6 +115,7 @@
     box-sizing: border-box;
     -webkit-border-radius: 0;
     color: #fff;
+    margin: 5px;
 }
 
 .my-bard-button:hover {

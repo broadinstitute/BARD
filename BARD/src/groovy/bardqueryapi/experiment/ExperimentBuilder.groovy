@@ -4,17 +4,20 @@ import bard.core.adapter.CompoundAdapter
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.experiment.*
+import bard.db.dictionary.OntologyDataAccessService
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
 import bard.db.experiment.JsonSubstanceResults
 import bardqueryapi.*
 import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
+import bardqueryapi.compoundBioActivitySummary.PreviewExperimentResultsSummaryBuilder
 import bardqueryapi.compoundBioActivitySummary.PreviewResultsSummaryBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
 class ExperimentBuilder {
     GrailsApplication grailsApplication
     CompoundRestService compoundRestService
+    OntologyDataAccessService ontologyDataAccessService
 
     List<WebQueryValue> buildHeader(final boolean hasDoseCurve) {
 
@@ -81,16 +84,32 @@ class ExperimentBuilder {
             rowData.add(new StringValue(value: 'Not Available'))
             rowData.add(new StringValue(value: 'Not Available'))
         }
-        PreviewResultsSummaryBuilder previewResultsSummaryBuilder = new PreviewResultsSummaryBuilder()
-        Map m = previewResultsSummaryBuilder.convertExperimentResultsToTableModelCellsAndRows(substanceResults.rootElem, priorityElements, yNormMin, yNormMax)
-        StringValue outcome = m.outcome
-        final List<StringValue> summaryResults = m.priorityElements as List
 
+
+        PreviewExperimentResultsSummaryBuilder previewResultsSummaryBuilder = new PreviewExperimentResultsSummaryBuilder()
+        previewResultsSummaryBuilder.ontologyDataAccessService = this.ontologyDataAccessService
+
+        Map resultsMap = [:]
+        resultsMap.priorityElements = priorityElements
+        resultsMap.priorityElementValues = []
+        resultsMap.yNormMin = yNormMin
+        resultsMap.yNormMax = yNormMax
+        resultsMap.outcome = null
+        resultsMap.experimentalValues = []
+        resultsMap.childElements = []
+
+        previewResultsSummaryBuilder.convertExperimentResultsToTableModelCellsAndRows(resultsMap,substanceResults.rootElem)
+
+
+        StringValue outcome = resultsMap.outcome
         rowData.add(outcome)
+
+
+        final List<StringValue> summaryResults = resultsMap.priorityElementValues as List
         rowData.add(new ListValue(value: summaryResults.sort()))
 
-        List<ConcentrationResponseSeriesValue> experimentValues = m.experimentalvalues
 
+        List<WebQueryValue> experimentValues = previewResultsSummaryBuilder.sortWebQueryValues(resultsMap.experimentalValues)
         //if the result type is a concentration series, we want to add the normalization values to each curve.
         experimentValues.findAll({ WebQueryValue experimentResult ->
             experimentResult instanceof ConcentrationResponseSeriesValue
@@ -98,13 +117,15 @@ class ExperimentBuilder {
             concResSer.yNormMax = yNormMax
             concResSer.yNormMin = yNormMin
         }
+
+
         if (experimentValues) {
             ListValue listValue = new ListValue(value: experimentValues)
             rowData.add(listValue)
             hasDosePoints = true
         }
         List<StringValue> supplementalInformation = []
-        final List<WebQueryValue> elements = m.childElements
+        final List<WebQueryValue> elements = resultsMap.childElements
         for (def childElement : elements) {
             if (childElement instanceof StringValue) {
                 supplementalInformation << childElement
@@ -118,7 +139,6 @@ class ExperimentBuilder {
         rowData.add(new ListValue(value: supplementalInformation.sort()))
         return [hasDosePoints: hasDosePoints, rowData: rowData];
     }
-
     /**
      *
      * Builds the tableModel's row based on the result set and types.
@@ -201,10 +221,6 @@ class ExperimentBuilder {
         //Add all childElements of the priorityElements, if any.
         List<WebQueryValue> childElements = []
 
-
-        if (!resultData.isMapped()) {
-            childElements << new StringValue(value: "TIDs not yet mapped to a result hierarchy")
-        }
         for (RootElement rootElement : resultData.rootElements) {
             if (rootElement.toDisplay()) {
                 childElements << new StringValue(value: rootElement.toDisplay())

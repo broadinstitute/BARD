@@ -20,17 +20,13 @@
     }
 </script>
 
-<div class="row-fluid">
-    <g:if test="${flash.message}">
+<g:if test="${flash.message}">
+    <div class="row-fluid">
         <div class="span12" role="status"><p style="color: #3A87AD;">${flash.message}</p></div>
-    </g:if>
-
-    <div class="span2">
-        <g:render template="../bardWebInterface/facets"
-                  model="['facets': facets, 'formName': FacetFormType.AssayFacetForm]"/>
     </div>
-
-    <div class="span10">
+</g:if>
+<div class="row-fluid">
+    <div class="span12">
         <g:if test="${molSpreadSheetData?.getColumnCount() > 0}">
             <g:set var="columnHeaders" value="${molSpreadSheetData?.getColumns()}"/>
             <g:set var="columnWidth" value="${100.0 / ((molSpreadSheetData?.getColumnCount() - 1) as float)}"/>
@@ -72,9 +68,10 @@
                     <th class="molSpreadSheetImg" colspan=3>Molecular structure</th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <td class="molSpreadSheetImg">
-                            <% String retrievedSmiles = """${molSpreadSheetData?.displayValue(rowCnt, 0)."smiles"}""".toString() %>
+                            <% String retrievedSmiles = """${molSpreadSheetData?.displayValue(rowCnt, 0)?."smiles"}""".toString() %>
                             <% String cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
-                            <g:imageCell cid="${cid}" smiles="${retrievedSmiles}"/>
+                            <% String name = """${molSpreadSheetData?.displayValue(rowCnt, 0)?."name"}""".toString() %>
+                            <g:imageCell cid="${cid}" smiles="${retrievedSmiles}" name="${name}"/>
                         </td>
                     </g:each>
                 </tr>
@@ -183,8 +180,9 @@
         </g:else>
 
     </div>
-    <% String mycid="${params.cid}" %>
-    <div class="span10 pull-right">
+</div>
+<div class="row-fluid">
+    <div class="span12">
         <export:formats formats="['csv', 'excel', 'pdf']" params="['cid':[params.cid]]"/>
     </div>
 </div>

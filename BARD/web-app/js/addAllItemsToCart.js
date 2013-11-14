@@ -11,15 +11,11 @@ $(document).on('click', '#addAllItemsToCart', function () {
         var name = $(element).attr('data-cart-name');
         var type = $(element).attr('data-cart-type');
         var smiles = $(element).attr('data-cart-smiles');
-        var numActive = $(element).attr('data-cart-numActive');
-        var numAssays = $(element).attr('data-cart-numAssays');
         var payloadArrayItem = {
             'id':id,
             'type':type,
             'name':name,
-            'smiles':smiles,
-            'numActive':numActive,
-            'numAssays':numAssays
+            'smiles':smiles
         };
         payloadArray[index] = payloadArrayItem;
     });

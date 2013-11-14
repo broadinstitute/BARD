@@ -5,8 +5,8 @@ import bard.core.helper.LoggerService
 import bard.core.rest.spring.*
 import bard.core.util.ExternalUrlDTO
 import bard.db.ReadyForExtractFlushListener
+import bard.db.util.BardEditorRegistrar
 import bard.hibernate.ModifiedByListener
-import bard.person.RoleEditorRegistrar
 import bardqueryapi.ETagsService
 import bardqueryapi.QueryService
 import bardqueryapi.experiment.ExperimentBuilder
@@ -23,7 +23,7 @@ import persona.PersonaAuthenticationProvider
 beans = {
 
 
-    customPropertyEditorRegistrar(RoleEditorRegistrar)
+    customPropertyEditorRegistrar(BardEditorRegistrar)
     springSecurityUiService(SpringSecurityUiService) {
         messageSource = ref('messageSource')
         springSecurityService = ref('springSecurityService')
@@ -130,6 +130,7 @@ beans = {
     experimentBuilder(ExperimentBuilder) {
         grailsApplication = grailsApplication
         compoundRestService=ref('compoundRestService')
+        ontologyDataAccessService=ref('ontologyDataAccessService')
     }
     experimentRestService(ExperimentRestService) {
         externalUrlDTO = ref('externalUrlDTO')

@@ -149,6 +149,7 @@ div.header > h3 {
 .bard-footer-versioninfo {
     margin-top: 10px;
     vertical-align: middle;
+    text-align: center;
 }
 
 .bard-footer .horizontal-block-list {
@@ -220,6 +221,10 @@ div.facets {
 .facets form fieldset label {
     margin: 0 10px 0 10px;
     font-size: .9em;
+}
+
+li label {
+    margin-bottom: 0;
 }
 
 .facets input[type="submit"] {

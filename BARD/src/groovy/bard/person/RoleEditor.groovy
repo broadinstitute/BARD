@@ -18,8 +18,3 @@ class RoleEditor extends PropertyEditorSupport {
         value = Role.get(text)
     }
 }
-class RoleEditorRegistrar implements PropertyEditorRegistrar {
-    void registerCustomEditors(PropertyEditorRegistry registry) {
-        registry.registerCustomEditor(Role, new RoleEditor())
-    }
-}

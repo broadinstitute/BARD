@@ -76,17 +76,13 @@
     });
 </script>
 <% molSpreadSheetData.flipNormalizationForAdid (assayNormalizationSwap) %>
-<div class="row-fluid">
-    <g:if test="${flash.message}">
+<g:if test="${flash.message}">
+    <div class="row-fluid">
         <div class="span12" role="status"><p style="color: #3A87AD;">${flash.message}</p></div>
-    </g:if>
-
-    <div class="span2">
-        <g:render template="../bardWebInterface/facets"
-                  model="['facets': facets, 'formName': FacetFormType.AssayFacetForm]"/>
     </div>
-
-    <div class="span10">
+</g:if>
+<div class="row-fluid">
+    <div class="span12">
         <g:if test="${molSpreadSheetData?.getRowCount() > 0}">
             <g:set var="columnWidth" value="${100.0 / ((molSpreadSheetData?.getColumnCount() - 1) as float)}"/>
 
@@ -214,7 +210,8 @@
                 <tbody>
                 <% Integer rowCount = 0 %>
                 <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
-                    <% String retrievedSmiles = """${molSpreadSheetData?.displayValue(rowCnt, 0)."smiles"}""".toString() %>
+                    <% String retrievedSmiles = """${molSpreadSheetData?.displayValue(rowCnt, 0)?."smiles"}""".toString() %>
+                    <% String name = """${molSpreadSheetData?.displayValue(rowCnt, 0)?."name"}""".toString() %>
                     <% String cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
                     <% String activeVrsTested = """${molSpreadSheetData?.displayValue(rowCnt, 3)?."value"}""".toString() %>
                     <g:if test="${((rowCount++) % 2) == 0}">
@@ -224,7 +221,7 @@
                         <tr class="molSpreadSheetGray">
                     </g:else>
                     <td class="molSpreadSheetImg" property="struct">
-                        <g:imageCell cid="${cid}" smiles="${retrievedSmiles}"/>
+                        <g:imageCell cid="${cid}" smiles="${retrievedSmiles}" name="${name}"/>
                     </td>
                     <td class="molSpreadSheet" property="cid">
                         <g:cidCell cid="${cid}"/>
@@ -254,11 +251,11 @@
         </g:else>
 
     </div>
-
-    <div class="span10 pull-right">
-        <g:if test="${molSpreadSheetData?.getRowCount() > 0}">
-            <export:formats formats="['csv', 'excel', 'pdf']" params="['cid':[params.cid]]"/>
-        </g:if>
-    </div>
 </div>
-
+<g:if test="${molSpreadSheetData?.getRowCount() > 0}">
+    <div class="row-fluid">
+        <div class="span12">
+            <export:formats formats="['csv', 'excel', 'pdf']" params="['cid':[params.cid]]"/>
+        </div>
+    </div>
+</g:if>

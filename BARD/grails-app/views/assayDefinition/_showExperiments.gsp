@@ -1,12 +1,13 @@
 <%@ page import="bard.db.enums.ProjectStatus; bard.db.enums.ExperimentStatus; org.apache.commons.lang3.tuple.Pair" %>
 <div id="showExperiments">
     <g:if test="${assayInstance.experiments}">
+        <g:render template="/layouts/templates/tableSorterTip"/>
         <table class="table table-striped table-hover table-bordered">
             <thead>
             <tr>
-                <th rowspan="2">EID</th>
+                <th rowspan="2" data-sort="int">EID</th>
                 <th rowspan="2">Experiment Name</th>
-                <th rowspan="2">External References</th>
+                <th rowspan="2" data-sort="string-ins">External References</th>
                 <th colspan="2"># Compounds</th>
                 <th rowspan="2">PID</th>
                 <th rowspan="2">Project Name</th>

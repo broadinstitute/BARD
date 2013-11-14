@@ -3,7 +3,6 @@ $(document).ready(function () {
     var table = $("table").stupidtable({
 
     });
-    //var table = $("#mytable").stupidtable();
 
     table.on("beforetablesort", function (event, data) {
         // Apply a "disabled" look to the table while sorting.

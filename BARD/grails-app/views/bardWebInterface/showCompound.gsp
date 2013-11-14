@@ -21,9 +21,7 @@
         <g:saveToCartButton id="${compound.id}"
                             name="${JavaScriptUtility.cleanup(compound.name)}"
                             type="${querycart.QueryItemType.Compound}"
-                            smiles="${compound.smiles}"
-                            numActive="${compound.numberOfActiveAssays}"
-                            numAssays="${compound.numberOfAssays}"/>
+                            smiles="${compound.smiles}"/>
         <span style="padding-left: 30px; padding-right: 10px; float: right;"><g:link controller="bardWebInterface" action="bigSunburst" id="${compound.id}"
         >Linked Hierarchy Visualization</g:link></span>
         <span style="padding-left: 30px; padding-right: 30px; float: right;"><g:link controller="bardWebInterface" action="showCompoundBioActivitySummary" id="${compound.id}"
@@ -156,8 +154,6 @@
                         cid="${compound?.id}"
                         smiles="${compound?.smiles}"
                         name="${bardqueryapi.JavaScriptUtility.cleanup(compound?.name)}"
-                        numActive="${compound?.numberOfActiveAssays}"
-                        numAssays="${compound?.numberOfAssays}"
                         imageWidth="400"
                         imageHeight="300"/>
             </li>

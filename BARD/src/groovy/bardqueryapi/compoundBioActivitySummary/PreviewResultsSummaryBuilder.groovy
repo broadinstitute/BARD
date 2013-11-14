@@ -41,6 +41,25 @@ class PreviewResultsSummaryBuilder {
      * So called high priority elements
      */
     private static List<Long> HIGH_PRIORITY_DICT_ELEM = [
+            new Long(942),
+            new Long(944),
+            new Long(945),
+            new Long(946),
+            new Long(947),
+            new Long(951),
+            new Long(957),
+            new Long(959),
+            new Long(961),
+            new Long(970),
+            new Long(1719),
+            new Long(1726),
+            new Long(1727),
+            new Long(1728),
+            new Long(1729),
+            new Long(1730),
+            new Long(1327),
+            new Long(1451),
+
             new Long(917),
             new Long(952),
             new Long(956),

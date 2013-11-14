@@ -210,7 +210,7 @@ class MolecularSpreadSheetService {
 
     /**
      * Now we have all of the available data in the dataMap, but that map may have holes ( where the compound wasn't tested with a particular assay)
-     * and it may also have cells with multiple values. This method is intended to smooth out the rough spots -- make a new map with exactly one value
+     * and it may also have cells with multiple values. This method is intended to smooth out the rough spots -- make a new map with at least one value
      * for each cell  in the molecular spreadsheet.  Some of those cells may be null, but that's fine, since we can print out "Not tested in this experiment"
      * on the GSP when we bump into one of them.
      * @param molSpreadSheetData
@@ -246,32 +246,51 @@ class MolecularSpreadSheetService {
                                         bestMolSpreadSheetCell = new MolSpreadSheetCell()
                                     } else if ((molSpreadSheetCells == null) || (molSpreadSheetCells.size() == 0)) {
                                         bestMolSpreadSheetCell = new MolSpreadSheetCell()  // this shouldn't happen(?). We have no data
-                                    } else if (molSpreadSheetCells.size() == 1) {   // we have exactly one match. That's easy enough
+                                    } else if (molSpreadSheetCells.size() == 1) {   // we have exactly one match.
                                         bestMolSpreadSheetCell = molSpreadSheetCells[0]
-                                    } else { // we have more than one option.  Send all of the spreadsheet activities forward. Average out a value for display
+                                    } else { // we have more than one option.  Send all of the spreadsheet activities forward. Combine them together.
                                         double valueToDisplay = Double.NaN
+                                        String stringValue = ""
                                         MolSpreadSheetCell firstNonNullMolSpreadSheetCell = null
 
 
                                         for (MolSpreadSheetCell molSpreadSheetCell in molSpreadSheetCells) {              // this is the inner loop.  Collect data, don't advance counter
-                                            for (HillCurveValueHolder hillCurveValueHolder in molSpreadSheetCell.spreadSheetActivityStorage?.hillCurveValueHolderList) {
-                                                if ((hillCurveValueHolder.slope) && (hillCurveValueHolder.slope != Double.NaN)) {
-                                                    numberOfValuesGoingIntoArithmeticMean++
-                                                    if (valueToDisplay == Double.NaN) {
-                                                        firstNonNullMolSpreadSheetCell = molSpreadSheetCell
-                                                        valueToDisplay = hillCurveValueHolder.slope
-                                                    } else {
-                                                        valueToDisplay += hillCurveValueHolder.slope
-                                                        // in addition to taking the display value, duplicate the hillCurveValueHolders, and then will do something useful with them on the display side
-                                                        firstNonNullMolSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
+                                            if (molSpreadSheetCell.molSpreadSheetCellType==MolSpreadSheetCellType.numeric) {
+                                                for (HillCurveValueHolder hillCurveValueHolder in molSpreadSheetCell.spreadSheetActivityStorage?.hillCurveValueHolderList) {
+                                                    if ((hillCurveValueHolder.slope) && (hillCurveValueHolder.slope != Double.NaN)) {
+                                                        numberOfValuesGoingIntoArithmeticMean++
+                                                        if (valueToDisplay == Double.NaN) {
+                                                            firstNonNullMolSpreadSheetCell = molSpreadSheetCell
+                                                            valueToDisplay = hillCurveValueHolder.slope
+                                                        } else {
+                                                            valueToDisplay += hillCurveValueHolder.slope
+                                                            firstNonNullMolSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
+                                                        }
                                                     }
+
                                                 }
 
+                                            } else if (molSpreadSheetCell.molSpreadSheetCellType==MolSpreadSheetCellType.string)   {
+                                                if (molSpreadSheetCell.strInternalValue!="null"){
+                                                    for (HillCurveValueHolder hillCurveValueHolder in molSpreadSheetCell.spreadSheetActivityStorage?.hillCurveValueHolderList) {
+                                                        if (stringValue == "") {
+                                                            firstNonNullMolSpreadSheetCell = molSpreadSheetCell
+                                                            stringValue = hillCurveValueHolder.stringValue
+                                                        } else {
+                                                            stringValue += hillCurveValueHolder.stringValue
+                                                            firstNonNullMolSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
-                                        if ((firstNonNullMolSpreadSheetCell != null) &&      // we had at least one value that wasn't null – proceed to assign the arithmetic average to the display case
-                                                (valueToDisplay != Double.NaN) &&                 // maybe we had one or more values but they were all assignments NaN? seems unlikely, but possible
-                                                (numberOfValuesGoingIntoArithmeticMean > 0)) {  // I think this last check is strictly superfluous, but maybe something will change in the future code release?
+                                        if ((firstNonNullMolSpreadSheetCell != null) &&      // we had at least one value that wasn't null   AND  EITHER
+                                                (
+                                                (stringValue != "")
+
+                                                        ||
+                                                 ((valueToDisplay != Double.NaN) &&              // we had a non-null numeric value
+                                                   (numberOfValuesGoingIntoArithmeticMean > 0)))){  //  we had a non-null string value
                                             // if we wanted to assign the mean value to the first element then we could do it here.
                                             //firstNonNullMolSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[0].slope = (valueToDisplay / numberOfValuesGoingIntoArithmeticMean)
                                             bestMolSpreadSheetCell = firstNonNullMolSpreadSheetCell // we like this one.  Remember it.

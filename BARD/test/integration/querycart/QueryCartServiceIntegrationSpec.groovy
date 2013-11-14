@@ -13,7 +13,7 @@ class QueryCartServiceIntegrationSpec extends IntegrationSpec {
     void "test retrieve Carts"() {
         given: "Shopping Carts"
         CartAssay cartAssay = new CartAssay("This is an assay", 1, 1)
-        CartCompound cartCompound = new CartCompound("c1ccccc1", "cmpd name", 1, 0, 0)
+        CartCompound cartCompound = new CartCompound("c1ccccc1", "cmpd name", 1)
         CartProject cartProject = new CartProject("my project", 1, 1)
         shoppingCartService.addToShoppingCart(cartAssay)
         shoppingCartService.addToShoppingCart(cartCompound)

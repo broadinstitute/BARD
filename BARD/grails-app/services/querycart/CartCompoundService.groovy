@@ -18,8 +18,6 @@ class CartCompoundService {
             cartCompound.smiles = compoundAdapter.smiles
             cartCompound.name = compoundAdapter.name
             cartCompound.externalId = compoundAdapter.id
-            cartCompound.numAssayActive = compoundAdapter.numberOfActiveAssays
-            cartCompound.numAssayTested = compoundAdapter.numberOfAssays
         }
 
         return cartCompound
