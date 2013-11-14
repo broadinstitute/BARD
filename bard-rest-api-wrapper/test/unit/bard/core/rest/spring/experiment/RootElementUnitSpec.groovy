@@ -76,7 +76,7 @@ class RootElementUnitSpec extends Specification {
         ctx.dictionaryRestService()>>{dictionaryRestService}
 
         assert rootElement
-        assert rootElement.pubChemDisplayName== "Outcome"
+        assert rootElement.displayName== "Outcome"
         assert rootElement.dictElemId==899
         assert rootElement.value=="Active"
 
@@ -91,7 +91,7 @@ class RootElementUnitSpec extends Specification {
         ctx.dictionaryRestService()>>{dictionaryRestService}
 
         assert rootElement
-        assert rootElement.pubChemDisplayName=="AvgGluFoldShift"
+        assert rootElement.displayName=="AvgGluFoldShift"
         assert rootElement.dictElemId==1387
         assert rootElement.value=="26.7"
 
@@ -99,7 +99,7 @@ class RootElementUnitSpec extends Specification {
         assert childElements
         assert childElements.size() == 5
         for(ActivityData activityData in childElements){
-            assert activityData.pubChemDisplayName
+            assert activityData.displayName
             assert activityData.dictElemId
             assert activityData.value
         }

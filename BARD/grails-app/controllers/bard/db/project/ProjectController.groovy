@@ -21,6 +21,7 @@ import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.web.client.HttpClientErrorException
@@ -36,6 +37,7 @@ class ProjectController {
     def permissionEvaluator
     CapPermissionService capPermissionService
     IQueryService queryService
+    GrailsApplication grailsApplication
 
     @Secured(['isAuthenticated()'])
     def myProjects() {
@@ -76,8 +78,15 @@ class ProjectController {
                 conflictMessage(message)
                 return
             }
-            project = projectService.updateProjectStatus(inlineEditableCommand.pk, projectStatus)
-            generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.projectStatus.id)
+
+            final List<Experiment> unApprovedExperiments = project.findUnApprovedExperiments() as List<Experiment>
+            if (!unApprovedExperiments) {
+                project = projectService.updateProjectStatus(inlineEditableCommand.pk, projectStatus)
+                generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.projectStatus.id)
+            }else{
+                List<Long> unApprovedIds = unApprovedExperiments.collect {it.id}
+                render(status: HttpServletResponse.SC_BAD_REQUEST, text: "Before you can approve this project, you must approve the following experiments: " + unApprovedIds.sort().join(","), contentType: 'text/plain', template: null)
+            }
         }
         catch (AccessDeniedException ade) {
             log.error(ade)
@@ -435,7 +444,7 @@ class ProjectController {
             return [command: command]
         } catch (Exception ee) {
             log.error(ee, ee)
-            command.errorMessages.add("An error has occurred, Please log an issue with the BARD team at bard-users@broadinstitute.org to fix this issue")
+            command.errorMessages.add("An error has occurred, Please log an issue with the BARD team at ${grailsApplication.config.bard.users.email} to fix this issue")
             return [command: command]
         }
 

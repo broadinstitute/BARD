@@ -59,7 +59,7 @@ class SpreadSheetActivityUnitSpec extends Specification {
     void "test extractExperimentalValuesFromAPriorityElement"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName")
+        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName")
         List <MolSpreadSheetColSubHeader> resultTypeNames = []
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
@@ -71,7 +71,7 @@ class SpreadSheetActivityUnitSpec extends Specification {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         ConcentrationResponseSeries concentrationResponseSeries = new ConcentrationResponseSeries(responseUnit: "uM")
-        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName")
+        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName")
         priorityElement.concentrationResponseSeries = concentrationResponseSeries
         List <MolSpreadSheetColSubHeader> resultTypeNames = []
         when:
@@ -83,7 +83,7 @@ class SpreadSheetActivityUnitSpec extends Specification {
     void "test extractExperimentalValuesFromAPriorityElement with repeated column name"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: 'columnName')
+        PriorityElement priorityElement = new  PriorityElement (displayName: 'columnName')
         List <MolSpreadSheetColSubHeader> resultTypeNames  = [new MolSpreadSheetColSubHeader(columnTitle:'columnName') ]
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
@@ -94,7 +94,7 @@ class SpreadSheetActivityUnitSpec extends Specification {
     void "test extractExperimentalValuesFromAPriorityElement with non-repeated column name"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName1")
+        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName1")
         List <MolSpreadSheetColSubHeader> resultTypeNames  = [new MolSpreadSheetColSubHeader(columnTitle:'columnName2')]
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)

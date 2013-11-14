@@ -1,11 +1,11 @@
 package bard.db.context.item
 
+import bard.db.ContextItemService
 import bard.db.audit.BardContextUtils
 import bard.db.project.ProjectContextItem
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.SessionFactory
-import org.springframework.context.MessageSource
 import spock.lang.Unroll
 
 /**
@@ -21,11 +21,9 @@ class ContextItemControllerIntegrationSpec extends IntegrationSpec {
 
     ContextItemController controller
 
-    MessageSource messageSource
-
     ProjectContextItem contextItem
     SessionFactory sessionFactory
-
+    ContextItemService contextItemService
     void setup() {
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
         BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'integrationTestUser')
@@ -41,15 +39,13 @@ class ContextItemControllerIntegrationSpec extends IntegrationSpec {
         ProjectContextItem.withSession { session ->
             session.flush()
         }
+        BasicContextItemCommand contextItemCommand =
+            new BasicContextItemCommand(attributeElementId: contextItem.attributeElement.id, valueNum: valueNumParam,qualifier: '= ')
 
-        setContextItemRelatedParams(contextItem)
+        setContextItemRelatedParams(contextItem,contextItemCommand)
 
-        controller.params.attributeElementId = contextItem.attributeElement.id
-        controller.params.valueNum = valueNumParam
-        controller.params.qualifier = '= '
-
-        when:
-        controller.update()
+          when:
+        controller.update(contextItemCommand)
 
         then:
         controller.modelAndView.model.instance.contextItem == contextItem
@@ -73,22 +69,27 @@ class ContextItemControllerIntegrationSpec extends IntegrationSpec {
         given:
         ProjectContextItem contextItem = ProjectContextItem.build()
         final Long id = contextItem.id
-        setContextItemRelatedParams(contextItem)
+
+        BasicContextItemCommand contextItemCommand =
+            new BasicContextItemCommand()
+
+        setContextItemRelatedParams(contextItem,contextItemCommand)
 
         when:
-        controller.delete()
+        controller.delete(contextItemCommand)
 
         then:
         ProjectContextItem.findById(id) == null
 
     }
 
-    private void setContextItemRelatedParams(ProjectContextItem contextItem) {
-        controller.params.contextOwnerId = contextItem.context?.owner?.id
-        controller.params.contextId = contextItem.context?.id
-        controller.params.contextItemId = contextItem.id
-        controller.params.version = contextItem.version
-        controller.params.contextClass = 'ProjectContext'
+    private void setContextItemRelatedParams(ProjectContextItem contextItem,BasicContextItemCommand contextItemCommand) {
+        contextItemCommand.contextOwnerId = contextItem.context?.owner?.id
+        contextItemCommand.contextId = contextItem.context?.id
+        contextItemCommand.contextItemId = contextItem.id
+        contextItemCommand.version = contextItem.version
+        contextItemCommand.contextClass = 'ProjectContext'
+        contextItemCommand.contextItemService = contextItemService
     }
 
 

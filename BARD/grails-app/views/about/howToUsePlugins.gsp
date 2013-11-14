@@ -104,7 +104,8 @@
         </p>
 
     <p>
-        For more technical details on how to develop plug-ins, please see <a href="https://github.com/ncats/bard/wiki/Plugins">https://github.com/ncats/bard/wiki/Plugins</a>. To initiate a request for a copy of the BARD date warehouse, please email <em>bard-users@broadinstitute.org</em>.
+        For more technical details on how to develop plug-ins, please see <a href="https://github.com/ncats/bard/wiki/Plugins">https://github.com/ncats/bard/wiki/Plugins</a>. To initiate a request for a copy of the BARD date warehouse, please email
+        <em>${grailsApplication.config.bard.users.email}</em>.
     </p>
 
 

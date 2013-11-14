@@ -326,7 +326,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         controller.cloneAssay(assay.id)
         then:
         controller.assayDefinitionService.cloneAssayForEditing(_, _) >> { throw new ValidationException("message", new GrailsMockErrors(assay)) }
-        assert flash.message == "Cannot clone assay definition with id \"${assay.id}\" probably because of data migration issues. Please email the BARD team at bard-users@broadinstitute.org to fix this assay"
+        assert flash.message == "Cannot clone assay definition with id \"${assay.id}\" probably because of data migration issues. Please email the BARD team at bard-users.REMOVE-ME@REMOVE-ME.broadinstitute.org to fix this assay"
         assert controller.response.redirectedUrl.startsWith("/assayDefinition/show/")
     }
 

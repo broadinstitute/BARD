@@ -46,8 +46,8 @@ class ChemAxonControllerUnitSpec extends Specification {
         final String type = response.contentType
 
         then:
-        chemAxonService.getDefaultImage(width, height) >> {new BufferedImage(width, height, 5)}
-        0 * chemAxonService.generateStructurePNG(_, _, _) >> {bytesArra}
+        chemAxonService.getDefaultImage(width, height) >> { new BufferedImage(width, height, 5) }
+        0 * chemAxonService.generateStructurePNG(_, _, _) >> { bytesArra }
         assert type == "image/png"
         assert response.contentAsByteArray
         //assert returnedImage.size() == expectedByteArraySize
@@ -66,7 +66,7 @@ class ChemAxonControllerUnitSpec extends Specification {
         final byte[] returnedImage = response.contentAsByteArray
 
         then:
-        chemAxonService.generateStructurePNG(_, _, _) >> {bytesArra}
+        chemAxonService.generateStructurePNG(_, _, _) >> { bytesArra }
         assert returnedImage.size() == expectedByteArraySize
 
         where:
@@ -86,7 +86,7 @@ class ChemAxonControllerUnitSpec extends Specification {
         final byte[] returnedImage = response.contentAsByteArray
 
         then:
-        chemAxonService.generateStructurePNG(_, _, _) >> {new Exception()}
+        chemAxonService.generateStructurePNG(_, _, _) >> { new Exception() }
         assert returnedImage.size() == 0
     }
     /**
@@ -98,8 +98,8 @@ class ChemAxonControllerUnitSpec extends Specification {
         final byte[] returnedImage = response.contentAsByteArray
 
         then:
-        queryService.showCompound(_) >> {compoundAdptr}
-        chemAxonService.generateStructurePNG(_, _, _) >> {bytesArra}
+        queryService.showCompound(_) >> { compoundAdptr }
+        chemAxonService.generateStructurePNG(_, _, _) >> { bytesArra }
         assert returnedImage.size() == expectedByteArraySize
 
         where:
@@ -119,7 +119,7 @@ class ChemAxonControllerUnitSpec extends Specification {
         final byte[] returnedImage = response.contentAsByteArray
 
         then:
-        queryService.showCompound(_) >> {new Exception()}
+        queryService.showCompound(_) >> { new Exception() }
         assert returnedImage.size() == 0
     }
 
@@ -139,5 +139,24 @@ class ChemAxonControllerUnitSpec extends Specification {
 
         then:
         assert controller.response.contentAsString == ''
+    }
+
+    /**
+     * {@link ChemAxonController#generateStructureImageFromCID}
+     */
+    void "test converting SMILES structure to Mol format #label"() {
+        when:
+        controller.convertSmilesToMolFormat(smiles)
+
+        then:
+        chemAxonService.convertSmilesToAnotherFormat(smiles, 'mol') >> { molString }
+        assert response.contentAsString == expectedMolString
+        assert response.status == expectedResponseStatus
+
+        where:
+        label                  | smiles                  | molString | expectedMolString | expectedResponseStatus
+        "a good smiles string" | 'C1=CC2=C(C=C1)C=CC=C2' | 'mol'     | 'mol'             | 200
+        "a bad smiles string"  | 'bad smiles'            | null      | ''                | 400
+        "a null smiles string" | null                    | null      | ''                | 400
     }
 }

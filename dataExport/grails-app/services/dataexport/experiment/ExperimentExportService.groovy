@@ -122,6 +122,7 @@ class ExperimentExportService extends ExportAbstractService {
         Map<String, String> attributes = [:]
 
         attributes.put("experimentId", experiment.id?.toString())
+        extractOwner(experiment, attributes)
         attributes.put('status', experiment.experimentStatus.id)
         attributes.put('readyForExtraction', experiment.readyForExtraction.getId())
         if (experiment.confidenceLevel != null && StringUtils.isNotBlank(experiment.confidenceLevel?.toString())) {

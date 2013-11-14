@@ -28,7 +28,8 @@ class QueryCartController {
         render text: compositeETag, contentType: 'text/plain'
     }
     def toDesktopClient() {
-        final String thickClientURL = grailsApplication.config.ncgc.thickclient.etags.url
+        final String thickClientURL = grailsApplication.config.ncgc.thickclient.root.url
+        final String thickClientETagURL = grailsApplication.config.ncgc.thickclient.etags.url
 
         String compositeETag = ""
         final List<Long> cids = queryCartService.retrieveCartCompoundIdsFromShoppingCart()
@@ -38,7 +39,7 @@ class QueryCartController {
             compositeETag = eTagsService.createCompositeETags(cids, pids, adids)
         }
         if (compositeETag){
-            redirect(url: thickClientURL + compositeETag + VIEW_LIST)
+            redirect(url: thickClientETagURL + compositeETag + VIEW_LIST)
             return
         }
         redirect(url: thickClientURL)

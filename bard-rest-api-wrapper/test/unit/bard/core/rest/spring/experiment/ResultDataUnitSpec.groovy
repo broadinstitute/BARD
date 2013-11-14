@@ -453,7 +453,7 @@ class ResultDataUnitSpec extends Specification {
 
     void validateRootElementActivityData(final String responseClass, final ActivityData activityData, boolean hasQualifier) {
         assert activityData.dictElemId
-        assert activityData.pubChemDisplayName
+        assert activityData.displayName
 
         assert activityData.qualifier == true == hasQualifier
         assert activityData.responseUnit
@@ -464,7 +464,7 @@ class ResultDataUnitSpec extends Specification {
 
     void validateRootElements(List<RootElement> rootElements) {
         for (RootElement rootElement : rootElements) {
-            assert rootElement.pubChemDisplayName
+            assert rootElement.displayName
         }
     }
 
@@ -472,7 +472,7 @@ class ResultDataUnitSpec extends Specification {
         for (PriorityElement priorityElement : priorityElements) {
             assert priorityElement
             assert !priorityElement.primaryElements
-            assert priorityElement.pubChemDisplayName
+            assert priorityElement.displayName
             if (hasChildElement) {
                 assert priorityElement.childElements
             }

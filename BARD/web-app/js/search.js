@@ -13,14 +13,93 @@ var NUMBER_MATCHING_REGEX = /^\s*\d+\s*(?:,?\s*\d+\s*)*(threshold:\d+)*$/;
 //SMILES validation (JavaScript) beyond a length of 5
 var SMILES_MATCHING_REGEX = /^(exact: *|substructure: *|superstructure: *|similarity: *)([^J][0-9BCOHNSOPrIFla@+\-\[\]\(\)\\\/%=#$,.~&!]{6,})$/ig;
 var TAB_ICON_CLASS = 'badge badge-important';
+var OFFSET_PREFIX = '+offset=';
+
+// return a parameter value from a URL
+function getParam ( url, sname ){
+    var params = url.substr(url.indexOf("?")+1);
+    var sval = "";
+    params = params.split("&");
+    // split param and value into individual pieces
+    for (var i=0; i<params.length; i++){
+        temp = params[i].split("=");
+        if ( [temp[0]] == sname ) { sval = temp[1]; }
+    }
+    return sval;
+}
+
+// Gets the tab anchor from the hash string if present
+function getHashedTabAnchor(){
+    if(window.location.hash){
+        var splitVals = window.location.hash.split(OFFSET_PREFIX);
+        return splitVals[0];
+    }
+    return null;
+}
+
+// Gets the offset for paging from the hash string if present
+function getHashedPageOffset(){
+    if(window.location.hash){
+        var splitVals = window.location.hash.split(OFFSET_PREFIX);
+        if(splitVals.length > 1){
+            return splitVals[1];
+        }
+    }
+    return null;
+}
+
+// Finds the tab based on the anchor in the url and opens the tab
+function activateHashedTab(){
+    var tabHash = getHashedTabAnchor();
+    if(tabHash)
+        $('#resultTabUL').find('a[href="' + tabHash + '"]').tab('show');
+}
+
+//function activateHashedPage(){
+//    var tabHash = getHashedTabAnchor();
+//    var pageOffset = getHashedPageOffset();
+//    if(tabHash && !pageOffset){
+//        window.location.hash = window.location.hash + OFFSET_PREFIX + "0";
+//    }
+//}
+
+// Hash the offset paging when a new page is clicked in a table of items
+function setHashOnPageClicked(url){
+    var newPageOffset = getParam ( url, 'offset');
+    var oldPageOffset = getHashedPageOffset();
+    if(oldPageOffset){
+        var tabHash = getHashedTabAnchor();
+        window.location.hash = tabHash + OFFSET_PREFIX + newPageOffset;
+    }
+    else{
+        window.location.hash = window.location.hash + OFFSET_PREFIX + newPageOffset;
+    }
+}
 
 $(document).ready(function () {
+    // Listens to the hashchange event and opens the tab when changed
+    $(window).bind('hashchange', function(){
+        activateHashedTab();
+    });
+
+    // Activate tab if hash is present otherwise set the right hash for the active tab
+    if(window.location.hash){
+        activateHashedTab();
+    }
+    else{
+        window.location.hash = $('#resultTabUL li[class="active"] a[data-toggle="tab"]').attr('href');
+    }
+
+    // This show event fires before the new tab has been shown and adds the anchor to the window.location.hash
+    $('#resultTabUL a[data-toggle="tab"]').on('show', function(event){
+        window.location.hash = $(this).attr('href');
+    })
 
     //set up main form submission
     $('#searchForm').submit(function (event) {
         event.preventDefault();	// prevent the default action behaviour to happen
         var searchString = $("#searchString").val();
-        handleMainFormSubmit(searchString);
+        handleMainFormSubmit(searchString, getHashedTabAnchor(), getHashedPageOffset());
         return false; //do not submit form the normal way, use Ajax instead
 
     });
@@ -65,7 +144,9 @@ $(document).ready(function () {
         event.preventDefault();	// prevent the default action behaviour to happen
         var url = $(this).attr('href');
 
-        handlePaging(url)
+        setHashOnPageClicked(url);
+
+        handlePaging(url);
     });
 
     // If there's a string in the search box, then submit it (used for redirect from home page)
@@ -283,33 +364,34 @@ function showTab(tabId) {
  * Handles form submission from the main form
  * @param searchString  - The string entered into the main form's search box
  */
-function handleMainFormSubmit(searchString) {
+function handleMainFormSubmit(searchString, activeTab, pageOffset) {
 
     var searchType = findSearchType(searchString);
+    var offsetParam = pageOffset ? "?offset=" + pageOffset : "";
     switch (searchType.toUpperCase()) {
         case 'FREE_TEXT':
-            handleAllFreeTextSearches();
+            handleAllFreeTextSearches(activeTab, pageOffset);
             break;
         case 'ADID':
             activateCurrentTab('assaysTab');
             showTab("assays");
-            handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+            handleSearch('/BARD/bardWebInterface/searchAssaysByIDs' + offsetParam, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
             break;
         case 'CID':
             activateCurrentTab('compoundsTab');
             showTab("compounds");
-            handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs' + offsetParam, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
             break;
         case 'PROBES':
             activateCurrentTab('compoundsTab');
             showTab("compounds");
-            handleSearch('/BARD/bardWebInterface/showProbeList', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            handleSearch('/BARD/bardWebInterface/showProbeList' + offsetParam, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
             break;
         case 'PID':
             activateCurrentTab('projectsTab');
             // $("#projects").tab('show');
             showTab("projects");
-            handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+            handleSearch('/BARD/bardWebInterface/searchProjectsByIDs' + offsetParam, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
             break;
         case 'ID':
             //TODO: Right now we are treating Id searches like regular searches
@@ -318,7 +400,7 @@ function handleMainFormSubmit(searchString) {
             //the type of id (like we do with structure searches) so that we
             //can only send the query to the resource of interest
             activateCurrentTab('assaysTab');
-            handleAllIdSearches();
+            handleAllIdSearches(activeTab, pageOffset);
             break;
         case 'STRUCTURE':
             if ($.trim(searchString).match(SMILES_MATCHING_REGEX)) {
@@ -333,19 +415,61 @@ function handleMainFormSubmit(searchString) {
 /**
  * Handle all free text searches
  */
-function handleAllFreeTextSearches() {
-    handleSearch('/BARD/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-    handleSearch('/BARD/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-    handleSearch('/BARD/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+function handleAllFreeTextSearches(activeTab, pageOffset) {
+    if(activeTab && pageOffset){
+        switch (activeTab) {
+            case '#assays':
+                handleSearch('/BARD/bardWebInterface/searchAssays?offset=' + pageOffset, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+                handleSearch('/BARD/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+                handleSearch('/BARD/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                break;
+            case '#compounds':
+                handleSearch('/BARD/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+                handleSearch('/BARD/bardWebInterface/searchCompounds?offset=' + pageOffset, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+                handleSearch('/BARD/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                break;
+            case '#projects':
+                handleSearch('/BARD/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+                handleSearch('/BARD/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+                handleSearch('/BARD/bardWebInterface/searchProjects?offset=' + pageOffset, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                break;
+        }
+    }
+    else{
+        handleSearch('/BARD/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+        handleSearch('/BARD/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+        handleSearch('/BARD/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+    }
 }
 
 /**
  * Handle all ID searches
  */
-function handleAllIdSearches() {
-    handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-    handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-    handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+function handleAllIdSearches(activeTab, pageOffset) {
+    if(activeTab && pageOffset){
+        switch (activeTab) {
+            case '#assays':
+                handleSearch('/BARD/bardWebInterface/searchAssaysByIDs?offset=' + pageOffset, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+                handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+                handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                break;
+            case '#compounds':
+                handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+                handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs?offset=' + pageOffset, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+                handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                break;
+            case '#projects':
+                handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+                handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+                handleSearch('/BARD/bardWebInterface/searchProjectsByIDs?offset=' + pageOffset, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                break;
+        }
+    }
+    else{
+        handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+        handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+        handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+    }
 }
 /**
  * Make Tabs inactive
@@ -397,16 +521,19 @@ function activateCurrentTab(currentTab) {
             activateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds ");
             deActivateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions (0)');
             deActivateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects (0)');
+            window.location.hash = "#compounds";
             break;
         case 'assaysTab':
             deActivateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds (0)");
             activateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions ');
             deActivateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects (0)');
+            window.location.hash = "#assays";
             break;
         case 'projectsTab':
             deActivateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds (0)");
             deActivateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions (0)');
             activateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects ');
+            window.location.hash = "#projects";
             break;
         default:
             activateCurrentTab('assaysTab');

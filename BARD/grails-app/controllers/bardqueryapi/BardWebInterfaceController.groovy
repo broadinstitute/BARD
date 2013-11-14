@@ -75,13 +75,18 @@ class BardWebInterfaceController {
     }
 
     def previewResults(Long id) {
+
         Experiment experiment = Experiment.get(id)
         if (!experiment.experimentFiles) {
             flash.message = "Experiment does not have result files"
             redirect(action: "show")
             return
         }
-        final TableModel tableModel = experimentService.previewResults(id)
+        int records = 10
+        if(params.records){
+          records = new Integer(params.records)
+        }
+        final TableModel tableModel = experimentService.previewResults(id,records)
         //this should do a full page reload
         render(view: 'showExperimentalResultsPreview',
                 model: [tableModel: tableModel,
@@ -239,7 +244,12 @@ class BardWebInterfaceController {
 
     def retrieveExperimentResultsSummary(Long id, SearchCommand searchCommand) {
         Experiment experiment = Experiment.get(id)
-        render queryService.histogramDataByEID(experiment.ncgcWarehouseId)
+        final Long ncgcWarehouseId = experiment.ncgcWarehouseId
+        if (ncgcWarehouseId) {
+            render queryService.histogramDataByEID(ncgcWarehouseId)
+        } else {
+            render(text: "")
+        }
     }
 
     def probe(String probeId) {

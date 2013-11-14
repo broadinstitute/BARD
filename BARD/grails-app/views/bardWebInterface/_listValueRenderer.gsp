@@ -72,7 +72,7 @@
                 </g:elseif>
             %{--A simple string-value result--}%
                 <g:elseif test="${result instanceof bardqueryapi.StringValue}">
-                    <p class="lineSpacing"><b><small>${result}</small></b></p>
+                    <tr><td><p class="lineSpacing"><b><small>${result}</small></b></p></td> </tr>
                 </g:elseif>
             %{--Call the list-rendering recursively--}%
                 <g:elseif test="${result instanceof bardqueryapi.ListValue}">

@@ -71,10 +71,11 @@ Link to Project and Assay</xs:documentation>
             <xs:attribute name="runDateFrom" type="xs:dateTime" use="optional"/>
             <xs:attribute name="runDateTo" type="xs:dateTime" use="optional"/>
             <xs:attribute name="status" type="xs:string" use="required"/>
-              
+
             <xs:attribute ref="readyForExtraction" use="required"/>
             <xs:attribute ref="lastUpdated"/>
             <xs:attribute ref="modifiedBy"/>
+            <xs:attributeGroup ref="ownerGroup"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="results">

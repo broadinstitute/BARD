@@ -47,7 +47,11 @@
                     </g:if>
                     <small>(Project ID: ${instance.id})</small>
                 </h2>
-
+                <br/>
+                <a class="btn"
+                   href="mailto:${grailsApplication.config.bard.users.email}?Subject=Question about PID: ${instance.id}"
+                   target="_top"><i class="icon-envelope"></i> Ask a question about this Project</a>
+                <br/>
                 <g:if test="${projectAdapter != null}">
                     <g:saveToCartButton id="${instance.id}"
                                         name="${bardqueryapi.JavaScriptUtility.cleanup(projectAdapter?.name)}"

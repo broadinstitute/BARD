@@ -1,5 +1,5 @@
-<%@page defaultCodec="none"%>
-<%@page import="bard.core.rest.spring.util.StructureSearchParams" contentType="text/html;charset=UTF-8" %>
+<%@ page defaultCodec="none" %>
+<%@ page import="bard.core.rest.spring.util.StructureSearchParams" contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,6 +13,18 @@
 </head>
 
 <body>
+<div class="row-fluid">
+    %{--AJAX is handling this--}%
+    <form class="form-inline" style="margin-top: 3px; margin-left: 3px">
+        <input type="text" id="convertSmilesTextfield" name="smiles" class="span8" rows="1"
+               placeholder="${message(code: 'jsDraw.convertSmiles')}"/>
+
+        <button type="submit" id="smilesToMolBtn" class="btn">Import</button>
+
+        <label id="smilesImportErrorLabel" style="margin-left: 5px;"/>
+    </form>
+</div>
+
 <div class="row-fluid">
     <div class="span12">
         <div id="jsDrawEditorDiv" skin='w8' style="border:1px solid gray; margin-left: auto; margin-right: auto;"></div>

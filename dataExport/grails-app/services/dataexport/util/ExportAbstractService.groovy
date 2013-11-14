@@ -5,6 +5,7 @@ import bard.db.enums.ContextType
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractDocument
+import bard.db.people.Role
 import bard.db.registration.ExternalReference
 import dataexport.registration.MediaTypesDTO
 import groovy.xml.MarkupBuilder
@@ -13,6 +14,11 @@ import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 class ExportAbstractService {
 
 
+    public void extractOwner(def entity, Map attributes){
+        final Role role = entity.ownerRole
+        attributes.put("ownerId",role.id)
+        attributes.put("owner",role.displayName)
+    }
     public void generateExternalReferencesLink(final MarkupBuilder markupBuilder,
                                                final List<ExternalReference> externalReferences,
                                                final LinkGenerator grailsLinkGenerator,
