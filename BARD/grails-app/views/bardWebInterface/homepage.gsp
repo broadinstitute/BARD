@@ -22,29 +22,6 @@
     </noscript>
     <r:layoutResources/>
 
-    <style type="text/css">
-    @media (min-width: 768px) {
-        /* start of modification for 5 columns.  Must follow after bootstrap definitions */
-        .fivecolumns .span2 {
-            width: 18.2%;
-            *width: 18.2%;
-        }
-    }
-
-    @media (min-width: 1200px) {
-        .fivecolumns .span2 {
-            width: 17.9%;
-            *width: 17.8%;
-        }
-    }
-
-    @media (min-width: 768px) and (max-width: 979px) {
-        .fivecolumns .span2 {
-            width: 17.7%;
-            *width: 17.7%;
-        }
-    }
-    </style>
 </head>
 
 <body>
@@ -163,8 +140,8 @@
 
         <div class="search-block">
             <div class="row-fluid">
-                <g:render template="../layouts/templates/searchBlock"></g:render>
-            </div class="row-fluid">
+                <g:render template="../layouts/templates/searchBlock"/>
+            </div>
 
             <div class="links-holder">
                 %{--<a href="#">Advanced Search</a>                    We can put this link back when we have an advanced search to present--}%
@@ -176,7 +153,7 @@
     </div>
 </div>
 
-<g:render template="/layouts/templates/IdSearchBox"></g:render>
+<g:render template="/layouts/templates/IdSearchBox"/>
 
 %{--carousel news panel. Turn this back on by reversing the conditional below
     as soon as we have some dynamic content to display --}%
@@ -345,81 +322,8 @@
     </section>
 </g:if>
 
+<g:render template="/layouts/templates/footer"/>
 
-%{--Now we have a footer section containing a bunch of links--}%
-<footer id="footer">
-    <div class="footer-columns">
-        <div class="container-fluid">
-            %{--<div class="row-fluid">--}%
-            %{--Note:  remove 'fivecolumns' class and go to span3's to move down to four columns--}%
-            <div class="row-fluid fivecolumns">
-                <div class="span2">
-                    <h3>About</h3>
-                    <ul>
-                        <li><g:link controller="about" action="bardHistory">History</g:link></li>
-                        <li><g:link controller="about" action="bardDevelopmentTeam">Development Team</g:link></li>
-                    </ul>
-                </div>
-
-                <div class="span2">
-                    <h3>Help</h3>
-                    <ul>
-                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!forum/bard-users">Forums</a>
-                        </li>
-                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Submit a Bug Report</a>
-                        </li>
-                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Ask a Question</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="span2">
-                    <h3>Technology</h3>
-                    <ul>
-                        <li><g:link controller="about" action="bardArchitecture">Architecture &amp; Design</g:link></li>
-                        <li><a href="https://github.com/ncatsdpiprobedev/bard/wiki">REST API</a></li>
-                        <li><a href="#" style="text-decoration: line-through;">Source code on GitHub<img
-                                src="${resource(dir: 'images/bardHomepage', file: 'comingSoon2.png')}"
-                                alt="coming soon"></a></li>
-                    </ul>
-                </div>
-
-                <div class="span2">
-                    <h3>RDM</h3>
-                    <ul>
-                        <li><g:link controller="about"
-                                    action="bardOrganizingPrinciples">Organizing principles</g:link></li>
-                        <li><g:link controller="element"
-                                    action="showTopLevelHierarchyHelp">Top-level concepts</g:link></li>
-                        <li><g:link controller="dictionaryTerms" action="dictionaryTerms">Glossary</g:link></li>
-                    </ul>
-                </div>
-
-
-                <div class="span2">
-                    <strong class="logo-by"><a href="http://www.chemaxon.com/"
-                                               title="Powered by ChemAxon">Powered by ChemAxon</a></strong>
-
-                    <p><strong class="logo-scilligence"><a href="http://www.scilligence.com/web/"
-                                                           title="Scilligence">Scilligence</a></strong></p>
-
-                    <p>&copy; 2013 BARD</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    %{--The bottom line of the whole page--}%
-    <div class="footer-info">
-        <div class="container-fluid">
-            <ul>
-                <li><a href="http://www.nih.gov/">National Institutes of Health</a></li>
-                <li><a href="http://www.hhs.gov/">U.S. Department of Health and Human Services</a></li>
-                <li><a href="http://www.usa.gov/">USA.gov – Government Made Easy</a></li>
-            </ul>
-        </div>
-    </div>
-</footer>
 </div>
 <r:layoutResources/>
 </body>

@@ -9,8 +9,6 @@ class CompoundOptionsTagLib {
                 sid: attrs.sid,
                 imageWidth: attrs.imageWidth,
                 imageHeight: attrs.imageHeight,
-                name: attrs.name,
-                numActive: attrs.numActive,
-                numAssays: attrs.numAssays])
+                name: attrs.name])
     }
 }

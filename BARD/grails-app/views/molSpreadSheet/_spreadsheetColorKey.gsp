@@ -1,7 +1,5 @@
 <div class="row-fluid">
-    <div class="span2"></div>
-
-    <div class="span10"  style="text-align: right">
+    <div class="span12"  style="text-align: right">
         <div class="container colorkeyholder">
             <div class="span2" style="margin: auto 0;">
                 <table class="colorkey">

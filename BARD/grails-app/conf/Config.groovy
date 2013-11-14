@@ -4,6 +4,9 @@ import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
+
+bard.users.email="bard-users.REMOVE-ME@REMOVE-ME.broadinstitute.org"
+
 ncgc.thickclient.root.url="http://bard.nih.gov/bard/"
 ncgc.thickclient.compounds.url = "${ncgc.thickclient.root.url}compounds/"
 ncgc.thickclient.etags.url = "${ncgc.thickclient.root.url}etag/"

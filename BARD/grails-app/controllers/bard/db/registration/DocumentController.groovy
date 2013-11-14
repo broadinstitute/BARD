@@ -11,6 +11,7 @@ import bard.db.project.ProjectDocument
 import grails.plugins.springsecurity.Secured
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.validation.Errors
 import org.springframework.validation.ObjectError
@@ -26,6 +27,7 @@ class DocumentController {
     DocumentService documentService
     def permissionEvaluator
     def springSecurityService
+
 
     def create(DocumentCommand documentCommand) {
         documentCommand.clearErrors()
@@ -117,7 +119,7 @@ class DocumentController {
             } else {
                 throw new RuntimeException("Could not find owning entity with id ${inlineEditableCommand.owningEntityId}")
             }
-            render(renderDocument(documentCommand))
+            render(renderDocument(documentCommand,grailsApplication))
         }
 
     }
@@ -151,7 +153,7 @@ class DocumentController {
                     return
                 }
             }
-            render(renderDocument(documentCommand))
+            render(renderDocument(documentCommand,grailsApplication))
         }
 
     }
@@ -208,9 +210,9 @@ class DocumentController {
 class DocumentHelper {
 
 
-    private static final String DOCUMENT_INTERNAL_SERVER_ERROR = "An internal server error occurred while you were editing this page. Please refresh your browser and try again. If you still encounter issues please report it to the BARD team (bard-users@broadinstitute.org)"
+    def renderDocument(DocumentCommand documentCommand,GrailsApplication grailsApplication) {
+        final String DOCUMENT_INTERNAL_SERVER_ERROR = "An internal server error occurred while you were editing this page. Please refresh your browser and try again. If you still encounter issues please report it to the BARD team ${grailsApplication.config.bard.users.email}"
 
-    def renderDocument(DocumentCommand documentCommand) {
         try {
             def document = documentCommand.updateExistingDocument()
             if (documentCommand.hasErrors()) {

@@ -28,8 +28,6 @@
                             cid="${compoundAdapter.pubChemCID}"
                             smiles="${compoundAdapter.structureSMILES}"
                             name="${JavaScriptUtility.cleanup(compoundAdapter.name)}"
-                            numActive="${compoundAdapter.numberOfActiveAssays}"
-                            numAssays="${compoundAdapter.numberOfAssays}"
                             imageWidth="180"
                             imageHeight="150"/>
                 </td>
@@ -68,9 +66,7 @@
                     <g:saveToCartButton id="${compoundAdapter.pubChemCID}"
                                         name="${JavaScriptUtility.cleanup(compoundAdapter.name)}"
                                         type="${querycart.QueryItemType.Compound}"
-                                        smiles="${compoundAdapter.getStructureSMILES()}"
-                                        numActive="${compoundAdapter.numberOfActiveAssays}"
-                                        numAssays="${compoundAdapter.numberOfAssays}"/>
+                                        smiles="${compoundAdapter.getStructureSMILES()}"/>
                     <dl>
                         <g:if test="${compoundAdapter.highlight}">
                             <dt>Search Match:</dt>

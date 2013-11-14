@@ -68,6 +68,32 @@
                         <sec:ifLoggedIn>
                             <g:link controller="bardWebInterface" action="navigationPage" class="my-bard-button btn">My BARD</g:link>
                         </sec:ifLoggedIn>
+
+                        <div class="navbar right-aligned">
+                            <ul class="nav">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="../about/howToSearch">Search</a></li>
+                                        <li><a href="../about/howToFilterResults">Filter search results</a></li>
+                                        <li><a href="../about/howToReadResults">Interpret search results</a></li>
+                                        %{--<li><a href="../about/howToUseSecurely">Use securely</a></li>--}%
+                                        <li><a href="../about/howToUsePlugins">Create and use plug-ins</a></li>
+                                        <li><a href="../about/howToVisualizeAndCaptureData">Visualize and Capture Data</a></li>
+                                        <li><a href="../about/howToGetTheMostFromBard">Get the Most From Bard</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="../about/howToReportABug">Report a bug</a></li>
+                                        <li><a href="../about/howToContactUs">Contact us</a></li>
+                                        <li><a href="../about/howToDocumentBard">BARD Documentation</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
                     </nav>
                 </div>
 
@@ -98,43 +124,8 @@
     </div>
 </div>
 
-<div class="row-fluid bard-footer" id="bard-footer">
-    <footer id="footer">
-        <div class="footer-columns">
-            <div class="container-fluid">
-                <div class="row-fluid">
+<g:render template="/layouts/templates/footer"/>
 
-                    <div class="span5 bard-footer-versioninfo muted">
-                        <div>
-                            <b>Created:</b> ${grailsApplication.metadata['war.created']} <b>branch:</b> ${grailsApplication?.metadata['git.branch.name']} <b>revision:</b> ${grailsApplication?.metadata['git.branch.version']}
-                        </div>
-                    </div>
-
-                    <div class="span5">
-                    </div>
-
-
-                    <div class="span2 right-aligned">
-                        <a href="http://www.chemaxon.com/" target="chemAxon"><img
-                                src="${resource(dir: 'images/bardHomepage', file: 'logo-by.png')}"
-                                alt="Powered by ChemAxon"/></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        %{--The bottom line of the whole page--}%
-        <div class="footer-info">
-            <div class="container-fluid">
-                <ul>
-                    <li><a href="#">National Institutes of Health</a></li>
-                    <li><a href="#">U.S. Department of Health and Human Services</a></li>
-                    <li><a href="#">USA.gov – Government Made Easy</a></li>
-                </ul>
-            </div>
-        </div>
-    </footer>
-</div>
 <r:layoutResources/>
 </body>
 </html>

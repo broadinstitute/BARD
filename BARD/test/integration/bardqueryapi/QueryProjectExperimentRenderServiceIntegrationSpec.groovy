@@ -22,7 +22,7 @@ class QueryProjectExperimentRenderServiceIntegrationSpec extends IntegrationSpec
 
         where:
         label                   | pid
-        "With few nodes"        | 10
+        "With few nodes"        | 1
         "With a lot of nodes"   | 25
         "With our flag project" | 41
     }

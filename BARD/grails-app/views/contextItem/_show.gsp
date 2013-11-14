@@ -90,8 +90,15 @@
                 <g:else>
                     <g:if test="${contextItem.attributeElement?.externalURL}">
                         <td class="valuedLabel">
-                            <a href="${contextItem.attributeElement.externalURL + contextItem.extValueId}"
-                               target="_blank">${contextItem.valueDisplay}</a>
+                            <g:if test="${contextItem.attributeElement.externalURL=='http://www.bard.nih.gov/person#'}">
+                                ${contextItem.valueDisplay}
+                            </g:if>
+                            <g:else>
+                                <a href="${contextItem.attributeElement.externalURL + contextItem.extValueId}"
+                                   target="_blank">${contextItem.valueDisplay}</a>
+                            </g:else>
+
+
                         </td>
                     </g:if>
                     <g:else>

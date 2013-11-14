@@ -7,19 +7,15 @@ class CartCompound extends QueryItem {
     static final int MAXIMUM_SMILES_FIELD_LENGTH = 255
 
     String smiles
-    int numAssayActive
-    int numAssayTested
 
     CartCompound() {
         this.queryItemType = QueryItemType.Compound
     }
     //TODO: Should only be called for testing, because validation is by passed
-    CartCompound(String smiles, String name, Long compoundId, int numAssayActive, int numAssayTested) {
+    CartCompound(String smiles, String name, Long compoundId) {
         this.smiles = smiles
         this.name = name
         this.externalId = compoundId
-        this.numAssayActive = numAssayActive
-        this.numAssayTested = numAssayTested
         this.queryItemType = QueryItemType.Compound
     }
 

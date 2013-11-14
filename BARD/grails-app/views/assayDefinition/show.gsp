@@ -3,7 +3,7 @@
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,assaysummary,canEditWidget"/>
+            modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,assaysummary,canEditWidget,myBard"/>
     <meta name="layout" content="basic"/>
     <title>ADID ${assayInstance?.id}: ${assayInstance?.assayName}</title>
 </head>
@@ -72,6 +72,10 @@
                                 uri="/images/clone-icon.png"/> Clone Assay Definition</g:link>
                     </sec:ifLoggedIn>
                 </g:if>
+
+                <a class="btn"
+                   href="mailto:${grailsApplication.config.bard.users.email}?Subject=Question about ADID: ${assayInstance.id}"
+                   target="_top"><i class="icon-envelope"></i>Ask a question about this Assay Definition</a>
             </div>
         </div>
     </div>

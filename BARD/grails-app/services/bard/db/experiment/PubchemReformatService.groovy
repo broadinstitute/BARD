@@ -601,10 +601,14 @@ class PubchemReformatService {
         }
 
         String relationship = stub.parentChildRelationship
-        if (relationship != null && relationship.toLowerCase() == "derives")
+        if (relationship != null && ((relationship.toLowerCase() == "derives") || (relationship.toLowerCase() == "calculated from")))
             mapped.parentChildRelationship = HierarchyType.CALCULATED_FROM
-        else
+        else if (relationship != null && (relationship.toLowerCase() == "supported by"))
             mapped.parentChildRelationship = HierarchyType.SUPPORTED_BY
+        else if (relationship == null)
+            mapped.parentChildRelationship = null;
+        else
+            throw new RuntimeException("Could not parse relationship ${relationship}");
 
         for (attribute in stub.contextItems.keySet()) {
             Element attributeElement = Element.findByLabel(attribute)

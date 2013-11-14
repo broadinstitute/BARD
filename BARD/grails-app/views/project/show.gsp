@@ -47,7 +47,11 @@
                     </g:if>
                     <small>(Project ID: ${instance.id})</small>
                 </h2>
-
+                <br/>
+                <a class="btn"
+                   href="mailto:${grailsApplication.config.bard.users.email}?Subject=Question about PID: ${instance.id}"
+                   target="_top"><i class="icon-envelope"></i> Ask a question about this Project</a>
+                <br/>
                 <g:if test="${projectAdapter != null}">
                     <g:saveToCartButton id="${instance.id}"
                                         name="${bardqueryapi.JavaScriptUtility.cleanup(projectAdapter?.name)}"
@@ -72,6 +76,7 @@
                                 <li class="span4">
                                     <div class="thumbnail">
                                         <g:compoundOptions cid="${probe.cid}" sid="${probe.cid}" smiles="${probe?.smiles}"
+                                                           name="${probe.probeId}"
                                                            imageHeight="200" imageWidth="300"/>
                                         <div class="caption">
                                             <h3>Probe ML#: ${probe.probeId}</h3>

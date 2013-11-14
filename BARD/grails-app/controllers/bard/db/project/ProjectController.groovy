@@ -21,6 +21,7 @@ import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.web.client.HttpClientErrorException
@@ -36,6 +37,7 @@ class ProjectController {
     def permissionEvaluator
     CapPermissionService capPermissionService
     IQueryService queryService
+    GrailsApplication grailsApplication
 
     @Secured(['isAuthenticated()'])
     def myProjects() {
@@ -442,7 +444,7 @@ class ProjectController {
             return [command: command]
         } catch (Exception ee) {
             log.error(ee, ee)
-            command.errorMessages.add("An error has occurred, Please log an issue with the BARD team at bard-users@broadinstitute.org to fix this issue")
+            command.errorMessages.add("An error has occurred, Please log an issue with the BARD team at ${grailsApplication.config.bard.users.email} to fix this issue")
             return [command: command]
         }
 
