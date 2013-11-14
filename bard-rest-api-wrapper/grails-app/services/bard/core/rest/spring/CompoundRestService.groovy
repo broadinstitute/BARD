@@ -273,7 +273,8 @@ class CompoundRestService extends AbstractRestService {
         try {
             final List<Compound> compounds = getForObject(url, List.class) as List<Compound>
             if (compounds) {
-                return compounds.get(0)
+                //get the last compound in the list
+                return compounds.get(compounds.size()-1)
             }
             return null;
         } catch (Exception e) {
