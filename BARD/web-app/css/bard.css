@@ -149,6 +149,7 @@ div.header > h3 {
 .bard-footer-versioninfo {
     margin-top: 10px;
     vertical-align: middle;
+    text-align: center;
 }
 
 .bard-footer .horizontal-block-list {
