@@ -80,7 +80,9 @@ QueryCart.prototype.removeAll = function () {
 };
 
 QueryCart.prototype.publishCartChangeEvent = function (eventName, itemChangedId) {
-    $('.addToCartCheckbox,#summaryView,#detailView').trigger(eventName, itemChangedId);
+    this.refreshSummaryView();
+    this.refreshDetailsView();
+    $('.addToCartCheckbox').trigger(eventName, itemChangedId);
 };
 
 QueryCart.prototype.refreshInCartCheckboxes = function (event, idToTarget) {
@@ -116,11 +118,7 @@ QueryCart.prototype.init = function () {
     $(document).on('click', '.addToCartCheckbox:checked', this.addItemToCartHandler);
     $(document).on('click', '.addToCartCheckbox:not(:checked)', this.removeItemFromCartHandler);
     $(document).on('cart.itemAdded', '.addToCartCheckbox', this.refreshInCartCheckboxes);
-    $(document).on('cart.itemAdded', '#summaryView', this.refreshSummaryView);
-    $(document).on('cart.itemAdded', '#detailView', this.refreshDetailsView);
     $(document).on('cart.itemRemoved', '.addToCartCheckbox', this.refreshInCartCheckboxes);
-    $(document).on('cart.itemRemoved', '#summaryView', this.refreshSummaryView);
-    $(document).on('cart.itemRemoved', '#detailView', this.refreshDetailsView);
     $(document).on('cart.refreshCheckboxes', '.addToCartCheckbox', this.refreshInCartCheckboxes);
 //    This is for the addToCart link we give in each compound's option pull-down menu
     $(document).on('click', '.addToCartLink', this.addItemToCartHandler);
