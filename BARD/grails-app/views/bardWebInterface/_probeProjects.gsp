@@ -22,7 +22,7 @@
                             <g:if test="${searchString}">
                                 <g:form controller="BardWebInterface" action="search" method="POST">
                                     <g:hiddenField name="searchString" value="${searchString}"/>
-                                    <g:submitButton name="View All Probes" class='btn'/>
+                                    <g:submitButton name="View All Probes" class='btn' value="View All Probes"/>
                                 </g:form>
                             </g:if>
                         </p>

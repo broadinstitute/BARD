@@ -330,6 +330,10 @@ class PreviewExperimentResultsSummaryBuilder {
             // that is not a Concentration/response endpoint so that we can display it in a column
             StringValue outcome = new StringValue(value: jsonResult.valueDisplay)
             resultsMap.outcome = outcome
+
+            if (jsonResult.contextItems) {
+                resultsMap.childElements << contextItemsToChildElements(jsonResult.contextItems)
+            }
             if (jsonResult.related) {
                 convertExperimentResultsToTableModelCellsAndRows(resultsMap, jsonResult.related)
             }
