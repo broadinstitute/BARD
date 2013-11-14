@@ -642,6 +642,10 @@ li{line-height:inherit;}
     display:block;
     height:100%;
 }
+.logoSection div {
+    padding-bottom: 5px;
+}
+
 /* media queries */
 @media only screen and (max-width: 1240px){
 	.items-gallery .btn-prev,

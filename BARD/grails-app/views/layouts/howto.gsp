@@ -146,74 +146,10 @@
                 <g:layoutBody/>
             </div>
         </div>
-
-
-        <div class="row-fluid bard-footer">
-            <footer id="footer">
-                <div class="footer-columns">
-                    <div class="container-fluid">
-                        %{--<div class="row-fluid">--}%
-                        %{--Note:  remove 'fivecolumns' class and go to span3's to move down to four columns--}%
-                        <div class="row-fluid fivecolumns">
-                            <div class="span2">
-                                <h3>About</h3>
-                                <ul>
-                                    <li><a href="../about/bardHistory">History</a></li>
-                                    <li><a href="../about/bardDevelopmentTeam">Development Team</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="span2">
-                                <h3>Help</h3>
-                                <ul>
-                                    <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!forum/bard-users">Forums</a></li>
-                                    <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Submit a Bug Report</a></li>
-                                    <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Ask a Question</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="span2">
-                                <h3>Technology</h3>
-                                <ul>
-                                    <li><a href="../about/bardArchitecture">Architecture &amp; Design</a></li>
-                                    <li><a href="https://github.com/ncatsdpiprobedev/bard/wiki">REST API</a></li>
-                                    <li><a href="#" style="text-decoration: line-through;">Source code on GitHub<img src="${resource(dir: 'images/bardHomepage', file: 'comingSoon2.png')}" alt="coming soon"></a></li>
-                                </ul>
-                            </div>
-
-                            <div class="span2">
-                                <h3>RDM</h3>
-                                <ul>
-                                    <li><a href="../about/bardOrganizingPrinciples">Organizing principles</a></li>
-                                    <li><a href="../element/showTopLevelHierarchyHelp">Top-level concepts</a></li>
-                                    <li><a href="../dictionaryTerms/dictionaryTerms">Glossary</a></li>
-                                </ul>
-                            </div>
-
-
-
-                            <div class="span2">
-                                <strong class="logo-by"><a href="http://www.chemaxon.com/" title="Powered by ChemAxon">Powered by ChemAxon</a></strong>
-                                <p><strong class="logo-scilligence"><a href="http://www.scilligence.com/web/" title="Scilligence">Scilligence</a></strong></p>
-                                <p>&copy; 2013 BARD</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                %{--The bottom line of the whole page--}%
-                <div class="footer-info">
-                    <div class="container-fluid">
-                        <ul>
-                            <li><a href="http://www.nih.gov/">National Institutes of Health</a></li>
-                            <li><a href="http://www.hhs.gov/">U.S. Department of Health and Human Services</a></li>
-                            <li><a href="http://www.usa.gov/">USA.gov – Government Made Easy</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </footer>
-        </div>
     </div>
+
+    <g:render template="/layouts/templates/footer"/>
+
 </div>
 <r:layoutResources/>
 </body>
