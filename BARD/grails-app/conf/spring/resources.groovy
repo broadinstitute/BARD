@@ -130,6 +130,7 @@ beans = {
     experimentBuilder(ExperimentBuilder) {
         grailsApplication = grailsApplication
         compoundRestService=ref('compoundRestService')
+        ontologyDataAccessService=ref('ontologyDataAccessService')
     }
     experimentRestService(ExperimentRestService) {
         externalUrlDTO = ref('externalUrlDTO')
