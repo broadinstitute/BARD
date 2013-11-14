@@ -81,17 +81,22 @@ class HillCurveValueHolderUnitSpec extends Specification{
         HillCurveValueHolder hillCurveValueHolder = new HillCurveValueHolder()
         hillCurveValueHolder.slope = slope
         hillCurveValueHolder.response = [response]
+        hillCurveValueHolder.stringValue = stringValue
 
         then:
         assertNotNull hillCurveValueHolder
         assert hillCurveValueHolder.toString().trim() ==  returnValue
 
         where:
-        slope       |   response    |   returnValue
-        47.89       |   null        |   "47.9"
-        null        |   47.89       |   "47.9"
-        47.89       |   47.89       |   "47.9"
-        null        |   null        |   "--"
+        slope       |   response    |   stringValue |   returnValue
+        47.89       |   null        |   ""          |   "47.9"
+        null        |   47.89       |   ""          |   "47.9"
+        47.89       |   47.89       |   ""          |   "47.9"
+        null        |   null        |   ""          |   "--"
+        47.89       |   null        |   "Inhibitor" |   "Inhibitor"
+        null        |   47.89       |   "Inhibitor" |   "Inhibitor"
+        47.89       |   47.89       |   "Inhibitor" |   "Inhibitor"
+        null        |   null        |   "Inhibitor" |   "Inhibitor"
 
     }
 

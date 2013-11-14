@@ -94,7 +94,8 @@ class SpreadSheetActivityStorage {
 
     String printUnits(String resultValueHolder = '') {
         String returnValue
-        if (resultValueHolder == '--') { // if we have a null value and we don't want to print out any units for it
+        if ((resultValueHolder == '--')||
+            (resultValueHolder == 'NA')){ // if we have a null value and we don't want to print out any units for it
             returnValue = ''
         } else {
             if (responseUnit == null)
