@@ -243,8 +243,10 @@
             class="icon-question-sign"></i></g:link></h3>
 
     <div class="row-fluid">
+        %{--Add the linked measures to the experiment annotations section IN ADDITION to their card in the Experimental Variables section.--}%
+        %{--The linked measures is always the first contexts in the experimental variable group.--}%
         <g:render template="../context/show"
-                  model="[contextOwner: instance, contexts: instance.groupContexts(), uneditable: true]"/>
+                  model="[contextOwner: instance, additionalContexts: instance.assay.groupExperimentalVariables().value.first(), uneditable: true]"/>
     </div>
     <br/>
 
