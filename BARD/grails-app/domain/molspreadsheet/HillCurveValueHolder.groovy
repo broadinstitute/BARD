@@ -90,7 +90,9 @@ class HillCurveValueHolder {
             }
 
             // add a qualifier if we have one ( otherwise append a null string ).
-            if (!returnValue.contains("--")) {
+            if ((!returnValue.contains("--"))&&
+                (!returnValue.equals("NA")))  // special case: sometimes we are told the string value="NA".  If so then a qualifier doesn't make sense
+                     {
                 returnValue = qualifier + " " + returnValue
             }
         }
