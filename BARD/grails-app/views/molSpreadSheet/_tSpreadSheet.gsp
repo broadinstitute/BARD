@@ -20,17 +20,13 @@
     }
 </script>
 
-<div class="row-fluid">
-    <g:if test="${flash.message}">
+<g:if test="${flash.message}">
+    <div class="row-fluid">
         <div class="span12" role="status"><p style="color: #3A87AD;">${flash.message}</p></div>
-    </g:if>
-
-    <div class="span2">
-        <g:render template="../bardWebInterface/facets"
-                  model="['facets': facets, 'formName': FacetFormType.AssayFacetForm]"/>
     </div>
-
-    <div class="span10">
+</g:if>
+<div class="row-fluid">
+    <div class="span12">
         <g:if test="${molSpreadSheetData?.getColumnCount() > 0}">
             <g:set var="columnHeaders" value="${molSpreadSheetData?.getColumns()}"/>
             <g:set var="columnWidth" value="${100.0 / ((molSpreadSheetData?.getColumnCount() - 1) as float)}"/>
@@ -184,8 +180,9 @@
         </g:else>
 
     </div>
-    <% String mycid="${params.cid}" %>
-    <div class="span10 pull-right">
+</div>
+<div class="row-fluid">
+    <div class="span12">
         <export:formats formats="['csv', 'excel', 'pdf']" params="['cid':[params.cid]]"/>
     </div>
 </div>

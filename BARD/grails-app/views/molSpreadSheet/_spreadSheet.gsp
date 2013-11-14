@@ -76,11 +76,12 @@
     });
 </script>
 <% molSpreadSheetData.flipNormalizationForAdid (assayNormalizationSwap) %>
-<div class="row-fluid">
-    <g:if test="${flash.message}">
+<g:if test="${flash.message}">
+    <div class="row-fluid">
         <div class="span12" role="status"><p style="color: #3A87AD;">${flash.message}</p></div>
-    </g:if>
-
+    </div>
+</g:if>
+<div class="row-fluid">
     <div class="span12">
         <g:if test="${molSpreadSheetData?.getRowCount() > 0}">
             <g:set var="columnWidth" value="${100.0 / ((molSpreadSheetData?.getColumnCount() - 1) as float)}"/>
@@ -250,11 +251,11 @@
         </g:else>
 
     </div>
-
-    <div class="span10 pull-right">
-        <g:if test="${molSpreadSheetData?.getRowCount() > 0}">
-            <export:formats formats="['csv', 'excel', 'pdf']" params="['cid':[params.cid]]"/>
-        </g:if>
-    </div>
 </div>
-
+<g:if test="${molSpreadSheetData?.getRowCount() > 0}">
+    <div class="row-fluid">
+        <div class="span12">
+            <export:formats formats="['csv', 'excel', 'pdf']" params="['cid':[params.cid]]"/>
+        </div>
+    </div>
+</g:if>
