@@ -140,22 +140,31 @@ class CompoundSummaryCategorizer {
             log.warn("Error expected experiment ID =: '${eid}'")
         }  else {
             SingleEidSummary singleEidSummary = totalContents[eid]
-            int proteinTargetIndex = deriveProteinTargetIndex (proteinTarget)
-            if (!singleEidSummary.proteinTargetsIndexList.contains(proteinTargetIndex))// Strictly a self consistency check -- should never be false.
-                singleEidSummary.proteinTargetsIndexList <<  proteinTargetIndex
+            int proteinTargetIndex = deriveBiologicalProcessIndex (proteinTarget)
+            // verify that we assign biological conversions to all assays sharing this ID
+            List<SingleEidSummary> singleEidSummaryList = totalContents.values().findAll {it.assayCapId==singleEidSummary.assayCapId}
+            for (SingleEidSummary eachSingleEidSummaryList in singleEidSummaryList)   {
+                if (!eachSingleEidSummaryList.proteinTargetsIndexList.contains(proteinTargetIndex))  {
+                    eachSingleEidSummaryList.proteinTargetsIndexList <<  proteinTargetIndex
+                }
+            }
         }
-
     }
 
 
     public combineInNewBiologicalProcessValue (long eid, String biologicalProcess ) {
         if (!totalContents.keySet().contains(eid)) {
-            log.warn("Error expected experiment ID =:  '${eid}'")
+            log.warn("Error! expected experiment ID =:  '${eid}'")
         }  else {
             SingleEidSummary singleEidSummary = totalContents[eid]
             int biologicalProcessIndex = deriveBiologicalProcessIndex (biologicalProcess)
-            if (!singleEidSummary.biologicalProcessIndexList.contains(biologicalProcessIndex))// Strictly a self consistency check -- should never be false.
-                singleEidSummary.biologicalProcessIndexList <<  biologicalProcessIndex
+            // verify that we assign biological conversions to all assays sharing this ID
+            List<SingleEidSummary> singleEidSummaryList = totalContents.values().findAll {it.assayCapId==singleEidSummary.assayCapId}
+            for (SingleEidSummary eachSingleEidSummaryList in singleEidSummaryList)   {
+                if (!eachSingleEidSummaryList.biologicalProcessIndexList.contains(biologicalProcessIndex))  {
+                    eachSingleEidSummaryList.biologicalProcessIndexList <<  biologicalProcessIndex
+                }
+            }
         }
 
     }
