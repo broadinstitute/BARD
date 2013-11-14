@@ -37,8 +37,6 @@
                                     cid="${cell.getValue().cid}"
                                     smiles="${cell.getValue().smiles}"
                                     name="${bardqueryapi.JavaScriptUtility.cleanup(cell.getValue().name)}"
-                                    numActive="${cell.getValue().numberOfActiveAssays}"
-                                    numAssays="${cell.getValue().numberOfAssays}"
                                     imageWidth="180"
                                     imageHeight="150"/>
                         </td>

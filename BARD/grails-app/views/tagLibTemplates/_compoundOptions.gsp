@@ -6,15 +6,15 @@
         style="min-width: ${imageWidth}px; min-height: ${imageHeight}px"/>
     </g:if>
     <g:else>
-        <img alt="SID: ${sid}" title="SID: ${sid}"
+        <img alt="CID: ${cid}" title="CID: ${cid}"
              src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromCID', params: [cid: cid, width: imageWidth, height: imageHeight])}"/>
     </g:else>
     <g:if test="${name}">
         <g:if test="${name.size() <= 15}">
-            <div class="compound-info-name">${name}</div>
+            <div class="text-center">${name}</div>
         </g:if>
         <g:else>
-            <div title="${name}" rel="tooltip" class="compound-info-name">${name.substring(0,14)}...</div>
+            <div title="${name}" rel="tooltip" class="text-center">${name.substring(0,14)}...</div>
         </g:else>
     </g:if>
     <div class="compound-info-dropdown">
@@ -41,15 +41,12 @@
                     <g:link controller="molSpreadSheet" action="showExperimentDetails"
                             params="[cid: cid, transpose: true]">Show Experimental Details</g:link>
                 </li>
-                <g:if test="${smiles && name && numActive && numAssays}">
+                <g:if test="${smiles && name}">
                     <li>
-                        <a href="javascript:void(0);" name="saveToCartLink" class="addToCartLink"
-                           data-cart-name="${name}"
-                           data-cart-id="${cid}"
-                           data-cart-type="${QueryItemType.Compound}"
-                           data-cart-smiles="${smiles}"
-                           data-cart-numActive="${numActive}"
-                           data-cart-numAssays="${numAssays}">Save to Cart For Analysis</a>
+                        <g:saveToCartButton id="${cid}"
+                                            name="${bardqueryapi.JavaScriptUtility.cleanup(name)}"
+                                            type="${QueryItemType.Compound}"
+                                            smiles="${smiles}"/>
                     </li>
                 </g:if>
                 <li>

@@ -181,20 +181,6 @@
 </g:if>
 
 
-%{--<ul class="thumbnails">--}%
-%{--<li>--}%
-%{--<g:compoundOptions--}%
-%{--sid="${compound?.pubChemCID}"--}%
-%{--cid="${compound?.pubChemCID}"--}%
-%{--smiles="${compound?.structureSMILES}"--}%
-%{--name="${bardqueryapi.JavaScriptUtility.cleanup(compound?.name)}"--}%
-%{--numActive="${compound?.numberOfActiveAssays}"--}%
-%{--numAssays="${compound?.numberOfAssays}"--}%
-%{--imageWidth="400"--}%
-%{--imageHeight="300"/>--}%
-%{--</li>--}%
-%{--</ul>--}%
-
 <g:if test="${compound?.structureSMILES}">
     <img alt="${compound.structureSMILES}"
          src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: compound.structureSMILES, width: 400, height: 300])}"/>

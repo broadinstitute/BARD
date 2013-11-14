@@ -222,6 +222,10 @@ div.facets {
     font-size: .9em;
 }
 
+li label {
+    margin-bottom: 0;
+}
+
 .facets input[type="submit"] {
     float: right;
 }

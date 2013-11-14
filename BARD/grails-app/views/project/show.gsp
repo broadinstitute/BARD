@@ -72,6 +72,7 @@
                                 <li class="span4">
                                     <div class="thumbnail">
                                         <g:compoundOptions cid="${probe.cid}" sid="${probe.cid}" smiles="${probe?.smiles}"
+                                                           name="${probe.probeId}"
                                                            imageHeight="200" imageWidth="300"/>
                                         <div class="caption">
                                             <h3>Probe ML#: ${probe.probeId}</h3>

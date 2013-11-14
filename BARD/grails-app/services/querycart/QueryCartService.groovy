@@ -1,11 +1,9 @@
 package querycart
-
 import bard.db.project.Project
 import bard.db.registration.Assay
 import com.metasieve.shoppingcart.IShoppable
 import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartService
-import grails.converters.JSON
 
 class QueryCartService {
 
@@ -193,7 +191,7 @@ class QueryCartService {
         return item
     }
 
-    QueryItem getQueryItem(def id, def itemType, def name, def smiles, def numActive, def numAssays) {
+    QueryItem getQueryItem(def id, def itemType, def name, def smiles) {
         QueryItem item
 
         // compounds have no internal id, so we must look them up by external ID
@@ -206,14 +204,10 @@ class QueryCartService {
         if (!item) {
             switch (itemType) {
                 case QueryItemType.Compound:
-                    int numAssayActive = numActive ? new Integer(numActive) : 0
-                    int numAssayTested = numAssays ? new Integer(numAssays) : 0
                     item = new CartCompound()
                     item.smiles = smiles
                     item.name = name
                     item.externalId = id
-                    item.numAssayActive = numAssayActive
-                    item.numAssayTested = numAssayTested
                     break
                 case QueryItemType.Project:
                     Long externalId = Project.get(id)?.ncgcWarehouseId

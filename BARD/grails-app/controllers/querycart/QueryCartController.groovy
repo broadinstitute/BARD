@@ -1,15 +1,11 @@
 package querycart
 
-import bard.db.project.Project
-import bard.db.registration.Assay
 import bardqueryapi.BardUtilitiesService
+import bardqueryapi.ETagsService
 import bardqueryapi.InetAddressUtil
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.converters.JSON
-import grails.plugins.springsecurity.Secured
-import bardqueryapi.ETagsService
 import org.codehaus.groovy.grails.commons.GrailsApplication
-
 
 @Mixin(InetAddressUtil)
 class QueryCartController {
@@ -71,7 +67,7 @@ class QueryCartController {
 
         String name = params.name
 
-        QueryItem item = queryCartService.getQueryItem(id, itemType, name, params.smiles, params.numActive, params.numAssays)
+        QueryItem item = queryCartService.getQueryItem(id, itemType, name, params.smiles)
         queryCartService.addToShoppingCart(item)
 
         return render(status: 200, text: "Added item [${item}] to cart")
@@ -84,8 +80,6 @@ class QueryCartController {
             params.type = item.type
             params.name = item.name
             params.smiles = item.smiles
-            params.numActive = item.numActive
-            params.numAssays = item.numAssays
 
             addItem()
 
@@ -209,6 +203,4 @@ class CartItemDTO {
     String type
     String name
     String smiles
-    Integer numActive
-    Integer numAssays
 }

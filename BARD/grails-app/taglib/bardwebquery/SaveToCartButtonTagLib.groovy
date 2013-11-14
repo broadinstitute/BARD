@@ -26,6 +26,6 @@ class SaveToCartButtonTagLib {
         }
 
         out << render(template: "/tagLibTemplates/saveToCartButton", model: [name: attrs.name, id: attrs.id, type: attrs.type,
-                smiles: attrs.smiles, isInCart: isInCart, numAssays: attrs.numAssays, numActive: attrs.numActive, hideLabel: attrs.hideLabel])
+                smiles: attrs.smiles, isInCart: isInCart, numAssays: attrs.numAssays, hideLabel: attrs.hideLabel])
     }
 }

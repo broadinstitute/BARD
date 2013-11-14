@@ -1,5 +1,7 @@
 package querycart
-
+import bardqueryapi.BardUtilitiesService
+import bardqueryapi.ETagsService
+import bardqueryapi.InetAddressUtil
 import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.test.mixin.Mock
@@ -10,10 +12,6 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
-import bardqueryapi.InetAddressUtil
-import grails.plugins.springsecurity.SpringSecurityService
-import bardqueryapi.BardUtilitiesService
-import bardqueryapi.ETagsService
 
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(QueryCartController)
@@ -66,7 +64,7 @@ class QueryCartControllerUnitSpec extends Specification {
 
         when:
         QueryItem item =  Mock(QueryItem)
-        1 * queryCartService.getQueryItem(_, _, _, _, _, _) >> item
+        1 * queryCartService.getQueryItem(_, _, _, _) >> item
         1 * queryCartService.addToShoppingCart(_ as QueryItem)
 
         controller.addItem()
@@ -83,26 +81,6 @@ class QueryCartControllerUnitSpec extends Specification {
         "add new compound w/details" | QueryItemType.Compound        | 6          | 'Test' | 'C'
         "add new project w/details"  | QueryItemType.Project         | 7          | 'Test' | null
         "add assay already in cart"  | TYPE_IN_CART                  | ID_IN_CART | 'foo'  | null
-    }
-
-    void "test successful add compound Item with numActive and numAssays"() {
-        given:
-        params.type = QueryItemType.Compound.toString()
-        params.id = "3"
-        params.name = 'Test'
-        params.smiles = 'C'
-        params.numActive = "1"
-        params.numAssays = "3"
-
-        when:
-        QueryItem item =  Mock(QueryItem)
-        1 * queryCartService.getQueryItem(_, _, _, _, _, _) >> item
-        1 * queryCartService.addToShoppingCart(_ as QueryItem)
-
-        controller.addItem()
-
-        then:
-        assert response.status == HttpServletResponse.SC_OK
     }
 
 
@@ -134,7 +112,7 @@ class QueryCartControllerUnitSpec extends Specification {
         when:
         project.save()
 
-        1 * queryCartService.getQueryItem(_, _, _, _, _, _) >> project
+        1 * queryCartService.getQueryItem(_, _, _, _) >> project
         1 * queryCartService.addToShoppingCart(project)
 
         controller.addItem()
@@ -150,7 +128,7 @@ class QueryCartControllerUnitSpec extends Specification {
         params.name = 'Test'
 
         when:
-        (_..1) * queryCartService.getQueryItem(_, _, _, _, _, _) >> null
+        (_..1) * queryCartService.getQueryItem(_, _, _, _) >> null
         0 * queryCartService.addToShoppingCart(_ as QueryItem)
         controller.addItem()
 
@@ -322,12 +300,12 @@ class QueryCartControllerUnitSpec extends Specification {
 
     void "test successful addItems for #label"() {
         given:
-        String itemsJSON = "[{'id': ${id}, 'type': ${type}, 'name': ${name}, 'smiles': ${smiles}, 'numActive': 1, 'numAssays': 3}]"
+        String itemsJSON = "[{'id': ${id}, 'type': ${type}, 'name': ${name}, 'smiles': ${smiles}}]"
         params.items = itemsJSON
 
         when:
         QueryItem item =  Mock(QueryItem)
-        1 * queryCartService.getQueryItem(_, _, _, _, _, _) >> item
+        1 * queryCartService.getQueryItem(_, _, _, _) >> item
         1 * queryCartService.addToShoppingCart(_ as QueryItem)
 
         controller.addItems()
@@ -349,7 +327,7 @@ class QueryCartControllerUnitSpec extends Specification {
 
     void "test failed addItems for #label"() {
         given:
-        String itemsJSON = "[{'id': ${id}, 'type': ${type}, 'name': 'Test', 'smiles': 'C=C', 'numActive': 1, 'numAssays': 3}]"
+        String itemsJSON = "[{'id': ${id}, 'type': ${type}, 'name': 'Test', 'smiles': 'C=C'}]"
         params.items = itemsJSON
 
         when:
