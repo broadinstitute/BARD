@@ -196,11 +196,11 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         false            | null                   | null                     | null
         false            | new CartAssay("A",1,1) | null                     | null
         false            | null                   | new CartProject("P",8,8) | null
-        true             | null                   | null                     | new CartCompound("C", "c", 1, 0, 0)
-        true             | null                   | new CartProject("P",8,8) | new CartCompound("C", "c", 1, 0, 0)
-        true             | new CartAssay("A",1,1) | null                     | new CartCompound("C", "c", 1, 0, 0)
+        true             | null                   | null                     | new CartCompound("C", "c", 1)
+        true             | null                   | new CartProject("P",8,8) | new CartCompound("C", "c", 1)
+        true             | new CartAssay("A",1,1) | null                     | new CartCompound("C", "c", 1)
         false            | new CartAssay("A",1,1) | new CartProject("P",8,8) | null
-        true             | new CartAssay("A",1,1) | new CartProject("P",8,8) | new CartCompound("C", "c", 1, 0, 0)
+        true             | new CartAssay("A",1,1) | new CartProject("P",8,8) | new CartCompound("C", "c", 1)
         false            | null                   | null                     | null
     }
 
@@ -210,9 +210,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void "test try different cart combos"() {
         given:
         final CartAssay assay1 = new CartAssay("Assay Definition: Identification of inhibitors of RAD54 Measured in Biochemical System Using Plate Reader - 2159-01_Inhibitor_SinglePoint_HTS_Activity", 1, 4332L)
-        final CartCompound compound1 = new CartCompound("COC1=CC=C(C=C1)C#CC1=CC=C(C=C1)[C@H]1[C@@H](CO)N2CCCCN(C[C@H]12)C(=O)NC1=CC(F)=CC=C1", "BRD-K70362473-001-01-0", 54667549, 0, 0)
+        final CartCompound compound1 = new CartCompound("COC1=CC=C(C=C1)C#CC1=CC=C(C=C1)[C@H]1[C@@H](CO)N2CCCCN(C[C@H]12)C(=O)NC1=CC(F)=CC=C1", "BRD-K70362473-001-01-0", 54667549)
         final CartAssay assay = new CartAssay("Assay Definition: Confirmation Concentration-Response Assay for Inhibitors of Human Muscle isoform 2 Pyruvate Kinase", 2, 364L)
-        final CartCompound compound = new CartCompound("CC1=CC=C(O1)C1=C(NC2=CC=C(C)C=C2)N2C(C=CC=C2C)=N1", "HMS1817I15", 4085914L, 0, 0)
+        final CartCompound compound = new CartCompound("CC1=CC=C(O1)C1=C(NC2=CC=C(C)C=C2)N2C(C=CC=C2C)=N1", "HMS1817I15", 4085914L)
 
 
         when: "we have a molecularSpreadSheetService"
@@ -413,7 +413,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void "test that we can create an ETag from a list of  current compounds"() {
         when: "we have list of cart compounds"
         List<CartCompound> cartCompoundList = []
-        cartCompoundList.add(new CartCompound("CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", "Rottlerin", 5281847, 0, 0))
+        cartCompoundList.add(new CartCompound("CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", "Rottlerin", 5281847))
         Object eTag = molecularSpreadSheetService.generateETagFromCids(cartCompoundList*.externalId)
 
         then: "we should be able to build and Etag from them"
@@ -428,7 +428,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         List<CartCompound> cartCompoundList = []
         Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
-        cartCompoundList.add(new CartCompound("CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", "Rottlerin", 5281847, 0, 0))
+        cartCompoundList.add(new CartCompound("CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", "Rottlerin", 5281847))
         //List<Experiment> originalExperimentList =  []
         List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.compoundIdsToExperiments(cartCompoundList*.externalId, mapExperimentIdsToCapAssayIds, true)
 
@@ -441,7 +441,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         List<CartCompound> cartCompoundList = []
         Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
-        cartCompoundList.add(new CartCompound("CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", "Rottlerin", 5281847, 0, 0))
+        cartCompoundList.add(new CartCompound("CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", "Rottlerin", 5281847))
         //List<Experiment> originalExperimentList =  []
         List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.compoundIdsToExperiments(cartCompoundList*.externalId, mapExperimentIdsToCapAssayIds, false)
 
