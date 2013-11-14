@@ -10,7 +10,7 @@ class SpreadsheetElementsTagLib {
             out << attrs.smiles
         } else {
             out << render(template: "/tagLibTemplates/compoundOptions", model: [cid: attrs.cid,
-                    smiles: attrs.smiles, sid: attrs.sid,
+                    smiles: attrs.smiles, sid: attrs.sid, name: attrs.name,
                     imageWidth: "150", imageHeight: "120"])
         }
     }

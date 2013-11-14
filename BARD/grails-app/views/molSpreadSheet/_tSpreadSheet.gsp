@@ -72,9 +72,10 @@
                     <th class="molSpreadSheetImg" colspan=3>Molecular structure</th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <td class="molSpreadSheetImg">
-                            <% String retrievedSmiles = """${molSpreadSheetData?.displayValue(rowCnt, 0)."smiles"}""".toString() %>
+                            <% String retrievedSmiles = """${molSpreadSheetData?.displayValue(rowCnt, 0)?."smiles"}""".toString() %>
                             <% String cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
-                            <g:imageCell cid="${cid}" smiles="${retrievedSmiles}"/>
+                            <% String name = """${molSpreadSheetData?.displayValue(rowCnt, 0)?."name"}""".toString() %>
+                            <g:imageCell cid="${cid}" smiles="${retrievedSmiles}" name="${name}"/>
                         </td>
                     </g:each>
                 </tr>
