@@ -111,25 +111,9 @@ class PubchemImportService {
             }
         }
 
-        if(panel != null) {
-            PanelExperiment panelExperiment = createPanelExperiment(panel, eids);
-            log.info("Created an experiment panel ${panelExperiment.id}")
-        }
-
         return firstResults;
     }
 
-    PanelExperiment createPanelExperiment(Panel panel, Collection<Long> eids) {
-        PanelExperiment panelExperiment = new PanelExperiment();
-        eids.each {
-            panelExperiment.addToExperiments(Experiment.get(it))
-        }
-        panelExperiment.panel = panel
-
-        panelExperiment.save(failOnError: true)
-
-        return panelExperiment;
-    }
 
     Panel derivePanel(Collection<Long> eids) {
         // find the unique set of assays used by these experiments.
