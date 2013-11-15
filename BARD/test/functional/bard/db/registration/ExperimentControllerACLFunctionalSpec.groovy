@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.dictionary.Element
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
@@ -33,7 +34,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String controllerUrl = getBaseUrl()+ "experiment/"
+    static final String controllerUrl = getBaseUrl() + "experiment/"
 
     @Shared
     Map experimentData
@@ -56,9 +57,13 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
                 otherRole = Role.build(authority: 'ROLE_TEAM_B', displayName: 'ROLE_TEAM_B').save(flush: true)
             }
             Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role).save(flush: true)
-            ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: true)
-            Experiment experiment = Experiment.build(assay: assay, ownerRole:role,experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>).save(flush: true)
 
+            Element element = Element.findByLabel("Some labelYYY")
+            if (!element) {
+                element = Element.build(label: "Some labelYYY").save(flush:true)
+            }
+            Experiment experiment = Experiment.build(assay: assay, ownerRole: role).save(flush: true)
+            ExperimentMeasure.build(experiment: experiment,resultType:element,priorityElement: true).save(flush: true)
             return [id: experiment.id, experimentName: experiment.experimentName, assayName: assay.assayName, assayId: assay.id, authority: role.authority]
         })
         assayIdList.add(experimentData.assayId)
@@ -461,7 +466,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         when:
 
         def response = client.post() {
-            urlenc assayId: assayId, ownerRole: experimentData.authority, experimentName : team ,experimentTree:"[]"
+            urlenc assayId: assayId, ownerRole: experimentData.authority, experimentName: team, experimentTree: "[]"
         }
 
         then:
