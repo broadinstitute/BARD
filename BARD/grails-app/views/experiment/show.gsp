@@ -72,10 +72,8 @@
 </div>
 <g:hiddenField name="version" id="versionId" value="${instance.version}"/>
 <div class="span9">
-<a class="btn"
-   href="mailto:${grailsApplication.config.bard.users.email}?Subject=Question about EID: ${instance.id}"
-   target="_top"><i class="icon-envelope"></i> Ask a question about this Experiment</a>
-<br/>
+<g:render template="../layouts/askAQuestion" model="['entity':'Experiment']"/>
+
 <section id="summary-header">
     <div class="page-header">
         <h3 class="sect">Overview</h3>

@@ -11,7 +11,7 @@
 <body>
 <div class="container-fluid">
     <div class="row-fluid">
-        <p>Please email the BARD team at ${grailsApplication.config.bard.users.email} if you would like to be added to a Team</p> <br/>
+        <p>Please email the BARD team at <g:render template="../layouts/bardusers"/> if you would like to be added to a Team</p> <br/>
 
         <g:render template="/layouts/templates/tableSorterTip"/>
         <table class="table table-striped table-hover table-bordered">
