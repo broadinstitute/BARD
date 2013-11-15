@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentMeasure
 import bard.db.people.Role
 import bard.db.project.ExperimentController
 import groovy.sql.Sql
@@ -55,7 +56,8 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
                 otherRole = Role.build(authority: 'ROLE_TEAM_B', displayName: 'ROLE_TEAM_B').save(flush: true)
             }
             Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role).save(flush: true)
-            Experiment experiment = Experiment.build(assay: assay, ownerRole:role).save(flush: true)
+            ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: true)
+            Experiment experiment = Experiment.build(assay: assay, ownerRole:role,experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>).save(flush: true)
 
             return [id: experiment.id, experimentName: experiment.experimentName, assayName: assay.assayName, assayId: assay.id, authority: role.authority]
         })

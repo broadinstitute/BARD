@@ -841,7 +841,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         associateExperimentsCommand.mergeAssayDefinitionService.convertIdToEntity(_, _) >> { experiment }
         associateExperimentsCommand.projectService.addExperimentToProject(_, _, _) >> { throw new RuntimeException("msg") }
 
-        assert model.command.errorMessages == ["An error has occurred, Please log an issue with the BARD team at bard-users.REMOVE-ME@REMOVE-ME.broadinstitute.org to fix this issue"]
+        assert model.command.errorMessages == ["An error has occurred, Please log an issue with the BARD team at bard-users@broadinstitute.org to fix this issue"]
     }
 
     void 'test show Experiments To Add Project - UserFixableException'() {
