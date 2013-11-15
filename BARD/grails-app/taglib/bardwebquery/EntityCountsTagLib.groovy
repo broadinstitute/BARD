@@ -9,27 +9,43 @@ class EntityCountsTagLib {
 
     def projectCount = { attrs, body ->
         long projects = queryService.numberOfProjects()
-        String link = generateLink(projects, "Projects", "#tab-projects")
+        if (projects > 0) {
+            String link = generateLink(projects, "Projects", "#tab-projects")
 
-        out << "${link}"
+            out << "${link}"
+        } else {
+            out << "Warehouse server is unavailable"
+        }
     }
 
     def assayCount = { attrs, body ->
         long assays = queryService.numberOfAssays()
-        String link = generateLink(assays, "Assay Definitions", "#tab-definitions")
-        out << "${link}"
+        if (assays > 0) {
+            String link = generateLink(assays, "Assay Definitions", "#tab-definitions")
+            out << "${link}"
+        } else {
+            out << "Warehouse server is unavailable"
+        }
     }
 
     def experimentCount = { attrs, body ->
         long experiments = queryService.numberOfExperiments()
-        String link = generateLink(experiments, "Experiments", "#tab-experiments")
-        out << "${link}"
+        if (experiments > 0) {
+            String link = generateLink(experiments, "Experiments", "#tab-experiments")
+            out << "${link}"
+        } else {
+            out << "Warehouse server is unavailable"
+        }
     }
 
     def exptDataCount = { attrs, body ->
         long exptData = queryService.numberOfExperimentData()
-        String link = generateLink(exptData, "Number of results", "#tab-results")
-        out << "${link}"
+        if (exptData > 0) {
+            String link = generateLink(exptData, "Number of results", "#tab-results")
+            out << "${link}"
+        } else {
+            out << "Warehouse server is unavailable"
+        }
     }
 
 

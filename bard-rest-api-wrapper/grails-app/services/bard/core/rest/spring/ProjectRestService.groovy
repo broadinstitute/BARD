@@ -20,11 +20,17 @@ class ProjectRestService extends AbstractRestService {
     def transactional = false
 
     public List<Project> findRecentlyAdded(long top) {
-        String urlString = getResource("${RestApiConstants.RECENT}${top}${RestApiConstants.QUESTION_MARK}expand=true")
 
-        final URL url = new URL(urlString)
-        final List<Project> projectResult = (List) getForObject(url.toURI(), List.class)
-        return projectResult
+        try {
+            String urlString = getResource("${RestApiConstants.RECENT}${top}${RestApiConstants.QUESTION_MARK}expand=true")
+
+            final URL url = new URL(urlString)
+            final List<Project> projectResult = (List) getForObject(url.toURI(), List.class)
+            return projectResult
+        } catch (Exception ee) {
+            log.error(ee,ee)
+            return []
+        }
     }
 
     public String getResourceContext() {

@@ -62,7 +62,8 @@ class MoveExperimentsController {
             return
         }
         if (!moveExperimentsCommand.experiments) {
-            render(status: HttpServletResponse.SC_BAD_REQUEST, template: "assayError", model: [message: "Could not find experiments with ids ${StringUtils.join(moveExperimentsCommand.experimentIds)}"])
+            render(status: HttpServletResponse.SC_BAD_REQUEST, template: "assayError",
+                    model: [message: "Could not find experiments with ids ${StringUtils.join(moveExperimentsCommand.experimentIds)}"])
             return
         }
 

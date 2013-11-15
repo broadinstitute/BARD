@@ -4,6 +4,7 @@
         <a href="#items-gallery-2" class="btn-next" data-slide="next">Previous</a>
 
         <div class="carousel-inner">
+            <g:if test="${recentlyAddedAssays}">
             <div class="item active">
                 <div class="row-fluid">
                     <g:each status="i" in="${recentlyAddedAssays}" var="assay">
@@ -23,6 +24,16 @@
                     </g:each>
                 </div>
             </div>
+            </g:if>
+            <g:else>
+                <div class="item active">
+                    <div class="row-fluid">
+                        <h2>
+                            Warehouse server, unavailable
+                        </h2>
+                    </div>
+                </div>
+            </g:else>
         </div>
     </div>
 </div>
