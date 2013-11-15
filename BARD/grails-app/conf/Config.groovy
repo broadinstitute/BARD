@@ -5,7 +5,8 @@ import org.apache.log4j.DailyRollingFileAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
 
-bard.users.email="bard-users.REMOVE-ME@REMOVE-ME.broadinstitute.org"
+bard.users.email="bard-users@broadinstitute.org"
+bard.users.mailing.list="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users"
 
 ncgc.thickclient.root.url="http://bard.nih.gov/bard/"
 ncgc.thickclient.compounds.url = "${ncgc.thickclient.root.url}compounds/"

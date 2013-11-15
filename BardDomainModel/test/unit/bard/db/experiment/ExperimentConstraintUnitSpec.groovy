@@ -22,8 +22,8 @@ import static test.TestUtils.createString
  * Time: 12:35 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, Experiment,Role])
-@Mock([Assay, Experiment,Role])
+@Build([Assay, Experiment, Role, ExperimentMeasure])
+@Mock([Assay, Experiment, Role, ExperimentMeasure])
 @Unroll
 class ExperimentConstraintUnitSpec extends Specification {
 
@@ -36,6 +36,20 @@ class ExperimentConstraintUnitSpec extends Specification {
     void doSetup() {
         domainInstance = Experiment.buildWithoutSave()
         validAssay = Assay.build()
+    }
+
+    void "test measuresHaveAtLeastOnePriorityElement #desc"() {
+        given:
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: priorityElement)
+        Experiment experiment = Experiment.build(experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+        when:
+        boolean found = experiment.measuresHaveAtLeastOnePriorityElement()
+        then:
+        assert expected == found
+        where:
+        desc                      | priorityElement | expected
+        "Has no Priority Element" | false           | false
+        "Has Priority Element"    | true            | true
     }
 
     void "test experimentName constraints #desc experimentName: '#valueUnderTest'"() {
@@ -287,6 +301,7 @@ class ExperimentConstraintUnitSpec extends Specification {
         'null not valid' | null           | false | 'nullable'
         'date valid'     | new Date()     | true  | null
     }
+
     void "test ownerRole constraints #desc ownerRole: '#valueUnderTest'"() {
         final String field = 'ownerRole'
 

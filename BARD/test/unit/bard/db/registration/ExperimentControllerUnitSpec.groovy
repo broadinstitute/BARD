@@ -316,11 +316,14 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
     }
 
     void 'test edit Experiment Status success'() {
+
         given:
-        Experiment newExperiment = Experiment.build(version: 0, experimentStatus: ExperimentStatus.DRAFT)  //no designer
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: true)
+
+        Experiment newExperiment = Experiment.build(version: 0, experimentStatus: ExperimentStatus.DRAFT,experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         Experiment updatedExperiment =
             Experiment.build(experimentName: "My New Name", version: 1, lastUpdated: new Date(),
-                    experimentStatus: ExperimentStatus.APPROVED)
+                    experimentStatus: ExperimentStatus.APPROVED,experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: newExperiment.id,
                     version: newExperiment.version, name: newExperiment.experimentName,
@@ -342,10 +345,14 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
     void 'test edit Experiment Status - access denied'() {
         given:
         accessDeniedRoleMock()
-        Experiment newExperiment = Experiment.build(version: 0, experimentStatus: ExperimentStatus.DRAFT)  //no designer
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: true)
+
+
+        Experiment newExperiment = Experiment.build(version: 0, experimentStatus: ExperimentStatus.DRAFT,
+                experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)  //no designer
         Experiment updatedExperiment =
             Experiment.build(experimentName: "My New Name", version: 1, lastUpdated: new Date(),
-                    experimentStatus: ExperimentStatus.APPROVED)
+                    experimentStatus: ExperimentStatus.APPROVED, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: newExperiment.id,
                     version: newExperiment.version, name: newExperiment.experimentName,
@@ -368,7 +375,8 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
 
     void 'test edit Experiment Status with errors'() {
         given:
-        Experiment newExperiment = Experiment.build(version: 0, experimentStatus: ExperimentStatus.APPROVED)
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: true)
+        Experiment newExperiment = Experiment.build(version: 0, experimentStatus: ExperimentStatus.APPROVED,experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: newExperiment.id, version: newExperiment.version, name: newExperiment.experimentName, value: ExperimentStatus.APPROVED.id)
         controller.metaClass.message = { Map p -> return "foo" }

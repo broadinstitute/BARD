@@ -17,10 +17,8 @@
     </g:if>
 
 <div class="span9">
-    <a class="btn"
-       href="mailto:${grailsApplication.config.bard.users.email}?Subject=Question about results for EID: ${tableModel.additionalProperties.capExptId}"
-       target="_top"><i class="icon-envelope"></i> Ask a question about this Experiment Results</a>
-    <br/>
+
+    <g:render template="../layouts/askAQuestion" model="['entity':'Experiment']"/>
     <g:if test="${tableModel?.data}">
         <div id="experimentalResults">
             <g:render template='experimentResultData'
