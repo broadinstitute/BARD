@@ -12,6 +12,7 @@ import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -232,7 +233,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
-    void "test get Compound by sid"() {
+    void "test get Compound by sid #label"() {
         when: "We call the get method of the the RESTCompoundService"
         Compound compound = this.compoundRestService.getCompoundBySid(sid)
         then: "We expect to get back a list of 10 results"
@@ -240,8 +241,10 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         assert compound.cid == expectedCID
 
         where:
-        label                         | sid       | expectedCID
-        "Search with a single of SID" | 152255054 | 66575055
+        label                                                                    | sid       | expectedCID
+        "Search with a single of SID"                                            | 152255054 | 66575055
+        "Search with a single of SID, mutiple CIDs-select one with highest mwt " | 842122    | 6602571
+        "Mutiple CIDs-select one with highest mwt "                              | 842121    | 6603008
 
     }
 

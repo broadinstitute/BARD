@@ -273,8 +273,18 @@ class CompoundRestService extends AbstractRestService {
         try {
             final List<Compound> compounds = getForObject(url, List.class) as List<Compound>
             if (compounds) {
+                //find the one with the highest molecular weight
+                Compound foundCompound
+                for(Compound currentCompound : compounds){
+                  if(foundCompound == null){
+                      foundCompound = currentCompound
+                  }
+                  if(foundCompound.mwt < currentCompound.mwt){
+                      foundCompound = currentCompound
+                  }
+                }
                 //get the last compound in the list
-                return compounds.get(compounds.size()-1)
+                return foundCompound
             }
             return null;
         } catch (Exception e) {

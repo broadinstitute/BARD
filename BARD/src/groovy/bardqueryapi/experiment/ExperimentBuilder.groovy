@@ -11,7 +11,6 @@ import bard.db.experiment.JsonSubstanceResults
 import bardqueryapi.*
 import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
 import bardqueryapi.compoundBioActivitySummary.PreviewExperimentResultsSummaryBuilder
-import bardqueryapi.compoundBioActivitySummary.PreviewResultsSummaryBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
 class ExperimentBuilder {
@@ -26,7 +25,7 @@ class ExperimentBuilder {
         columnHeaders.add(new StringValue(value: "CID"))
         columnHeaders.add(new StringValue(value: "Structure"))
         columnHeaders.add(new StringValue(value: "Outcome"))
-        columnHeaders.add(new StringValue(value: "Summary Result"))
+        columnHeaders.add(new StringValue(value: "Priority Elements"))
         if (hasDoseCurve) {
             columnHeaders.add(new StringValue(value: "Dose Response"))
         }
@@ -49,7 +48,8 @@ class ExperimentBuilder {
     Map<Boolean, List<WebQueryValue>> addRowForResultsPreview(final JsonSubstanceResults substanceResults,
                                                               final Set<String> priorityElements,
                                                               final Double yNormMin,
-                                                              final Double yNormMax, CompoundAdapter compoundAdapter) {
+                                                              final Double yNormMax, CompoundAdapter compoundAdapter,
+                                                              PreviewExperimentResultsSummaryBuilder previewExperimentResultsSummaryBuilder) {
 
         //A row is a list of table cells, each implements WebQueryValue.
         List<WebQueryValue> rowData = []
@@ -86,8 +86,7 @@ class ExperimentBuilder {
         }
 
 
-        PreviewExperimentResultsSummaryBuilder previewResultsSummaryBuilder = new PreviewExperimentResultsSummaryBuilder()
-        previewResultsSummaryBuilder.ontologyDataAccessService = this.ontologyDataAccessService
+
 
         Map resultsMap = [:]
         resultsMap.priorityElements = priorityElements
@@ -98,7 +97,7 @@ class ExperimentBuilder {
         resultsMap.experimentalValues = []
         resultsMap.childElements = []
 
-        previewResultsSummaryBuilder.convertExperimentResultsToTableModelCellsAndRows(resultsMap,substanceResults.rootElem)
+        previewExperimentResultsSummaryBuilder.convertExperimentResultsToTableModelCellsAndRows(resultsMap,substanceResults.rootElem)
 
 
         StringValue outcome = resultsMap.outcome
@@ -109,7 +108,7 @@ class ExperimentBuilder {
         rowData.add(new ListValue(value: summaryResults.sort()))
 
 
-        List<WebQueryValue> experimentValues = previewResultsSummaryBuilder.sortWebQueryValues(resultsMap.experimentalValues)
+        List<WebQueryValue> experimentValues = previewExperimentResultsSummaryBuilder.sortWebQueryValues(resultsMap.experimentalValues)
         //if the result type is a concentration series, we want to add the normalization values to each curve.
         experimentValues.findAll({ WebQueryValue experimentResult ->
             experimentResult instanceof ConcentrationResponseSeriesValue
@@ -333,6 +332,9 @@ class ExperimentBuilder {
             }
         }
         boolean hasDosePoints = false
+        PreviewExperimentResultsSummaryBuilder previewResultsSummaryBuilder = new PreviewExperimentResultsSummaryBuilder()
+        previewResultsSummaryBuilder.ontologyDataAccessService = this.ontologyDataAccessService
+
         for (JsonSubstanceResults jsonSubstanceResults : jsonSubstanceResultList) {
             Long sid = jsonSubstanceResults.getSid()
             CompoundAdapter compoundAdapter = null
@@ -342,7 +344,7 @@ class ExperimentBuilder {
             } catch (Exception ee) {
                 log.error(ee)
             }
-            final Map<Boolean, List<WebQueryValue>> preview = addRowForResultsPreview(jsonSubstanceResults, priorityElements, yNormMin, yNormMax, compoundAdapter)
+            final Map<Boolean, List<WebQueryValue>> preview = addRowForResultsPreview(jsonSubstanceResults, priorityElements, yNormMin, yNormMax, compoundAdapter,previewResultsSummaryBuilder)
             if (!hasDosePoints) {
                 hasDosePoints = preview.hasDosePoints
             }

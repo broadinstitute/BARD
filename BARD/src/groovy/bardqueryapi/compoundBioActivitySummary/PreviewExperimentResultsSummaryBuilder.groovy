@@ -9,9 +9,12 @@ import bard.db.dictionary.ResultTypeTree
 import bard.db.experiment.JsonResult
 import bard.db.experiment.JsonResultContextItem
 import bardqueryapi.*
+import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.tuple.ImmutablePair
 import org.apache.commons.lang3.tuple.Pair
 import org.apache.log4j.Logger
+
+import java.text.DecimalFormat
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +22,14 @@ import org.apache.log4j.Logger
  *
  */
 class PreviewExperimentResultsSummaryBuilder {
+
+    static final String CONCENTRATION_END_POINT = "RESULT TYPE> CONCENTRATION ENDPOINT"
+    static final String CONCENTRATION_RESPONSE_CURVE = "CONCENTRATION-RESPONSE CURVE"
+    static final String PUBCHEM_OUTCOME = "PUBCHEM OUTCOME"
+    static final String RESPONSE_ENDPOINT = "RESPONSE ENDPOINT"
+    static final String PERCENT_RESPONSE = "PERCENT RESPONSE"
+    static final String SCREENING_CONCENTRATION_PATH = "project management> experiment> result detail> screening concentration"
+
     private Map<Long, ResultTypeTree> resultTypeTreeCache = [:]
     static final Logger log = Logger.getLogger(PreviewExperimentResultsSummaryBuilder.class)
     OntologyDataAccessService ontologyDataAccessService
@@ -35,7 +46,7 @@ class PreviewExperimentResultsSummaryBuilder {
     protected boolean isCurveFitParameter(final Long resultTypeId) {
         ResultTypeTree resultTypeTree = addOrFindResultTypeTreeToCache(resultTypeId)
         if (resultTypeTree) {
-            if (resultTypeTree.fullPath.toUpperCase().contains("CONCENTRATION-RESPONSE CURVE")) {
+            if (resultTypeTree.fullPath.toUpperCase().contains(CONCENTRATION_RESPONSE_CURVE)) {
                 return true
             }
         }
@@ -66,7 +77,7 @@ class PreviewExperimentResultsSummaryBuilder {
     protected boolean isPubChemOutcome(Long resultTypeId) {
         ResultTypeTree resultTypeTree = addOrFindResultTypeTreeToCache(resultTypeId)
         if (resultTypeTree) {
-            if (resultTypeTree.label.toUpperCase().equals("PUBCHEM OUTCOME")) {
+            if (resultTypeTree.label.toUpperCase().equals(PUBCHEM_OUTCOME)) {
                 return true
             }
         }
@@ -74,61 +85,101 @@ class PreviewExperimentResultsSummaryBuilder {
     }
     /**
      * Here we only look for things with 'percent response' or 'percent endpoint' in its path.
-     * NOTE that this is not a scaleable solution at all.
-     *
-     * We are thinking of changing the model so that the jsonresult object contains enough information for
-     * us to not have to resort to this hack. However, this should work for most cases, since most pubchem assays
-     * fits this hack
      * @param resultTypeId
      * @return true/false
      */
     protected boolean isPercentResponse(Long resultTypeId) {
         ResultTypeTree resultTypeTree = addOrFindResultTypeTreeToCache(resultTypeId)
         if (resultTypeTree) {
-            if (resultTypeTree.fullPath.toUpperCase().contains("RESPONSE ENDPOINT") &&
-                    resultTypeTree.fullPath.toUpperCase().contains("PERCENT RESPONSE")) {
+            if (resultTypeTree.fullPath.toUpperCase().contains(RESPONSE_ENDPOINT) &&
+                    resultTypeTree.fullPath.toUpperCase().contains(PERCENT_RESPONSE)) {
                 return true
             }
         }
         return false
     }
+    final static DecimalFormat TO_THREE_SIG_FIGURES_FORMAT = new DecimalFormat("0.000");
     /**
      * Set the curve fit parameters
-     * Note that if we were to add a parameter that is not accounted for here, it will
+     * Note that if we were to add a parameter that is not accounted for here
      * we can likely not fit the curve
      * @param curveFitParameters
      * @param resultTypeTree
      * @param jsonResult
      */
-    protected void setCurveFitParameters(CurveFitParameters curveFitParameters, ResultTypeTree resultTypeTree, JsonResult jsonResult) {
+    protected void setCurveFitParameters(CurveFitParameters curveFitParameters, ResultTypeTree resultTypeTree, JsonResult jsonResult, Map resultsMap) {
+
+        if(!jsonResult.valueNum){
+           //turn this into a child element
+            resultsMap.childElements << new StringValue(value: jsonResult.resultType + ":" + jsonResult.valueDisplay)
+            return
+        }
+        Double curveParam = Double.valueOf(TO_THREE_SIG_FIGURES_FORMAT.format(jsonResult.valueNum))
         switch (resultTypeTree.label.toUpperCase()) {
             case "HILL COEFFICIENT":
-                curveFitParameters.setHillCoef(jsonResult.valueNum)
+                 curveFitParameters.setHillCoef(curveParam)
                 break
             case "HILL S0":
-                curveFitParameters.setS0(jsonResult.valueNum)
+                curveFitParameters.setS0(curveParam)
                 break
             case "HILL SINF":
-                curveFitParameters.setSInf(jsonResult.valueNum)
+                curveFitParameters.setSInf(curveParam)
                 break
-            default: //We call everything else logEc50. Need to fix this. This is actually the slope
-                curveFitParameters.setLogEc50(jsonResult.valueNum)
+            default: //TODO: We call everything else logEc50. Need to fix this. This is actually the slope
+                curveFitParameters.setLogEc50(curveParam)
                 break
         }
     }
-    /**
-     * Convert the list of jsonResults to Dose Response Curve points
-     * @param jsonResults
-     * @return
-     */
-    protected void convertToDoseResponse(List<JsonResult> jsonResults, Map resultsMap) {
 
+
+    protected void handlePotentialScreeningConcentration(final JsonResult jsonResult,
+                                                         final Map resultsMap,
+                                                         final CurveFitParameters curveFitParameters,
+                                                         List<Double> concentrations = [],
+                                                         List<Double> activities = [],
+                                                         String responseUnits = "",
+                                                         String concentrationUnits = "") {
+
+
+        for (JsonResultContextItem resultContextItem : jsonResult.getContextItems()) {
+            if (isScreeningConcentration(resultContextItem.attributeId)) { //this is a screening concentration
+                final float activity = jsonResult.valueNum
+                if (!responseUnits) {
+                    responseUnits = jsonResult.resultType
+                }
+                final float concentration = resultContextItem.valueNum
+                //get concentration units
+                String valueDisplay = resultContextItem.valueDisplay
+                if (!concentrationUnits) {
+                    concentrationUnits = parseUnits(valueDisplay)
+                }
+
+                activities.add(activity.doubleValue())
+                concentrations.add(concentration.doubleValue())
+            } else {
+                resultsMap.childElements << new StringValue(value: resultContextItem.attribute + ":" + resultContextItem.valueDisplay)
+            }
+        }
+        resultsMap.activityConcentrationMap = new ActivityConcentrationMap(activities: activities, concentrations: concentrations)
+        resultsMap.curveFitParameters = curveFitParameters
+        resultsMap.responseUnits = responseUnits
+        resultsMap.concentrationUnits = concentrationUnits
+    }
+    /**
+     *
+     * @param jsonResults
+     * @param resultsMap
+     */
+    protected void convertResultsToDoseResponse(List<JsonResult> jsonResults, Map resultsMap) {
+
+        CurveFitParameters curveFitParameters = new CurveFitParameters()
         List<Double> concentrations = []
         List<Double> activities = []
-        CurveFitParameters curveFitParameters = new CurveFitParameters()
         String responseUnits = ""
         String concentrationUnits = ""
+
         for (JsonResult jsonResult : jsonResults) {
+
             final Long resultTypeId = jsonResult.resultTypeId
             String resultType = jsonResult.resultType
 
@@ -136,35 +187,9 @@ class PreviewExperimentResultsSummaryBuilder {
                 resultsMap.priorityElementValues.add(new StringValue(value: jsonResult.valueDisplay))
             }
             if (isCurveFitParameter(resultTypeId)) {
-                setCurveFitParameters(curveFitParameters, resultTypeTreeCache.get(resultTypeId), jsonResult)
+                setCurveFitParameters(curveFitParameters, resultTypeTreeCache.get(resultTypeId), jsonResult,resultsMap)
             } else if (jsonResult.contextItems) {
-                final List<JsonResultContextItem> items = jsonResult.getContextItems()
-
-                for (JsonResultContextItem resultContextItem : items) {
-                    if (isScreeningConcentration(resultContextItem.attributeId)) { //this is a screening concentration
-                        final float activity = jsonResult.valueNum
-                        if (!responseUnits) {
-                            responseUnits = jsonResult.resultType
-                        }
-                        final float concentration = resultContextItem.valueNum
-                        //get concentration units
-                        String valueDisplay = resultContextItem.valueDisplay
-                        if (!concentrationUnits) {
-                            concentrationUnits = parseUnits(valueDisplay)
-                        }
-
-                        activities.add(activity.doubleValue())
-                        concentrations.add(concentration.doubleValue())
-                    } else {
-                        if (!resultsMap.priorityElements.contains(resultType.trim())) {
-                            resultsMap.childElements << new StringValue(value: resultContextItem.attribute + ":" + resultContextItem.valueDisplay)
-                        }
-                    }
-                }
-                resultsMap.activityConcentrationMap = new ActivityConcentrationMap(activities: activities, concentrations: concentrations)
-                resultsMap.curveFitParameters = curveFitParameters
-                resultsMap.responseUnits = responseUnits
-                resultsMap.concentrationUnits = concentrationUnits
+                handlePotentialScreeningConcentration(jsonResult, resultsMap, curveFitParameters, concentrations, activities, responseUnits, concentrationUnits)
             } else {
                 if (!resultsMap.priorityElements.contains(resultType.trim())) {
                     resultsMap.childElements << new StringValue(value: jsonResult.resultType + ":" + jsonResult.valueDisplay)
@@ -191,7 +216,7 @@ class PreviewExperimentResultsSummaryBuilder {
 
         String qualifier = jsonResult.qualifier ?: ""
 
-        convertToDoseResponse(jsonResult.related, resultsMap)
+        convertResultsToDoseResponse(jsonResult.related, resultsMap)
 
         ConcentrationResponseSeriesValue concentrationResponseSeriesValue =
             new ConcentrationResponseSeriesValue(value: resultsMap.activityConcentrationMap,
@@ -209,29 +234,16 @@ class PreviewExperimentResultsSummaryBuilder {
         //add context items , they are child elements
         final List<JsonResultContextItem> resultContextItems = jsonResult.contextItems
         if (resultContextItems) {
-
             resultsMap.childElements << contextItemsToChildElements(resultContextItems)
         }
         resultsMap.experimentalValues << concentrationResponseSeriesValue
 
     }
-
-    protected void handleEfficacyMeasures(final JsonResult jsonResult, final Map resultsMap) {
-        final Long dictionaryId = jsonResult.resultTypeId
-
-        Pair<StringValue, StringValue> pair =
-            new ImmutablePair<StringValue, StringValue>(new StringValue(value: jsonResult.resultType), new StringValue(value: jsonResult.valueDisplay))
-        LinkValue dictionaryElement
-
-        if (dictionaryId) {
-            dictionaryElement = new LinkValue(value: "/BARD/dictionaryTerms/#${jsonResult.resultTypeId}")
-        }
-        resultsMap.experimentalValues << new PairValue(value: pair, dictionaryElement: dictionaryElement)
-        if (jsonResult.contextItems) {
-            resultsMap.childElements << contextItemsToChildElements(jsonResult.contextItems)
-        }
-    }
-
+    /**
+     * Convert context items to child elements
+     * @param jsonResultContextItems
+     * @return
+     */
     protected List<WebQueryValue> contextItemsToChildElements(List<JsonResultContextItem> jsonResultContextItems) {
         List<WebQueryValue> childElements = []
         for (JsonResultContextItem jsonResultContextItem : jsonResultContextItems) {
@@ -240,11 +252,13 @@ class PreviewExperimentResultsSummaryBuilder {
         return childElements
     }
 
-
-
-    boolean isScreeningConcentration(Long attributeId) {
-        String startOfFullPath = "project management> experiment> result detail> screening concentration"
-        final List<Descriptor> descriptors = ontologyDataAccessService.getDescriptors(startOfFullPath, null)
+    /**
+     * if the attribute id maps to an item in the dictionary that is a screening concentration
+     * @param attributeId
+     * @return
+     */
+    protected boolean isScreeningConcentration(Long attributeId) {
+        final List<Descriptor> descriptors = ontologyDataAccessService.getDescriptors(SCREENING_CONCENTRATION_PATH, null)
         for (Descriptor descriptor : descriptors) {
             if (descriptor.element.id == attributeId) {
                 return true
@@ -264,15 +278,14 @@ class PreviewExperimentResultsSummaryBuilder {
      * And that child must have at least one context one of which must be a screening concentration
      *
      * e.g
-     * {result type = ac50, children = [ {result type = result endpoint, contexts = [ { attribute = "screening concentration", value= 10 } ] }
-     *
+     *{result type = ac50, children = [ {result type = result endpoint, contexts = [ { attribute = "screening concentration", value= 10 } ] }*
      * @param jsonResult
      * @return
      */
     boolean isConcentrationResponseEndPoint(JsonResult jsonResult) {
         ResultTypeTree resultTypeTree = addOrFindResultTypeTreeToCache(jsonResult.resultTypeId)
         if (resultTypeTree) {
-            if (resultTypeTree.fullPath.toUpperCase().contains("RESULT TYPE> CONCENTRATION ENDPOINT")) {
+            if (resultTypeTree.fullPath.toUpperCase().contains(CONCENTRATION_END_POINT)) {
 
                 final List<JsonResult> related = jsonResult.related
                 if (!related) { //if it has no child nodes
@@ -301,8 +314,8 @@ class PreviewExperimentResultsSummaryBuilder {
      * @param yNormMax
      * @return
      */
-    public void convertExperimentResultsToTableModelCellsAndRows(Map resultsMap,
-                                                                 List<JsonResult> rootElements) {
+    public void convertExperimentResultsToTableModelCellsAndRows(final Map resultsMap,
+                                                                 final List<JsonResult> rootElements) {
 
         for (JsonResult jsonResult : rootElements) {
             convertSingleExperimentResult(resultsMap, jsonResult)
@@ -314,11 +327,13 @@ class PreviewExperimentResultsSummaryBuilder {
      * @param resultsMap
      * @param jsonResult
      */
-    protected void convertSingleExperimentResult(Map resultsMap,
-                                                 JsonResult jsonResult) {
+    protected void convertSingleExperimentResult(final Map resultsMap, final JsonResult jsonResult) {
+
         final long resultTypeId = jsonResult.resultTypeId
         String display = jsonResult.valueDisplay
         String resultType = jsonResult.resultType
+
+        //add this to the list of priority element values
         if (resultsMap.priorityElements.contains(resultType.trim())) {
             resultsMap.priorityElementValues << new StringValue(value: resultType + ":" + display)
         }
@@ -331,25 +346,25 @@ class PreviewExperimentResultsSummaryBuilder {
             StringValue outcome = new StringValue(value: jsonResult.valueDisplay)
             resultsMap.outcome = outcome
 
-            if (jsonResult.contextItems) {
-                resultsMap.childElements << contextItemsToChildElements(jsonResult.contextItems)
-            }
-            if (jsonResult.related) {
-                convertExperimentResultsToTableModelCellsAndRows(resultsMap, jsonResult.related)
-            }
+            handleContextItemsAndRelatedResults(resultsMap, jsonResult)
         } else {
             //treat as child element
             if (!resultsMap.priorityElements.contains(jsonResult.resultType)) {
                 resultsMap.childElements << new StringValue(value: jsonResult.resultType + ":" + jsonResult.valueDisplay)
             }
-            if (jsonResult.contextItems) {
-                resultsMap.childElements << contextItemsToChildElements(jsonResult.contextItems)
-            }
-            if (jsonResult.related) {
-                convertExperimentResultsToTableModelCellsAndRows(resultsMap, jsonResult.related)
-            }
+            handleContextItemsAndRelatedResults(resultsMap, jsonResult)
         }
     }
+
+    protected void handleContextItemsAndRelatedResults(final Map resultsMap, final JsonResult jsonResult) {
+        if (jsonResult.contextItems) {
+            resultsMap.childElements << contextItemsToChildElements(jsonResult.contextItems)
+        }
+        if (jsonResult.related) {
+            convertExperimentResultsToTableModelCellsAndRows(resultsMap, jsonResult.related)
+        }
+    }
+
     /**
      *
      * extract the units from a given string. Assume that the units are space separated from the value
