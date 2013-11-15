@@ -20,7 +20,11 @@
 
     </div>
 </div>
-
+<style>
+  .unindentedDefinition  dd {
+    margin-left: 0px;
+  }
+</style>
 
 <article class="hero-block">
     <div class="container-fluid">
@@ -38,18 +42,18 @@
                     </p>
 
                     <p>
-                    <dl>
-                        <dt>Data Dictionary component</dt>
-                        <dd>used by Dictionary Curators to manage BARD’s hierarchical dictionary of terms/dd>
+                    <dl class='unindentedDefinition'>
+                        <dt>Data dictionary component</dt>
+                        <dd>Used by dictionary curators to manage BARD’s hierarchical dictionary of terms</dd>
                         <br/>
-                        <dt>Catalog of Assay Protocols component</dt>
-                        <dd>used by Data Generators to register assays and upload result data</dd>
+                        <dt>Catalog of assay protocols component</dt>
+                        <dd>Used by data generators to register assays and upload result data</dd>
                         <br/>
                         <dt>Warehouse component</dt>
-                        <dd>provides persistent storage of result data in a form that is fast and simple to query via a REST API.  Relies on the controlled terms from the dictionary for effective and accurate searching.  Links to data from GO and other sources.  Used by query tool components and by Informatics Data Consumers.  The API can be extended using plug-ins contributed by the community.</dd>
+                        <dd>Provides persistent storage of result data in a form that is fast and simple to query via a REST API.  Relies on the controlled terms from the dictionary for effective and accurate searching.  Links to data from GO and other sources.  Used by query tool components and by informatics data consumers.  The API can be extended using plug-ins contributed by the community.</dd>
                         <br/>
                         <dt>Query tool components</dt>
-                        <dd>Web Query and Desktop Client – provide methods for novice and experienced users to browse and find the information they need.</dd>
+                        <dd>Both the 'web query' and 'desktop client' provide methods for novice and experienced users to browse and find the information they need.</dd>
                     </dl>
 
                 </p>

@@ -75,12 +75,12 @@
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="../about/howToSearch">Search</a></li>
-                                        <li><a href="../about/howToFilterResults">Filter search results</a></li>
                                         <li><a href="../about/howToReadResults">Interpret search results</a></li>
+                                        <li><a href="../about/howToFilterResults">Filter search results</a></li>
                                         %{--<li><a href="../about/howToUseSecurely">Use securely</a></li>--}%
-                                        <li><a href="../about/howToUsePlugins">Create and use plug-ins</a></li>
                                         <li><a href="../about/howToVisualizeAndCaptureData">Visualize and Capture Data</a></li>
                                         <li><a href="../about/howToGetTheMostFromBard">Get the Most From Bard</a></li>
+                                        <li><a href="../about/howToUsePlugins">Create and use plug-ins</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown">
