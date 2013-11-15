@@ -98,6 +98,7 @@ class PreviewExperimentResultsSummaryBuilder {
         }
         return false
     }
+
     final static DecimalFormat TO_THREE_SIG_FIGURES_FORMAT = new DecimalFormat("0.000");
     /**
      * Set the curve fit parameters
@@ -109,15 +110,15 @@ class PreviewExperimentResultsSummaryBuilder {
      */
     protected void setCurveFitParameters(CurveFitParameters curveFitParameters, ResultTypeTree resultTypeTree, JsonResult jsonResult, Map resultsMap) {
 
-        if(!jsonResult.valueNum){
-           //turn this into a child element
+        if (!jsonResult.valueNum) {
+            //turn this into a child element
             resultsMap.childElements << new StringValue(value: jsonResult.resultType + ":" + jsonResult.valueDisplay)
             return
         }
         Double curveParam = Double.valueOf(TO_THREE_SIG_FIGURES_FORMAT.format(jsonResult.valueNum))
         switch (resultTypeTree.label.toUpperCase()) {
             case "HILL COEFFICIENT":
-                 curveFitParameters.setHillCoef(curveParam)
+                curveFitParameters.setHillCoef(curveParam)
                 break
             case "HILL S0":
                 curveFitParameters.setS0(curveParam)
@@ -153,9 +154,10 @@ class PreviewExperimentResultsSummaryBuilder {
                 if (!concentrationUnits) {
                     concentrationUnits = parseUnits(valueDisplay)
                 }
-
-                activities.add(activity.doubleValue())
-                concentrations.add(concentration.doubleValue())
+                if (concentration > 0) {
+                    activities.add(activity.doubleValue())
+                    concentrations.add(concentration.doubleValue())
+                }
             } else {
                 resultsMap.childElements << new StringValue(value: resultContextItem.attribute + ":" + resultContextItem.valueDisplay)
             }
@@ -187,7 +189,7 @@ class PreviewExperimentResultsSummaryBuilder {
                 resultsMap.priorityElementValues.add(new StringValue(value: jsonResult.valueDisplay))
             }
             if (isCurveFitParameter(resultTypeId)) {
-                setCurveFitParameters(curveFitParameters, resultTypeTreeCache.get(resultTypeId), jsonResult,resultsMap)
+                setCurveFitParameters(curveFitParameters, resultTypeTreeCache.get(resultTypeId), jsonResult, resultsMap)
             } else if (jsonResult.contextItems) {
                 handlePotentialScreeningConcentration(jsonResult, resultsMap, curveFitParameters, concentrations, activities, responseUnits, concentrationUnits)
             } else {
