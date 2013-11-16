@@ -72,7 +72,7 @@
 </div>
 <g:hiddenField name="version" id="versionId" value="${instance.version}"/>
 <div class="span9">
-<g:render template="../layouts/askAQuestion" model="['entity':'Experiment']"/>
+<g:render template="../layouts/templates/askAQuestion" model="['entity':'Experiment']"/>
 
 <section id="summary-header">
     <div class="page-header">

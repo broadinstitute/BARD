@@ -78,26 +78,7 @@
                     <div class="row-fluid">
                         <nav class="nav-panel span12 right-aligned">
                             <ul class="nav">
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="../about/howToSearch">Search</a></li>
-                                        <li><a href="../about/howToFilterResults">Filter search results</a></li>
-                                        <li><a href="../about/howToReadResults">Interpret search results</a></li>
-                                        %{--<li><a href="../about/howToUseSecurely">Use securely</a></li>--}%
-                                        <li><a href="../about/howToUsePlugins">Create and use plug-ins</a></li>
-                                        <li><a href="../about/howToVisualizeAndCaptureData">Visualize and Capture Data</a></li>
-                                        <li><a href="../about/howToGetTheMostFromBard">Get the Most From Bard</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="../about/howToReportABug">Report a bug</a></li>
-                                        <li><a href="../about/howToContactUs">Contact us</a></li>
-                                        <li><a href="../about/howToDocumentBard">BARD Documentation</a></li>
-                                    </ul>
-                                </li>
+                               <g:render template="/layouts/templates/howtolinks"/>
                                 <sec:ifLoggedIn>
                                     <li><a href="/BARD/bardWebInterface/navigationPage">My BARD</a></li>
                                 </sec:ifLoggedIn>

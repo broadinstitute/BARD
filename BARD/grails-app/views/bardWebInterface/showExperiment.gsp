@@ -18,7 +18,7 @@
 
 <div class="span9">
 
-    <g:render template="../layouts/askAQuestion" model="['entity':'Experiment']"/>
+    <g:render template="../layouts/templates/askAQuestion" model="['entity':'Experiment']"/>
     <g:if test="${tableModel?.data}">
         <div id="experimentalResults">
             <g:render template='experimentResultData'

@@ -96,7 +96,7 @@ class AssayDefinitionController {
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee,ee)
+            log.error(ee, ee)
             editErrorMessage()
         }
     }
@@ -130,7 +130,7 @@ class AssayDefinitionController {
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee,ee)
+            log.error(ee, ee)
             editErrorMessage()
         }
     }
@@ -154,7 +154,7 @@ class AssayDefinitionController {
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee,ee)
+            log.error(ee, ee)
             editErrorMessage()
         }
     }
@@ -186,7 +186,7 @@ class AssayDefinitionController {
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee,ee)
+            log.error(ee, ee)
             editErrorMessage()
         }
     }
@@ -218,7 +218,7 @@ class AssayDefinitionController {
             log.error(ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee,ee)
+            log.error(ee, ee)
             editErrorMessage()
         }
     }
@@ -341,8 +341,12 @@ class AssayDefinitionController {
         //TODO: This should get replaced with cache. Get the active vs tested compound counts
         //grab all of the experiment ids
         final List<Long> experimentIds = assayInstance.experiments.collect { it.id }
-
-        final Map<Long, Pair<Long, Long>> experimentsActiveVsTested = queryService.findActiveVsTestedForExperiments(experimentIds)
+        Map<Long, Pair<Long, Long>> experimentsActiveVsTested = [:]
+        try {
+            experimentsActiveVsTested = queryService.findActiveVsTestedForExperiments(experimentIds)
+        } catch (Exception ee) {
+            log.error(ee,ee)
+        }
         return [assayInstance: assayInstance, assayOwner: owner, editable: editable ? 'canedit' : 'cannotedit', experimentsActiveVsTested: experimentsActiveVsTested]
     }
 
