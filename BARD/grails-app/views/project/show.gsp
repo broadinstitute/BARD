@@ -93,6 +93,9 @@
                                                             class="projectTooltip"
                                                             rel="tooltip"
                                                             data-original-title="">Show Experimental Details</g:link></li>
+                                                <li><g:link controller="molSpreadSheet" action="probeSarTable"
+                                                            params="[cid: probe.cid, pid: projectAdapter.id, transpose: false, showOnlyActive: false, threshold: 0.90]">
+                                                    Show SAR Table for Compounds Similar to Probe</g:link></li>
                                             </ul>
                                         </div>
                                     </div>

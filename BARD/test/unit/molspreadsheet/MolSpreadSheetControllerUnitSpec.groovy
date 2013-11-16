@@ -1,5 +1,10 @@
 package molspreadsheet
-
+import bard.core.adapter.CompoundAdapter
+import bard.core.rest.spring.compounds.Compound
+import bard.core.rest.spring.util.StructureSearchParams
+import bardqueryapi.BardUtilitiesService
+import bardqueryapi.IQueryService
+import bardqueryapi.InetAddressUtil
 import de.andreasschmitt.export.ExportService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
@@ -10,9 +15,8 @@ import querycart.QueryItem
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bardqueryapi.InetAddressUtil
-import bardqueryapi.BardUtilitiesService
 
+import javax.servlet.http.HttpServletResponse
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
@@ -25,6 +29,7 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
     BardUtilitiesService bardUtilitiesService
     ExportService exportService
     QueryCartService queryCartService
+    IQueryService queryService
     RetainSpreadsheetService retainSpreadsheetService = new RetainSpreadsheetService()
     @Shared MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
 
@@ -40,8 +45,10 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         controller.molecularSpreadSheetService = this.molecularSpreadSheetService
         this.exportService = Mock(ExportService)
         this.queryCartService = Mock(QueryCartService)
+        this.queryService = Mock(IQueryService)
         controller.queryCartService = this.queryCartService
         controller.exportService = this.exportService
+        controller.queryService = this.queryService
         molSpreadSheetData.molSpreadsheetDerivedMethod = MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects
     }
 
@@ -143,17 +150,20 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
 
         then:
 
-        molecularSpreadSheetService.retrieveExperimentalDataFromIds(_, _, _,_) >> {new MolSpreadSheetData()}
+        molecularSpreadSheetService.retrieveExperimentalDataFromIds(exptCids, exptAdids, exptPids, activeCompoundsOnly) >> {new MolSpreadSheetData()}
         assert response.contentAsString.contains("molecular spreadsheet")
         assert response.status == 200
         where:
-        label       | cid | adid | pid  | activeCompoundsOnly
-        "With CID"  | "2" | ""   | ""   | true
-        "With PID"  | ""  | ""   | "2"  | true
-        "With ADID" | ""  | "2"  | ""   | true
-        "With CID"  | "2" | ""   | ""   | false
-        "With PID"  | ""  | ""   | "2"  | false
-        "With ADID" | ""  | "2"  | ""   | false
+        label       | cid | adid | pid  | activeCompoundsOnly | exptCids | exptAdids | exptPids
+        "With CID"  | "25" | ""   | ""   | true | [25] | [] | []
+        "With PID"  | ""  | ""   | "25"  | true | [] | [] | [25]
+        "With ADID" | ""  | "25"  | ""   | true | [] | [25] | []
+        "With CID"  | "25" | ""   | ""   | false | [25] | [] | []
+        "With PID"  | ""  | ""   | "25"  | false | [] | [] | [25]
+        "With ADID" | ""  | "25"  | ""   | false | [] | [25] | []
+        "With null cid"  | null | "35"   | ""   | true | [] | [35] | []
+        "With CID list"  | ["25","35"] | ""   | ""   | true | [25,35] | [] | []
+        "With CID list and project"  | ["25","35"] | ""   | "45"   | true | [25,35] | [] | [45]
     }
 
 
@@ -207,7 +217,51 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         assert response.status == 200
     }
 
+    void "test probeSarTable for #label"() {
 
+        when:
+        controller.probeSarTable(pid, cid, transpose, showOnlyActive, threshold)
+
+        then:
+        1 * queryService.structureSearch(cid, StructureSearchParams.Type.Similarity, threshold, [], _ as Integer, _ as Integer, _ as Integer) >> {
+            Map results = [:]
+            def compoundList = searchResults.collect {
+                new CompoundAdapter(new Compound(cid:it))
+            }
+            results.compoundAdapters = compoundList
+            return results
+        }
+        response.status == HttpServletResponse.SC_OK
+        view == '/molSpreadSheet/molecularSpreadSheet'
+        model.cid == exptCids
+        model.pid == pid
+        model.transpose == transpose
+        model.showActive == showOnlyActive
+
+        where:
+        label                 | pid | cid | transpose | showOnlyActive | threshold | searchResults | exptCids
+        "valid ids"           | 100 | 555 | false     | false          | 0.9       | [500,555,600] | [555,500,600]
+        "transpose true"      | 100 | 555 | true      | false          | 0.9       | [500,555,600] | [555,500,600]
+        "showOnlyActive true" | 100 | 555 | false     | true           | 0.9       | [500,555,600] | [555,500,600]
+        "transpose and active"| 100 | 555 | true      | true           | 0.9       | [500,555,600] | [555,500,600]
+        "null pid"            | null| 555 | false     | false          | 0.9       | [500,555,600] | [555,500,600]
+    }
+
+    void "test probeSarTable errors for #label"() {
+
+        when:
+        controller.probeSarTable(pid, cid, transpose, showOnlyActive, threshold)
+
+        then:
+        0 * _._
+        response.status == HttpServletResponse.SC_BAD_REQUEST
+        view == null
+
+        where:
+        label                 | pid | cid | transpose | showOnlyActive | threshold | searchResults | exptCids
+        "null cid"            | 100 | null| false     | false          | 0.9       | [] | []
+        "null pid and cid"    | null| null| false     | false          | 0.9       | [] | []
+    }
 
     void "test list, which we will one day use when sorting"() {
         when:
