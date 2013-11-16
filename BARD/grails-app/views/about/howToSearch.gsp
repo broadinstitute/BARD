@@ -104,7 +104,7 @@
                     <p>
 
                         </p>
-                    </p>You’ll notice that when you select one of the auto-suggest matches to perform a constrained search, BARD changes the text in the search box. So for our above example, the search box would read: gobp_term:“ras protein signal transduction". You can use this formula – category:“search term” – to perform constrained searches by typing them directly into the search box. There are many more advanced search formulas, listed below.
+                    </p>You’ll notice that when you select one of the auto-suggest matches to perform a constrained search, BARD changes the text in the search box. So for our above example, the search box would read: gobp_term:“ras protein signal transduction". You can use this formula – category:“search term” – to perform constrained searches by typing them directly into the search box. There are many more <a href="#advanced_search_formulas">advanced search formulas</a>.
 
                     <h3>
                     Search by One or More ID Numbers
@@ -115,7 +115,7 @@
                     </p>
 
                     <p>
-                        You can also search multiple ID numbers of the same type of data (assay definition, project and compound) simply by separating them with commas. For a more convenient way to search multiple IDs, click “IDs” near the search box to open a larger search box.  In this box, you can paste a carriage return-separated list of ID numbers copied from a spreadsheet.
+                        You can also search multiple ID numbers of the same type of data (assay definition, project or compound) simply by separating them with commas. For a more convenient way to search multiple IDs, click “IDs” near the search box to open a larger search box.  In this box, you can paste a carriage return-separated list of ID numbers copied from a spreadsheet.
                     </p>
 
                     <aside class="calloutbox">
@@ -158,9 +158,9 @@
                     With BARD, you can perform a variety molecular structure searches: substructure, superstructure, exact structure, and similarity. Similarity searches require a numeric parameter describing the degree of similarity required for matches, and can be set  between 0 and 100%. For more details on BARD’s molecular structure search, please visit <a href="http://tripod.nih.gov/?p=427">http://tripod.nih.gov/?p=427</a>.
                     </p>
 
-                    <h3>
+                    <h3 id="advanced_search_formulas">
                         Advanced Search Formulas
-                        </h3>
+                    </h3>
 
                     <p>
                         As you can see below, there are a wide variety of search formulas available. Advanced users can use these to quickly target specific categories within a particular type of data.
