@@ -7,6 +7,11 @@
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
     <title>BARD Architecture</title>
+    <style>
+    .unindentedDefinition  dd {
+        margin-left: 0px;
+    }
+    </style>
 </head>
 
 <body>
@@ -20,11 +25,6 @@
 
     </div>
 </div>
-<style>
-  .unindentedDefinition  dd {
-    margin-left: 0px;
-  }
-</style>
 
 <article class="hero-block">
     <div class="container-fluid">
