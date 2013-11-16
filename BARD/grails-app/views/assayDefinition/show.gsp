@@ -72,7 +72,7 @@
                                 uri="/images/clone-icon.png"/> Clone Assay Definition</g:link>
                     </sec:ifLoggedIn>
                 </g:if>
-                <g:render template="../layouts/askAQuestion" model="['entity':'Assay Definition']"/>
+                <g:render template="../layouts/templates/askAQuestion" model="['entity':'Assay Definition']"/>
             </div>
         </div>
     </div>

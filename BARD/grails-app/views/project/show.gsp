@@ -48,7 +48,7 @@
                     <small>(Project ID: ${instance.id})</small>
                 </h2>
                 <br/>
-                <g:render template="../layouts/askAQuestion" model="['entity':'Project']"/>
+                <g:render template="../layouts/templates/askAQuestion" model="['entity':'Project']"/>
                 <g:if test="${projectAdapter != null}">
                     <g:saveToCartButton id="${instance.id}"
                                         name="${bardqueryapi.JavaScriptUtility.cleanup(projectAdapter?.name)}"

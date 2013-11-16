@@ -83,10 +83,10 @@ class BardWebInterfaceController {
             return
         }
         int records = 10
-        if(params.records){
-          records = new Integer(params.records)
+        if (params.records) {
+            records = new Integer(params.records)
         }
-        final TableModel tableModel = experimentService.previewResults(id,records)
+        final TableModel tableModel = experimentService.previewResults(id, records)
         //this should do a full page reload
         render(view: 'showExperimentalResultsPreview',
                 model: [tableModel: tableModel,
@@ -142,22 +142,22 @@ class BardWebInterfaceController {
 
     //TODO: Use Command Object here. Bind the filters instead. Use the FilterTypes
     def showExperiment(Long id, SearchCommand searchCommand) {
-
-        if (isHTTPBadRequest(id, 'Experiment ID is a required Field', bardUtilitiesService.username)) {
-            return
-        }
-        Experiment experiment = Experiment.get(id)
-        if (!experiment) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND,
-                    "Could not find Experiment with EID: ${id}")
-            return
-        }
-        if (!experiment.ncgcWarehouseId) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND,
-                    "Could not find Experiment with EID: ${id} in warehouse")
-            return
-        }
         try {
+            if (isHTTPBadRequest(id, 'Experiment ID is a required Field', bardUtilitiesService.username)) {
+                return
+            }
+            Experiment experiment = Experiment.get(id)
+            if (!experiment) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                        "Could not find Experiment with EID: ${id}")
+                return
+            }
+            if (!experiment.ncgcWarehouseId) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                        "Could not find Experiment with EID: ${id} in warehouse")
+                return
+            }
+
             //Convert from CAP ID to NCGC Id
 
             Map<String, Integer> searchParams = handleSearchParams()
@@ -236,9 +236,9 @@ class BardWebInterfaceController {
 
             String message = "Problem finding Experiment with EID ${id}"
             log.error(message + getUserIpAddress(bardUtilitiesService.username), ee)
-
-            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    "${message}")
+            render(view: '../layouts/warehouseUnavailable',
+                    model: [message: "EID ${id}: Experimental Results"])
+            return
         }
     }
 
@@ -567,8 +567,11 @@ class BardWebInterfaceController {
         catch (Exception exp) {
             final String errorMessage = "Show compound page has encountered an error:\n${exp.message}"
             log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username), exp)
-            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                    errorMessage)
+            render(view: '../layouts/warehouseUnavailable',
+                    model: [message: "Compound ${cid}: Compound Not Available"])
+            return
+            // return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
+            //       errorMessage)
         }
     }
 
@@ -674,8 +677,12 @@ class BardWebInterfaceController {
         catch (Exception exp) {
             final String errorMessage = "Show compound page has encountered an error:\n${exp.message}"
             log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username), exp)
-            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                    errorMessage)
+            // return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
+            //         errorMessage)
+            render(view: '../layouts/warehouseUnavailable',
+                    model: [message: "Compound ${id}: Compound Not Available"])
+            return
+
         }
 
         try {
@@ -766,8 +773,8 @@ class BardWebInterfaceController {
             String message = "Error building Compound Bio Activity Summary TableModel for CID ${id}"
             log.error(message + getUserIpAddress(bardUtilitiesService.username), ee)
 
-            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    "${message}")
+            render(view: '../layouts/warehouseUnavailable',
+                    model: [message: "Compound ${id}: Compound Not Available"])
         }
     }
 

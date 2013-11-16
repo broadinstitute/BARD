@@ -44,7 +44,7 @@
                     <p>
                         If it appears you’re the first to spot the bug, great! Please
                         <a href="${grailsApplication.config.bard.users.mailing.list}" target="forum">tell us</a> what you see, exactly where you see it, and step-by-step what you are doing when it occurs. Simply complete the form or email
-                    <g:render template="../layouts/bardusers"/>. We promise a prompt response, as outlined by the Feedback Policy in our Service Level Agreement.
+                    <g:render template="../layouts/templates/bardusers"/>. We promise a prompt response, as outlined by the Feedback Policy in our Service Level Agreement.
                     </p>
 
                 </article>
