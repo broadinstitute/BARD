@@ -1,4 +1,4 @@
-package bard.admin
+package bard.db.registration
 
 import bard.db.command.BardCommand
 import bard.db.experiment.Experiment
@@ -16,7 +16,7 @@ import org.apache.commons.lang.StringUtils
 import javax.servlet.http.HttpServletResponse
 
 @Mixin([EditingHelper])
-@Secured(["hasRole('ROLE_BARD_ADMINISTRATOR')"])
+@Secured(['isAuthenticated()'])
 class MoveExperimentsController {
     MergeAssayDefinitionService mergeAssayDefinitionService
 
@@ -32,19 +32,24 @@ class MoveExperimentsController {
 
     def confirmMoveExperiments(ConfirmMoveExperimentsCommand confirmMoveExperimentsCommand) {
         try {
-            mergeAssayDefinitionService.validateConfirmMergeInputs(confirmMoveExperimentsCommand.targetAssayId, confirmMoveExperimentsCommand.sourceEntityIds, confirmMoveExperimentsCommand.idType)
+            mergeAssayDefinitionService.validateConfirmMergeInputs(confirmMoveExperimentsCommand.targetAssayId,
+                    confirmMoveExperimentsCommand.sourceEntityIds, confirmMoveExperimentsCommand.idType)
 
-            final List<Long> entityIdsToMove = MergeAssayDefinitionService.convertStringToIdList(confirmMoveExperimentsCommand.sourceEntityIds)
 
             final Assay targetAssay = mergeAssayDefinitionService.convertIdToEntity(IdType.ADID, confirmMoveExperimentsCommand.targetAssayId)
 
             if (!targetAssay) {
                 throw new RuntimeException("Could not find assay with ADID: ${confirmMoveExperimentsCommand.targetAssayId}")
             }
-            final List<Long> experimentsToMove = mergeAssayDefinitionService.normalizeEntitiesToMoveToExperimentIds(
+            final List<Long> entityIdsToMove = MergeAssayDefinitionService.convertStringToIdList(confirmMoveExperimentsCommand.sourceEntityIds)
+
+            List<Long> experimentsToMove = mergeAssayDefinitionService.normalizeEntitiesToMoveToExperimentIds(
                     entityIdsToMove, confirmMoveExperimentsCommand.idType, targetAssay)
 
-            MoveExperimentsCommand moveExperimentsCommand = new MoveExperimentsCommand(targetAssay: targetAssay, experimentIds: experimentsToMove)
+            experimentsToMove = mergeAssayDefinitionService.filterOutExperimentsNotOwnedByMe(experimentsToMove)
+
+            MoveExperimentsCommand moveExperimentsCommand =
+                new MoveExperimentsCommand(targetAssay: targetAssay, experimentIds: experimentsToMove)
             render(status: HttpServletResponse.SC_OK, template: "selectExperimentsToMove", model: [moveExperimentsCommand: moveExperimentsCommand])
 
 
@@ -68,6 +73,9 @@ class MoveExperimentsController {
         }
 
         try {
+            List<Long> experimentsToMoveIds = mergeAssayDefinitionService.filterOutExperimentsNotOwnedByMe(moveExperimentsCommand.experimentIds)
+            moveExperimentsCommand.experimentIds = experimentsToMoveIds
+
             Assay targetAssay = mergeAssayDefinitionService.moveExperimentsFromAssay(
                     moveExperimentsCommand.targetAssay,
                     moveExperimentsCommand.experiments
@@ -78,7 +86,6 @@ class MoveExperimentsController {
         }
         catch (ValidationException validationError) {
             render(status: HttpServletResponse.SC_BAD_REQUEST, template: "moveValidationError", model: [validationError: validationError])
-
         }
         catch (Exception ee) {
             render(status: HttpServletResponse.SC_BAD_REQUEST, template: "assayError", model: [message: ee?.message])
