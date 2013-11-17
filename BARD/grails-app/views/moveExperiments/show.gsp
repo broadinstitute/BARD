@@ -16,6 +16,21 @@
     <div class="span8"><h2>Move Experiments</h2><br/><br/></div>
 
     <div class="span2"></div>
+
+</div>
+
+<div class="row-fluid">
+    <div class="span2"></div>
+
+    <div class="span8">
+        <b>This page allows you to change the assay definition that describes one or more experiments.
+        The primary use for this functionality is when two assay definitions are identified as being duplicates;
+        then the experiments from one can be moved to the other and the one without any experiments can be retired.
+        </b>
+    </div>
+
+    <div class="span2"></div>
+
 </div>
 
 <div class="container-fluid">
@@ -24,7 +39,8 @@
 
         <div class="span8">
 
-            <g:formRemote class="form-horizontal" url="[controller: 'moveExperiments', action: 'confirmMoveExperiments']"
+            <g:formRemote class="form-horizontal"
+                          url="[controller: 'moveExperiments', action: 'confirmMoveExperiments']"
                           name="mergeAssays"
                           update="[success: 'confirmMove', failure: 'confirmMove']">
                 <div class="control-group">
@@ -37,13 +53,16 @@
                                   optionValue="name"/>
                     </div>
                 </div>
+
                 <div class="control-group">
-                    <label class="control-label" for="idType"><div id="textBoxMessage">Identify Entities to Move</div></label>
+                    <label class="control-label" for="idType"><div id="textBoxMessage">Identify Entities to Move</div>
+                    </label>
 
                     <div class="controls">
                         <g:textField class="input-xxlarge" id="sourceEntityIds" name="sourceEntityIds" required=""/>
                     </div>
                 </div>
+
                 <div class="control-group">
                     <label class="control-label" for="idType">Assay Definition to move to (ADID):</label>
 
@@ -51,6 +70,7 @@
                         <g:textField id="targetAssayId" class="input-mini" name="targetAssayId" required=""/>
                     </div>
                 </div>
+
                 <div class="control-group">
                     <label class="control-label"></label>
                     <input type="submit" class="btn btn-primary">
