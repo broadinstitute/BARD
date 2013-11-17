@@ -10,65 +10,63 @@
 </head>
 
 <body>
-<div class="container">
-    <div class="hero-unit">
-        <h2>Move Experiments</h2>
-    </div>
-    <g:formRemote url="[controller: 'moveExperiments', action: 'confirmMoveExperiments']"
-                  name="mergeAssays"
-                  update="[success: 'confirmMove', failure: 'confirmMove']">
-        <div class="row">
-            <div class="span6">
-                <h4><div id="selectBoxMessage">Identify experiments to Move</div></h4>
-                <g:select name="idType" id="idType"
-                          from="${IdType.values()}"
-                          value="${IdType.EID}"
-                          optionValue="name"/>
-            </div>
+<div class="row-fluid">
+    <div class="span2"></div>
 
-            <div class="span6">
-                <h4><div id="textBoxMessage">Identify Entities to Move</div></h4>
-                <g:textField class="input-xxlarge" id="sourceEntityIds" name="sourceEntityIds" required=""/>
-            </div>
+    <div class="span8"><h2>Move Experiments</h2><br/><br/></div>
 
-        </div>
-        <br/>
-
-        <div class="row">
-            <div class="span6">
-                <h4>Assay Definition to move to (ADID):</h4>
-            </div>
-            <br/>
-
-            <div class="span6">
-                <g:textField id="targetAssayId" class="input-mini" name="targetAssayId" required=""/>
-            </div>
-
-        </div>
-        <br/>
-        <br/>
-
-        <div class="row">
-            <div class="span4">
-                <input type="submit" class="btn btn-primary btn-large">
-            </div>
-
-            <div class="span4">
-
-            </div>
-
-            <div class="span4">
-
-            </div>
-        </div>
-
-    </g:formRemote>
+    <div class="span2"></div>
 </div>
-<br/>
-<hr/>
 
-<div id="confirmMove">
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span2"></div>
 
+        <div class="span8">
+
+            <g:formRemote class="form-horizontal" url="[controller: 'moveExperiments', action: 'confirmMoveExperiments']"
+                          name="mergeAssays"
+                          update="[success: 'confirmMove', failure: 'confirmMove']">
+                <div class="control-group">
+                    <label class="control-label" for="idType">Identify experiments to Move:</label>
+
+                    <div class="controls">
+                        <g:select name="idType" id="idType"
+                                  from="${IdType.values()}"
+                                  value="${IdType.EID}"
+                                  optionValue="name"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="idType"><div id="textBoxMessage">Identify Entities to Move</div></label>
+
+                    <div class="controls">
+                        <g:textField class="input-xxlarge" id="sourceEntityIds" name="sourceEntityIds" required=""/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="idType">Assay Definition to move to (ADID):</label>
+
+                    <div class="controls">
+                        <g:textField id="targetAssayId" class="input-mini" name="targetAssayId" required=""/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"></label>
+                    <input type="submit" class="btn btn-primary">
+                </div>
+            </g:formRemote>
+
+        </div>
+
+        <div class="span2"></div>
+    </div>
+    <br/>
+    <hr/>
+
+    <div id="confirmMove">
+
+    </div>
 </div>
 </body>
 </html>
