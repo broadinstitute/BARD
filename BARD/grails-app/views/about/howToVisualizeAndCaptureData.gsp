@@ -15,7 +15,7 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <aside class="span2"></aside>
-            <article class="span8 head-holder"><h2>BARD Visualize Data</h2></article>
+            <article class="span8 head-holder"><h2>how to Visualize Data</h2></article>
             <aside class="span2"></aside>
         </div>
 
@@ -67,7 +67,7 @@
                         </p>
 
                     <section class="shiftedSection">
-                        <dl>
+                        <dl  class='unindentedDefinition'>
                             <dt>View Summary Result Details</dt>
                             <dd>Hover over underlined summary results to view detailed information such as dose response curves.</dd>
                             <br/>
@@ -75,10 +75,13 @@
                             <dd>Simply click on the column’s header.</dd>
                             <br/>
                             <dt>Transpose the Table</dt>
-                            <dd>Improves readability when you have few compounds and many assay definitions.</dd>
+                            <dd>Improve readability when you have few compounds and many assay definitions.</dd>
                             <br/>
                             <dt>De-normalize the Y-Axis of Dose Response Graphs</dt>
-                            <dd>By default, the y-axis of all dose response graphs are normalized to the same range. Click DENORMALIZE in the column header to undo this default.</dd>
+                            <dd>The y-axis of all dose response graphs are normalized to the same range. Click DENORMALIZE in the column header to undo this default.</dd>
+                            <br/>
+                            <dt>Results from active assays</dt>
+                            <dd>When no assays or projects are specified through the query cart then results are displayed from assays only when at least one of those results is marked as active. Click "Show Inactive Results" to display assays from which no results were marked as active.</dd>
                             <br/>
                             <dt>Focus Results</dt>
                             <dd>Constrain compounds to specific projects or assay definitions by adding those projects and assay definitions to your query cart.</dd>
@@ -97,7 +100,7 @@
                         </p>
 
                     <section class="shiftedSection">
-                        <dl>
+                        <dl  class='unindentedDefinition'>
                             <dt>Simple to Use </dt>
                             <dd>Download the desktop client from the homepage or from your query cart by clicking VISUALIZE. It will launch via Java WebStart and display the contents of your query cart as a collection.</dd>
                             <br/>
@@ -118,8 +121,11 @@
                         Show Experimental Results – Quickly See Assay Definitions that Show Activity
                         </h3>
                     <p>
-                        This is a specialized version of the molecular spreadsheet that shows only the assay definitions that the compound tested active against. You can access this tool by clicking the “i” information icon next to a structure drawing and selecting “Show Experimental Results.”
+                        This specialized version of the molecular spreadsheet will display all of an assay's results when at least one of those results is marked as active. Inactive results are also available, and may be displayed by clicking the checkbox "Show Inactive Results". You can access this tool by clicking the “i” information icon next to a structure drawing and selecting “Show Experimental Results”.
                         </p>
+
+                    <p>
+                    Note that all of the capabilities associated with the regular molecular spreadsheet are available through the “Show Experimental Results” page. </p>
 
 
                     <h3>
@@ -131,7 +137,7 @@
                         </p>
 
                     <section class="shiftedSection">
-                        <dl>
+                        <dl class='unindentedDefinition'>
                             <dt>Group by Assay </dt>
                             <dd>Show how a compound performed across repeated tests using the same protocol.</dd>
                             <br/>
@@ -139,7 +145,7 @@
                             <dd>Show which projects pursued that compound and how far down the screening pipeline it went.</dd>
                             <br/>
                             <dt>De-normalize the Y-Axis</dt>
-                            <dd>By default, the y-axis of all graphs are normalized to the same range. Click DENORMALIZE in the column header to undo this default.</dd>
+                            <dd>The y-axis of all graphs are normalized to the same range. Click DENORMALIZE in the column header to undo this default.</dd>
                             <br/>
                             <dt>Hide Single Point Data</dt>
                             <dd>Hide all experiments that only tested at a single concentration point.</dd>
@@ -157,7 +163,7 @@
                         </p>
 
                     <section class="shiftedSection">
-                        <dl>
+                        <dl class='unindentedDefinition'>
                             <dt>Filter by Pie Chart</dt>
                             <dd>Click on any pie chart wedge to filter the table of assay definitions below to show only those that match the annotation for the selected wedge. You can choose to filter by multiple dimensions at once by clicking on multiple pie segments.</dd>
                             <br/>
@@ -177,16 +183,16 @@
                         </h3>
 
                     <p>
-                        See all the results for a single experiment grouped by up to ten substances (PubChem SID) at once. You will see numeric values, text, and graphs showing dose response curves. You will also see histograms for key result types. To use this visualization tool, click “Show experiment” on the detail page of an assay definition or Project, then choose "Result Summary" from the table of contents, then “View all results for this experiment.”
+                        See all the results for a single experiment grouped by up to ten substances (PubChem SID) at once. You will see numeric values, text, and graphs showing dose response curves. You will also see histograms for key result types. To use this visualization tool, click “Show experiment” on the detail page of an assay definition or project, then choose "Result Summary" from the table of contents, then “View all results for this experiment.”
                         </p>
 
                     <section class="shiftedSection">
-                        <dl>
+                        <dl class='unindentedDefinition'>
                             <dt>Show All or Only Active Results</dt>
-                            <dd>By default, only active results are displayed, but there is an option on the left to show all results.</dd>
+                            <dd>Only active results are displayed, but there is an option on the left to show all results.</dd>
                             <br/>
                             <dt>De-normalize the Y-Axis</dt>
-                            <dd>By default, the y-axis of all graphs are normalized to the same range. Click DENORMALIZE in the column header to undo this default.</dd>
+                            <dd>The y-axis of all graphs are normalized to the same range. Click DENORMALIZE in the column header to undo this default.</dd>
                         </dl>
                     </section>
 
@@ -195,11 +201,11 @@
                     </h3>
 
                     <p>
-                        This visualization shows you all of the experiments in a project and the order in which they were run, as well as the experiment stage – the intended purpose of the experiment in the context of the project (primary, confirmatory, compound toxicity screen, etc.). To use this visualization, navigate to the detail page for a Project and select "Experiments and Steps" from the table of contents.
+                        This visualization shows you all of the experiments in a project and the order in which they were run, as well as the experiment stage – the intended purpose of the experiment in the context of the project (primary, confirmatory, compound toxicity screen, etc.). To use this visualization, navigate to the detail page for a project and select "Experiments and Steps" from the table of contents.
                         </p>
 
                     <section class="shiftedSection">
-                        <dl>
+                        <dl class='unindentedDefinition'>
                             <dt>View Details</dt>
                             <dd>Click one of the boxes on the graph for more information about the experiment.</dd>
                             <br/>
@@ -216,7 +222,7 @@
                         </p>
 
                     <section class="shiftedSection">
-                        <dl>
+                        <dl class='unindentedDefinition'>
                             <dt>Bookmark</dt>
                             <dd>The detail page for any assay definition, compound or project can be bookmarked in your browser for fast retrieval. However, you cannot bookmark dynamic pages, such as your query cart and pages that list your search results.</dd>
                             <br/>
