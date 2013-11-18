@@ -26,7 +26,19 @@ class ExperimentConstraintIntegrationSpec extends BardIntegrationSpec {
     void doSetup() {
         domainInstance = Experiment.buildWithoutSave()
     }
-
+    void "test measuresHaveAtLeastOnePriorityElement #desc"() {
+        given:
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: priorityElement)
+        Experiment experiment = Experiment.build(experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+        when:
+        boolean found = experiment.measuresHaveAtLeastOnePriorityElement()
+        then:
+        assert expected == found
+        where:
+        desc                      | priorityElement | expected
+        "Has no Priority Element" | false           | false
+        "Has Priority Element"    | true            | true
+    }
     void "test experimentName constraints #desc experimentName: '#valueUnderTest'"() {
         final String field = 'experimentName'
 

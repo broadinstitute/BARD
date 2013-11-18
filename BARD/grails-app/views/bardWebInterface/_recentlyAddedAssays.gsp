@@ -28,9 +28,7 @@
             <g:else>
                 <div class="item active">
                     <div class="row-fluid">
-                        <h2>
-                            Warehouse server, unavailable
-                        </h2>
+                        <g:render template="/layouts/templates/restapiunavailable"/>
                     </div>
                 </div>
             </g:else>

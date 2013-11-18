@@ -20,7 +20,7 @@ import groovy.transform.TypeChecked
 class MinimumOfOneBiologyGuidanceRule implements GuidanceRule {
 
     private static final String BIOLOGY_LABEL = 'biology'
-    private static final String ONE_BIOLOGY_ATTRIBUTE_REQUIRED = "There should be at least 1 context with an item where the attribute is 'biology'."
+    private static final String ONE_BIOLOGY_ATTRIBUTE_REQUIRED = "There should be at least 1 context with an item where either the attribute is 'biology' or where the attribute is 'assay format' and the value 'small molecule'."
     AbstractContextOwner owner
 
     MinimumOfOneBiologyGuidanceRule(AbstractContextOwner owner) {

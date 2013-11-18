@@ -342,7 +342,7 @@ class ExperimentBuilder {
                 final Compound compound = this.compoundRestService.getCompoundBySid(sid)
                 compoundAdapter = new CompoundAdapter(compound)
             } catch (Exception ee) {
-                log.error(ee)
+                log.error(ee,ee)
             }
             final Map<Boolean, List<WebQueryValue>> preview = addRowForResultsPreview(jsonSubstanceResults, priorityElements, yNormMin, yNormMax, compoundAdapter,previewResultsSummaryBuilder)
             if (!hasDosePoints) {

@@ -85,6 +85,7 @@
             </div>
             <div class="row-fluid">
                 <div class="span8 offset2 bard-footer-versioninfo muted">
+                    <b>By using BARD, you agree to our <g:link controller="about" action="termsOfUse">terms of use</g:link>  and <g:link controller="about" action="privacyPolicy">privacy policy</g:link></b></br>
                     <b>Release created:</b> ${grailsApplication.metadata['war.created']} <b>Branch:</b> ${grailsApplication?.metadata['git.branch.name']} <b>Revision:</b> ${grailsApplication?.metadata['git.branch.version']}
                 </div>
             </div>
