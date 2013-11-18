@@ -4,16 +4,19 @@
             <div class="search-box">
                 <div class="search-box-row">
                     <div class="search-box-button-cell" style="width:74px">
-                        <g:link controller="bardWebInterface" action="jsDrawEditor">
-                            <img
-                             src="${resource(dir: 'images/bardHomepage', file: 'struct_icon.png')}"
+                        <g:link controller="bardWebInterface" action="jsDrawEditor" >
+                            <img id="struct_icon" src="${resource(dir: 'images/bardHomepage', file: 'struct_icon.png')}"
+                                 onmouseover="this.src='${resource(dir: 'images/bardHomepage', file: 'struct_icon_bright.png')}'"
+                                 onmouseout="this.src='${resource(dir: 'images/bardHomepage', file: 'struct_icon.png')}'"
                                  alt="Draw or paste a structure"
                                  title="Draw or paste a structure"/>
                         </g:link>
                     </div>
 
                     <div class="search-box-button-cell" style="width:44px">
-                        <img     src="${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}"
+                        <img  id="ids_icon"    src="${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}"
+                              onmouseover="this.src='${resource(dir: 'images/bardHomepage', file: 'ids_icon_bright.png')}'"
+                              onmouseout="this.src='${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}'"
                              alt="List of IDs for search"
                              title="List of IDs for search" data-toggle="modal" href="#idModalDiv"
                              />

@@ -59,7 +59,7 @@
                         Workflow 1: Biology-driven searches
                         </h3>
 
-                    <ol class="shiftedSection">
+                    <ol>
                         <li>Type "cholesterol" into the search bar as free text</li>
                         <li>Note that different options appear through the auto suggest mechanism. Choose "cholesterol transport as GO Biological Process Term”</li>
                         <li>Observe the filters on the left side of the screen that allow you to narrow your search result. Select "fluorescence intensity” from "Detection method type" and click "Apply Filters”.</li>
@@ -79,7 +79,7 @@
                     <h3>
                         Workflow 2: Chemistry-driven searches
                         </h3>
-                        <ol class="shiftedSection">
+                        <ol>
                             <li>Type “DNA repair” into the search bar and press enter.</li>
                             <li>Note that search results are available on three tabs below: “Assay Definitions”, "Compounds", and "Projects". Select the Compounds tab.</li>
                             <li>Look through the molecular structures returned by the search. About halfway down the page is a structure for the drug “Chlorambucil”.  Click on the icon (marked with an “i”) to the lower right of the molecular structure for Chlorambucil.  Click on the option "Show Experimental Details”.</li>
@@ -95,7 +95,7 @@
                     </h3>
 
 
-                    <ol class="shiftedSection">
+                    <ol>
                         <li>Start by selecting the name of a Molecular Libraries probe (“ML162”).  Note that the search brings back both the compounds (on the compounds tab) and a project. Move to the Projects tab.</li>
                         <li>Scan through some of the information available to describe this project. Note in particular the two resulting probes (both ML162 and ML210), and the project annotations that make this record accessible via searches.  Note also the interactive project diagram, which permits an overview of the decision-making process driving the project by showing how one experiment leads to another (note that those experiments and their associated assay links are also presented below the project diagram).  Finally moved back to the top of the screen, click the checkbox “Save to Cart for analysis”, then move to the display for probe ML210 and click “Show Compound Details in BARD”.</li>
                         <li>On the compound page click the small checkbox to “Save to Cart for analysis”.  The query cart will now display all active experimental results for this compound, but only when those experiments were performed as a part of our selected project.  Click on the QUERY CART button in the upper right-hand corner of the screen, then click on the VISUALIZE drop-down box and select the Molecular Spreadsheet to see this display.</li>
