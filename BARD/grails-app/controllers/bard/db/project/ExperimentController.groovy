@@ -68,7 +68,7 @@ class ExperimentController {
 
         final Object principal = springSecurityService?.principal
         String loggedInUser = null
-        def experimentInstance = Experiment.get(params.id)
+        def experimentInstance = Experiment.get(id)
         if (principal instanceof String) {
             loggedInUser = null
         } else {
