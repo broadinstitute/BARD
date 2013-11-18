@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
     <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
           rel='stylesheet' type='text/css'>
-    <r:require modules="bardHomepage,idSearch,jquerynotifier,downtime,autocomplete"/>
+    <r:require modules="bardHomepage,idSearch,jquerynotifier,downtime,autocomplete,compoundOptions"/>
     <!--[if lt IE 9]><link rel="stylesheet" href="../css/bardHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
     <!--[if IE]><script src="../js/bardHomepage/ie.js"></script><![endif]-->
 
@@ -283,7 +283,11 @@
                           model="['numberOfExperimentData': numberOfExperimentData]"/>
 
                 %{--Contents of the "Probes" tab (of our row of five content boxes) --}%
-                <g:render template="probeProjects" model="['probeProjectIds': probeProjectIds]"/>
+                <g:render template="probeProjects" model="[
+                        'probeProjectIds': probeProjectIds,
+                        'compoundAdapters':probeCompoundMap.compoundAdapters,
+                        'probeCompoundIds': probeCompoundMap.probeCompoundIds
+                ]"/>
             </div>
         </div>
     </section>

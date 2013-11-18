@@ -103,6 +103,7 @@ class BardWebInterfaceController {
 
         //link to all probes
         final List<Long> probeProjectIds = queryService.findAllProbeProjects()
+        final Map probeCompoundMap = queryService.findAllProbeCompounds()
         long numberOfExperimentData = queryService.numberOfExperimentData()
         render(view: 'homepage', model:
                 [
@@ -110,7 +111,8 @@ class BardWebInterfaceController {
                         numberOfExperimentData: numberOfExperimentData,
                         recentlyAddedProjects: recentlyAddedProjects,
                         recentlyAddedExperiments: recentlyAddedExperiments,
-                        probeProjectIds: probeProjectIds
+                        probeProjectIds: probeProjectIds,
+                        probeCompoundMap: probeCompoundMap
 
                 ]
         )

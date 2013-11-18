@@ -29,9 +29,11 @@ public interface IQueryService {
 
     long numberOfExperimentData()
 
-    int numberOfProbes()
+    int numberOfProbeProjects()
+    int numberOfProbeCompounds()
 
     List<Long> findAllProbeProjects()
+    Map findAllProbeCompounds()
     List<Assay> findRecentlyAddedAssays(int numberOfAssays)
 
     List<ExperimentSearch> findRecentlyAddedExperiments(int numberOfExperiments)

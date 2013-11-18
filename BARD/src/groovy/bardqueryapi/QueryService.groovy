@@ -735,12 +735,25 @@ class QueryService implements IQueryService {
         return experimentRestService.getExptDataCount()
     }
 
-    int numberOfProbes() {
+    int numberOfProbeProjects() {
         return projectService.findApprovedProbeProjects()?.size()
     }
-    List<Long> findAllProbeProjects(){
+
+    int numberOfProbeCompounds() {
+        return projectService.findApprovedProbeCompounds()?.size()
+    }
+
+    List<Long> findAllProbeProjects() {
         return projectService.findApprovedProbeProjects()
     }
+
+    Map findAllProbeCompounds() {
+        final List<Long> probeCompoundIds = projectService.findApprovedProbeCompounds()
+        Map m = searchCompoundsByCids(probeCompoundIds, probeCompoundIds.size(), 0, [])
+        m.probeCompoundIds = probeCompoundIds
+        return m
+    }
+
     List<Assay> findRecentlyAddedAssays(int numberOfAssays = 6) {
         final List<Assay> assays = assayRestService.findRecentlyAdded(numberOfAssays)
         return assays
