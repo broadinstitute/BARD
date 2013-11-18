@@ -6,7 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix"/>
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>BARD Contact Us</title>
+    <title>BARD Documentation</title>
 </head>
 
 <body>
@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <aside class="span2"></aside>
-            <article class="span8 head-holder"><h2>BARD-related presentations and posters</h2></article>
+            <article class="span8 head-holder"><h2>Documentation</h2></article>
             <aside class="span2"></aside>
         </div>
 
@@ -29,7 +29,12 @@
                 <aside class="span2"></aside>
                 <article class="span8">
 
-                    <dl>
+                    <h3>
+                        Presentations and posters
+                    </h3>
+
+                    <section class="shiftedSection">
+                    <dl class='unindentedDefinition'>
                         <dt><a href="${resource(dir: 'documentation', file: 'BARD_ACS_0_Sep2013.pdf')}">Integrative Chemogenomics Knowledge Mining Using NIH Open Access Resources -- Introductory remarks</a></dt><dd>P. Clemons</dd>
                         <br/>
                         <dt><a href="${resource(dir: 'documentation', file: 'BARD_ACS_2_Sep2013.pdf')}">Pushing Chemical Biology Data Through the Pipes</a></dt><dd>R. Guha, J. Braisted, A. Jadhav, D. Nguyen, T. Peryea, N. Sothall</dd>
@@ -51,6 +56,7 @@
                         Vempati, M. Southern, E. Dawson, P. Clemons and T. Chung</dd>
 
                     </dl>
+                    </section>
 
                 </article>
                 <aside class="span2"></aside>

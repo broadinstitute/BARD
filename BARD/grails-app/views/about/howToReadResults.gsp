@@ -6,7 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix"/>
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>BARD Interpret Results</title>
+    <title>BARD How to interpret search results</title>
 </head>
 
 <body>
@@ -38,7 +38,7 @@
                         </p>
 
                     <p>
-                        The largest part of the page will display the individual results of the selected tab, with assay definitions being the default. Each result will offer an overview of key information, but for more detailed information you can simply click on either the entry’s name or its ID number.
+                        The largest part of the page will display the individual results of the selected tab, with assay definitions being the default. Each result will offer an overview of key information, for more detailed information you can simply click on either the entry’s name or its ID number.
                         </p>
 
                     <p>
@@ -55,15 +55,17 @@
                         </p>
 
                         <section class="shiftedSection">
-                            <dl>
-                                <dt>
-                                    Text Search</dt>
-                                <dd>Results will be every assay definition that includes a match of any of the searched text in any text field or annotation.  Constrained Search Results will only include assay definitions from the category of data to which you constrained your search.</dd>
+                            <dl class='unindentedDefinition'>
+                                <dt>Text Search</dt>
+                                <dd>Results will be every assay definition that includes a match of any of the searched text in any text field or annotation.  </dd>
+                                <br/>
+                                <dt>Constrained Search</dt>
+                                <dd>Results will only include assay definitions from the category of data to which you constrained your search.</dd>
                             </dl>
                         </section>
 
                     <p>
-                        Each result will include key information about each assay definition:  assay format, assay type, detection method type, assay definition ID, name, matched category, and a field to indicate the status of the assay definition’s annotation and review process. There is also a checkbox for you to capture that result in your query cart.
+                        Each result will include key information about each assay definition:  assay format, assay type, detection method type, assay definition ID, name, matched category, and a field to indicate the status of the assay definition’s annotation in the review process. There is also a checkbox for you to capture that result in your query cart.
                         </p>
 
 
@@ -76,7 +78,7 @@
                         </p>
 
                     <section class="shiftedSection">
-                        <dl>
+                        <dl class='unindentedDefinition'>
                             <dt>Text Search</dt>
                             <dd>Results will be compounds where the searched text matches annotations to the compound in a descriptive field, such as Mechanism of Action, or Therapeutic Indication. "Matched Category" will always simply state “Annotation Value.” (Note: It is currently not possible to search for a compound by name.)</dd>
                             <br/>
@@ -84,7 +86,7 @@
                             <dd>Results will only include compounds from the category of data to which you constrained your search.</dd>
                             <br/>
                             <dt>CID Search</dt>
-                            <dd>Results will include all entries that match the searched PubChem Compound ID numbers. “Matched Category” will be left blank.  Note:  partial ID matches are not included (for example, searching for CID 123 will not return CID 1234).</dd>
+                            <dd>Results will include all entries that match the searched PubChem Compound ID numbers. “Matched Category” will be left blank.  Note:  partial ID matches are not possible. For example, searching for CID 123 will not return CID 1234.</dd>
                             <br/>
                             <dt>Structure Search</dt>
                             <dd>Results will include matches to a molecular structure or fragment you’ve drawn or pasted into BARD. Each resulting structure and a description of the search will be shown (including a SMILES representation), but the “Matched Category” will not be listed, nor will any filtering options be presented.</dd>
@@ -108,15 +110,15 @@
                         </p>
 
                         <section class="shiftedSection">
-                            <dl>
+                            <dl class='unindentedDefinition'>
                                 <dt>Text Search</dt>
                                 <dd>Results will be projects where the searched text matches annotations, such as the name or description.</dd>
                                 <br/>
                                 <dt>Constrained Search</dt>
                                 <dd>Results will only include projects from the category of data to which you constrained your search.</dd>
                                 <br/>
-                                <dt>Project ID</dt>
-                                <dd>Search The result will be the project matching the searched PID.</dd>
+                                <dt>Project ID Search</dt>
+                                <dd>The result will be the project matching the searched PID.</dd>
                             </dl>
                         </section>
 

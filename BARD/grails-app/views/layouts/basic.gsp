@@ -71,6 +71,7 @@
 
                         <div class="navbar right-aligned">
                             <ul class="nav">
+
                                 <g:render template="/layouts/templates/howtolinks"/>
                             </ul>
                         </div>

@@ -314,17 +314,16 @@ class QueryService implements IQueryService {
         Collection<Value> facets = []
         String eTag = null
         if (compoundIds) {
-            //create ETAG using a random name
-            //  eTag = restCompoundService.newETag("Compound ETags", compoundIds).toString();
-            //commenting out facets until we figure out how to apply filters to ID searches
-            //facets = restCompoundService.getFacets(etag)
-            CompoundResult compoundResult = compoundRestService.searchCompoundsByIds(compoundIds)
+            try {
+                CompoundResult compoundResult = compoundRestService.searchCompoundsByIds(compoundIds)
 
-            if (compoundResult) {
-                compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compoundResult))
-                eTag = compoundResult.etag
+                if (compoundResult) {
+                    compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compoundResult))
+                    eTag = compoundResult.etag
+                }
+            } catch (Exception ee) {
+                log.error(ee,ee)
             }
-            //TODO: Even though facets are available they cannot be used for filtering
         }
         int nhits = compoundAdapters.size()
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits, eTag: eTag]
