@@ -6,7 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix"/>
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>BARD Contact Us</title>
+    <title>BARD Contact us</title>
 </head>
 
 <body>
@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <aside class="span2"></aside>
-            <article class="span8 head-holder"><h2>Contact Us</h2></article>
+            <article class="span8 head-holder"><h2>Contact us</h2></article>
             <aside class="span2"></aside>
         </div>
 
@@ -38,7 +38,7 @@
                         </p>
 
                     <br/>
-                    <dl>
+                    <dl class='unindentedDefinition'>
                         <dt>General Feedback</dt>
                         <dd>Tell us about your experience using BARD. Which features are helpful? Which could use improvement? What functionality would you like to see in the future?
                         Please tell us at <g:render template="../layouts/templates/bardusers"/>

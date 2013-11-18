@@ -6,7 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix"/>
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>Create and Use Plug-ins</title>
+    <title>BARD How to create and use plug-ins</title>
 
 </head>
 
@@ -36,7 +36,7 @@
     </h3>
 
     <p>
-        Flexibility and responsiveness are core tenets of BARD. One way the system delivers is through an open architecture where users can create shareable plug-ins that meet their needs. That means that computational biologists, informatics experts, developers of advanced computational methods and other adept scientists can contribute code to BARD that benefits themselves and the entire research community.
+        Flexibility and responsiveness are core tenets of BARD. One way the system delivers this is through an open architecture where users can create shareable plug-ins that meet their needs. That means that computational biologists, informatics experts, developers of advanced computational methods and other adept scientists can contribute code to BARD that benefits themselves and the entire research community.
     </p>
 
 
