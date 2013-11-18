@@ -60,12 +60,20 @@ class MockQueryService implements IQueryService {
         return 0
     }
 
-    int numberOfProbes() {
+    int numberOfProbeProjects() {
+        return 0  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    int numberOfProbeCompounds() {
         return 0  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     List<Long> findAllProbeProjects() {
         return []  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    Map findAllProbeCompounds() {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     List<Compound> findRecentlyAddedProbes(int numberOfProbes) {

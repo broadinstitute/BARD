@@ -72,7 +72,7 @@
 </div>
 <g:hiddenField name="version" id="versionId" value="${instance.version}"/>
 <div class="span9">
-<g:render template="../layouts/askAQuestion" model="['entity':'Experiment']"/>
+<g:render template="../layouts/templates/askAQuestion" model="['entity':'Experiment']"/>
 
 <section id="summary-header">
     <div class="page-header">
@@ -250,12 +250,8 @@
             class="icon-question-sign"></i></g:link></h3>
 
     <div class="row-fluid">
-        %{--Add the linked measures to the experiment annotations section IN ADDITION to their card in the Experimental Variables section.--}%
-        <%
-            List<AbstractContext> assayExperimentMeasuresContexts = instance.assay.groupExperimentalVariables().value.findAll { AbstractContext context -> context.hasProperty('assayContextExperimentMeasures') && context.assayContextExperimentMeasures }
-        %>
         <g:render template="../context/show"
-                  model="[contextOwner: instance, additionalContexts: assayExperimentMeasuresContexts, uneditable: true]"/>
+                  model="[contextOwner: instance, additionalContexts: [], uneditable: true]"/>
     </div>
     <br/>
 

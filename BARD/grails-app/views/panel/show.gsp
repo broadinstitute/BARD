@@ -49,7 +49,7 @@
             <div class="pull-left">
                 <g:if test="${panelInstance?.id}">
                     <h4>View Panel (Panel ID: ${panelInstance?.id})</h4>
-                    <g:render template="../layouts/askAQuestion" model="['entity':'Panel']"/>
+                    <g:render template="../layouts/templates/askAQuestion" model="['entity':'Panel']"/>
                 </g:if>
              </div>
         </div>

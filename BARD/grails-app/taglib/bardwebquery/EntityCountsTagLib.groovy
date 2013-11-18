@@ -50,11 +50,15 @@ class EntityCountsTagLib {
 
 
     def probeCount = { attrs, body ->
-        long probes = queryService.numberOfProbes()
+        long probes = queryService.numberOfProbeProjects()
         String link = generateLink(probes, "Number of Probes", "#tab-probes")
         out << "${link}"
     }
-
+    def probeCIDCount = { attrs, body ->
+        long probes = queryService.numberOfProbeCompounds()
+        String link = generateLink(probes, "Number of Probe Compounds", "#tab-probes")
+        out << "${link}"
+    }
     String generateLink(Long number, String displayName, String tabName) {
         StringBuilder sb = new StringBuilder()
         def num = formatNumber(number: number, type: "number", groupingUsed: true)

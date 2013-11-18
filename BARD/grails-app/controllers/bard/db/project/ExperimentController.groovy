@@ -22,6 +22,7 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.validation.Errors
 
+import javax.servlet.http.HttpServletResponse
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
@@ -67,7 +68,7 @@ class ExperimentController {
 
         final Object principal = springSecurityService?.principal
         String loggedInUser = null
-        def experimentInstance = Experiment.get(params.id)
+        def experimentInstance = Experiment.get(id)
         if (principal instanceof String) {
             loggedInUser = null
         } else {
@@ -294,6 +295,11 @@ class ExperimentController {
             final String message = inlineEditableCommand.validateVersions(experiment.version, Experiment.class)
             if (message) {
                 conflictMessage(message)
+                return
+            }
+            if (!experiment.measuresHaveAtLeastOnePriorityElement()) {
+                render(status: HttpServletResponse.SC_BAD_REQUEST, text: "You must designate at least one result type as a priority element before this experiment can be marked as approved.",
+                        contentType: 'text/plain', template: null)
                 return
             }
             experiment = experimentService.updateExperimentStatus(inlineEditableCommand.pk, experimentStatus)

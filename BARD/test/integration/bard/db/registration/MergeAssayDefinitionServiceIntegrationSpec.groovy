@@ -3,6 +3,9 @@ package bard.db.registration
 import bard.db.audit.BardContextUtils
 import bard.db.enums.AssayStatus
 import bard.db.experiment.Experiment
+import bard.db.people.Person
+import bard.db.people.PersonRole
+import bard.db.people.Role
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.SessionFactory
@@ -11,7 +14,7 @@ import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
- * User: ddurkin
+ * User: jasiedu
  * Date: 8/21/12
  * Time: 9:18 AM
  * To change this template use File | Settings | File Templates.
@@ -26,6 +29,35 @@ class MergeAssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
     void setup() {
         BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
+
+    }
+
+    void "test filterOut Experiments Not Owned By Me"() {
+        given:
+        Role role1 = Role.build(authority: "ROLE_TEAM_MU", displayName: "Manchester United").save(flush: true)
+        Role role2 = Role.build(authority: "ROLE_TEAM_MC", displayName: "Manchester City").save(flush: true)
+        Person person1 = Person.build(userName: "ryanGiggs").save(flush: true)
+        PersonRole.build(person: person1, role: role1).save(flush: true)
+        final List<Long> experimentIds = []
+
+
+        for (int i = 1; i <= 10; i++) {
+            if (i % 2 == 0) {
+                Experiment experiment = Experiment.build(ownerRole: role1).save(flush: true)
+                experimentIds.add(experiment.id)
+            } else {
+                Experiment experiment = Experiment.build(ownerRole: role2).save(flush: true)
+                experimentIds.add(experiment.id)
+            }
+        }
+        SpringSecurityUtils.reauthenticate(person1.userName, null)
+        when:
+
+        List<Long> ids = mergeAssayDefinitionService.filterOutExperimentsNotOwnedByMe(experimentIds)
+        then:
+        assert ids.size() == 5
+
+
     }
 
     void "test find Assay By ADID no exceptions"() {

@@ -76,7 +76,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         map == expectedMap
         where:
         desc                 | fieldUnderTest    | value            | docType                    | expectedMap
-        'missing assayId'    | 'assayId'         | null             | DOCUMENT_TYPE_PUBLICATION  | [status: SC_INTERNAL_SERVER_ERROR, template: null, text: "An internal server error occurred while you were editing this page. Please refresh your browser and try again. If you still encounter issues please report it to the BARD team bard-users.REMOVE-ME@REMOVE-ME.broadinstitute.org", contentType: 'text/plain']
+        'missing assayId'    | 'assayId'         | null             | DOCUMENT_TYPE_PUBLICATION  | [status: SC_INTERNAL_SERVER_ERROR, template: null, text: "An internal server error occurred while you were editing this page. Please refresh your browser and try again. If you still encounter issues please report it to the BARD team bard-users@broadinstitute.org", contentType: 'text/plain']
         'null documentName'  | 'documentName'    | null             | DOCUMENT_TYPE_PUBLICATION  | [status: SC_BAD_REQUEST, template: null, text: 'nullable', contentType: 'text/plain']
         'blank documentName' | 'documentName'    | ''               | DOCUMENT_TYPE_PUBLICATION  | [status: SC_BAD_REQUEST, template: null, text: 'blank', contentType: 'text/plain']
         'blank documentName' | 'documentName'    | ' '              | DOCUMENT_TYPE_PUBLICATION  | [status: SC_BAD_REQUEST, template: null, text: 'blank', contentType: 'text/plain']

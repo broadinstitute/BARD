@@ -1,11 +1,14 @@
 package bard.db.registration
 
+import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContextItem
 import grails.plugins.springsecurity.SpringSecurityService
 import merge.MergeAssayService
 import org.apache.commons.lang3.StringUtils
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.springframework.security.access.prepost.PreAuthorize
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,6 +21,29 @@ class MergeAssayDefinitionService {
     MergeAssayService mergeAssayService
     SpringSecurityService springSecurityService
     def sessionFactory
+
+    List<Long> filterOutExperimentsNotOwnedByMe(List<Long> experimentIds) {
+        //if you are an admin you can move any experiment
+        if (BardCommand.isCurrentUserBARDAdmin()) {
+            return experimentIds
+        }
+        if (!experimentIds) {
+            return []
+        }
+        List<Long> roleIds = SpringSecurityUtils.principalAuthorities*.id
+        if (!roleIds) {
+            return []
+        }
+
+        String OWNED_EXPERIMENT_QUERY = "select experiment.id from Experiment experiment WHERE experiment.id in (" +
+                StringUtils.join(experimentIds, ",") + ") AND experiment.ownerRole.id in (" + StringUtils.join(roleIds, ",") + ")"
+
+
+        final List<Long> ownedExperiments = Experiment.executeQuery(OWNED_EXPERIMENT_QUERY)
+
+        return ownedExperiments
+
+    }
 
     List<Long> normalizeEntitiesToMoveToExperimentIds(final List<Long> entityIdsToMove, final IdType idType, final Assay targetAssay) {
         final List<Long> notFoundEntities = []
@@ -131,7 +157,7 @@ class MergeAssayDefinitionService {
                 return Experiment.findById(entityId)
             case IdType.AID:
                 ExternalReference externalReference = bard.db.registration.ExternalReference.findByExtAssayRef("aid=${entityId}")
-                if(externalReference){
+                if (externalReference) {
                     return externalReference.experiment
                 }
 
@@ -163,67 +189,6 @@ class MergeAssayDefinitionService {
 
             errorMessages.add(builder.toString())
         }
-
-    }
-
-    protected void validateExperimentContextItems(final List<ExperimentContextItem> experimentContextItems,
-                                                  final Map<Element, AssayContextItem> targetElementToAssayContextItemMap,
-                                                  final List<String> errorMessages) {
-        for (ExperimentContextItem experimentContextItem : experimentContextItems) {
-            validateExperimentContextItem(experimentContextItem, targetElementToAssayContextItemMap, errorMessages)
-        }
-    }
-    /**
-     *  1.for each context item i, make sure there exists a context item j on the target assay where i.attributeElement == j.attributeElement
-     *  2. and the Context Item on the target(merging into) assay must have an AttributeType != AttributeType.Fixed
-     * @param targetAssay
-     * @param sourceAssays
-     * @return
-     */
-    public List<String> validateAllContextItems(final Assay targetAssay, final List<Assay> sourceAssays) {
-        Map<Element, AssayContextItem> targetElementToAssayContextItemMap = [:]
-        final List<AssayContextItem> assayContextItems = targetAssay.assayContextItems
-        for (AssayContextItem assayContextItem : assayContextItems) {
-            final Element element = assayContextItem.attributeElement
-            targetElementToAssayContextItemMap.put(element, assayContextItem)
-        }
-        final List<String> errorMessages = []
-        for (Assay assayToMerge : sourceAssays) {
-            for (Experiment experiment : assayToMerge.experiments) {
-                final List<ExperimentContextItem> experimentContextItems = experiment.experimentContextItems
-                validateExperimentContextItems(experimentContextItems, targetElementToAssayContextItemMap, errorMessages)
-            }
-        }
-        return errorMessages
-    }
-
-    void validateExperimentsToMerge(Assay oldAssay, List<Experiment> experiments) {
-        List<String> errorMessages = []
-        for (Experiment experiment : experiments) {
-            if (experiment?.assay?.id != oldAssay?.id) {
-                errorMessages.add("Experiment EID: ${experiment?.id} , does not belong to Assay ADID: ${oldAssay?.id}")
-            }
-        }
-        if (errorMessages) {
-            throw new RuntimeException(org.apache.commons.lang.StringUtils.join(errorMessages, ","))
-        }
-    }
-    //use #moveExperimentsFromAssay(Assay,List<Experiment>) instead
-    @Deprecated
-    Assay moveExperimentsFromAssay(Assay sourceAssay, Assay targetAssay,
-                                   List<Experiment> experiments) {
-        validateExperimentsToMerge(sourceAssay, experiments)
-        targetAssay.fullyValidateContextItems = false
-
-        String modifiedBy = springSecurityService.principal?.username
-        mergeAssayService.moveExperiments(experiments, targetAssay, modifiedBy)
-        println("end handleExperiments")
-        sessionFactory.currentSession.flush()
-        // def session, Assay sourceAssay, Assay targetAssay, List<Experiment> sourceExperiments, String modifiedBy
-        mergeAssayService.handleMeasures(targetAssay, experiments.collect { it.assay } as Set)
-        sessionFactory.currentSession.flush()
-
-        return Assay.findById(targetAssay.id)
 
     }
 
