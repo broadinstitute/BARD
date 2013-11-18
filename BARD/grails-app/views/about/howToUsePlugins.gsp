@@ -6,7 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix"/>
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>Create and Use Plug-ins</title>
+    <title>BARD How to create and use plug-ins</title>
 
 </head>
 

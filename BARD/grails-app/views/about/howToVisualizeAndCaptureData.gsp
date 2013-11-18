@@ -6,7 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix"/>
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>How to search</title>
+    <title>BARD How to visualize and capture data</title>
 
 </head>
 
@@ -15,7 +15,7 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <aside class="span2"></aside>
-            <article class="span8 head-holder"><h2>how to Visualize Data</h2></article>
+            <article class="span8 head-holder"><h2>how to visualize and capture data</h2></article>
             <aside class="span2"></aside>
         </div>
 

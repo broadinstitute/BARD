@@ -6,7 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix"/>
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>Get the most from BARD</title>
+    <title>BARD How to get the most from BARD</title>
 </head>
 
 <body>
@@ -38,12 +38,12 @@
                     </p>
 
                     <section class="shiftedSection">
-                        <dl>
+                        <dl class='unindentedDefinition'>
                             <dt>Discovering Connections</dt>
                             <dd>By allowing one search to flow into the next, by taking full advantage of auto-suggest to lead you closer and open new paths, and by using filters to focus your thinking and results, often surprising connections between different data will emerge.</dd>
                             <br/>
                             <dt>Progressive Refinement</dt>
-                            <dd>Think of your query cart as a quiet workspace, free of noise and clutter, where only the most interesting assay definitions, compounds and projects come together and your ideas take shape. Your cart will expand and contract, as you come and go between searches and drill downs into details using visualization tools such as the molecular spreadsheet.</dd>
+                            <dd>Think of your query cart as a quiet workspace, free of noise and clutter, where only the most interesting assay definitions, compounds and projects come together and your ideas take shape. Your cart will expand and contract as you come and go between searches and drill downs into details using visualization tools such as the molecular spreadsheet.</dd>
                             <br/>
                             <dt>Hypothesis Generation</dt>
                             <dd>Tools such as the Linked Hierarchy Visualization may lead you to new questions and hypotheses. Because BARD has made it possible to examine specific projects in detail, you can now consider the ideas that drive large collections of assays and experiments.</dd>
