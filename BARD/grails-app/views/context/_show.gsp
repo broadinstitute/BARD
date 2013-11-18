@@ -49,13 +49,9 @@
         </g:if>
 
         <g:if test="${contextOwner.groupUnclassified()?.value}">
-            <%
-                AbstractContextOwner.ContextGroup currentCard = contextOwner.groupUnclassified()
-                currentCard.value = [additionalContexts, currentCard.value].flatten()
-            %>
             <div id="cardHolder" class="span12">
                 <g:render template="/context/currentCard"
-                          model="[contextOwner: contextOwner, currentCard: currentCard, subTemplate: 'show', renderEmptyGroups: false,
+                          model="[contextOwner: contextOwner, currentCard: contextOwner.groupUnclassified(), subTemplate: 'show', renderEmptyGroups: false,
                                   showCheckBoxes: showCheckBoxes, existingContextIds: existingContextIds]"/>
 
             </div>
