@@ -186,7 +186,7 @@ class PreviewExperimentResultsSummaryBuilder {
             String resultType = jsonResult.resultType
 
             if (resultsMap.priorityElements.contains(resultType?.trim())) {
-                resultsMap.priorityElementValues.add(new StringValue(value: jsonResult.valueDisplay))
+                resultsMap.priorityElementValues << new StringValue(value: resultType + ":" + jsonResult.valueDisplay)
             }
             if (isCurveFitParameter(resultTypeId)) {
                 setCurveFitParameters(curveFitParameters, resultTypeTreeCache.get(resultTypeId), jsonResult, resultsMap)
