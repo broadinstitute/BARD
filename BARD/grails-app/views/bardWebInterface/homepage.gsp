@@ -256,9 +256,9 @@
                 <li>
                     <g:experimentCount/>
                 </li>
-                <li>
-                    <g:exptDataCount/>
-                </li>
+                %{--<li>--}%
+                    %{--<g:exptDataCount/>--}%
+                %{--</li>--}%
                 <li>
                     <g:probeCount/>
                 </li>
@@ -279,8 +279,8 @@
                 <g:render template="recentlyAddedExperiments"
                           model="['recentlyAddedExperiments': recentlyAddedExperiments]"/>
                 %{--Contents of the "Compounds" tab (of our row of five content boxes) --}%
-                <g:render template="numberOfExperimentData"
-                          model="['numberOfExperimentData': numberOfExperimentData]"/>
+                %{--<g:render template="numberOfExperimentData"--}%
+                          %{--model="['numberOfExperimentData': numberOfExperimentData]"/>--}%
 
                 %{--Contents of the "Probes" tab (of our row of five content boxes) --}%
                 <g:render template="probeProjects" model="[
