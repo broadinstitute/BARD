@@ -53,6 +53,10 @@ grails.project.dependency.resolution = {
             excludes "servlet-api"
         }
 
+        // needed for SMTPAppender (included as a compile dependency because the right one is being picked up for runtime, but
+        compile "log4j:log4j:1.2.16"
+        build "log4j:log4j:1.2.16"
+
         // runtime scope
         // runtime 'mysql:mysql-connector-java:5.1.16'
         runtime('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
