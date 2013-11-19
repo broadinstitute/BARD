@@ -20,6 +20,11 @@
             $('.linksListPopup').popover({
             delay: { show: 0, hide: 3000 }
             });
+//        Add the group-by selection to the facet form submission to preserve the group-by value over the form-submission event.
+            $('.facetsForm').submit(function(event) {
+            var groupByTypeSelect = $('#groupByTypeSelect').val();
+            $(this).append('<input type="hidden" name="groupByType" value="' + groupByTypeSelect +'"/>);');
+            });
         });
     </r:script>
 </head>
@@ -41,7 +46,8 @@
                     </g:if>
                 </h2>
 
-                <g:form action="showCompoundBioActivitySummary" id="${params.id}">
+                <g:form action="showCompoundBioActivitySummary" id="${params.id}"
+                        class="showCompoundBioActivitySummaryForm">
                     <g:hiddenField name="compoundId" id='compoundId' value="${params?.id}"/>
                     <div style="text-align: left; vertical-align: middle;">
                         <label for="groupByTypeSelect"
