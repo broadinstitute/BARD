@@ -36,11 +36,11 @@
         </div>
 
         <div class="row-fluid">
-            <div class="span6">
+            <div class="span3" style="min-width: 210px; min-height: 70px;">
                 <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
             </div>
 
-            <div class="span6">
+            <div class="span9">
                 <div class="row-fluid">
                     <div class="center-aligned span6">
                         <g:render template="/layouts/templates/socialMedia"/>
