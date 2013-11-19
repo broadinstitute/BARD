@@ -506,7 +506,10 @@ class MolecularSpreadSheetService {
      * @param assayIds
      * @return list
      */
-    protected List<ExperimentSearch> assaysToExperiments(List<ExperimentSearch> incomingExperimentList, final List<Long> assayIds, Map<Long, Long> mapExperimentIdsToCapAssayIds) {
+    protected List<ExperimentSearch> assaysToExperiments(List<ExperimentSearch> incomingExperimentList,
+                                                         final List<Long> assayIds,
+                                                         Map<Long, Long> mapExperimentIdsToCapAssayIds,
+                                                         Map<Long, String> mapCapAssayIdsToAssayNames) {
 
         List<ExperimentSearch> allExperiments
         if (incomingExperimentList) {
@@ -521,9 +524,11 @@ class MolecularSpreadSheetService {
         final ExpandedAssayResult expandedAssayResult = assayRestService.searchAssaysByIds(assayIds)
         final List<ExpandedAssay> assays = expandedAssayResult.assays
         for (ExpandedAssay assay : assays) {
+            if (!mapCapAssayIdsToAssayNames.containsKey(assay.bardAssayId)){  // store the name of the assay for later display
+                mapCapAssayIdsToAssayNames [assay.bardAssayId]    = assay.name
+            }
             final List<ExperimentSearch> experiments = assay.experiments
             if (experiments) {
-//                allExperiments.addAll(experiments)
                 for (ExperimentSearch experimentSearch in experiments) {
                     if (!allExperiments*.bardExptId.contains(experimentSearch.bardExptId)){
                         allExperiments <<  experimentSearch
@@ -541,15 +546,21 @@ class MolecularSpreadSheetService {
      * @param adids
      * @return list of experiments
      */
-    protected List<ExperimentSearch> assayIdsToExperiments(final List<ExperimentSearch> incomingExperimentList, final List<Long> adids, Map<Long, Long> mapExperimentIdsToCapAssayIds) {
-        return assaysToExperiments(incomingExperimentList, adids, mapExperimentIdsToCapAssayIds)
+    protected List<ExperimentSearch> assayIdsToExperiments(final List<ExperimentSearch> incomingExperimentList,
+                                                           final List<Long> adids,
+                                                           Map<Long, Long> mapExperimentIdsToCapAssayIds,
+                                                           Map<Long, String> mapCapAssayIdsToAssayNames ) {
+        return assaysToExperiments(incomingExperimentList, adids, mapExperimentIdsToCapAssayIds,mapCapAssayIdsToAssayNames)
     }
     /**
      *
      * @param cids
      * @return list of experiments
      */
-    protected List<ExperimentSearch> compoundIdsToExperiments(final List<Long> cids, Map<Long, Long> mapExperimentIdsToCapAssayIds, Boolean showActiveCompoundsOnly) {
+    protected List<ExperimentSearch> compoundIdsToExperiments(final List<Long> cids,
+                                                              Map<Long, Long> mapExperimentIdsToCapAssayIds,
+                                                              Map<Long, String> mapCapAssayIdsToAssayNames,
+                                                              Boolean showActiveCompoundsOnly) {
         if (!cids) {
             return []
         }
@@ -557,13 +568,14 @@ class MolecularSpreadSheetService {
         for (Long individualCompoundId in cids) {
             List<Assay> assays = compoundRestService.getTestedAssays(individualCompoundId, showActiveCompoundsOnly)
             for (Assay assay in assays) {
+                if (!mapCapAssayIdsToAssayNames.containsKey(assay.bardAssayId)){  // store the name of the assay for later display
+                    mapCapAssayIdsToAssayNames [assay.bardAssayId]    = assay.name
+                }
                 if (!allAssays*.assayId.contains(assay.bardAssayId)) {
                     allAssays.add(assay)
                     mapExperimentIdsToCapAssayIds[assay.bardAssayId] = assay.capAssayId
                 }
             }
-
-            //allAssays.addAll(assays)
         }
 
         return assaysToExperiments(allAssays)
@@ -574,17 +586,20 @@ class MolecularSpreadSheetService {
      * @param projectIds
      * @return list of Experiment's from a list of project Ids
      */
-    protected List<ExperimentSearch> projectIdsToExperiments(final List<Long> projectIds, Map<Long, Long> mapExperimentIdsToCapAssayIds) {
+    protected List<ExperimentSearch> projectIdsToExperiments(final List<Long> projectIds, Map<Long, Long> mapExperimentIdsToCapAssayIds,Map<Long, String> mapCapAssayIdsToAssayNames) {
         final ProjectResult projectResult = projectRestService.searchProjectsByIds(projectIds)
-        return projectsToExperiments(projectResult, mapExperimentIdsToCapAssayIds)
+        return projectsToExperiments(projectResult, mapExperimentIdsToCapAssayIds,mapCapAssayIdsToAssayNames)
     }
 
-    protected List<ExperimentSearch> projectsToExperiments(final ProjectResult projectResult, Map<Long, Long> mapExperimentIdsToCapAssayIds) {
+    protected List<ExperimentSearch> projectsToExperiments(final ProjectResult projectResult, Map<Long, Long> mapExperimentIdsToCapAssayIds,Map<Long, String> mapCapAssayIdsToAssayNames) {
         final List<ExperimentSearch> allExperiments = []
         if (projectResult) {
             for (Project project : projectResult.projects) {
                 ProjectExpanded projectExpanded = projectRestService.getProjectById(project.bardProjectId)
                 for (Assay assay in projectExpanded?.assays){
+                    if (!mapCapAssayIdsToAssayNames.containsKey(assay.bardAssayId)){  // store the name of the assay for later display
+                        mapCapAssayIdsToAssayNames [assay.bardAssayId]    = assay.name
+                    }
                     if (!mapExperimentIdsToCapAssayIds.containsKey(assay.bardAssayId)) {
                         mapExperimentIdsToCapAssayIds[assay.bardAssayId] = assay.capAssayId
                     }

@@ -45,10 +45,9 @@ class MolSpreadSheetDataBuilderIntegrationSpec extends IntegrationSpec {
         if (cartProject) {
             pids << cartProject.externalId
         }
-        Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
 
         when: "we have a molecularSpreadSheetService"
-        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids, cids,mapExperimentIdsToCapAssayIds, true)
+        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids, cids,true)
 
         then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
         List<ExperimentSearch> experimentList = deriveListOfExperiments.experimentList

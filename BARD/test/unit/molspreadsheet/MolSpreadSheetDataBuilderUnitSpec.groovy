@@ -75,16 +75,15 @@ class MolSpreadSheetDataBuilderUnitSpec extends Specification {
         List<Long> cartCompoundList = []
         List<Long> cartAssayList = []
         List<Long> cartProjectList = []
-        Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
         MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
 
         then: "The expected hashCode is returned"
-        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(cartProjectList,cartAssayList,cartCompoundList,mapExperimentIdsToCapAssayIds, true)
+        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(cartProjectList,cartAssayList,cartCompoundList,true)
         List<ExperimentSearch> experimentList = deriveListOfExperiments.experimentList
         MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = deriveListOfExperiments.molSpreadsheetDerivedMethod
         assertNotNull experimentList
         assert experimentList.size() == 0
         assertNull molSpreadsheetDerivedMethod
-        mapExperimentIdsToCapAssayIds.size()==0
+        molSpreadSheetDataBuilder.mapExperimentIdsToCapAssayIds.size()==0
     }
 }

@@ -111,6 +111,8 @@ class MolSpreadSheetDataUnitSpec extends Specification {
         molSpreadSheetData.mapColumnsToAssay[4]='346'
         molSpreadSheetData.mapColumnsToAssay[5]='2199'
         molSpreadSheetData.mapColumnsToAssay[6]='2199'
+        molSpreadSheetData.mapCapAssayIdsToAssayNames[346L]='Fluorescence-based dose response'
+        molSpreadSheetData.mapCapAssayIdsToAssayNames[2199L]='HTS small molecules'
         molSpreadSheetData.experimentFullNameList<<'Fluorescence-based dose response'
         molSpreadSheetData.experimentFullNameList<<'HTS small molecules'
         molSpreadSheetData.mapColumnsToAssayName[4]='Fluorescence-based dose response'
