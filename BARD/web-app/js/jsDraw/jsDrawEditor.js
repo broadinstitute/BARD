@@ -61,7 +61,7 @@ function isSimilarityThresholdValueValid(cutoff) {
 }
 
 //Converts a SMILES string to MolFile using an AJAX call
-$('#smilesToMolBtn').on('click', function () {
+$('#smilesToMolBtn').on('click', function (event) {
     event.preventDefault();
     event.stopPropagation();
 
