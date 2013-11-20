@@ -325,7 +325,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         List<Compound> compounds = structureSearch.compounds
         assertCompounds(compounds)
         assert structureSearch.numberOfHits >= expectedNumberOfCompounds
-        assert expectedNumberOfCompounds == compounds.size()
+        assert compounds.size() >= expectedNumberOfCompounds
         assert !structureSearch.facets
         where:
         label                            | structureSearchParamsType                 | smiles                                        | skip | top | expectedNumberOfCompounds
