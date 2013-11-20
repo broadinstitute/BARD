@@ -2,15 +2,12 @@ package bard.db.registration
 
 import bard.db.command.BardCommand
 import bard.db.experiment.Experiment
-import bard.db.registration.Assay
-import bard.db.registration.EditingHelper
-import bard.db.registration.IdType
-import bard.db.registration.MergeAssayDefinitionService
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import grails.validation.ValidationException
 import groovy.transform.InheritConstructors
+import org.apache.commons.collections.CollectionUtils
 import org.apache.commons.lang.StringUtils
 
 import javax.servlet.http.HttpServletResponse
@@ -43,14 +40,29 @@ class MoveExperimentsController {
             }
             final List<Long> entityIdsToMove = MergeAssayDefinitionService.convertStringToIdList(confirmMoveExperimentsCommand.sourceEntityIds)
 
-            List<Long> experimentsToMove = mergeAssayDefinitionService.normalizeEntitiesToMoveToExperimentIds(
+            List<Long> experimentsSelectedByUser = mergeAssayDefinitionService.normalizeEntitiesToMoveToExperimentIds(
                     entityIdsToMove, confirmMoveExperimentsCommand.idType, targetAssay)
 
-            experimentsToMove = mergeAssayDefinitionService.filterOutExperimentsNotOwnedByMe(experimentsToMove)
+            List<Long> experimentsToMove = mergeAssayDefinitionService.filterOutExperimentsNotOwnedByMe(experimentsSelectedByUser)
+
+            //subtract experiments to move from experiments entered. If teh results returns more than zero experiments
+            //then those are experiments that the user does not have permission to move
+            final Collection<Long> noPermission = CollectionUtils.subtract(experimentsSelectedByUser, experimentsToMove)
+
+            String warningMessage = ""
+            if (!noPermission.isEmpty()) {
+                warningMessage = "You do not have permission to move experiments with ids: ${StringUtils.join(noPermission, ",")}"
+            }
+            if(noPermission.size() == experimentsSelectedByUser.size()){ //it means we do not have permissions to move any experiment so show error page
+              throw new RuntimeException(warningMessage)
+            }
 
             MoveExperimentsCommand moveExperimentsCommand =
                 new MoveExperimentsCommand(targetAssay: targetAssay, experimentIds: experimentsToMove)
-            render(status: HttpServletResponse.SC_OK, template: "selectExperimentsToMove", model: [moveExperimentsCommand: moveExperimentsCommand])
+            render(
+                    status: HttpServletResponse.SC_OK, template: "selectExperimentsToMove",
+                    model: [moveExperimentsCommand: moveExperimentsCommand, warningMessage: warningMessage]
+            )
 
 
         } catch (Exception ee) {
