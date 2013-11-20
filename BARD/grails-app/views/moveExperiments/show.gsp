@@ -5,7 +5,7 @@
     <r:require
             modules="core,bootstrap,moveExperiments"/>
     <meta name="layout" content="basic"/>
-    <title>Merge Assays</title>
+    <title>Move Experiments</title>
 
 </head>
 
