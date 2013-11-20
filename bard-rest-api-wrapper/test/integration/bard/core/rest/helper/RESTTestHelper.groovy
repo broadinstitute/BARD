@@ -121,7 +121,7 @@ class RESTTestHelper {
         assert compoundTemplate.hbondDonor >= 0
         assert compoundTemplate.rotatable >= 0
         assert compoundTemplate.hbondAcceptor >= 0
-        assert compoundTemplate.tpsa
+//        assert compoundTemplate.tpsa
 
     }
     /**
