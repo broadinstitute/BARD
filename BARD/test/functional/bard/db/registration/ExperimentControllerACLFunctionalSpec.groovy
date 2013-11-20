@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.AssayStatus
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
@@ -56,12 +57,13 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
             if (!otherRole) {
                 otherRole = Role.build(authority: 'ROLE_TEAM_B', displayName: 'ROLE_TEAM_B').save(flush: true)
             }
-            Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role).save(flush: true)
+            Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role, assayStatus: AssayStatus.APPROVED).save(flush: true)
 
             Element element = Element.findByLabel("Some labelYYY")
             if (!element) {
                 element = Element.build(label: "Some labelYYY").save(flush:true)
             }
+
             Experiment experiment = Experiment.build(assay: assay, ownerRole: role).save(flush: true)
             ExperimentMeasure.build(experiment: experiment,resultType:element,priorityElement: true).save(flush: true)
             return [id: experiment.id, experimentName: experiment.experimentName, assayName: assay.assayName, assayId: assay.id, authority: role.authority]
