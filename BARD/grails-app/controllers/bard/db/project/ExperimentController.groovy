@@ -5,6 +5,7 @@ import bard.db.command.BardCommand
 import bard.db.dictionary.Descriptor
 import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
+import bard.db.enums.AssayStatus
 import bard.db.enums.ContextType
 import bard.db.enums.ExperimentStatus
 import bard.db.enums.HierarchyType
@@ -22,6 +23,7 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.validation.Errors
 
+import javax.servlet.http.HttpServletResponse
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
@@ -67,7 +69,7 @@ class ExperimentController {
 
         final Object principal = springSecurityService?.principal
         String loggedInUser = null
-        def experimentInstance = Experiment.get(params.id)
+        def experimentInstance = Experiment.get(id)
         if (principal instanceof String) {
             loggedInUser = null
         } else {
@@ -296,6 +298,22 @@ class ExperimentController {
                 conflictMessage(message)
                 return
             }
+
+
+            final Assay assay = experiment.assay
+            if (assay.assayStatus != AssayStatus.APPROVED) {
+               String errorMessage = "The assay definition (ADID:${assay.id} for this experiment must be marked Approved before this experiment can be marked Approved."
+                render(status: HttpServletResponse.SC_BAD_REQUEST, text:
+                        errorMessage, contentType: 'text/plain', template: null)
+                return
+            }
+            if (!experiment.measuresHaveAtLeastOnePriorityElement()) {
+                render(status: HttpServletResponse.SC_BAD_REQUEST, text: "You must designate at least one result type as a priority element before this experiment can be marked as approved.",
+                        contentType: 'text/plain', template: null)
+                return
+            }
+
+
             experiment = experimentService.updateExperimentStatus(inlineEditableCommand.pk, experimentStatus)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, experiment.experimentStatus.id)
 

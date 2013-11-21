@@ -2,7 +2,7 @@
 <div class="span3">
     <g:if test="${facets}">
         <div class="facets">
-            <g:form name="${formName.toString()}" id="${formName.toString()}">
+            <g:form name="${formName.toString()}" id="${formName.toString()}" class="facetsForm">
                 <g:if test="${total}">
                     <p>Total: ${total}</p>
                 </g:if>

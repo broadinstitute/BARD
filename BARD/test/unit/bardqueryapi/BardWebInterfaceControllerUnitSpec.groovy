@@ -30,6 +30,7 @@ import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.servlet.ModelAndView
 import querycart.CartAssay
 import spock.lang.Ignore
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -1021,7 +1022,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.showCompound(cid)
         then:
         queryService.showCompound(_) >> { new RuntimeException("ee") }
-        response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        response.status == HttpServletResponse.SC_OK
     }
 
     void "test showCompound #label"() {

@@ -388,8 +388,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have list of cart compounds"
         List<CartProject> cartProjectList = []
         Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
+        Map<Long, String> mapCapAssayIdsToAssayNames = [:]
         cartProjectList << new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 1, TEST_PID)
-        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.projectIdsToExperiments(cartProjectList*.externalId, mapExperimentIdsToCapAssayIds)
+        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.projectIdsToExperiments(cartProjectList*.externalId, mapExperimentIdsToCapAssayIds, mapCapAssayIdsToAssayNames)
         String eTag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(finalExperimentList)
 
         then: "we should be able to build and Etag from them"
@@ -428,9 +429,10 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         List<CartCompound> cartCompoundList = []
         Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
+        Map<Long, String> mapCapAssayIdsToAssayNames = [:]
         cartCompoundList.add(new CartCompound("CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", "Rottlerin", 5281847))
         //List<Experiment> originalExperimentList =  []
-        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.compoundIdsToExperiments(cartCompoundList*.externalId, mapExperimentIdsToCapAssayIds, true)
+        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.compoundIdsToExperiments(cartCompoundList*.externalId, mapExperimentIdsToCapAssayIds, mapCapAssayIdsToAssayNames,true)
 
         then: "we should be able to generate a list of spreadsheet activity elements"
         assertNotNull finalExperimentList
@@ -441,9 +443,10 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         List<CartCompound> cartCompoundList = []
         Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
+        Map<Long, String> mapCapAssayIdsToAssayNames = [:]
         cartCompoundList.add(new CartCompound("CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", "Rottlerin", 5281847))
         //List<Experiment> originalExperimentList =  []
-        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.compoundIdsToExperiments(cartCompoundList*.externalId, mapExperimentIdsToCapAssayIds, false)
+        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.compoundIdsToExperiments(cartCompoundList*.externalId, mapExperimentIdsToCapAssayIds,mapCapAssayIdsToAssayNames, false)
 
         then: "we should be able to generate a list of spreadsheet activity elements"
         assertNotNull finalExperimentList
@@ -455,7 +458,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         List<Long> cartCompoundList = []
         Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
-        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.compoundIdsToExperiments(cartCompoundList, mapExperimentIdsToCapAssayIds, true)
+        Map<Long, String> mapCapAssayIdsToAssayNames = [:]
+        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.compoundIdsToExperiments(cartCompoundList, mapExperimentIdsToCapAssayIds,mapCapAssayIdsToAssayNames, true)
 
         then: "we should be able to generate a list of spreadsheet activity elements"
         assert finalExperimentList.size() == 0
@@ -468,8 +472,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         List<CartProject> cartProjectList = []
         Map<Long, Long> mapExperimentIdsToCapAssayIds  = [:]
+        Map<Long, String> mapCapAssayIdsToAssayNames = [:]
         cartProjectList.add(new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 1, TEST_PID))
-        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.projectIdsToExperiments(cartProjectList*.externalId,mapExperimentIdsToCapAssayIds)
+        List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.projectIdsToExperiments(cartProjectList*.externalId,mapExperimentIdsToCapAssayIds, mapCapAssayIdsToAssayNames)
 
         then: "we should be able to generate a list of spreadsheet activity elements"
         assertNotNull finalExperimentList
@@ -492,8 +497,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         given: "That a list of CartAssay objects have been created"
         final List<CartAssay> givenCartAssays = cartAssays
         Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
+        Map<Long, String> mapCapAssayIdsToAssayNames = [:]
         when: "We call the cartAssaysToExperiments() with the given list of assay carty objects"
-        List<ExperimentSearch> experiments = molecularSpreadSheetService.assayIdsToExperiments(null, givenCartAssays*.externalId, mapExperimentIdsToCapAssayIds)
+        List<ExperimentSearch> experiments = molecularSpreadSheetService.assayIdsToExperiments(null, givenCartAssays*.externalId, mapExperimentIdsToCapAssayIds, mapCapAssayIdsToAssayNames)
         then: "We expect experiments for each of the assays to be found"
         experiments
         mapExperimentIdsToCapAssayIds.size() == 1
@@ -505,10 +511,11 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void "tests empty cartAssaysToExperiments"() {
         given: "That a list of CartAssay objects have been created"
         final Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
+        Map<Long, String> mapCapAssayIdsToAssayNames = [:]
         final List<Long> cartAssays = []
         final List<CartAssay> givenCartAssays = cartAssays
         when: "We call the cartAssaysToExperiments() with the given list of assay carty objects"
-        List<ExperimentSearch> experiments = molecularSpreadSheetService.assayIdsToExperiments(null, givenCartAssays, mapExperimentIdsToCapAssayIds)
+        List<ExperimentSearch> experiments = molecularSpreadSheetService.assayIdsToExperiments(null, givenCartAssays, mapExperimentIdsToCapAssayIds, mapCapAssayIdsToAssayNames)
         then: "We expect experiments for each of the assays to be found"
         experiments.size() == 0
         mapExperimentIdsToCapAssayIds.size() == 0
@@ -521,10 +528,11 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         List<ExperimentSearch> experimentList = []
         ExperimentSearch experiment = new ExperimentSearch()
         Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
+        Map<Long, String> mapCapAssayIdsToAssayNames = [:]
         experimentList << experiment
         final List<Long> givenCartAssays = []
         when: "We call the cartAssaysToExperiments() with the given list of assay carty objects"
-        List<ExperimentSearch> experiments = molecularSpreadSheetService.assayIdsToExperiments(experimentList, givenCartAssays, mapExperimentIdsToCapAssayIds)
+        List<ExperimentSearch> experiments = molecularSpreadSheetService.assayIdsToExperiments(experimentList, givenCartAssays, mapExperimentIdsToCapAssayIds, mapCapAssayIdsToAssayNames)
         then: "We expect experiments for each of the assays to be found"
         experiments.size() == 1
         mapExperimentIdsToCapAssayIds.size() == 0

@@ -4,17 +4,19 @@ import bard.core.adapter.CompoundAdapter
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.experiment.*
+import bard.db.dictionary.OntologyDataAccessService
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
 import bard.db.experiment.JsonSubstanceResults
 import bardqueryapi.*
 import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
-import bardqueryapi.compoundBioActivitySummary.PreviewResultsSummaryBuilder
+import bardqueryapi.compoundBioActivitySummary.PreviewExperimentResultsSummaryBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
 class ExperimentBuilder {
     GrailsApplication grailsApplication
     CompoundRestService compoundRestService
+    OntologyDataAccessService ontologyDataAccessService
 
     List<WebQueryValue> buildHeader(final boolean hasDoseCurve) {
 
@@ -23,7 +25,7 @@ class ExperimentBuilder {
         columnHeaders.add(new StringValue(value: "CID"))
         columnHeaders.add(new StringValue(value: "Structure"))
         columnHeaders.add(new StringValue(value: "Outcome"))
-        columnHeaders.add(new StringValue(value: "Summary Result"))
+        columnHeaders.add(new StringValue(value: "Priority Elements"))
         if (hasDoseCurve) {
             columnHeaders.add(new StringValue(value: "Dose Response"))
         }
@@ -46,7 +48,8 @@ class ExperimentBuilder {
     Map<Boolean, List<WebQueryValue>> addRowForResultsPreview(final JsonSubstanceResults substanceResults,
                                                               final Set<String> priorityElements,
                                                               final Double yNormMin,
-                                                              final Double yNormMax, CompoundAdapter compoundAdapter) {
+                                                              final Double yNormMax, CompoundAdapter compoundAdapter,
+                                                              PreviewExperimentResultsSummaryBuilder previewExperimentResultsSummaryBuilder) {
 
         //A row is a list of table cells, each implements WebQueryValue.
         List<WebQueryValue> rowData = []
@@ -81,16 +84,31 @@ class ExperimentBuilder {
             rowData.add(new StringValue(value: 'Not Available'))
             rowData.add(new StringValue(value: 'Not Available'))
         }
-        PreviewResultsSummaryBuilder previewResultsSummaryBuilder = new PreviewResultsSummaryBuilder()
-        Map m = previewResultsSummaryBuilder.convertExperimentResultsToTableModelCellsAndRows(substanceResults.rootElem, priorityElements, yNormMin, yNormMax)
-        StringValue outcome = m.outcome
-        final List<StringValue> summaryResults = m.priorityElements as List
 
+
+
+
+        Map resultsMap = [:]
+        resultsMap.priorityElements = priorityElements
+        resultsMap.priorityElementValues = []
+        resultsMap.yNormMin = yNormMin
+        resultsMap.yNormMax = yNormMax
+        resultsMap.outcome = null
+        resultsMap.experimentalValues = []
+        resultsMap.childElements = []
+
+        previewExperimentResultsSummaryBuilder.convertExperimentResultsToTableModelCellsAndRows(resultsMap,substanceResults.rootElem)
+
+
+        StringValue outcome = resultsMap.outcome
         rowData.add(outcome)
+
+
+        final List<StringValue> summaryResults = resultsMap.priorityElementValues as List
         rowData.add(new ListValue(value: summaryResults.sort()))
 
-        List<ConcentrationResponseSeriesValue> experimentValues = m.experimentalvalues
 
+        List<WebQueryValue> experimentValues = previewExperimentResultsSummaryBuilder.sortWebQueryValues(resultsMap.experimentalValues)
         //if the result type is a concentration series, we want to add the normalization values to each curve.
         experimentValues.findAll({ WebQueryValue experimentResult ->
             experimentResult instanceof ConcentrationResponseSeriesValue
@@ -98,13 +116,15 @@ class ExperimentBuilder {
             concResSer.yNormMax = yNormMax
             concResSer.yNormMin = yNormMin
         }
+
+
         if (experimentValues) {
             ListValue listValue = new ListValue(value: experimentValues)
             rowData.add(listValue)
             hasDosePoints = true
         }
         List<StringValue> supplementalInformation = []
-        final List<WebQueryValue> elements = m.childElements
+        final List<WebQueryValue> elements = resultsMap.childElements
         for (def childElement : elements) {
             if (childElement instanceof StringValue) {
                 supplementalInformation << childElement
@@ -118,7 +138,6 @@ class ExperimentBuilder {
         rowData.add(new ListValue(value: supplementalInformation.sort()))
         return [hasDosePoints: hasDosePoints, rowData: rowData];
     }
-
     /**
      *
      * Builds the tableModel's row based on the result set and types.
@@ -201,10 +220,6 @@ class ExperimentBuilder {
         //Add all childElements of the priorityElements, if any.
         List<WebQueryValue> childElements = []
 
-
-        if (!resultData.isMapped()) {
-            childElements << new StringValue(value: "TIDs not yet mapped to a result hierarchy")
-        }
         for (RootElement rootElement : resultData.rootElements) {
             if (rootElement.toDisplay()) {
                 childElements << new StringValue(value: rootElement.toDisplay())
@@ -317,6 +332,9 @@ class ExperimentBuilder {
             }
         }
         boolean hasDosePoints = false
+        PreviewExperimentResultsSummaryBuilder previewResultsSummaryBuilder = new PreviewExperimentResultsSummaryBuilder()
+        previewResultsSummaryBuilder.ontologyDataAccessService = this.ontologyDataAccessService
+
         for (JsonSubstanceResults jsonSubstanceResults : jsonSubstanceResultList) {
             Long sid = jsonSubstanceResults.getSid()
             CompoundAdapter compoundAdapter = null
@@ -324,9 +342,9 @@ class ExperimentBuilder {
                 final Compound compound = this.compoundRestService.getCompoundBySid(sid)
                 compoundAdapter = new CompoundAdapter(compound)
             } catch (Exception ee) {
-                log.error(ee)
+                log.error(ee,ee)
             }
-            final Map<Boolean, List<WebQueryValue>> preview = addRowForResultsPreview(jsonSubstanceResults, priorityElements, yNormMin, yNormMax, compoundAdapter)
+            final Map<Boolean, List<WebQueryValue>> preview = addRowForResultsPreview(jsonSubstanceResults, priorityElements, yNormMin, yNormMax, compoundAdapter,previewResultsSummaryBuilder)
             if (!hasDosePoints) {
                 hasDosePoints = preview.hasDosePoints
             }

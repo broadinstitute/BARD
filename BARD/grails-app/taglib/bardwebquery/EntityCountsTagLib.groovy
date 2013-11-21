@@ -9,36 +9,57 @@ class EntityCountsTagLib {
 
     def projectCount = { attrs, body ->
         long projects = queryService.numberOfProjects()
-        String link = generateLink(projects, "Projects", "#tab-projects")
+        if (projects > 0) {
+            String link = generateLink(projects, "Projects", "#tab-projects")
 
-        out << "${link}"
+            out << "${link}"
+        } else {
+            out << "Warehouse server is unavailable"
+        }
     }
 
     def assayCount = { attrs, body ->
         long assays = queryService.numberOfAssays()
-        String link = generateLink(assays, "Assay Definitions", "#tab-definitions")
-        out << "${link}"
+        if (assays > 0) {
+            String link = generateLink(assays, "Assay Definitions", "#tab-definitions")
+            out << "${link}"
+        } else {
+            out << "Warehouse server is unavailable"
+        }
     }
 
     def experimentCount = { attrs, body ->
         long experiments = queryService.numberOfExperiments()
-        String link = generateLink(experiments, "Experiments", "#tab-experiments")
-        out << "${link}"
+        if (experiments > 0) {
+            String link = generateLink(experiments, "Experiments", "#tab-experiments")
+            out << "${link}"
+        } else {
+            out << "Warehouse server is unavailable"
+        }
     }
 
     def exptDataCount = { attrs, body ->
         long exptData = queryService.numberOfExperimentData()
-        String link = generateLink(exptData, "Number of results", "#tab-results")
-        out << "${link}"
+        if (exptData > 0) {
+            String link = generateLink(exptData, "Number of results", "#tab-results")
+            out << "${link}"
+        } else {
+            out << "Warehouse server is unavailable"
+        }
     }
 
 
     def probeCount = { attrs, body ->
-        long probes = queryService.numberOfProbes()
+        //long probes = queryService.numberOfProbeProjects()
+        long probes = queryService.numberOfProbeCompounds()
         String link = generateLink(probes, "Number of Probes", "#tab-probes")
         out << "${link}"
     }
-
+    def probeCIDCount = { attrs, body ->
+        long probes = queryService.numberOfProbeCompounds()
+        String link = generateLink(probes, "Number of Probe Compounds", "#tab-probes")
+        out << "${link}"
+    }
     String generateLink(Long number, String displayName, String tabName) {
         StringBuilder sb = new StringBuilder()
         def num = formatNumber(number: number, type: "number", groupingUsed: true)

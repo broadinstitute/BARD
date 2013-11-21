@@ -31,8 +31,6 @@
                                             controller="downTimeScheduler" action="list">View Down Times</g:link></li>
                                     <li class="controller"><g:link controller="person"
                                                                    action="list">List Person Table</g:link></li>
-                                    <li class="controller"><g:link controller="moveExperiments"
-                                                                   action="show">Move Experiments</g:link></li>
 
                                     <li class="controller"><g:link controller="assayDefinition"
                                                                    action="assayComparisonReport">Compare Assays</g:link></li>
@@ -83,6 +81,8 @@
                             <ul>
                                 <li class="controller"><g:link controller="experiment"
                                                                action="myExperiments">My Experiments</g:link></li>
+                                <li class="controller"><g:link controller="moveExperiments"
+                                                               action="show">Move Experiments</g:link></li>
                                 <li class="controller"><g:link controller="jobs"
                                                                action="index">My import jobs</g:link></li>
                             </ul>

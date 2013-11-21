@@ -403,8 +403,9 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         given:
         final List<Long> pids = [2, 4]
         Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
+        Map<Long, String> mapCapAssayIdsToAssayNames = [:]
         when:
-        final List<ExperimentSearch> experimentSearches = service.projectIdsToExperiments(pids, mapExperimentIdsToCapAssayIds)
+        final List<ExperimentSearch> experimentSearches = service.projectIdsToExperiments(pids, mapExperimentIdsToCapAssayIds,mapCapAssayIdsToAssayNames)
         then:
         projectRestService.searchProjectsByIds(_) >> {projectResult}
         expectedNumberOfMethodCalls * experimentRestService.searchExperimentsByIds(_) >> { new ExperimentSearchResult(experiments: [new ExperimentSearch()])}
@@ -418,7 +419,8 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void "test projectsToExperiments #label"() {
         when:
         Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
-        List<ExperimentSearch> experiments = service.projectsToExperiments(projectResult, mapExperimentIdsToCapAssayIds)
+        Map<Long, String> mapCapAssayIdsToAssayNames = [:]
+        List<ExperimentSearch> experiments = service.projectsToExperiments(projectResult, mapExperimentIdsToCapAssayIds,mapCapAssayIdsToAssayNames)
         then:
         expectedNumberOfMethodCalls * experimentRestService.searchExperimentsByIds(_) >> { new ExperimentSearchResult(experiments: [new ExperimentSearch()])}
         assert experiments.size() == expectedSize

@@ -210,7 +210,7 @@ class MolecularSpreadSheetService {
 
     /**
      * Now we have all of the available data in the dataMap, but that map may have holes ( where the compound wasn't tested with a particular assay)
-     * and it may also have cells with multiple values. This method is intended to smooth out the rough spots -- make a new map with exactly one value
+     * and it may also have cells with multiple values. This method is intended to smooth out the rough spots -- make a new map with at least one value
      * for each cell  in the molecular spreadsheet.  Some of those cells may be null, but that's fine, since we can print out "Not tested in this experiment"
      * on the GSP when we bump into one of them.
      * @param molSpreadSheetData
@@ -246,32 +246,51 @@ class MolecularSpreadSheetService {
                                         bestMolSpreadSheetCell = new MolSpreadSheetCell()
                                     } else if ((molSpreadSheetCells == null) || (molSpreadSheetCells.size() == 0)) {
                                         bestMolSpreadSheetCell = new MolSpreadSheetCell()  // this shouldn't happen(?). We have no data
-                                    } else if (molSpreadSheetCells.size() == 1) {   // we have exactly one match. That's easy enough
+                                    } else if (molSpreadSheetCells.size() == 1) {   // we have exactly one match.
                                         bestMolSpreadSheetCell = molSpreadSheetCells[0]
-                                    } else { // we have more than one option.  Send all of the spreadsheet activities forward. Average out a value for display
+                                    } else { // we have more than one option.  Send all of the spreadsheet activities forward. Combine them together.
                                         double valueToDisplay = Double.NaN
+                                        String stringValue = ""
                                         MolSpreadSheetCell firstNonNullMolSpreadSheetCell = null
 
 
                                         for (MolSpreadSheetCell molSpreadSheetCell in molSpreadSheetCells) {              // this is the inner loop.  Collect data, don't advance counter
-                                            for (HillCurveValueHolder hillCurveValueHolder in molSpreadSheetCell.spreadSheetActivityStorage?.hillCurveValueHolderList) {
-                                                if ((hillCurveValueHolder.slope) && (hillCurveValueHolder.slope != Double.NaN)) {
-                                                    numberOfValuesGoingIntoArithmeticMean++
-                                                    if (valueToDisplay == Double.NaN) {
-                                                        firstNonNullMolSpreadSheetCell = molSpreadSheetCell
-                                                        valueToDisplay = hillCurveValueHolder.slope
-                                                    } else {
-                                                        valueToDisplay += hillCurveValueHolder.slope
-                                                        // in addition to taking the display value, duplicate the hillCurveValueHolders, and then will do something useful with them on the display side
-                                                        firstNonNullMolSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
+                                            if (molSpreadSheetCell.molSpreadSheetCellType==MolSpreadSheetCellType.numeric) {
+                                                for (HillCurveValueHolder hillCurveValueHolder in molSpreadSheetCell.spreadSheetActivityStorage?.hillCurveValueHolderList) {
+                                                    if ((hillCurveValueHolder.slope) && (hillCurveValueHolder.slope != Double.NaN)) {
+                                                        numberOfValuesGoingIntoArithmeticMean++
+                                                        if (valueToDisplay == Double.NaN) {
+                                                            firstNonNullMolSpreadSheetCell = molSpreadSheetCell
+                                                            valueToDisplay = hillCurveValueHolder.slope
+                                                        } else {
+                                                            valueToDisplay += hillCurveValueHolder.slope
+                                                            firstNonNullMolSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
+                                                        }
                                                     }
+
                                                 }
 
+                                            } else if (molSpreadSheetCell.molSpreadSheetCellType==MolSpreadSheetCellType.string)   {
+                                                if (molSpreadSheetCell.strInternalValue!="null"){
+                                                    for (HillCurveValueHolder hillCurveValueHolder in molSpreadSheetCell.spreadSheetActivityStorage?.hillCurveValueHolderList) {
+                                                        if (stringValue == "") {
+                                                            firstNonNullMolSpreadSheetCell = molSpreadSheetCell
+                                                            stringValue = hillCurveValueHolder.stringValue
+                                                        } else {
+                                                            stringValue += hillCurveValueHolder.stringValue
+                                                            firstNonNullMolSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
-                                        if ((firstNonNullMolSpreadSheetCell != null) &&      // we had at least one value that wasn't null – proceed to assign the arithmetic average to the display case
-                                                (valueToDisplay != Double.NaN) &&                 // maybe we had one or more values but they were all assignments NaN? seems unlikely, but possible
-                                                (numberOfValuesGoingIntoArithmeticMean > 0)) {  // I think this last check is strictly superfluous, but maybe something will change in the future code release?
+                                        if ((firstNonNullMolSpreadSheetCell != null) &&      // we had at least one value that wasn't null   AND  EITHER
+                                                (
+                                                (stringValue != "")
+
+                                                        ||
+                                                 ((valueToDisplay != Double.NaN) &&              // we had a non-null numeric value
+                                                   (numberOfValuesGoingIntoArithmeticMean > 0)))){  //  we had a non-null string value
                                             // if we wanted to assign the mean value to the first element then we could do it here.
                                             //firstNonNullMolSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[0].slope = (valueToDisplay / numberOfValuesGoingIntoArithmeticMean)
                                             bestMolSpreadSheetCell = firstNonNullMolSpreadSheetCell // we like this one.  Remember it.
@@ -487,7 +506,10 @@ class MolecularSpreadSheetService {
      * @param assayIds
      * @return list
      */
-    protected List<ExperimentSearch> assaysToExperiments(List<ExperimentSearch> incomingExperimentList, final List<Long> assayIds, Map<Long, Long> mapExperimentIdsToCapAssayIds) {
+    protected List<ExperimentSearch> assaysToExperiments(List<ExperimentSearch> incomingExperimentList,
+                                                         final List<Long> assayIds,
+                                                         Map<Long, Long> mapExperimentIdsToCapAssayIds,
+                                                         Map<Long, String> mapCapAssayIdsToAssayNames) {
 
         List<ExperimentSearch> allExperiments
         if (incomingExperimentList) {
@@ -502,9 +524,11 @@ class MolecularSpreadSheetService {
         final ExpandedAssayResult expandedAssayResult = assayRestService.searchAssaysByIds(assayIds)
         final List<ExpandedAssay> assays = expandedAssayResult.assays
         for (ExpandedAssay assay : assays) {
+            if (!mapCapAssayIdsToAssayNames.containsKey(assay.bardAssayId)){  // store the name of the assay for later display
+                mapCapAssayIdsToAssayNames [assay.bardAssayId]    = assay.name
+            }
             final List<ExperimentSearch> experiments = assay.experiments
             if (experiments) {
-//                allExperiments.addAll(experiments)
                 for (ExperimentSearch experimentSearch in experiments) {
                     if (!allExperiments*.bardExptId.contains(experimentSearch.bardExptId)){
                         allExperiments <<  experimentSearch
@@ -522,15 +546,21 @@ class MolecularSpreadSheetService {
      * @param adids
      * @return list of experiments
      */
-    protected List<ExperimentSearch> assayIdsToExperiments(final List<ExperimentSearch> incomingExperimentList, final List<Long> adids, Map<Long, Long> mapExperimentIdsToCapAssayIds) {
-        return assaysToExperiments(incomingExperimentList, adids, mapExperimentIdsToCapAssayIds)
+    protected List<ExperimentSearch> assayIdsToExperiments(final List<ExperimentSearch> incomingExperimentList,
+                                                           final List<Long> adids,
+                                                           Map<Long, Long> mapExperimentIdsToCapAssayIds,
+                                                           Map<Long, String> mapCapAssayIdsToAssayNames ) {
+        return assaysToExperiments(incomingExperimentList, adids, mapExperimentIdsToCapAssayIds,mapCapAssayIdsToAssayNames)
     }
     /**
      *
      * @param cids
      * @return list of experiments
      */
-    protected List<ExperimentSearch> compoundIdsToExperiments(final List<Long> cids, Map<Long, Long> mapExperimentIdsToCapAssayIds, Boolean showActiveCompoundsOnly) {
+    protected List<ExperimentSearch> compoundIdsToExperiments(final List<Long> cids,
+                                                              Map<Long, Long> mapExperimentIdsToCapAssayIds,
+                                                              Map<Long, String> mapCapAssayIdsToAssayNames,
+                                                              Boolean showActiveCompoundsOnly) {
         if (!cids) {
             return []
         }
@@ -538,13 +568,14 @@ class MolecularSpreadSheetService {
         for (Long individualCompoundId in cids) {
             List<Assay> assays = compoundRestService.getTestedAssays(individualCompoundId, showActiveCompoundsOnly)
             for (Assay assay in assays) {
+                if (!mapCapAssayIdsToAssayNames.containsKey(assay.bardAssayId)){  // store the name of the assay for later display
+                    mapCapAssayIdsToAssayNames [assay.bardAssayId]    = assay.name
+                }
                 if (!allAssays*.assayId.contains(assay.bardAssayId)) {
                     allAssays.add(assay)
                     mapExperimentIdsToCapAssayIds[assay.bardAssayId] = assay.capAssayId
                 }
             }
-
-            //allAssays.addAll(assays)
         }
 
         return assaysToExperiments(allAssays)
@@ -555,17 +586,20 @@ class MolecularSpreadSheetService {
      * @param projectIds
      * @return list of Experiment's from a list of project Ids
      */
-    protected List<ExperimentSearch> projectIdsToExperiments(final List<Long> projectIds, Map<Long, Long> mapExperimentIdsToCapAssayIds) {
+    protected List<ExperimentSearch> projectIdsToExperiments(final List<Long> projectIds, Map<Long, Long> mapExperimentIdsToCapAssayIds,Map<Long, String> mapCapAssayIdsToAssayNames) {
         final ProjectResult projectResult = projectRestService.searchProjectsByIds(projectIds)
-        return projectsToExperiments(projectResult, mapExperimentIdsToCapAssayIds)
+        return projectsToExperiments(projectResult, mapExperimentIdsToCapAssayIds,mapCapAssayIdsToAssayNames)
     }
 
-    protected List<ExperimentSearch> projectsToExperiments(final ProjectResult projectResult, Map<Long, Long> mapExperimentIdsToCapAssayIds) {
+    protected List<ExperimentSearch> projectsToExperiments(final ProjectResult projectResult, Map<Long, Long> mapExperimentIdsToCapAssayIds,Map<Long, String> mapCapAssayIdsToAssayNames) {
         final List<ExperimentSearch> allExperiments = []
         if (projectResult) {
             for (Project project : projectResult.projects) {
                 ProjectExpanded projectExpanded = projectRestService.getProjectById(project.bardProjectId)
                 for (Assay assay in projectExpanded?.assays){
+                    if (!mapCapAssayIdsToAssayNames.containsKey(assay.bardAssayId)){  // store the name of the assay for later display
+                        mapCapAssayIdsToAssayNames [assay.bardAssayId]    = assay.name
+                    }
                     if (!mapExperimentIdsToCapAssayIds.containsKey(assay.bardAssayId)) {
                         mapExperimentIdsToCapAssayIds[assay.bardAssayId] = assay.capAssayId
                     }

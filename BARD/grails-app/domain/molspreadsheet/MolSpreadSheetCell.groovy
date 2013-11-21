@@ -141,7 +141,13 @@ class MolSpreadSheetCell {
                         hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: Double.NaN)
                     } else if (!MolSpreadSheetCellHelper.isNumeric(priorityElement.value)) {
                         String stringRepresentationOfValue = priorityElement.value as String
-                        hillCurveValueHolder = new HillCurveValueHolder(identifier: "${identifierString} ${stringRepresentationOfValue}", slope: Double.NaN)
+ //                       hillCurveValueHolder = new HillCurveValueHolder(identifier: "${identifierString} ${stringRepresentationOfValue}", slope: Double.NaN)
+                        molSpreadSheetCell.molSpreadSheetCellType = MolSpreadSheetCellType.string
+                        molSpreadSheetCell.spreadSheetActivityStorage.dictionaryDescription = priorityElement.getDictionaryDescription() ?: ''
+                        molSpreadSheetCell.spreadSheetActivityStorage.dictionaryLabel = priorityElement.getDictionaryLabel() ?: ''
+                        molSpreadSheetCell.spreadSheetActivityStorage.dictionaryId = priorityElement.getDictElemId() ?: 0
+                        molSpreadSheetCell.strInternalValue =  stringRepresentationOfValue;
+                        hillCurveValueHolder = new HillCurveValueHolder(identifier: "${identifierString}", slope: Double.NaN, stringValue: stringRepresentationOfValue)
                     } else {
                         Double value = Double.parseDouble(priorityElement.value) // note from .isNumeric() above that this parse will be successful
                         molSpreadSheetCell.spreadSheetActivityStorage.dictionaryDescription = priorityElement.getDictionaryDescription() ?: ''

@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize
 class ProjectService {
     CapPermissionService capPermissionService
     final static String BARD_PROBE_URI = "http://www.bard.nih.gov/ontology/bard#BARD_0001682"
+    final static String PUBCHEM_CID_URI = "http://www.bard.nih.gov/ontology/bard#BARD_0001205"
 
     List<Long> findApprovedProbeProjects() {
 
@@ -25,7 +26,20 @@ class ProjectService {
 
         return projectIds
     }
+    List<Long> findApprovedProbeCompounds() {
 
+        final String PROBES_QUERY = '''
+                SELECT DISTINCT contextItem.extValueId FROM Project project inner join project.contexts context
+                inner join context.contextItems contextItem
+                inner join contextItem.attributeElement element WHERE element.bardURI=? and
+                project.ncgcWarehouseId is not null and project.projectStatus=?
+                '''
+
+        final List cids = Project.executeQuery(PROBES_QUERY,
+                [PUBCHEM_CID_URI, ProjectStatus.APPROVED]) as List<Long>
+
+        return cids.collect{it as Long}
+    }
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Project updateOwnerRole(Long id, Role ownerRole) {
         Project project = Project.findById(id)

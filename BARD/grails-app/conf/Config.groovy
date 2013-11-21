@@ -2,10 +2,12 @@ import bard.ReloadResultsJob
 import bard.util.BardCacheUtilsService
 import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
+import org.apache.log4j.net.SMTPAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
 
-bard.users.email="bard-users.REMOVE-ME@REMOVE-ME.broadinstitute.org"
+bard.users.email="bard-users@broadinstitute.org"
+bard.users.mailing.list="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users"
 
 ncgc.thickclient.root.url="http://bard.nih.gov/bard/"
 ncgc.thickclient.compounds.url = "${ncgc.thickclient.root.url}compounds/"
@@ -331,6 +333,7 @@ if (System.getProperty("migrationContextsToRun") != null) {
 
 log4j = {
     appenders {
+        try {
         String baselogDir = grails.util.Environment.warDeployed ? System.getProperty('catalina.home') : 'target'
         String logDir = "$baselogDir/logs"
         String defaultPattern = '%d [%t] %-5p %c{1} - %m%n' // see http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html
@@ -360,11 +363,30 @@ log4j = {
                 layout: pattern(defaultPattern),
                 immediateFlush: true,
                 datePattern: "'.'yyyy-MM-dd"))
+
+        appender(new SMTPAppender(
+                name: "mail",
+                SMTPPort: config.grails.mail.port,
+                from: config.grails.mail.default.from,
+                to: config.grails.mail.default.to,
+                subject: "[${InetAddress.getLocalHost().getHostName()}] " + config.grails.mail.default.subject,
+                SMTPHost: config.grails.mail.host,
+                layout: pattern(defaultPattern),
+                threshold: org.apache.log4j.Level.ERROR))
+
+        } catch (Exception ex) {
+            // have to write to System.out because System.err appears to _also_ get dropped on the floor
+            System.out.println("!!!!!!!!! Got exception trying to set up log4j.  This causes the whole logging config to be messed up, so printing the exception before it gets lost: ${ex}");
+            System.out.println("SMTPAppender ${SMTPAppender.methods.each {it.name}}")
+            throw ex;
+        }
     }
-    // stdout is a default console appender ss
+
+    // stdout is a default console appender
     root {
-        warn('outputFile', 'stdout')
+        warn('outputFile', 'stdout', 'mail')
     }
+
     error('org.codehaus.groovy.grails.web.servlet',  //  controllers
             'org.codehaus.groovy.grails.web.pages', //  GSP
             'org.codehaus.groovy.grails.web.sitemesh', //  layouts
@@ -381,7 +403,7 @@ log4j = {
     //Capture JavaScript errors from the client (via the ErrorHandling controller)
     error(additivity: true, JavaScriptErrorsAppender: ['grails.app.controllers.bardqueryapi.ErrorHandlingController'])
     //Capture NCGC REST API roundtrip timing.
-    info(additivity: false['grails.app.services.bard.core.helper.LoggerService'])
+    info(additivity: false, NCGCRestApiTimingAppender: ['grails.app.services.bard.core.helper.LoggerService'])
 }
 
 // Added by the JQuery Validation UI plugin:

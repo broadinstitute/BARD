@@ -136,7 +136,7 @@
                     </div>
 
                     <g:render template="../context/show"
-                              model="[contextOwner: contextOwner, contexts: contextOwner.groupContexts(),
+                              model="[contextOwner: contextOwner, additionalContexts: contextOwner.groupContexts(),
                                       uneditable: true, showCheckBoxes: true, existingContextIds: resultTypeCommand.contextIds]"/>
                     <g:render template="../context/currentCard"
                               model="[contextOwner: contextOwner, currentCard: contextOwner.groupExperimentalVariables(), subTemplate: 'show', renderEmptyGroups: false,

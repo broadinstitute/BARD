@@ -17,6 +17,7 @@ class MolSpreadSheetData {
     Map<Integer, String> mapColumnsToExperimentId = [:]
     Map<Integer, String> mapColumnsToAssayName = [:]
     Map<Integer, Boolean> mapColumnsNormalization = [:]
+    Map<Long, String> mapCapAssayIdsToAssayNames = [:]
 
     MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod
 
@@ -186,9 +187,12 @@ class MolSpreadSheetData {
             for (int i in 0..(assayNames.size() - 1)) {
                 String fullAssayName = 'Data error: please contact your system administrator'   // This message should never be displayed
                 if (assayNames[i] != null) {    // Assay name should never be null -- this is a safety measure
-                    int columnOfAssay = mapColumnsToAssay.find { it.value == assayNames[i] }.key
-                    fullAssayName = mapColumnsToAssayName[columnOfAssay]
-                    this.mapExperimentIdsToCapAssayIds
+                    Long bardAssayId = Long.parseLong(assayNames[i])
+                    if (this.mapCapAssayIdsToAssayNames.containsKey(bardAssayId))  {
+                        fullAssayName = mapCapAssayIdsToAssayNames[bardAssayId]
+                    }  else {
+                        fullAssayName = "Assay name unknown"
+                    }
                 }
                 //convert assay id to cap id
                 String capId = "U"

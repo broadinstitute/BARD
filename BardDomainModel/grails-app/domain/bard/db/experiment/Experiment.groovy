@@ -54,7 +54,10 @@ class Experiment extends AbstractContextOwner {
 
 
 
-    static transients = ['experimentContextItems', 'disableUpdateReadyForExtraction']
+    static transients = ['measuresHaveAtLeastOnePriorityElement','experimentContextItems', 'disableUpdateReadyForExtraction']
+
+
+
     Role ownerRole //The team that owns this object. This is used by the ACL to allow edits etc
 
     List<ExperimentContextItem> getExperimentContextItems() {
@@ -127,7 +130,17 @@ class Experiment extends AbstractContextOwner {
         }
     }
 
-
+    boolean measuresHaveAtLeastOnePriorityElement(){
+        if(!experimentMeasures){
+            return false
+        }
+        for(ExperimentMeasure experimentMeasure: experimentMeasures){
+            if(experimentMeasure.priorityElement){
+                return true
+            }
+        }
+        return false
+    }
 
     String getOwner() {
         final String objectOwner = this.ownerRole?.displayName

@@ -1,8 +1,5 @@
 package molspreadsheet
-
 import spock.lang.Specification
-import bard.core.rest.spring.experiment.ExperimentSearch
-
 //import static org.junit.Assert.assertNotNull
 
 /**
@@ -24,18 +21,15 @@ class MolSpreadSheetDataBuilderDirectorUnitSpec extends Specification {
         final List<Long> pids = [2]
         final List<Long> adids = []
         final List<Long> cids = []
-        Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
         MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
         MolecularSpreadSheetService molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
         molSpreadSheetDataBuilder.molecularSpreadSheetService = molecularSpreadSheetService
         when:
-        Map map = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, cids, adids, mapExperimentIdsToCapAssayIds,true)
+        Map map = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, cids, adids, true)
         then:
-        1 * molecularSpreadSheetService.projectIdsToExperiments(pids,mapExperimentIdsToCapAssayIds) >> {new RuntimeException()}
         assert map
         assert !map.experimentList
-        assert !map.molSpreadsheetDerivedMethod
-        mapExperimentIdsToCapAssayIds.size()==0
+        assert map.molSpreadsheetDerivedMethod.toString()=="NoCompounds_NoAssays_Projects"
     }
 
 
@@ -49,19 +43,16 @@ class MolSpreadSheetDataBuilderDirectorUnitSpec extends Specification {
         final List<Long> pids = []
         final List<Long> adids = [2]
         final List<Long> cids = []
-        List<ExperimentSearch> experimentList = []
-        Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
         MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
         MolecularSpreadSheetService molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
         molSpreadSheetDataBuilder.molecularSpreadSheetService = molecularSpreadSheetService
         when:
-        Map map = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids,cids, mapExperimentIdsToCapAssayIds, true)
+        Map map = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids,cids, true)
         then:
-        1 * molecularSpreadSheetService.assayIdsToExperiments(experimentList,adids,mapExperimentIdsToCapAssayIds) >> {new RuntimeException()}
         assert map
         assert !map.experimentList
-        assert !map.molSpreadsheetDerivedMethod
-        mapExperimentIdsToCapAssayIds.size()==0
+        assert map.molSpreadsheetDerivedMethod.toString()=="NoCompounds_Assays_NoProjects"
+
     }
 
 
@@ -74,18 +65,20 @@ class MolSpreadSheetDataBuilderDirectorUnitSpec extends Specification {
         final List<Long> pids = []
         final List<Long> adids = []
         final List<Long> cids = [2]
-        Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
+        Map<Long, String> mapCapAssayIdsToAssayNames = [:]
         MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
         MolecularSpreadSheetService molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
         molSpreadSheetDataBuilder.molecularSpreadSheetService = molecularSpreadSheetService
         when:
-        Map map = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids, cids, mapExperimentIdsToCapAssayIds, true)
+        Map map = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids, cids, true)
         then:
-        1 * molecularSpreadSheetService.compoundIdsToExperiments(cids,mapExperimentIdsToCapAssayIds, true) >> {new RuntimeException()}
+        1 * molecularSpreadSheetService.compoundIdsToExperiments(cids,molSpreadSheetDataBuilder.mapExperimentIdsToCapAssayIds,mapCapAssayIdsToAssayNames, true) >> {new RuntimeException()}
         assert map
         assert !map.experimentList
         assert !map.molSpreadsheetDerivedMethod
-        mapExperimentIdsToCapAssayIds.size()==0
+        molSpreadSheetDataBuilder.mapExperimentIdsToCapAssayIds.size()==0
+        molSpreadSheetDataBuilder.mapCapAssayIdsToAssayNames.size()==0
+
     }
 
 

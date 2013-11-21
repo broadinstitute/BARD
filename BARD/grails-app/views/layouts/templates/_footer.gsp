@@ -39,11 +39,11 @@
                 <div class="span2">
                     <h3>Help</h3>
                     <ul>
-                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!forum/bard-users">Forums</a>
+                        <li><a href="${grailsApplication.config.bard.users.mailing.list}" target="forum">Forums</a>
                         </li>
-                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Submit a Bug Report</a>
+                        <li><a href="${grailsApplication.config.bard.users.mailing.list}" target="forum">Submit a Bug Report</a>
                         </li>
-                        <li><a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">Ask a Question</a>
+                        <li><a href="${grailsApplication.config.bard.users.mailing.list}" target="forum">Ask a Question</a>
                         </li>
                     </ul>
                 </div>
@@ -85,6 +85,7 @@
             </div>
             <div class="row-fluid">
                 <div class="span8 offset2 bard-footer-versioninfo muted">
+                    <b>By using BARD, you agree to our <g:link controller="about" action="termsOfUse">terms of use</g:link>  and <g:link controller="about" action="privacyPolicy">privacy policy</g:link></b></br>
                     <b>Release created:</b> ${grailsApplication.metadata['war.created']} <b>Branch:</b> ${grailsApplication?.metadata['git.branch.name']} <b>Revision:</b> ${grailsApplication?.metadata['git.branch.version']}
                 </div>
             </div>

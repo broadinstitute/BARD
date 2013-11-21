@@ -150,9 +150,14 @@ public class ConcentrationResponseSeries extends JsonUtil {
 
         for (ConcentrationResponsePoint concentrationResponsePoint : concentrationResponsePoints) {
             if (concentrationResponsePoint.testConcentration != null && concentrationResponsePoint.value != null) {
-                if (concentrationResponsePoint.value.isNumber() && !concentrationResponsePoint.testConcentration.isNaN()) {
-                    concentrations.add(concentrationResponsePoint.testConcentration)
-                    activities.add(new Double(concentrationResponsePoint.value))
+                final String concentrationResponseValue = concentrationResponsePoint.value
+                if (concentrationResponseValue.isNumber() && !concentrationResponsePoint.testConcentration.isNaN()) {
+                    final Double currentPoint = new Double(concentrationResponsePoint.value)
+                    if(currentPoint != 0){ //take out zero concentrations
+                        concentrations.add(concentrationResponsePoint.testConcentration)
+                        activities.add(currentPoint)
+                    }
+
                 }
 
             }
@@ -162,7 +167,6 @@ public class ConcentrationResponseSeries extends JsonUtil {
         }
 
         ActivityConcentrationMap activityConcentrationMap = new ActivityConcentrationMap(activities: activities, concentrations: concentrations)
-        //return [activities: activities, concentrations: concentrations]
         return activityConcentrationMap
     }
 }

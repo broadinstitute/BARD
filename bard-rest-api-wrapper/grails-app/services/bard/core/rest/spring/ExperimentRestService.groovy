@@ -21,11 +21,16 @@ class ExperimentRestService extends AbstractRestService {
     }
 
     public List<ExperimentSearch> findRecentlyAdded(long top) {
-        String recentURL = "${RestApiConstants.RECENT}${top}${RestApiConstants.QUESTION_MARK}expand=true"
-        final String urlString = getResource(recentURL)
-        final URL url = new URL(urlString)
-        final List<ExperimentSearch> experiments = (List) getForObject(url.toURI(), List.class)
-        return experiments
+        try {
+            String recentURL = "${RestApiConstants.RECENT}${top}${RestApiConstants.QUESTION_MARK}expand=true"
+            final String urlString = getResource(recentURL)
+            final URL url = new URL(urlString)
+            final List<ExperimentSearch> experiments = (List) getForObject(url.toURI(), List.class)
+            return experiments
+        } catch (Exception ee) {
+            log.error(ee, ee)
+            return []
+        }
     }
 
     //Why is this returning a string and not a java object?

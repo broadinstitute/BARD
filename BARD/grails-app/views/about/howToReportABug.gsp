@@ -6,7 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix"/>
     <meta name="layout" content="howto"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>BARD Report Bug</title>
+    <title>BARD Report a bug</title>
 </head>
 
 <body>
@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <aside class="span2"></aside>
-            <article class="span8 head-holder"><h2>Report A Bug in BARD</h2></article>
+            <article class="span8 head-holder"><h2>Report A Bug</h2></article>
             <aside class="span2"></aside>
         </div>
 
@@ -38,12 +38,13 @@
                         </p>
 
                     <p>
-                        But before you invest your valuable time, we suggest that you browse our list of <a href="https://groups.google.com/a/broadinstitute.org/forum/#!forum/bard-users">previously reported issues</a> and visit the BARD Support Community to see if there is already an ongoing discussion.
+                        But before you invest your valuable time, we suggest that you browse our list of <a href="${grailsApplication.config.bard.users.mailing.list}" target="forum">previously reported issues</a> and visit the BARD Support Community to see if there is already an ongoing discussion.
                         </p>
 
                     <p>
-                        If it appears you’re the first to spot the bug, great! Please <a href="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users">tell us</a> what you see, exactly where you see it, and step-by-step what you are doing when it occurs. Simply complete the form or email
-                    ${grailsApplication.config.bard.users.email}. We promise a prompt response, as outlined by the Feedback Policy in our Service Level Agreement.
+                        If it appears you’re the first to spot the bug, great! Please
+                        <a href="${grailsApplication.config.bard.users.mailing.list}" target="forum">tell us</a> what you see, exactly where you see it, and step-by-step what you are doing when it occurs. Simply complete the form or email
+                    <g:render template="../layouts/templates/bardusers"/>. We promise a prompt response, as outlined by the Feedback Policy in our Service Level Agreement.
                     </p>
 
                 </article>

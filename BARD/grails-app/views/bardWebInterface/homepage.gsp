@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
     <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
           rel='stylesheet' type='text/css'>
-    <r:require modules="bardHomepage,idSearch,jquerynotifier,downtime,autocomplete"/>
+    <r:require modules="bardHomepage,idSearch,jquerynotifier,downtime,autocomplete,compoundOptions"/>
     <!--[if lt IE 9]><link rel="stylesheet" href="../css/bardHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
     <!--[if IE]><script src="../js/bardHomepage/ie.js"></script><![endif]-->
 
@@ -36,11 +36,11 @@
         </div>
 
         <div class="row-fluid">
-            <div class="span6">
+            <div class="span3" style="min-width: 210px; min-height: 70px;">
                 <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
             </div>
 
-            <div class="span6">
+            <div class="span9">
                 <div class="row-fluid">
                     <div class="center-aligned span6">
                         <g:render template="/layouts/templates/socialMedia"/>
@@ -55,40 +55,7 @@
                     <div class="span12">
                         <nav class="nav-panel right-aligned">
                             <ul class="nav">
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">How To …</a>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <g:link controller="about" action="howToSearch">Search</g:link>
-                                        </li>
-                                        <li>
-                                            <g:link controller="about"
-                                                    action="howToFilterResults">Filter search results</g:link>
-                                        </li>
-                                        <li>
-                                            <g:link controller="about" action="howToReadResults">
-                                                Interpret search results</g:link>
-                                        </li>
-                                        %{--<li><a href="../about/howToUseSecurely">Use securely</a></li>--}%
-                                        <li><g:link controller="about"
-                                                    action="howToUsePlugins">Create and use plug-ins</g:link></li>
-                                        <li><g:link controller="about"
-                                                    action="howToVisualizeAndCaptureData">Visualize and Capture Data</g:link>
-                                        </li>
-                                        <li><g:link controller="about"
-                                                    action="howToGetTheMostFromBard">Get the Most From Bard</g:link></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support</a>
-                                    <ul class="dropdown-menu">
-                                        <li><g:link controller="about"
-                                                    action="howToReportABug">Report a bug</g:link></li>
-                                        <li><g:link controller="about" action="howToContactUs">Contact us</g:link></li>
-                                        <li><g:link controller="about"
-                                                    action="howToDocumentBard">BARD Documentation</g:link></li>
-                                    </ul>
-                                </li>
+                                <g:render template="/layouts/templates/howtolinks"/>
                                 <sec:ifLoggedIn>
                                     <li><g:link controller="bardWebInterface"
                                                 action="navigationPage">My BARD</g:link></li>
@@ -201,7 +168,7 @@
 </g:if>
 
 %{--This is the main carousel, with three big pictures and associated buttons--}%
-<div class="articles-gallery slide" id="articles-gallery" data-interval="false">
+<div class="articles-gallery slide" id="articles-gallery">
     <a href="#articles-gallery" class="btn-prev" data-slide="prev">Previous</a>
     <a href="#articles-gallery" class="btn-next" data-slide="next">Next</a>
 
@@ -218,7 +185,7 @@
                             <h1>Search and analyze your own way.</h1>
 
                             <p>Keeping the promise of the MLP, BARD gives you nimble access to most all the program’s data through an array of query, analysis and visualization tools.</p>
-                            <a href="../about/howToReadResults" class="btn btn-primary">HOW TO WORK WITH RESULTS</a>
+                            <a href="../about/howToVisualizeAndCaptureData" class="btn btn-primary">HOW TO VISUALIZE DATA</a>
                         </div>
                     </div>
                 </div>
@@ -289,9 +256,9 @@
                 <li>
                     <g:experimentCount/>
                 </li>
-                <li>
-                    <g:exptDataCount/>
-                </li>
+                %{--<li>--}%
+                    %{--<g:exptDataCount/>--}%
+                %{--</li>--}%
                 <li>
                     <g:probeCount/>
                 </li>
@@ -312,11 +279,15 @@
                 <g:render template="recentlyAddedExperiments"
                           model="['recentlyAddedExperiments': recentlyAddedExperiments]"/>
                 %{--Contents of the "Compounds" tab (of our row of five content boxes) --}%
-                <g:render template="numberOfExperimentData"
-                          model="['numberOfExperimentData': numberOfExperimentData]"/>
+                %{--<g:render template="numberOfExperimentData"--}%
+                          %{--model="['numberOfExperimentData': numberOfExperimentData]"/>--}%
 
                 %{--Contents of the "Probes" tab (of our row of five content boxes) --}%
-                <g:render template="probeProjects" model="['probeProjectIds': probeProjectIds]"/>
+                <g:render template="probeProjects" model="[
+                        'probeProjectIds': probeProjectIds,
+                        'compoundAdapters':probeCompoundMap.compoundAdapters,
+                        'probeCompoundIds': probeCompoundMap.probeCompoundIds
+                ]"/>
             </div>
         </div>
     </section>
@@ -325,6 +296,10 @@
 <g:render template="/layouts/templates/footer"/>
 
 </div>
+<script> var $ = jQuery.noConflict(); $(document).ready(function()
+{ $('#articles-gallery').carousel({ interval: 10000, cycle: true }); });
+
+</script>
 <r:layoutResources/>
 </body>
 </html>

@@ -83,8 +83,8 @@ class ProjectController {
             if (!unApprovedExperiments) {
                 project = projectService.updateProjectStatus(inlineEditableCommand.pk, projectStatus)
                 generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.projectStatus.id)
-            }else{
-                List<Long> unApprovedIds = unApprovedExperiments.collect {it.id}
+            } else {
+                List<Long> unApprovedIds = unApprovedExperiments.collect { it.id }
                 render(status: HttpServletResponse.SC_BAD_REQUEST, text: "Before you can approve this project, you must approve the following experiments: " + unApprovedIds.sort().join(","), contentType: 'text/plain', template: null)
             }
         }
@@ -245,7 +245,11 @@ class ProjectController {
         Map projectMap = null;
         try {
             if (projectInstance.ncgcWarehouseId != null) {
-                projectMap = this.queryService.showProject(projectInstance.ncgcWarehouseId)
+                try {
+                    projectMap = this.queryService.showProject(projectInstance.ncgcWarehouseId)
+                } catch (Exception ee) {
+                    log.error(ee, ee)
+                }
             }
         }
         catch (HttpClientErrorException httpClientErrorException) {

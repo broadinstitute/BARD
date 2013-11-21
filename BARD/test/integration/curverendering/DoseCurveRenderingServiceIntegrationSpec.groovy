@@ -7,6 +7,7 @@ import bardqueryapi.QueryService
 import grails.plugin.spock.IntegrationSpec
 import org.jfree.chart.ChartUtilities
 import org.jfree.chart.JFreeChart
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
 import spock.lang.Ignore
@@ -66,7 +67,79 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         assert doseCurve.length
 
     }
+    @IgnoreRest
+    void "tests createDoseCurvex #label"() {
+        given: "That we have created an ETag from a list of CIDs"
+        final Map map = [
+                activities: [
+                        new Double(-0.02800000086426735),
+                        new Double(-0.02800000086426735),
+                        new Double(-0.02500000037252903),
+                        new Double(-0.017999999225139618),
+                        new Double(-0.01899999938905239),
+                        new Double(-0.017999999225139618),
+                        new Double(-0.02199999988079071),
+                        new Double(-0.02199999988079071),
+                        new Double(-0.017999999225139618),
+                        new Double(-0.014999999664723873),
+                        new Double(-0.017000000923871994),
+                        new Double(-0.017999999225139618),
+                        new Double(-0.014999999664723873),
+                        new Double(-0.017000000923871994),
+                        new Double(-0.01600000075995922),
+                        new Double(-0.017000000923871994),
+                        new Double(-0.017999999225139618),
+                        new Double(-0.020999999716877937),
+                        new Double(-0.024000000208616257),
+                        new Double(-0.023000000044703484)
+                ],
+                concentrations: [
+                        new Double(0.0),
+                        new Double(0.0),
+                        new Double(9.999999974752427E-7),
+                        new Double(1.9999999949504854E-6),
+                        new Double(7.000000096013537E-6),
+                        new Double(2.099999983329326E-5),
+                        new Double(5.999999848427251E-5),
+                        new Double(1.9500000053085387E-4),
+                        new Double(5.600000149570405E-4),
+                        new Double(0.0015999999595806003),
+                        new Double(0.004999999888241291),
+                        new Double(0.014999999664723873),
+                        new Double(0.04600000008940697),
+                        new Double(0.13500000536441803),
+                        new Double(0.41999998688697815),
+                        new Double(1.2000000476837158),
+                        new Double(3.799999952316284),
+                        new Double(11.0),
+                        new Double(35.0),
+                        new Double(100)
+                ],
+                s0: -0.02, sinf: -0.02, ac50: null, hillSlope: null, height: 200, width: 200, xAxisLabel: 'X', yAxisLabel: 'Y']
+        when: "We call the createDoseCurve method with the spreadSheetActivity.hillCurveValue value and the other parameters"
 
+        JFreeChart jFreeChart =
+            this.doseCurveRenderingService.
+                    createDoseCurve(map.concentrations,
+                            map.activities,
+                            null,
+                            null,
+                            map.s0,
+                            map.sinf,
+                            'X', 'Y', null, null, null, null)
+
+        then: "We expect to get back a JFreeChart back"
+        assert jFreeChart
+        final File file = new File("testChar1.jpg")
+        ChartUtilities.saveChartAsJPEG(file, jFreeChart, 200, 200);
+        assert file.exists()
+
+
+//        where:
+//        label                                    | cids        | experimentId
+//        "An existing experiment with activities" | [46897918L] | 551
+
+    }
 
     void "tests createDoseCurve #label"() {
         given: "That we have created an ETag from a list of CIDs"
@@ -153,6 +226,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         "An existing experiment with activities" | [46897918L] | 551
 
     }
+
     @Ignore
     void "tests plot multiple curves on same graph #label"() {
         given: "That we have created an ETag from a list of CIDs"

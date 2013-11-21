@@ -157,12 +157,14 @@ abstract class AbstractRestService {
         url.append(RestApiConstants.QUESTION_MARK).append(RestApiConstants.EXPAND_TRUE)
         return url.toString()
     }
+
     public String buildURLToPostSids() {
         StringBuilder url = new StringBuilder(getResource())
         url.append(RestApiConstants.SID)
         url.append(RestApiConstants.QUESTION_MARK).append(RestApiConstants.EXPAND_TRUE)
         return url.toString()
     }
+
     public String buildURLToGetSid(Long sid) {
         StringBuilder url = new StringBuilder(getResource())
         url.append(RestApiConstants.SID)
@@ -171,6 +173,7 @@ abstract class AbstractRestService {
         url.append(RestApiConstants.QUESTION_MARK).append(RestApiConstants.EXPAND_TRUE)
         return url.toString()
     }
+
     protected String getResource(final String resource) {
         return new StringBuilder(getResource()).append(resource).toString();
     }
@@ -296,6 +299,7 @@ abstract class AbstractRestService {
         }
         return f.toString();
     }
+
     public Map<String, List<String>> suggest(SuggestParams params) {
         final String resource = buildSuggestQuery(params)
         final URL url = new URL(resource)
@@ -423,11 +427,16 @@ abstract class AbstractRestService {
      * @return the number of  entities
      */
     public long getResourceCount(final String resource) {
-
-        final URL url = new URL(resource)
-        final String countString = (String) getForObject(url.toURI(), String.class)
-        Long count = Long.parseLong(countString)
-        return count;
+        try {
+            final URL url = new URL(resource)
+            final String countString = (String) getForObject(url.toURI(), String.class)
+            Long count = Long.parseLong(countString)
+            return count;
+        }
+        catch (Exception ee) {
+            log.error(ee, ee)
+            return -1
+        }
     }
     /**
      * Get a count of entities making up a resource

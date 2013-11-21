@@ -49,11 +49,7 @@
             <div class="pull-left">
                 <g:if test="${panelInstance?.id}">
                     <h4>View Panel (Panel ID: ${panelInstance?.id})</h4>
-                    <a class="btn"
-                       href="mailto:${grailsApplication.config.bard.users.email}?Subject=Question about Panel ID: ${panelInstance.id}"
-                       target="_top"><i class="icon-envelope"></i> Ask a question about this Panel</a>
-                    <br/>
-
+                    <g:render template="../layouts/templates/askAQuestion" model="['entity':'Panel']"/>
                 </g:if>
              </div>
         </div>

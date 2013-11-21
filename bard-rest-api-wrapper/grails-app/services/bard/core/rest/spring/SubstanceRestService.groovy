@@ -15,11 +15,16 @@ class SubstanceRestService extends AbstractRestService {
     def transactional = false
 
     public List<Substance> findRecentlyAdded(long top) {
-        String urlString = getResource("${RestApiConstants.RECENT}${top}${RestApiConstants.QUESTION_MARK}expand=true")
+        try {
+            String urlString = getResource("${RestApiConstants.RECENT}${top}${RestApiConstants.QUESTION_MARK}expand=true")
 
-        final URL url = new URL(urlString)
-        final List<Substance> substances = (List) getForObject(url.toURI(), List.class)
-        return substances
+            final URL url = new URL(urlString)
+            final List<Substance> substances = (List) getForObject(url.toURI(), List.class)
+            return substances
+        } catch (Exception ee) {
+            log.error(ee,ee)
+            return []
+        }
     }
 
 

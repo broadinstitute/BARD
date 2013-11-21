@@ -57,7 +57,6 @@ public class DoseCurveImage {
             List<Double> y = drc.getActivities();
             List<Boolean> isValid = drc.getIsValid();
             if ((x != null) && (y != null)) {
-//                drc.getCurveParameters();
                 addCurve(name, dataset, renderer, plot, x, y, isValid, drc.getCurveParameters(), drc.getColor());
             }
 
@@ -96,8 +95,6 @@ public class DoseCurveImage {
         for (int i = 0; i < y.size(); i++) {
             Double nx = Math.log10(x.get(i));
             if (nx == Double.NEGATIVE_INFINITY) {
-//                x.remove(i);
-//                y.remove(i);
                 continue;
             }
             if (isValid.get(i)) {

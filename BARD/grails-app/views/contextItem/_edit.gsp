@@ -16,22 +16,29 @@
             <div class="cardTitle">
                 %{--We will put error messages on this card--}%
                 <div id="${context.id}_Errors"></div>
-                <g:textInPlaceEdit bean="${context}" field="preferredName" id="updatePreferredName-${context.id}"
-                                   controller="contextItem" params="${[contextClass: context.simpleClassName]}"/>
+                <g:if test="${!disableHeaderEdits}">
+                    <g:textInPlaceEdit bean="${context}" field="preferredName" id="updatePreferredName-${context.id}"
+                                       controller="contextItem" params="${[contextClass: context.simpleClassName]}"/>
+                </g:if>
+                <g:else>
+                    <strong>${context.preferredName}</strong>
+                </g:else>
             </div>
 
-            <div class="btn-group pull-right">
-                <g:link class="btn btn btn-info btn-mini" title="Add item" controller="contextItem"
-                        action="create"
-                        params="${[contextId: context?.id, contextClass: context?.class?.simpleName, contextOwnerId: context?.owner?.id]}"><i
-                        class="icon-plus"></i></g:link>
-                <g:if test="${context.contextItems.size() == 0}">
-                    <g:link class="btn btn btn-info btn-mini" title="Delete Card" controller="context"
-                            action="deleteEmptyCard"
-                            params="[contextClass: context?.class?.simpleName, contextId: context?.id, section: cardSection]"><i
-                            class="icon-trash"></i></g:link>
-                </g:if>
-            </div>
+            <g:if test="${!disableHeaderEdits}">
+                <div class="btn-group pull-right">
+                    <g:link class="btn btn btn-info btn-mini" title="Add item" controller="contextItem"
+                            action="create"
+                            params="${[contextId: context?.id, contextClass: context?.class?.simpleName, contextOwnerId: context?.owner?.id]}"><i
+                            class="icon-plus"></i></g:link>
+                    <g:if test="${context.contextItems.size() == 0}">
+                        <g:link class="btn btn btn-info btn-mini" title="Delete Card" controller="context"
+                                action="deleteEmptyCard"
+                                params="[contextClass: context?.class?.simpleName, contextId: context?.id, section: cardSection]"><i
+                                class="icon-trash"></i></g:link>
+                    </g:if>
+                </div>
+            </g:if>
 
         </caption>
         <tbody>

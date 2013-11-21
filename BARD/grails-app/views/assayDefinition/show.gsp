@@ -72,10 +72,7 @@
                                 uri="/images/clone-icon.png"/> Clone Assay Definition</g:link>
                     </sec:ifLoggedIn>
                 </g:if>
-
-                <a class="btn"
-                   href="mailto:${grailsApplication.config.bard.users.email}?Subject=Question about ADID: ${assayInstance.id}"
-                   target="_top"><i class="icon-envelope"></i>Ask a question about this Assay Definition</a>
+                <g:render template="../layouts/templates/askAQuestion" model="['entity':'Assay Definition']"/>
             </div>
         </div>
     </div>
