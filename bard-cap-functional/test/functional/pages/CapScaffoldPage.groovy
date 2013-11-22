@@ -127,7 +127,16 @@ class CapScaffoldPage extends CommonFunctionalPage {
 	def getUISummaryInfo(){
 		def uiSummary = [:]
 		for(int i; i < viewSummary.ddValue.size(); i++){
-			uiSummary.put(viewSummary.dtLabel[i].text().trim().replace(" ", "").replace(":", ""), viewSummary.ddValue[i].text().trim()=="Empty"||""?"null":viewSummary.ddValue[i].text().trim())
+			def label = viewSummary.dtLabel[i].text().trim().replaceAll(" ", "")
+			def value = viewSummary.ddValue[i].text().trim()
+			if(label.contains('(')){
+				label = label.substring(0, label.indexOf('('))//.replace(":", "").replace(" ", "")
+				
+			}
+			if(label.contains(':')){
+				label = label.replace(":", "")
+			}
+			uiSummary.put(label, value=="Empty"||""?"null":value)
 		}
 		return uiSummary
 	}

@@ -6,8 +6,9 @@ package common
  */
 class TestData {
 
-	static def projectId = 1315
-	static def assayId = 8129
+	final static def projectId = 1315
+	final static def assayId = 8129
+	final static int panelId = 49
 
 	final static def documents = [
 		documentName:"Document Name",
@@ -53,4 +54,12 @@ class TestData {
 			valueDisplayEdit:"Matrilysin Complexed",
 		]
 	]
+
+	final static Map addPanel = [
+		name:"Test Panel Name",
+		description:"Test Panel Description",
+		owner:"BARD Administrator"
+	]
+	final static def assaysToPanel = [8129, 1315]
+
 }

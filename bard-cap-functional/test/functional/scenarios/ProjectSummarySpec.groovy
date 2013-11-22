@@ -1,14 +1,12 @@
 package scenarios
 
-import pages.CapSearchPage
 import pages.HomePage
 import pages.ViewProjectDefinitionPage
 import base.BardFunctionalSpec
+
 import common.Constants
-import common.TestData;
-import common.TestDataReader
-import common.Constants.NavigateTo
-import common.Constants.SearchBy
+import common.TestData
+
 import db.Project
 
 /**

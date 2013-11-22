@@ -4,8 +4,7 @@ import geb.Page
 
 /**
  * @author Muhammad.Rafique
- * Date Created: 13/02/11
- * Date Updated: 13/10/07
+ * Date Created: 2013/02/11
  */
 class HomePage extends ScaffoldPage {
 	static url = "bardWebInterface/index"

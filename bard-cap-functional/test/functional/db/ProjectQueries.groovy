@@ -3,7 +3,6 @@ package db
 /**
  * @author Muhammad.Rafique
  * Date Created: 13/02/07
- * Date Updated: 13/10/07
  */
 class ProjectQueries {
 	final static String PROJECT_SUMMARY_BYID = "SELECT P.PROJECT_ID AS PID, P.PROJECT_STATUS AS Status, P.PROJECT_NAME AS Name, P.DESCRIPTION Description, to_char(P.DATE_CREATED, 'MM/DD/YYYY') AS DateCreated, to_char(P.LAST_UPDATED, 'MM/DD/YYYY') AS LastUpdated, P.MODIFIED_BY AS ModifiedBy FROM PROJECT P WHERE P.PROJECT_ID = ?";
