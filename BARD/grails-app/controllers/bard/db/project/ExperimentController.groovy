@@ -301,18 +301,19 @@ class ExperimentController {
 
 
             final Assay assay = experiment.assay
-            if (assay.assayStatus != AssayStatus.APPROVED) {
-               String errorMessage = "The assay definition (ADID:${assay.id} for this experiment must be marked Approved before this experiment can be marked Approved."
-                render(status: HttpServletResponse.SC_BAD_REQUEST, text:
-                        errorMessage, contentType: 'text/plain', template: null)
-                return
+            if (experimentStatus == ExperimentStatus.APPROVED) {//if experiment status is approved then assay status must be approved
+                if (assay.assayStatus != AssayStatus.APPROVED) {
+                    String errorMessage = "The assay definition (ADID:${assay.id} for this experiment must be marked Approved before this experiment can be marked Approved."
+                    render(status: HttpServletResponse.SC_BAD_REQUEST, text:
+                            errorMessage, contentType: 'text/plain', template: null)
+                    return
+                }
+                if (!experiment.measuresHaveAtLeastOnePriorityElement()) {
+                    render(status: HttpServletResponse.SC_BAD_REQUEST, text: "You must designate at least one result type as a priority element before this experiment can be marked as approved.",
+                            contentType: 'text/plain', template: null)
+                    return
+                }
             }
-            if (!experiment.measuresHaveAtLeastOnePriorityElement()) {
-                render(status: HttpServletResponse.SC_BAD_REQUEST, text: "You must designate at least one result type as a priority element before this experiment can be marked as approved.",
-                        contentType: 'text/plain', template: null)
-                return
-            }
-
 
             experiment = experimentService.updateExperimentStatus(inlineEditableCommand.pk, experimentStatus)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, experiment.experimentStatus.id)
