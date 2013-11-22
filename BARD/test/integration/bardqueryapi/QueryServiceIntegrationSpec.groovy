@@ -6,7 +6,6 @@ import bard.core.adapter.ProjectAdapter
 import bard.core.interfaces.AssayCategory
 import bard.core.interfaces.AssayRole
 import bard.core.interfaces.AssayType
-import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.db.audit.BardContextUtils
@@ -15,7 +14,6 @@ import grails.plugin.spock.IntegrationSpec
 import grails.plugins.springsecurity.SpringSecurityService
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.SessionFactory
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 
