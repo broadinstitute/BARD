@@ -5,17 +5,20 @@ import bard.db.dictionary.Element
 import bard.db.dictionary.ElementStatus as ELS
 import bard.db.enums.AssayStatus as AS
 import bard.db.enums.ExperimentStatus as EXS
+import bard.db.enums.ProjectStatus
 import bard.db.enums.ProjectStatus as PS
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
 import bard.db.project.Project
+import bard.db.project.ProjectSingleExperiment
 import bard.db.registration.Assay
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.SessionFactory
 import spock.lang.Unroll
 
+import static bard.db.enums.ReadyForExtraction.COMPLETE
 import static bard.db.enums.ReadyForExtraction.NOT_READY
 import static bard.db.enums.ReadyForExtraction.READY
 
@@ -92,13 +95,52 @@ class ReadyForExtractFlushListenerIntegrationSpec extends IntegrationSpec {
         ownerEntity.readyForExtraction == NOT_READY
 
         where:
-        desc                      | ownerClosure           | initialRFE | statusField        | statusToTest   | fieldToModify
-        'Assay with status '      | { Assay.build() }      | NOT_READY  | 'assayStatus'      | AS.APPROVED    | 'assayName'
-        'Assay with status '      | { Assay.build() }      | NOT_READY  | 'assayStatus'      | AS.RETIRED     | 'assayName'
-        'Experiment with status ' | { Experiment.build() } | NOT_READY  | 'experimentStatus' | EXS.APPROVED   | 'description'
-        'Experiment with status ' | { Experiment.build() } | NOT_READY  | 'experimentStatus' | EXS.RETIRED    | 'description'
-        'Project with status '    | { Project.build() }    | NOT_READY  | 'projectStatus'    | PS.APPROVED    | 'description'
-        'Project with status '    | { Project.build() }    | NOT_READY  | 'projectStatus'    | PS.RETIRED     | 'description'
+        desc                      | ownerClosure           | initialRFE | statusField        | statusToTest | fieldToModify
+        'Assay with status '      | { Assay.build() }      | NOT_READY  | 'assayStatus'      | AS.APPROVED  | 'assayName'
+        'Assay with status '      | { Assay.build() }      | NOT_READY  | 'assayStatus'      | AS.RETIRED   | 'assayName'
+        'Experiment with status ' | { Experiment.build() } | NOT_READY  | 'experimentStatus' | EXS.APPROVED | 'description'
+        'Experiment with status ' | { Experiment.build() } | NOT_READY  | 'experimentStatus' | EXS.RETIRED  | 'description'
+        'Project with status '    | { Project.build() }    | NOT_READY  | 'projectStatus'    | PS.APPROVED  | 'description'
+        'Project with status '    | { Project.build() }    | NOT_READY  | 'projectStatus'    | PS.RETIRED   | 'description'
+    }
+
+    void "test ready flag for project experiments gets set #desc #statusToTest.id"() {
+        given: 'an owning entity with readyForExtraction: NOT_READY'
+        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'integrationTestUser')
+        SpringSecurityUtils.reauthenticate('integrationTestUser', null)
+        Project project = Project.build(projectStatus: ProjectStatus.APPROVED, readyForExtraction: COMPLETE)
+        Experiment experiment = Experiment.build()
+        ProjectSingleExperiment.build(project: project, experiment: experiment)
+
+        when: 'when flush'
+        sessionFactory.currentSession.flush()
+
+        then: 'verify readyForExtraction due to status'
+        experiment.readyForExtraction == initialRFE
+
+        when: 'modification but status Draft'
+        experiment."${fieldToModify}" += ' a change '
+        sessionFactory.currentSession.flush()
+
+        then: 'still NOT_READY'
+        experiment.readyForExtraction == NOT_READY
+
+
+        when: 'status is not Draft'
+        experiment."${statusField}" = statusToTest
+        experiment."${fieldToModify}" += ' a change '
+        sessionFactory.currentSession.flush()
+
+        then: 'the expect'
+        experiment.readyForExtraction == READY
+        project.readyForExtraction == READY
+
+
+
+        where:
+        desc                      | initialRFE | statusField        | statusToTest | fieldToModify
+        'Experiment with status ' | NOT_READY  | 'experimentStatus' | EXS.APPROVED | 'description'
+        'Experiment with status ' | NOT_READY  | 'experimentStatus' | EXS.RETIRED  | 'description'
     }
 
     void "test Element ready flag #desc"() {
@@ -112,7 +154,7 @@ class ReadyForExtractFlushListenerIntegrationSpec extends IntegrationSpec {
 
         then: 'verify initial readyForExtraction and status'
         ownerEntity.readyForExtraction == READY
-        ownerEntity.elementStatus ==  ELS.Pending
+        ownerEntity.elementStatus == ELS.Pending
 
         when: 'we have a spcific status and a modification'
         ownerEntity.elementStatus = statusToTest
@@ -131,10 +173,10 @@ class ReadyForExtractFlushListenerIntegrationSpec extends IntegrationSpec {
         ownerEntity.readyForExtraction == NOT_READY
 
         where:
-        desc                      | statusToTest
-        'Element with status '    | ELS.Pending
-        'Element with status '    | ELS.Published
-        'Element with status '    | ELS.Deprecated
-        'Element with status '    | ELS.Retired
+        desc                   | statusToTest
+        'Element with status ' | ELS.Pending
+        'Element with status ' | ELS.Published
+        'Element with status ' | ELS.Deprecated
+        'Element with status ' | ELS.Retired
     }
 }
