@@ -66,6 +66,7 @@
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=externalSystem"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=projectDoc"/>
                         <xs:enumeration value="application/json;type=results"/>
+                        <xs:enumeration value="application/vnd.bard.cap+json;type=results"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>

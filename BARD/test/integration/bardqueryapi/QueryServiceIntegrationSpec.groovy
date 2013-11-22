@@ -24,7 +24,6 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
     QueryService queryService
     SpringSecurityService springSecurityService
     SessionFactory sessionFactory
-    ExperimentRestService experimentRestService
 
     @Shared
     List<Long> PIDS = [2]
@@ -151,7 +150,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                    | structureSearchParamsType                 | cid    | skip | top | numberOfCompounds
-        "Super structure search" | StructureSearchParams.Type.Superstructure | 5358   | 0    | 10  | 3
+        "Super structure search" | StructureSearchParams.Type.Superstructure | 237    | 0    | 10  | 3
         "Similarity Search"      | StructureSearchParams.Type.Similarity     | 123606 | 0    | 10  | 1
         "Substructure"           | StructureSearchParams.Type.Substructure   | 237    | 0    | 10  | 10
         "salicylic acid exact"   | StructureSearchParams.Type.Exact          | 338    | 0    | 10  | 1
@@ -198,7 +197,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         where:
         label                            | structureSearchParamsType               | smiles                    | skip | top | numberOfCompounds
         "square planar"                  | StructureSearchParams.Type.Substructure | "F[Po@SP1](Cl)(Br)I"      | 0    | 2   | 0
-        "mixture"                        | StructureSearchParams.Type.Substructure | "c1ccnc1.C1CCCCC1"        | 0    | 2   | 2
+        "mixture"                        | StructureSearchParams.Type.Substructure | "C1=CNC=C1.C2CCCCC2"      | 0    | 2   | 2
         "explicit hydrogens"             | StructureSearchParams.Type.Substructure | "CC[H]"                   | 0    | 2   | 2
         "aromatic"                       | StructureSearchParams.Type.Substructure | "c1ccccc1"                | 0    | 2   | 2
         "triple bond"                    | StructureSearchParams.Type.Substructure | "CC#CCl"                  | 0    | 2   | 1
