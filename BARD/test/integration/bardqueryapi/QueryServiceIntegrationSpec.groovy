@@ -6,7 +6,6 @@ import bard.core.adapter.ProjectAdapter
 import bard.core.interfaces.AssayCategory
 import bard.core.interfaces.AssayRole
 import bard.core.interfaces.AssayType
-import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.db.audit.BardContextUtils
@@ -321,7 +320,6 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         "Single ADID"                 | [25]
         "Search with a list of ADIDs" | [25, 26, 27]
     }
-
     void "test find Projects By Text Search #label"() {
         when: ""
         Map projectAdapterMap = queryService.findProjectsByTextSearch(searchString, top, skip, filters)
@@ -334,7 +332,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         where:
         label                | searchString                  | skip | top | filters
         "dna repair"         | "\"Scavenger\""               | 0    | 10  | []
-        "biological process" | "kegg_disease_cat:\"Cancer\"" | 0    | 10  | []
+       // "biological process" | "kegg_disease_cat:\"Cancer\"" | 0    | 10  | []
     }
 
     void "test find Projects Cap Ids #label"() {
