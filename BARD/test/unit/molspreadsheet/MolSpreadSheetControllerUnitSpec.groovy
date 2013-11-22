@@ -220,7 +220,7 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
     void "test probeSarTable for #label"() {
 
         when:
-        controller.probeSarTable(pid, cid, transpose, showOnlyActive, threshold)
+        controller.probeSarTable(pid, cid, transpose, threshold)
 
         then:
         1 * queryService.structureSearch(cid, StructureSearchParams.Type.Similarity, threshold, [], _ as Integer, _ as Integer, _ as Integer) >> {
@@ -236,21 +236,20 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         model.cid == exptCids
         model.pid == pid
         model.transpose == transpose
-        model.showActive == showOnlyActive
 
         where:
-        label                 | pid | cid | transpose | showOnlyActive | threshold | searchResults | exptCids
-        "valid ids"           | 100 | 555 | false     | false          | 0.9       | [500,555,600] | [555,500,600]
-        "transpose true"      | 100 | 555 | true      | false          | 0.9       | [500,555,600] | [555,500,600]
-        "showOnlyActive true" | 100 | 555 | false     | true           | 0.9       | [500,555,600] | [555,500,600]
-        "transpose and active"| 100 | 555 | true      | true           | 0.9       | [500,555,600] | [555,500,600]
-        "null pid"            | null| 555 | false     | false          | 0.9       | [500,555,600] | [555,500,600]
+        label                 | pid | cid | transpose | threshold | searchResults | exptCids
+        "valid ids"           | 100 | 555 | false     | 0.9       | [500,555,600] | [555,500,600]
+        "transpose true"      | 100 | 555 | true      | 0.9       | [500,555,600] | [555,500,600]
+        "showOnlyActive true" | 100 | 555 | false     | 0.9       | [500,555,600] | [555,500,600]
+        "transpose and active"| 100 | 555 | true      | 0.9       | [500,555,600] | [555,500,600]
+        "null pid"            | null| 555 | false     | 0.9       | [500,555,600] | [555,500,600]
     }
 
     void "test probeSarTable errors for #label"() {
 
         when:
-        controller.probeSarTable(pid, cid, transpose, showOnlyActive, threshold)
+        controller.probeSarTable(pid, cid, transpose, threshold)
 
         then:
         0 * _._
@@ -258,9 +257,9 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         view == null
 
         where:
-        label                 | pid | cid | transpose | showOnlyActive | threshold | searchResults | exptCids
-        "null cid"            | 100 | null| false     | false          | 0.9       | [] | []
-        "null pid and cid"    | null| null| false     | false          | 0.9       | [] | []
+        label                 | pid | cid | transpose | threshold | searchResults | exptCids
+        "null cid"            | 100 | null| false     | 0.9       | [] | []
+        "null pid and cid"    | null| null| false     | 0.9       | [] | []
     }
 
     void "test list, which we will one day use when sorting"() {

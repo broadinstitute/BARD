@@ -90,9 +90,14 @@
                                                             class="projectTooltip"
                                                             rel="tooltip"
                                                             data-original-title="">Show Experimental Details</g:link></li>
-                                                <li><g:link controller="molSpreadSheet" action="probeSarTable"
-                                                            params="[cid: probe.cid, pid: projectAdapter.id, transpose: false, showOnlyActive: false, threshold: 0.90]">
-                                                    Show SAR Table for Compounds Similar to Probe</g:link></li>
+                                                <li><g:form class="form-inline" controller="molSpreadSheet" action="probeSarTable" params="[cid: probe.cid, pid: projectAdapter.id, transpose: false]">
+                                                    <g:submitButton name="Show results" class="btn btn-link"/>
+                                                    for similar compounds tested in this project using
+                                                    <div class="input-append">
+                                                        <g:field class="input-mini" name="threshold" value="90" type="number" min="0" max="100" step="1" size="4" maxlength="3" required="required"/>
+                                                        <span class="add-on">%</span>
+                                                    </div> tanimoto
+                                                </g:form></li>
                                             </ul>
                                         </div>
                                     </div>
