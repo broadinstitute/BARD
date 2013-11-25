@@ -66,6 +66,7 @@
                     <g:radio disabled="${disabledInput}" name="valueConstraintType" id="valueConstraintList"
                              value="List"
                              checked="${instance.valueConstraintType == 'List'}"/> Should be selected from a list of acceptable values specified below
+                            <br/><strong>NOTE:</strong> List items are added and deleted one at a time.  Items with same attribute are grouped into a list.
                 </label>
 
                 <label class="radio" id="valueConstraintRangeContainer">
@@ -214,7 +215,7 @@
                 code="contextItem.valueDisplay.label"/>:</label>
 
         <div class="controls">
-            <g:textField class="valueField" id="valueDisplay" name="valueDisplay"
+            <g:textField class="valueField span11" id="valueDisplay" name="valueDisplay"
                          value="${instance?.valueDisplay}"
                          disabled="${disabledInput}"/>
             <span class="help-inline"><g:fieldError field="valueDisplay" bean="${instance}"/></span>
