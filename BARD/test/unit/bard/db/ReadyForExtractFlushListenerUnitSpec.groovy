@@ -4,11 +4,14 @@ import bard.db.dictionary.Element
 import bard.db.dictionary.ElementHierarchy
 import bard.db.dictionary.Ontology
 import bard.db.dictionary.OntologyItem
+import bard.db.enums.ExperimentStatus
+import bard.db.enums.ProjectStatus
 import bard.db.experiment.*
 import bard.db.project.*
 import bard.db.registration.*
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -107,11 +110,39 @@ class ReadyForExtractFlushListenerUnitSpec extends Specification {
         "ProjectDocument"              | { project -> ProjectDocument.build(project: project) }
         "ExternalReference"            | { project -> ExternalReference.build(project: project) }
         "ExternalSystem"               | { project -> ExternalSystem.build(externalReferences: [ExternalReference.build(project: project)]) }
-        "ProjectSingleExperiment"            | { project -> ProjectSingleExperiment.build(project: project) }
+        "ProjectSingleExperiment"      | { project -> ProjectSingleExperiment.build(project: project) }
         "ProjectExperimentContext"     | { project -> ProjectExperimentContext.build(projectExperiment: ProjectSingleExperiment.build(project: project)) }
         "ProjectExperimentContextItem" | { project -> ProjectExperimentContextItem.build(context: ProjectExperimentContext.build(projectExperiment: ProjectSingleExperiment.build(project: project))) }
         "ProjectStep next"             | { project -> buildStep(ProjectSingleExperiment.build(project: project), ProjectSingleExperiment.build(project: project)) }
         "ProjectStep prev"             | { project -> buildStep(ProjectSingleExperiment.build(project: project), ProjectSingleExperiment.build(project: project)) }
+    }
+
+    def 'test experiment with projects setting ready for extract for #description'() {
+        setup:
+        Project projectx = Project.build(projectStatus: ProjectStatus.APPROVED)
+        Experiment experiment1 = Experiment.build()
+        Experiment experiment2 = Experiment.build()
+
+        buildStep(ProjectSingleExperiment.build(project: projectx, experiment: experiment1), ProjectSingleExperiment.build(project: projectx, experiment: experiment2))
+
+        when:
+        experiment1.experimentStatus = ExperimentStatus.APPROVED
+        def impacted = new HashSet(ReadyForExtractFlushListener.getObjectsImpactedByChange(experiment1))
+
+        then:
+        boolean isExperiment = false
+        boolean isProject = false
+        impacted.size() == 2
+        impacted.each {
+            if (it instanceof Project) {
+                isProject = true
+            }
+            if (it instanceof Experiment) {
+                isExperiment = true
+            }
+        }
+        assert isExperiment
+        assert isProject
     }
 
     ProjectStep buildStep(ProjectSingleExperiment next, ProjectSingleExperiment prev) {
