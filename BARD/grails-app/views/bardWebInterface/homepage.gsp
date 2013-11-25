@@ -168,7 +168,7 @@
 </g:if>
 
 %{--This is the main carousel, with three big pictures and associated buttons--}%
-<div class="articles-gallery slide" id="articles-gallery" data-interval="false">
+<div class="articles-gallery slide" id="articles-gallery">
     <a href="#articles-gallery" class="btn-prev" data-slide="prev">Previous</a>
     <a href="#articles-gallery" class="btn-next" data-slide="next">Next</a>
 
@@ -296,6 +296,10 @@
 <g:render template="/layouts/templates/footer"/>
 
 </div>
+<script> var $ = jQuery.noConflict(); $(document).ready(function()
+{ $('#articles-gallery').carousel({ interval: 10000, cycle: true }); });
+
+</script>
 <r:layoutResources/>
 </body>
 </html>

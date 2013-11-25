@@ -48,7 +48,11 @@ $(document).ready(function () {
             var form = jqForm[0];
             var nameValue = form.cardName.value;
             if (!nameValue || 0 === nameValue || (/^\s*$/).test(nameValue)) {
-                alert("Name field is required and cannot be empty");
+                alert("Name field is required and cannot be empty.");
+                return false;
+            }
+            else if(nameValue.length > 128){
+                alert("The name entered is too long (" + nameValue.length + " chars). Max is 128 chars");
                 return false;
             }
             else {

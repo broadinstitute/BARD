@@ -118,10 +118,20 @@ class ReadyForExtractFlushListener implements FlushEventListener, PostInsertEven
             return new ArrayList(((Ontology) entity).ontologyItems.collect { it.element })
         } else {
             Object owningEntity = getOwningObject(entity)
-            if (owningEntity != null)
-                return [owningEntity]
-            else
-                return []
+            List owningEntities = []
+            if (owningEntity != null) {
+                owningEntities.add(owningEntity)
+                if (owningEntity instanceof Experiment) {
+                    //get all of the projects that references this experiment
+                    Experiment experiment = (Experiment) owningEntity
+                    final Set<ProjectSingleExperiment> projectSingleExperiments = experiment.projectExperiments
+                    for (ProjectExperiment projectSingleExperiment : projectSingleExperiments) {
+                        owningEntities.add(projectSingleExperiment.project)
+                    }
+                }
+                return owningEntities
+            }
+            return owningEntities
         }
     }
 

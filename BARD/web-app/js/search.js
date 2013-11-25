@@ -99,7 +99,23 @@ $(document).ready(function () {
     $('#searchForm').submit(function (event) {
         event.preventDefault();	// prevent the default action behaviour to happen
         var searchString = $("#searchString").val();
-        handleMainFormSubmit(searchString, getHashedTabAnchor(), getHashedPageOffset());
+        var oldSearchString =  window.location.search;
+        var hashedTab = getHashedTabAnchor();
+        var hashedPageOffset = getHashedPageOffset();
+        if(oldSearchString){
+            var decodedOldSearchString =  decodeURIComponent(oldSearchString.replace("?searchString=", ""));
+            if(decodedOldSearchString != searchString){
+                window.location.hash = $('#resultTabUL li[class="active"] a[data-toggle="tab"]').attr('href');
+                window.location.search = "?searchString=" + encodeURIComponent(searchString);
+                handleMainFormSubmit(searchString, hashedTab, null);
+            }
+            else{
+                handleMainFormSubmit(searchString, hashedTab, hashedPageOffset);
+            }
+        }
+        else{
+            handleMainFormSubmit(searchString, hashedTab, hashedPageOffset);
+        }
         return false; //do not submit form the normal way, use Ajax instead
 
     });

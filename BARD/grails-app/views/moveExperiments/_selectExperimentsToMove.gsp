@@ -2,6 +2,10 @@
 <div class="container">
     <div>
         <h2>(${moveExperimentsCommand.experiments?.size()}) Experiments found - choose which ones to move</h2>
+
+        <g:if test="${warningMessage}">
+            <h4>${warningMessage}</h4>
+        </g:if>
     </div>
 
     <div class="row">

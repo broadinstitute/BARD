@@ -16,7 +16,7 @@ class BardEditorRegistrar implements PropertyEditorRegistrar {
 
     public void registerCustomEditors(PropertyEditorRegistry registry) {
         // We want all strings to be trimmed
-        registry.registerCustomEditor(String.class, new StringTrimmerEditor(false));
+     //   registry.registerCustomEditor(String.class, new StringTrimmerEditor(false));
         registry.registerCustomEditor(Role.class, new RoleEditor())
     }
 }

@@ -5,20 +5,25 @@ import bard.core.rest.spring.biology.BiologyEntity
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
-class BiologyRestService  extends AbstractRestService  {
+class BiologyRestService extends AbstractRestService {
     def transactional = false
+
     public String getResourceContext() {
         return RestApiConstants.BIOLOGY_RESOURCE;
     }
 
     public List<BiologyEntity> convertBiologyId(final List<Long> bids) {
-        if (bids) {
-            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-            map.add("bids", bids.join(","));
-            final String urlString = buildURLToBiologyData(true)
-            final URL url = new URL(urlString)
-            final List<BiologyEntity> biologyEntityList = this.postForObject(url.toURI(), BiologyEntity[].class, map) as List<BiologyEntity>;
-            return biologyEntityList
+        try {
+            if (bids) {
+                MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+                map.add("bids", bids.join(","));
+                final String urlString = buildURLToBiologyData(true)
+                final URL url = new URL(urlString)
+                final List<BiologyEntity> biologyEntityList = this.postForObject(url.toURI(), BiologyEntity[].class, map) as List<BiologyEntity>;
+                return biologyEntityList
+            }
+        } catch (Exception ee) {
+            log.error(ee,ee)
         }
         return null
 
@@ -26,7 +31,7 @@ class BiologyRestService  extends AbstractRestService  {
 
 
     String buildURLToBiologyData(Boolean expand) {
-        final StringBuilder resource =  new StringBuilder(getResource())
+        final StringBuilder resource = new StringBuilder(getResource())
 
         if (expand) {
             resource.append(RestApiConstants.QUESTION_MARK)
@@ -58,8 +63,6 @@ class BiologyRestService  extends AbstractRestService  {
                 append(RestApiConstants.FORWARD_SLASH)).
                 toString();
     }
-
-
 
 
 }
