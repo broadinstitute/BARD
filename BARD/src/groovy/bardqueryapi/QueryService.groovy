@@ -50,18 +50,23 @@ class QueryService implements IQueryService {
         Collection<Value> facets = []
         int nhits = 0
         String eTag = null
-        if (cids) {
+        try {
+            if (cids) {
 
-            final SearchParams searchParams = this.queryHelperService.constructSearchParams("", top, skip, searchFilters)
-            //do the search
-            CompoundResult compoundResult = compoundRestService.searchCompoundsByCids(cids, searchParams)
+                final SearchParams searchParams = this.queryHelperService.constructSearchParams("", top, skip, searchFilters)
+                //do the search
+                CompoundResult compoundResult = compoundRestService.searchCompoundsByCids(cids, searchParams)
 
-            //convert to adapters
-            foundCompoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compoundResult))
-            facets = compoundResult.getFacetsToValues()
-            nhits = compoundResult.numberOfHits
-            eTag = compoundResult.etag
+                //convert to adapters
+                foundCompoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compoundResult))
+                facets = compoundResult.getFacetsToValues()
+                nhits = compoundResult.numberOfHits
+                eTag = compoundResult.etag
+            }
+        } catch (Exception ee) {
+            log.error(ee, ee)
         }
+
         return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
     /**
@@ -322,7 +327,7 @@ class QueryService implements IQueryService {
                     eTag = compoundResult.etag
                 }
             } catch (Exception ee) {
-                log.error(ee,ee)
+                log.error(ee, ee)
             }
         }
         int nhits = compoundAdapters.size()

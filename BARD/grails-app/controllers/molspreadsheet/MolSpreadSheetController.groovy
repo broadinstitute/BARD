@@ -1,5 +1,8 @@
 package molspreadsheet
+
+import bard.core.rest.spring.util.StructureSearchParams
 import bardqueryapi.BardUtilitiesService
+import bardqueryapi.IQueryService
 import bardqueryapi.InetAddressUtil
 import de.andreasschmitt.export.ExportService
 import org.codehaus.groovy.grails.commons.GrailsApplication
@@ -15,9 +18,11 @@ class MolSpreadSheetController {
     GrailsApplication grailsApplication  //inject GrailsApplication
     RetainSpreadsheetService retainSpreadsheetService
     BardUtilitiesService bardUtilitiesService
+    IQueryService queryService
+
 
     def index() {
-        render(view: 'molecularSpreadSheet', model: [transpose: params.transpose, norefresh: params.norefresh, ChangeNorm: params.ChangeNorm, cid: params.cid, showActive: params.showActive] )
+        render(view: 'molecularSpreadSheet', model: [transpose: params.transpose, norefresh: params.norefresh, ChangeNorm: params.ChangeNorm, cid: params.cid, pid: params.pid, showActive: params.showActive] )
     }
 
     def showExperimentDetails(Long pid, Long cid, Boolean transpose, Boolean showActive) {
@@ -36,9 +41,9 @@ class MolSpreadSheetController {
             List<Long> pids = []
             List<Long> adids = []
             if (params.cid || params.pid || params.adid) {
-                cids = params.cid ? [new Long(params.cid)] : []
-                pids = params.pid ? [new Long(params.pid)] : []
-                adids = params.adid ? [new Long(params.adid)] : []
+                cids = params.cid ? params.list('cid').collect {String it -> it.toLong()} : []
+                pids = params.pid ? [params.pid.toLong()] : []
+                adids = params.adid ? [params.adid.toLong()] : []
             }
             else if (queryCartService.weHaveEnoughDataToMakeASpreadsheet()) {
                 cids = queryCartService.retrieveCartCompoundIdsFromShoppingCart()
@@ -78,6 +83,24 @@ class MolSpreadSheetController {
                     "${flash.message}")
         }
 
+    }
+
+    def probeSarTable(Long pid, Long cid, Boolean transpose, Double threshold) {
+        if (!cid) {
+            String errorMessage = "A non-empty CID parameter is required to generate this spreadsheet"
+            flash.message = errorMessage
+            return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "${flash.message}")
+        }
+        if (threshold > 1) {
+            threshold = threshold/100
+        }
+        Map resultMap = queryService.structureSearch(cid.intValue(), StructureSearchParams.Type.Similarity, threshold, [], 40, 0, -1)
+        List<Long> cidList = resultMap.compoundAdapters*.getId()
+        // put the probe CID first in the spreadsheet
+        cidList.remove(cid)
+        cidList.add(0,cid)
+        render(view: 'molecularSpreadSheet', model: [cid: cidList, pid: pid, transpose: transpose])
     }
 
     def list = {
