@@ -111,6 +111,7 @@ rememberme.key = 'bard_crowd_remember_me_2'
 rememberme.cookieName = 'bard_crowd_remember_me_cookie_2'
 
 bard.home.page = "http://localhost:8080/${appName}"
+bard.showStackTraceOnErrorPage = true;
 
 // this should get overwritten by
 bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
