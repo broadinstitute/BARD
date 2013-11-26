@@ -237,7 +237,7 @@ class PanelController {
 
 
     def show() {
-        if (StringUtils.isNumeric(params.id)) {
+        if (StringUtils.isNumeric(params.id?.toString())) {
             Panel panelInstance = Panel.get(new Long(params.id))
 
             if (!panelInstance) {
