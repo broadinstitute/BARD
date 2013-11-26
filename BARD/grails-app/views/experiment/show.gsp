@@ -378,8 +378,10 @@
                     <g:else>
                         <h4>Results for this experiment aren't available for querying because this experiment has a Draft status and needs to be approved</h4>
                     </g:else>
-                    <g:link controller="bardWebInterface" action="previewResults"
-                            id="${instance?.id}"><h4>Preview results</h4></g:link>
+                    <g:if test="${editable == 'canedit'}">
+                        <g:link controller="bardWebInterface" action="previewResults"
+                                id="${instance?.id}"><h4>Preview results</h4></g:link>
+                    </g:if>
                 </g:else>
 
             </div>
