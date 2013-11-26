@@ -95,27 +95,37 @@ class BardWebInterfaceController {
     }
 
     def index() {
+        render(view: 'homepage')
+    }
+
+    def bardIsGrowing() {
         //Add model
-        final List<Assay> recentlyAddedAssays = queryService.findRecentlyAddedAssays(6)
-        final List<bard.core.rest.spring.project.Project> recentlyAddedProjects = queryService.findRecentlyAddedProjects(6)
 
-        final List<ExperimentSearch> recentlyAddedExperiments = queryService.findRecentlyAddedExperiments(6)
+        try {
+            final List<Assay> recentlyAddedAssays = queryService.findRecentlyAddedAssays(6)
+            final List<bard.core.rest.spring.project.Project> recentlyAddedProjects = queryService.findRecentlyAddedProjects(6)
 
-        //link to all probes
-        final List<Long> probeProjectIds = queryService.findAllProbeProjects()
-        final Map probeCompoundMap = queryService.findAllProbeCompounds()
-        long numberOfExperimentData = queryService.numberOfExperimentData()
-        render(view: 'homepage', model:
-                [
-                        recentlyAddedAssays: recentlyAddedAssays,
-                        numberOfExperimentData: numberOfExperimentData,
-                        recentlyAddedProjects: recentlyAddedProjects,
-                        recentlyAddedExperiments: recentlyAddedExperiments,
-                        probeProjectIds: probeProjectIds,
-                        probeCompoundMap: probeCompoundMap
+            final List<ExperimentSearch> recentlyAddedExperiments = queryService.findRecentlyAddedExperiments(6)
 
-                ]
-        )
+            //link to all probes
+            final List<Long> probeProjectIds = queryService.findAllProbeProjects()
+            final Map probeCompoundMap = queryService.findAllProbeCompounds()
+            long numberOfExperimentData = queryService.numberOfExperimentData()
+            render(template: 'bardIsGrowing', model:
+                    [
+                            recentlyAddedAssays: recentlyAddedAssays,
+                            numberOfExperimentData: numberOfExperimentData,
+                            recentlyAddedProjects: recentlyAddedProjects,
+                            recentlyAddedExperiments: recentlyAddedExperiments,
+                            probeProjectIds: probeProjectIds,
+                            probeCompoundMap: probeCompoundMap
+
+                    ]
+            )
+        } catch (Exception ee) {
+            log.warn(ee, ee)
+            render(template: '../layouts/templates/restapiunavailable')
+        }
     }
 
     def redirectToIndex() {
