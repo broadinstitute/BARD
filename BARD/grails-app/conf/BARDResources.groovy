@@ -62,6 +62,7 @@ modules = {
         resource url: '/css/bardHomepage/BardHomepage.css'
         resource url: "css/bardHomepage/footer.css"
         resource url: "css/bardHomepage/searchBox.css"
+        resource url: '/js/bardIsGrowing.js'
         resource url: '/js/errorReporting.js'
         resource url: '/js/idSearchDialog.js'
     }
