@@ -326,8 +326,7 @@ input:-ms-input-placeholder{color:#000;}
 
 @media only screen and (max-width: 767px) {
     body {
-        padding-left: 0;
-        padding-right: 0;
+        padding: 0;
     }
     .qcart {
         display: inline;

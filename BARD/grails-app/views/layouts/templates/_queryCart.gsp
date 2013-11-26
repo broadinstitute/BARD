@@ -1,15 +1,9 @@
 <r:require module="cart"/>
 <style>
-
 .querycartholder {
-    background: transparent;
     padding-top: 15px;
-    min-width: 300px;
 }
-.popupQueryCartPanel {
-    text-align: left;
-}
-@media only screen and (max-width: 1100px){
+@media only screen and (max-width: 1105px){
     .querycartholder {
         padding-top: 55px;
     }
@@ -24,7 +18,6 @@
         margin-top: 3px;
     }
     .social-networks{float:none}
-    .basic-social-networks{float:none}
 }
 @media only screen and (max-width: 767px){
     body{padding:0;}
@@ -35,15 +28,6 @@
         font-size: 12px;
         line-height:16px;
         padding: 3px;
-        padding-top: 1px;
-        padding-bottom: 1px;
-    }
-}
-@media only screen and (max-width: 497px){
-    .my-bard-button {
-        font-size: 12px;
-        line-height:16px;
-        padding-right: 3px;
         padding-top: 1px;
         padding-bottom: 1px;
     }

@@ -13,28 +13,6 @@
     <%@ page import="bardqueryapi.IDSearchType" %>
     <r:layoutResources/>
     <ga:trackPageview/>
-    <style>
-.basic-social-networks{
-    float:right;
-    margin:-6px -12px 0 0;
-    list-style:none;
-}
-
-.basic-social-networks li{
-    float:left;
-    margin:0 0 0 4px;
-}
-
-.basic-social-networks a{
-    display:block;
-    width:16px;
-    height:16px;
-    text-indent:-9999px;
-    overflow:hidden;
-    background:url('../../images/bardHomepage/sprite.png') no-repeat;
-}
-.basic-social-networks .google{background-position:-18px 0;}
-    </style>
 </head>
 
 <body>
@@ -71,14 +49,14 @@
                     <div class="search-block left-aligned">
                         <g:render template="/layouts/templates/searchBlock"/>
                     </div>
-                    <div class="share-block basic-social-networks">
+                    <div class="share-block social-networks">
                         <g:render template="/layouts/templates/socialMedia"/>
                     </div>
                 </div>
 
                 <div class="span2"></div>
                     <nav class="nav-panel" style="min-width: 150px; ">
-                        <div class="right-aligned" style="min-width: 300px;">
+                        <div class="right-aligned">
                             <g:render template="/layouts/templates/loginStrip"/>
                         </div>
                         <div class="right-aligned">
@@ -91,7 +69,6 @@
                             </div>
                         </sec:ifLoggedIn>
 
-                        %{--<div class="navbar right-aligned visible-desktop visible-tablet">--}%
                         <div class="navbar right-aligned hidden-phone">
                             <ul class="nav">
                                 <g:render template="/layouts/templates/howtolinks"/>

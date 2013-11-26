@@ -1,11 +1,10 @@
 <r:require modules="autocomplete"/>
-<g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form"
-        style="border:1px solid rgba(244, 244, 244, 0.2); background:rgba(228, 228, 228, 0.2);">
+<g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form" style="border:1px solid rgba(244, 244, 244, 0.2); background:rgba(228, 228, 228, 0.2);">
 %{-- .search-field is styled as "display: table" so make sure the children are styled with "display: table-row" and grandchildren with "display: table-cell" --}%
     <div class="search-box">
         <div class="search-box-row">
             <div class="search-box-search-subbuttons" style="width: 130px">
-                <div style="display: inline-block; width: 74px" %{--class="search-box-search-subbuttons" %{--style="width:74px"--}%>
+                <div style="display: inline-block; width: 74px">
                     <g:link controller="bardWebInterface" action="jsDrawEditor">
                         <img id="struct_icon" src="${resource(dir: 'images/bardHomepage', file: 'struct_icon.png')}"
                              onmouseover="this.src = '${resource(dir: 'images/bardHomepage', file: 'struct_icon_bright.png')}'"
@@ -15,7 +14,7 @@
                     </g:link>
                 </div>
 
-                <div style="display: inline-block; width: 51px" %{--class="search-box-search-subbuttons" %{--style="width:44px"--}%>
+                <div style="display: inline-block; width: 51px">
                     <img id="ids_icon" src="${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}"
                          onmouseover="this.src = '${resource(dir: 'images/bardHomepage', file: 'ids_icon_bright.png')}'"
                          onmouseout="this.src = '${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}'"
