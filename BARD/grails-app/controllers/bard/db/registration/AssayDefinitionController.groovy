@@ -16,6 +16,7 @@ import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import grails.validation.ValidationException
 import groovy.transform.InheritConstructors
+import org.apache.commons.lang.StringUtils
 import org.apache.commons.lang3.tuple.Pair
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
@@ -321,33 +322,39 @@ class AssayDefinitionController {
 
 
     def show() {
-        def assayInstance = Assay.get(params.id)
 
-        if (!assayInstance) {
-            def messageStr = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
-            return [message: messageStr]
-        }        // sanity check the context items
-        for (context in assayInstance.assayContexts) {
-            assert context.id != null
-            for (item in context.contextItems) {
-                if (item?.id == null) {
-                    throw new RuntimeException("Context ${context.id} missing context item.  Display order probably needs to be updated.")
+        if (StringUtils.isNumeric(params.id.toString())) {
+            def assayInstance = Assay.get(params.id)
+
+            if (!assayInstance) {
+                def messageStr = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+                return [message: messageStr]
+            }        // sanity check the context items
+            for (context in assayInstance.assayContexts) {
+                assert context.id != null
+                for (item in context.contextItems) {
+                    if (item?.id == null) {
+                        throw new RuntimeException("Context ${context.id} missing context item.  Display order probably needs to be updated.")
+                    }
                 }
             }
-        }
-        boolean editable = canEdit(permissionEvaluator, springSecurityService, assayInstance)
-        String owner = capPermissionService.getOwner(assayInstance)
+            boolean editable = canEdit(permissionEvaluator, springSecurityService, assayInstance)
+            String owner = capPermissionService.getOwner(assayInstance)
 
-        //TODO: This should get replaced with cache. Get the active vs tested compound counts
-        //grab all of the experiment ids
-        final List<Long> experimentIds = assayInstance.experiments.collect { it.id }
-        Map<Long, Pair<Long, Long>> experimentsActiveVsTested = [:]
-        try {
-            experimentsActiveVsTested = queryService.findActiveVsTestedForExperiments(experimentIds)
-        } catch (Exception ee) {
-            log.error(ee,ee)
+            //TODO: This should get replaced with cache. Get the active vs tested compound counts
+            //grab all of the experiment ids
+            final List<Long> experimentIds = assayInstance.experiments.collect { it.id }
+            Map<Long, Pair<Long, Long>> experimentsActiveVsTested = [:]
+            try {
+                experimentsActiveVsTested = queryService.findActiveVsTestedForExperiments(experimentIds)
+            } catch (Exception ee) {
+                log.error(ee, ee)
+            }
+            return [assayInstance: assayInstance, assayOwner: owner, editable: editable ? 'canedit' : 'cannotedit', experimentsActiveVsTested: experimentsActiveVsTested]
+        } else {
+            String messageStr = "A Valid Assay Definition ID is required"
+            return [message: messageStr]
         }
-        return [assayInstance: assayInstance, assayOwner: owner, editable: editable ? 'canedit' : 'cannotedit', experimentsActiveVsTested: experimentsActiveVsTested]
     }
 
     @Secured(['isAuthenticated()'])

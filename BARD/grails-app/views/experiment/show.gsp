@@ -11,16 +11,7 @@
 </head>
 
 <body>
-<g:hiddenField name="experimentId" id="experimentId" value="${instance.id}"/>
-<div class="row-fluid">
-    <div class="span12">
-        <div class="well well-small">
-            <div class="pull-left">
-                <h4>View Experiment (${instance?.id})</h4>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <g:if test="${flash.message}">
     <div class="row-fluid">
@@ -36,6 +27,16 @@
 </g:if>
 
 <g:if test="${instance?.id}">
+<g:hiddenField name="experimentId" id="experimentId" value="${instance?.id}"/>
+<div class="row-fluid">
+    <div class="span12">
+        <div class="well well-small">
+            <div class="pull-left">
+                <h4>View Experiment (${instance?.id})</h4>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container-fluid">
 <div class="row-fluid">
@@ -93,7 +94,7 @@
                         data-type="select"
                         data-value="${instance?.experimentStatus?.id}"
                         data-source="/BARD/experiment/experimentStatus"
-                        data-pk="${instance.id}"
+                        data-pk="${instance?.id}"
                         data-url="/BARD/experiment/editExperimentStatus"
                         data-original-title="Select Experiment Status">${instance?.experimentStatus?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status"
@@ -109,7 +110,7 @@
                         data-inputclass="input-xxlarge"
                         data-type="textarea"
                         data-value="${instance?.experimentName}"
-                        data-pk="${instance.id}"
+                        data-pk="${instance?.id}"
                         data-url="/BARD/experiment/editExperimentName"
                         data-placeholder="Required"
                         data-original-title="Edit Experiment Name">${instance?.experimentName}</span>
@@ -127,7 +128,7 @@
                             data-inputclass="input-xxlarge"
                             data-type="textarea"
                             data-value="${instance.description}"
-                            data-pk="${instance.id}"
+                            data-pk="${instance?.id}"
                             data-url="/BARD/experiment/editDescription"
                             data-placeholder="Required"
                             data-original-title="Edit Description By">${instance.description}</span>
@@ -146,7 +147,7 @@
                         data-type="select"
                         data-value="${instance?.owner}"
                         data-source="/BARD/assayDefinition/roles"
-                        data-pk="${instance.id}"
+                        data-pk="${instance?.id}"
                         data-url="/BARD/experiment/editOwnerRole"
                         data-placeholder="Required"
                         data-original-title="Select Owner Role">${instance?.owner}</span>
@@ -156,7 +157,7 @@
             <g:if test="${editable == 'canedit'}">
                 <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
                 <dd>
-                    <span class="rfddate" id="rfd" data-type="combodate" data-pk="${instance.id}"
+                    <span class="rfddate" id="rfd" data-type="combodate" data-pk="${instance?.id}"
                           data-url="/BARD/experiment/editRunFromDate"
                           data-value="${instance.runDateFrom}"
                           data-original-title="Select run from date"
@@ -173,7 +174,7 @@
                 </dd>
                 <dt><g:message code="experiment.runtodate.label" default="Run Date to"/>:</dt>
                 <dd>
-                    <span class="rdtdate" id="rdt" data-type="combodate" data-pk="${instance.id}"
+                    <span class="rdtdate" id="rdt" data-type="combodate" data-pk="${instance?.id}"
                           data-url="/BARD/experiment/editRunToDate"
                           data-value="${instance.runDateTo}"
                           data-original-title="Select run to date"
@@ -203,13 +204,13 @@
                   model="[experiment: instance, excludedLinks: ['experiment.show']]"/>
         <sec:ifLoggedIn>
             <g:link controller="results" action="configureTemplate"
-                    params="${[experimentId: instance.id]}"
+                    params="${[experimentId: instance?.id]}"
                     class="btn">Download a template</g:link>
         </sec:ifLoggedIn>
         <g:if test="${editable == 'canedit'}">
             <a href="#uploadResultsModal" role="button" class="btn"
                data-toggle="modal">Upload results</a>
-            <g:link action="reloadResults" class="btn" id="${instance.id}">Reload Results from Pubchem</g:link>
+            <g:link action="reloadResults" class="btn" id="${instance?.id}">Reload Results from Pubchem</g:link>
         </g:if>
 
     <%-- Dialog for uploading results --%>
@@ -226,7 +227,7 @@
                     <p>Uploading results will replace any results already stored for this experiment.</p>
 
                     <p>Select a file to upload</p>
-                    <input type="hidden" name="experimentId" value="${instance.id}">
+                    <input type="hidden" name="experimentId" value="${instance?.id}">
                     <input type="file" name="resultsFile">
                 </form>
             </div>
@@ -307,7 +308,7 @@
                           existingContextIds: contextIds,
                           displayNonFixedContextsOnly: true,
                           renderEmptyGroups: false,
-                          experimentId: instance.id
+                          experimentId: instance?.id
                   ]"/>
     </div>
     <br/>
@@ -337,9 +338,9 @@
                     <p><b>No result types specified</b></p>
                 </g:else>
 
-                <g:link action="addResultTypes" params="[experimentId: instance.id]" class="btn"><i
+                <g:link action="addResultTypes" params="[experimentId: instance?.id]" class="btn"><i
                         class="icon-plus"></i> Add result type</g:link>
-                <g:link action="addDoseResultTypes" params="[experimentId: instance.id]"
+                <g:link action="addDoseResultTypes" params="[experimentId: instance?.id]"
                         class="btn"><i class="icon-plus"></i> Add dose response result type</g:link>
 
             </g:if>
@@ -362,7 +363,7 @@
             <div class="row-fluid">
                 <g:if test="${instance.ncgcWarehouseId && instance.experimentFiles}">
                     <g:link controller="bardWebInterface" action="showExperiment"
-                            id="${instance.id}"><h4>View all results for this experiment</h4></g:link>
+                            id="${instance?.id}"><h4>View all results for this experiment</h4></g:link>
                 </g:if>
                 <g:elseif test="${!instance.experimentFiles}">
                     <h4>No results uploaded for this experiment</h4>
@@ -378,7 +379,7 @@
                         <h4>Results for this experiment aren't available for querying because this experiment has a Draft status and needs to be approved</h4>
                     </g:else>
                     <g:link controller="bardWebInterface" action="previewResults"
-                            id="${instance.id}"><h4>Preview results</h4></g:link>
+                            id="${instance?.id}"><h4>Preview results</h4></g:link>
                 </g:else>
 
             </div>
@@ -402,6 +403,7 @@
 </div>
 </div>
 </g:if>
+
 
 </body>
 </html>

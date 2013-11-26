@@ -75,23 +75,36 @@ class BardWebInterfaceController {
     }
 
     def previewResults(Long id) {
-
-        Experiment experiment = Experiment.get(id)
-        if (!experiment.experimentFiles) {
-            flash.message = "Experiment does not have result files"
-            redirect(action: "show")
-            return
+        if (id) {
+            Experiment experiment = Experiment.get(id)
+            if (!experiment) {
+                render(view: 'showExperimentalResultsPreview',
+                        model: [tableModel: null,
+                                capExperiment: id,
+                                totalNumOfCmpds: 0])
+                return
+            }
+            if (!experiment.experimentFiles) {
+                flash.message = "Experiment does not have result files"
+                redirect(action: "show")
+                return
+            }
+            int records = 10
+            if (params.records) {
+                records = new Integer(params.records)
+            }
+            final TableModel tableModel = experimentService.previewResults(id, records)
+            //this should do a full page reload
+            render(view: 'showExperimentalResultsPreview',
+                    model: [tableModel: tableModel,
+                            capExperiment: experiment,
+                            totalNumOfCmpds: 0])
+        } else {
+            render(view: 'showExperimentalResultsPreview',
+                    model: [tableModel: null,
+                            capExperiment: null,
+                            totalNumOfCmpds: 0])
         }
-        int records = 10
-        if (params.records) {
-            records = new Integer(params.records)
-        }
-        final TableModel tableModel = experimentService.previewResults(id, records)
-        //this should do a full page reload
-        render(view: 'showExperimentalResultsPreview',
-                model: [tableModel: tableModel,
-                        capExperiment: experiment,
-                        totalNumOfCmpds: 0])
     }
 
     def index() {
@@ -255,13 +268,19 @@ class BardWebInterfaceController {
     }
 
     def retrieveExperimentResultsSummary(Long id, SearchCommand searchCommand) {
-        Experiment experiment = Experiment.get(id)
-        final Long ncgcWarehouseId = experiment.ncgcWarehouseId
-        if (ncgcWarehouseId) {
-            render queryService.histogramDataByEID(ncgcWarehouseId)
-        } else {
-            render(text: "")
+
+        if (id) {
+            Experiment experiment = Experiment.get(id)
+            if (experiment) {
+                final Long ncgcWarehouseId = experiment.ncgcWarehouseId
+                if (ncgcWarehouseId) {
+                    render queryService.histogramDataByEID(ncgcWarehouseId)
+                    return
+                }
+            }
         }
+        render(text: "")
+
     }
 
     def probe(String probeId) {

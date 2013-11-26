@@ -19,6 +19,7 @@ import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
+import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.validation.Errors
@@ -86,34 +87,41 @@ class ExperimentController {
 
     def show() {
 
-        final Experiment experiment = Experiment.get(params.id)
-        if (!experiment) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'experiment.label', default: 'Experiment'), params.id])
-            return
-        }
-
-        final Set<Long> contextIds = new HashSet<Long>()
-        //load the assay context items for this measure
-        for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
-            //load the assay context items for this measure
-            final Set<AssayContextExperimentMeasure> assayContextExperimentMeasures = experimentMeasure.assayContextExperimentMeasures
-            for (AssayContextExperimentMeasure assayContextExperimentMeasure : assayContextExperimentMeasures) {
-
-                contextIds.add(assayContextExperimentMeasure.assayContext.id);
+        if (params.id && StringUtils.isNumeric(params.id.toString())) {
+            final Experiment experiment = Experiment.get(params.id)
+            if (!experiment) {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'experiment.label', default: 'Experiment'), params.id])
+                return
             }
+
+            final Set<Long> contextIds = new HashSet<Long>()
+            //load the assay context items for this measure
+            for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
+                //load the assay context items for this measure
+                final Set<AssayContextExperimentMeasure> assayContextExperimentMeasures = experimentMeasure.assayContextExperimentMeasures
+                for (AssayContextExperimentMeasure assayContextExperimentMeasure : assayContextExperimentMeasures) {
+
+                    contextIds.add(assayContextExperimentMeasure.assayContext.id);
+                }
+            }
+
+            boolean editable = canEdit(permissionEvaluator, springSecurityService, experiment)
+            boolean isAdmin = SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
+            String owner = capPermissionService.getOwner(experiment)
+
+            return [
+                    instance: experiment,
+                    contextIds: contextIds,
+                    experimentOwner: owner,
+                    editable: editable ? 'canedit' : 'cannotedit',
+                    isAdmin: isAdmin
+            ]
+        } else {
+
+            flash.message = "Experiment ID is required!"
+            return
+
         }
-
-        boolean editable = canEdit(permissionEvaluator, springSecurityService, experiment)
-        boolean isAdmin = SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
-        String owner = capPermissionService.getOwner(experiment)
-
-        [
-                instance: experiment,
-                contextIds: contextIds,
-                experimentOwner: owner,
-                editable: editable ? 'canedit' : 'cannotedit',
-                isAdmin: isAdmin
-        ]
     }
 
     @Secured(['isAuthenticated()'])
