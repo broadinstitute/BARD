@@ -1,0 +1,40 @@
+apply plugin: "groovy"
+apply plugin: "idea"
+
+repositories {
+    maven {
+        url(mavenRepoUrl)
+    }
+}
+
+dependencies {
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.2.0'
+    compile group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.5.2'
+    compile group: 'com.oracle', name: 'ojdbc6', version: '11.2.0.2.0'
+    compile "org.apache.commons:commons-lang3:3.1"
+    compile "log4j:log4j:1.2.16"
+//    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+task runScript(dependsOn: 'classes', type: JavaExec) {
+    if (!this.hasProperty("configFile")) {
+        ant.fail("Could not find a configFile parameter. A configFile pointer is needed (e.g., -PconfigFile=<config file name>)")
+    }
+    args = [configFile]
+    main = 'updateBardNews'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task createDirs << {
+    sourceSets*.allSource.srcDirs*.each { dir ->
+        ant.touch(file: new File(dir, ".gitignore"), mkdirs: true)
+    }
+    sourceSets*.resources.srcDirs*.each { dir ->
+        ant.touch(file: new File(dir, ".gitignore"), mkdirs: true)
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "1.8"
+}
+ 

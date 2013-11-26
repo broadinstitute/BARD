@@ -232,13 +232,13 @@ class CompoundBioActivitySummaryBuilder {
                                     title: new PairValue(value: title, dictionaryElement: dictionaryElement),
                                     curveFitParameters: curveFitParameters,
                                     slope: priorityElement.getSlope(),
-                                    responseUnit: concentrationResponseSeries.responseUnit,
-                                    testConcentrationUnit: concentrationResponseSeries.testConcentrationUnit,
+                                    responseUnit: concentrationResponseSeries.responseUnit?:"",
+                                    testConcentrationUnit: concentrationResponseSeries.testConcentrationUnit?:"",
                                     qualifier: priorityElement.qualifier,
                                     yNormMin: yNormMin,
                                     yNormMax: yNormMax)
-                            concentrationResponseSeriesValue.yAxisLabel = concentrationResponseSeriesValue.responseUnit
-                            final String testConcentrationUnit = concentrationResponseSeriesValue.testConcentrationUnit
+                            concentrationResponseSeriesValue.yAxisLabel = concentrationResponseSeriesValue.responseUnit?:""
+                            final String testConcentrationUnit = concentrationResponseSeriesValue.testConcentrationUnit?:""
                             concentrationResponseSeriesValue.xAxisLabel = testConcentrationUnit ? "Concentration (log [${testConcentrationUnit}])" : ""
                             values << concentrationResponseSeriesValue
                         } else {//the result type is a key/value pair

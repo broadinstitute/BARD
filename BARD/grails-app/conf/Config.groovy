@@ -6,10 +6,10 @@ import org.apache.log4j.net.SMTPAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
 
-bard.users.email="bard-users@broadinstitute.org"
-bard.users.mailing.list="https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users"
+bard.users.email = "bard-users@broadinstitute.org"
+bard.users.mailing.list = "https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users"
 
-ncgc.thickclient.root.url="http://bard.nih.gov/bard/"
+ncgc.thickclient.root.url = "http://bard.nih.gov/bard/"
 ncgc.thickclient.compounds.url = "${ncgc.thickclient.root.url}compounds/"
 ncgc.thickclient.etags.url = "${ncgc.thickclient.root.url}etag/"
 
@@ -111,6 +111,7 @@ rememberme.key = 'bard_crowd_remember_me_2'
 rememberme.cookieName = 'bard_crowd_remember_me_cookie_2'
 
 bard.home.page = "http://localhost:8080/${appName}"
+bard.showStackTraceOnErrorPage = true;
 
 // this should get overwritten by
 bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
@@ -122,7 +123,7 @@ grails {
             workerPool {
                 workers = 1
                 queueNames = ['backgroundQueue']
-                jobTypes = [(ReloadResultsJob.simpleName):ReloadResultsJob]
+                jobTypes = [(ReloadResultsJob.simpleName): ReloadResultsJob]
             }
         }
     }
@@ -207,7 +208,7 @@ switch (Environment.current) {
         break;
     default:
         //use basic auth and in memory security services in no-production environments
-        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService',  'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
         break;
 }
 
@@ -282,7 +283,7 @@ google.analytics.webPropertyID = "UA-xxxxxx-x"
 
 /**
  * Whether to include basic auth or not. Headless functional tests, requires basic auth so
-* So run with -Dbard.basic.auth=true
+ * So run with -Dbard.basic.auth=true
  *
  * Note that the default is false
  */
@@ -320,7 +321,7 @@ if (appName) {
             println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
         }
     }
-    if (bard.basic.auth){
+    if (bard.basic.auth) {
         grails.config.locations << "classpath:bard-basic-auth-config.groovy"
     }
 }
@@ -334,50 +335,56 @@ if (System.getProperty("migrationContextsToRun") != null) {
 log4j = {
     appenders {
         try {
-        String baselogDir = grails.util.Environment.warDeployed ? System.getProperty('catalina.home') : 'target'
-        String logDir = "$baselogDir/logs"
-        String defaultPattern = '%d [%t] %-5p %c{1} - %m%n' // see http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html
-        console(name: "stdout", layout: pattern(defaultPattern));
-        appender(new DailyRollingFileAppender(
-                name: "NCGCErrorAppender",
-                file: "$logDir/NCGC_Errors.log",
-                layout: pattern(defaultPattern),
-                immediateFlush: true,
-                datePattern: "'.'yyyy-MM-dd"))
-        appender(new DailyRollingFileAppender(
-                name: "JavaScriptErrorsAppender",
-                file: "$logDir/Client_JavaScript_Errors.log",
-                layout: pattern(defaultPattern),
-                immediateFlush: true,
-                datePattern: "'.'yyyy-MM-dd"))
-        appender(new DailyRollingFileAppender(
-                name: "NCGCRestApiTimingAppender",
-                file: "$logDir/NCGC_StopWatch.log",
-                layout: pattern(defaultPattern),
-                immediateFlush: true,
-                datePattern: "'.'yyyy-MM-dd"))
+            String baselogDir = grails.util.Environment.warDeployed ? System.getProperty('catalina.home') : 'target'
+            String logDir = "$baselogDir/logs"
+            String defaultPattern = '%d [%t] %-5p %c{1} - %m%n' // see http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html
+            console(name: "stdout", layout: pattern(defaultPattern));
+            appender(new DailyRollingFileAppender(
+                    name: "NCGCErrorAppender",
+                    file: "$logDir/NCGC_Errors.log",
+                    layout: pattern(defaultPattern),
+                    immediateFlush: true,
+                    datePattern: "'.'yyyy-MM-dd"))
+            appender(new DailyRollingFileAppender(
+                    name: "AccessDeniedAppender",
+                    file: "$logDir/AccessDenied_Errors.log",
+                    layout: pattern(defaultPattern),
+                    immediateFlush: true,
+                    datePattern: "'.'yyyy-MM-dd"))
+            appender(new DailyRollingFileAppender(
+                    name: "JavaScriptErrorsAppender",
+                    file: "$logDir/Client_JavaScript_Errors.log",
+                    layout: pattern(defaultPattern),
+                    immediateFlush: true,
+                    datePattern: "'.'yyyy-MM-dd"))
+            appender(new DailyRollingFileAppender(
+                    name: "NCGCRestApiTimingAppender",
+                    file: "$logDir/NCGC_StopWatch.log",
+                    layout: pattern(defaultPattern),
+                    immediateFlush: true,
+                    datePattern: "'.'yyyy-MM-dd"))
 
-        appender(new DailyRollingFileAppender(
-                name: "outputFile",
-                file: "$logDir/output.log",
-                layout: pattern(defaultPattern),
-                immediateFlush: true,
-                datePattern: "'.'yyyy-MM-dd"))
+            appender(new DailyRollingFileAppender(
+                    name: "outputFile",
+                    file: "$logDir/output.log",
+                    layout: pattern(defaultPattern),
+                    immediateFlush: true,
+                    datePattern: "'.'yyyy-MM-dd"))
 
-        appender(new SMTPAppender(
-                name: "mail",
-                SMTPPort: config.grails.mail.port,
-                from: config.grails.mail.default.from,
-                to: config.grails.mail.default.to,
-                subject: "[${InetAddress.getLocalHost().getHostName()}] " + config.grails.mail.default.subject,
-                SMTPHost: config.grails.mail.host,
-                layout: pattern(defaultPattern),
-                threshold: org.apache.log4j.Level.ERROR))
+            appender(new SMTPAppender(
+                    name: "mail",
+                    SMTPPort: config.grails.mail.port,
+                    from: config.grails.mail.default.from,
+                    to: config.grails.mail.default.to,
+                    subject: "[${InetAddress.getLocalHost().getHostName()}] " + config.grails.mail.default.subject,
+                    SMTPHost: config.grails.mail.host,
+                    layout: pattern(defaultPattern),
+                    threshold: org.apache.log4j.Level.ERROR))
 
         } catch (Exception ex) {
             // have to write to System.out because System.err appears to _also_ get dropped on the floor
             System.out.println("!!!!!!!!! Got exception trying to set up log4j.  This causes the whole logging config to be messed up, so printing the exception before it gets lost: ${ex}");
-            System.out.println("SMTPAppender ${SMTPAppender.methods.each {it.name}}")
+            System.out.println("SMTPAppender ${SMTPAppender.methods.each { it.name }}")
             throw ex;
         }
     }
@@ -400,6 +407,9 @@ log4j = {
             'net.sf.ehcache.hibernate')
     //Capture errors from the NCGC API (via JDO) but DO NOT send emails about them.
     error(additivity: false, NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService'])
+
+    //Capture errors from AccessDenied Appender do not send email
+    error(additivity: false, AccessDeniedAppender: ['org.springframework.security.access.AccessDeniedException'])
     //Capture JavaScript errors from the client (via the ErrorHandling controller)
     error(additivity: true, JavaScriptErrorsAppender: ['grails.app.controllers.bardqueryapi.ErrorHandlingController'])
     //Capture NCGC REST API roundtrip timing.

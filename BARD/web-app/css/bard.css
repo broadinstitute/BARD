@@ -227,6 +227,15 @@ li label {
     margin-bottom: 0;
 }
 
+li .btn-link {
+    padding: 0;
+    font: inherit;
+}
+
+li form.form-inline {
+    margin: 0;
+}
+
 .facets input[type="submit"] {
     float: right;
 }

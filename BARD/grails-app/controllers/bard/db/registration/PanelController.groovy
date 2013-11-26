@@ -8,6 +8,7 @@ import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
+import org.apache.commons.lang.StringUtils
 import org.springframework.security.access.AccessDeniedException
 
 @Mixin(EditingHelper)
@@ -141,7 +142,7 @@ class PanelController {
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee,ee)
+            log.error(ee, ee)
             editErrorMessage()
         }
     }
@@ -169,11 +170,11 @@ class PanelController {
             generateAndRenderJSONResponse(panel.version, panel.modifiedBy, panel.lastUpdated, panel.name)
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee,ee)
+            log.error(ee, ee)
             editErrorMessage()
         }
     }
@@ -205,7 +206,7 @@ class PanelController {
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee,ee)
+            log.error(ee, ee)
             editErrorMessage()
         }
     }
@@ -236,16 +237,19 @@ class PanelController {
 
 
     def show() {
-        Panel panelInstance = Panel.get(params.id)
+        if (StringUtils.isNumeric(params.id)) {
+            Panel panelInstance = Panel.get(new Long(params.id))
 
-        if (!panelInstance) {
-            def messageStr = message(code: 'default.not.found.message', args: [message(code: 'panel.label', default: 'Panel'), params.id])
-            return [message: messageStr]
+            if (!panelInstance) {
+                def messageStr = message(code: 'default.not.found.message', args: [message(code: 'panel.label', default: 'Panel'), params.id])
+                return [message: messageStr]
+            }
+
+            boolean editable = canEdit(permissionEvaluator, springSecurityService, panelInstance)
+            String owner = panelInstance.getOwner()
+            return [panelInstance: panelInstance, panelOwner: owner, editable: editable ? 'canedit' : 'cannotedit']
         }
-
-        boolean editable = canEdit(permissionEvaluator, springSecurityService, panelInstance)
-        String owner = panelInstance.getOwner()
-        return [panelInstance: panelInstance, panelOwner: owner, editable: editable ? 'canedit' : 'cannotedit']
+        return [message: "Supplied ID not a valid Panel ID"]
     }
 
 

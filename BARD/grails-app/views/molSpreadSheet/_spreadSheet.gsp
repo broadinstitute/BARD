@@ -103,10 +103,14 @@
                 </span>
 
 
-            <g:if test="${params?.cid?.size()>0}">
-                <a href="../molSpreadSheet/index?transpose=true&norefresh=true&cid=${params.cid}" class="pull-right tranposeSymbol"
+            <g:if test="${params?.cid?.getClass()?.isArray()}">
+                <a href="../molSpreadSheet/index?transpose=true&norefresh=true&cid=${params.cid.join('&cid=')}&pid=${params.pid}" class="pull-right tranposeSymbol"
                    title="Transpose columns and rows">
             </g:if>
+            <g:elseif test="${params?.cid?.size()>0}">
+                <a href="../molSpreadSheet/index?transpose=true&norefresh=true&cid=${params.cid}" class="pull-right tranposeSymbol"
+                   title="Transpose columns and rows">
+            </g:elseif>
             <g:else>
                 <a href="../molSpreadSheet/index?transpose=true&norefresh=true" class="pull-right tranposeSymbol"
                    title="Transpose columns and rows">
