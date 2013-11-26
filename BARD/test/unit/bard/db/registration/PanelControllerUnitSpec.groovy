@@ -14,6 +14,7 @@ import grails.test.mixin.support.GrailsUnitTestMixin
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
@@ -54,7 +55,7 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         final Role role = Role.build()
         given:
         PanelCommand panelCommand = new PanelCommand(name: "Some Name", springSecurityService: controller.springSecurityService, ownerRole: role.authority)
-        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
         }
         when:
@@ -144,8 +145,8 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         Panel updatedPanel = Panel.build(name: "My New Name", version: 1, lastUpdated: new Date(), ownerRole: roleB)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newPanel.id,
                 version: newPanel.version, name: newPanel.name, value: updatedPanel.ownerRole.displayName)
-        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities={
-            return [this.role,roleB]
+        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
+            return [this.role, roleB]
         }
         when:
         controller.editOwnerRole(inlineEditableCommand)
@@ -160,6 +161,7 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         assert responseJSON.get("lastUpdated").asText()
         assert response.contentType == "text/json;charset=utf-8"
     }
+
     void 'test edit Panel owner new role not in list - fail'() {
         given:
         SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
@@ -177,6 +179,7 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         assert response.status == HttpServletResponse.SC_BAD_REQUEST
 
     }
+
     void 'test edit Panel owner role - access denied'() {
         given:
         accessDeniedRoleMock()
@@ -239,6 +242,19 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         model.panelInstance == panel
     }
 
+
+    void 'test show - fail #desc'() {
+        when:
+        params.id = panelId
+        def model = controller.show()
+
+        then:
+        model.message == expectedMessage
+        where:
+        desc             | expectedMessage                    | panelId
+        "With ID=0"      | "default.not.found.message"        | "0"
+        "With ID=STRING" | "Supplied ID not a valid Panel ID" | "STRING"
+    }
 
     void 'test add assays'() {
         given:
