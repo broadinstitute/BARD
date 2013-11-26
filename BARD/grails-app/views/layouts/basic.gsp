@@ -13,7 +13,28 @@
     <%@ page import="bardqueryapi.IDSearchType" %>
     <r:layoutResources/>
     <ga:trackPageview/>
+    <style>
+.basic-social-networks{
+    float:right;
+    margin:-6px -12px 0 0;
+    list-style:none;
+}
 
+.basic-social-networks li{
+    float:left;
+    margin:0 0 0 4px;
+}
+
+.basic-social-networks a{
+    display:block;
+    width:16px;
+    height:16px;
+    text-indent:-9999px;
+    overflow:hidden;
+    background:url('../../images/bardHomepage/sprite.png') no-repeat;
+}
+.basic-social-networks .google{background-position:-18px 0;}
+    </style>
 </head>
 
 <body>
@@ -24,7 +45,7 @@
     </a>
 </noscript>
 
-<header class="container-fluid" id="bard-header">
+<header class="container-fluid" id="header">
 
     <div class="search-panel">
 
@@ -40,44 +61,45 @@
             </div>
 
             <div class="row-fluid">
-                <div class="span2">
+                <div class="span2"  style="min-width: 180px">
                     <strong class="logo"><a
-                            href="${createLink(controller: 'BardWebInterface', action: 'index')}">BARD BioAssay Research Database</a>
+                            href="${createLink(controller: 'BardWebInterface', action: 'index')}"  style="min-width: 207px">BARD BioAssay Research Database</a>
                     </strong>
                 </div>
 
-                <div class="span8">
-                    <div class="search-block">
+                <div class="span8"  style="min-width: 350px;">
+                    <div class="search-block left-aligned">
                         <g:render template="/layouts/templates/searchBlock"/>
                     </div>
-                    <div class="share-block">
+                    <div class="share-block basic-social-networks">
                         <g:render template="/layouts/templates/socialMedia"/>
                     </div>
                 </div>
 
-                <div class="span2">
-                    <nav class="nav-panel">
-                        <div class="center-aligned">
+                <div class="span2"></div>
+                    <nav class="nav-panel" style="min-width: 150px; ">
+                        <div class="right-aligned" style="min-width: 300px;">
                             <g:render template="/layouts/templates/loginStrip"/>
                         </div>
-
-                        <div class="visible-desktop">
+                        <div class="right-aligned">
                             <g:render template="/layouts/templates/queryCart"/>
                         </div>
 
                         <sec:ifLoggedIn>
-                            <g:link controller="bardWebInterface" action="navigationPage" class="my-bard-button btn">My BARD</g:link>
+                            <div class="right-aligned">
+                               <g:link controller="bardWebInterface" action="navigationPage" class="my-bard-button btn">My BARD</g:link>
+                            </div>
                         </sec:ifLoggedIn>
 
-                        <div class="navbar right-aligned">
+                        %{--<div class="navbar right-aligned visible-desktop visible-tablet">--}%
+                        <div class="navbar right-aligned hidden-phone">
                             <ul class="nav">
-
                                 <g:render template="/layouts/templates/howtolinks"/>
                             </ul>
                         </div>
 
                     </nav>
-                </div>
+
 
             </div>
         </div>

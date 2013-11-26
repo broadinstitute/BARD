@@ -1,14 +1,55 @@
 <r:require module="cart"/>
 <style>
+
 .querycartholder {
-   background: transparent;
-    padding-right: 5px;
+    background: transparent;
+    padding-top: 15px;
+    min-width: 300px;
 }
 .popupQueryCartPanel {
     text-align: left;
 }
+@media only screen and (max-width: 1100px){
+    .querycartholder {
+        padding-top: 55px;
+    }
+    #shrinkableQcart {
+        font-size: 12px;
+        line-height:16px;
+        padding: 4px 8px;
+        margin-top: 10px;
+        margin-bottom: 1px;
+    }
+    .my-bard-button {
+        margin-top: 3px;
+    }
+    .social-networks{float:none}
+    .basic-social-networks{float:none}
+}
+@media only screen and (max-width: 767px){
+    body{padding:0;}
+    .querycartholder {
+        padding-top: 0px;
+    }
+    .my-bard-button {
+        font-size: 12px;
+        line-height:16px;
+        padding: 3px;
+        padding-top: 1px;
+        padding-bottom: 1px;
+    }
+}
+@media only screen and (max-width: 497px){
+    .my-bard-button {
+        font-size: 12px;
+        line-height:16px;
+        padding-right: 3px;
+        padding-top: 1px;
+        padding-bottom: 1px;
+    }
+}
 </style>
-<div class="querycartholder">
+<div class="querycartholder" >
     <g:if test="${flash.searchString}">
         <g:include controller="queryCart" action="refreshSummaryView" params="[searchString: flash.searchString]"/>
     </g:if>
