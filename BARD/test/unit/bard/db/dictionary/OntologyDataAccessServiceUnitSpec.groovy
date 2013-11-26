@@ -177,7 +177,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
 
         then: 'logging should happen at the error level and an exception should be thrown'
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> { throw new ExternalOntologyException("some exception") }
-        1 * log.error(_, _)
+        1 * log.warn(_)
         hasIntegratedSearch == false
     }
 

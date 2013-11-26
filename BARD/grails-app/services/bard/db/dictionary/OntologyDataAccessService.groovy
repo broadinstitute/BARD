@@ -238,7 +238,7 @@ class OntologyDataAccessService {
             }
         }
         catch (ExternalOntologyException e) {
-            log.error("Exception when calling getExternalOntologyAPI with externalUrl: $externalUrl", e)
+            log.warn("Exception when calling getExternalOntologyAPI with externalUrl: $externalUrl ,therefore, no itegrated search will be presented to user.")
         }
         hasSupport
     }
