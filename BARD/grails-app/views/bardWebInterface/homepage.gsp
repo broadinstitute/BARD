@@ -124,48 +124,53 @@
 
 %{--carousel news panel. Turn this back on by reversing the conditional below
     as soon as we have some dynamic content to display --}%
-<g:if test="${false}">
-    <section class="news-panel">
-        <div class="container-fluid">
-            <div class="news-row">
-                <h1>BARD NEWS</h1>
+<section class="news-panel">
+    <div class="container-fluid">
+        <div class="news-row">
+            <h1>BARD NEWS</h1>
 
-                <div class="news-holder">
-                    <div class="news-gallery slide" id="news-gallery" data-interval="false">
-                        <a href="#news-gallery" class="btn-prev" data-slide="prev">Previous</a>
-                        <a href="#news-gallery" class="btn-next" data-slide="next">Next</a>
+            <div class="news-holder">
+                <div class="news-gallery slide" id="news-gallery" data-interval="false">
+                    <a href="#news-gallery" class="btn-prev" data-slide="prev">Previous</a>
+                    <a href="#news-gallery" class="btn-next" data-slide="next">Next</a>
 
-                        <div class="carousel-inner">
-                            <div class="item active">
-                                <strong class="ttl">Presentation<time
-                                        datetime="2013-08-16T08:20">SEP 20 2013 @ 1:00 pm</time>
-                                </strong>
-
-                                <p><a href="#">Steve Brudz reviews BARD in keynote at CBBO</a></p>
+                    <div class="carousel-inner">
+                        <g:each in="${bard.db.util.BardNews.listOrderByEntryDateUpdated(order: "desc")}" status="i"
+                                var="newsItem">
+                            <div class="item ${!i ? 'active' : ''}" style="max-width: 500px;">
+                                <g:bardNewsItem item="${newsItem}"/>
                             </div>
+                        </g:each>
 
-                            <div class="item">
-                                <strong class="ttl">Release<time
-                                        datetime="2013-08-17T08:20">NOV 20 2013 @ 3:00 pm</time>
-                                </strong>
+                        <div class="item">
+                            <strong class="ttl">Presentation<time
+                                    datetime="2013-08-16T08:20">SEP 20 2013 @ 1:00 pm</time>
+                            </strong>
 
-                                <p><a href="#">Projected public release of BARD</a></p>
-                            </div>
+                            <p><a href="#">Steve Brudz reviews BARD in keynote at CBBO</a></p>
+                        </div>
 
-                            <div class="item">
-                                <strong class="ttl">Demonstration<time
-                                        datetime="2013-08-18T08:20">NOV 5 2013 @ 2:00 pm</time>
-                                </strong>
+                        <div class="item">
+                            <strong class="ttl">Release<time
+                                    datetime="2013-08-17T08:20">NOV 20 2013 @ 3:00 pm</time>
+                            </strong>
 
-                                <p><a href="#">Regularly scheduled BARD iteration demo.</a></p>
-                            </div>
+                            <p><a href="#">Projected public release of BARD</a></p>
+                        </div>
+
+                        <div class="item">
+                            <strong class="ttl">Demonstration<time
+                                    datetime="2013-08-18T08:20">NOV 5 2013 @ 2:00 pm</time>
+                            </strong>
+
+                            <p><a href="#">Regularly scheduled BARD iteration demo.</a></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-</g:if>
+    </div>
+</section>
 
 %{--This is the main carousel, with three big pictures and associated buttons--}%
 <div class="articles-gallery slide" id="articles-gallery" data-interval="false">
@@ -185,7 +190,8 @@
                             <h1>Search and analyze your own way.</h1>
 
                             <p>Keeping the promise of the MLP, BARD gives you nimble access to most all the program’s data through an array of query, analysis and visualization tools.</p>
-                            <a href="../about/howToVisualizeAndCaptureData" class="btn btn-primary">HOW TO VISUALIZE DATA</a>
+                            <a href="../about/howToVisualizeAndCaptureData"
+                               class="btn btn-primary">HOW TO VISUALIZE DATA</a>
                         </div>
                     </div>
                 </div>
@@ -257,7 +263,7 @@
                     <g:experimentCount/>
                 </li>
                 %{--<li>--}%
-                    %{--<g:exptDataCount/>--}%
+                %{--<g:exptDataCount/>--}%
                 %{--</li>--}%
                 <li>
                     <g:probeCount/>
@@ -280,12 +286,12 @@
                           model="['recentlyAddedExperiments': recentlyAddedExperiments]"/>
                 %{--Contents of the "Compounds" tab (of our row of five content boxes) --}%
                 %{--<g:render template="numberOfExperimentData"--}%
-                          %{--model="['numberOfExperimentData': numberOfExperimentData]"/>--}%
+                %{--model="['numberOfExperimentData': numberOfExperimentData]"/>--}%
 
                 %{--Contents of the "Probes" tab (of our row of five content boxes) --}%
                 <g:render template="probeProjects" model="[
                         'probeProjectIds': probeProjectIds,
-                        'compoundAdapters':probeCompoundMap.compoundAdapters,
+                        'compoundAdapters': probeCompoundMap.compoundAdapters,
                         'probeCompoundIds': probeCompoundMap.probeCompoundIds
                 ]"/>
             </div>
