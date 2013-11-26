@@ -30,10 +30,10 @@ class QueryProjectExperimentRenderService {
             result = processProjectExperiments(projectExperiments, experimentTypes)
         } catch (HttpClientErrorException exp) {
             if (exp.statusCode != HttpStatus.NOT_FOUND) {
-                log.error(exp)
+                log.error(exp,exp)
             }
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
         }
         return result
     }

@@ -19,7 +19,7 @@ class BootStrap {
         try {
             dictionaryRestService.getDictionary()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
         }
     }
     void loadTargets(){
@@ -28,7 +28,7 @@ class BootStrap {
             assert targets.exists()
             sunburstRestService.loadTargetsFromFile(targets)
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
         }
     }
 }

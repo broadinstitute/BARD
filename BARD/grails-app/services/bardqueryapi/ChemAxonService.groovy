@@ -40,7 +40,7 @@ class ChemAxonService {
             return MolExporter.exportToBinFormat(mol, jchemBinFormat.toString());
         }
         catch (MolFormatException e) {
-            log.error(e)
+            log.error(e,e)
             throw e;
         }
     }
@@ -73,7 +73,7 @@ class ChemAxonService {
                 return MolExporter.exportToFormat(mol, frmt);
             }
             catch (MolFormatException e) {
-                log.error(e)
+                log.error(e,e)
                 throw e;
             }
         }

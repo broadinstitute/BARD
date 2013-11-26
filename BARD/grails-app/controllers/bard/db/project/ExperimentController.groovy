@@ -146,10 +146,10 @@ class ExperimentController {
             final String updatedDateAsString = formatter.format(experiment.holdUntilDate)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, updatedDateAsString)
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -171,10 +171,10 @@ class ExperimentController {
             final String updatedDateAsString = formatter.format(experiment.runDateFrom)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, updatedDateAsString)
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -196,10 +196,10 @@ class ExperimentController {
             final String updatedDateAsString = formatter.format(experiment.runDateTo)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, updatedDateAsString)
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -229,10 +229,10 @@ class ExperimentController {
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, experiment.description)
 
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -260,11 +260,11 @@ class ExperimentController {
 
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -293,10 +293,10 @@ class ExperimentController {
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, experiment.experimentName)
 
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -332,10 +332,10 @@ class ExperimentController {
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, experiment.experimentStatus.id)
 
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }

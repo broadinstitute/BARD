@@ -89,7 +89,7 @@ class ProjectController {
             }
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editProjectStatus", ee)
@@ -121,7 +121,7 @@ class ProjectController {
 
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editProjectOwnerRole", ee)
@@ -153,7 +153,7 @@ class ProjectController {
             generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.name)
 
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee, ee)
@@ -186,7 +186,7 @@ class ProjectController {
             generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.description)
 
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editDescription", ee)

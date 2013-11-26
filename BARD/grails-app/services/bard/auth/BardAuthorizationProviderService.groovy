@@ -33,7 +33,7 @@ class BardAuthorizationProviderService extends CrowdAuthenticationProviderServic
             addRolesFromDatabase(bardUser)
             return new UsernamePasswordAuthenticationToken(bardUser, credentials, bardUser.authorities);
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             throw ee
         }
 

@@ -93,7 +93,7 @@ class AssayDefinitionController {
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.assayType.id)
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -127,7 +127,7 @@ class AssayDefinitionController {
 
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -151,7 +151,7 @@ class AssayDefinitionController {
 
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -183,7 +183,7 @@ class AssayDefinitionController {
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.assayName)
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -216,7 +216,7 @@ class AssayDefinitionController {
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.designedBy)
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee, ee)
