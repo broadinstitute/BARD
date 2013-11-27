@@ -36,6 +36,8 @@
                                                                    action="assayComparisonReport">Compare Assays</g:link></li>
                                     <li class="controller"><g:link controller="splitAssayDefinition"
                                                                    action="show">Split Assays</g:link></li>
+                                    <li class="controller"><g:link controller="config"
+                                                                   action="index">Override API URL</g:link></li>
                                 </ul>
 
                             </li>
