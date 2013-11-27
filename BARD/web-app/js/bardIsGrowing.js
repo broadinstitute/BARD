@@ -13,7 +13,7 @@ $(document).ready(function () {
         success:function (data) {
             $('#bardIsGrowing').html(data);
         },
-        error:function () {
+        error:function (data) {
             $('#bardIsGrowing').html(data);
         },
         complete:function () {
