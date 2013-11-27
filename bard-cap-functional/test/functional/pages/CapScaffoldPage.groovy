@@ -112,6 +112,25 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		waitFor { !editableForm.buttons.iconRemove }
 //		ajaxRequestCompleted()
 	}
+	def editDate(def indexValue, def runDate){
+		def errorMessage = "Required and cannot be empty"
+		assert summaryEdit(indexValue).editIconPencil
+		summaryEdit(indexValue).editIconPencil.click()
+		waitFor { editableForm.buttons.iconOk }
+		waitFor { editableForm.buttons.iconRemove }
+		
+		assert editableForm.selectDay
+		assert editableForm.selectMonth
+		assert editableForm.selectYear
+		
+		editableForm.selectDay.value(runDate.day)
+		editableForm.selectMonth.value(runDate.month)
+		editableForm.selectYear.value(runDate.year)
+		editableForm.buttons.iconOk.click()
+		
+		waitFor { !editableForm.buttons.iconOk }
+		waitFor { !editableForm.buttons.iconRemove }
+	}
 	def selectingComboValue(def editValue){
 		assert editableForm.selectInput
 		editableForm.selectInput.value(editValue)

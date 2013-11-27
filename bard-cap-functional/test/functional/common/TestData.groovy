@@ -8,6 +8,7 @@ class TestData {
 
 	final static def projectId = 1315
 	final static def assayId = 8129
+	final static int experimentId = 1553
 	final static int panelId = 49
 
 	final static def documents = [
@@ -60,6 +61,19 @@ class TestData {
 		description:"Test Panel Description",
 		owner:"BARD Administrator"
 	]
+	final static Map rundate = [
+		From:[
+			day:'3',
+			month:'Mar',
+			year:'2012'
+			],
+		To:[
+			day:'3',
+			month:'Mar',
+			year:'2014'
+			]
+		]
 	final static def assaysToPanel = [8129, 1315]
+	
 
 }

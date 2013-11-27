@@ -16,7 +16,7 @@ import db.Panel
  * @author Muhammad.Rafique
  * Date Created: 2013/11/20
  */
-class CreatePanelSpec extends BardFunctionalSpec {
+class PanelSpec extends BardFunctionalSpec {
 	int nameIndex = 1
 	int descriptionIndex = 2
 	def setup() {
