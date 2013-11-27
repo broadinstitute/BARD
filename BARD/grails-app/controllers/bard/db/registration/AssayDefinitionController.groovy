@@ -16,6 +16,7 @@ import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import grails.validation.ValidationException
 import groovy.transform.InheritConstructors
+import org.apache.commons.lang.StringUtils
 import org.apache.commons.lang3.tuple.Pair
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
@@ -92,7 +93,7 @@ class AssayDefinitionController {
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.assayType.id)
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -126,7 +127,7 @@ class AssayDefinitionController {
 
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -150,7 +151,7 @@ class AssayDefinitionController {
 
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -182,7 +183,7 @@ class AssayDefinitionController {
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.assayName)
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -215,7 +216,7 @@ class AssayDefinitionController {
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.designedBy)
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee, ee)
@@ -321,39 +322,45 @@ class AssayDefinitionController {
 
 
     def show() {
-        def assayInstance = Assay.get(params.id)
 
-        if (!assayInstance) {
-            def messageStr = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
-            return [message: messageStr]
-        }        // sanity check the context items
-        for (context in assayInstance.assayContexts) {
-            assert context.id != null
-            for (item in context.contextItems) {
-                if (item?.id == null) {
-                    throw new RuntimeException("Context ${context.id} missing context item.  Display order probably needs to be updated.")
+        if (StringUtils.isNumeric(params.id.toString())) {
+            def assayInstance = Assay.get(params.id)
+
+            if (!assayInstance) {
+                def messageStr = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+                return [message: messageStr]
+            }        // sanity check the context items
+            for (context in assayInstance.assayContexts) {
+                assert context.id != null
+                for (item in context.contextItems) {
+                    if (item?.id == null) {
+                        throw new RuntimeException("Context ${context.id} missing context item.  Display order probably needs to be updated.")
+                    }
                 }
             }
-        }
-        boolean editable = canEdit(permissionEvaluator, springSecurityService, assayInstance)
-        String owner = capPermissionService.getOwner(assayInstance)
+            boolean editable = canEdit(permissionEvaluator, springSecurityService, assayInstance)
+            String owner = capPermissionService.getOwner(assayInstance)
 
-        //TODO: This should get replaced with cache. Get the active vs tested compound counts
-        //grab all of the experiment ids
-        final List<Long> experimentIds = assayInstance.experiments.collect { it.id }
-        Map<Long, Pair<Long, Long>> experimentsActiveVsTested = [:]
-        try {
-            experimentsActiveVsTested = queryService.findActiveVsTestedForExperiments(experimentIds)
-        } catch (Exception ee) {
-            log.error(ee,ee)
+            //TODO: This should get replaced with cache. Get the active vs tested compound counts
+            //grab all of the experiment ids
+            final List<Long> experimentIds = assayInstance.experiments.collect { it.id }
+            Map<Long, Pair<Long, Long>> experimentsActiveVsTested = [:]
+            try {
+                experimentsActiveVsTested = queryService.findActiveVsTestedForExperiments(experimentIds)
+            } catch (Exception ee) {
+                log.error(ee, ee)
+            }
+            // Don't allow caching if the page is editable
+            if(editable){
+                response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+                response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+                response.setDateHeader("Expires", 0); // Proxies
+            }
+            return [assayInstance: assayInstance, assayOwner: owner, editable: editable ? 'canedit' : 'cannotedit', experimentsActiveVsTested: experimentsActiveVsTested]
+        } else {
+            String messageStr = "A Valid Assay Definition ID is required"
+            return [message: messageStr]
         }
-        // Don't allow caching if the page is editable
-        if(editable){
-            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-            response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-            response.setDateHeader("Expires", 0); // Proxies
-        }
-        return [assayInstance: assayInstance, assayOwner: owner, editable: editable ? 'canedit' : 'cannotedit', experimentsActiveVsTested: experimentsActiveVsTested]
     }
 
     @Secured(['isAuthenticated()'])

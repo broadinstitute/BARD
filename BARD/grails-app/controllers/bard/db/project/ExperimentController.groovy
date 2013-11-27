@@ -19,6 +19,7 @@ import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
+import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.validation.Errors
@@ -66,61 +67,73 @@ class ExperimentController {
 
     def loadExperimentMeasuresAsJSON(Long id) {
         //if user is logged in pass in the boolean
+        if (params.id && StringUtils.isNumeric(params.id.toString())) {
+            final Object principal = springSecurityService?.principal
+            String loggedInUser = null
+            Experiment experimentInstance = Experiment.get(id)
+            if (experimentInstance) {
+                if (principal instanceof String) {
+                    loggedInUser = null
+                } else {
+                    //only people with permission can see this
+                    boolean editable = canEdit(permissionEvaluator, springSecurityService, experimentInstance)
+                    if (editable) {
+                        loggedInUser = principal?.username
+                    }
+                }
 
-        final Object principal = springSecurityService?.principal
-        String loggedInUser = null
-        def experimentInstance = Experiment.get(id)
-        if (principal instanceof String) {
-            loggedInUser = null
-        } else {
-            //only people with permission can see this
-            boolean editable = canEdit(permissionEvaluator, springSecurityService, experimentInstance)
-            if (editable) {
-                loggedInUser = principal?.username
+                JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance, loggedInUser))
+                render text: measuresAsJsonTree, contentType: 'text/json', template: null
+                return
             }
         }
-
-        JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance, loggedInUser))
-        render text: measuresAsJsonTree, contentType: 'text/json', template: null
+        render text: "", contentType: 'text/json', template: null
     }
 
     def show() {
 
-        final Experiment experiment = Experiment.get(params.id)
-        if (!experiment) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'experiment.label', default: 'Experiment'), params.id])
-            return
-        }
-
-        final Set<Long> contextIds = new HashSet<Long>()
-        //load the assay context items for this measure
-        for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
-            //load the assay context items for this measure
-            final Set<AssayContextExperimentMeasure> assayContextExperimentMeasures = experimentMeasure.assayContextExperimentMeasures
-            for (AssayContextExperimentMeasure assayContextExperimentMeasure : assayContextExperimentMeasures) {
-
-                contextIds.add(assayContextExperimentMeasure.assayContext.id);
+        if (params.id && StringUtils.isNumeric(params.id.toString())) {
+            final Experiment experiment = Experiment.get(params.id)
+            if (!experiment) {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'experiment.label', default: 'Experiment'), params.id])
+                return
             }
+
+            final Set<Long> contextIds = new HashSet<Long>()
+            //load the assay context items for this measure
+            for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
+                //load the assay context items for this measure
+                final Set<AssayContextExperimentMeasure> assayContextExperimentMeasures = experimentMeasure.assayContextExperimentMeasures
+                for (AssayContextExperimentMeasure assayContextExperimentMeasure : assayContextExperimentMeasures) {
+
+                    contextIds.add(assayContextExperimentMeasure.assayContext.id);
+                }
+            }
+
+            boolean editable = canEdit(permissionEvaluator, springSecurityService, experiment)
+            boolean isAdmin = SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
+            String owner = capPermissionService.getOwner(experiment)
+
+            // Don't allow caching if the page is editable
+            if(editable){
+                response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+                response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+                response.setDateHeader("Expires", 0); // Proxies
+            }
+
+            return [
+                    instance: experiment,
+                    contextIds: contextIds,
+                    experimentOwner: owner,
+                    editable: editable ? 'canedit' : 'cannotedit',
+                    isAdmin: isAdmin
+            ]
+        } else {
+
+            flash.message = "Experiment ID is required!"
+            return
+
         }
-
-        boolean editable = canEdit(permissionEvaluator, springSecurityService, experiment)
-        boolean isAdmin = SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
-        String owner = capPermissionService.getOwner(experiment)
-
-        // Don't allow caching if the page is editable
-        if(editable){
-            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-            response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-            response.setDateHeader("Expires", 0); // Proxies
-        }
-
-        [
-                instance: experiment,
-                contextIds: contextIds,
-                experimentOwner: owner,
-                editable: editable ? 'canedit' : 'cannotedit',
-                isAdmin: isAdmin
-        ]
     }
 
     @Secured(['isAuthenticated()'])
@@ -140,10 +153,10 @@ class ExperimentController {
             final String updatedDateAsString = formatter.format(experiment.holdUntilDate)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, updatedDateAsString)
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -165,10 +178,10 @@ class ExperimentController {
             final String updatedDateAsString = formatter.format(experiment.runDateFrom)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, updatedDateAsString)
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -190,10 +203,10 @@ class ExperimentController {
             final String updatedDateAsString = formatter.format(experiment.runDateTo)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, updatedDateAsString)
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -223,10 +236,10 @@ class ExperimentController {
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, experiment.description)
 
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -254,11 +267,11 @@ class ExperimentController {
 
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -287,10 +300,10 @@ class ExperimentController {
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, experiment.experimentName)
 
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }
@@ -326,10 +339,10 @@ class ExperimentController {
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, experiment.lastUpdated, experiment.experimentStatus.id)
 
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
             editErrorMessage()
         }
     }

@@ -111,6 +111,7 @@ rememberme.key = 'bard_crowd_remember_me_2'
 rememberme.cookieName = 'bard_crowd_remember_me_cookie_2'
 
 bard.home.page = "http://localhost:8080/${appName}"
+bard.showStackTraceOnErrorPage = true;
 
 // this should get overwritten by
 bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
@@ -275,7 +276,7 @@ grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
 grails.mail.default.from = "noreply@broadinstitute.org"
 grails.mail.default.to = "noreply@broadinstitute.org"
 grails.mail.host = "localhost"
-grails.mail.default.subject = "Error From BARD Web Query"
+grails.mail.default.subject = "Error From ${Environment.current.name}"
 
 //TODO Replace with the analytics ID
 google.analytics.webPropertyID = "UA-xxxxxx-x"
@@ -351,6 +352,13 @@ log4j = {
                     immediateFlush: true,
                     datePattern: "'.'yyyy-MM-dd"))
             appender(new DailyRollingFileAppender(
+                    name: "MySQLAppender",
+                    file: "$logDir/MySQLAppender_Errors.log",
+                    layout: pattern(defaultPattern),
+                    immediateFlush: true,
+                    datePattern: "'.'yyyy-MM-dd"))
+
+            appender(new DailyRollingFileAppender(
                     name: "JavaScriptErrorsAppender",
                     file: "$logDir/Client_JavaScript_Errors.log",
                     layout: pattern(defaultPattern),
@@ -375,7 +383,7 @@ log4j = {
                     SMTPPort: config.grails.mail.port,
                     from: config.grails.mail.default.from,
                     to: config.grails.mail.default.to,
-                    subject: "[${InetAddress.getLocalHost().getHostName()}] " + config.grails.mail.default.subject,
+                    subject: config.grails.mail.default.subject,
                     SMTPHost: config.grails.mail.host,
                     layout: pattern(defaultPattern),
                     threshold: org.apache.log4j.Level.ERROR))
@@ -390,7 +398,8 @@ log4j = {
 
     // stdout is a default console appender
     root {
-        warn('outputFile', 'stdout', 'mail')
+        warn('outputFile', 'stdout')
+        error('outputFile', 'stdout', 'mail')
     }
 
     error('org.codehaus.groovy.grails.web.servlet',  //  controllers
@@ -407,8 +416,10 @@ log4j = {
     //Capture errors from the NCGC API (via JDO) but DO NOT send emails about them.
     error(additivity: false, NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService'])
 
+    //Cpature MySQL Errors
+    error(additivity: false, MySQLAppender: ['com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException', 'com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException'])
     //Capture errors from AccessDenied Appender do not send email
-    error(additivity: false, AccessDeniedAppender: ['org.springframework.security.access.AccessDeniedException'])
+    error(additivity: false, AccessDeniedAppender: ['org.springframework.security.access.AccessDeniedException','bard.auth.BardAuthorizationProviderService'])
     //Capture JavaScript errors from the client (via the ErrorHandling controller)
     error(additivity: true, JavaScriptErrorsAppender: ['grails.app.controllers.bardqueryapi.ErrorHandlingController'])
     //Capture NCGC REST API roundtrip timing.

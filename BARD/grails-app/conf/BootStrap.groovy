@@ -30,7 +30,7 @@ class BootStrap {
         try {
             externalOntologyFactory.getCreators().add(new PersonCreator())
         } catch (Exception ee) {
-            log.error(ee)
+            log.error(ee,ee)
         }
     }
 

@@ -527,8 +527,7 @@ class RingManagerService {
             }
 
         } catch (Exception exception) {
-            exception.printStackTrace()
-            log.error("ERROR: Problems with assay format/type service")
+            log.error("ERROR: Problems with assay format/type service",exception)
         }
         return returnValue
     }

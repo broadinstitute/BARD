@@ -3,9 +3,13 @@ package bard
 import org.apache.commons.lang.exception.ExceptionUtils
 import grails.plugins.springsecurity.Secured
 import grails.util.Environment
+import org.springframework.beans.factory.annotation.Value
 
 @Secured(['permitAll'])
 class ErrorsController {
+    @Value('${bard.showStackTraceOnErrorPage}')
+    boolean showStackTraceOnErrorPage
+
     def error403 () {
 
     }
@@ -18,9 +22,7 @@ class ErrorsController {
 
             log.error("Error ${errorId}: Uncaught exception", exception)
 
-            boolean showException = Environment.getCurrent().name != Environment.PRODUCTION
-
-            render(view: '/error', model: [errorId: errorId, exception: exception, showException: showException])
+            render(view: '/error', model: [errorId: errorId, exception: exception, showException: showStackTraceOnErrorPage])
         } catch(Exception ex) {
             log.error("Exception writing error page", ex)
             def trace = ExceptionUtils.getFullStackTrace(ex)

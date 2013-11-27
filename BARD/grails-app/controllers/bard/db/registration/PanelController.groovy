@@ -138,7 +138,7 @@ class PanelController {
             generateAndRenderJSONResponse(panel.version, panel.modifiedBy, panel.lastUpdated, panel.description)
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -202,7 +202,7 @@ class PanelController {
 
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -237,7 +237,7 @@ class PanelController {
 
 
     def show() {
-        if (StringUtils.isNumeric(params.id)) {
+        if (StringUtils.isNumeric(params.id?.toString())) {
             Panel panelInstance = Panel.get(new Long(params.id))
 
             if (!panelInstance) {

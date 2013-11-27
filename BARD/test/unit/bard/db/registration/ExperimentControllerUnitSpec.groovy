@@ -25,6 +25,8 @@ import grails.test.mixin.domain.DomainClassUnitTestMixin
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
+import spock.lang.IgnoreRest
+import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
 
@@ -39,6 +41,7 @@ import javax.servlet.http.HttpServletResponse
 @TestMixin(DomainClassUnitTestMixin)
 @Build([Assay, Experiment, Role, Element, ExperimentMeasure])
 @Mock([Assay, Experiment, Element, ExperimentMeasure, AssayDescriptor, AssayContextItem, AssayContext, AssayContextExperimentMeasure])
+@Unroll
 class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     @Before
     void setup() {
@@ -321,11 +324,11 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         given:
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: true)
         Assay assay = Assay.build(assayStatus: AssayStatus.APPROVED)
-        Experiment newExperiment = Experiment.build(assay:assay,version: 0,
-                experimentStatus: ExperimentStatus.DRAFT,experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+        Experiment newExperiment = Experiment.build(assay: assay, version: 0,
+                experimentStatus: ExperimentStatus.DRAFT, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         Experiment updatedExperiment =
-            Experiment.build(assay:assay,experimentName: "My New Name", version: 1, lastUpdated: new Date(),
-                    experimentStatus: ExperimentStatus.APPROVED,experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+            Experiment.build(assay: assay, experimentName: "My New Name", version: 1, lastUpdated: new Date(),
+                    experimentStatus: ExperimentStatus.APPROVED, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: newExperiment.id,
                     version: newExperiment.version, name: newExperiment.experimentName,
@@ -343,15 +346,16 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         assert responseJSON.get("lastUpdated").asText()
         assert response.contentType == "text/json;charset=utf-8"
     }
+
     void 'test edit Experiment Status - Assay Definition not approved'() {
 
         given:
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: true)
         Assay assay = Assay.build(assayStatus: AssayStatus.DRAFT)
-        Experiment newExperiment = Experiment.build(assay:assay,version: 0, experimentStatus: ExperimentStatus.DRAFT,experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+        Experiment newExperiment = Experiment.build(assay: assay, version: 0, experimentStatus: ExperimentStatus.DRAFT, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         Experiment updatedExperiment =
-            Experiment.build(assay:assay,experimentName: "My New Name", version: 1, lastUpdated: new Date(),
-                    experimentStatus: ExperimentStatus.APPROVED,experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+            Experiment.build(assay: assay, experimentName: "My New Name", version: 1, lastUpdated: new Date(),
+                    experimentStatus: ExperimentStatus.APPROVED, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: newExperiment.id,
                     version: newExperiment.version, name: newExperiment.experimentName,
@@ -363,6 +367,7 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         assert response.status == HttpServletResponse.SC_BAD_REQUEST
         assert response.text == "The assay definition (ADID:${assay.id} for this experiment must be marked Approved before this experiment can be marked Approved."
     }
+
     void 'test edit Experiment Status - access denied'() {
         given:
         accessDeniedRoleMock()
@@ -370,7 +375,7 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         Assay assay = Assay.build(assayStatus: AssayStatus.APPROVED)
 
 
-        Experiment newExperiment = Experiment.build(assay:assay,version: 0, experimentStatus: ExperimentStatus.DRAFT,
+        Experiment newExperiment = Experiment.build(assay: assay, version: 0, experimentStatus: ExperimentStatus.DRAFT,
                 experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)  //no designer
         Experiment updatedExperiment =
             Experiment.build(experimentName: "My New Name", version: 1, lastUpdated: new Date(),
@@ -400,7 +405,7 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         Assay assay = Assay.build(assayStatus: AssayStatus.APPROVED)
 
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: true)
-        Experiment newExperiment = Experiment.build(assay:assay,version: 0, experimentStatus: ExperimentStatus.APPROVED,experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+        Experiment newExperiment = Experiment.build(assay: assay, version: 0, experimentStatus: ExperimentStatus.APPROVED, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: newExperiment.id, version: newExperiment.version, name: newExperiment.experimentName, value: ExperimentStatus.APPROVED.id)
         controller.metaClass.message = { Map p -> return "foo" }
@@ -535,6 +540,20 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         then:
         capPermissionService.getOwner(_) >> { 'owner' }
         m.instance == exp
+    }
+
+
+    def 'test show - fail #label'() {
+        given:
+        params.id = id
+        when:
+        controller.show()
+        then:
+        assert flash.message == message
+        where:
+        label                        | id    | message
+        "No Experiment Id"           | null  | "Experiment ID is required!"
+        "Non Existing Experiment ID" | 10000 | "default.not.found.message"
     }
 
     void 'test create result type'() {

@@ -66,7 +66,7 @@ class MolSpreadSheetDataBuilder {
         } catch (Exception exception) {
             // The shopping cart plugins sometimes throwns an exception though it seems to always keep working
             //TODO: If we know the specific exception that it throws then we should catch the specific one
-            log.error(exception)
+            log.error(exception,exception)
         }
 
         return [experimentList: experimentList, molSpreadsheetDerivedMethod: molSpreadsheetDerivedMethod]
