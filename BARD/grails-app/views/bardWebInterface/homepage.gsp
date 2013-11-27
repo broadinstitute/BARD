@@ -214,58 +214,11 @@
     </div>
 </div>
 
-<div id="bardIsGrowing" href="${createLink(controller: "bardWebInterface", action: 'bardIsGrowing')}">
+<div id="bardIsGrowing" href="${createLink(controller:"bardWebInterface", action: 'bardIsGrowing')}">
+
 
 </div>
 
-%{--Here we have a set of clickable boxes, each one leading to a carousel of information. These are implemented simply as tabs,--}%
-%{--all of which are defined in the next section. This information should probably come back dynamically through ajax ( at least --}%
-%{--once we have information worth providing--}%
-<div class="tabs-list-holder">
-    <ul class="tabs-list">
-        <li>
-            <g:projectCount/>
-        </li>
-        <li class="active">
-            <g:assayCount/>
-        </li>
-        <li>
-            <g:experimentCount/>
-        </li>
-        %{--<li>--}%
-        %{--<g:exptDataCount/>--}%
-        %{--</li>--}%
-        <li>
-            <g:probeCount/>
-        </li>
-    </ul>
-</div>
-
-
-<div class="container-fluid">
-    <div class="tab-content">
-        %{--Contents of the "Projects" tab (of our row of five content boxes) --}%
-        <g:render template="recentlyAddedProjects" model="['recentlyAddedProjects': recentlyAddedProjects]"/>
-
-        %{--Contents of the "Definitions" tab (of our row of five content boxes) --}%
-        <g:render template="recentlyAddedAssays" model="['recentlyAddedAssays': recentlyAddedAssays]"/>
-
-
-        %{--Contents of the "Experiments" tab (of our row of five content boxes) --}%
-        <g:render template="recentlyAddedExperiments"
-                  model="['recentlyAddedExperiments': recentlyAddedExperiments]"/>
-        %{--Contents of the "Compounds" tab (of our row of five content boxes) --}%
-        %{--<g:render template="numberOfExperimentData"--}%
-        %{--model="['numberOfExperimentData': numberOfExperimentData]"/>--}%
-
-        %{--Contents of the "Probes" tab (of our row of five content boxes) --}%
-        <g:render template="probeProjects" model="[
-                'probeProjectIds': probeProjectIds,
-                'compoundAdapters': probeCompoundMap.compoundAdapters,
-                'probeCompoundIds': probeCompoundMap.probeCompoundIds
-        ]"/>
-    </div>
-</div>
 <g:render template="/layouts/templates/footer"/>
 
 </div>
