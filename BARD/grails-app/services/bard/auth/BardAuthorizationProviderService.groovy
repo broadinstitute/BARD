@@ -76,6 +76,7 @@ class BardAuthorizationProviderService extends CrowdAuthenticationProviderServic
             addRolesFromDatabase(bardUser)
             return bardUser
         } catch (Exception ee) {
+            log.error(ee,ee)
             throw new UsernameNotFoundException(ee.getMessage());
         }
     }
