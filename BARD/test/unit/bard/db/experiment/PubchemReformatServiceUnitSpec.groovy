@@ -1,6 +1,7 @@
 package bard.db.experiment
 
 import bard.db.dictionary.Element
+import bard.db.enums.ExpectedValueType
 import bard.db.enums.HierarchyType
 import bard.db.enums.ValueType
 import bard.db.registration.Assay
@@ -398,4 +399,21 @@ class PubchemReformatServiceUnitSpec extends Specification {
         then:
         transformed == oldFormat
     }
+
+    def 'test creating list context items'() {
+        setup:
+        PubchemReformatService service = new PubchemReformatService();
+        Assay assay = Assay.build()
+        Element attribute = Element.build(expectedValueType: ExpectedValueType.NUMERIC);
+
+        when:
+        AssayContext context = service.createAssayContextForResultType(assay, [attribute], [(attribute): ["1","2","2"]], [], "contextName");
+
+        then:
+        context.contextItems.size() == 2
+        context.contextItems.first().attributeType == AttributeType.List
+        context.contextName == "contextName"
+    }
 }
+
+

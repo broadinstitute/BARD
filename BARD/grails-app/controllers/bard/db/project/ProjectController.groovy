@@ -89,7 +89,7 @@ class ProjectController {
             }
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+            log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editProjectStatus", ee)
@@ -121,7 +121,7 @@ class ProjectController {
 
         }
         catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editProjectOwnerRole", ee)
@@ -153,7 +153,7 @@ class ProjectController {
             generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.name)
 
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee, ee)
@@ -186,7 +186,7 @@ class ProjectController {
             generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.description)
 
         } catch (AccessDeniedException ade) {
-            log.error(ade)
+           log.error(ade,ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editDescription", ee)
@@ -256,6 +256,13 @@ class ProjectController {
             if (httpClientErrorException.statusCode != HttpStatus.NOT_FOUND) {
                 throw new RuntimeException("Exception for Project capId:${params.id} ncgcWarehouseId:${projectInstance.ncgcWarehouseId}", httpClientErrorException)
             }
+        }
+
+        // Don't allow caching if the page is editable
+        if(editable){
+            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+            response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+            response.setDateHeader("Expires", 0); // Proxies
         }
 
         return [instance: projectInstance,

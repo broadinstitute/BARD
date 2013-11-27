@@ -806,7 +806,8 @@ class PubchemReformatService {
 
                 assayContext.addToAssayContextItems(item)
             } else {
-                for (value in attributeValues[attribute]) {
+                Set uniqueValues = new HashSet(attributeValues[attribute])
+                for (value in uniqueValues) {
                     AssayContextItem item = new AssayContextItem();
                     item.attributeType = AttributeType.List
                     item.attributeElement = attribute

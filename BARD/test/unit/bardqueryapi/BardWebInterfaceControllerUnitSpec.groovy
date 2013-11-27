@@ -127,11 +127,58 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         then:
         experimentService.previewResults(experiment.id) >> { new TableModel() }
         assert response.status == statusCode
-
         where:
         label                  | instance                                                        | statusCode
         "No Experiment File"   | { Experiment.build() }                                          | HttpServletResponse.SC_FOUND
         "With Experiment File" | { Experiment.build(experimentFiles: [ExperimentFile.build()]) } | HttpServletResponse.SC_OK
+
+    }
+
+
+    void "test retrieve Experiment Results Summary"() {
+        given:
+        SearchCommand searchCommand = new SearchCommand()
+        Experiment experiment = instance.call()
+        when:
+        controller.retrieveExperimentResultsSummary(experiment.id, searchCommand)
+        then:
+        numberOfTimes * controller.queryService.histogramDataByEID(_) >> { data }
+        assert response.text == data
+        where:
+        label               | instance                                   | data        | numberOfTimes
+        "No warehouse id"   | { Experiment.build() }                     | ""          | 0
+        "With warehouse id" | { Experiment.build(ncgcWarehouseId: 200) } | "Some text" | 1
+
+    }
+
+    void "test retrieve Experiment Results Summary - fail #label"() {
+        given:
+        SearchCommand searchCommand = new SearchCommand()
+        when:
+        controller.retrieveExperimentResultsSummary(id, searchCommand)
+        then:
+        assert response.text == ''
+        where:
+        label                        | id    | statusCode                | hasTableModel
+        "No Experiment Id"           | null  | HttpServletResponse.SC_OK | null
+        "Non Existing Experiment ID" | 10000 | HttpServletResponse.SC_OK | null
+
+    }
+
+    void "test find preview results -fail #label"() {
+
+        when:
+        controller.previewResults(id)
+        then:
+        assert response.status == statusCode
+        assert view == "/bardWebInterface/showExperimentalResultsPreview"
+        assert model.tableModel == hasTableModel
+        assert model.capExperiment == id
+        assert !model.totalNumOfCmpds
+        where:
+        label                        | id    | statusCode                | hasTableModel
+        "No Experiment Id"           | null  | HttpServletResponse.SC_OK | null
+        "Non Existing Experiment ID" | 10000 | HttpServletResponse.SC_OK | null
 
     }
 

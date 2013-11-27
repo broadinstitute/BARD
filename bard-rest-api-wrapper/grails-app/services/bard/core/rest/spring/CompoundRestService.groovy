@@ -179,7 +179,7 @@ class CompoundRestService extends AbstractRestService {
                     URLEncoder.encode(query, RestApiConstants.UTF_8)).append(
                     RestApiConstants.STRUCTURE);
         } catch (UnsupportedEncodingException ex) {
-            log.error(ex);
+            log.error(ex,ex);
             throw new IllegalArgumentException
             ("Bogus query: " + query);
         }

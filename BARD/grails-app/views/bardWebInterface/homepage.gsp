@@ -124,48 +124,29 @@
 
 %{--carousel news panel. Turn this back on by reversing the conditional below
     as soon as we have some dynamic content to display --}%
-<g:if test="${false}">
-    <section class="news-panel">
-        <div class="container-fluid">
-            <div class="news-row">
-                <h1>BARD NEWS</h1>
+<section class="news-panel">
+    <div class="container-fluid">
+        <div class="news-row">
+            <h1>BARD NEWS</h1>
 
-                <div class="news-holder">
-                    <div class="news-gallery slide" id="news-gallery" data-interval="false">
-                        <a href="#news-gallery" class="btn-prev" data-slide="prev">Previous</a>
-                        <a href="#news-gallery" class="btn-next" data-slide="next">Next</a>
+            <div class="news-holder">
+                <div class="news-gallery slide" id="news-gallery" data-interval="false">
+                    <a href="#news-gallery" class="btn-prev" data-slide="prev">Previous</a>
+                    <a href="#news-gallery" class="btn-next" data-slide="next">Next</a>
 
-                        <div class="carousel-inner">
-                            <div class="item active">
-                                <strong class="ttl">Presentation<time
-                                        datetime="2013-08-16T08:20">SEP 20 2013 @ 1:00 pm</time>
-                                </strong>
-
-                                <p><a href="#">Steve Brudz reviews BARD in keynote at CBBO</a></p>
+                    <div class="carousel-inner">
+                        <g:each in="${bard.db.util.BardNews.listOrderByEntryDateUpdated(order: "desc")}" status="i"
+                                var="newsItem">
+                            <div class="item ${!i ? 'active' : ''}" style="max-width: 500px;">
+                                <g:bardNewsItem item="${newsItem}"/>
                             </div>
-
-                            <div class="item">
-                                <strong class="ttl">Release<time
-                                        datetime="2013-08-17T08:20">NOV 20 2013 @ 3:00 pm</time>
-                                </strong>
-
-                                <p><a href="#">Projected public release of BARD</a></p>
-                            </div>
-
-                            <div class="item">
-                                <strong class="ttl">Demonstration<time
-                                        datetime="2013-08-18T08:20">NOV 5 2013 @ 2:00 pm</time>
-                                </strong>
-
-                                <p><a href="#">Regularly scheduled BARD iteration demo.</a></p>
-                            </div>
-                        </div>
+                        </g:each>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-</g:if>
+    </div>
+</section>
 
 %{--This is the main carousel, with three big pictures and associated buttons--}%
 <div class="articles-gallery slide" id="articles-gallery">
@@ -185,7 +166,8 @@
                             <h1>Search and analyze your own way.</h1>
 
                             <p>Keeping the promise of the MLP, BARD gives you nimble access to most all the program’s data through an array of query, analysis and visualization tools.</p>
-                            <a href="../about/howToVisualizeAndCaptureData" class="btn btn-primary">HOW TO VISUALIZE DATA</a>
+                            <a href="../about/howToVisualizeAndCaptureData"
+                               class="btn btn-primary">HOW TO VISUALIZE DATA</a>
                         </div>
                     </div>
                 </div>
@@ -232,66 +214,10 @@
     </div>
 </div>
 
-<g:if test="${true}">
-%{--The BARD is  growing line sits on its own above the blocks--}%
-    <section
-            class="tabs-section">%{--This section tag binds 'Bard is growing', the blocks, and the tab information together  --}%
-        <div class="container-fluid">
-            <div class="page-header">
-                <h1>BARD Is Growing <small>Statistics &amp; Recent Submissions</small></h1>
-            </div>
-        </div>
-
-        %{--Here we have a set of clickable boxes, each one leading to a carousel of information. These are implemented simply as tabs,--}%
-        %{--all of which are defined in the next section. This information should probably come back dynamically through ajax ( at least --}%
-        %{--once we have information worth providing--}%
-        <div class="tabs-list-holder">
-            <ul class="tabs-list">
-                <li>
-                    <g:projectCount/>
-                </li>
-                <li class="active">
-                    <g:assayCount/>
-                </li>
-                <li>
-                    <g:experimentCount/>
-                </li>
-                %{--<li>--}%
-                    %{--<g:exptDataCount/>--}%
-                %{--</li>--}%
-                <li>
-                    <g:probeCount/>
-                </li>
-            </ul>
-        </div>
+<div id="bardIsGrowing" href="${createLink(controller:"bardWebInterface", action: 'bardIsGrowing')}">
 
 
-        <div class="container-fluid">
-            <div class="tab-content">
-                %{--Contents of the "Projects" tab (of our row of five content boxes) --}%
-                <g:render template="recentlyAddedProjects" model="['recentlyAddedProjects': recentlyAddedProjects]"/>
-
-                %{--Contents of the "Definitions" tab (of our row of five content boxes) --}%
-                <g:render template="recentlyAddedAssays" model="['recentlyAddedAssays': recentlyAddedAssays]"/>
-
-
-                %{--Contents of the "Experiments" tab (of our row of five content boxes) --}%
-                <g:render template="recentlyAddedExperiments"
-                          model="['recentlyAddedExperiments': recentlyAddedExperiments]"/>
-                %{--Contents of the "Compounds" tab (of our row of five content boxes) --}%
-                %{--<g:render template="numberOfExperimentData"--}%
-                          %{--model="['numberOfExperimentData': numberOfExperimentData]"/>--}%
-
-                %{--Contents of the "Probes" tab (of our row of five content boxes) --}%
-                <g:render template="probeProjects" model="[
-                        'probeProjectIds': probeProjectIds,
-                        'compoundAdapters':probeCompoundMap.compoundAdapters,
-                        'probeCompoundIds': probeCompoundMap.probeCompoundIds
-                ]"/>
-            </div>
-        </div>
-    </section>
-</g:if>
+</div>
 
 <g:render template="/layouts/templates/footer"/>
 

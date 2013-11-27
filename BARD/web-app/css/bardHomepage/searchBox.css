@@ -115,7 +115,7 @@
     box-sizing: border-box;
     -webkit-border-radius: 0;
     color: #fff;
-    margin: 5px;
+    margin: 5px 0px 5px 10px;
 }
 
 .my-bard-button:hover {
@@ -132,5 +132,9 @@
 }
 
 .search-box-text-field-cell {
+    display: table-cell;
+}
+
+search-box-search-subbuttons  {
     display: table-cell;
 }

@@ -32,11 +32,33 @@
             <h1>An error has occurred</h1>
 
             <p>
-                An internal error has occurred.   Details of the error have been logged and the BARD team will investigate.   Please retry your operation.
+                (Error ID: ${errorId})
             </p>
 
             <p>
-                (Error ID: ${errorId})
+            BARD has encountered an internal error when trying to process your request.  We apologize for the inconvenience.  An email has been sent to the BARD Development Team, and we will investigate the problem as soon as possible.
+            </p>
+
+            <p>
+                In the meantime, you can try:
+                <ul>
+                    <li>
+                        Waiting a little bit and then repeating what you were doing, in case the error is only temporary.
+                    </li>
+                    <li>
+                        Reporting the problem to the bard-users mailing list with a description of what you are trying to do.  This will help us to resolve the problem more quickly.
+                    </li>
+                </ul>
+            </p>
+
+            <p>
+                Thank you for your patience.
+            </p>
+
+            <p>
+                Sincerely,
+                <br>
+                The BARD Development Team
             </p>
 
             <g:if test="${showException}">
