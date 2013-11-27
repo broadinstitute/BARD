@@ -134,8 +134,36 @@ class OntologyJsonControllerUnitSpec extends Specification {
         '1 BardDescriptor found'   | { [BardDescriptor.build(fullPath: 'somePath')] } | [results: [[id: 1, text: "label1", description: null, expectedValueType: "NONE", parentFullPath: null, fullPath: "somePath", hasIntegratedSearch: false, externalUrl: null, unitId: null, addChildMethod: "NO"]]]
     }
 
+    void "test findExternalItemsById #desc "() {
+        given: 'valid params'
+        TestDataConfigurationHolder.reset() // so label on element will be label1
+        final String externalUrl = 'http://bard.org'
+        final String extValueId = 'foo'
+        final Element element = Element.build(externalURL: externalUrl)
+
+
+        when: 'we look for an item'
+        controller.findExternalItemById(element.id, extValueId)
+        final String resultJson = controller.response.contentAsString
+
+        then: 'we serialize the item as JSON, dealing with nulls and ExternalOntologyExceptions'
+        1 * ontologyDataAccessService.findExternalItemById(externalUrl, extValueId) >> { serviceReturnValue.call() }
+        resultJson
+        println(resultJson)
+        Map resultMap = new JsonSlurper().parseText(resultJson)
+        println(resultMap)
+        resultMap == expectedMap
+
+        where:
+        desc               | serviceReturnValue                                        | expectedMap
+        'no item found'    | { null }                                                  | [:]
+        'item found'       | { new ExternalItem('1', 'item 1') }                       | [id: '1', text: '(1) item 1', display: 'item 1']
+        'exception thrown' | { throw new ExternalOntologyException("some Exception") } | [error: 'Integrated lookup for the External Ontology Id: foo was not successful at this time.']
+    }
+
     void "test findExternalItemsByTerm #desc "() {
         given: 'valid params'
+        TestDataConfigurationHolder.reset() // so label on element will be label1
         final String externalUrl = 'http://bard.org'
         final String term = 'foo'
         final Element element = Element.build(externalURL: externalUrl)
@@ -158,6 +186,6 @@ class OntologyJsonControllerUnitSpec extends Specification {
         'no items found'   | { [] }                                                                 | [externalItems: []]
         '1 item found'     | { [new ExternalItem('1', 'item 1')] }                                  | [externalItems: [[id: '1', text: '(1) item 1', display: 'item 1']]]
         '2 items found'    | { [new ExternalItem('1', 'item 1'), new ExternalItem('2', 'item 2')] } | [externalItems: [[id: '1', text: '(1) item 1', display: 'item 1'], [id: '2', text: '(2) item 2', display: 'item 2']]]
-        'exception thrown' | { throw new ExternalOntologyException("some Exception") }              | [error: 'some Exception', externalItems: []]
+        'exception thrown' | { throw new ExternalOntologyException("some Exception") }              | [error: 'Integrated lookup for attribute label1 with the term: foo was not successful at this time.  Please try again or, enter the External Ontology Id and Display Value directly.', externalItems: []]
     }
 }

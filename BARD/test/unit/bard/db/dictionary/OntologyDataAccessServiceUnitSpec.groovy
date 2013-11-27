@@ -88,9 +88,9 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         when: 'an exception is thrown'
         ExternalItem externalItem = service.findExternalItemById(externalUrl, id)
 
-        then: 'logging should happen at the error level and an exception should be thrown'
+        then: 'logging should happen at the warn level and an exception should be thrown'
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> { throw new ExternalOntologyException("some exception") }
-        1 * log.error(_, _)
+        1 * log.warn(_)
         thrown(ExternalOntologyException)
     }
 
@@ -164,7 +164,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
 
         then: 'logging should happen at the error level and an exception should be thrown'
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> { throw new ExternalOntologyException("some exception") }
-        1 * log.error(_, _)
+        1 * log.warn(_)
         thrown(ExternalOntologyException)
     }
 
