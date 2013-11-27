@@ -107,6 +107,13 @@ class ExperimentController {
         boolean isAdmin = SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
         String owner = capPermissionService.getOwner(experiment)
 
+        // Don't allow caching if the page is editable
+        if(editable){
+            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+            response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+            response.setDateHeader("Expires", 0); // Proxies
+        }
+
         [
                 instance: experiment,
                 contextIds: contextIds,

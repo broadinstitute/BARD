@@ -347,6 +347,12 @@ class AssayDefinitionController {
         } catch (Exception ee) {
             log.error(ee,ee)
         }
+        // Don't allow caching if the page is editable
+        if(editable){
+            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+            response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+            response.setDateHeader("Expires", 0); // Proxies
+        }
         return [assayInstance: assayInstance, assayOwner: owner, editable: editable ? 'canedit' : 'cannotedit', experimentsActiveVsTested: experimentsActiveVsTested]
     }
 
