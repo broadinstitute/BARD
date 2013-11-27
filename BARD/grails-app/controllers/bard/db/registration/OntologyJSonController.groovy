@@ -62,7 +62,7 @@ class OntologyJSonController {
      */
     @Cacheable(value = "contextItemAttributeDescriptors")
     def getStatsModifierDescriptors(String startOfFullPath) {
-        final List<Descriptor> descriptors = ontologyDataAccessService.getDescriptors(startOfFullPath,null)
+        final List<Descriptor> descriptors = ontologyDataAccessService.getDescriptors(startOfFullPath, null)
         final List<Map> attributes = descriptors.collect { Descriptor descriptor ->
             asMapForSelect2(descriptor, false)
         }
@@ -94,7 +94,7 @@ class OntologyJSonController {
     @Cacheable(value = "contextItemValueDescriptors")
     def getValueDescriptorsV2(Long attributeId) {
         final List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForValues(attributeId)
-        final List<Map> values = descriptors.collect{   Descriptor descriptor->
+        final List<Map> values = descriptors.collect { Descriptor descriptor ->
             asMapForSelect2(descriptor, false)
         }
         final Map map = ['results': values]
@@ -120,7 +120,7 @@ class OntologyJSonController {
 
     private Map asMapForSelect2(Descriptor descriptor, boolean removeIdForExpectedValueTypeNone) {
         Map map = asMapForSelect2(descriptor.element)
-        if(removeIdForExpectedValueTypeNone && descriptor.element.expectedValueType == ExpectedValueType.NONE){
+        if (removeIdForExpectedValueTypeNone && descriptor.element.expectedValueType == ExpectedValueType.NONE) {
             map.remove('id')
         }
         map.put('fullPath', descriptor.fullPath.replace('BARD> ', ''))
@@ -170,7 +170,7 @@ class OntologyJSonController {
                 responseMap = toMapForSelect2(externalItem)
             }
             catch (ExternalOntologyException e) {
-                responseMap.error = e.message
+                responseMap.error = "Integrated lookup for the External Ontology Id: ${id} was not successful at this time."
             }
         }
         render responseMap as JSON
@@ -187,15 +187,18 @@ class OntologyJSonController {
                 responseMap.externalItems.addAll(foundItems.collect { ExternalItem item -> toMapForSelect2(item) })
             }
             catch (ExternalOntologyException e) {
-                responseMap.error = e.message
+                responseMap.error = "Integrated lookup for attribute ${element.label} with the term: ${term} was not successful at this time.  Please try again or, enter the External Ontology Id and Display Value directly."
             }
         }
-        println(responseMap)
         render responseMap as JSON
     }
 
     private Map toMapForSelect2(ExternalItem item) {
-        ['id': item.id, 'text': "(${item.id}) ${item.display}", 'display': item.display]
+        Map map = [:]
+        if (item) {
+            map = ['id': item.id, 'text': "(${item.id}) ${item.display}", 'display': item.display]
+        }
+        map
     }
 
 }

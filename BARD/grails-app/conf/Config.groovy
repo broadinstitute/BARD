@@ -398,8 +398,7 @@ log4j = {
 
     // stdout is a default console appender
     root {
-        warn('outputFile', 'stdout')
-        error('outputFile', 'stdout', 'mail')
+        error('outputFile', 'stdout', mail)
     }
 
     error('org.codehaus.groovy.grails.web.servlet',  //  controllers

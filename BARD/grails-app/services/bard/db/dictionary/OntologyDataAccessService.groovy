@@ -279,7 +279,7 @@ class OntologyDataAccessService {
                 externalItems.addAll(externalOntology.findMatching(term, limit))
             }
         } catch (ExternalOntologyException e) {
-            log.error("Exception when calling externalOntology.findMatching() with externalUrl: $externalUrl term: $term", e)
+            log.warn("Exception when calling externalOntology.findMatching(${term}) with externalUrl: $externalUrl")
             throw e
         }
         externalItems.sort(true) { ExternalItem a, ExternalItem b -> a.display?.toLowerCase() <=> b.display?.toLowerCase() }
@@ -305,7 +305,7 @@ class OntologyDataAccessService {
                 externalItem = externalOntology.findById(id)
             }
         } catch (ExternalOntologyException e) {
-            log.error("Exception when calling externalOntology.findMatching() with externalUrl: $externalUrl term: $id", e)
+            log.warn("Exception when calling externalOntology.findById(${id}) with externalUrl: $externalUrl ${e.message}")
             throw e
         }
         externalItem
