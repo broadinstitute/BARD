@@ -351,6 +351,13 @@ log4j = {
                     immediateFlush: true,
                     datePattern: "'.'yyyy-MM-dd"))
             appender(new DailyRollingFileAppender(
+                    name: "MySQLAppender",
+                    file: "$logDir/MySQLAppender_Errors.log",
+                    layout: pattern(defaultPattern),
+                    immediateFlush: true,
+                    datePattern: "'.'yyyy-MM-dd"))
+
+            appender(new DailyRollingFileAppender(
                     name: "JavaScriptErrorsAppender",
                     file: "$logDir/Client_JavaScript_Errors.log",
                     layout: pattern(defaultPattern),
@@ -407,6 +414,8 @@ log4j = {
     //Capture errors from the NCGC API (via JDO) but DO NOT send emails about them.
     error(additivity: false, NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService'])
 
+    //Cpature MySQL Errors
+    error(additivity: false, MySQLAppender: ['com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException','com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException'])
     //Capture errors from AccessDenied Appender do not send email
     error(additivity: false, AccessDeniedAppender: ['org.springframework.security.access.AccessDeniedException'])
     //Capture JavaScript errors from the client (via the ErrorHandling controller)

@@ -75,47 +75,70 @@ class BardWebInterfaceController {
     }
 
     def previewResults(Long id) {
-
-        Experiment experiment = Experiment.get(id)
-        if (!experiment.experimentFiles) {
-            flash.message = "Experiment does not have result files"
-            redirect(action: "show")
-            return
+        if (id) {
+            Experiment experiment = Experiment.get(id)
+            if (!experiment) {
+                render(view: 'showExperimentalResultsPreview',
+                        model: [tableModel: null,
+                                capExperiment: id,
+                                totalNumOfCmpds: 0])
+                return
+            }
+            if (!experiment.experimentFiles) {
+                flash.message = "Experiment does not have result files"
+                redirect(action: "show")
+                return
+            }
+            int records = 10
+            if (params.records) {
+                records = new Integer(params.records)
+            }
+            final TableModel tableModel = experimentService.previewResults(id, records)
+            //this should do a full page reload
+            render(view: 'showExperimentalResultsPreview',
+                    model: [tableModel: tableModel,
+                            capExperiment: experiment,
+                            totalNumOfCmpds: 0])
+        } else {
+            render(view: 'showExperimentalResultsPreview',
+                    model: [tableModel: null,
+                            capExperiment: null,
+                            totalNumOfCmpds: 0])
         }
-        int records = 10
-        if (params.records) {
-            records = new Integer(params.records)
-        }
-        final TableModel tableModel = experimentService.previewResults(id, records)
-        //this should do a full page reload
-        render(view: 'showExperimentalResultsPreview',
-                model: [tableModel: tableModel,
-                        capExperiment: experiment,
-                        totalNumOfCmpds: 0])
     }
 
     def index() {
+        render(view: 'homepage')
+    }
+
+    def bardIsGrowing() {
         //Add model
-        final List<Assay> recentlyAddedAssays = queryService.findRecentlyAddedAssays(6)
-        final List<bard.core.rest.spring.project.Project> recentlyAddedProjects = queryService.findRecentlyAddedProjects(6)
 
-        final List<ExperimentSearch> recentlyAddedExperiments = queryService.findRecentlyAddedExperiments(6)
+        try {
+            final List<Assay> recentlyAddedAssays = queryService.findRecentlyAddedAssays(6)
+            final List<bard.core.rest.spring.project.Project> recentlyAddedProjects = queryService.findRecentlyAddedProjects(6)
 
-        //link to all probes
-        final List<Long> probeProjectIds = queryService.findAllProbeProjects()
-        final Map probeCompoundMap = queryService.findAllProbeCompounds()
-        long numberOfExperimentData = queryService.numberOfExperimentData()
-        render(view: 'homepage', model:
-                [
-                        recentlyAddedAssays: recentlyAddedAssays,
-                        numberOfExperimentData: numberOfExperimentData,
-                        recentlyAddedProjects: recentlyAddedProjects,
-                        recentlyAddedExperiments: recentlyAddedExperiments,
-                        probeProjectIds: probeProjectIds,
-                        probeCompoundMap: probeCompoundMap
+            final List<ExperimentSearch> recentlyAddedExperiments = queryService.findRecentlyAddedExperiments(6)
 
-                ]
-        )
+            //link to all probes
+            final List<Long> probeProjectIds = queryService.findAllProbeProjects()
+            final Map probeCompoundMap = queryService.findAllProbeCompounds()
+            long numberOfExperimentData = queryService.numberOfExperimentData()
+            render(template: 'bardIsGrowing', model:
+                    [
+                            recentlyAddedAssays: recentlyAddedAssays,
+                            numberOfExperimentData: numberOfExperimentData,
+                            recentlyAddedProjects: recentlyAddedProjects,
+                            recentlyAddedExperiments: recentlyAddedExperiments,
+                            probeProjectIds: probeProjectIds,
+                            probeCompoundMap: probeCompoundMap
+
+                    ]
+            )
+        } catch (Exception ee) {
+            log.warn(ee, ee)
+            render(template: '../layouts/templates/restapiunavailable')
+        }
     }
 
     def redirectToIndex() {
@@ -245,13 +268,19 @@ class BardWebInterfaceController {
     }
 
     def retrieveExperimentResultsSummary(Long id, SearchCommand searchCommand) {
-        Experiment experiment = Experiment.get(id)
-        final Long ncgcWarehouseId = experiment.ncgcWarehouseId
-        if (ncgcWarehouseId) {
-            render queryService.histogramDataByEID(ncgcWarehouseId)
-        } else {
-            render(text: "")
+
+        if (id) {
+            Experiment experiment = Experiment.get(id)
+            if (experiment) {
+                final Long ncgcWarehouseId = experiment.ncgcWarehouseId
+                if (ncgcWarehouseId) {
+                    render queryService.histogramDataByEID(ncgcWarehouseId)
+                    return
+                }
+            }
         }
+        render(text: "")
+
     }
 
     def probe(String probeId) {

@@ -1,22 +1,31 @@
 $(document).ready(function () {
 
     //handle experiment measures
-    var experimentMeasuresLink = "/BARD/experiment/loadExperimentMeasuresAsJSON/" + $("#experimentId").val();
 
-    //load measures for this experiment
-    $.ajax(experimentMeasuresLink).done(function (data) {
-        rootUl = parseNodes(data);
-        var root = document.createElement("div");
-        root.className = "span12";
-        root.appendChild(rootUl);
-        $("#result-type-table").html(root);
-    });
+
+    //if the experiment id exists
+    if ($("#experimentId").length != 0) {
+        //it doesn't exist
+        var experimentId = $("#experimentId").val();
+        if (experimentId.length != 0 && experimentId != 'undefined') {//if there is a value
+            var experimentMeasuresLink = "/BARD/experiment/loadExperimentMeasuresAsJSON/" + experimentId;
+
+            //load measures for this experiment
+            $.ajax(experimentMeasuresLink).done(function (data) {
+                rootUl = parseNodes(data);
+                var root = document.createElement("div");
+                root.className = "span12";
+                root.appendChild(rootUl);
+                $("#result-type-table").html(root);
+            });
+        }
+    }
 
     $('a.treeNode').on('click', function () {
         $('.measureHi').removeClass().addClass('span6');
         var colorStr = 'green';
         var measureId = $(this).attr('id');
-        $("#e_"+measureId).addClass("measureHi");
+        $("#e_" + measureId).addClass("measureHi");
         setTimeout(function () {
             $("#e_" + measureId).css("background-color", "#ffffff"); // reset background
             $("#e_" + measureId).effect("highlight", {color: colorStr}, 3000); // animate
