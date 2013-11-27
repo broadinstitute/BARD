@@ -10,7 +10,6 @@ import org.apache.log4j.*
 org.apache.log4j.BasicConfigurator.configure();
 LogManager.rootLogger.level = Level.ERROR
 Logger log = Logger.getLogger('updateBardNews')
-log.error("testing")
 
 assert args && args[0], "No config-file name has been provided (e.g., ~/.grails/BARD-production-config.groovy)\n"
 String configFileName = args[0]
