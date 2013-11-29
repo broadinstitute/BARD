@@ -52,6 +52,7 @@ grails.project.dependency.resolution = {
         compile "org.codehaus.groovy.modules.remote:remote-transport-http:0.5", {
             excludes "servlet-api"
         }
+        compile 'log4j:apache-log4j-extras:1.2.17'
 
         // needed for SMTPAppender (included as a compile dependency because the right one is being picked up for runtime, but
         compile "log4j:log4j:1.2.16"
