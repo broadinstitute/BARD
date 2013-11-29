@@ -67,7 +67,7 @@ class BootStrap {
     //Handle the BoneCP MySQL errors
     void handleMySQLErrorLogging(Appender appender) {
         StringMatchFilter stringMatchFilter = new StringMatchFilter()
-        stringMatchFilter.setStringToMatch("BoneCP-keep-alive-scheduler")
+        stringMatchFilter.setStringToMatch("BoneCP-")
         stringMatchFilter.acceptOnMatch = true
         stringMatchFilter.activateOptions()
         appender.addFilter(stringMatchFilter)
@@ -118,7 +118,7 @@ class BootStrap {
 
         //exclude mysql errors
         StringMatchFilter mySQLAccessFilter = new StringMatchFilter()
-        mySQLAccessFilter.setStringToMatch("BoneCP-keep-alive-scheduler")
+        mySQLAccessFilter.setStringToMatch("BoneCP-")
         mySQLAccessFilter.acceptOnMatch = false
         mySQLAccessFilter.activateOptions()
         excludeFilters.add(mySQLAccessFilter)
