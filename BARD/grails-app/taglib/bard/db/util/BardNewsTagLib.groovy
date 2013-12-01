@@ -8,14 +8,12 @@ class BardNewsTagLib {
     def bardNewsItem = { attrs, body ->
         BardNews item = attrs.item
 
-        out << "<table>"
-        out << "<tr>"
-        out << "<td align=\"left\" style=\"padding-left: 10px;\">${(item?.entryDateUpdated ?: item.datePublished)?.format('MM/dd/yyyy  hh:mm:ss')}</td>"
-        out << "<td align=\"right\" style=\"padding-left: 10px;\">${item?.authorName}</td>"
-        out << "</tr>"
-        out << "<tr>"
-        out << """<td colspan="2"><a href="${item?.link?.trim()}">${item.title}</a></td>"""
-        out << "</tr>"
-        out << "</table>"
+        out << "<p>"
+        out << item?.authorName
+        out << "<span>&nbsp;&nbsp;-&nbsp;&nbsp;"
+        out << (item?.entryDateUpdated ?: item.datePublished)?.format('MMM dd yyyy @ hh:mm a')
+        out << "&nbsp;&nbsp;-&nbsp;&nbsp;"
+        out << """<a href="${item?.link?.trim()}">${item.title}</a></span>"""
+        out << "</p>"
     }
 }

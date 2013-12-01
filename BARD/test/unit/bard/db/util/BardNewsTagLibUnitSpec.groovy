@@ -27,6 +27,7 @@ class BardNewsTagLibUnitSpec extends Specification {
         String results = this.tagLib.bardNewsItem([item: item], null)
 
         then:
-        assert results.contains('<table><tr><td>')
+        assert results.contains('<p>John Doe<span>&nbsp;&nbsp;-&nbsp;&nbsp;')
+        assert results.contains('&nbsp;&nbsp;-&nbsp;&nbsp;<a href="link">title</a></span></p>')
     }
 }
