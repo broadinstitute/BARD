@@ -11,7 +11,6 @@ class BardNews {
     Date datePublished
     Date entryDateUpdated
     String title
-    String content
     String link
     String authorName
     String authorEmail
@@ -30,7 +29,6 @@ class BardNews {
         entryId(nullable: false, blank: false, maxSize: 250)
         entryDateUpdated(nullable: true)
         title(nullable: false, blank: false, maxSize: 1020)
-        content(nullable: true)
         link(nullable: false, blank: false, maxSize: 250)
         authorName(nullable: true, blank: false, maxSize: 125)
         authorEmail(nullable: true, blank: false, maxSize: 125)

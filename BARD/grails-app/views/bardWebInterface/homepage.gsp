@@ -137,7 +137,7 @@
                     <div class="carousel-inner">
                         <g:each in="${bard.db.util.BardNews.listOrderByEntryDateUpdated(order: "desc")}" status="i"
                                 var="newsItem">
-                            <div class="item ${!i ? 'active' : ''}" style="max-width: 500px;">
+                            <div class="item ${!i ? 'active' : ''}">
                                 <g:bardNewsItem item="${newsItem}"/>
                             </div>
                         </g:each>

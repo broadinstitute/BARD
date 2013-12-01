@@ -31,7 +31,7 @@ assert username, "Could not find username configuration\n"
 String password = config.dataSource.password
 assert password, "Could not find password configuration\n"
 println([url, username, password, driverClassName])
-sql = Sql.newInstance(url, username, password, driverClassName);
+Sql sql = Sql.newInstance(url, username, password, driverClassName);
 
 StopWatch sw = new StopWatch()
 sw.start()
@@ -41,21 +41,22 @@ def uri = new groovyx.net.http.URIBuilder('http://askthebard.blogspot.com/feeds/
 def http = new HTTPBuilder(uri)
 
 try {
-    sql.call("call bard_context.set_username('bard_news')")
+    sql.withTransaction {
+        sql.call("call bard_context.set_username('bard_news')")
 
-    sql.execute('delete from bard_news')
+        sql.execute('delete from bard_news')
 
-    http.request(GET, XML) { req ->
-        // executed for all successful responses:
-        response.success = { resp, xml ->
-            assert resp.statusLine.statusCode == 200
-            xml.entry.each { entry ->
-                // iterate over each XML ATOM 'entry' element in the response:
-                Date published = DatatypeFactory.newInstance().newXMLGregorianCalendar(entry.published as String).toGregorianCalendar().getTime()
-                Date updated = DatatypeFactory.newInstance().newXMLGregorianCalendar(entry.updated as String).toGregorianCalendar().getTime()
-                String link = (entry.link.find { it["@type"] == "text/html" && it["@rel"] == "alternate" }["@href"] as String).replaceAll("'", "''")
+        http.request(GET, XML) { req ->
+            // executed for all successful responses:
+            response.success = { resp, xml ->
+                assert resp.statusLine.statusCode == 200
+                xml.entry.each { entry ->
+                    // iterate over each XML ATOM 'entry' element in the response:
+                    Date published = DatatypeFactory.newInstance().newXMLGregorianCalendar(entry.published as String).toGregorianCalendar().getTime()
+                    Date updated = DatatypeFactory.newInstance().newXMLGregorianCalendar(entry.updated as String).toGregorianCalendar().getTime()
+                    String link = (entry.link.find { it["@type"] == "text/html" && it["@rel"] == "alternate" }["@href"] as String).replaceAll("'", "''")
 
-                String parametrizedSql = """insert into BARD_NEWS (id, version, entry_id, Date_Published, Entry_Date_Updated, title, content, link, author_name, author_email, author_uri, Date_Created, Last_Updated, modified_by)
+                    String parametrizedSql = """insert into BARD_NEWS (id, version, entry_id, Date_Published, Entry_Date_Updated, title, link, author_name, author_email, author_uri, Date_Created, Last_Updated, modified_by)
             values (
                 BARD_NEWS_ID_SEQ.nextval,
                 0,
@@ -63,7 +64,6 @@ try {
                 timestamp'${published.toTimestamp()}',
                 timestamp'${updated.toTimestamp()}',
                 '${(entry.title as String).replaceAll("'", "''")}',
-                '${(entry.content as String).replaceAll("'", "''")}',
                 '${link}',
                 '${(entry.author.name as String).replaceAll("'", "''")}',
                 '${(entry.author.email as String).replaceAll("'", "''")}',
@@ -73,7 +73,8 @@ try {
                 null
             )"""
 
-                sql.execute(parametrizedSql)
+                    sql.execute(parametrizedSql)
+                }
             }
         }
     }
