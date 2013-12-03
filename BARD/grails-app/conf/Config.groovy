@@ -375,7 +375,7 @@ log4j = {
                     to: config.grails.mail.default.to,
                     subject: config.grails.mail.default.subject,
                     SMTPHost: config.grails.mail.host,
-                    layout: pattern(defaultPattern),
+                    layout: pattern("%d [%t] %X{request}\n%-5p %c{1} - %m%n"),
                     threshold: org.apache.log4j.Level.ERROR))
 
         } catch (Exception ex) {
