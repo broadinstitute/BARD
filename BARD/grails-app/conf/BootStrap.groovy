@@ -5,6 +5,7 @@ import org.apache.log4j.Appender
 import org.apache.log4j.Logger
 import org.apache.log4j.filter.DenyAllFilter
 import org.apache.log4j.filter.ExpressionFilter
+import org.apache.log4j.filter.StringMatchFilter
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.springsecurity.SecurityFilterPosition
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
@@ -49,7 +50,9 @@ class BootStrap {
         Enumeration appenders = ((Logger) Logger.getLogger(BootStrap.class)).getRootLogger().getAllAppenders()
         while (appenders.hasMoreElements()) {
             Appender appender = (Appender) appenders.nextElement();
-            if (appender.name == "accessDeniedAppender") {
+            if (appender.name == "mySQLAppender") {
+                handleMySQLErrorFileLogging(appender)
+            } else if (appender.name == "accessDeniedAppender") {
                 handleAccessDeniedFileLogging(appender)
             } else {
                 final List<ExpressionFilter> excludeFilters = getSmtpExcludeFilters()
@@ -61,6 +64,20 @@ class BootStrap {
         }
     }
 
+    //Handle the BoneCP MySQL errors
+    void handleMySQLErrorFileLogging(Appender appender) {
+
+        ExpressionFilter boneCPFilter = new ExpressionFilter()
+        boneCPFilter.expression =
+            "THREAD ~= 'BoneCP-keep-alive-scheduler'"
+        boneCPFilter.acceptOnMatch = true
+        boneCPFilter.activateOptions()
+        appender.addFilter(boneCPFilter)
+
+        //We use the following filter to deny everything but the one we defined above
+        DenyAllFilter denyAllFilter = new DenyAllFilter()
+        appender.addFilter(denyAllFilter)
+    }
     //Call this method so that we log this message to a specific file
     //when access denied errors occur or when a security exception occurs
     void handleAccessDeniedFileLogging(Appender appender) {
@@ -100,6 +117,13 @@ class BootStrap {
         accessDeniedFilter.acceptOnMatch = false
         accessDeniedFilter.activateOptions()
         excludeFilters.add(accessDeniedFilter)
+
+        ExpressionFilter boneCPFilter = new ExpressionFilter()
+        boneCPFilter.expression =
+            "THREAD ~= 'BoneCP-keep-alive-scheduler'"
+        boneCPFilter.acceptOnMatch = true
+        boneCPFilter.activateOptions()
+        excludeFilters.add(boneCPFilter)
         return excludeFilters
     }
 
