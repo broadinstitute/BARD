@@ -5,7 +5,6 @@ import org.apache.log4j.Appender
 import org.apache.log4j.Logger
 import org.apache.log4j.filter.DenyAllFilter
 import org.apache.log4j.filter.ExpressionFilter
-import org.apache.log4j.filter.StringMatchFilter
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.springsecurity.SecurityFilterPosition
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
@@ -50,10 +49,8 @@ class BootStrap {
         Enumeration appenders = ((Logger) Logger.getLogger(BootStrap.class)).getRootLogger().getAllAppenders()
         while (appenders.hasMoreElements()) {
             Appender appender = (Appender) appenders.nextElement();
-            if (appender.name == "mySQLAppender") {
-                handleMySQLErrorLogging(appender)
-            } else if (appender.name == "accessDeniedAppender") {
-                handleAccessDeniedLogging(appender)
+            if (appender.name == "accessDeniedAppender") {
+                handleAccessDeniedFileLogging(appender)
             } else {
                 final List<ExpressionFilter> excludeFilters = getSmtpExcludeFilters()
                 excludeFilters.each { excludeFilter ->
@@ -64,21 +61,9 @@ class BootStrap {
         }
     }
 
-    //Handle the BoneCP MySQL errors
-    void handleMySQLErrorLogging(Appender appender) {
-        StringMatchFilter stringMatchFilter = new StringMatchFilter()
-        stringMatchFilter.setStringToMatch("BoneCP-")
-        stringMatchFilter.acceptOnMatch = true
-        stringMatchFilter.activateOptions()
-        appender.addFilter(stringMatchFilter)
-
-        //We use the following filter to deny everything but the one we defined above
-        DenyAllFilter denyAllFilter = new DenyAllFilter()
-        appender.addFilter(denyAllFilter)
-    }
     //Call this method so that we log this message to a specific file
     //when access denied errors occur or when a security exception occurs
-    void handleAccessDeniedLogging(Appender appender) {
+    void handleAccessDeniedFileLogging(Appender appender) {
 
         ExpressionFilter accessDeniedFilter = new ExpressionFilter()
         accessDeniedFilter.expression = "(EXCEPTION ~= org.springframework.security.access.AccessDeniedException) || (EXCEPTION ~= org.springframework.security.authentication.AuthenticationServiceException)"
@@ -115,14 +100,6 @@ class BootStrap {
         accessDeniedFilter.acceptOnMatch = false
         accessDeniedFilter.activateOptions()
         excludeFilters.add(accessDeniedFilter)
-
-        //exclude mysql errors
-        StringMatchFilter mySQLAccessFilter = new StringMatchFilter()
-        mySQLAccessFilter.setStringToMatch("BoneCP-")
-        mySQLAccessFilter.acceptOnMatch = false
-        mySQLAccessFilter.activateOptions()
-        excludeFilters.add(mySQLAccessFilter)
-
         return excludeFilters
     }
 

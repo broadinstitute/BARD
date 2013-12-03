@@ -403,6 +403,10 @@ log4j = {
             'org.springframework',
             'org.hibernate',
             'net.sf.ehcache.hibernate')
+
+    //BoneCP errors
+    error(additivity: false, mySQLAppender: ['com.jolbox.bonecp.BoneCP'])
+
     //Capture errors from the NCGC API (via JDO) but DO NOT send emails about them.
     error(additivity: false, NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService'])
     //Capture JavaScript errors from the client (via the ErrorHandling controller)
