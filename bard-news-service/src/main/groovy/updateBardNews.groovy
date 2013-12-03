@@ -7,10 +7,11 @@ import static groovyx.net.http.ContentType.*
 import groovy.sql.Sql
 import org.apache.log4j.*
 
-org.apache.log4j.BasicConfigurator.configure();
-LogManager.rootLogger.level = Level.ERROR
-Logger log = Logger.getLogger('updateBardNews')
-
+//org.apache.log4j.BasicConfigurator.configure();
+//LogManager.rootLogger.level = Level.ERROR
+LogManager.getCurrentLoggers().each { Logger logger -> logger.level = Level.ERROR }
+Logger log = Logger.getLogger('A1')
+log.level=Level.INFO
 assert args && args[0], "No config-file name has been provided (e.g., ~/.grails/BARD-production-config.groovy)\n"
 String configFileName = args[0]
 
