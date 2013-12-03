@@ -17,7 +17,7 @@ dependencies {
 //    testCompile group: 'junit', name: 'junit', version: '4.+'
 }
 
-task runScript(dependsOn: 'classes', type: JavaExec) {
+task runScript(dependsOn: 'classes', type: JavaExec) << {
     if (!this.hasProperty("configFile")) {
         ant.fail("Could not find a configFile parameter. A configFile pointer is needed (e.g., -PconfigFile=<config file name>)")
     }

@@ -39,16 +39,16 @@ class PubchemImportService {
         }
 
         List<ExternalReference> refs = ExternalReference.findAllByExtAssayRef("aid=${aid}")
-        if(refs.size() == 0) {
+        if (refs.size() == 0) {
             throw new RuntimeException("skipping ${aid} because it was not in the database at all")
         }
 
-        List eids = refs.collectAll { it.experiment.id }
+        List eids = refs.findAll { it?.experiment?.id } collectAll { it?.experiment?.id }
         Panel panel = null;
 
-        if(eids.size() != 1) {
+        if (eids.size() != 1) {
             Set expectedEids = map.getPanelEids() as Set
-            if((eids as Set) != expectedEids) {
+            if ((eids as Set) != expectedEids) {
                 throw new RuntimeException("${aid} in DB multiple times: ${eids} but result map only mentioned the following eids: ${expectedEids}")
             }
 
@@ -57,11 +57,11 @@ class PubchemImportService {
 
         statusCallback("Recreating measures...")
 
-        if(map.allRecords.size() == 0) {
+        if (map.allRecords.size() == 0) {
             throw new RuntimeException("Skipping ${aid} -> ${refs*.experiment*.id.join(', ')} because we're missing resultmapping")
         }
 
-        for(eid in eids) {
+        for (eid in eids) {
             Experiment experiment = Experiment.get(eid)
             try {
                 pubchemReformatService.recreateMeasures(experiment, map)
@@ -73,7 +73,7 @@ class PubchemImportService {
         refs = ExternalReference.findAllByExtAssayRef("aid=${aid}")
 
         ImportSummary firstResults = null
-        for(eid in eids) {
+        for (eid in eids) {
             def pubchemFile = "${pubchemFileDir}/${aid}.csv"
             def capFile = "${convertedFileDir}/exp-${aid}-${eid}.csv"
 
@@ -95,15 +95,15 @@ class PubchemImportService {
             options.skipExperimentContexts = true
             options.statusCallback = statusCallback
             ImportSummary results = resultsService.importResults(eid, new FileInputStream(capFile), options)
-            if(firstResults == null)
+            if (firstResults == null)
                 firstResults = results
 
             log.info("errors from loading ${aid}: ${results.errors.size()}")
-            for(e in results.errors) {
+            for (e in results.errors) {
                 log.info("\t${e}")
             }
 
-            if(results.errors.size() > 0) {
+            if (results.errors.size() > 0) {
                 log.error("failed to load: ${aid}")
             } else {
                 log.info("successfully loaded: ${aid}")
@@ -117,7 +117,7 @@ class PubchemImportService {
 
     Panel derivePanel(Collection<Long> eids) {
         // find the unique set of assays used by these experiments.
-        Set<Assay> assays = new HashSet( eids.collect { Experiment.get(it).assay } )
+        Set<Assay> assays = new HashSet(eids.collect { Experiment.get(it).assay })
 
         // the unique set of panels that those assays are in
         Set<Panel> panels = assays.collectMany { it.panelAssays.panel }
@@ -127,11 +127,11 @@ class PubchemImportService {
             return new HashSet(panel.panelAssays.collect { it.assay }).equals(assays)
         }
 
-        if(matching.size() == 0) {
+        if (matching.size() == 0) {
             throw new RuntimeException("Could not find panel which contain assays ${assays}");
         }
 
-        if(matching.size() > 1) {
+        if (matching.size() > 1) {
             throw new RuntimeException("Found multiple panels ${matching} which contain assays ${assays}");
         }
 
