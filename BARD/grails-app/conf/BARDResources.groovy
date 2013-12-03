@@ -143,7 +143,9 @@ modules = {
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
         resource url: '/js/dynatree-1.2.2/skin/ui.dynatree.css'
     }
-
+    editRole{
+        resource url:'/js/cap/editRole.js'
+    }
     //E
     experimentData {
         //Polyfill for handling History

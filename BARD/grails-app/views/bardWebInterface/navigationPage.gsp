@@ -38,7 +38,11 @@
                                                                    action="show">Split Assays</g:link></li>
                                     <li class="controller"><g:link controller="config"
                                                                    action="index">Override API URL</g:link></li>
-                                </ul>
+                                    <li class="controller"><g:link controller="role"
+                                                                   action="list">List Teams</g:link></li>
+                                    <li class="controller"><g:link controller="role"
+                                                                   action="create">Create new Team</g:link></li>
+                                 </ul>
 
                             </li>
                         </sec:ifAnyGranted>

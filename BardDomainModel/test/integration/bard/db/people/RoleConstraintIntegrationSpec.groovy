@@ -4,8 +4,7 @@ import bard.db.BardIntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
 
-import static bard.db.people.Person.MODIFIED_BY_MAX_SIZE
-import static bard.db.people.Person.NAME_MAX_SIZE
+
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 
@@ -38,12 +37,12 @@ class RoleConstraintIntegrationSpec extends BardIntegrationSpec {
         }
 
         where:
-        desc               | valueUnderTest                  | valid | errorCode
-        'null '            | null                            | false | 'nullable'
-        'blank value'      | ''                              | false | 'blank'
-        'blank value'      | '  '                            | false | 'blank'
-        'too long'         | createString(NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'exactly at limit' | createString(NAME_MAX_SIZE)     | true  | null
+        desc               | valueUnderTest                             | valid | errorCode
+        'null '            | null                                       | false | 'nullable'
+        'blank value'      | ''                                         | false | 'blank'
+        'blank value'      | '  '                                       | false | 'blank'
+        'too long'         | createString(Role.AUTHORITY_NAME_SIZE + 1) | false | 'maxSize.exceeded'
+        'exactly at limit' | createString(Role.AUTHORITY_NAME_SIZE)     | true  | null
     }
 
     void "test role constraints #desc display name: '#valueUnderTest'"() {
@@ -64,12 +63,12 @@ class RoleConstraintIntegrationSpec extends BardIntegrationSpec {
         }
 
         where:
-        desc               | valueUnderTest                         | valid | errorCode
-        'null '            | null                                   | true  | null
-        'blank value'      | ''                                     | false | 'blank'
-        'blank value'      | '  '                                   | false | 'blank'
-        'too long'         | createString(MODIFIED_BY_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'exactly at limit' | createString(MODIFIED_BY_MAX_SIZE)     | true  | null
+        desc               | valueUnderTest                           | valid | errorCode
+        'null '            | null                                     | true  | null
+        'blank value'      | ''                                       | false | 'blank'
+        'blank value'      | '  '                                     | false | 'blank'
+        'too long'         | createString(Role.DISPLAY_NAME_SIZE + 1) | false | 'maxSize.exceeded'
+        'exactly at limit' | createString(Role.DISPLAY_NAME_SIZE)     | true  | null
     }
 
     void "test modifiedBy constraints #desc name: '#valueUnderTest'"() {
@@ -90,11 +89,11 @@ class RoleConstraintIntegrationSpec extends BardIntegrationSpec {
         }
 
         where:
-        desc               | valueUnderTest                         | valid | errorCode
-        'null '            | null                                   | true  | null
-        'blank value'      | ''                                     | false | 'blank'
-        'blank value'      | '  '                                   | false | 'blank'
-        'too long'         | createString(MODIFIED_BY_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'exactly at limit' | createString(MODIFIED_BY_MAX_SIZE)     | true  | null
+        desc               | valueUnderTest                                | valid | errorCode
+        'null '            | null                                          | true  | null
+        'blank value'      | ''                                            | false | 'blank'
+        'blank value'      | '  '                                          | false | 'blank'
+        'too long'         | createString(Person.MODIFIED_BY_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'exactly at limit' | createString(Person.MODIFIED_BY_MAX_SIZE)     | true  | null
     }
 }
