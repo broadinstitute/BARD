@@ -404,6 +404,8 @@ log4j = {
             'org.hibernate',
             'net.sf.ehcache.hibernate')
 
+
+    //Note that other filters are configured in Bootstrap.groovy
     //BoneCP errors
     error(additivity: false, mySQLAppender: ['com.jolbox.bonecp.BoneCP'])
 
