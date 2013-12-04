@@ -49,9 +49,11 @@
                     <div class="search-block left-aligned">
                         <g:render template="/layouts/templates/searchBlock"/>
                     </div>
-                    <div class="share-block social-networks">
-                        <g:render template="/layouts/templates/socialMedia"/>
-                    </div>
+                    <g:if test="${noSocialLinks}">
+                        <div class="share-block social-networks">
+                            <g:render template="/layouts/templates/socialMedia"/>
+                        </div>
+                    </g:if>
                 </div>
 
                 <div class="span2"></div>
