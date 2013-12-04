@@ -1,4 +1,4 @@
-<%@ page import="bard.db.bard.db.people.Role" %>
+<%@ page import="bard.db.people.Role" %>
 
 
 
