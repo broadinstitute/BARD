@@ -5,7 +5,7 @@ import bard.db.experiment.PubchemImportService
 import bard.db.experiment.AsyncResultsService
 import bard.db.experiment.results.ImportSummary
 import bard.db.registration.ExternalReference
-import clover.org.apache.commons.lang.exception.ExceptionUtils
+import org.apache.commons.lang.exception.ExceptionUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 
@@ -20,14 +20,18 @@ class ReloadResultsJob {
                 ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
                 def aid = Integer.parseInt(xref.extAssayRef.replace("aid=",""))
 
-                ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid, {msg -> asyncResultsService.updateStatus(jobKey, msg)})
+                ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid,
+                        { msg -> asyncResultsService.updateStatus(jobKey, msg)}
+                )
 
                 asyncResultsService.updateResult(jobKey, results)
             }
         } catch (Exception ex) {
-            log.error("Exception thrown trying to execute recreate measures username: ${username}, jobKey: ${jobKey}, id: ${id}", ex)
+            // seeing weird behavior in prod where the stack trace is missing and unable to reproduce locally.  Suspecting filtering
+            // so also report the exception manually
+            log.error("Exception thrown trying to reload results. username: ${username}, jobKey: ${jobKey}, id: ${id}, exception: ${ExceptionUtils.getStackTrace(ex)}", ex);
             String message = ExceptionUtils.getRootCauseMessage(ex)
-            asyncResultsService.updateStatus(jobKey, "An internal error occurred: ${message}")
+            asyncResultsService.updateFinished(jobKey, "An internal error occurred: ${message}")
         }
     }
 }
