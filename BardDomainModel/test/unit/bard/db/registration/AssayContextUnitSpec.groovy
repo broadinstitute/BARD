@@ -84,4 +84,12 @@ class AssayContextUnitSpec extends AbstractContextUnitSpec<AssayContext> {
         "biology='protein-reporter complex' should have supporting term"         | [[label: 'biology']]                                                                   | [[label: 'protein-reporter complex']]                          | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
         "biology='protein-reporter complex' should have supporting term"         | [[label: 'biology']]                                                                   | [[label: 'protein']]                                           | [MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG]
     }
+
+    void 'test rules wired into assayContext '() {
+        when: 'we have an assayContext'
+        AssayContext assayContext = new AssayContext()
+
+        then: 'we should see only the rules we expect'
+        assayContext.getGuidanceRules()*.class*.simpleName == ['OneBiologyAttributePerContextRule', 'BiologyShouldHaveOneSupportingReferencePerContextRule', 'ShouldOnlyHaveOneItemPerNonFixedAttributeElementRule']
+    }
 }

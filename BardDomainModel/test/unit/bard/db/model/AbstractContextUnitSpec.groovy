@@ -2,6 +2,9 @@ package bard.db.model
 
 import bard.db.dictionary.Element
 import bard.db.enums.ExpectedValueType
+import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.AssayContextItem
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll

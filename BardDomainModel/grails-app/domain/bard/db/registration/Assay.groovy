@@ -11,6 +11,7 @@ import bard.db.experiment.Experiment
 import bard.db.guidance.Guidance
 import bard.db.guidance.GuidanceAware
 import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
+import bard.db.guidance.owner.ShouldOnlyHaveOneItemPerNonFixedAttributeElementRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
@@ -192,6 +193,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     List<Guidance> getGuidance() {
         final List<Guidance> guidanceList = []
         guidanceList.addAll(new MinimumOfOneBiologyGuidanceRule(this).getGuidance())
+        guidanceList.addAll(new ShouldOnlyHaveOneItemPerNonFixedAttributeElementRule(this).getGuidance())
         guidanceList
     }
 }
