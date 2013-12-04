@@ -67,7 +67,7 @@ class MoveExperimentsController {
 
         } catch (Exception ee) {
             render(status: HttpServletResponse.SC_BAD_REQUEST, template: "assayError", model: [message: ee.message])
-            log.info("error moving experiment", ee)
+          //  log.info("error moving experiment", ee)
         }
     }
 
@@ -101,7 +101,7 @@ class MoveExperimentsController {
         }
         catch (Exception ee) {
             render(status: HttpServletResponse.SC_BAD_REQUEST, template: "assayError", model: [message: ee?.message])
-            log.info("error moving experiment", ee)
+         //   log.info("error moving experiment", ee)
         }
     }
 }
