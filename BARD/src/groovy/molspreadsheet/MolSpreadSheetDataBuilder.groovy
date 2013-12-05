@@ -129,7 +129,7 @@ class MolSpreadSheetDataBuilderDirector {
                                             Boolean showActiveCompoundsOnly) {
 
         Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids, cids, showActiveCompoundsOnly)
-        List<ExperimentSearch> experimentList = deriveListOfExperiments.experimentList
+        List<ExperimentSearch> experimentList = deriveListOfExperiments.experimentList.sort{it.bardAssayId}
         MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = deriveListOfExperiments.molSpreadsheetDerivedMethod
 
 
