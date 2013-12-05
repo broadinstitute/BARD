@@ -950,7 +950,7 @@ class SearchHelper {
             final String inputAfterColon = searchStringSplit[1].trim()
 
             if (searchCommand.searchString.toUpperCase().contains(THRESHOLD_STRING) && searchCommand.searchString.toUpperCase().contains(StructureSearchParams.Type.Similarity.toString().toUpperCase())) {
-                inputAfterColon = searchStringSplit[1].toUpperCase().replaceAll(THRESHOLD_STRING, "").trim()
+                inputAfterColon = searchStringSplit[1].replaceAll('(?i)' + THRESHOLD_STRING, "").trim() //makes the replaceAll case-insensitive.
                 thresholdValue = searchStringSplit[2].trim()
             }
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
