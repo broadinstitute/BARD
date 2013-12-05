@@ -1,7 +1,5 @@
 package pages
 
-import org.apache.tools.ant.taskdefs.WaitFor;
-
 import geb.Page
 import modules.CardsHolderModule
 import modules.DocumentSectionModule

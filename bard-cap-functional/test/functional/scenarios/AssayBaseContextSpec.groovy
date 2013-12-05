@@ -177,7 +177,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		report ""
 	}
 
-	def "est Delete Context Card in Assay"(){
+	def "Test Delete Context Card in Assay"(){
 		given:"Navigate to Show Assay page"
 		to ViewAssayDefinitionPage
 		

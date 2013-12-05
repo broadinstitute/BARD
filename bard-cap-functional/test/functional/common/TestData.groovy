@@ -8,7 +8,7 @@ class TestData {
 
 	final static def projectId = 1315
 	final static def assayId = 8129
-	final static int experimentId = 1553
+	final static int experimentId = 1552
 	final static int panelId = 49
 
 	final static def documents = [
@@ -66,14 +66,19 @@ class TestData {
 			day:'3',
 			month:'Mar',
 			year:'2012'
-			],
+		],
 		To:[
 			day:'3',
 			month:'Mar',
 			year:'2014'
-			]
 		]
+	]
+
+	final static Map resultType = [
+		resultTypeId:'PubChem activity score',
+		statsModifierId:'geometric mean'
+	]
 	final static def assaysToPanel = [8129, 1315]
-	
+
 
 }
