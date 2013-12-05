@@ -16,6 +16,7 @@ import bard.core.util.FilterTypes
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
 import bard.db.project.Project
+import bard.db.util.BardNews
 import grails.plugins.springsecurity.Secured
 import molspreadsheet.CompoundSummaryCategorizer
 import molspreadsheet.LinkedVisHierData
@@ -108,7 +109,9 @@ class BardWebInterfaceController {
     }
 
     def index() {
-        render(view: 'homepage')
+        List<BardNews> bardNewsInstances = BardNews.listOrderByEntryDateUpdated(order: "desc", max: 20)
+
+        render(view: 'homepage', model: [bardNewsInstances: bardNewsInstances])
     }
 
     def bardIsGrowing() {
