@@ -129,7 +129,9 @@ class MolSpreadSheetDataBuilderDirector {
                                             Boolean showActiveCompoundsOnly) {
 
         Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids, cids, showActiveCompoundsOnly)
-        List<ExperimentSearch> experimentList = deriveListOfExperiments.experimentList.sort{it.bardAssayId}
+        // make sure that all the results we retrieve from the REST API are grouped by assay.  Corrects bug
+        // leading to experiments showing up in the wrong assay group.
+        List<ExperimentSearch> experimentList = deriveListOfExperiments.experimentList?.sort{it.bardAssayId}
         MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = deriveListOfExperiments.molSpreadsheetDerivedMethod
 
 
