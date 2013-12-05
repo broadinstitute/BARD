@@ -135,7 +135,7 @@
                     <a href="#news-gallery" class="btn-next" data-slide="next">Next</a>
 
                     <div class="carousel-inner">
-                        <g:each in="${bard.db.util.BardNews.listOrderByEntryDateUpdated(order: "desc")}" status="i"
+                        <g:each in="${bard.db.util.BardNews.listOrderByEntryDateUpdated(order: "desc", max: 20)}" status="i"
                                 var="newsItem">
                             <div class="item ${!i ? 'active' : ''}">
                                 <g:bardNewsItem item="${newsItem}"/>

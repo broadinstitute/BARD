@@ -60,16 +60,6 @@
             </li>
         </g:if>
 
-        <g:if test="${bardNewsInstance?.content}">
-            <li class="fieldcontain">
-                <span id="content-label" class="property-label"><g:message code="bardNews.content.label"
-                                                                           default="Content"/></span>
-
-                <span class="property-value" aria-labelledby="content-label"><%=bardNewsInstance.content%></span>
-
-            </li>
-        </g:if>
-
         <g:if test="${bardNewsInstance?.link}">
             <li class="fieldcontain">
                 <span id="link-label" class="property-label"><g:message code="bardNews.link.label"

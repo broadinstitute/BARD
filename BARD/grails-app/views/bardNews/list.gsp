@@ -30,8 +30,6 @@
 
 						<g:sortableColumn property="title" title="${message(code: 'bardNews.title.label', default: 'Title')}" />
 
-						<g:sortableColumn property="content" title="${message(code: 'bardNews.content.label', default: 'Content')}" />
-
 						<g:sortableColumn property="link" title="${message(code: 'bardNews.link.label', default: 'Link')}" />
 
 						<g:sortableColumn property="authorName" title="${message(code: 'bardNews.authorName.label', default: 'Author Name')}" />
@@ -47,8 +45,6 @@
 						<td><g:formatDate date="${bardNewsInstance.entryDateUpdated}" /></td>
 
 						<td>${fieldValue(bean: bardNewsInstance, field: "title")}</td>
-
-						<td><%=bardNewsInstance.content%></td>
 
 						<td>${fieldValue(bean: bardNewsInstance, field: "link")}</td>
 
