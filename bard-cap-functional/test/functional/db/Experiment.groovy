@@ -54,7 +54,15 @@ class Experiment extends DatabaseConnectivity {
 		}
 		return contextItemsList
 	}
-		
+	
+	public static def getExperimentResultType(def experimentId) {
+		def resultTypeList = []
+		def sql = getSql()
+		sql.eachRow(ExperimentQueries.EXPERIMENT_RESULTS, [experimentId]) { row ->
+			resultTypeList.add(row.ResultType)
+		}
+		return resultTypeList
+	}
 	/**
 	 * @param projectId
 	 * @param documentType

@@ -4,9 +4,9 @@ import geb.Page
 import geb.navigator.Navigator
 import modules.BardCapHeaderModule;
 import modules.LoadingModule
-
 import common.Constants
 import common.Constants.NavigateTo;
+import common.TestData;
 
 public class CommonFunctionalPage extends Page {
 	def seachADID = "Search by Assay Definition ID"
@@ -77,5 +77,10 @@ public class CommonFunctionalPage extends Page {
 	}
 	void waitForPageToLoad() {
 		waitFor(15, 0.5) { title.contains("BARD: Catalog of Assay Protocols") }
+	}
+	
+	void waitForPageLoad() {
+		waitFor(35000,0.5) { title.contains("EID "+TestData.experimentId) }
+		println "this is waiting for page to load"
 	}
 }

@@ -1,7 +1,5 @@
 package pages
 
-import org.apache.tools.ant.taskdefs.WaitFor;
-
 import geb.Page
 import modules.CardsHolderModule
 import modules.DocumentSectionModule
@@ -203,7 +201,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 			withConfirm { document.documentContents(docName).iconTrash.click() }
 			ajaxRequestCompleted()
 		}
-	}
+	} 
 
 	boolean isDocument(def document, def docName){
 		if(document.documentContents(docName)){

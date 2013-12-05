@@ -1,9 +1,9 @@
 package pages
 
 import geb.Page
-import modules.EditIconModule
+
 import common.Constants
-import common.TestData;
+import common.TestData
 /**
  * @author Muhammad.Rafique
  * Date Created: 2013/02/07

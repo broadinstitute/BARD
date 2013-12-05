@@ -13,7 +13,6 @@ import db.Assay
 /**
  * @author Muhammad.Rafique
  * Date Created: 13/02/07
- * Last Updated: 13/10/07
  */
 @Ignore
 class AssaySearchSpec extends BardFunctionalSpec {

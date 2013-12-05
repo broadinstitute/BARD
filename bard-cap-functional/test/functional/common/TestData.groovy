@@ -8,7 +8,7 @@ class TestData {
 
 	final static def projectId = 1315
 	final static def assayId = 8129
-	final static int experimentId = 1553
+	final static int experimentId = 1552
 	final static int panelId = 49
 
 	final static def documents = [
@@ -66,14 +66,41 @@ class TestData {
 			day:'3',
 			month:'Mar',
 			year:'2012'
-			],
+		],
 		To:[
 			day:'3',
 			month:'Mar',
 			year:'2014'
-			]
 		]
+	]
+
+	final static Map resultType = [
+		parent:[
+			resultType:'PubChem activity score',
+			statsModifier:'geometric mean'
+		],
+		editParent:[
+			resultType:'brain penetrance',
+			statsModifier:'minimum'
+		],
+		child:[
+			resultType:'categorical result',
+			statsModifier:'relative',
+			parentResultType:"PubChem activity score",	//this should be resultType value of parent map
+			relationship:'supported by'
+		],
+		dose:[
+			doseResultType:'active concentration',
+			responseResultType:'percent activity',
+			statsModifier:'median'
+		],
+		editDose:[
+			doseResultType:'cytostatic concentration',
+			responseResultType:'percent activity',
+			statsModifier:'maximum'
+		]
+	]
 	final static def assaysToPanel = [8129, 1315]
-	
+
 
 }
