@@ -406,8 +406,9 @@ log4j = {
 
 
     //Note that other filters are configured in Bootstrap.groovy
+
     //BoneCP errors
-    error(additivity: false, mySQLAppender: ['com.jolbox.bonecp.BoneCP'])
+    error(additivity: false, mySQLAppender: ['com.jolbox.bonecp'])
 
     //Capture errors from the NCGC API (via JDO) but DO NOT send emails about them.
     error(additivity: false, NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService'])
