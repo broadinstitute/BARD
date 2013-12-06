@@ -129,18 +129,8 @@ class CompoundBioActivitySummaryBuilder {
             case GroupByTypes.ASSAY:
                 List<AssayAdapter> assayAdapters
                 //For assays, we can use the testedAssays/hitAssays properties in the compoundSummary resource.
-                List<Assay> assays
-                if (filterTypes.containsAll([FilterTypes.ACTIVE, FilterTypes.INACTIVE])) {
-                    assays = testedAssays
-                } else if (filterTypes.contains(FilterTypes.ACTIVE)) {
-                    assays = hitAssays
-                } else if (filterTypes.contains(FilterTypes.INACTIVE)) {
-                    //We need to subtract the hitAssays from the testedAssays to get the inactive ones.
-                    List<Long> inactiveBardAssayIds = testedAssays*.bardAssayId - hitAssays*.bardAssayId
-                    assays = testedAssays.findAll { Assay assay -> inactiveBardAssayIds.contains(assay.bardAssayId) }
-                }
-
-                assayAdapters = assays?.unique()?.findAll { Assay assay -> assay.id == resourceId }?.collect { Assay assay -> return new AssayAdapter(assay) }
+                List<Assay> assays = filterTypes.contains(FilterTypes.TESTED) ? testedAssays : hitAssays
+                assayAdapters = assays.unique().findAll { Assay assay -> assay.id == resourceId }.collect { Assay assay -> return new AssayAdapter(assay) }
 
                 if (assayAdapters?.size() == 1) {
                     resource = new AssayValue(value: assayAdapters.first())

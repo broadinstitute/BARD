@@ -734,7 +734,7 @@ class BardWebInterfaceController {
             }
 
             final List<FilterTypes> filters = []
-//            filters.add(FilterTypes.TESTED)
+            filters.add(FilterTypes.TESTED)
             Boolean normalizeYAxisFilter = searchCommand.filters.find { SearchFilter searchFilter -> return searchFilter.filterName == 'plot_axis' }?.filterValue
             NormalizeAxis normalizeAxis = normalizeYAxisFilter ? NormalizeAxis.Y_NORM_AXIS : NormalizeAxis.Y_DENORM_AXIS
             if (normalizeAxis == NormalizeAxis.Y_DENORM_AXIS) {
