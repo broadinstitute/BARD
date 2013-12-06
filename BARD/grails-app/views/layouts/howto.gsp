@@ -19,18 +19,21 @@
     <r:layoutResources/>
 
     <style type="text/css">
-    @media (min-width: 768px) {          /* start of modification for 5 columns.  Must follow after bootstrap definitions */
+    @media (min-width: 768px) {
+        /* start of modification for 5 columns.  Must follow after bootstrap definitions */
         .fivecolumns .span2 {
             width: 18.2%;
             *width: 18.2%;
         }
     }
+
     @media (min-width: 1200px) {
         .fivecolumns .span2 {
             width: 17.9%;
             *width: 17.8%;
         }
     }
+
     @media (min-width: 768px) and (max-width: 979px) {
         .fivecolumns .span2 {
             width: 17.7%;
@@ -56,65 +59,65 @@
     <header class="navbar navbar-static-top" id="header">
         <div class="container-fluid">
             <div class="row-fluid">
-                <div class="span12" id="downtimeMessage"></div>
-            </div>
-
-            <div class="row-fluid">
-                <div class="span6">
-                    <strong class="logo"><a href="/BARD">BARD BioAssay Research Database</a></strong>
+                <div class="span3">
+                    <g:render template="/layouts/templates/downtime"/>
                 </div>
 
-                <div class="span6">
-                    <div class="row-fluid">
-                        <div class="center-aligned span6">
-                            <g:render template="/layouts/templates/socialMedia"/>
-                        </div>
-
-                        <div class="right-aligned span6">
-                            <g:render template="/layouts/templates/loginStrip"/>
-                        </div>
+                <div class="row-fluid">
+                    <div class="span6">
+                        <strong class="logo"><a href="/BARD">BARD BioAssay Research Database</a></strong>
                     </div>
 
-                    <div class="row-fluid">
-                        <nav class="nav-panel span12 right-aligned">
-                            <ul class="nav">
-                               <g:render template="/layouts/templates/howtolinks"/>
-                                <sec:ifLoggedIn>
-                                    <li><a href="/BARD/bardWebInterface/navigationPage">My BARD</a></li>
-                                </sec:ifLoggedIn>
-                            </ul>
-                            <g:if test="${false}">
-                                <ul class="login-nav">
-                                    <li><a href="#">Sign up</a></li>
-                                    <li><a href="#">Sign in</a></li>
+                    <div class="span6">
+                        <div class="row-fluid">
+                            <div class="center-aligned span6">
+                                <g:render template="/layouts/templates/socialMedia"/>
+                            </div>
+
+                            <div class="right-aligned span6">
+                                <g:render template="/layouts/templates/loginStrip"/>
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                            <nav class="nav-panel span12 right-aligned">
+                                <ul class="nav">
+                                    <g:render template="/layouts/templates/howtolinks"/>
+                                    <sec:ifLoggedIn>
+                                        <li><a href="/BARD/bardWebInterface/navigationPage">My BARD</a></li>
+                                    </sec:ifLoggedIn>
                                 </ul>
-                            </g:if>
-                        </nav>
-                     </div>
+                                <g:if test="${false}">
+                                    <ul class="login-nav">
+                                        <li><a href="#">Sign up</a></li>
+                                        <li><a href="#">Sign in</a></li>
+                                    </ul>
+                                </g:if>
+                            </nav>
+                        </div>
 
-
+                    </div>
                 </div>
             </div>
-        </div>
     </header>
 
 
     %{--Enhanced data and advanced tools block--}%
     %{--<article class="hero-block">--}%
-        %{--<div class="container-fluid">--}%
-            %{--<div class="hero-area">--}%
+    %{--<div class="container-fluid">--}%
+    %{--<div class="hero-area">--}%
 
-                %{--<div class="row-fluid">--}%
-                    %{--<article class="span8">--}%
-                        %{--<h1>Enhanced data and advanced tools to accelerate drug discovery.</h1>--}%
+    %{--<div class="row-fluid">--}%
+    %{--<article class="span8">--}%
+    %{--<h1>Enhanced data and advanced tools to accelerate drug discovery.</h1>--}%
 
-                        %{--<p>Introducing BARD, the powerful new bioassay database from the NIH Molecular Libraries Program. Now with unprecedented efficiency, scientists can develop and test hypotheses on the influence of different chemical probes on biological functions.</p>--}%
-                        %{--<a href="#" class="btn btn-primary">LEARN MORE</a>--}%
-                    %{--</article>--}%
-                    %{--<aside class="span4"></aside>--}%
-                %{--</div>--}%
-            %{--</div>--}%
-        %{--</div>--}%
+    %{--<p>Introducing BARD, the powerful new bioassay database from the NIH Molecular Libraries Program. Now with unprecedented efficiency, scientists can develop and test hypotheses on the influence of different chemical probes on biological functions.</p>--}%
+    %{--<a href="#" class="btn btn-primary">LEARN MORE</a>--}%
+    %{--</article>--}%
+    %{--<aside class="span4"></aside>--}%
+    %{--</div>--}%
+    %{--</div>--}%
+    %{--</div>--}%
     %{--</article>--}%
 
     <div class="container-fluid">
