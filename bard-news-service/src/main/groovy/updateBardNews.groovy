@@ -10,8 +10,8 @@ import org.apache.log4j.*
 //org.apache.log4j.BasicConfigurator.configure();
 //LogManager.rootLogger.level = Level.ERROR
 LogManager.getCurrentLoggers().each { Logger logger -> logger.level = Level.ERROR }
-Logger log = Logger.getLogger('A1')
-log.level=Level.INFO
+Logger log = Logger.getLogger('bardBewsAppender')
+log.level = Level.INFO
 assert args && args[0], "No config-file name has been provided (e.g., ~/.grails/BARD-production-config.groovy)\n"
 String configFileName = args[0]
 
@@ -45,7 +45,9 @@ try {
     sql.withTransaction {
         sql.call("call bard_context.set_username('bard_news')")
 
-        sql.execute('delete from bard_news')
+//        sql.execute('delete from bard_news')
+        String bardNewsItemsQuery = """select * from bard_news"""
+        def rows = sql.rows(bardNewsItemsQuery)
 
         http.request(GET, XML) { req ->
             // executed for all successful responses:
@@ -74,6 +76,14 @@ try {
                 null
             )"""
 
+                    //If we already have that news-item entry in the bard_news table, skip. For now, we are ignoring updates to an existing entry.
+                    Boolean newsItemExists = rows*.ENTRY_ID.contains(entry.id)
+                    if (newsItemExists) {
+                        log.info("Skipping - entry already exists: ${entry.id}")
+                        return
+                    }
+
+                    log.info("Adding ${entry.id}")
                     sql.execute(parametrizedSql)
                 }
             }
