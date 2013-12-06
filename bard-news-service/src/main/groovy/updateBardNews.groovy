@@ -7,10 +7,11 @@ import static groovyx.net.http.ContentType.*
 import groovy.sql.Sql
 import org.apache.log4j.*
 
-org.apache.log4j.BasicConfigurator.configure();
-LogManager.rootLogger.level = Level.ERROR
-Logger log = Logger.getLogger('updateBardNews')
-
+//org.apache.log4j.BasicConfigurator.configure();
+//LogManager.rootLogger.level = Level.ERROR
+LogManager.getCurrentLoggers().each { Logger logger -> logger.level = Level.ERROR }
+Logger log = Logger.getLogger('bardBewsAppender')
+log.level = Level.INFO
 assert args && args[0], "No config-file name has been provided (e.g., ~/.grails/BARD-production-config.groovy)\n"
 String configFileName = args[0]
 
@@ -31,7 +32,7 @@ assert username, "Could not find username configuration\n"
 String password = config.dataSource.password
 assert password, "Could not find password configuration\n"
 println([url, username, password, driverClassName])
-sql = Sql.newInstance(url, username, password, driverClassName);
+Sql sql = Sql.newInstance(url, username, password, driverClassName);
 
 StopWatch sw = new StopWatch()
 sw.start()
@@ -41,21 +42,24 @@ def uri = new groovyx.net.http.URIBuilder('http://askthebard.blogspot.com/feeds/
 def http = new HTTPBuilder(uri)
 
 try {
-    sql.call("call bard_context.set_username('bard_news')")
+    sql.withTransaction {
+        sql.call("call bard_context.set_username('bard_news')")
 
-    sql.execute('delete from bard_news')
+//        sql.execute('delete from bard_news')
+        String bardNewsItemsQuery = """select * from bard_news"""
+        def rows = sql.rows(bardNewsItemsQuery)
 
-    http.request(GET, XML) { req ->
-        // executed for all successful responses:
-        response.success = { resp, xml ->
-            assert resp.statusLine.statusCode == 200
-            xml.entry.each { entry ->
-                // iterate over each XML ATOM 'entry' element in the response:
-                Date published = DatatypeFactory.newInstance().newXMLGregorianCalendar(entry.published as String).toGregorianCalendar().getTime()
-                Date updated = DatatypeFactory.newInstance().newXMLGregorianCalendar(entry.updated as String).toGregorianCalendar().getTime()
-                String link = (entry.link.find { it["@type"] == "text/html" && it["@rel"] == "alternate" }["@href"] as String).replaceAll("'", "''")
+        http.request(GET, XML) { req ->
+            // executed for all successful responses:
+            response.success = { resp, xml ->
+                assert resp.statusLine.statusCode == 200
+                xml.entry.each { entry ->
+                    // iterate over each XML ATOM 'entry' element in the response:
+                    Date published = DatatypeFactory.newInstance().newXMLGregorianCalendar(entry.published as String).toGregorianCalendar().getTime()
+                    Date updated = DatatypeFactory.newInstance().newXMLGregorianCalendar(entry.updated as String).toGregorianCalendar().getTime()
+                    String link = (entry.link.find { it["@type"] == "text/html" && it["@rel"] == "alternate" }["@href"] as String).replaceAll("'", "''")
 
-                String parametrizedSql = """insert into BARD_NEWS (id, version, entry_id, Date_Published, Entry_Date_Updated, title, content, link, author_name, author_email, author_uri, Date_Created, Last_Updated, modified_by)
+                    String parametrizedSql = """insert into BARD_NEWS (id, version, entry_id, Date_Published, Entry_Date_Updated, title, link, author_name, author_email, author_uri, Date_Created, Last_Updated, modified_by)
             values (
                 BARD_NEWS_ID_SEQ.nextval,
                 0,
@@ -63,7 +67,6 @@ try {
                 timestamp'${published.toTimestamp()}',
                 timestamp'${updated.toTimestamp()}',
                 '${(entry.title as String).replaceAll("'", "''")}',
-                '${(entry.content as String).replaceAll("'", "''")}',
                 '${link}',
                 '${(entry.author.name as String).replaceAll("'", "''")}',
                 '${(entry.author.email as String).replaceAll("'", "''")}',
@@ -73,7 +76,16 @@ try {
                 null
             )"""
 
-                sql.execute(parametrizedSql)
+                    //If we already have that news-item entry in the bard_news table, skip. For now, we are ignoring updates to an existing entry.
+                    Boolean newsItemExists = rows*.ENTRY_ID.contains(entry.id)
+                    if (newsItemExists) {
+                        log.info("Skipping - entry already exists: ${entry.id}")
+                        return
+                    }
+
+                    log.info("Adding ${entry.id}")
+                    sql.execute(parametrizedSql)
+                }
             }
         }
     }

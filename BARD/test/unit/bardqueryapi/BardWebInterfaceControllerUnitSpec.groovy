@@ -14,6 +14,7 @@ import bard.core.rest.spring.project.Project
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentFile
 import bard.db.experiment.ExperimentService
+import bard.db.util.BardNews
 import bardwebquery.CompoundOptionsTagLib
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.buildtestdata.mixin.Build
@@ -43,7 +44,7 @@ import javax.servlet.http.HttpServletResponse
 @TestMixin([GrailsUnitTestMixin, DomainClassUnitTestMixin])
 @TestFor(BardWebInterfaceController)
 @Build([bard.db.project.Project, Experiment, ExperimentFile])
-@Mock([bard.db.project.Project, CompoundOptionsTagLib, Experiment, ExperimentFile])
+@Mock([bard.db.project.Project, CompoundOptionsTagLib, Experiment, ExperimentFile, BardNews])
 @Unroll
 class BardWebInterfaceControllerUnitSpec extends Specification {
     MolecularSpreadSheetService molecularSpreadSheetService

@@ -28,15 +28,8 @@
     <div class="search-panel">
 
         <div class="container-fluid">
-            <div id="downtimenotify" class="row-fluid span12" style="display:none">
-                <div id="basic-template">
-                    <a class="ui-notify-cross ui-notify-close" href="#">x</a>
+            <g:render template="/layouts/templates/downtime"/>
 
-                    <h1 id="downTimeTitle">#{title}</h1>
-
-                    <p>#{text}</p>
-                </div>
-            </div>
 
             <div class="row-fluid">
                 <div class="span2"  style="min-width: 180px">

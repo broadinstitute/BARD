@@ -28,12 +28,14 @@
 
 <div id="wrapper">
 
-%{--The control area at the top of the page is all contained within this header--}%
-<header class="navbar navbar-static-top" id="header">
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span12" id="downtimeMessage"></div>
-        </div>
+    %{--The control area at the top of the page is all contained within this header--}%
+    <header class="navbar navbar-static-top" id="header">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span3">
+                    <g:render template="/layouts/templates/downtime"/>
+                </div>
+            </div>
 
         <div class="row-fluid">
             <div class="span3" style="min-width: 210px; min-height: 70px;">
@@ -72,7 +74,7 @@
                 </div>
             </div>
         </div>
-    </div>
+</div>
 </header>
 
 %{--Enhanced data and advanced tools block--}%
@@ -135,9 +137,8 @@
                     <a href="#news-gallery" class="btn-next" data-slide="next">Next</a>
 
                     <div class="carousel-inner">
-                        <g:each in="${bard.db.util.BardNews.listOrderByEntryDateUpdated(order: "desc")}" status="i"
-                                var="newsItem">
-                            <div class="item ${!i ? 'active' : ''}" style="max-width: 500px;">
+                        <g:each in="${bardNewsInstances}" status="i" var="newsItem">
+                            <div class="item ${!i ? 'active' : ''}">
                                 <g:bardNewsItem item="${newsItem}"/>
                             </div>
                         </g:each>
@@ -214,16 +215,17 @@
     </div>
 </div>
 
-<div id="bardIsGrowing" href="${createLink(controller:"bardWebInterface", action: 'bardIsGrowing')}">
-
+<div id="bardIsGrowing" href="${createLink(controller: "bardWebInterface", action: 'bardIsGrowing')}">
 
 </div>
 
 <g:render template="/layouts/templates/footer"/>
 
 </div>
-<script> var $ = jQuery.noConflict(); $(document).ready(function()
-{ $('#articles-gallery').carousel({ interval: 10000, cycle: true }); });
+<script> var $ = jQuery.noConflict();
+$(document).ready(function () {
+    $('#articles-gallery').carousel({ interval: 10000, cycle: true });
+});
 
 </script>
 <r:layoutResources/>

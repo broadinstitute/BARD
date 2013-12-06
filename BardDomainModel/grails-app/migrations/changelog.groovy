@@ -59,6 +59,7 @@ databaseChangeLog = {
     include(file: "iteration_035/035_changelog.groovy")
     include(file: "iteration_036/036_changelog.groovy")
     include(file: "iteration_037/037_changelog.groovy")
+    include(file: "iteration_038/038_changelog.groovy")
 
     // views
     changeSet(author: 'ddurkin', id: 'create-or-replace-dictionary-views.sql', dbms: 'oracle', context: 'standard', runAlways: 'true') {
