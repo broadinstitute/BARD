@@ -20,16 +20,34 @@ class PubchemImportService {
     ResultsService resultsService
 
     @PreAuthorize("hasRole('ROLE_BARD_ADMINISTRATOR')")
-    ImportSummary recreateMeasuresAndLoad(boolean forceConvertPubchem, int aid, Closure statusCallback) {
+    ImportSummary recreateMeasuresAndLoad(boolean forceConvertPubchem, Long eid, Closure statusCallback) {
         statusCallback("Starting...")
 
         String pubchemPrefix
         String pubchemFileDir
         String convertedFileDir
 
+
+
+
+
+
         pubchemPrefix = grailsApplication.config.bard.pubchemPrefix
+
+
+
         pubchemFileDir = "${pubchemPrefix}/pubchem-files"
         convertedFileDir = "${pubchemPrefix}/converted-files"
+
+        Experiment experiment = Experiment.get(eid)
+        if(experiment == null) {
+            throw new RuntimeException("skipping experiment ${eid} because it could not be found")
+        }
+        ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
+        if(xref == null) {
+            throw new RuntimeException("Could not find aid for experiment ${eid}");
+        }
+        int aid = Integer.parseInt(xref.extAssayRef.replace("aid=",""))
 
         PubchemReformatService.ResultMap map
         try {
@@ -43,16 +61,10 @@ class PubchemImportService {
             throw new RuntimeException("skipping ${aid} because it was not in the database at all")
         }
 
-        List eids = refs.findAll { it?.experiment?.id } collectAll { it?.experiment?.id }
         Panel panel = null;
-
-        if (eids.size() != 1) {
-            Set expectedEids = map.getPanelEids() as Set
-            if ((eids as Set) != expectedEids) {
-                throw new RuntimeException("${aid} in DB multiple times: ${eids} but result map only mentioned the following eids: ${expectedEids}")
-            }
-
-            panel = derivePanel(eids)
+        if(experiment.panel != null)
+        {
+            panel = experiment.panel.panel
         }
 
         statusCallback("Recreating measures...")
@@ -61,6 +73,18 @@ class PubchemImportService {
             throw new RuntimeException("Skipping ${aid} -> ${refs*.experiment*.id.join(', ')} because we're missing resultmapping")
         }
 
+        Collection<Long> eids;
+        if(panel != null) {
+             eids = experiment.panel.experiments.collect { it.id }
+        } else {
+            eids = [eid]
+        }
+        return reloadEids(forceConvertPubchem, eids, map, aid, pubchemFileDir, convertedFileDir, statusCallback);
+    }
+
+    protected ImportSummary reloadEids(boolean forceConvertPubchem, Collection<Long> eids, PubchemReformatService.ResultMap map, int aid,
+                                       String pubchemFileDir, String convertedFileDir,
+                                       Closure statusCallback) {
         for (eid in eids) {
             Experiment experiment = Experiment.get(eid)
             try {
@@ -69,8 +93,6 @@ class PubchemImportService {
                 throw new RuntimeException("Exception while creating measures", ex)
             }
         }
-
-        refs = ExternalReference.findAllByExtAssayRef("aid=${aid}")
 
         ImportSummary firstResults = null
         for (eid in eids) {
@@ -113,7 +135,6 @@ class PubchemImportService {
 
         return firstResults;
     }
-
 
     Panel derivePanel(Collection<Long> eids) {
         // find the unique set of assays used by these experiments.
