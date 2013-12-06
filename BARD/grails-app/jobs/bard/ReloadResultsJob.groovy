@@ -16,11 +16,9 @@ class ReloadResultsJob {
     def perform(String username, String jobKey, Long id) {
         try {
             SpringSecurityUtils.doWithAuth(username) {
-                def experiment = Experiment.get(id)
-                ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
-                def aid = Integer.parseInt(xref.extAssayRef.replace("aid=",""))
-
-                ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid, {msg -> asyncResultsService.updateStatus(jobKey, msg)})
+                ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, id,
+                        { msg -> asyncResultsService.updateStatus(jobKey, msg)}
+                )
 
                 asyncResultsService.updateResult(jobKey, results)
             }
