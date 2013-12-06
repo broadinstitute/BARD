@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     var attributeSelect2 = new DescriptorSelect2('#attributeElementId', 'Search for attribute name',{results: []});
     $.ajax("/BARD/ontologyJSon/getAttributeDescriptors").done(function (data) {
-        attributeSelect2.initSelect2(data);
+        attributeSelect2.initSelect2(data, validateAddToChildren);
     });
     $("#attributeElementId").on("change", function (e) {
         // based on the attribute selected only show the appropriate value widgets
@@ -27,6 +27,7 @@ function validateAddToChildren(data) {
     }
     else {
         $('#attributeElementErrorField').html('<p class="text-error"><i class="icon-exclamation-sign"></i> That term is not allowed to be used as a parent</p>');
+        $("#nextBtn").attr("disabled", true);
     }
 }
 
