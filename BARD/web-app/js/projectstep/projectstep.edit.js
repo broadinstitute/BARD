@@ -140,7 +140,8 @@ function deleteItem(experimentId, projectId) {
                     data: data,
                     success: function (data) {
                         handleSuccess(data)
-                    }
+                    },
+                    error: handleAjaxError()
                 });
                 $(this).dialog("close");
             }
@@ -170,7 +171,8 @@ function deleteEdge(fromId, toId, projectId) {
                     data: data,
                     success: function (data) {
                         handleSuccess(data)
-                    }
+                    },
+                    error: handleAjaxError()
                 });
                 $(this).dialog("close");
             }

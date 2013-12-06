@@ -92,13 +92,13 @@ function editDocument(documentId, documentKind, owningEntityId, documentContent,
             $('#' + msgId).addClass("alert alert-success");
             $('#' + msgId).html("Successfully edited");
         },
-        error: function (response, textStatus, errorThrown) {
+        error: handleAjaxError(function (response, textStatus, errorThrown) {
             //reset all div with class of alert
             $('.alert').html("");
             $('div').removeClass("alert alert-error alert-success");
             $('#' + msgId).addClass("alert alert-error");
             $('#' + msgId).html(response.responseText);
-        }
+        })
     });
 }
 

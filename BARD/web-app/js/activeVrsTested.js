@@ -18,9 +18,9 @@ var ActiveVrsTestedHandler = {
                 success:function (data) {
                     $('#' + activeVrsTestedDivId).html(data);
                  },
-                error:function() {
+                error: handleAjaxError(function() {
                     $('#' + activeVrsTestedDivId).html('No data found');
-                },
+                }),
                 complete:function() {
                     $(this).addClass("processed");
                 }
