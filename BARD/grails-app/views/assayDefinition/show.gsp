@@ -43,7 +43,7 @@
 </g:if>
 <g:else>
     <g:render template="showAssayDefinition"
-              model="[assayInstance: assayInstance, editable: editable, uneditable: uneditable]"/>
+              model="[assayInstance: assayInstance, editable: editable, uneditable: uneditable, experimentsActiveVsTested:experimentsActiveVsTested]"/>
 </g:else>
 
 </body>
