@@ -14,8 +14,8 @@ class ExternalReference implements Serializable {
     Project project
     String extAssayRef
 
-    Date dateCreated
-    Date lastUpdated
+    Date dateCreated = new Date()
+    Date lastUpdated = new Date()
     String modifiedBy
     static transients = ['aid']
 
