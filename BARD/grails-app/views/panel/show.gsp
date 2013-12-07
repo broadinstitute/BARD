@@ -187,6 +187,7 @@
                                 <g:link controller="panel" action="create"
                                         class="btn"><i class="icon-plus"></i>Create a New Panel</g:link>
                             </sec:ifLoggedIn>
+                            <br/><br/>
                         </div>
                     </div>
                 </div>

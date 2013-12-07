@@ -1,5 +1,6 @@
 package bard.db.project
 
+import bard.db.enums.AssayStatus
 import bard.db.enums.DocumentType
 import bard.db.enums.ExperimentStatus
 import bard.db.enums.ProjectGroupType
@@ -15,6 +16,7 @@ import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
 import bard.db.registration.ExternalReference
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 class Project extends AbstractContextOwner implements GuidanceAware {
     public static final int PROJECT_NAME_MAX_SIZE = 256
@@ -176,5 +178,13 @@ class Project extends AbstractContextOwner implements GuidanceAware {
         final List<Guidance> guidanceList = []
         guidanceList.addAll(new MinimumOfOneBiologyGuidanceRule(this).getGuidance())
         guidanceList
+    }
+    public boolean permittedToSeeEntity() {
+        if ((projectStatus == ProjectStatus.DRAFT) &&
+                (!SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR') &&
+                        !SpringSecurityUtils.principalAuthorities.contains(this.ownerRole))) {
+            return false
+        }
+        return true
     }
 }

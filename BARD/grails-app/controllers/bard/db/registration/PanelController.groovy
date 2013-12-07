@@ -2,6 +2,7 @@ package bard.db.registration
 
 import acl.CapPermissionService
 import bard.db.command.BardCommand
+import bard.db.enums.AssayStatus
 import bard.db.people.Role
 import bard.db.project.InlineEditableCommand
 import grails.plugins.springsecurity.Secured
@@ -58,7 +59,15 @@ class PanelController {
         if (associatePanelCommand.hasErrors()) {
             return [associatePanelCommand: associatePanelCommand]
         }
-
+        Map unApprovedAssays = associatePanelCommand.getUnApprovedAssays()
+        if (unApprovedAssays) {
+            // unApprovedAssays.put("associatePanelCommand",associatePanelCommand)
+            return [
+                    associatePanelCommand: associatePanelCommand,
+                    draftAssays: unApprovedAssays.draftAssays,
+                    retiredAssays: unApprovedAssays.retiredAssays
+            ]
+        }
         this.panelService.associateAssays(associatePanelCommand.id, associatePanelCommand.assays)
 
         redirect(controller: "panel", action: "show", id: associatePanelCommand.id)
@@ -138,7 +147,7 @@ class PanelController {
             generateAndRenderJSONResponse(panel.version, panel.modifiedBy, panel.lastUpdated, panel.description)
         }
         catch (AccessDeniedException ade) {
-            log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -170,7 +179,7 @@ class PanelController {
             generateAndRenderJSONResponse(panel.version, panel.modifiedBy, panel.lastUpdated, panel.name)
         }
         catch (AccessDeniedException ade) {
-            log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -202,7 +211,7 @@ class PanelController {
 
         }
         catch (AccessDeniedException ade) {
-            log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -289,6 +298,24 @@ class AssociatePanelCommand extends BardCommand {
             sourceAssays.add(Assay.findById(id))
         }
         return sourceAssays
+    }
+
+    Map getUnApprovedAssays() {
+        final List<Assay> assays = getAssays()
+        final List<Assay> draftAssays = []
+        final List<Assay> retiredAssays = []
+
+        for (Assay assay : assays) {
+            if (assay.assayStatus == AssayStatus.DRAFT) {
+                draftAssays.add(assay)
+            } else if (assay.assayStatus == AssayStatus.RETIRED) {
+                retiredAssays.add(assay)
+            }
+        }
+        if (draftAssays || retiredAssays) {
+            return [draftAssays: draftAssays, retiredAssays: retiredAssays]
+        }
+        return [:]
     }
 
     List<Long> getAssayIdsAsLong() {

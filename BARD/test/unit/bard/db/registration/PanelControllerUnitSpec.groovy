@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import acl.CapPermissionService
+import bard.db.enums.AssayStatus
 import bard.db.people.Role
 import bard.db.project.InlineEditableCommand
 import com.fasterxml.jackson.databind.JsonNode
@@ -14,7 +15,6 @@ import grails.test.mixin.support.GrailsUnitTestMixin
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
@@ -256,11 +256,12 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         "With ID=STRING" | "Supplied ID not a valid Panel ID" | "STRING"
     }
 
+
     void 'test add assays'() {
         given:
         request.method = "POST"
         panel = Panel.build(name: 'Test')
-        Assay assay = Assay.build(assayName: "assay")
+        Assay assay = Assay.build(assayName: "assay", assayStatus: AssayStatus.APPROVED)
         params.id = panel.id
         params.assayIds = assay.id
 
@@ -283,6 +284,34 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         notThrown(Exception.class)
     }
 
+    void 'test add to panel with unapproved assays'() {
+        given:
+        controller.panelService = Mock(PanelService)
+        request.method = "POST"
+        panel = Panel.build(name: 'Test')
+        Assay assayRetired = Assay.build(assayName: "assay1", assayStatus: AssayStatus.RETIRED)
+        Assay assayApproved = Assay.build(assayName: "assay2", assayStatus: AssayStatus.APPROVED)
+        Assay assayDraft = Assay.build(assayName: "assay2", assayStatus: AssayStatus.DRAFT)
+        params.id = panel.id
+        params.assayIds = "${assayRetired.id} ${assayApproved.id} ${assayDraft.id}"
+        when:
+        def model = controller.addAssays()
+        then:
+        final AssociatePanelCommand associatePanelCommand = model.associatePanelCommand
+        List<Assay> draftAssays = model.draftAssays
+        List<Assay> retiredAssays = model.retiredAssays
+
+        assert associatePanelCommand
+        assert draftAssays
+        assert draftAssays.size() == 1
+        assert draftAssays.get(0).id == assayDraft.id
+
+        assert retiredAssays
+        assert retiredAssays.size() == 1
+        assert retiredAssays.get(0).id == assayRetired.id
+
+
+    }
 
     void 'test add assays - access denied'() {
         given:

@@ -12,6 +12,7 @@ import bard.db.project.ProjectSingleExperiment
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
 import bard.db.registration.MeasureCaseInsensitiveDisplayLabelComparator
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -54,7 +55,7 @@ class Experiment extends AbstractContextOwner {
 
 
 
-    static transients = ['measuresHaveAtLeastOnePriorityElement','experimentContextItems', 'disableUpdateReadyForExtraction']
+    static transients = ['measuresHaveAtLeastOnePriorityElement', 'experimentContextItems', 'disableUpdateReadyForExtraction']
 
 
 
@@ -84,7 +85,7 @@ class Experiment extends AbstractContextOwner {
     }
 
     static constraints = {
-        experimentName(nullable:false,blank: false, maxSize: EXPERIMENT_NAME_MAX_SIZE)
+        experimentName(nullable: false, blank: false, maxSize: EXPERIMENT_NAME_MAX_SIZE)
         experimentStatus(nullable: false)
         readyForExtraction(nullable: false)
         assay()
@@ -130,12 +131,12 @@ class Experiment extends AbstractContextOwner {
         }
     }
 
-    boolean measuresHaveAtLeastOnePriorityElement(){
-        if(!experimentMeasures){
+    boolean measuresHaveAtLeastOnePriorityElement() {
+        if (!experimentMeasures) {
             return false
         }
-        for(ExperimentMeasure experimentMeasure: experimentMeasures){
-            if(experimentMeasure.priorityElement){
+        for (ExperimentMeasure experimentMeasure : experimentMeasures) {
+            if (experimentMeasure.priorityElement) {
                 return true
             }
         }
@@ -147,6 +148,14 @@ class Experiment extends AbstractContextOwner {
         return objectOwner
     }
 
+    public boolean permittedToSeeEntity() {
+        if ((experimentStatus == ExperimentStatus.DRAFT) &&
+                (!SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR') &&
+                        !SpringSecurityUtils.principalAuthorities.contains(this.ownerRole))) {
+            return false
+        }
+        return true
+    }
 
     List<ExperimentDocument> getPublications() {
         final List<ExperimentDocument> documents = experimentDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION } as List<ExperimentDocument>

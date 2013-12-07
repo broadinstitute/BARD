@@ -38,7 +38,7 @@
         </div>
     </div>
 </g:if>
-<g:if test="${assayInstance?.assayStatus == AssayStatus.DRAFT && (!SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR') && !SpringSecurityUtils.principalAuthorities.contains(assayInstance?.ownerRole))}">
+<g:if test="${!assayInstance?.permittedToSeeEntity()}">
     <g:render template="/layouts/templates/handleDraftEntities" model="[entity: 'Assay Definition']"/>
 </g:if>
 <g:else>

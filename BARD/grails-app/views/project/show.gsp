@@ -18,7 +18,7 @@
 
 <body>
 <g:if test="${instance?.id}">
-    <g:if test="${instance?.projectStatus == ProjectStatus.DRAFT && (!SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR') && !SpringSecurityUtils.principalAuthorities.contains(instance?.ownerRole))}">
+    <g:if test="${!instance?.permittedToSeeEntity()}">
         <g:render template="/layouts/templates/handleDraftEntities" model="[entity: 'Project']"/>
     </g:if>
     <g:else>

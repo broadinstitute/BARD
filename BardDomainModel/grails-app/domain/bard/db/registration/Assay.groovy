@@ -3,6 +3,7 @@ package bard.db.registration
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.DocumentType
+import bard.db.enums.ExperimentStatus
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.hibernate.AssayStatusEnumUserType
 import bard.db.enums.hibernate.AssayTypeEnumUserType
@@ -15,6 +16,7 @@ import bard.db.guidance.owner.ShouldOnlyHaveOneItemPerNonFixedAttributeElementRu
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 class Assay extends AbstractContextOwner implements GuidanceAware {
     public static final int ASSAY_NAME_MAX_SIZE = 1000
@@ -195,5 +197,13 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
         guidanceList.addAll(new MinimumOfOneBiologyGuidanceRule(this).getGuidance())
         guidanceList.addAll(new ShouldOnlyHaveOneItemPerNonFixedAttributeElementRule(this).getGuidance())
         guidanceList
+    }
+    public boolean permittedToSeeEntity() {
+        if ((assayStatus == AssayStatus.DRAFT) &&
+                (!SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR') &&
+                        !SpringSecurityUtils.principalAuthorities.contains(this.ownerRole))) {
+            return false
+        }
+        return true
     }
 }

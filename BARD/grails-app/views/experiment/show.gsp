@@ -26,14 +26,13 @@
 </g:if>
 
 <g:if test="${instance?.id}">
-    <g:if test="${instance?.experimentStatus == ExperimentStatus.DRAFT && (!SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR') && !SpringSecurityUtils.principalAuthorities.contains(instance?.ownerRole))}">
-        <g:render template="/layouts/templates/handleDraftEntities" model="[entity: 'Experiment']"/>
+    <g:if test="${instance?.permittedToSeeEntity()}">
+        <g:render template="showExperiment"
+                  model="[instance: instance, editable: editable, uneditable: uneditable, contextIds: contextIds]"/>
     </g:if>
     <g:else>
-        <g:render template="showExperiment"
-                  model="[instance: instance, editable: editable, uneditable: uneditable, contextIds:contextIds]"/>
+        <g:render template="/layouts/templates/handleDraftEntities" model="[entity: 'Experiment']"/>
     </g:else>
-
 </g:if>
 
 </body>

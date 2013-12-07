@@ -328,6 +328,13 @@ class ExperimentController {
                             errorMessage, contentType: 'text/plain', template: null)
                     return
                 }
+                if(!experiment.experimentFiles){
+                    String errorMessage = "You must upload results for this experiment before it can be approved."
+                    render(status: HttpServletResponse.SC_BAD_REQUEST, text:
+                            errorMessage, contentType: 'text/plain', template: null)
+                    return
+
+                }
                 if (!experiment.measuresHaveAtLeastOnePriorityElement()) {
                     render(status: HttpServletResponse.SC_BAD_REQUEST, text: "You must designate at least one result type as a priority element before this experiment can be marked as approved.",
                             contentType: 'text/plain', template: null)

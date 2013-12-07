@@ -26,7 +26,7 @@
                 <tbody>
                 <g:each in="${assayInstance.experiments}" var="experiment">
                     <g:if test="${experiment.experimentStatus != ExperimentStatus.RETIRED}">
-                        <g:if test="${experiment?.experimentStatus == ExperimentStatus.DRAFT && (!SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR') && !SpringSecurityUtils.principalAuthorities.contains(experiment?.ownerRole))}">
+                        <g:if test="${!experiment?.permittedToSeeEntity()}">
                         %{--gray out the row if you are--}%
                             <tr class="grayout">
                                 <td>
