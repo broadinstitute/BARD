@@ -72,6 +72,20 @@ class OntologyJSonController {
     /**
      * @return List of elements to be used as attributes for ContextItems
      *
+     * TODO: Change stats modifier to also use this
+     */
+    @Cacheable(value = "contextItemAttributeDescriptors")
+    def getAttributeDescriptorsNoExpectedValueType(String startOfFullPath) {
+        final List<Descriptor> descriptors = ontologyDataAccessService.getDescriptors(startOfFullPath, null)
+        final List<Map> attributes = descriptors.collect { Descriptor descriptor ->
+            asMapForSelect2(descriptor, false)
+        }
+        final Map map = ['results': attributes]
+        render map as JSON
+    }
+    /**
+     * @return List of elements to be used as attributes for ContextItems
+     *
      * note: this cache will need to be cleared if the element hierarchy is changed or a new element is added
      */
     @Cacheable(value = "contextItemAttributeDescriptors")
