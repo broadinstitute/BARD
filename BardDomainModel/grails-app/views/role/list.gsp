@@ -1,3 +1,4 @@
+<%@ page import="bard.db.people.Role; bard.db.registration.*" %>
 <!DOCTYPE html>
 <html>
 <head>
