@@ -3,7 +3,7 @@
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,assaysummary,canEditWidget,myBard"/>
+            modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,assaysummary,canEditWidget"/>
     <meta name="layout" content="basic"/>
     <title>ADID ${assayInstance?.id}: ${assayInstance?.assayName}</title>
 </head>
