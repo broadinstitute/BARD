@@ -1,4 +1,3 @@
-<%@ page import="bard.db.bard.db.people.Role" %>
 <!DOCTYPE html>
 <html>
 <head>
