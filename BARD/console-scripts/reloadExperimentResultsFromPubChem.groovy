@@ -12,12 +12,12 @@ import org.hibernate.Session
 
 def outFile = new File('reload_experiment_result_out.txt')
 outFile.withWriter { writer ->
-    List<Long> eids
+    List<String> eids = []
     List<String> failedEids = []
     new File('EIDs.txt').eachLine { String line ->
         String[] eidStrings = line.split(/\s/)
         assert eidStrings.every { String eidString -> eidString.isLong() }, "All EIDs must be a LONG number ${eidStrings}"
-        eids = eidStrings.collect { String eidStr -> eidStr.toLong() }
+        eids.addAll(eidStrings)
     }
     writer.writeLine("EIDs: ${eids.join(', ')} (${eids.size()})")
     println("EIDs: ${eids.join(', ')}")
@@ -55,7 +55,7 @@ outFile.withWriter { writer ->
 
                     //      comment below when ready to commit
                     //transactionStatus.setRollbackOnly()
-                    ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, eid, { msg -> println("\tPubChemService: " + msg); writer.writeLine("\t" + msg) })
+                    ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, eid.toLong(), { msg -> println("\tPubChemService: " + msg); writer.writeLine("\t" + msg) })
 
                     println("\t...Finished")
                     writer.writeLine("\t...Finished")
