@@ -25,6 +25,9 @@ databaseChangeLog = {
                     END;""")
             }
         }
+    }
 
+    changeSet(author: "pmontgom", id: "iteration-039/03-drop-unused-tables", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_039/03-drop-unused-tables.sql", stripComments: true)
     }
 }

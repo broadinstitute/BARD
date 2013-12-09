@@ -949,29 +949,11 @@ as
            set element_id = ani_new_element_id
          where element_id = ani_element_id;
 
-        update rslt_context_item
-           set attribute_id = ani_new_element_id
-         where attribute_id = ani_element_id;
-
-        update rslt_context_item
-           set value_id = ani_new_element_id,
-               value_display = replace(value_display, lv_old_label, lv_new_label)
-         where value_id = ani_element_id;
-
         update exprmt_context_item
            set attribute_id = ani_new_element_id
          where attribute_id = ani_element_id;
 
         update exprmt_context_item
-           set value_id = ani_new_element_id,
-               value_display = replace(value_display, lv_old_label, lv_new_label)
-         where value_id = ani_element_id;
-
-        update prjct_exprmt_cntxt_item
-           set attribute_id = ani_new_element_id
-         where attribute_id = ani_element_id;
-
-        update prjct_exprmt_cntxt_item
            set value_id = ani_new_element_id,
                value_display = replace(value_display, lv_old_label, lv_new_label)
          where value_id = ani_element_id;
@@ -1002,26 +984,6 @@ as
            set value_id = ani_new_element_id,
                value_display = replace(value_display, lv_old_label, lv_new_label)
          where value_id = ani_element_id;
-
-        update measure
-           set result_type_id = ani_new_element_id
-         where result_type_id = ani_element_id;
-
-        update measure
-           set stats_modifier_id = ani_new_element_id
-         where stats_modifier_id = ani_element_id;
-
-        update measure
-           set entry_unit_id = ani_new_element_id
-         where entry_unit_id = ani_element_id;
-
-        update result
-           set result_type_id = ani_new_element_id
-         where result_type_id = ani_element_id;
-
-        update result
-           set stats_modifier_id = ani_new_element_id
-         where stats_modifier_id = ani_element_id;
 
         update project_experiment
            set stage_id = ani_new_element_id
