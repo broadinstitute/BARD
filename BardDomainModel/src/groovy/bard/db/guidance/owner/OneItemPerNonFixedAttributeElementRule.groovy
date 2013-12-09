@@ -17,16 +17,16 @@ import groovy.transform.TypeChecked
  * Time: 10:55 AM
  * An assay definition should only be allowed to have a single context item per attributeElement that has an attributeType != Fixed
  */
-class ShouldOnlyHaveOneItemPerNonFixedAttributeElementRule implements GuidanceRule {
+class OneItemPerNonFixedAttributeElementRule implements GuidanceRule {
 
     final Assay assay
     final AssayContext assayContext
 
-    ShouldOnlyHaveOneItemPerNonFixedAttributeElementRule(Assay assay) {
+    OneItemPerNonFixedAttributeElementRule(Assay assay) {
         this.assay = assay
     }
 
-    ShouldOnlyHaveOneItemPerNonFixedAttributeElementRule(AssayContext assayContext) {
+    OneItemPerNonFixedAttributeElementRule(AssayContext assayContext) {
         this.assayContext = assayContext
         this.assay = assayContext.assay
     }
@@ -40,8 +40,12 @@ class ShouldOnlyHaveOneItemPerNonFixedAttributeElementRule implements GuidanceRu
         attributeToItemsMap.each { Element attribute, List<AssayContextItem> itemsForAttribute ->
             final ArrayList<AssayContextItem> nonFixedItems = itemsForAttribute.findAll { it.attributeType != AttributeType.Fixed }
             final String attributeLabel = attribute.label
+            final Map<AttributeType,List<AssayContextItem>> attributeTypeToItemsMap = nonFixedItems.groupBy {AssayContextItem aci -> aci.attributeType}
             if (nonFixedItems.size() > 1) {
-                if (this.assayContext == null) { // report assay wide issue
+                if(attributeTypeToItemsMap.containsKey(AttributeType.List) && attributeTypeToItemsMap.size() == 1 ){
+                   // multiple List items are ok as long as there are only List items no Range or Free items
+                }
+                else if (this.assayContext == null) { // report assay wide issue
                     guidanceList.add(new DefaultGuidanceImpl(getErrorMsg(attributeLabel)))
                 } else { // only report if an item within this assayContext contains one an offending item
                     if (this.assayContext.contextItems.any { nonFixedItems.contains(it) }) {
@@ -55,6 +59,6 @@ class ShouldOnlyHaveOneItemPerNonFixedAttributeElementRule implements GuidanceRu
 
 
     public static String getErrorMsg(String attributeLabel) {
-        "The attribute '${attributeLabel}' should only appear in one context item for any value the will be provided with an experiment."
+        "The attribute '${attributeLabel}' should only appear in one context item for any value that will be provided with an experiment."
     }
 }

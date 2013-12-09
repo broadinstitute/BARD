@@ -90,6 +90,6 @@ class AssayContextUnitSpec extends AbstractContextUnitSpec<AssayContext> {
         AssayContext assayContext = new AssayContext()
 
         then: 'we should see only the rules we expect'
-        assayContext.getGuidanceRules()*.class*.simpleName == ['OneBiologyAttributePerContextRule', 'BiologyShouldHaveOneSupportingReferencePerContextRule', 'ShouldOnlyHaveOneItemPerNonFixedAttributeElementRule']
+        assayContext.getGuidanceRules()*.class*.simpleName == ['OneBiologyAttributePerContextRule', 'BiologyShouldHaveOneSupportingReferencePerContextRule', 'OneItemPerNonFixedAttributeElementRule']
     }
 }
