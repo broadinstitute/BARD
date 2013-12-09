@@ -47,7 +47,6 @@ class ResultsService {
     PugService pugService
     ResultsExportService resultsExportService
     ArchivePathService archivePathService
-    BulkResultService bulkResultService
     SpringSecurityService springSecurityService;
 
     public static class ImportOptions {
