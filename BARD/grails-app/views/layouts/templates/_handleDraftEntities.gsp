@@ -8,6 +8,8 @@
             <h2>${entity} Pending</h2>
 
             <p>This ${entity} is still a work in progress and is not available for public viewing. Please check back later!</p>
+            <br/>
+            <br/>
         </div>
     </div>
 </div>
