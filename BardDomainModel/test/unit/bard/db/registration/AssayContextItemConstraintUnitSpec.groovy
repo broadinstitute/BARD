@@ -37,7 +37,7 @@ class AssayContextItemConstraintUnitSpec extends AbstractContextItemConstraintUn
 
     AssayContextItem constructInstance(Map props) {
         def instance = AssayContextItem.buildWithoutSave(props)
-        instance.attributeElement.save(failOnError:true, flush: true)
+        instance.attributeElement.save(failOnError: true, flush: true)
 
         return instance
     }
@@ -153,40 +153,26 @@ class AssayContextItemConstraintUnitSpec extends AbstractContextItemConstraintUn
         "Range Attribute Type" | AttributeType.Range | true
     }
 
-    void "test canDelete has experiments #desc"() {
-        given:
-        domainInstance.attributeType = attributeType
-        Assay assay = domainInstance.assayContext.assay
-        assay.experiments = [new Experiment()]
-        when:
-        boolean canDelete = AssayContextItem.canDeleteContextItem(domainInstance)
-        then:
-        assert canDelete == valid
-
-        where:
-        desc                   | attributeType       | valid
-        "Fixed Attribute Type" | AttributeType.Fixed | true
-        "Free Attribute Type"  | AttributeType.Free  | false
-        "List Attribute Type"  | AttributeType.List  | false
-        "Range Attribute Type" | AttributeType.Range | false
-
-    }
-
-
     void "test safeToDeleteContextItem #desc"() {
         given:
-        domainInstance.attributeType = attributeType
+        final AssayContext ac = AssayContext.build()
+        count.times {
+            AssayContextItem.buildWithoutSave(assayContext: ac, attributeType: attributeType)
+        }
+
         when:
-        boolean safeToDelete = AssayContextItem.safeToDeleteContextItem(domainInstance)
+        boolean safeToDelete = AssayContextItem.safeToDeleteContextItem(ac.assayContextItems.first())
+
         then:
         assert safeToDelete == valid
 
         where:
-        desc                   | attributeType       | valid
-        "Fixed Attribute Type" | AttributeType.Fixed | true
-        "Free Attribute Type"  | AttributeType.Free  | false
-        "List Attribute Type"  | AttributeType.List  | false
-        "Range Attribute Type" | AttributeType.Range | false
+        desc                     | attributeType       | count | valid
+        "Fixed Attribute Type"   | AttributeType.Fixed | 1     | true
+        "1 Free Attribute Type"  | AttributeType.Free  | 1     | false
+        "1 List Attribute Type"  | AttributeType.List  | 1     | false
+        "1 Range Attribute Type" | AttributeType.Range | 1     | false
+
 
     }
 

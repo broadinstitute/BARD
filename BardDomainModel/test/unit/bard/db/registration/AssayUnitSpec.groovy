@@ -13,7 +13,7 @@ import bard.db.guidance.owner.*
 import static bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule.*
 import static bard.db.registration.AttributeType.*
 
-import static bard.db.guidance.owner.ShouldOnlyHaveOneItemPerNonFixedAttributeElementRule.getErrorMsg
+import static OneItemPerNonFixedAttributeElementRule.getErrorMsg
 
 /**
  * Created with IntelliJ IDEA.
