@@ -88,7 +88,6 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             }
 
             sql.execute("DELETE FROM ASSAY_CONTEXT WHERE ASSAY_ID=${assayId}")
-            sql.execute("DELETE FROM MEASURE WHERE ASSAY_ID=${assayId}")
             sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${assayId}")
         }
         for (Long projectId : projectIdList) {

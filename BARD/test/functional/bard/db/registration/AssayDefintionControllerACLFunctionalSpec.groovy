@@ -104,7 +104,6 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
             sql.call("{call bard_context.set_username(?)}", [TEAM_A_1_USERNAME])
 
             sql.execute("DELETE FROM ASSAY_CONTEXT WHERE ASSAY_ID=${assayData.id}")
-            //sql.execute("DELETE FROM MEASURE WHERE ASSAY_ID=${assayData.id}")
             sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${assayData.id}")
         }
     }
