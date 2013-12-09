@@ -67,3 +67,7 @@ div.drophoverCard table.table{
     -moz-border-radius: 4px;
     border-radius: 4px;
 }
+
+.card-table-container table caption {
+    height: 2em;
+}
