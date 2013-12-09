@@ -38,7 +38,7 @@
 
         <script id="edge-selection-template" type="text/x-handlebars-template">
             <div id="selectedEdgeId" style="display: none">{{selectedEdgeId}}</div>
-            <strong>Selected Edge</strong>
+            <strong>Selected Link</strong>
 
             <table><tr>
                 <td><div id="selectedEdgeFromId">{{fromNode}}</div> </td>
@@ -48,7 +48,7 @@
                     <a href="#" onclick="deleteEdge({{fromNode}},{{toNode}},${instanceId});return false;"
                        style="font-family:arial;color:red;font-size:10px;">
                         <i class="icon-trash"></i>
-                        Remove from Project
+                        Remove link
                     </a>
                 </g:if></td>
             </tr></table>
