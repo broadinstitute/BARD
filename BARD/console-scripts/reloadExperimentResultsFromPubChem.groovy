@@ -19,7 +19,7 @@ outFile.withWriter { writer ->
         assert eidStrings.every { String eidString -> eidString.isLong() }, "All EIDs must be a LONG number ${eidStrings}"
         eids.addAll(eidStrings as List<Long>)
     }
-    writer.writeLine("EIDs: ${eids.join(', ')}")
+    writer.writeLine("EIDs: ${eids.join(', ')} (${eids.size()})")
     println("EIDs: ${eids.join(', ')}")
 
     SpringSecurityUtils.reauthenticate("gwalzer", null)
@@ -55,7 +55,7 @@ outFile.withWriter { writer ->
 
                     //      comment below when ready to commit
                     //transactionStatus.setRollbackOnly()
-                    ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid, { msg -> println("\tPubChemService: " + msg); writer.writeLine("\t" + msg) })
+                    ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, eid, { msg -> println("\tPubChemService: " + msg); writer.writeLine("\t" + msg) })
 
                     println("\t...Finished")
                     writer.writeLine("\t...Finished")
