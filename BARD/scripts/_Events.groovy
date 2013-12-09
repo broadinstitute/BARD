@@ -11,8 +11,12 @@ eventWarStart = { type ->
     String buildDate = new Date()
     try {
         version = "git rev-parse HEAD".execute().text
-        branchName =  "git rev-parse --abbrev-ref HEAD".execute().text
-
+        branchName = "git rev-parse --abbrev-ref HEAD".execute().text
+        // prefer tagNames to branch names.  So if we have a tag, use that as the name
+        def tagName = "git tag --points-at HEAD".execute().text
+        if(tagName.length() > 0) {
+            branchName = tagName;
+        }
     } catch (e) {
         // couldn't access git.  Retrieved from the user interactively
         println "In order to build a war file we need the Git hash and name for the most recent build"
