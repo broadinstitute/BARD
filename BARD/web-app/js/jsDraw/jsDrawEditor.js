@@ -22,14 +22,16 @@ $(document).on('click', '#searchButton', function (event) {
         constructedSearch += ' threshold:' + cutoff;
     }
     $('#searchString').attr('value', constructedSearch);
-    jsDrawEditor.writeCookie();
+    var username = $('#jsDrawUsername').text()
+    jsDrawEditor.writeCookie(username);
 });
 
 $(document).ready(function () {
     jsDrawEditor = new JSDraw2.Editor("jsDrawEditorDiv", {popup: false, rxn: false, biology: false});
     adjustJSDrawEditorWindow()
     //Read cached structure
-    jsDrawEditor.readCookie();
+    var username = $('#jsDrawUsername').text()
+    jsDrawEditor.readCookie(username);
 
     $(window).resize(function () {
         adjustJSDrawEditorWindow();

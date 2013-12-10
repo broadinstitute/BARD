@@ -1,7 +1,7 @@
 <%@ page defaultCodec="none" %>
 <%@ page import="bard.core.rest.spring.util.StructureSearchParams" contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <title>BARD: Structure Search</title>
     <script type="text/javascript" src="${request.contextPath}/js/dojo-min/dojoConfig.js"></script>
@@ -14,7 +14,15 @@
 
 <body>
 <div class="row-fluid">
-    %{--AJAX is handling this--}%
+%{--Save the username in the page--}%
+    <sec:ifLoggedIn>
+        <p style="display: none" id="jsDrawUsername"><sec:username/></p>
+    </sec:ifLoggedIn>
+    <sec:ifNotLoggedIn>
+        <p style="display: none" id="jsDrawUsername">anonymous</p>
+    </sec:ifNotLoggedIn>
+
+%{--AJAX is handling this--}%
     <form class="form-inline" style="margin-top: 3px; margin-left: 3px">
         <input type="text" id="convertSmilesTextfield" name="smiles" class="span8" rows="1"
                placeholder="${message(code: 'jsDraw.convertSmiles')}"/>
