@@ -54,7 +54,7 @@
                         <div class="right-aligned">
                             <g:render template="/layouts/templates/loginStrip"/>
                         </div>
-                        <div class="right-aligned">
+                        <div class="left-aligned">
                             <g:render template="/layouts/templates/queryCart"/>
                         </div>
 
