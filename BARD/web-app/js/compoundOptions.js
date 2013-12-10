@@ -15,7 +15,7 @@ $(document).ready(function () {
     });
 
     //Use tooltip to display the SMILES string in case the it is larger than 30 character.
-    $("li[rel=tooltip]").tooltip({container:'body', placement: "bottom"});
+    $("li[rel=tooltip]").tooltip({container:'body', placement: "auto bottom"});
 });
 
 //Overrides the Twitter Bootstraps' Dropdown behavior that hides the menu when a menu item was clicked

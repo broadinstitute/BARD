@@ -28,7 +28,7 @@
                         </div>
                     </li>
                 </g:each>
-                <li class="span3">
+                <li class="span3" style="overflow: hidden;">
                     <br/>
                     <br/>
                     <g:if test="${probeCompoundsSearchString}">
