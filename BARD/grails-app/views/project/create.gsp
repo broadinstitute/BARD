@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="bard.db.command.BardCommand; bard.db.people.Role; bard.db.enums.ProjectGroupType; bard.db.enums.ProjectStatus; bard.db.project.*" %>
+<%@ page import="bard.db.enums.Status; bard.db.command.BardCommand; bard.db.people.Role; bard.db.enums.ProjectGroupType; bard.db.enums.Status; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,7 +70,7 @@
 
                 <div class="controls">
                     <g:select name="projectStatus" id="projectStatus"
-                              from="${ProjectStatus.values()}"
+                              from="${Status.values()}"
                               value="${projectCommand?.projectStatus}"
                               optionValue="id"/>
 

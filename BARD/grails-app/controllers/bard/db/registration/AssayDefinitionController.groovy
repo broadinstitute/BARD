@@ -3,9 +3,9 @@ package bard.db.registration
 import acl.CapPermissionService
 import bard.db.ContextService
 import bard.db.command.BardCommand
-import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ContextType
+import bard.db.enums.Status
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
 import bard.db.project.InlineEditableCommand
@@ -139,7 +139,7 @@ class AssayDefinitionController {
     @Secured(['isAuthenticated()'])
     def editAssayStatus(InlineEditableCommand inlineEditableCommand) {
         try {
-            final AssayStatus assayStatus = AssayStatus.byId(inlineEditableCommand.value)
+            final Status assayStatus = Status.byId(inlineEditableCommand.value)
             Assay assay = Assay.findById(inlineEditableCommand.pk)
             final String message = inlineEditableCommand.validateVersions(assay.version, Assay.class)
             if (message) {
@@ -230,9 +230,9 @@ class AssayDefinitionController {
      */
     def assayStatus() {
         List<String> sorted = []
-        final Collection<AssayStatus> assayStatuses = AssayStatus.values()
-        for (AssayStatus assayStatus : assayStatuses) {
-            if (assayStatus != AssayStatus.DRAFT) {
+        final Collection<Status> assayStatuses = Status.values()
+        for (Status assayStatus : assayStatuses) {
+            if (assayStatus != Status.DRAFT) {
                 sorted.add(assayStatus.id)
             }
         }

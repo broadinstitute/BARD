@@ -1,7 +1,7 @@
 package bard.db.registration
 
 import acl.CapPermissionService
-import bard.db.enums.AssayStatus
+import bard.db.enums.Status
 import bard.db.people.Role
 import bard.db.project.InlineEditableCommand
 import com.fasterxml.jackson.databind.JsonNode
@@ -261,7 +261,7 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         given:
         request.method = "POST"
         panel = Panel.build(name: 'Test')
-        Assay assay = Assay.build(assayName: "assay", assayStatus: AssayStatus.APPROVED)
+        Assay assay = Assay.build(assayName: "assay", assayStatus: Status.APPROVED)
         params.id = panel.id
         params.assayIds = assay.id
 
@@ -289,9 +289,9 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         controller.panelService = Mock(PanelService)
         request.method = "POST"
         panel = Panel.build(name: 'Test')
-        Assay assayRetired = Assay.build(assayName: "assay1", assayStatus: AssayStatus.RETIRED)
-        Assay assayApproved = Assay.build(assayName: "assay2", assayStatus: AssayStatus.APPROVED)
-        Assay assayDraft = Assay.build(assayName: "assay2", assayStatus: AssayStatus.DRAFT)
+        Assay assayRetired = Assay.build(assayName: "assay1", assayStatus: Status.RETIRED)
+        Assay assayApproved = Assay.build(assayName: "assay2", assayStatus: Status.APPROVED)
+        Assay assayDraft = Assay.build(assayName: "assay2", assayStatus: Status.DRAFT)
         params.id = panel.id
         params.assayIds = "${assayRetired.id} ${assayApproved.id} ${assayDraft.id}"
         when:

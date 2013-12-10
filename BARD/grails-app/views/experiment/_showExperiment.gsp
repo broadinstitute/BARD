@@ -1,4 +1,4 @@
-<%@ page import="org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils; bard.db.dictionary.Element; bard.db.model.AbstractContextItem; bard.db.model.AbstractContext; bard.db.enums.ExperimentStatus; bard.db.enums.ContextType; bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
+<%@ page import="bard.db.enums.Status; org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils; bard.db.dictionary.Element; bard.db.model.AbstractContextItem; bard.db.model.AbstractContext; bard.db.enums.Status; bard.db.enums.ContextType; bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
 <g:hiddenField name="experimentId" id="experimentId" value="${instance?.id}"/>
 <div class="row-fluid">
     <div class="span12">
@@ -341,10 +341,10 @@
                     <h4>No results uploaded for this experiment</h4>
                 </g:elseif>
                 <g:else>
-                    <g:if test="${instance.experimentStatus == ExperimentStatus.APPROVED}">
+                    <g:if test="${instance.experimentStatus == Status.APPROVED}">
                         <h4>Results for this experiment aren't available for querying because this experiment is waiting to be loaded to the warehouse.</h4>
                     </g:if>
-                    <g:elseif test="${instance.experimentStatus == ExperimentStatus.RETIRED}">
+                    <g:elseif test="${instance.experimentStatus == Status.RETIRED}">
                         <h4>Results for this experiment aren't available for querying because this experiment has a Retired status</h4>
                     </g:elseif>
                     <g:else>

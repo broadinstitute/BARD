@@ -1,11 +1,9 @@
 package bard.db.project
 
-import bard.db.enums.AssayStatus
 import bard.db.enums.DocumentType
-import bard.db.enums.ExperimentStatus
 import bard.db.enums.ProjectGroupType
-import bard.db.enums.ProjectStatus
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.Status
 import bard.db.enums.hibernate.ProjectGroupTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.experiment.Experiment
@@ -28,7 +26,7 @@ class Project extends AbstractContextOwner implements GuidanceAware {
     ProjectGroupType groupType = ProjectGroupType.PROJECT
     String description
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
-    ProjectStatus projectStatus = ProjectStatus.DRAFT
+    Status projectStatus = Status.DRAFT
     Long ncgcWarehouseId;
 
     Date dateCreated
@@ -54,7 +52,7 @@ class Project extends AbstractContextOwner implements GuidanceAware {
         Set<Experiment> unApprovedExperiments = new HashSet<Experiment>()
         projectExperiments.each { ProjectSingleExperiment projectExperiment ->
             final Experiment experiment = projectExperiment.experiment
-            if (experiment.experimentStatus != ExperimentStatus.APPROVED && experiment.experimentStatus != ExperimentStatus.RETIRED) {
+            if (experiment.experimentStatus != Status.APPROVED && experiment.experimentStatus != Status.RETIRED) {
                 unApprovedExperiments.add(experiment)
             }
         }
@@ -180,7 +178,7 @@ class Project extends AbstractContextOwner implements GuidanceAware {
         guidanceList
     }
     public boolean permittedToSeeEntity() {
-        if ((projectStatus == ProjectStatus.DRAFT) &&
+        if ((projectStatus == Status.DRAFT) &&
                 (!SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR') &&
                         !SpringSecurityUtils.principalAuthorities.contains(this.ownerRole))) {
             return false

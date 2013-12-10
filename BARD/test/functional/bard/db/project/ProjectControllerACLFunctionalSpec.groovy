@@ -4,7 +4,7 @@ import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
 import bard.db.enums.ContextType
 import bard.db.enums.ProjectGroupType
-import bard.db.enums.ProjectStatus
+import bard.db.enums.Status
 import bard.db.experiment.Experiment
 import bard.db.people.Role
 import bard.db.registration.BardControllerFunctionalSpec
@@ -111,7 +111,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         String name = "My Project Name_" + team
         String description = "Some Description"
-        String status = ProjectStatus.DRAFT.id
+        String status = Status.DRAFT.id
         String groupType = ProjectGroupType.PROJECT.id
         RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
         when:
@@ -136,7 +136,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         String name = "My Project Name_" + team
         String description = "Some Description"
-        String status = ProjectStatus.DRAFT.id
+        String status = Status.DRAFT.id
         String groupType = ProjectGroupType.PROJECT.id
         RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
         when:
@@ -158,7 +158,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test edit Project Status #desc'() {
         given:
         Long pk = projectData.id
-        String newStatus = ProjectStatus.APPROVED.id
+        String newStatus = Status.APPROVED.id
         Long version = getCurrentProjectProperties().version
         RESTClient client = getRestClient(controllerUrl, "editProjectStatus", team, teamPassword)
         when:
@@ -183,7 +183,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test edit Project Status #desc - Forbidden'() {
         given:
         Long pk = projectData.id
-        String value = ProjectStatus.APPROVED.id
+        String value = Status.APPROVED.id
         Long version = getCurrentProjectProperties().version
         RESTClient client = getRestClient(controllerUrl, "editProjectStatus", team, teamPassword)
         when:
@@ -202,7 +202,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test edit Project Name #desc'() {
         given:
         Long pk = projectData.id
-        String newName = ProjectStatus.APPROVED.id + team
+        String newName = Status.APPROVED.id + team
         Long version = getCurrentProjectProperties().version
         RESTClient client = getRestClient(controllerUrl, "editProjectName", team, teamPassword)
         when:
@@ -227,7 +227,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test edit Project Name #desc - Forbidden'() {
         given:
         Long pk = projectData.id
-        String newName = ProjectStatus.APPROVED.id + team
+        String newName = Status.APPROVED.id + team
         Long version = getCurrentProjectProperties().version
         RESTClient client = getRestClient(controllerUrl, "editProjectName", team, teamPassword)
         when:
@@ -247,7 +247,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test edit Project Description #desc'() {
         given:
         Long pk = projectData.id
-        String newDescription = ProjectStatus.APPROVED.id + team
+        String newDescription = Status.APPROVED.id + team
         Long version = getCurrentProjectProperties().version
         RESTClient client = getRestClient(controllerUrl, "editDescription", team, teamPassword)
         when:
@@ -272,7 +272,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test edit Project Description #desc - Forbidden'() {
         given:
         Long pk = projectData.id
-        String newDescription = ProjectStatus.APPROVED.id + team
+        String newDescription = Status.APPROVED.id + team
         Long version = getCurrentProjectProperties().version
         RESTClient client = getRestClient(controllerUrl, "editDescription", team, teamPassword)
         when:
@@ -657,7 +657,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         when:
         def response = client.post() {
-            urlenc instanceId: projectData.id, projectName: "My New Name", description: "My Description", projectStatus: ProjectStatus.DRAFT
+            urlenc instanceId: projectData.id, projectName: "My New Name", description: "My Description", projectStatus: Status.DRAFT
         }
 
         then:
@@ -677,7 +677,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         RESTClient client = getRestClient(controllerUrl, "editSummary", team, teamPassword)
         when:
         client.post() {
-            urlenc instanceId: projectData.id, projectName: "My New Name", description: "My Description", projectStatus: ProjectStatus.DRAFT
+            urlenc instanceId: projectData.id, projectName: "My New Name", description: "My Description", projectStatus: Status.DRAFT
         }
         then:
         def ex = thrown(RESTClientException)

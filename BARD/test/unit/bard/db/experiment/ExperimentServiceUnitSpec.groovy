@@ -1,8 +1,8 @@
 package bard.db.experiment
 
 import bard.db.dictionary.Element
-import bard.db.enums.ExperimentStatus
 import bard.db.enums.HierarchyType
+import bard.db.enums.Status
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
@@ -146,8 +146,8 @@ public class ExperimentServiceUnitSpec extends Specification {
 
     void "test update Experiment Status"() {
         given:
-        final Experiment experiment = Experiment.build(experimentName: 'experimentName20', experimentStatus: ExperimentStatus.DRAFT)
-        final ExperimentStatus newExperimentStatus = ExperimentStatus.APPROVED
+        final Experiment experiment = Experiment.build(experimentName: 'experimentName20', experimentStatus: Status.DRAFT)
+        final Status newExperimentStatus = Status.APPROVED
         when:
         final Experiment updatedExperiment = service.updateExperimentStatus(experiment.id, newExperimentStatus)
         then:

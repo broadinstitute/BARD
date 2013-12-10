@@ -1,8 +1,7 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
-import bard.db.enums.AssayStatus
-import bard.db.enums.ExperimentStatus
+import bard.db.enums.Status
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentFile
 import bard.db.experiment.ExperimentMeasure
@@ -58,7 +57,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
             if (!otherRole) {
                 otherRole = Role.build(authority: 'ROLE_TEAM_B', displayName: 'ROLE_TEAM_B').save(flush: true)
             }
-            Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role, assayStatus: AssayStatus.APPROVED).save(flush: true)
+            Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role, assayStatus:Status.APPROVED).save(flush: true)
 
             Element element = Element.findByLabel("Some labelYYY")
             if (!element) {
@@ -413,7 +412,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         Long version = currentDataMap.version
         String oldExperimentStatus = currentDataMap.experimentStatus
         String newExperimentStatus = null
-        for (ExperimentStatus experimentStatus : ExperimentStatus.values()) {
+        for (Status experimentStatus : Status.values()) {
             if (oldExperimentStatus != experimentStatus.id) {
                 newExperimentStatus = experimentStatus.id
                 break;
@@ -444,7 +443,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         Long version = currentDataMap.version
         String oldExperimentStatus = currentDataMap.experimentStatus
         String newExperimentStatus = null
-        for (ExperimentStatus experimentStatus : ExperimentStatus.values()) {
+        for (Status experimentStatus : Status.values()) {
             if (oldExperimentStatus != experimentStatus.id) {
                 newExperimentStatus = experimentStatus.id
                 break;

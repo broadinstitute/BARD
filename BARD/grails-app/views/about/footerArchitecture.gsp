@@ -1,14 +1,7 @@
-<%@ page import="bard.db.enums.ExperimentStatus; bard.db.enums.ContextType; bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
+<%@ page import="bard.db.enums.ContextType; bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
-<head>
-    <r:require
-            modules="core,bootstrap,twitterBootstrapAffix"/>
-    <meta name="layout" content="howto"/>
-    <r:external file="css/bootstrap-plus.css"/>
-    <title>BARD Architecture</title>
-</head>
-
+<g:render template="howToHeader" model="[title:'BARD Architecture']"/>
 <body>
 <div class="search-panel">
     <div class="container-fluid">

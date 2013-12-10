@@ -2,7 +2,7 @@ package bard.db.registration
 
 import acl.CapPermissionService
 import bard.db.command.BardCommand
-import bard.db.enums.AssayStatus
+import bard.db.enums.Status
 import bard.db.people.Role
 import bard.db.project.InlineEditableCommand
 import grails.plugins.springsecurity.Secured
@@ -306,9 +306,9 @@ class AssociatePanelCommand extends BardCommand {
         final List<Assay> retiredAssays = []
 
         for (Assay assay : assays) {
-            if (assay.assayStatus == AssayStatus.DRAFT) {
+            if (assay.assayStatus == Status.DRAFT) {
                 draftAssays.add(assay)
-            } else if (assay.assayStatus == AssayStatus.RETIRED) {
+            } else if (assay.assayStatus == Status.RETIRED) {
                 retiredAssays.add(assay)
             }
         }

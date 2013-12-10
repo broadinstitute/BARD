@@ -1,4 +1,4 @@
-<%@ page import="bard.db.enums.AssayStatus; bard.db.enums.ContextType; bard.db.model.AbstractContextOwner; org.springframework.security.acls.domain.BasePermission; bard.db.registration.*" %>
+<%@ page import="bard.db.enums.Status; bard.db.enums.ContextType; bard.db.model.AbstractContextOwner; org.springframework.security.acls.domain.BasePermission; bard.db.registration.*" %>
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span3">

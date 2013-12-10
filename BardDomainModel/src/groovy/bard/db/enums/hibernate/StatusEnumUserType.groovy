@@ -1,6 +1,6 @@
 package bard.db.enums.hibernate
 
-import bard.db.enums.AssayStatus
+import bard.db.enums.Status
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,10 +9,10 @@ import bard.db.enums.AssayStatus
  * Time: 1:40 AM
  * To change this template use File | Settings | File Templates.
  */
-class AssayStatusEnumUserType extends AbstractEnumUserType<AssayStatus> {
+class StatusEnumUserType extends AbstractEnumUserType<Status> {
 
-    public AssayStatusEnumUserType() {
-        super(AssayStatus.class)
+    public StatusEnumUserType() {
+        super(Status.class)
     }
 
 }

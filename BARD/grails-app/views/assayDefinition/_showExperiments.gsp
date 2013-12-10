@@ -1,4 +1,4 @@
-<%@ page import="org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils; bard.db.enums.ProjectStatus; bard.db.enums.ExperimentStatus; org.apache.commons.lang3.tuple.Pair" %>
+<%@ page import="bard.db.enums.Status; org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils; bard.db.enums.Status; org.apache.commons.lang3.tuple.Pair" %>
 <div id="showExperiments" xmlns="http://www.w3.org/1999/html">
     <g:if test="${assayInstance.experiments}">
         <g:render template="/layouts/templates/tableSorterTip"/>
@@ -25,7 +25,7 @@
                 </thead>
                 <tbody>
                 <g:each in="${assayInstance.experiments}" var="experiment">
-                    <g:if test="${experiment.experimentStatus != ExperimentStatus.RETIRED}">
+                    <g:if test="${experiment.experimentStatus != Status.RETIRED}">
                         <g:if test="${!experiment?.permittedToSeeEntity()}">
                         %{--gray out the row if you are--}%
                             <tr class="grayout">
@@ -68,7 +68,7 @@
                                 <g:if test="${!experiment.projectExperiments.isEmpty()}">
 
                                     <g:each in="${experiment.projectExperiments}" var="projectExperiment">
-                                        <g:if test="${projectExperiment.project.projectStatus != ProjectStatus.RETIRED}">
+                                        <g:if test="${projectExperiment.project.projectStatus != Status.RETIRED}">
                                             <td>
 
                                                 <g:link controller="project" id="${projectExperiment.project.id}"

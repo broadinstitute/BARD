@@ -1,8 +1,8 @@
 package bard.db.registration
 
-import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.Status
 import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
@@ -80,8 +80,8 @@ public class AssayServiceUnitSpec extends Specification {
 
         where:
         desc                                        | assayBuild                              | assayNamePrefix | expectedAssayName  | expectedAssayStatus
-        "Cloned Assay with blank assay Name prefix" | { Assay.build(assayName: "assayName") } | ""              | "assayName"        | AssayStatus.DRAFT
-        "Cloned Assay with an assay Name prefix"    | { Assay.build(assayName: "assayName") } | "Cloned "       | "Cloned assayName" | AssayStatus.DRAFT
+        "Cloned Assay with blank assay Name prefix" | { Assay.build(assayName: "assayName") } | ""              | "assayName"        | Status.DRAFT
+        "Cloned Assay with an assay Name prefix"    | { Assay.build(assayName: "assayName") } | "Cloned "       | "Cloned assayName" | Status.DRAFT
     }
 
     void 'test clone assay for editing'() {
@@ -103,7 +103,7 @@ public class AssayServiceUnitSpec extends Specification {
         // test assay props are good
         assay != newAssay
         assert "Clone of ${assay.assayName}" == newAssay.assayName
-        assert AssayStatus.DRAFT == newAssay.assayStatus
+        assert Status.DRAFT == newAssay.assayStatus
         assert assay.assayType != newAssay.assayType
         assert newAssay.assayType == AssayType.REGULAR
         assert assay.designedBy == newAssay.designedBy

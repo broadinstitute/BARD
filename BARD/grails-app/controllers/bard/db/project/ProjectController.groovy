@@ -5,9 +5,8 @@ import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
 import bard.db.enums.ContextType
-import bard.db.enums.ExperimentStatus
 import bard.db.enums.ProjectGroupType
-import bard.db.enums.ProjectStatus
+import bard.db.enums.Status
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
@@ -71,7 +70,7 @@ class ProjectController {
     @Secured(['isAuthenticated()'])
     def editProjectStatus(InlineEditableCommand inlineEditableCommand) {
         try {
-            final ProjectStatus projectStatus = ProjectStatus.byId(inlineEditableCommand.value)
+            final Status projectStatus = Status.byId(inlineEditableCommand.value)
             final Project project = Project.findById(inlineEditableCommand.pk)
             final String message = inlineEditableCommand.validateVersions(project.version, Project.class)
             if (message) {
@@ -206,9 +205,9 @@ class ProjectController {
      */
     def projectStatus() {
         List<String> sorted = []
-        final Collection<ProjectStatus> projectStatuses = ProjectStatus.values()
-        for (ProjectStatus projectStatus : projectStatuses) {
-            if (projectStatus != ProjectStatus.DRAFT) {
+        final Collection<Status> projectStatuses = Status.values()
+        for (Status projectStatus : projectStatuses) {
+            if (projectStatus != Status.DRAFT) {
                 sorted.add(projectStatus.id)
             }
         }
@@ -354,7 +353,7 @@ class ProjectController {
         if (editable) {
             projectInstance.name = projectName
             projectInstance.description = description
-            projectInstance.projectStatus = Enum.valueOf(ProjectStatus, projectStatus);
+            projectInstance.projectStatus = Enum.valueOf(Status, projectStatus);
             projectInstance.save(flush: true)
             projectInstance = Project.findById(instanceId)
             render(template: "summaryDetail", model: [project: projectInstance])
@@ -551,7 +550,7 @@ class AssociateExperimentsCommand extends BardCommand {
                                         "Experiment EID: ${entityId} is already part of this Project ${command.projectId}");
                             }
 
-                        } else if (experiment.experimentStatus == ExperimentStatus.RETIRED) {
+                        } else if (experiment.experimentStatus == Status.RETIRED) {
                             if (command.idType == IdType.AID) {
                                 err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.aid.retired",
                                         ["${entityId}", "${command.projectId}"] as Object[],
@@ -627,7 +626,7 @@ class AssociateExperimentsCommand extends BardCommand {
             }
             for (Experiment experiment : experiments) {
                 if (!projectService.isExperimentAssociatedWithProject(experiment, project) &&
-                        experiment.experimentStatus != ExperimentStatus.RETIRED) {
+                        experiment.experimentStatus != Status.RETIRED) {
                     this.availableExperiments.add(experiment)
                 }
             }
@@ -642,7 +641,7 @@ class ProjectCommand extends BardCommand {
     String name
     String description
     ProjectGroupType projectGroupType = ProjectGroupType.PROJECT
-    ProjectStatus projectStatus = ProjectStatus.DRAFT
+    Status projectStatus = Status.DRAFT
 
     SpringSecurityService springSecurityService
     String ownerRole

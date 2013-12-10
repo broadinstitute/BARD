@@ -1,10 +1,10 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
-import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ContextType
 import bard.db.enums.HierarchyType
+import bard.db.enums.Status
 import bard.db.experiment.ExperimentMeasure
 import bard.db.people.Role
 import groovy.sql.Sql
@@ -532,7 +532,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         Long version = currentDataMap.version
         String oldAssayStatus = currentDataMap.assayStatus
         String newAssayStatus = null
-        for (AssayStatus assayStatus : AssayStatus.values()) {
+        for (Status assayStatus : Status.values()) {
             if (oldAssayStatus != assayStatus.id) {
                 newAssayStatus = assayStatus.id
                 break;
@@ -562,7 +562,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         Long version = currentDataMap.version
         String oldAssayStatus = currentDataMap.assayStatus
         String newAssayStatus = null
-        for (AssayStatus assayStatus : AssayStatus.values()) {
+        for (Status assayStatus : Status.values()) {
             if (oldAssayStatus != assayStatus.id) {
                 newAssayStatus = assayStatus.id
                 break;

@@ -1,13 +1,12 @@
 package bard.db.registration
 
-import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.DocumentType
-import bard.db.enums.ExperimentStatus
 import bard.db.enums.ReadyForExtraction
-import bard.db.enums.hibernate.AssayStatusEnumUserType
+import bard.db.enums.Status
 import bard.db.enums.hibernate.AssayTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
+import bard.db.enums.hibernate.StatusEnumUserType
 import bard.db.experiment.Experiment
 import bard.db.guidance.Guidance
 import bard.db.guidance.GuidanceAware
@@ -37,7 +36,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
 
 
     def capPermissionService
-    AssayStatus assayStatus = AssayStatus.DRAFT
+    Status assayStatus = Status.DRAFT
     String assayName
     String assayVersion
     String designedBy
@@ -91,7 +90,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
 
     static mapping = {
         id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
-        assayStatus(type: AssayStatusEnumUserType)
+        assayStatus(type: StatusEnumUserType)
         readyForExtraction(type: ReadyForExtractionEnumUserType)
         assayType(type: AssayTypeEnumUserType)
         assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true', cascade: 'all-delete-orphan')
@@ -176,7 +175,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
 
 
     boolean allowsNewExperiments() {
-        return (assayStatus != AssayStatus.RETIRED && assayType != AssayType.TEMPLATE)
+        return (assayStatus != Status.RETIRED && assayType != AssayType.TEMPLATE)
     }
 
     @Override
@@ -199,7 +198,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
         guidanceList
     }
     public boolean permittedToSeeEntity() {
-        if ((assayStatus == AssayStatus.DRAFT) &&
+        if ((assayStatus == Status.DRAFT) &&
                 (!SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR') &&
                         !SpringSecurityUtils.principalAuthorities.contains(this.ownerRole))) {
             return false
