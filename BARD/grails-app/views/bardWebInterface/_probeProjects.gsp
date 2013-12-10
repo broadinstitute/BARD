@@ -21,7 +21,7 @@
         <a href="#items-gallery-5" class="btn-prev" data-slide="prev">Previous</a>
         <a href="#items-gallery-5" class="btn-next" data-slide="next">Previous</a>
 
-        <div class="carousel-inner">
+        <div class="carousel-inner" style="overflow: visible;">
             <g:set var="activeClass" value="active"/>
             <g:each in="${compoundAdapters}" status="i" var="x">
                 <g:if test="${i % 3 == 0 && i > 0}">
