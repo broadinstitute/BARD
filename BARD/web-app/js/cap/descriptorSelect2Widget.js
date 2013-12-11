@@ -5,21 +5,23 @@
  * @param backingData
  * @constructor
  */
-function DescriptorSelect2(elementId, placeholderText, backingData ) {
+function DescriptorSelect2(elementId, placeholderText, backingData, delimiter, dropdownCssClass) {
     this.elementId = elementId;
     this.placeholder = placeholderText;
     this.backingData = backingData;
+    this.delimiter = delimiter;
+    this.dropdownCssClass = dropdownCssClass;
 
-    this.updateSelect2DescriptionPopover = function(data){
+    this.updateSelect2DescriptionPopover = function (data) {
         // destroy any existing popover
         $(".select2-input").popover("destroy");
         // if we have any description, create a popover
-        if(data.description){
-            $(".select2-input").popover({placement:'top',
+        if (data.description) {
+            $(".select2-input").popover({placement: 'top',
                 html: true,
-                trigger:'manual',
-                title:'<b>' +data.text + '</b>',
-                content:data.description});
+                trigger: 'manual',
+                title: '<b>' + data.text + '</b>',
+                content: data.description});
             $(".select2-input").popover('show');
         }
     };
@@ -42,9 +44,10 @@ function DescriptorSelect2(elementId, placeholderText, backingData ) {
      *   ...
      *  ]
      */
-    this.initSelect2 = function(backingData, onInitDoneCallback) {
+    this.initSelect2 = function (backingData, onInitDoneCallback) {
         this.backingData = backingData;
         $(this.elementId).select2({
+            dropdownCssClass: dropdownCssClass ? dropdownCssClass : '',
             placeholder: placeholderText,
             allowClear: true,
             initSelection: function (element, callback) {
@@ -57,7 +60,7 @@ function DescriptorSelect2(elementId, placeholderText, backingData ) {
                         dataType: "json"
                     }).done(function (data) {
                             callback(data);
-                            if(onInitDoneCallback){
+                            if (onInitDoneCallback) {
                                 onInitDoneCallback(data);
                             }
                         });
@@ -67,7 +70,7 @@ function DescriptorSelect2(elementId, placeholderText, backingData ) {
             formatResult: function (result, container, query, escapeMarkup) {
                 var markup = [];
                 window.Select2.util.markMatch(result.parentFullPath, query.term, markup, escapeMarkup);
-                markup.push('> ');
+                markup.push(delimiter ? delimiter : '> ');
                 markup.push('<b>');
                 window.Select2.util.markMatch(result.text, query.term, markup, escapeMarkup);
                 markup.push('</b>');
@@ -85,7 +88,7 @@ function DescriptorSelect2(elementId, placeholderText, backingData ) {
         });
         // on change eliminate any popover attached to .select2-input otherwise it can show up out of context
         // in a differenct select2 widget than initially displayed
-        $(this.elementId).on("change", function(e) {
+        $(this.elementId).on("change", function (e) {
             $(".select2-input").popover("destroy");
         });
     };

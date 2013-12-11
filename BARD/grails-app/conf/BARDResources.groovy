@@ -126,6 +126,7 @@ modules = {
     descriptorSelect2Widget {
         dependsOn 'core,select2'
         resource url: "/js/cap/descriptorSelect2Widget.js"
+        resource url: '/css/descriptorSelect2Widget.css'
         resource url: '/css/select2PopoverOverride.css'
     }
     dictionaryPage {
@@ -219,12 +220,15 @@ modules = {
         dependsOn 'core,bootstrap'
         resource url: '/js/cap/moveExperiments.js'
     }
-
     newTerm {
         dependsOn 'descriptorSelect2Widget'
         resource url: '/css/newterm/newTerms.css'
         resource url: '/js/element/newTerm.js'
 
+    }
+    elementSelect {
+        dependsOn 'descriptorSelect2Widget'
+        resource url: '/js/element/elementList.js'
     }
     myBard {
         dependsOn('core', 'bootstrap', 'tableSorter')
