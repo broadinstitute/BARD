@@ -19,6 +19,7 @@ import org.apache.commons.collections.Transformer;
 import org.apache.commons.collections.map.MultiValueMap;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.dom4j.Document;
@@ -120,13 +121,20 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	public ExternalItem findById(String id) throws ExternalOntologyException {
 		try {
 			id = cleanId(id);
-			if (StringUtils.isBlank(id))
-				return null;
+			if (StringUtils.isBlank(id)){
+                return null;
+            }
 			Document doc = eutils.getSummary(id, database);
 			List<ExternalItem> items = processSummaries(doc);
-			if (items.size() > 1)
-				throw new ExternalOntologyException(String.format("'%s' is not unique for NCBI %s database", id, database));
-			return items.get(0);
+			if (items.size() > 1){
+                throw new ExternalOntologyException(String.format("'%s' is not unique for NCBI %s database", id, database));
+            }
+            else if (items.size() == 1 ){
+                return items.get(0);
+            }
+            else {
+                return null;
+            }
 		} catch (EUtilsException ex) {
 			throw new ExternalOntologyException(ex);
 		}
@@ -159,20 +167,29 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	@Override
 	public List<ExternalItem> findMatching(String term, int limit) throws ExternalOntologyException {
 		try {
-			String cleanTerm = cleanName(term);
-			if (StringUtils.isBlank(cleanTerm))
-				return Collections.EMPTY_LIST;
-			cleanTerm = queryGenerator(cleanTerm);
-			int chunk = limit > 0 & chunkSize > limit ? limit : chunkSize;
-			List<Long> ids = (List<Long>) eutils.getIds(cleanTerm, database, new ArrayList<Long>(), chunk, limit);
-			if (ids.size() == 0)
-				return Collections.EMPTY_LIST;
-			Document doc = eutils.getSummariesAsDocument(ids, database);
-			if (database.equals("mesh"))
-				return processMeSHSummaries(doc);
-			else
-				return processSummaries(doc);
+            final ArrayList<ExternalItem> externalItems = new ArrayList<ExternalItem>();
+			final String cleanTerm = cleanName(term);
+            if(matchesId(cleanTerm)){
+                final ExternalItem itemById = findById(cleanTerm);
+                if(itemById!=null){
+                    externalItems.add(itemById);
+                }
+            }
+            if(StringUtils.isNotBlank(cleanTerm) && externalItems.isEmpty()){
+                int chunk = limit > 0 & chunkSize > limit ? limit : chunkSize;
+                List<Long> ids = (List<Long>) eutils.getIds(queryGenerator(cleanTerm), database, new ArrayList<Long>(), chunk, limit);
+                if (ids.size() > 0){
+                    Document doc = eutils.getSummariesAsDocument(ids, database);
+                    if (database.equals("mesh")){
+                        externalItems.addAll(processMeSHSummaries(doc));
+                    }
+                    else {
+                        externalItems.addAll(processSummaries(doc));
+                    }
+                }
 
+            }
+            return externalItems;
 		} catch (EUtilsException ex) {
 			throw new ExternalOntologyException(ex);
 		}
@@ -187,7 +204,12 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 		return term;
 	}
 
-	/**
+    @Override
+    public boolean matchesId(String potentialId) {
+        return NumberUtils.isDigits(potentialId);
+    }
+
+    /**
 	 * URL of specific NCBI Entrez Database
 	 */
 	@Override

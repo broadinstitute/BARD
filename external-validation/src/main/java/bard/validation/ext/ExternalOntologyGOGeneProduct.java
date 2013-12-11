@@ -149,7 +149,12 @@ public class ExternalOntologyGOGeneProduct extends ExternalOntologyAPI {
 		return id;
 	}
 
-	/**
+    @Override
+    public boolean matchesId(String potentialId) {
+        return idPattern.matcher(potentialId).matches();
+    }
+
+    /**
 	 * trims and adds a % to the end of the term if it doesn't already have one.
 	 */
 	@Override

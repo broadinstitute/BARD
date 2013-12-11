@@ -54,6 +54,12 @@ public abstract class ExternalOntologyAPI {
 		return StringUtils.trimToEmpty(name);
 	}
 
+    /**
+     * @param potentialId Note, this have already been cleaned if needed
+     * @return true if the string looks like an reasonable id for this resource, otherwise false
+     */
+    public abstract boolean matchesId(String potentialId);
+
 	public boolean validate(String name, String id) throws ExternalOntologyException {
 		ExternalItem item = findByName(cleanName(name));
 		ExternalItem item2 = findById(cleanId(id));

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -33,22 +34,31 @@ public class ExternalOntologyUniprot extends ExternalOntologyAPI {
 
 	private UniProtQueryService uniProtQueryService;
 
+    private static final Pattern UNIPROT_ID_PATTERN = Pattern.compile("^[A-Z][0-9]{5}$");
+
 	public ExternalOntologyUniprot() {
 		uniProtQueryService = UniProtJAPI.factory.getUniProtQueryService();
 	}
 
 	public ExternalItem findById(String id) throws ExternalOntologyException {
+        ExternalItem externalItem = null;
 		id = cleanId(id);
 		if( StringUtils.isBlank(id))
 			return null;
 		Query query = UniProtQueryBuilder.buildExactMatchIdentifierQuery(id);
 		EntryIterator<UniProtEntry> entryIterator = uniProtQueryService.getEntryIterator(query);
 		int resultSize = entryIterator.getResultSize();
-		if (resultSize != 1)
+		if (resultSize > 1) {
 			throw new ExternalOntologyException(String.format("'%s' is not a unique Uniprot identifier", id));
-		ExternalItem item = getExternalItems(entryIterator, 1).get(0);
-		item.setId(id); // should always be the id the user submitted.
-		return item;
+        }
+        else if (resultSize == 0 ){
+            externalItem = null;
+        }
+        else {
+            externalItem  = getExternalItems(entryIterator, 1).get(0);
+            externalItem.setId(id); // should always be the id the user submitted.
+        }
+		return externalItem;
 	}
 
 	public ExternalItem findByName(String name) throws ExternalOntologyException {
@@ -63,13 +73,22 @@ public class ExternalOntologyUniprot extends ExternalOntologyAPI {
 	}
 
 	public List<ExternalItem> findMatching(String term, int limit) throws ExternalOntologyException {
-		term = cleanName(term);
-		if( StringUtils.isBlank(term))
-			return Collections.EMPTY_LIST;
-		term = queryGenerator(term);
-		Query query = UniProtQueryBuilder.buildFullTextSearch(term);
-		EntryIterator<UniProtEntry> entryIterator = uniProtQueryService.getEntryIterator(query);
-		return getExternalItems(entryIterator, limit);
+        final List<ExternalItem> externalItems = new ArrayList<ExternalItem>();
+		final String cleanedTerm = cleanName(term);
+        if(StringUtils.isNotBlank(cleanedTerm)){
+            if(matchesId(cleanedTerm)){
+                final ExternalItem itemById = findById(cleanedTerm);
+                if(itemById !=null){
+                    externalItems.add(itemById);
+                }
+            }
+            if(externalItems.isEmpty()){
+                Query query = UniProtQueryBuilder.buildFullTextSearch(queryGenerator(cleanedTerm));
+                EntryIterator<UniProtEntry> entryIterator = uniProtQueryService.getEntryIterator(query);
+                externalItems.addAll(getExternalItems(entryIterator, limit));
+            }
+        }
+        return externalItems;
 	}
 
 	protected String getDisplay(UniProtEntry entry) {
@@ -107,4 +126,14 @@ public class ExternalOntologyUniprot extends ExternalOntologyAPI {
 	public String getExternalURL(String id) {
 		return String.format("http://www.uniprot.org/uniprot/%s", cleanId(id));
 	}
+
+    /**
+     *
+     * @param potentialId Note, this have already been cleaned if needed
+     * @return true if it looks like an Id
+     */
+    @Override
+    public boolean matchesId(String potentialId) {
+        return UNIPROT_ID_PATTERN.matcher(potentialId).matches();
+    }
 }

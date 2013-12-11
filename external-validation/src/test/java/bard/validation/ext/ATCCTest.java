@@ -11,7 +11,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class ATCCTests {
+public class ATCCTest {
 
 	private String id;
 	private boolean expected;
@@ -49,7 +49,7 @@ public class ATCCTests {
 		return Arrays.asList(data);
 	}
 
-	public ATCCTests(String id, boolean expected) {
+	public ATCCTest(String id, boolean expected) {
 		this.id = id;
 		this.expected = expected;
 	}

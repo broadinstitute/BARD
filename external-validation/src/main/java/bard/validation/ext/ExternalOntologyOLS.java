@@ -131,4 +131,9 @@ public class ExternalOntologyOLS extends ExternalOntologyAPI {
 			id = "GO:" + id;
 		return id;
 	}
+
+    @Override
+    public boolean matchesId(String potentialId) {
+        return false;
+    }
 }

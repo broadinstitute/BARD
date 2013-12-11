@@ -14,10 +14,10 @@ import org.junit.runners.Parameterized.Parameters;
 import uk.ac.ebi.kraken.uuw.services.remoting.RemoteDataAccessException;
 
 @RunWith(Parameterized.class)
-public class NameTests {
+public class IdTest {
 
 	private String uri;
-	private String name;
+	private String id;
 	private Class clazz;
 
 	@Parameters
@@ -35,25 +35,25 @@ public class NameTests {
 		return Arrays.asList(data);
 	}
 
-	public NameTests(String uri, String name, Class clazz) {
+	public IdTest(String uri, String id, Class clazz) {
 		this.uri = uri;
-		this.name = name;
+		this.id = id;
 		this.clazz = clazz;
 	}
 
 	@Test
-	public void testName() throws ExternalOntologyException {
+	public void testId() throws ExternalOntologyException {
 		Properties props = new Properties();
 		props.setProperty(ExternalOntologyNCBI.NCBI_EMAIL, "southern@scripps.edu");
 		props.setProperty(ExternalOntologyNCBI.NCBI_TOOL, "BARD-CAP");
 		ExternalOntologyAPI api = RegisteringExternalOntologyFactory.getInstance().getExternalOntologyAPI(uri, props);
 		try {
-			ExternalItem item = api.findById(name);
+			ExternalItem item = api.findById(id);
 			assertEquals(item == null, true);
 		}
 		catch(Exception ex) {
 			boolean result = ex.getClass().equals(clazz);
-			String msg = String.format("%s\t%s\t%s\t%s", result, uri, name, ex.getMessage());
+			String msg = String.format("%s\t%s\t%s\t%s", result, uri, id, ex.getMessage());
 			System.out.println(msg);
 			assertEquals(msg, result, true);			
 		}

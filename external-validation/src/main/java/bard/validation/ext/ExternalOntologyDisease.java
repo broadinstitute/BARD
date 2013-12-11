@@ -116,4 +116,9 @@ public class ExternalOntologyDisease extends ExternalOntologyAPI {
 		id = super.cleanId(id);
 		return id;
 	}
+
+    @Override
+    public boolean matchesId(String potentialId) {
+        return false; // at the moment, not clear on ID format
+    }
 }

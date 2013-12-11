@@ -12,11 +12,11 @@ import org.junit.Test;
 
 import bard.validation.ext.util.GOUtil;
 
-public class GOGeneProductTests {
+public class GOGeneProductTest {
 
 	private static ExternalOntologyGOGeneProduct eo;
 
-	public GOGeneProductTests() {
+	public GOGeneProductTest() {
 		BasicConfigurator.configure();
 //		Logger logger = Logger.getRootLogger().getLoggerRepository().getLogger("org.apache.http");
 //		logger.setLevel(Level.INFO);

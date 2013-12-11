@@ -9,11 +9,11 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-public class ATCCMatchingTests {
+public class ATCCMatchingTest {
 
 	private ExternalOntologyAPI api = new ExternalOntologyATCC();
 	
-	public ATCCMatchingTests() throws Exception {
+	public ATCCMatchingTest() throws Exception {
 		BasicConfigurator.configure();
 		Logger logger = Logger.getRootLogger().getLoggerRepository().getLogger("org.apache.http");
 		logger.setLevel(Level.INFO);

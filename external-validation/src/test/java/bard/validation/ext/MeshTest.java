@@ -9,9 +9,9 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-public class MeshTests {
+public class MeshTest {
 
-	public MeshTests() {
+	public MeshTest() {
 		BasicConfigurator.configure();
 		Logger logger = Logger.getRootLogger().getLoggerRepository().getLogger("org.apache.http");
 		logger.setLevel(Level.INFO);

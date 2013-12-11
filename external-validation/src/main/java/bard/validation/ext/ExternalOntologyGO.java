@@ -145,12 +145,20 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 	 */
 	@Override
 	public List<ExternalItem> findMatching(String name, int limit) throws ExternalOntologyException {
-		name = cleanName(name);
-		if( StringUtils.isBlank(name))
-			return Collections.EMPTY_LIST;
-		List<ExternalItem> items = runQuery("SELECT acc, name FROM term WHERE lower(name) like lower(?) and term_type = ? and is_obsolete = 0",
-				limit, queryGenerator(name), type);
-		return items;
+        final List<ExternalItem> externalItems = new ArrayList<ExternalItem>();
+        final String potentialId = cleanId(name);
+        if(matchesId(potentialId)){
+            final ExternalItem itemById = findById(potentialId);
+            if(itemById!=null){
+                externalItems.add(itemById);
+            }
+        }
+        final String cleanName = cleanName(name);
+        if(externalItems.isEmpty() && StringUtils.isNotBlank(cleanName)){
+            externalItems.addAll(runQuery("SELECT acc, name FROM term WHERE lower(name) like lower(?) and term_type = ? and is_obsolete = 0",
+                    limit, queryGenerator(name), type));
+        }
+		return externalItems;
 	}
 
 	public DataSource getDataSource() {
@@ -178,7 +186,12 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 		return id;
 	}
 
-	protected List<ExternalItem> processResultSet(ResultSet rs, int limit) throws SQLException {
+    @Override
+    public boolean matchesId(String potentialId) {
+        return goPattern.matcher(potentialId).matches();
+    }
+
+    protected List<ExternalItem> processResultSet(ResultSet rs, int limit) throws SQLException {
 		List<ExternalItem> items = limit > 0 ? new ArrayList<ExternalItem>(limit) : new ArrayList<ExternalItem>();
 		int counter = 0;
 		while (rs.next()) {

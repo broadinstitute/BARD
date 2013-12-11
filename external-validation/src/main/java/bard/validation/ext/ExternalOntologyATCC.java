@@ -165,7 +165,7 @@ public class ExternalOntologyATCC extends ExternalOntologyAPI {
 
 	private static boolean DEBUGGING = false;
 
-	private static Pattern ID_PATTERN = Pattern.compile("^.*ATCC®?\\s*([\\w\\d-]+)™?\\)?$"); // "^(ATCC\\s*)(.+)$"
+	private static Pattern ID_PATTERN = Pattern.compile("^.*ATCCï¿½?\\s*([\\w\\d-]+)ï¿½?\\)?$"); // "^(ATCC\\s*)(.+)$"
 
 	private static final Logger log = LoggerFactory.getLogger(ExternalOntologyATCC.class);
 
@@ -196,7 +196,12 @@ public class ExternalOntologyATCC extends ExternalOntologyAPI {
 		return cleanId(name);
 	}
 
-	@Override
+    @Override
+    public boolean matchesId(String potentialId) {
+        return ID_PATTERN.matcher(potentialId).matches();
+    }
+
+    @Override
 	public ExternalItem findById(String id) throws ExternalOntologyException {
 		id = cleanId(id);
 		try {
