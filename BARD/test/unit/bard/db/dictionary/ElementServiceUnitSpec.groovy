@@ -29,7 +29,7 @@ class ElementServiceUnitSpec extends Specification {
     void "test convertPathsToSelectWidgetStructures"() {
 
         given:
-        List<ElementAndFullPath> elementListWithPaths = [new ElementAndFullPath(Element.build(description: "description1"))]
+        List<ElementAndFullPath> elementListWithPaths = [new ElementAndFullPath(Element.build(description: "description1", label: 'label1'))]
 
         when:
         def result = service.convertPathsToSelectWidgetStructures(elementListWithPaths)
