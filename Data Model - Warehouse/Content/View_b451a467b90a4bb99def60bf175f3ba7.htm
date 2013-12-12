@@ -22,7 +22,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE VIEW BBDS.ASSAY_ND</TT><BR><TT>(ASSAY_REF, ASSAY_ID, ASSAY_STATUS, ASSAY_SHORT_NAME, ASSAY_NAME, ASSAY_VERSION, ASSAY_OWNER, ACL_TICKET, EFFECTIVE_FROM, ASSAY_CLASS, SOURCE_SYSTEM, LOAD_DATE) AS</TT><BR><TT>select</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp assay_ref</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ,assay_id</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ,assay_status</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ,assay_short_name</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ,assay_name</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ,assay_version</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ,assay_owner</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ,acl_ticket</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ,effective_from</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ,assay_class</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ,source_system</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ,load_date</TT><BR><TT>from&nbsp&nbsp&nbsp&nbsp (</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp select a.*,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp -- add assay_ref as secondary sort in case of identical effective_from</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp row_number() over(partition by assay_id order by effective_from desc, assay_ref desc) rseq$</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp from&nbsp&nbsp&nbsp assay a</TT><BR><TT>)</TT><BR><TT>where&nbsp&nbsp&nbsp rseq$ = 1</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -36,6 +36,66 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Column Name / Expression&nbsp;</FONT></B></TD>
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Alias Name&nbsp;</FONT></B></TD>
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table Name&nbsp;</FONT></B></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_ref&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_ref&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_id&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_id&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_status&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_status&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_short_name&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_short_name&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_name&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_name&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_version&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_version&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_owner&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_owner&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">acl_ticket&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">acl_ticket&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">effective_from&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">effective_from&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_class&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">assay_class&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">source_system&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">source_system&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">load_date&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">load_date&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
