@@ -198,6 +198,10 @@ modules = {
         resource url: 'js/jquery-notifier/ui.notify.css'
     }
     jsDrawEditor {
+        resource url: "js/dojo-min/dojoConfig.js"
+        resource url: "js/dojo-min/dojo.js"
+        resource url: "js/jsDraw/Scilligence.JSDraw2.js"
+        resource url: "js/jsDraw/license.js"
         resource url: "js/jsDraw/jsDrawEditor.js"
         resource url: "css/jsDrawEditor.css"
     }
