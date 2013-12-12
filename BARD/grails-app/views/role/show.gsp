@@ -24,7 +24,7 @@
                             data-type="textarea"
                             data-value="${roleInstance?.authority}"
                             data-pk="${roleInstance?.id}"
-                            data-url="/BARD/role/editAuthority"
+                            data-url="${request.contextPath}/role/editAuthority"
                             data-original-title="Edit Name">${roleInstance?.authority}</span>
                     <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit name"
                        data-id="authorityId"></a>
@@ -40,7 +40,7 @@
                             data-type="textarea"
                             data-value="${roleInstance?.displayName}"
                             data-pk="${roleInstance?.id}"
-                            data-url="/BARD/role/editDisplayName"
+                            data-url="${request.contextPath}/role/editDisplayName"
                             data-original-title="Edit Display Name">${roleInstance?.displayName}</span>
                     <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit display name"
                        data-id="displayNameId"></a>

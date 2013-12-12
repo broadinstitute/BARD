@@ -53,7 +53,7 @@ function DescriptorSelect2(elementId, placeholderText, backingData, delimiter, d
             initSelection: function (element, callback) {
                 var id = $(element).val();
                 if (id !== "") {
-                    $.ajax("/BARD/ontologyJSon/getElement", {
+                    $.ajax(bardAppContext + "/ontologyJSon/getElement", {
                         data: {
                             id: id
                         },

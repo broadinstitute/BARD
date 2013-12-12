@@ -65,7 +65,7 @@
 
                 <div class="row-fluid">
                     <div class="span6">
-                        <strong class="logo"><a href="/BARD">BARD BioAssay Research Database</a></strong>
+                        <strong class="logo"><a href="${request.contextPath}">BARD BioAssay Research Database</a></strong>
                     </div>
 
                     <div class="span6">
@@ -84,7 +84,7 @@
                                 <ul class="nav">
                                     <g:render template="/layouts/templates/howtolinks"/>
                                     <sec:ifLoggedIn>
-                                        <li><a href="/BARD/bardWebInterface/navigationPage">My BARD</a></li>
+                                        <li><a href="${request.contextPath}/bardWebInterface/navigationPage">My BARD</a></li>
                                     </sec:ifLoggedIn>
                                 </ul>
                                 <g:if test="${false}">

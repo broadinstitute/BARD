@@ -1,4 +1,5 @@
-var waitingImage = '<img src="/BARD/images/ajax-loader.gif" alt="loading" title="loading"/>';
+var bigSpinnerImage = '<div class="tab-message">' + '<img src="' + bardAppContext + '/images/ajax-loader.gif"' + ' alt="loading" title="loading"/></div>';
+var waitingImage = bigSpinnerImage;
 
 var PromiscuityHandler = {
     setup:function () {

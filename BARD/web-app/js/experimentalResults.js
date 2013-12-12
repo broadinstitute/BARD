@@ -1,4 +1,3 @@
-var bigSpinnerImage = '<div class="tab-message"><img src="/BARD/images/ajax-loader.gif" alt="loading" title="loading"/></div>';
 //TODO: if javascript is not supported then do a full page load
 
 
@@ -42,7 +41,7 @@ $(document).on("submit", "#ExperimentFacetForm", function (event) {
     if (paginationUrl) {
         formUrl = paginationUrl + '&';
     } else {
-        formUrl = '/BARD/bardWebInterface/showExperiment/' + $('input#experimentId').attr('value') + '?';
+        formUrl = bardAppContext + '/bardWebInterface/showExperiment/' + $('input#experimentId').attr('value') + '?';
     }
     formUrl +=  $('#ExperimentFacetForm').serialize(); //add the filters
 //    $(this).attr('action', formUrl).attr('method', 'get');
@@ -61,7 +60,7 @@ $(document).on("submit", "#CompoundBioActivitySummaryForm", function (event) {
     if (paginationUrl) {
         formUrl = paginationUrl;
     } else {
-        formUrl = '/BARD/bardWebInterface/showCompoundBioActivitySummary/' + $('input#compoundId').attr('value');
+        formUrl = bardAppContext + '/bardWebInterface/showCompoundBioActivitySummary/' + $('input#compoundId').attr('value');
     }
     $(this).attr('action', formUrl);
     return true; //submit tue form the normal way

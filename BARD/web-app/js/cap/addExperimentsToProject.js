@@ -1,4 +1,4 @@
-var EXPERIMENT_STAGE_PATH = "/BARD/ontologyJSon/getAttributeDescriptorsNoExpectedValueType?startOfFullPath=project management> experiment> experiment stage";
+var EXPERIMENT_STAGE_PATH =bardAppContext +  "/ontologyJSon/getAttributeDescriptorsNoExpectedValueType?startOfFullPath=project management> experiment> experiment stage";
 
 //handle concentration result types on dose response page
 $('#stageId').on('change', function (e) {

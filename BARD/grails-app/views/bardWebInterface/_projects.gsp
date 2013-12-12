@@ -49,10 +49,9 @@
                         <dt>Number Of Experiments:</dt>
                         <dd>
                             <span class="badge badge-info">
-                                <a href="/BARD/project/show/${projectAdapter.capProjectId}#experiments-info"
-                                   style="color: white; text-decoration: underline">
+                                <g:link controller="project" action="show" id="${projectAdapter.capProjectId}" fragment="experiments-info" style="color: white; text-decoration: underline">
                                     ${projectAdapter.getNumberOfExperiments()}
-                                </a>
+                                </g:link>
                             </span>
                         </dd>
                     </dl>

@@ -7,6 +7,9 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
     <link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
           rel='stylesheet' type='text/css'>
+    <r:script disposition='head'>
+        window.bardAppContext = "${request.contextPath}";
+    </r:script>
     <g:layoutHead/>
 
     <r:require modules="basic,bootstrap,autocomplete,cart,idSearch,jquerynotifier,downtime"/>
@@ -32,13 +35,14 @@
 
 
             <div class="row-fluid">
-                <div class="span2"  style="min-width: 180px">
+                <div class="span2" style="min-width: 180px">
                     <strong class="logo"><a
-                            href="${createLink(controller: 'BardWebInterface', action: 'index')}"  style="min-width: 207px">BARD BioAssay Research Database</a>
+                            href="${createLink(controller: 'BardWebInterface', action: 'index')}"
+                            style="min-width: 207px">BARD BioAssay Research Database</a>
                     </strong>
                 </div>
 
-                <div class="span8"  style="min-width: 350px;">
+                <div class="span8" style="min-width: 350px;">
                     <div class="search-block left-aligned">
                         <g:render template="/layouts/templates/searchBlock"/>
                     </div>
@@ -50,28 +54,31 @@
                 </div>
 
                 <div class="span2"></div>
-                    <nav class="nav-panel" style="min-width: 150px; ">
+                <nav class="nav-panel" style="min-width: 150px; ">
+                    <div class="right-aligned">
+                        <g:render template="/layouts/templates/loginStrip"/>
+                    </div>
+
+                    <div class="left-aligned">
+                        <g:render template="/layouts/templates/queryCart"/>
+                    </div>
+
+
+
+                    <sec:ifLoggedIn>
                         <div class="right-aligned">
-                            <g:render template="/layouts/templates/loginStrip"/>
+                            <g:link controller="bardWebInterface" action="navigationPage"
+                                    class="my-bard-button btn">My BARD</g:link>
                         </div>
-                        <div class="left-aligned">
-                            <g:render template="/layouts/templates/queryCart"/>
-                        </div>
+                    </sec:ifLoggedIn>
 
-                        <sec:ifLoggedIn>
-                            <div class="right-aligned">
-                               <g:link controller="bardWebInterface" action="navigationPage" class="my-bard-button btn">My BARD</g:link>
-                            </div>
-                        </sec:ifLoggedIn>
+                    <div class="navbar right-aligned hidden-phone">
+                        <ul class="nav">
+                            <g:render template="/layouts/templates/howtolinks"/>
+                        </ul>
+                    </div>
 
-                        <div class="navbar right-aligned hidden-phone">
-                            <ul class="nav">
-                                <g:render template="/layouts/templates/howtolinks"/>
-                            </ul>
-                        </div>
-
-                    </nav>
-
+                </nav>
 
             </div>
         </div>

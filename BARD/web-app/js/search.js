@@ -1,8 +1,9 @@
 //use GLOBAL params here
-var spinnerImageLink = '<img src="/BARD/images/loading_icon.gif" alt="loading" title="loading" height="16" width="16"/>';
-var bigSpinnerImage = '<div class="tab-message"><img src="/BARD/images/ajax-loader.gif" alt="loading" title="loading"/></div>';
-var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt="error" height="16" width="16" />';
+var spinnerImageLink = '<img src="' + bardAppContext + '/images/loading_icon.gif"' + ' alt="loading" title="loading" height="16" width="16"/>';
+var bigSpinnerImage = '<div class="tab-message">' + '<img src="' + bardAppContext + '/images/ajax-loader.gif"' + ' alt="loading" title="loading"/></div>';
 
+var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt="error" height="16" width="16" />';
+var rootURL = bardAppContext + '/bardWebInterface/'
 //matches a number followed by a zero or more spaces, followed by max of one comma
 //The question mark and the colon after the opening round bracket are the special syntax that
 // you can use to tell the regex engine that this pair of brackets should not create a backreference
@@ -311,10 +312,10 @@ function handleFilteredQuery(searchString, facetFormType, currentFormId, current
 
     var controllerAction = findTheAppropriateControllerActionForRequest(searchString, facetFormType);
     if (controllerAction == 'structureSearch') {
-        handleStructureSearch('/BARD/bardWebInterface/searchStructures', currentFormId)
+        handleStructureSearch(rootURL + 'searchStructures', currentFormId)
     }
     else if (controllerAction != 'EMPTY') {
-        handleSearch('/BARD/bardWebInterface/' + controllerAction, currentFormId, currentTabId, numberOfHitsDivId, tabDisplayPrefix, updateId);
+        handleSearch(rootURL + controllerAction, currentFormId, currentTabId, numberOfHitsDivId, tabDisplayPrefix, updateId);
     }
 
 }
@@ -391,23 +392,23 @@ function handleMainFormSubmit(searchString, activeTab, pageOffset) {
         case 'ADID':
             activateCurrentTab('assaysTab');
             showTab("assays");
-            handleSearch('/BARD/bardWebInterface/searchAssaysByIDs' + offsetParam, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+            handleSearch(rootURL + 'searchAssaysByIDs' + offsetParam, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
             break;
         case 'CID':
             activateCurrentTab('compoundsTab');
             showTab("compounds");
-            handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs' + offsetParam, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            handleSearch(rootURL + 'searchCompoundsByIDs' + offsetParam, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
             break;
         case 'PROBES':
             activateCurrentTab('compoundsTab');
             showTab("compounds");
-            handleSearch('/BARD/bardWebInterface/showProbeList' + offsetParam, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            handleSearch(rootURL + 'showProbeList' + offsetParam, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
             break;
         case 'PID':
             activateCurrentTab('projectsTab');
             // $("#projects").tab('show');
             showTab("projects");
-            handleSearch('/BARD/bardWebInterface/searchProjectsByIDs' + offsetParam, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+            handleSearch(rootURL + 'searchProjectsByIDs' + offsetParam, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
             break;
         case 'ID':
             //TODO: Right now we are treating Id searches like regular searches
@@ -424,7 +425,7 @@ function handleMainFormSubmit(searchString, activeTab, pageOffset) {
                 var srchStr = splt[0].toLowerCase() + ':' + $.trim(splt[1]);
                 $("#searchString").val(srchStr);
             }
-            handleStructureSearch('/BARD/bardWebInterface/searchStructures', 'searchForm');
+            handleStructureSearch(rootURL + 'searchStructures', 'searchForm');
             break;
     }
 }
@@ -435,26 +436,26 @@ function handleAllFreeTextSearches(activeTab, pageOffset) {
     if(activeTab && pageOffset){
         switch (activeTab) {
             case '#assays':
-                handleSearch('/BARD/bardWebInterface/searchAssays?offset=' + pageOffset, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-                handleSearch('/BARD/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-                handleSearch('/BARD/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                handleSearch(rootURL + 'searchAssays?offset=' + pageOffset, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+                handleSearch(rootURL + 'searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+                handleSearch(rootURL + 'searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
                 break;
             case '#compounds':
-                handleSearch('/BARD/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-                handleSearch('/BARD/bardWebInterface/searchCompounds?offset=' + pageOffset, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-                handleSearch('/BARD/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                handleSearch(rootURL + 'searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+                handleSearch(rootURL + 'searchCompounds?offset=' + pageOffset, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+                handleSearch(rootURL + 'searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
                 break;
             case '#projects':
-                handleSearch('/BARD/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-                handleSearch('/BARD/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-                handleSearch('/BARD/bardWebInterface/searchProjects?offset=' + pageOffset, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                handleSearch(rootURL + 'searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+                handleSearch(rootURL + 'searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+                handleSearch(rootURL + 'searchProjects?offset=' + pageOffset, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
                 break;
         }
     }
     else{
-        handleSearch('/BARD/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-        handleSearch('/BARD/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-        handleSearch('/BARD/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+        handleSearch(rootURL + 'searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+        handleSearch(rootURL + 'searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+        handleSearch(rootURL + 'searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
     }
 }
 
@@ -465,26 +466,26 @@ function handleAllIdSearches(activeTab, pageOffset) {
     if(activeTab && pageOffset){
         switch (activeTab) {
             case '#assays':
-                handleSearch('/BARD/bardWebInterface/searchAssaysByIDs?offset=' + pageOffset, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-                handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-                handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                handleSearch(rootURL + 'searchAssaysByIDs?offset=' + pageOffset, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+                handleSearch(rootURL + 'searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+                handleSearch(rootURL + 'searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
                 break;
             case '#compounds':
-                handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-                handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs?offset=' + pageOffset, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-                handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                handleSearch(rootURL + 'searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+                handleSearch(rootURL + 'searchCompoundsByIDs?offset=' + pageOffset, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+                handleSearch(rootURL + 'searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
                 break;
             case '#projects':
-                handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-                handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-                handleSearch('/BARD/bardWebInterface/searchProjectsByIDs?offset=' + pageOffset, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                handleSearch(rootURL + 'searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+                handleSearch(rootURL + 'searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+                handleSearch(rootURL + 'searchProjectsByIDs?offset=' + pageOffset, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
                 break;
         }
     }
     else{
-        handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-        handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-        handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+        handleSearch(rootURL + 'searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+        handleSearch(rootURL + 'searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+        handleSearch(rootURL + 'searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
     }
 }
 /**

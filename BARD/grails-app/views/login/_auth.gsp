@@ -12,7 +12,7 @@
 <div class="container">
 
     <div>
-        <a class="brand" href="/BARD">
+        <a class="brand" href="${request.contextPath}">
             <img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database"/>
         </a>
 

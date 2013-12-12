@@ -6,7 +6,7 @@ function bardClientErrorHandler(message, url, line) {
         cache:false,
         type:"post",
         data:{error:message, url:url, line:line, browser:navigator.userAgent},
-        url:"/BARD/ErrorHandling/handleJsErrors",
+        url:bardAppContext + "/ErrorHandling/handleJsErrors",
         async:true
     });
     return true;
