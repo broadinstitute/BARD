@@ -63,12 +63,20 @@ public class ElementAndFullPath {
     String toString() {
         StringBuilder builder = new StringBuilder()
 
+        builder.append(getParentFullPath()).append(pathDelimeter).append(element.label).append(pathDelimeter)
+
+        return builder.toString()
+    }
+
+    String getParentFullPath() {
+        StringBuilder builder = new StringBuilder()
+
         for (ElementHierarchy eh : path) {
             builder.append(pathDelimeter).append(eh.parentElement.label)
         }
-        builder.append(pathDelimeter).append(element.label).append(pathDelimeter)
-    }
 
+        return builder.toString()
+    }
     /**
      * from toString() above:  starts and ends with pathDelimeter, so this method will ignore entries from split
      * before the first pathDelimeter.  If the path ends with the pathDelimeter, there will be no entries after the

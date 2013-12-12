@@ -1,7 +1,7 @@
 $(document).ready(function () {
     var experimentId = $("#experimentId").val();
     if (experimentId) {
-        d3.json("/BARD/bardWebInterface/retrieveExperimentResultsSummary/" + experimentId, function (error, dataFromServer) {
+        d3.json(bardAppContext + "/bardWebInterface/retrieveExperimentResultsSummary/" + experimentId, function (error, dataFromServer) {
             if (!(dataFromServer === undefined)) {
                 for (var i = 0; i < dataFromServer.length; i++) {
                     if (!(dataFromServer[i] === undefined)) {

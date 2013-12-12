@@ -4,14 +4,10 @@ import acl.CapPermissionService
 import bard.db.dictionary.AssayDescriptor
 import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
-import bard.db.enums.AssayStatus
 import bard.db.enums.ExpectedValueType
-import bard.db.enums.ExperimentStatus
 import bard.db.enums.HierarchyType
-import bard.db.experiment.AssayContextExperimentMeasure
-import bard.db.experiment.Experiment
-import bard.db.experiment.ExperimentMeasure
-import bard.db.experiment.ExperimentService
+import bard.db.enums.Status
+import bard.db.experiment.*
 import bard.db.people.Role
 import bard.db.project.*
 import com.fasterxml.jackson.databind.JsonNode
@@ -25,7 +21,6 @@ import grails.test.mixin.domain.DomainClassUnitTestMixin
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
@@ -39,8 +34,8 @@ import javax.servlet.http.HttpServletResponse
  */
 @TestFor(ExperimentController)
 @TestMixin(DomainClassUnitTestMixin)
-@Build([Assay, Experiment, Role, Element, ExperimentMeasure])
-@Mock([Assay, Experiment, Element, ExperimentMeasure, AssayDescriptor, AssayContextItem, AssayContext, AssayContextExperimentMeasure])
+@Build([Assay, Experiment, ExperimentFile, Role, Element, ExperimentMeasure])
+@Mock([Assay, Experiment, ExperimentFile, Element, ExperimentMeasure, AssayDescriptor, AssayContextItem, AssayContext, AssayContextExperimentMeasure])
 @Unroll
 class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     @Before
@@ -323,12 +318,15 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
 
         given:
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: true)
-        Assay assay = Assay.build(assayStatus: AssayStatus.APPROVED)
+        Assay assay = Assay.build(assayStatus: Status.APPROVED)
         Experiment newExperiment = Experiment.build(assay: assay, version: 0,
-                experimentStatus: ExperimentStatus.DRAFT, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+                experimentFiles: [ExperimentFile.build()],
+                experimentStatus: Status.DRAFT, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         Experiment updatedExperiment =
             Experiment.build(assay: assay, experimentName: "My New Name", version: 1, lastUpdated: new Date(),
-                    experimentStatus: ExperimentStatus.APPROVED, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+                    experimentStatus: Status.APPROVED,
+                    experimentFiles: [ExperimentFile.build()],
+                    experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: newExperiment.id,
                     version: newExperiment.version, name: newExperiment.experimentName,
@@ -347,15 +345,37 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         assert response.contentType == "text/json;charset=utf-8"
     }
 
+    void 'test edit Experiment Status - experiment has no results'() {
+
+        given:
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: true)
+        Assay assay = Assay.build(assayStatus: Status.APPROVED)
+        Experiment newExperiment = Experiment.build(assay: assay, version: 0,
+                experimentStatus: Status.DRAFT, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+        Experiment updatedExperiment =
+            Experiment.build(assay: assay, experimentName: "My New Name", version: 1, lastUpdated: new Date(),
+                    experimentStatus: Status.APPROVED,
+                    experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: newExperiment.id,
+                    version: newExperiment.version, name: newExperiment.experimentName,
+                    value: updatedExperiment.experimentStatus.id)
+        when:
+        controller.editExperimentStatus(inlineEditableCommand)
+        then:
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+        assert response.text == "You must upload results for this experiment before it can be approved."
+    }
+
     void 'test edit Experiment Status - Assay Definition not approved'() {
 
         given:
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: true)
-        Assay assay = Assay.build(assayStatus: AssayStatus.DRAFT)
-        Experiment newExperiment = Experiment.build(assay: assay, version: 0, experimentStatus: ExperimentStatus.DRAFT, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+        Assay assay = Assay.build(assayStatus: Status.DRAFT)
+        Experiment newExperiment = Experiment.build(assay: assay, version: 0, experimentStatus: Status.DRAFT, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         Experiment updatedExperiment =
             Experiment.build(assay: assay, experimentName: "My New Name", version: 1, lastUpdated: new Date(),
-                    experimentStatus: ExperimentStatus.APPROVED, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+                    experimentStatus: Status.APPROVED, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: newExperiment.id,
                     version: newExperiment.version, name: newExperiment.experimentName,
@@ -372,14 +392,15 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         given:
         accessDeniedRoleMock()
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: true)
-        Assay assay = Assay.build(assayStatus: AssayStatus.APPROVED)
+        Assay assay = Assay.build(assayStatus: Status.APPROVED)
 
 
-        Experiment newExperiment = Experiment.build(assay: assay, version: 0, experimentStatus: ExperimentStatus.DRAFT,
-                experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)  //no designer
+        Experiment newExperiment = Experiment.build(assay: assay, version: 0, experimentStatus: Status.DRAFT,
+                experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>, experimentFiles: [ExperimentFile.build()])  //no designer
         Experiment updatedExperiment =
             Experiment.build(experimentName: "My New Name", version: 1, lastUpdated: new Date(),
-                    experimentStatus: ExperimentStatus.APPROVED, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+                    experimentFiles: [ExperimentFile.build()],
+                    experimentStatus: Status.APPROVED, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: newExperiment.id,
                     version: newExperiment.version, name: newExperiment.experimentName,
@@ -402,12 +423,12 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
 
     void 'test edit Experiment Status with errors'() {
         given:
-        Assay assay = Assay.build(assayStatus: AssayStatus.APPROVED)
+        Assay assay = Assay.build(assayStatus: Status.APPROVED)
 
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: true)
-        Experiment newExperiment = Experiment.build(assay: assay, version: 0, experimentStatus: ExperimentStatus.APPROVED, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
+        Experiment newExperiment = Experiment.build(assay: assay, experimentFiles: [ExperimentFile.build()], version: 0, experimentStatus: Status.APPROVED, experimentMeasures: [experimentMeasure] as Set<ExperimentMeasure>)
         InlineEditableCommand inlineEditableCommand =
-            new InlineEditableCommand(pk: newExperiment.id, version: newExperiment.version, name: newExperiment.experimentName, value: ExperimentStatus.APPROVED.id)
+            new InlineEditableCommand(pk: newExperiment.id, version: newExperiment.version, name: newExperiment.experimentName, value: Status.APPROVED.id)
         controller.metaClass.message = { Map p -> return "foo" }
         when:
         controller.editExperimentStatus(inlineEditableCommand)

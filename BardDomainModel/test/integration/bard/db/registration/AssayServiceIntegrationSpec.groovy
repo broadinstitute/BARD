@@ -1,8 +1,6 @@
 package bard.db.registration
 
 import bard.db.BardIntegrationSpec
-import bard.db.enums.AssayStatus
-import bard.db.enums.AssayType
 import bard.db.experiment.Experiment
 import registration.AssayService
 import spock.lang.Unroll

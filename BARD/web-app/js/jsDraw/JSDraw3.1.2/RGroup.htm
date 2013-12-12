@@ -1,0 +1,141 @@
+<!--
+//////////////////////////////////////////////////////////////////////////////////
+//
+// JSDraw
+// Copyright (C) 2013 Scilligence Corporation
+// http://www.scilligence.com/
+//
+//////////////////////////////////////////////////////////////////////////////////
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<title>JSDraw Markush Structure</title>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.9.0/dojo/dojo.js"></script>
+<script type="text/javascript" src='Scilligence.JSDraw2.Pro.js'></script>
+
+</head>
+<body>
+<h2>JSDraw - Markush Structure </h2>
+
+
+
+<pre>
+Hits to draw Markush structures:
+1. Draw a R atom
+2. Right click on the atom and choose "Create R Definition" menu item.  It will create "R1=" label there.
+3. Right click on the "R1=" label, and select "Add Structure" menu item, and it will create a substructure
+4. You can edit the substructure
+5. To change R index number, mouse-hover R atom, and press +/-.
+</pre>
+
+
+<div id='Div1' dataformat='molfile' data="$MDL  REV  1 0501131452
+$MOL
+$HDR
+
+   JSDraw205011314522D
+
+$END HDR
+$CTAB
+  8  8  0  0  0  0  0  0  0  0  1 V2000
+   12.5786   -5.7456    0.0000 C   0  0
+   12.5765   -7.3093    0.0000 C   0  0
+   13.9274   -8.0894    0.0000 C   0  0
+   15.2814   -7.3083    0.0000 C   0  0
+   15.2761   -5.7387    0.0000 C   0  0
+   13.9240   -4.9654    0.0000 C   0  0
+   16.6234   -4.9541    0.0000 C   0  0
+   17.9766   -5.7285    0.0000 R#  0  0
+  5  6  2  0  0  0  0
+  6  1  1  0  0  0  0
+  5  7  1  0  0  0  0
+  7  8  1  0  0  0  0
+  1  2  2  0  0  0  0
+  2  3  1  0  0  0  0
+  3  4  2  0  0  0  0
+  4  5  1  0  0  0  0
+M  RGP  1   8   1
+M  END
+$END CTAB
+$RGP
+   1
+$CTAB
+  2  1  0  0  0  0  0  0  0  0  1 V2000
+   15.7048  -11.6053    0.0000 O   0  0
+   17.2648  -11.6053    0.0000 C   0  0
+  1  2  1  0  0  0  0
+M  APO  1   2   1
+M  END
+$END CTAB
+$CTAB
+  3  2  0  0  0  0  0  0  0  0  1 V2000
+   21.7366  -11.9950    0.0000 C   0  0
+   23.0876  -11.2150    0.0000 O   0  0
+   20.3858  -11.2150    0.0000 C   0  0
+  1  2  1  0  0  0  0
+  1  3  1  0  0  0  0
+M  APO  1   1   1
+M  END
+$END CTAB
+$CTAB
+  3  2  0  0  0  0  0  0  0  0  1 V2000
+   26.2100  -11.9953    0.0000 C   0  0
+   27.5609  -11.2153    0.0000 C   0  0
+   28.9119  -11.9953    0.0000 O   0  0
+  1  2  1  0  0  0  0
+  2  3  1  0  0  0  0
+M  APO  1   1   1
+M  END
+$END CTAB
+$END RGP
+$END MOL
+"></div>
+<button onclick='getMolfile()'>getMolfile</button>
+<button onclick='setMolfile()'>setMolfile</button>
+<button onclick='getXml()'>getXml</button>
+<button onclick='setXml()'>setXml</button><br />
+<textarea id='v' cols=80 rows=10></textarea>
+
+<script type="text/javascript">
+    dojo.ready(function () {
+        new JSDraw("Div1", { width: 800, height:350 } );
+    });
+
+    function getMolfile() {
+        dojo.byId('v').value = JSDraw.get("Div1").getMolfile();
+    }
+
+    function setMolfile() {
+        JSDraw.get("Div1").setMolfile(dojo.byId('v').value);
+    }
+
+    function getXml() {
+        dojo.byId('v').value = JSDraw.get("Div1").getXml();
+    }
+
+    function setXml() {
+        JSDraw.get("Div1").setXml(dojo.byId('v').value);
+    }
+</script>
+
+
+
+
+
+<br />
+<br />
+<hr />
+Copyright Scilligence, 2013 (<a href='http://www.scilligence.com/'>http://www.scilligence.com/</a>)
+<br />
+<br />
+<b>License:</b>
+<ul>
+<li>Free for education (<a href='http://www.scilligence.com/web/download.aspx?prod=JSDraw'>Download</a>)</li>
+<li>Please <a href='http://www.scilligence.com/web/contact.aspx'>contact us</a> for commercial licenses</li>
+</ul>    
+
+</body>
+</html>

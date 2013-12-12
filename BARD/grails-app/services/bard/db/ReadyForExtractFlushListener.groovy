@@ -4,10 +4,8 @@ import bard.db.dictionary.Element
 import bard.db.dictionary.ElementHierarchy
 import bard.db.dictionary.Ontology
 import bard.db.dictionary.OntologyItem
-import bard.db.enums.AssayStatus as AS
-import bard.db.enums.ExperimentStatus as ES
-import bard.db.enums.ProjectStatus as PS
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.Status as ST
 import bard.db.experiment.*
 import bard.db.project.*
 import bard.db.registration.*
@@ -53,9 +51,9 @@ class ReadyForExtractFlushListener implements FlushEventListener, PostInsertEven
         boolean needExtraFlush = false;
         Collection dirtyExtractables = dirty.collectMany(new HashSet()) { getObjectsImpactedByChange(it) }
         for (entity in dirtyExtractables) {
-            if ((entity instanceof Project && entity.projectStatus?.getId() != PS.DRAFT_ID) ||
-                    (entity instanceof Assay && entity.assayStatus?.getId() != AS.DRAFT_ID) ||
-                    (entity instanceof Experiment && entity.experimentStatus?.getId() != ES.DRAFT_ID) ||
+            if ((entity instanceof Project && entity.projectStatus?.getId() != ST.DRAFT_ID) ||
+                    (entity instanceof Assay && entity.assayStatus?.getId() != ST.DRAFT_ID) ||
+                    (entity instanceof Experiment && entity.experimentStatus?.getId() != ST.DRAFT_ID) ||
                     (entity instanceof Element)) {
                 if (entity.readyForExtraction != ReadyForExtraction.READY) {
                     if (!entity.disableUpdateReadyForExtraction) {

@@ -47,7 +47,6 @@ class ResultsService {
     PugService pugService
     ResultsExportService resultsExportService
     ArchivePathService archivePathService
-    BulkResultService bulkResultService
     SpringSecurityService springSecurityService;
 
     public static class ImportOptions {
@@ -861,9 +860,6 @@ class ResultsService {
 
             summary.resultsCreated += results.size()
 
-            if (options.writeResultsToDb)
-                bulkResultService.insertResults(getUsername(), experiment, results)
-
             // it's possible to have a rows with the SID populated but no measures reported,
             // especially when dealing converted data with panels.  (There may have originally
             // been measures in the original pubchem file for _other_ experiments in the panel,
@@ -918,7 +914,5 @@ class ResultsService {
                 context.delete()
             }
         }
-
-        bulkResultService.deleteResults(experiment)
     }
 }

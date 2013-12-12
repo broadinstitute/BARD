@@ -1,4 +1,3 @@
-<%@ page import="bard.db.enums.ExperimentStatus; bard.db.enums.ContextType; bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
 <head>

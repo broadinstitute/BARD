@@ -78,7 +78,6 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         sql.execute("DELETE FROM ASSAY_DOCUMENT WHERE ASSAY_ID=${documentData.assayId}")
         sql.execute("DELETE FROM PROJECT_DOCUMENT WHERE PROJECT_ID=${documentData.projectId}")
-        sql.execute("DELETE FROM MEASURE WHERE ASSAY_ID=${documentData.assayId}")
         sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${documentData.assayId}")
         sql.execute("DELETE FROM PROJECT WHERE PROJECT_ID=${documentData.projectId}")
 

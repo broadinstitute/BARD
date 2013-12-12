@@ -19,8 +19,8 @@ abstract class ProjectExperiment {
     Project project
     Element stage
 
-    Date dateCreated
-    Date lastUpdated
+    Date dateCreated = new Date()
+    Date lastUpdated = new Date()
     String modifiedBy
 
     Set<ProjectStep> precedingProjectSteps = [] as Set

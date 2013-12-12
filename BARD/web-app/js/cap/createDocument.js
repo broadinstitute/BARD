@@ -8,7 +8,7 @@
 $(document).ready(function () {
 
     new nicEditor({
-        iconsPath : '/BARD/images/nicedit/nicEditorIcons.gif',
+        iconsPath : bardAppContext + '/images/nicedit/nicEditorIcons.gif',
         buttonList : ['bold', 'italic', 'underline', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat', 'indent', 'outdent', 'hr', 'forecolor', 'link', 'unlink', 'fontSize', 'fontFamily', 'fontFormat', 'xhtml']
     }).panelInstance('documentContent');
 

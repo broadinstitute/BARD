@@ -1,7 +1,7 @@
 package bard.db.experiment
 
 import bard.db.BardIntegrationSpec
-import bard.db.enums.ExperimentStatus
+import bard.db.enums.Status
 import bard.db.enums.ReadyForExtraction
 import bard.db.people.Role
 import org.junit.Before
@@ -82,9 +82,9 @@ class ExperimentConstraintIntegrationSpec extends BardIntegrationSpec {
         desc          | valueUnderTest            | valid | errorCode
         'null'        | null                      | false | 'nullable'
 
-        'valid value' | ExperimentStatus.DRAFT    | true  | null
-        'valid value' | ExperimentStatus.APPROVED | true  | null
-        'valid value' | ExperimentStatus.RETIRED  | true  | null
+        'valid value' | Status.DRAFT    | true  | null
+        'valid value' | Status.APPROVED | true  | null
+        'valid value' | Status.RETIRED  | true  | null
     }
 
     void "test readyForExtraction constraints #desc readyForExtraction: '#valueUnderTest'"() {

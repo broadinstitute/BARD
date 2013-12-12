@@ -87,7 +87,7 @@ class QueryServiceUnitSpec extends Specification {
                [
                   18
                ],
-            "resultJson" : "{\\"responseClass\\":\\"SP\\",\\"bardExptId\\":1,\\"capExptId\\":1,\\"bardAssayId\\":1,\\"capAssayId\\":1,\\"sid\\":855944,\\"cid\\":443939,\\"potency\\":null,\\"priorityElements\\":[{\\"displayName\\":\\"percent inhibition\\",\\"dictElemId\\":998,\\"value\\":\\"60.0\\"}],\\"rootElements\\":[{\\"displayName\\":\\"PubChem outcome\\",\\"dictElemId\\":896,\\"value\\":\\"Active\\",\\"childElements\\":[{\\"displayName\\":\\"PubChem activity score\\",\\"dictElemId\\":898,\\"value\\":\\"60.0\\"}]}],\\"projects\\":[{\\"bardProjId\\":18,\\"capProjId\\":118}]}",
+            "resultJson" : "{\\"responseClass\\":\\"CR_SER\\",\\"bardExptId\\":2,\\"capExptId\\":2,\\"bardAssayId\\":2,\\"capAssayId\\":2,\\"sid\\":855944,\\"cid\\":443939,\\"potency\\":7.0795,\\"priorityElements\\":[{\\"displayName\\":\\"AC50\\",\\"dictElemId\\":959,\\"value\\":\\"7.0795\\",\\"concResponseSeries\\":{\\"responseUnit\\":\\"percent activity\\",\\"testConcUnit\\":\\"uM\\",\\"crSeriesDictId\\":986,\\"concRespParams\\":{\\"s0\\":-2.5499,\\"sInf\\":-180.521,\\"hillCoef\\":4.9549,\\"logEc50\\":-5.15},\\"concRespPoints\\":[{\\"testConc\\":0.00368173,\\"value\\":\\"-0.3369\\"},{\\"testConc\\":0.0195624,\\"value\\":\\"4.6837\\"},{\\"testConc\\":0.10299,\\"value\\":\\"1.3235\\"},{\\"testConc\\":0.452287,\\"value\\":\\"-16.7802\\"},{\\"testConc\\":2.37064,\\"value\\":\\"-2.8465\\"},{\\"testConc\\":12.5394,\\"value\\":\\"-165.309\\"},{\\"testConc\\":67.5346,\\"value\\":\\"-1.5224\\"}]},\\"childElements\\":[{\\"displayName\\":\\"R-squared\\",\\"dictElemId\\":980,\\"value\\":\\"0.9877\\"},{\\"displayName\\":\\"QC analyst\\",\\"dictElemId\\":1476,\\"value\\":\\"QC'd by \\\\\\"Sigma Chemical Company\\\\\\"\\"},{\\"displayName\\":\\"comment\\",\\"dictElemId\\":1329,\\"value\\":\\"-2.1\\"},{\\"displayName\\":\\"curve-fit specification\\",\\"dictElemId\\":590,\\"value\\":\\"Partial curve; high efficacy\\"}]},{\\"displayName\\":\\"efficacy\\",\\"dictElemId\\":983,\\"value\\":\\"177.971\\"}],\\"rootElements\\":[{\\"displayName\\":\\"PubChem outcome\\",\\"dictElemId\\":896,\\"value\\":\\"Active\\",\\"childElements\\":[{\\"displayName\\":\\"PubChem activity score\\",\\"dictElemId\\":898,\\"value\\":\\"46.0\\"}]},{\\"displayName\\":\\"activity type\\",\\"dictElemId\\":1708,\\"value\\":\\"Inhibitor\\"}],\\"projects\\":[{\\"bardProjId\\":6,\\"capProjId\\":75}]}",
             "runset" : "default",
             "outcome" : 2,
             "score" : 60,
@@ -262,7 +262,7 @@ class QueryServiceUnitSpec extends Specification {
    "hitExptdata" :
       [
          {
-            "exptDataId" : "1",
+            "exptDataId" : "1.855944",
             "eid" : 0,
             "cid" : 443939,
             "sid" : 855944,
@@ -278,7 +278,7 @@ class QueryServiceUnitSpec extends Specification {
                [
                   18
                ],
-            "resultJson" : "{\\"responseClass\\":\\"SP\\",\\"bardExptId\\":225,\\"capExptId\\":3527,\\"bardAssayId\\":145,\\"capAssayId\\":3325,\\"sid\\":855944,\\"cid\\":443939,\\"potency\\":null,\\"priorityElements\\":[{\\"displayName\\":\\"percent inhibition\\",\\"dictElemId\\":998,\\"value\\":\\"60.0\\"}],\\"rootElements\\":[{\\"displayName\\":\\"PubChem outcome\\",\\"dictElemId\\":896,\\"value\\":\\"Active\\",\\"childElements\\":[{\\"displayName\\":\\"PubChem activity score\\",\\"dictElemId\\":898,\\"value\\":\\"60.0\\"}]}],\\"projects\\":[{\\"bardProjId\\":18,\\"capProjId\\":118}]}",
+            "resultJson" : "{\\"responseClass\\":\\"CR_SER\\",\\"bardExptId\\":2,\\"capExptId\\":2,\\"bardAssayId\\":2,\\"capAssayId\\":2,\\"sid\\":855944,\\"cid\\":443939,\\"potency\\":7.0795,\\"priorityElements\\":[{\\"displayName\\":\\"AC50\\",\\"dictElemId\\":959,\\"value\\":\\"7.0795\\",\\"concResponseSeries\\":{\\"responseUnit\\":\\"percent activity\\",\\"testConcUnit\\":\\"uM\\",\\"crSeriesDictId\\":986,\\"concRespParams\\":{\\"s0\\":-2.5499,\\"sInf\\":-180.521,\\"hillCoef\\":4.9549,\\"logEc50\\":-5.15},\\"concRespPoints\\":[{\\"testConc\\":0.00368173,\\"value\\":\\"-0.3369\\"},{\\"testConc\\":0.0195624,\\"value\\":\\"4.6837\\"},{\\"testConc\\":0.10299,\\"value\\":\\"1.3235\\"},{\\"testConc\\":0.452287,\\"value\\":\\"-16.7802\\"},{\\"testConc\\":2.37064,\\"value\\":\\"-2.8465\\"},{\\"testConc\\":12.5394,\\"value\\":\\"-165.309\\"},{\\"testConc\\":67.5346,\\"value\\":\\"-1.5224\\"}]},\\"childElements\\":[{\\"displayName\\":\\"R-squared\\",\\"dictElemId\\":980,\\"value\\":\\"0.9877\\"},{\\"displayName\\":\\"QC analyst\\",\\"dictElemId\\":1476,\\"value\\":\\"QC'd by \\\\\\"Sigma Chemical Company\\\\\\"\\"},{\\"displayName\\":\\"comment\\",\\"dictElemId\\":1329,\\"value\\":\\"-2.1\\"},{\\"displayName\\":\\"curve-fit specification\\",\\"dictElemId\\":590,\\"value\\":\\"Partial curve; high efficacy\\"}]},{\\"displayName\\":\\"efficacy\\",\\"dictElemId\\":983,\\"value\\":\\"177.971\\"}],\\"rootElements\\":[{\\"displayName\\":\\"PubChem outcome\\",\\"dictElemId\\":896,\\"value\\":\\"Active\\",\\"childElements\\":[{\\"displayName\\":\\"PubChem activity score\\",\\"dictElemId\\":898,\\"value\\":\\"46.0\\"}]},{\\"displayName\\":\\"activity type\\",\\"dictElemId\\":1708,\\"value\\":\\"Inhibitor\\"}],\\"projects\\":[{\\"bardProjId\\":6,\\"capProjId\\":75}]}",
             "runset" : "default",
             "outcome" : 2,
             "score" : 60,
@@ -965,11 +965,12 @@ class QueryServiceUnitSpec extends Specification {
         assert tableModel?.data?.first()?.first()?.class == expectedResourceType
 
         where:
-        label                            | cid  | groupBy              | filterTypes                                | expectedTableModelDataSize | expectedTableModelHeaderSize | expectedResourceType
-        "group-by assay, all"            | 1234 | GroupByTypes.ASSAY   | [FilterTypes.ACTIVE, FilterTypes.INACTIVE] | 1                          | 2                            | AssayValue
-        "group-by assay, inactives-only" | 1234 | GroupByTypes.ASSAY   | [FilterTypes.INACTIVE]                     | 1                          | 1                            | AssayValue
-        "group-by assay, none"           | 1234 | GroupByTypes.ASSAY   | []                                         | null                       | null                         | null
-        "group-by project, all"          | 1234 | GroupByTypes.PROJECT | [FilterTypes.ACTIVE, FilterTypes.INACTIVE] | 1                          | 1                            | ProjectValue
+        label                            | cid  | groupBy              | filterTypes                                                    | expectedTableModelDataSize | expectedTableModelHeaderSize | expectedResourceType
+        "group-by assay, all"            | 1234 | GroupByTypes.ASSAY   | [FilterTypes.TESTED, FilterTypes.ACTIVE, FilterTypes.INACTIVE] | 2                          | 2                            | AssayValue
+        "group-by assay, actives-only"   | 1234 | GroupByTypes.ASSAY   | [FilterTypes.TESTED, FilterTypes.ACTIVE]                       | 1                          | 1                            | AssayValue
+        "group-by assay, inactives-only" | 1234 | GroupByTypes.ASSAY   | [FilterTypes.TESTED, FilterTypes.INACTIVE]                     | 1                          | 1                            | AssayValue
+        "group-by assay, none"           | 1234 | GroupByTypes.ASSAY   | [FilterTypes.TESTED]                                           | null                       | null                         | null
+        "group-by project, all"          | 1234 | GroupByTypes.PROJECT | [FilterTypes.TESTED, FilterTypes.ACTIVE, FilterTypes.INACTIVE] | 2                          | 1                            | ProjectValue
     }
 
 }

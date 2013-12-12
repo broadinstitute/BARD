@@ -1,5 +1,5 @@
 import acl.CapPermissionService
-import bard.db.enums.ProjectStatus
+import bard.db.enums.Status
 import bard.db.people.Role
 import bard.db.project.Project
 import org.apache.commons.lang.StringUtils
@@ -16,7 +16,7 @@ CapPermissionService capPermissionService = ctx.capPermissionService
 List<String> notFound = []
 try {
     SpringSecurityUtils.reauthenticate('integrationTestUser', null)
-    final List<Project> projects = Project.findAllByOwnerRoleIsNullAndProjectStatusNotInList([ProjectStatus.RETIRED])
+    final List<Project> projects = Project.findAllByOwnerRoleIsNullAndProjectStatusNotInList([Status.RETIRED])
     for (Project project : projects) {
         String roleDisplayName = capPermissionService.getOwner(project)
         Role role = Role.findByDisplayName(roleDisplayName)

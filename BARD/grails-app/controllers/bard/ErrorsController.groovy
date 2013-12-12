@@ -22,7 +22,7 @@ class ErrorsController {
 
             log.error("Error ${errorId}: Uncaught exception", exception)
 
-            render(view: '/error', model: [errorId: errorId, exception: exception, showException: showStackTraceOnErrorPage])
+            render(view: '/error', model: [errorId: errorId, exception: exception, showException: (showStackTraceOnErrorPage && exception != null)])
         } catch(Exception ex) {
             log.error("Exception writing error page", ex)
             def trace = ExceptionUtils.getFullStackTrace(ex)

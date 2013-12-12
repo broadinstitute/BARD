@@ -1,6 +1,5 @@
 package bard.db.registration
 
-import bard.db.experiment.BulkResultService
 import bard.db.experiment.BulkSubstanceService
 import bard.db.experiment.Substance
 import bard.hibernate.AuthenticatedUserRequired

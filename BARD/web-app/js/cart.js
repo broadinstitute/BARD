@@ -14,7 +14,7 @@ QueryCart.prototype.toggleDetailsHandler = function () {
 QueryCart.prototype.refreshSummaryView = function () {
     var ajaxLocation = '#summaryView';
     jQuery.ajax({  type:'GET',
-        url:'/BARD/queryCart/refreshSummaryView',
+        url:bardAppContext + '/queryCart/refreshSummaryView',
         success:function (data) {
             jQuery(ajaxLocation).html(data);
         }
@@ -24,7 +24,7 @@ QueryCart.prototype.refreshSummaryView = function () {
 QueryCart.prototype.refreshDetailsView = function () {
     var ajaxLocation = '#detailView';
     jQuery.ajax({  type:'GET',
-        url:'/BARD/queryCart/refreshDetailsView',
+        url:bardAppContext + '/queryCart/refreshDetailsView',
         success:function (data) {
             jQuery(ajaxLocation).html(data);
         }
@@ -43,7 +43,7 @@ QueryCart.prototype.addItemToCartHandler = function () {
             'name':name,
             'smiles':smiles
         },
-        url:'/BARD/queryCart/addItem',
+        url:bardAppContext + '/queryCart/addItem',
         success:function (data) {
             queryCart.publishCartChangeEvent('cart.itemAdded', id);
         }
@@ -57,7 +57,7 @@ QueryCart.prototype.removeItemFromCartHandler = function () {
     jQuery.ajax({  type:'POST',
         data:{'id':id,
             'type':type},
-        url:'/BARD/queryCart/removeItem',
+        url:bardAppContext + '/queryCart/removeItem',
         success:function (data) {
             queryCart.publishCartChangeEvent('cart.itemRemoved', id);
         }
@@ -67,7 +67,7 @@ QueryCart.prototype.removeItemFromCartHandler = function () {
 
 QueryCart.prototype.removeAll = function () {
     jQuery.ajax({  type:'POST',
-        url:'/BARD/queryCart/removeAll',
+        url:bardAppContext + '/queryCart/removeAll',
         success:function (data) {
             queryCart.publishCartChangeEvent('cart.itemRemoved');
         },
@@ -93,7 +93,7 @@ QueryCart.prototype.refreshInCartCheckboxes = function (event, idToTarget) {
     var type = $(this).attr('data-cart-type');
     var elementToUpdate = $(this);
     jQuery.ajax({  type:'POST',
-        url:'/BARD/queryCart/isInCart',
+        url:bardAppContext + '/queryCart/isInCart',
         data:{'id':id,
             'type':type},
         success:function (data) {

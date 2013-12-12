@@ -4,7 +4,7 @@ import bard.db.audit.BardContextUtils
 import bard.db.dictionary.Element
 import bard.db.enums.ContextType
 import bard.db.enums.ExpectedValueType
-import bard.db.enums.ProjectStatus
+import bard.db.enums.Status
 import bard.db.enums.ValueType
 import bard.db.people.Role
 import grails.plugin.spock.IntegrationSpec
@@ -56,9 +56,9 @@ class CapProjectServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         desc                     | projectStatus          | ncgcWarehouseId | bardURI                       | expectedNumberOfProbes
-        "Valid Probe Element"    | ProjectStatus.APPROVED | 1               | ProjectService.BARD_PROBE_URI | 1
-        "Status is not Approved" | ProjectStatus.DRAFT    | 1               | ProjectService.BARD_PROBE_URI | 0
-        "No NCGC Ware House Id"  | ProjectStatus.APPROVED | null            | ProjectService.BARD_PROBE_URI | 0
-        "Invalid PROBE URI"      | ProjectStatus.APPROVED | 1               | "Some uri"                    | 0
+        "Valid Probe Element"    | Status.APPROVED | 1               | ProjectService.BARD_PROBE_URI | 1
+        "Status is not Approved" | Status.DRAFT    | 1               | ProjectService.BARD_PROBE_URI | 0
+        "No NCGC Ware House Id"  | Status.APPROVED | null            | ProjectService.BARD_PROBE_URI | 0
+        "Invalid PROBE URI"      | Status.APPROVED | 1               | "Some uri"                    | 0
     }
 }

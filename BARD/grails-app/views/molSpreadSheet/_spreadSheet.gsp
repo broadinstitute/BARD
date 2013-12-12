@@ -198,7 +198,7 @@
                                 ${colHeader}
 
                                 <g:if test="${(columnDictionaryLookup[column]!=null) && ("0"!=columnDictionaryLookup[column])}">
-                                    <a href="/BARD/dictionaryTerms/#${columnDictionaryLookup[column]}"
+                                    <a href="${request.contextPath}/dictionaryTerms/#${columnDictionaryLookup[column]}"
                                        class="desc_tip mssheader" data-placement="top"
                                        target="datadictionary">
                                         <i class="icon-question-sign"></i>

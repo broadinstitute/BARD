@@ -2,7 +2,7 @@ package bard.db.project
 
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
-import bard.db.enums.ExperimentStatus
+import bard.db.enums.Status
 import bard.db.experiment.Experiment
 import bard.db.people.Role
 import bard.db.registration.Assay
@@ -169,7 +169,7 @@ class AssociateExperimentsCommandUnitSpec extends Specification {
     void "test source Entity Ids experiment retired #desc"() {
         given:
         String field = "sourceEntityIds"
-        final Experiment experiment = Experiment.build(ownerRole: role, experimentStatus: ExperimentStatus.RETIRED)
+        final Experiment experiment = Experiment.build(ownerRole: role, experimentStatus: Status.RETIRED)
 
         def domainInstance = new AssociateExperimentsCommand(
                 mergeAssayDefinitionService: this.mergeAssayDefinitionService,

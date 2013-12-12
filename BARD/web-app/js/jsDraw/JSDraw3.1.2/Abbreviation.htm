@@ -1,0 +1,142 @@
+<!--
+//////////////////////////////////////////////////////////////////////////////////
+//
+// JSDraw
+// Copyright (C) 2013 Scilligence Corporation
+// http://www.scilligence.com/
+//
+//////////////////////////////////////////////////////////////////////////////////
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<title>JSDraw - Atom Label/Abbreviation</title>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.9.0/dojo/dojo.js"></script>
+<script type="text/javascript" src='Scilligence.JSDraw2.Pro.js'></script>
+
+</head>
+<body>
+
+
+
+
+<h1>Atom Label/Abbreviation</h1>
+<pre>
+There are several ways to change atom type:
+1. Select atom type button on toolbar, then click atoms to change their type
+2. Mouse-hover an atom, then press keyboard key to change its type: C, N, S, O, l (Cl), b (Br), F, I, A, X
+3. Select text tool on toolbar, then click an atom
+4. Mouse-hover an atom, then press Enter key to show text edit box
+</pre>
+
+<div id='Div1' dataformat='mol' data='
+   JSDraw205071311162D
+
+ 13 13  0  0  0  0  0  0  0  0  1 V2000
+   15.7030   -5.8240    0.0000 C   0  0
+   15.7030   -4.2640    0.0000 C   0  0
+   17.0540   -3.4840    0.0000 C   0  0
+   18.4050   -4.2640    0.0000 C   0  0
+   11.6500   -8.1640    0.0000 C   0  0
+   11.6500   -6.6040    0.0000 C   0  0
+   13.0010   -5.8240    0.0000 C   0  0
+   13.0010   -8.9440    0.0000 C   0  0
+   14.3520   -8.1640    0.0000 C   0  0
+   14.3520   -6.6040    0.0000 C   0  0
+   17.0540   -6.6040    0.0000 C   0  0
+   17.0540   -8.1640    0.0000 O   0  0
+   18.4050   -5.8240    0.0000 O   0  0
+ 10  1  1  0  0  0  0
+  1 11  1  0  0  0  0
+  1  2  1  0  0  0  0
+  2  3  1  0  0  0  0
+  3  4  1  0  0  0  0
+  5  6  1  0  0  0  0
+  6  7  2  0  0  0  0
+  5  8  2  0  0  0  0
+  8  9  1  0  0  0  0
+  9 10  2  0  0  0  0
+ 10  7  1  0  0  0  0
+ 11 12  2  0  0  0  0
+ 11 13  1  0  0  0  0
+A    4
+Unknown
+M  STY  1   1 SUP
+M  SAL   1  6   5   6   7   8   9  10
+M  SBL   1  1   1
+M  SMT   1 Ph
+M  STY  1   2 SUP
+M  SAL   2  3  11  12  13
+M  SBL   2  1   2
+M  SMT   2 COOH
+M  END
+'></div>
+<button onclick='getMolfile()'>getMolfile</button>
+<button onclick='setMolfile()'>setMolfile</button>
+<button onclick='getXml()'>getXml</button>
+<button onclick='setXml()'>setXml</button>
+<button onclick='getSmiles()'>getSmiles</button>
+<button onclick='getMolWeight()'>getMolWeight</button>
+<button onclick='getExactMass()'>getExactMass</button>
+<button onclick='getFormula()'>getFormula</button><br />
+<textarea id='v' cols=80 rows=10></textarea>
+
+<script type="text/javascript">
+    dojo.ready(function () {
+        new JSDraw("Div1", { width: 800, height: 350 });
+    });
+
+    function getSmiles() {
+        dojo.byId('v').value = JSDraw.get("Div1").getSmiles();
+    }
+
+    function getMolWeight() {
+        dojo.byId('v').value = JSDraw.get("Div1").getMolWeight();
+    }
+
+    function getExactMass() {
+        dojo.byId('v').value = JSDraw.get("Div1").getExactMass();
+    }
+
+    function getFormula() {
+        dojo.byId('v').value = JSDraw.get("Div1").getFormula();
+    }
+
+    function getMolfile() {
+        dojo.byId('v').value = JSDraw.get("Div1").getMolfile();
+    }
+
+    function setMolfile() {
+        JSDraw.get("Div1").setMolfile(dojo.byId('v').value);
+    }
+
+    function getXml() {
+        dojo.byId('v').value = JSDraw.get("Div1").getXml();
+    }
+
+    function setXml() {
+        JSDraw.get("Div1").setXml(dojo.byId('v').value);
+    }
+</script>
+
+
+
+
+
+
+<br />
+<br />
+<hr />
+Copyright Scilligence, 2013 (<a href='http://www.scilligence.com/'>http://www.scilligence.com/</a>)
+<br />
+<br />
+<b>License:</b>
+<ul>
+<li>Free for education (<a href='http://www.scilligence.com/web/download.aspx?prod=JSDraw'>Download</a>)</li>
+<li>Please <a href='http://www.scilligence.com/web/contact.aspx'>contact us</a> for commercial licenses</li>
+</ul>    
+
+</body>
+</html>

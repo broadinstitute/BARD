@@ -1,7 +1,7 @@
 package bard.db.project
 
 import acl.CapPermissionService
-import bard.db.enums.ProjectStatus
+import bard.db.enums.Status
 import bard.db.people.Role
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
@@ -59,10 +59,10 @@ public class ProjectServiceUnitSpec extends Specification {
     }
     void "test update project status"() {
         given:
-        final Project project = Project.build(name: 'projectName10', projectStatus: ProjectStatus.DRAFT)
+        final Project project = Project.build(name: 'projectName10', projectStatus: Status.DRAFT)
         when:
-        final Project updatedProject = service.updateProjectStatus(project.id, ProjectStatus.APPROVED)
+        final Project updatedProject = service.updateProjectStatus(project.id, Status.APPROVED)
         then:
-        assert ProjectStatus.APPROVED == updatedProject.projectStatus
+        assert Status.APPROVED == updatedProject.projectStatus
     }
 }

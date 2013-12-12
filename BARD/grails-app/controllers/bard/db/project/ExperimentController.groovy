@@ -5,10 +5,9 @@ import bard.db.command.BardCommand
 import bard.db.dictionary.Descriptor
 import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
-import bard.db.enums.AssayStatus
 import bard.db.enums.ContextType
-import bard.db.enums.ExperimentStatus
 import bard.db.enums.HierarchyType
+import bard.db.enums.Status
 import bard.db.experiment.*
 import bard.db.experiment.results.JobStatus
 import bard.db.model.AbstractContextOwner
@@ -54,9 +53,9 @@ class ExperimentController {
      */
     def experimentStatus() {
         List<String> sorted = []
-        final Collection<ExperimentStatus> experimentStatuses = ExperimentStatus.values()
-        for (ExperimentStatus experimentStatus : experimentStatuses) {
-            if (experimentStatus != ExperimentStatus.DRAFT) {
+        final Collection<Status> experimentStatuses = Status.values()
+        for (Status experimentStatus : experimentStatuses) {
+            if (experimentStatus != Status.DRAFT) {
                 sorted.add(experimentStatus.id)
             }
         }
@@ -311,7 +310,7 @@ class ExperimentController {
     @Secured(['isAuthenticated()'])
     def editExperimentStatus(InlineEditableCommand inlineEditableCommand) {
         try {
-            final ExperimentStatus experimentStatus = ExperimentStatus.byId(inlineEditableCommand.value)
+            final Status experimentStatus = Status.byId(inlineEditableCommand.value)
             final Experiment experiment = Experiment.findById(inlineEditableCommand.pk)
             final String message = inlineEditableCommand.validateVersions(experiment.version, Experiment.class)
             if (message) {
@@ -321,12 +320,19 @@ class ExperimentController {
 
 
             final Assay assay = experiment.assay
-            if (experimentStatus == ExperimentStatus.APPROVED) {//if experiment status is approved then assay status must be approved
-                if (assay.assayStatus != AssayStatus.APPROVED) {
+            if (experimentStatus == Status.APPROVED) {//if experiment status is approved then assay status must be approved
+                if (assay.assayStatus != Status.APPROVED) {
                     String errorMessage = "The assay definition (ADID:${assay.id} for this experiment must be marked Approved before this experiment can be marked Approved."
                     render(status: HttpServletResponse.SC_BAD_REQUEST, text:
                             errorMessage, contentType: 'text/plain', template: null)
                     return
+                }
+                if(!experiment.experimentFiles){
+                    String errorMessage = "You must upload results for this experiment before it can be approved."
+                    render(status: HttpServletResponse.SC_BAD_REQUEST, text:
+                            errorMessage, contentType: 'text/plain', template: null)
+                    return
+
                 }
                 if (!experiment.measuresHaveAtLeastOnePriorityElement()) {
                     render(status: HttpServletResponse.SC_BAD_REQUEST, text: "You must designate at least one result type as a priority element before this experiment can be marked as approved.",

@@ -30,6 +30,7 @@ class ElementControllerUnitSpec extends Specification {
         this.controller.elementService = Mock(ElementService.class)
         this.controller.bardCacheUtilsService = Mock(BardCacheUtilsService.class)
         this.parentElement = Element.build(label: 'parent label with spaces', addChildMethod: AddChildMethod.DIRECT)
+        this.controller.buildElementPathsService = Mock(BuildElementPathsService)
     }
 
     void "test buildTopLevelHierarchyTree"() {
@@ -412,5 +413,18 @@ class ElementControllerUnitSpec extends Specification {
 
         then:
         thrown(EmptyPathSectionException)
+    }
+
+    void "test listAjax"() {
+        when:
+        controller.listAjax()
+
+
+        then:
+        controller.buildElementPathsService.buildAll() >> { [] }
+        controller.buildElementPathsService.createListSortedByString(_) >> { new ElementAndFullPathListAndMaxPathLength([], 0) }
+        controller.elementService.convertPathsToSelectWidgetStructures(_) >> { ["results"] }
+
+        assert response.text == '{"results":["results"]}'
     }
 }

@@ -76,7 +76,7 @@ function editDocument(documentId, documentKind, owningEntityId, documentContent,
     };
     $.ajax({
         type: 'POST',
-        url: '/BARD/document/editDocument',
+        url: bardAppContext + '/document/editDocument',
         data: payLoad,
         success: function (data, textStatus, response) {
             var version = response.getResponseHeader("version");

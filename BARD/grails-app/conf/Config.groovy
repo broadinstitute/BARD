@@ -375,7 +375,7 @@ log4j = {
                     to: config.grails.mail.default.to,
                     subject: config.grails.mail.default.subject,
                     SMTPHost: config.grails.mail.host,
-                    layout: pattern(defaultPattern),
+                    layout: pattern("%d [%t] %X{request}\n%-5p %c{1} - %m%n"),
                     threshold: org.apache.log4j.Level.ERROR))
 
         } catch (Exception ex) {
@@ -403,6 +403,13 @@ log4j = {
             'org.springframework',
             'org.hibernate',
             'net.sf.ehcache.hibernate')
+
+
+    //Note that other filters are configured in Bootstrap.groovy
+
+    //BoneCP errors
+    error(additivity: false, mySQLAppender: ['com.jolbox.bonecp'])
+
     //Capture errors from the NCGC API (via JDO) but DO NOT send emails about them.
     error(additivity: false, NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService'])
     //Capture JavaScript errors from the client (via the ErrorHandling controller)

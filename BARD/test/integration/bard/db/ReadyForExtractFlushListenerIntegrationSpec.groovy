@@ -3,10 +3,8 @@ package bard.db
 import bard.db.audit.BardContextUtils
 import bard.db.dictionary.Element
 import bard.db.dictionary.ElementStatus as ELS
-import bard.db.enums.AssayStatus as AS
-import bard.db.enums.ExperimentStatus as EXS
-import bard.db.enums.ProjectStatus
-import bard.db.enums.ProjectStatus as PS
+import bard.db.enums.Status
+import bard.db.enums.Status as ST
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
@@ -18,9 +16,7 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.SessionFactory
 import spock.lang.Unroll
 
-import static bard.db.enums.ReadyForExtraction.COMPLETE
-import static bard.db.enums.ReadyForExtraction.NOT_READY
-import static bard.db.enums.ReadyForExtraction.READY
+import static bard.db.enums.ReadyForExtraction.*
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,7 +35,7 @@ class ReadyForExtractFlushListenerIntegrationSpec extends IntegrationSpec {
         setup:
         BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'integrationTestUser')
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
-        Experiment experiment = Experiment.build(readyForExtraction: NOT_READY, experimentStatus: EXS.APPROVED)
+        Experiment experiment = Experiment.build(readyForExtraction: NOT_READY, experimentStatus: ST.APPROVED)
         ExperimentContext context = ExperimentContext.build(experiment: experiment)
         experiment.disableUpdateReadyForExtraction = true
 
@@ -96,19 +92,19 @@ class ReadyForExtractFlushListenerIntegrationSpec extends IntegrationSpec {
 
         where:
         desc                      | ownerClosure           | initialRFE | statusField        | statusToTest | fieldToModify
-        'Assay with status '      | { Assay.build() }      | NOT_READY  | 'assayStatus'      | AS.APPROVED  | 'assayName'
-        'Assay with status '      | { Assay.build() }      | NOT_READY  | 'assayStatus'      | AS.RETIRED   | 'assayName'
-        'Experiment with status ' | { Experiment.build() } | NOT_READY  | 'experimentStatus' | EXS.APPROVED | 'description'
-        'Experiment with status ' | { Experiment.build() } | NOT_READY  | 'experimentStatus' | EXS.RETIRED  | 'description'
-        'Project with status '    | { Project.build() }    | NOT_READY  | 'projectStatus'    | PS.APPROVED  | 'description'
-        'Project with status '    | { Project.build() }    | NOT_READY  | 'projectStatus'    | PS.RETIRED   | 'description'
+        'Assay with status '      | { Assay.build() }      | NOT_READY  | 'assayStatus'      | ST.APPROVED  | 'assayName'
+        'Assay with status '      | { Assay.build() }      | NOT_READY  | 'assayStatus'      | ST.RETIRED   | 'assayName'
+        'Experiment with status ' | { Experiment.build() } | NOT_READY  | 'experimentStatus' | ST.APPROVED | 'description'
+        'Experiment with status ' | { Experiment.build() } | NOT_READY  | 'experimentStatus' | ST.RETIRED  | 'description'
+        'Project with status '    | { Project.build() }    | NOT_READY  | 'projectStatus'    | ST.APPROVED  | 'description'
+        'Project with status '    | { Project.build() }    | NOT_READY  | 'projectStatus'    | ST.RETIRED   | 'description'
     }
 
     void "test ready flag for project experiments gets set #desc #statusToTest.id"() {
         given: 'an owning entity with readyForExtraction: NOT_READY'
         BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'integrationTestUser')
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
-        Project project = Project.build(projectStatus: ProjectStatus.APPROVED, readyForExtraction: COMPLETE)
+        Project project = Project.build(projectStatus: Status.APPROVED, readyForExtraction: COMPLETE)
         Experiment experiment = Experiment.build()
         ProjectSingleExperiment.build(project: project, experiment: experiment)
 
@@ -139,8 +135,8 @@ class ReadyForExtractFlushListenerIntegrationSpec extends IntegrationSpec {
 
         where:
         desc                      | initialRFE | statusField        | statusToTest | fieldToModify
-        'Experiment with status ' | NOT_READY  | 'experimentStatus' | EXS.APPROVED | 'description'
-        'Experiment with status ' | NOT_READY  | 'experimentStatus' | EXS.RETIRED  | 'description'
+        'Experiment with status ' | NOT_READY  | 'experimentStatus' | ST.APPROVED | 'description'
+        'Experiment with status ' | NOT_READY  | 'experimentStatus' | ST.RETIRED  | 'description'
     }
 
     void "test Element ready flag #desc"() {

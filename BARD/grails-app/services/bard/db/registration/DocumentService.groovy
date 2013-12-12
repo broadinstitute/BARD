@@ -1,12 +1,8 @@
 package bard.db.registration
 
-import bard.db.enums.AssayStatus
-import bard.db.enums.AssayType
 import bard.db.experiment.ExperimentDocument
-import bard.db.project.Project
 import bard.db.project.ProjectDocument
 import org.springframework.security.access.prepost.PreAuthorize
-import registration.AssayService
 
 class DocumentService {
 

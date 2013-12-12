@@ -5,6 +5,7 @@ import bard.db.dictionary.Element
 import bard.db.enums.ContextType
 import bard.db.guidance.Guidance
 import bard.db.guidance.GuidanceAware
+import bard.db.guidance.GuidanceRule
 import bard.db.registration.AssayContextItem
 import bard.db.registration.AttributeType
 
@@ -49,7 +50,7 @@ abstract class AbstractContext implements GuidanceAware {
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
-    static transients = ["preferredName", 'itemSubClass','atLeastOneNonFixedContextItem']
+    static transients = ["preferredName", 'itemSubClass','atLeastOneNonFixedContextItem','guidanceRules']
 
     boolean atLeastOneNonFixedContextItem(){
         for(AssayContextItem assayContextItem : this.getContextItems()){
@@ -119,9 +120,23 @@ abstract class AbstractContext implements GuidanceAware {
      */
     abstract Class<? extends AbstractContextItem> getItemSubClass()
 
+    /**
+     * subclasses that need to utilize some guidance should override and add rules
+     */
+    List<GuidanceRule> getGuidanceRules(){
+        []
+    }
+
+    /**
+     * @return a list of Guidance messages
+     */
     @Override
     List<Guidance> getGuidance() {
-        []
+        final List<Guidance> guidanceList = []
+        for (GuidanceRule rule : guidanceRules) {
+            guidanceList.add(rule.getGuidance())
+        }
+        guidanceList.flatten()
     }
 
 }

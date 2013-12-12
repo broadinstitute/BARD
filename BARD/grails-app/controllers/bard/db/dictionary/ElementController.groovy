@@ -38,6 +38,21 @@ class ElementController {
     }
 
     @Secured(['isAuthenticated()'])
+    def select() {}
+
+    @Secured(['isAuthenticated()'])
+    def listAjax() {
+        Map parameterMap = generatePaths()
+
+        if (!parameterMap.containsKey(errorMessageKey)) {
+            Map map = [results: elementService.convertPathsToSelectWidgetStructures(parameterMap.list)]
+            render map as JSON
+        } else {
+            render(parameterMap.get(errorMessageKey))
+        }
+    }
+
+    @Secured(['isAuthenticated()'])
     def getChildrenAsJson(long elementId, boolean doNotShowRetired, String expectedValueType) {
         List elementHierarchyTree = elementService.getChildNodes(elementId, doNotShowRetired, expectedValueType)
         JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)

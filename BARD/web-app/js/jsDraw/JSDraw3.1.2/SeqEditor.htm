@@ -1,0 +1,107 @@
+﻿<!--
+//////////////////////////////////////////////////////////////////////////////////
+//
+// JSDraw
+// Copyright (C) 2013 Scilligence Corporation
+// http://www.scilligence.com/
+//
+//////////////////////////////////////////////////////////////////////////////////
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<title>JSDraw - A Javascript Chemical Structure Editor/Viewer</title>
+
+<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js" type="text/javascript"></script>
+
+<script type="text/javascript" src='Scilligence.JSDraw2.Pro.js'></script>
+<script type="text/javascript" src='Service.aspx'></script>
+
+
+</head>
+<body>
+<h2>JSDraw - Sequence Editor </h2>
+
+
+<pre>
+Hits to draw user Sequence Editor:
+1. Click + icon on the toolbar to add Chain
+2. Double click the sequence to edit sequence
+3. To add annotation, select letters in a sequence, then click Add Annotation icon on the toolbar
+4. To edit annotation, select annotated letters, then click Edit Annotation icon on the toolbar
+</pre>
+
+<div id='t'></div>
+Size: <input id='size' size=5 />&nbsp;
+MW: <input id='mw' size=5 />&nbsp;
+Isoelectronic Point: <input id='ip' size=5 />&nbsp;
+Glycosylation Sites: <input id='gs' size=5 />&nbsp;
+Mol. Extinction Coef.: <input id='mec' size=5 /><br />
+
+
+<button onclick='clearse()'>Clear</button>
+<button onclick='getxml()'>GetXml</button>
+<button onclick='setxml()'>SetXml</button>
+<button onclick='getfasta()'>GetFASTA</button>
+<button onclick='setfasta()'>SetFASTA</button><br />
+<textarea id='v' cols=80 rows=10></textarea>
+
+
+<script type="text/javascript">
+    var se = null;
+    dojo.ready(function () {
+        se = new JSDraw2.SequenceEditor("t", { onchange: onchange });
+
+        var xml = "&lt;se&gt;&lt;chain&gt;&lt;c&gt;Light Chain&#xA;Antibody SKJ0324&lt;/c&gt;&lt;seq s='KFJKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLSKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLSKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLKFDJSLKFJSLKFJSLKFSF'&gt;&lt;a st='133' ed='142' t='b' c='yellow'&gt;Active Site&lt;/a&gt;&lt;/seq&gt;&lt;/chain&gt;&lt;chain&gt;&lt;c&gt;Heavy Chain&lt;/c&gt;&lt;seq s='AASJSDKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLSKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLKFDJSLKFJSLKFJKJFDLKSJDLKSJLKFDJSLKFJSLKFJSLKFSF'&gt;&lt;/seq&gt;&lt;/chain&gt;&lt;/se&gt;";
+        se.setXml(scil.Utils.unescXmlValue(xml));
+    });
+
+    function onchange() {
+        dojo.byId('size').value = se.getSize();
+        dojo.byId('mw').value = se.getMolWeight();
+        dojo.byId('ip').value = se.getIP();
+        dojo.byId('gs').value = se.getGlycosylationSites();
+        dojo.byId('mec').value = se.getMolarExtinctionCoef();
+    }
+
+    function clearse() {
+        JSDraw2.SequenceEditor.get("t").clear();
+    }
+
+    function getxml() {
+        dojo.byId('v').value = se.getXml();
+    }
+
+    function setxml() {
+        se.setXml(dojo.byId('v').value);
+    }
+
+    function getfasta() {
+        dojo.byId('v').value = se.getFasta();
+    }
+
+    function setfasta() {
+        se.setFasta(dojo.byId('v').value);
+    }
+</script>
+
+
+
+
+
+
+<br />
+<br />
+<hr />
+Copyright Scilligence, 2013 (<a href='http://www.scilligence.com/'>http://www.scilligence.com/</a>)
+<br />
+<br />
+<b>License:</b>
+<ul>
+<li>Free for education (<a href='http://www.scilligence.com/web/download.aspx?prod=JSDraw'>Download</a>)</li>
+<li>Please <a href='http://www.scilligence.com/web/contact.aspx'>contact us</a> for commercial licenses</li>
+</ul>    
+
+</body>
+</html>

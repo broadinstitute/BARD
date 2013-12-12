@@ -1,14 +1,6 @@
-<%@ page import="bard.db.enums.ExperimentStatus; bard.db.enums.ContextType; bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
-<head>
-    <r:require
-            modules="core,bootstrap,twitterBootstrapAffix"/>
-    <meta name="layout" content="howto"/>
-    <r:external file="css/bootstrap-plus.css"/>
-    <title>BARD How to visualize and capture data</title>
-
-</head>
+<g:render template="howToHeader" model="[title:'BARD How to visualize and capture data']"/>
 
 <body>
 <div class="search-panel">
