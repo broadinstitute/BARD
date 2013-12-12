@@ -18,6 +18,7 @@ class ElementController {
     BuildElementPathsService buildElementPathsService
     BardCacheUtilsService bardCacheUtilsService
     ModifyElementAndHierarchyService modifyElementAndHierarchyService
+    OntologyDataAccessService ontologyDataAccessService
 
     def index() {
         redirect(uri: '/')
@@ -122,7 +123,7 @@ class ElementController {
     }
 
     @Secured(["hasRole('ROLE_CURATOR')"])
-    def edit() {
+    def editHierarchyPath() {
         Map parameterMap = generatePaths()
 
         if (!parameterMap.containsKey(errorMessageKey)) {
@@ -130,6 +131,16 @@ class ElementController {
         } else {
             render(parameterMap.get(errorMessageKey))
         }
+    }
+
+    @Secured(["hasRole('ROLE_CURATOR')"])
+    def edit(Long id) {
+        Element element = Element.findById(id)
+        if (!element) {
+            flash.message = "Element ${id} does not exist"
+        }
+
+        [element: element, baseUnits: ontologyDataAccessService.getAllUnits()]
     }
 
     private Map generatePaths() {
@@ -149,7 +160,7 @@ class ElementController {
     }
 
     @Secured(["hasRole('ROLE_CURATOR')"])
-    def update(ElementEditCommand elementEditCommand) {
+    def updateHierarchyPath(ElementEditCommand elementEditCommand) {
         String errorMessage = null
 
         elementEditCommand.newPathString = elementEditCommand.newPathString?.trim()
@@ -196,12 +207,29 @@ detected loop id's:${idBuilder.toString()}<br/>"""
         }
 
         if (null == errorMessage) {
-            redirect(action: 'edit')
+            redirect(action: 'editHierarchyPath')
         } else {
             render(errorMessage)
         }
     }
 
+    @Secured(["hasRole('ROLE_CURATOR')"])
+    def update() {
+        Element element = Element.findById(params.id)
+        if (!element) {
+            flash.message = "Could not find element ${params.id} for editing"
+            redirect action: "select"
+        }
+
+        element.properties = params
+        if (element.save(flush: true)) {
+            flash.message = "Element ${element.id} saved successfully"
+            redirect action: "select"
+        } else {
+            flash.message = "Failed to update element ${element.id}"
+            render view: "edit", model: [element: element]
+        }
+    }
 
     static Element findElementFromId(Long id) {
         Element result = Element.findById(id)

@@ -35,9 +35,6 @@ grails.mime.use.accept.header = false
 grails.cache.clearAtStartup = true
 grails.cache.config = {
     cache {
-        name 'dictionaryElements'
-    }
-    cache {
         name(BardCacheUtilsService.CONTEXT_ITEM_ATTRIBUTE_DESCRIPTORS)
     }
     cache {
@@ -386,10 +383,9 @@ log4j = {
         }
     }
 
-
     // stdout is a default console appender
     root {
-        error('outputFile', 'stdout', 'mail','accessDeniedAppender','mySQLAppender')
+        error('outputFile', 'stdout', 'mail', 'accessDeniedAppender', 'mySQLAppender')
     }
 
     error('org.codehaus.groovy.grails.web.servlet',  //  controllers
@@ -404,7 +400,6 @@ log4j = {
             'org.hibernate',
             'net.sf.ehcache.hibernate')
 
-
     //Note that other filters are configured in Bootstrap.groovy
 
     //BoneCP errors
@@ -417,7 +412,6 @@ log4j = {
     //Capture NCGC REST API roundtrip timing.
     info(additivity: false, NCGCRestApiTimingAppender: ['grails.app.services.bard.core.helper.LoggerService'])
 }
-
 
 // Added by the JQuery Validation UI plugin:
 jqueryValidationUi {

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var bigSpinnerImage = '<div class="tab-message"><img src="/BARD/images/ajax-loader.gif" alt="loading" title="loading"/></div>';
+    var bigSpinnerImage = '<div class="tab-message"><img src="' + bardAppContext + '/images/ajax-loader.gif" alt="loading" title="loading"/></div>';
 
     $.ajax({
         url: "/BARD/element/listAjax",
@@ -16,4 +16,11 @@ $(document).ready(function () {
         .fail(function (XMLHTTPRequest, textStatus, errorThrown) {
             $('#elementList').html('<p><i class="icon-exclamation-sign"/>Could not retrieve the element list from the server</p>');
         });
+});
+
+$('#btnUpdateElement').on('click', function () {
+//    get the selected element
+    var element = $("#elementList").select2("data");
+//    send to the edit page
+    window.location.href = bardAppContext + '/element/edit/' + element.id;
 });

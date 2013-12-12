@@ -321,4 +321,8 @@ modules = {
         resource url: "/js/zynga-scroller-a44d7c2/Scroller.js"
         resource url: "/js/zynga-scroller-a44d7c2/render.js"
     }
+
+    elementEdit {
+        resource url: 'js/element/element.js'
+    }
 }
