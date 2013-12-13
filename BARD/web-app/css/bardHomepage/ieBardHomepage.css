@@ -1,5 +1,5 @@
 body{min-width:1232px;}
-#header{background:url(../images/bg-header.png);}
+#header{background:url(../../images/bardHomepage/bg-header.png);}
 .nav-panel .nav > li.open > .dropdown-toggle:before{display:none;}
 .tabs-list .arrow{background-position:-392px 0;}
 .tabs-list .active .arrow{background-position:-434px 0;}
