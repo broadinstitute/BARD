@@ -111,4 +111,17 @@ class ExternalOntologyPersonIntegrationSpec extends IntegrationSpec {
 
     }
 
+    void "test findMatching with person id"(){
+
+        final Person aPerson = persons.first()
+        when:
+        final List<ExternalItem> items = extOntologyPerson.findMatching(aPerson.id.toString())
+
+        then:
+        items.size() == 1
+        items[0].getId() == aPerson.id.toString()
+
+    }
+
+
 }
