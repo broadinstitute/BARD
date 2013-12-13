@@ -170,8 +170,7 @@
                                 <h1>Search and analyze your own way.</h1>
 
                                 <p>Keeping the promise of the MLP, BARD gives you nimble access to most all the program’s data through an array of query, analysis and visualization tools.</p>
-                                <a href="../about/howToVisualizeAndCaptureData"
-                                   class="btn btn-primary">HOW TO VISUALIZE DATA</a>
+                                <g:link controller="about" action="howToVisualizeAndCaptureData" class="btn btn-primary">HOW TO VISUALIZE DATA</g:link>
                             </div>
                         </div>
                     </div>
