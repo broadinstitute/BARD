@@ -4,6 +4,10 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <title>BARD: Structure Search</title>
+    <script type="text/javascript" src="${request.contextPath}/js/dojo-min/dojoConfig.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/dojo-min/dojo/dojo.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/jsDraw/JSDraw3.1.2/Scilligence.JSDraw2.Pro.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/jsDraw/license.js"></script>
     <r:require modules="jquery, jquery-ui, jquery-theme, core, bootstrap, jsDrawEditor"/>
     <r:layoutResources/>
 </head>
