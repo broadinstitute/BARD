@@ -223,6 +223,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
         if (!element) {
             flash.message = "Could not find element ${params.id} for editing"
             redirect action: "select"
+            return
         }
 
         element.properties['label',
