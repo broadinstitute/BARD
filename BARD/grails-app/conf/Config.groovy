@@ -35,6 +35,9 @@ grails.mime.use.accept.header = false
 grails.cache.clearAtStartup = true
 grails.cache.config = {
     cache {
+        name("elementListPaths")
+    }
+    cache {
         name(BardCacheUtilsService.CONTEXT_ITEM_ATTRIBUTE_DESCRIPTORS)
     }
     cache {

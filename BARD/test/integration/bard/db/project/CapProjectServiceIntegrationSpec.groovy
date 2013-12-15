@@ -40,7 +40,7 @@ class CapProjectServiceIntegrationSpec extends IntegrationSpec {
         given:
         Element probeElement = Element.findByBardURI(bardURI)
         if (!probeElement) {
-            probeElement = Element.build(expectedValueType: ExpectedValueType.EXTERNAL_ONTOLOGY, bardURI: bardURI)
+            probeElement = Element.build(expectedValueType: ExpectedValueType.EXTERNAL_ONTOLOGY, bardURI: bardURI, externalURL: "externalURL")
         }
         Project project = Project.build(projectStatus: projectStatus, ncgcWarehouseId: ncgcWarehouseId, ownerRole: role)
         ProjectContext projectContext = ProjectContext.build(contextName: "Context Name", contextType: ContextType.BIOLOGY, project: project)

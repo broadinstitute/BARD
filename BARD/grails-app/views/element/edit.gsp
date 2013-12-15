@@ -104,7 +104,7 @@
             <div class="controls">
                 <g:select name="unit.id"
                           from="${baseUnits}"
-                          value="${element?.unit.id.toString() ?: '<none>'}"
+                          value="${element?.unit?.id?.toString() ?: '<none>'}"
                           optionValue="label"
                           optionKey="id"/>
             </div>

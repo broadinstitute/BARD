@@ -4,6 +4,8 @@ import bard.db.command.BardCommand
 import bard.db.enums.AddChildMethod
 import bard.util.BardCacheUtilsService
 import grails.converters.JSON
+import grails.plugin.cache.CacheEvict
+import grails.plugin.cache.Cacheable
 import grails.plugins.springsecurity.Secured
 import grails.validation.Validateable
 import grails.validation.ValidationErrors
@@ -143,6 +145,7 @@ class ElementController {
         [element: element, baseUnits: ontologyDataAccessService.getAllUnits()]
     }
 
+    @Cacheable(value = "elementListPaths")
     private Map generatePaths() {
         Map result = null
         try {
@@ -214,6 +217,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
     }
 
     @Secured(["hasRole('ROLE_CURATOR')"])
+    @CacheEvict(value = "elementListPaths")
     def update() {
         Element element = Element.findById(params.id)
         if (!element) {
@@ -232,6 +236,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
                 'externalURL'] = params
 
         if (element.save(flush: true)) {
+            bardCacheUtilsService.refreshDueToNonDictionaryEntry()
             flash.message = "Element ${element.id} saved successfully"
             redirect action: "select"
         } else {
