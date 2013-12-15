@@ -42,7 +42,7 @@
             <label class="control-label">ID:</label>
 
             <div class="controls">
-                <input type="text" id="id" name='id' value="${element.id}" disabled="disabled">
+                <input type="text" id="id" name='id' value="${element.id}" disabled="true">
             </div>
         </div>
 
@@ -51,7 +51,7 @@
 
             <div class="controls">
                 <input type="text" id="dateCreated" name='dateCreated' value="${element.dateCreated}"
-                       disabled="disabled">
+                       disabled="true">
             </div>
         </div>
 
@@ -60,7 +60,7 @@
 
             <div class="controls">
                 <input type="text" id="lastUpdated" name='lastUpdated' value="${element.lastUpdated}"
-                       disabled="disabled">
+                       disabled="true">
             </div>
         </div>
 
@@ -68,7 +68,7 @@
             <label class="control-label">Modified By:</label>
 
             <div class="controls">
-                <input type="text" id="modifiedBy" name='modifiedBy' value="${element.modifiedBy}" disabled="disabled">
+                <input type="text" id="modifiedBy" name='modifiedBy' value="${element.modifiedBy}" disabled="true">
             </div>
         </div>
 
@@ -94,7 +94,7 @@
             <label class="control-label">BARD Unique Identifier:</label>
 
             <div class="controls">
-                <input type="text" id="bardURI" name='bardURI' value="${element.bardURI}">
+                <input type="text" id="bardURI" name='bardURI' value="${element.bardURI}" disabled="true">
             </div>
         </div>
 
@@ -102,16 +102,16 @@
             <label class="control-label">Base unit of measure:</label>
 
             <div class="controls">
-                <g:select name="unit.id" id="name.id"
+                <g:select name="unit.id"
                           from="${baseUnits}"
-                          value="${element?.unit?.label ?: '<none>'}"
+                          value="${element?.unit.id.toString() ?: '<none>'}"
                           optionValue="label"
                           optionKey="id"/>
             </div>
         </div>
 
         <div class="control-group">
-            <label class="control-label">Abvriviation:</label>
+            <label class="control-label">Abbreviation:</label>
 
             <div class="controls">
                 <input type="text" id="abbreviation" name='abbreviation' value="${element.abbreviation}"

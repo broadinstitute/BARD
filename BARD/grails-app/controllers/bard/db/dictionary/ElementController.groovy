@@ -221,7 +221,16 @@ detected loop id's:${idBuilder.toString()}<br/>"""
             redirect action: "select"
         }
 
-        element.properties = params
+        element.properties['label',
+                'elementStatus',
+                'unit',
+                'abbreviation',
+                'synonyms',
+                'expectedValueType',
+                'addChildMethod',
+                'description',
+                'externalURL'] = params
+
         if (element.save(flush: true)) {
             flash.message = "Element ${element.id} saved successfully"
             redirect action: "select"
