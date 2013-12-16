@@ -17,6 +17,7 @@ class ElementConstraintUnitSpec extends AbstractElementConstraintUnitSpec {
     void doSetup() {
         domainInstance = Element.buildWithoutSave()
     }
+
     void "test addChildMethod constraints #desc addChildMethod: '#valueUnderTest'"() {
         final String field = 'addChildMethod'
 
@@ -45,10 +46,11 @@ class ElementConstraintUnitSpec extends AbstractElementConstraintUnitSpec {
 
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
+        domainInstance.externalURL = externalUrl
         domainInstance.save()
 
         then: 'verify valid or invalid for expected reason'
-        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+        assertFieldValidationExpectations(domainInstance, errorField, valid, errorCode)
 
         and: 'verify the it can be persisted to the db'
         if (valid) {
@@ -56,13 +58,14 @@ class ElementConstraintUnitSpec extends AbstractElementConstraintUnitSpec {
         }
 
         where:
-        desc             | valueUnderTest                      | valid | errorCode
-        'null not value' | null                                | false | 'nullable'
-        'valid value'    | ExpectedValueType.NONE              | true  | null
-        'valid value'    | ExpectedValueType.ELEMENT           | true  | null
-        'valid value'    | ExpectedValueType.EXTERNAL_ONTOLOGY | true  | null
-        'valid value'    | ExpectedValueType.FREE_TEXT         | true  | null
-        'valid value'    | ExpectedValueType.NUMERIC           | true  | null
+        desc                                        | valueUnderTest                      | externalUrl   | valid | errorField          | errorCode
+        'null not value'                            | null                                | ''            | false | 'expectedValueType' | 'nullable'
+        'valid value'                               | ExpectedValueType.NONE              | ''            | true  | 'expectedValueType' | null
+        'valid value'                               | ExpectedValueType.ELEMENT           | ''            | true  | 'expectedValueType' | null
+        'valid value'                               | ExpectedValueType.EXTERNAL_ONTOLOGY | 'externalUrl' | true  | 'externalURL'       | null
+        'external ontology with empty external url' | ExpectedValueType.EXTERNAL_ONTOLOGY | ''            | false | 'externalURL'       | 'When ExpectedValue is set to ExternalOntology, externalURL can not be empty'
+        'valid value'                               | ExpectedValueType.FREE_TEXT         | ''            | true  | 'expectedValueType' | null
+        'valid value'                               | ExpectedValueType.NUMERIC           | ''            | true  | 'expectedValueType' | null
     }
 
 

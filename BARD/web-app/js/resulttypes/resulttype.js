@@ -1,7 +1,7 @@
 //Path to finding all the stats modifier descriptors
 
 $(document).ready(function () {
-    var COMMON_DESCRIPTOR_PATH = "/BARD/ontologyJSon/";
+    var COMMON_DESCRIPTOR_PATH = bardAppContext + "/ontologyJSon/";
     var STATS_MODIFIER_DESCRIPTORS = COMMON_DESCRIPTOR_PATH + "getStatsModifierDescriptors?startOfFullPath=project management> experiment> result detail> endpoint statistic>";
     var RESPONSE_END_POINT_DESCRIPTORS = COMMON_DESCRIPTOR_PATH + "getAttributeDescriptors?startOfFullPath=result type> response endpoint> percent response>";
     var RESULT_TYPE_DESCRIPTORS = COMMON_DESCRIPTOR_PATH + "getAttributeDescriptors?startOfFullPath=result type";

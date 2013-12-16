@@ -165,8 +165,8 @@ class ElementControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert response.statusCode == expectedHttpResponse
         where:
         desc      | team             | teamPassword     | expectedHttpResponse
-        "CURATOR" | CURATOR_USERNAME | CURATOR_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"   | ADMIN_USERNAME   | ADMIN_PASSWORD   | HttpServletResponse.SC_OK
+        "CURATOR" | CURATOR_USERNAME | CURATOR_PASSWORD | HttpServletResponse.SC_FOUND
+        "ADMIN"   | ADMIN_USERNAME   | ADMIN_PASSWORD   | HttpServletResponse.SC_FOUND
     }
 
     def 'test list #desc'() {

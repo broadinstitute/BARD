@@ -37,7 +37,7 @@
                         </h3>
 
                     <p>
-                        Be sure to invest some time reading <a href="../about/howToGetTheMostFromBard">How to Get the Most from BARD</a>. You’ll see sample workflows that demonstrate how these visualization tools work in concert with each other and other features throughout the system to unlock the full potential of the data.
+                        Be sure to invest some time reading <g:link controller="about" action="howToGetTheMostFromBard">How to Get the Most from BARD</g:link>. You’ll see sample workflows that demonstrate how these visualization tools work in concert with each other and other features throughout the system to unlock the full potential of the data.
                         </p>
                     </aside>
 

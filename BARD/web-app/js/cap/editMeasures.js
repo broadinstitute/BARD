@@ -8,7 +8,7 @@ $(document).ready(function () {
         //it doesn't exist
         var experimentId = $("#experimentId").val();
         if (experimentId.length != 0 && experimentId != 'undefined') {//if there is a value
-            var experimentMeasuresLink = "/BARD/experiment/loadExperimentMeasuresAsJSON/" + experimentId;
+            var experimentMeasuresLink = bardAppContext + "/experiment/loadExperimentMeasuresAsJSON/" + experimentId;
 
             //load measures for this experiment
             $.ajax(experimentMeasuresLink).done(function (data) {
@@ -58,8 +58,8 @@ function parseNodes(nodes) { // takes a nodes array and turns it into a <ol>
 }
 
 function createNodeWithEditDeleteIcons(liNode, measureId, addClass, title) {
-    var editLink = "/BARD/experiment/editMeasure?measureId=" + measureId + "&amp;experimentId=" + $("#experimentId").val();
-    var deleteLink = "/BARD/experiment/deleteMeasure?measureId=" + measureId + "&amp;experimentId=" + $("#experimentId").val();
+    var editLink = bardAppContext + "/experiment/editMeasure?measureId=" + measureId + "&amp;experimentId=" + $("#experimentId").val();
+    var deleteLink = bardAppContext + "/experiment/deleteMeasure?measureId=" + measureId + "&amp;experimentId=" + $("#experimentId").val();
     //only show icons if user is logged in
     var editIcon = '<a class="icon-pencil editMeasuresIcon" title="Click to edit result type" href="' + editLink + '"></a>';
     var deleteIcon = "<a class='icon-trash deleteMeasuresIcon' title='Click to delete result type' href='" + deleteLink + "'></a>";

@@ -97,7 +97,7 @@ $(document).ready(function () {
         }
         else if ('ELEMENT' === expectedValueType) {
             showWidgets('#elementValueContainer');
-            $.ajax("/BARD/ontologyJSon/getValueDescriptorsV2", {
+            $.ajax(bardAppContext + "/ontologyJSon/getValueDescriptorsV2", {
                 data: {attributeId: data.id}
             }).done(function (valueData) {
 
@@ -163,7 +163,7 @@ $(document).ready(function () {
         initSelection: function (element, callback) {
             var id = $(element).val();
             if (id !== "") {
-                $.ajax("/BARD/ontologyJSon/findExternalItemById", {
+                $.ajax(bardAppContext + "/ontologyJSon/findExternalItemById", {
                     data: {
                         elementId: $("#attributeElementId").val(),
                         id: id
@@ -176,7 +176,7 @@ $(document).ready(function () {
             }
         },
         ajax: {
-            url: "/BARD/ontologyJSon/findExternalItemsByTerm",
+            url: bardAppContext + "/ontologyJSon/findExternalItemsByTerm",
             dataType: 'json',
             quietMillis: 100,
             data: function (term) {
@@ -208,7 +208,7 @@ $(document).ready(function () {
         });
         var unitsData = {results: []};
         $.getJSON(
-            "/BARD/ontologyJSon/getUnits",
+            bardAppContext + "/ontologyJSon/getUnits",
             {
                 toUnitId: attributeUnitId
             },
@@ -285,7 +285,7 @@ $(document).ready(function () {
 
     var attributeSelect2 = new DescriptorSelect2('#attributeElementId', 'Search for attribute name',{results: []});
     attributeSelect2.initSelect2({results: []});
-    $.ajax("/BARD/ontologyJSon/getAttributeDescriptors").done(function (data) {
+    $.ajax(bardAppContext + "/ontologyJSon/getAttributeDescriptors").done(function (data) {
         attributeSelect2.initSelect2(data,updateConstraintWidgets);
     });
     $("#attributeElementId").on("change", function (e) {

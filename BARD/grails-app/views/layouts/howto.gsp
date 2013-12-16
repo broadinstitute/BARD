@@ -11,8 +11,8 @@
     <link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
           rel='stylesheet' type='text/css'>
     <r:require modules="bardHomepage,idSearch,jquerynotifier,downtime,autocomplete"/>
-    <!--[if lt IE 9]><link rel="stylesheet" href="../css/bardHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
-    <!--[if IE]><script src="../js/bardHomepage/ie.js"></script><![endif]-->
+    <!--[if lt IE 9]><link rel="stylesheet" href="${resource(dir:'css/bardHomepage', file: 'ieBardHomepage.css')}" media="screen" /><![endif]-->
+    <!--[if IE]><script src="${resource(dir: 'js/bardHomepage', file: 'ie.js')}" /></script><![endif]-->
 
     <g:layoutHead/>
 
@@ -65,7 +65,7 @@
 
                 <div class="row-fluid">
                     <div class="span6">
-                        <strong class="logo"><a href="/BARD">BARD BioAssay Research Database</a></strong>
+                        <strong class="logo"><a href="${request.contextPath}">BARD BioAssay Research Database</a></strong>
                     </div>
 
                     <div class="span6">
@@ -84,7 +84,7 @@
                                 <ul class="nav">
                                     <g:render template="/layouts/templates/howtolinks"/>
                                     <sec:ifLoggedIn>
-                                        <li><a href="/BARD/bardWebInterface/navigationPage">My BARD</a></li>
+                                        <li><a href="${request.contextPath}/bardWebInterface/navigationPage">My BARD</a></li>
                                     </sec:ifLoggedIn>
                                 </ul>
                                 <g:if test="${false}">

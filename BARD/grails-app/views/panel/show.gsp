@@ -86,7 +86,7 @@
                                                 data-type="textarea"
                                                 data-value="${panelInstance?.name}"
                                                 data-pk="${panelInstance.id}"
-                                                data-url="/BARD/panel/editPanelName"
+                                                data-url="${request.contextPath}/panel/editPanelName"
                                                 data-placeholder="Required"
                                                 data-original-title="Edit Panel Name">${panelInstance?.name}</span>
                                         <a href="#" class="icon-pencil documentPencil ${editable}"
@@ -102,7 +102,7 @@
                                               data-toggle="manual"
                                               data-value="${panelInstance?.description}"
                                               data-pk="${panelInstance.id}"
-                                              data-url="/BARD/panel/editDescription"
+                                              data-url="${request.contextPath}/panel/editDescription"
                                               data-placeholder="Required"
                                               data-inputclass="input-xxlarge"
                                               data-original-title="Edit Panel Description">${panelInstance?.description}</span>
@@ -120,9 +120,9 @@
                                                 id="ownerRoleId"
                                                 data-type="select"
                                                 data-value="${panelInstance?.ownerRole?.displayName}"
-                                                data-source="/BARD/assayDefinition/roles"
+                                                data-source="${request.contextPath}/assayDefinition/roles"
                                                 data-pk="${panelInstance.id}"
-                                                data-url="/BARD/panel/editOwnerRole"
+                                                data-url="${request.contextPath}/panel/editOwnerRole"
                                                 data-original-title="Select Owner Role">${panelInstance?.ownerRole?.displayName}</span>
                                         <a href="#" class="icon-pencil documentPencil ${editable}" data-id="ownerRoleId"
                                            title="Click to edit owner role"></a>

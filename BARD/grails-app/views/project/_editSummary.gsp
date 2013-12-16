@@ -15,9 +15,9 @@
                    id="${project?.projectStatus?.id}"
                    data-type="select"
                    data-value="${project?.projectStatus?.id}"
-                   data-source="/BARD/project/projectStatus"
+                   data-source="${request.contextPath}/project/projectStatus"
                    data-pk="${project.id}"
-                   data-url="/BARD/project/editProjectStatus"
+                   data-url="${request.contextPath}/project/editProjectStatus"
                    data-original-title="Select Project Status">${project?.projectStatus?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status" data-id="${project?.projectStatus?.id}"></a>
              </dd>
@@ -33,7 +33,7 @@
 
                    data-value="${project?.name}"
                    data-pk="${project.id}"
-                   data-url="/BARD/project/editProjectName"
+                   data-url="${request.contextPath}/project/editProjectName"
                    data-placeholder="Required"
                    data-original-title="Edit Project Name">${project?.name}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Name" data-id="nameId"></a>
@@ -49,7 +49,7 @@
                    data-toggle="manual"
                    data-value="${project.description}"
                    data-pk="${project.id}"
-                   data-url="/BARD/project/editDescription"
+                   data-url="${request.contextPath}/project/editDescription"
                    data-placeholder="Required"
                    data-original-title="Edit Description By">${project?.description}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description" data-id="descriptionId"></a>
@@ -64,9 +64,9 @@
                         id="ownerRoleId"
                         data-type="select"
                         data-value="${project?.ownerRole?.displayName}"
-                        data-source="/BARD/assayDefinition/roles"
+                        data-source="${request.contextPath}/assayDefinition/roles"
                         data-pk="${project.id}"
-                        data-url="/BARD/project/editOwnerRole"
+                        data-url="${request.contextPath}/project/editOwnerRole"
                         data-original-title="Select Owner Role">${project?.ownerRole?.displayName}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="ownerRoleId" title="Click to edit owner role"></a>
             </dd>

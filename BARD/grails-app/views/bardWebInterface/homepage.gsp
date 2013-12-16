@@ -9,9 +9,13 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
     <link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
           rel='stylesheet' type='text/css'>
+
+    <r:script disposition='head'>
+        window.bardAppContext = "${request.contextPath}";
+    </r:script>
     <r:require modules="bardHomepage,idSearch,jquerynotifier,downtime,autocomplete,compoundOptions"/>
-    <!--[if lt IE 9]><link rel="stylesheet" href="../css/bardHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
-    <!--[if IE]><script src="../js/bardHomepage/ie.js"></script><![endif]-->
+    <!--[if lt IE 9]><link rel="stylesheet" href="${resource(dir:'css/bardHomepage', file: 'ieBardHomepage.css')}" media="screen" /><![endif]-->
+    <!--[if IE]><script src="${resource(dir: 'js/bardHomepage', file: 'ie.js')}" /></script><![endif]-->
 
     %{--Make sure that people have their JavaScript turned on--}%
     <noscript>
@@ -159,7 +163,7 @@
                 <div class="container-fluid">
                     <div class="row-fluid">
                         <div class="span6 img-box">
-                            <img src="../images/bardHomepage/img-01.png" alt="image description">
+                            <r:img dir="images/bardHomepage" file="img-01.png" alt="Search and analyze your own way."/>
                         </div>
 
                         <div class="span6 pull-right article">
@@ -167,8 +171,7 @@
                                 <h1>Search and analyze your own way.</h1>
 
                                 <p>Keeping the promise of the MLP, BARD gives you nimble access to most all the program’s data through an array of query, analysis and visualization tools.</p>
-                                <a href="../about/howToVisualizeAndCaptureData"
-                                   class="btn btn-primary">HOW TO VISUALIZE DATA</a>
+                                <g:link controller="about" action="howToVisualizeAndCaptureData" class="btn btn-primary">HOW TO VISUALIZE DATA</g:link>
                             </div>
                         </div>
                     </div>
@@ -178,7 +181,7 @@
                 <div class="container-fluid">
                     <div class="row-fluid">
                         <div class="span6 img-box">
-                            <img src="../images/bardHomepage/img-02.png" alt="image description">
+                            <r:img dir="images/bardHomepage" file="img-02.png" alt="The power of a common language."/>
                         </div>
 
                         <div class="span6 pull-right article">
@@ -197,7 +200,7 @@
                 <div class="container-fluid">
                     <div class="row-fluid">
                         <div class="span6 img-box">
-                            <img src="../images/bardHomepage/img-03.png" alt="image description">
+                            <r:img  dir="images/bardHomepage" file="img-03.png" alt="Public bioassay data – organized, standardized and put into context."/>
                         </div>
 
                         <div class="span6 pull-right article">

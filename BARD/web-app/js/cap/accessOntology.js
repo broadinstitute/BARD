@@ -14,7 +14,7 @@ function enableAutoCompleteOntology (section, idFieldSelector) {
         query: function(query) {
 
             $.getJSON(
-                "/BARD/ontologyJSon/getLabelsFromTree",
+                bardAppContext + "/ontologyJSon/getLabelsFromTree",
                 {
                     label: query.term,
                     tree: section

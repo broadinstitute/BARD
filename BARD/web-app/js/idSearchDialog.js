@@ -53,6 +53,7 @@ $(document).ready(function () {
             constructedSearch = idSearchTypeSelected + ":" + constructedSearch
         }
         $('#searchString').attr('value', constructedSearch);
+
         $('#searchForm').submit();
 
     });

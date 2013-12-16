@@ -65,9 +65,9 @@
                         id="${instance?.experimentStatus?.id}"
                         data-type="select"
                         data-value="${instance?.experimentStatus?.id}"
-                        data-source="/BARD/experiment/experimentStatus"
+                        data-source="${request.contextPath}/experiment/experimentStatus"
                         data-pk="${instance?.id}"
-                        data-url="/BARD/experiment/editExperimentStatus"
+                        data-url="${request.contextPath}/experiment/editExperimentStatus"
                         data-original-title="Select Experiment Status">${instance?.experimentStatus?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status"
                    data-id="${instance?.experimentStatus?.id}"></a>
@@ -83,7 +83,7 @@
                         data-type="textarea"
                         data-value="${instance?.experimentName}"
                         data-pk="${instance?.id}"
-                        data-url="/BARD/experiment/editExperimentName"
+                        data-url="${request.contextPath}/experiment/editExperimentName"
                         data-placeholder="Required"
                         data-original-title="Edit Experiment Name">${instance?.experimentName}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Name"
@@ -101,7 +101,7 @@
                             data-type="textarea"
                             data-value="${instance.description}"
                             data-pk="${instance?.id}"
-                            data-url="/BARD/experiment/editDescription"
+                            data-url="${request.contextPath}/experiment/editDescription"
                             data-placeholder="Required"
                             data-original-title="Edit Description By">${instance.description}</span>
                     <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description"
@@ -118,9 +118,9 @@
                         id="ownerRoleId"
                         data-type="select"
                         data-value="${instance?.owner}"
-                        data-source="/BARD/assayDefinition/roles"
+                        data-source="${request.contextPath}/assayDefinition/roles"
                         data-pk="${instance?.id}"
-                        data-url="/BARD/experiment/editOwnerRole"
+                        data-url="${request.contextPath}/experiment/editOwnerRole"
                         data-placeholder="Required"
                         data-original-title="Select Owner Role">${instance?.owner}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" data-id="ownerRoleId"
@@ -130,7 +130,7 @@
                 <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
                 <dd>
                     <span class="rfddate" id="rfd" data-type="combodate" data-pk="${instance?.id}"
-                          data-url="/BARD/experiment/editRunFromDate"
+                          data-url="${request.contextPath}/experiment/editRunFromDate"
                           data-value="${instance.runDateFrom}"
                           data-original-title="Select run from date"
                           data-format="YYYY-MM-DD"
@@ -147,7 +147,7 @@
                 <dt><g:message code="experiment.runtodate.label" default="Run Date to"/>:</dt>
                 <dd>
                     <span class="rdtdate" id="rdt" data-type="combodate" data-pk="${instance?.id}"
-                          data-url="/BARD/experiment/editRunToDate"
+                          data-url="${request.contextPath}/experiment/editRunToDate"
                           data-value="${instance.runDateTo}"
                           data-original-title="Select run to date"
                           data-toggle="manual"
