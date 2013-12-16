@@ -1,17 +1,18 @@
 package bard.db.experiment
 
 import bard.db.enums.DocumentType
-import bard.db.enums.ExperimentStatus
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.Status
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
+import bard.db.enums.hibernate.StatusEnumUserType
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
-import bard.db.project.ProjectExperiment
 import bard.db.project.ProjectSingleExperiment
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
 import bard.db.registration.MeasureCaseInsensitiveDisplayLabelComparator
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -23,7 +24,7 @@ class Experiment extends AbstractContextOwner {
     public static final int DESCRIPTION_MAX_SIZE = 1000
     def capPermissionService
     String experimentName
-    ExperimentStatus experimentStatus = ExperimentStatus.DRAFT
+    Status experimentStatus = Status.DRAFT
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
     Assay assay
 
@@ -53,9 +54,7 @@ class Experiment extends AbstractContextOwner {
     boolean disableUpdateReadyForExtraction = false
 
 
-
-    static transients = ['measuresHaveAtLeastOnePriorityElement','experimentContextItems', 'disableUpdateReadyForExtraction']
-
+    static transients = ['measuresHaveAtLeastOnePriorityElement', 'experimentContextItems', 'disableUpdateReadyForExtraction']
 
 
     Role ownerRole //The team that owns this object. This is used by the ACL to allow edits etc
@@ -81,10 +80,11 @@ class Experiment extends AbstractContextOwner {
         experimentContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
         readyForExtraction(type: ReadyForExtractionEnumUserType)
         panel(column: 'PANEL_EXPRMT_ID')
+        experimentStatus(type: StatusEnumUserType)
     }
 
     static constraints = {
-        experimentName(nullable:false,blank: false, maxSize: EXPERIMENT_NAME_MAX_SIZE)
+        experimentName(nullable: false, blank: false, maxSize: EXPERIMENT_NAME_MAX_SIZE)
         experimentStatus(nullable: false)
         readyForExtraction(nullable: false)
         assay()
@@ -130,12 +130,12 @@ class Experiment extends AbstractContextOwner {
         }
     }
 
-    boolean measuresHaveAtLeastOnePriorityElement(){
-        if(!experimentMeasures){
+    boolean measuresHaveAtLeastOnePriorityElement() {
+        if (!experimentMeasures) {
             return false
         }
-        for(ExperimentMeasure experimentMeasure: experimentMeasures){
-            if(experimentMeasure.priorityElement){
+        for (ExperimentMeasure experimentMeasure : experimentMeasures) {
+            if (experimentMeasure.priorityElement) {
                 return true
             }
         }
@@ -147,39 +147,59 @@ class Experiment extends AbstractContextOwner {
         return objectOwner
     }
 
+    public boolean permittedToSeeEntity() {
+        if ((experimentStatus == Status.DRAFT) &&
+                (!SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR') &&
+                        !SpringSecurityUtils.principalAuthorities.contains(this.ownerRole))) {
+            return false
+        }
+        return true
+    }
 
     List<ExperimentDocument> getPublications() {
-        final List<ExperimentDocument> documents = experimentDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION } as List<ExperimentDocument>
+        final List<ExperimentDocument> documents = experimentDocuments.findAll {
+            it.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION
+        } as List<ExperimentDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
 
     List<ExperimentDocument> getExternalURLs() {
-        final List<ExperimentDocument> documents = experimentDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_EXTERNAL_URL } as List<ExperimentDocument>
+        final List<ExperimentDocument> documents = experimentDocuments.findAll {
+            it.documentType == DocumentType.DOCUMENT_TYPE_EXTERNAL_URL
+        } as List<ExperimentDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
 
     List<ExperimentDocument> getComments() {
-        final List<ExperimentDocument> documents = experimentDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_COMMENTS } as List<ExperimentDocument>
+        final List<ExperimentDocument> documents = experimentDocuments.findAll {
+            it.documentType == DocumentType.DOCUMENT_TYPE_COMMENTS
+        } as List<ExperimentDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
 
     List<ExperimentDocument> getDescriptions() {
-        final List<ExperimentDocument> documents = experimentDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_DESCRIPTION } as List<ExperimentDocument>
+        final List<ExperimentDocument> documents = experimentDocuments.findAll {
+            it.documentType == DocumentType.DOCUMENT_TYPE_DESCRIPTION
+        } as List<ExperimentDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
 
     List<ExperimentDocument> getProtocols() {
-        final List<ExperimentDocument> documents = experimentDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PROTOCOL } as List<ExperimentDocument>
+        final List<ExperimentDocument> documents = experimentDocuments.findAll {
+            it.documentType == DocumentType.DOCUMENT_TYPE_PROTOCOL
+        } as List<ExperimentDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
 
     List<ExperimentDocument> getOtherDocuments() {
-        final List<ExperimentDocument> documents = experimentDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_OTHER } as List<ExperimentDocument>
+        final List<ExperimentDocument> documents = experimentDocuments.findAll {
+            it.documentType == DocumentType.DOCUMENT_TYPE_OTHER
+        } as List<ExperimentDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }

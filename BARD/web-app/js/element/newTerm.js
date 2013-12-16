@@ -4,8 +4,8 @@ $(document).ready(function () {
 
 
     var attributeSelect2 = new DescriptorSelect2('#attributeElementId', 'Search for attribute name',{results: []});
-    $.ajax("/BARD/ontologyJSon/getAttributeDescriptors").done(function (data) {
-        attributeSelect2.initSelect2(data);
+    $.ajax(bardAppContext + "/ontologyJSon/getAttributeDescriptors").done(function (data) {
+        attributeSelect2.initSelect2(data, validateAddToChildren);
     });
     $("#attributeElementId").on("change", function (e) {
         // based on the attribute selected only show the appropriate value widgets
@@ -27,20 +27,21 @@ function validateAddToChildren(data) {
     }
     else {
         $('#attributeElementErrorField').html('<p class="text-error"><i class="icon-exclamation-sign"></i> That term is not allowed to be used as a parent</p>');
+        $("#nextBtn").attr("disabled", true);
     }
 }
 
 function reloadTree() {
     var doNotShowRetired = $("#doNotShowRetiredTerms").is(':checked');
     $("#element-hierarchy-tree").dynatree("option", "initAjax", {
-        url: "/BARD/element/buildTopLevelHierarchyTree",
+        url: bardAppContext + "/element/buildTopLevelHierarchyTree",
         data: {doNotShowRetired: doNotShowRetired, treeRoot: "BARD"}
     });
 
     $("#element-hierarchy-tree").dynatree("option", "onLazyRead", function (node) {
         node.appendAjax(
             {
-                url: "/BARD/element/getChildrenAsJson",
+                url: bardAppContext + "/element/getChildrenAsJson",
                 dataType: "json",
                 data: {elementId: node.data.elementId, doNotShowRetired: doNotShowRetired}
             }
@@ -68,7 +69,7 @@ function createHierarchyTree(treeElementName, treeTitle, treeRoot, expectedValue
             title: treeTitle,
             autoFocus: false,
             initAjax: {
-                url: "/BARD/element/buildTopLevelHierarchyTree",
+                url: bardAppContext + "/element/buildTopLevelHierarchyTree",
                 data: {doNotShowRetired: doNotShowRetired, treeRoot: treeRoot, expectedValueType: expectedValueType}
             },
             onActivate: function (node) {
@@ -90,7 +91,7 @@ function createHierarchyTree(treeElementName, treeTitle, treeRoot, expectedValue
                 node.appendAjax
                 (
                     {
-                        url: "/BARD/element/getChildrenAsJson",
+                        url: bardAppContext + "/element/getChildrenAsJson",
                         dataType: "json",
                         data: {elementId: node.data.elementId, doNotShowRetired: doNotShowRetired, expectedValueType: expectedValueType}
 
@@ -103,7 +104,7 @@ function createHierarchyTree(treeElementName, treeTitle, treeRoot, expectedValue
     )
     ;
     $("#saveTerm").ajaxForm({
-        url: '/BARD/element/saveTerm',
+        url: bardAppContext + '/element/saveTerm',
         type: 'POST',
         success: function (responseText, statusText, xhr, jqForm) {
             updateTermForm(responseText);

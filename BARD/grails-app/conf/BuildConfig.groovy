@@ -40,6 +40,7 @@ grails.project.dependency.resolution = {
         compile "org.apache.httpcomponents:httpclient:4.2.3"
 
         compile "bard:external-validation:20130717"
+        compile "bard:pubchem-xml:20131010"
 
         compile "com.oracle:ojdbc6:11.2.0.2.0"
         compile 'org.apache.commons:commons-lang3:3.1'

@@ -1,6 +1,6 @@
 package merge
 
-import bard.db.enums.AssayStatus
+import bard.db.enums.Status
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
 import bard.db.registration.Assay
@@ -90,7 +90,7 @@ class MergeAssayService {
 
     def updateStatus(List<Assay> assays, String modifiedBy) {
         assays.each { Assay assay ->
-            assay.assayStatus = AssayStatus.RETIRED
+            assay.assayStatus = Status.RETIRED
             assay.modifiedBy = modifiedBy
             if (!assay.save(failOnError: true)) {
                 println("Error happened when update assay status ${assay.errors}")

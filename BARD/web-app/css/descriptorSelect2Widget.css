@@ -1,0 +1,7 @@
+.bigdrop.select2-container .select2-results {
+    max-height: none;
+}
+
+.bigdrop .select2-results {
+    max-height: none;
+}

@@ -12,8 +12,6 @@
 
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'errors.css')}" type="text/css">
-    <r:require modules="core,bootstrap"/>
-    <r:layoutResources/>
 </head>
 <body>
 <div class="container-fluid">

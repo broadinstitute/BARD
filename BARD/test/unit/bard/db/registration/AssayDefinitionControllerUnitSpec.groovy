@@ -3,8 +3,8 @@ package bard.db.registration
 import acl.CapPermissionService
 import bard.db.ContextService
 import bard.db.dictionary.Element
-import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
+import bard.db.enums.Status
 import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
@@ -24,7 +24,6 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
@@ -143,8 +142,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     void 'test edit Assay Status success'() {
         given:
-        Assay newAssay = Assay.build(version: 0, assayStatus: AssayStatus.DRAFT)  //no designer
-        Assay updatedAssay = Assay.build(assayName: "My New Name", version: 1, lastUpdated: new Date(), designedBy: "Designer", assayStatus: AssayStatus.APPROVED)
+        Assay newAssay = Assay.build(version: 0, assayStatus: Status.DRAFT)  //no designer
+        Assay updatedAssay = Assay.build(assayName: "My New Name", version: 1, lastUpdated: new Date(), designedBy: "Designer", assayStatus: Status.APPROVED)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id,
                 version: newAssay.version, name: newAssay.assayName, value: updatedAssay.assayStatus.id)
         when:
@@ -173,8 +172,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
     void 'test edit Assay Status access denied'() {
         given:
         accessDeniedRoleMock()
-        Assay newAssay = Assay.build(version: 0, assayStatus: AssayStatus.DRAFT)  //no designer
-        Assay updatedAssay = Assay.build(assayName: "My New Name", version: 1, lastUpdated: new Date(), designedBy: "Designer", assayStatus: AssayStatus.APPROVED)
+        Assay newAssay = Assay.build(version: 0, assayStatus: Status.DRAFT)  //no designer
+        Assay updatedAssay = Assay.build(assayName: "My New Name", version: 1, lastUpdated: new Date(), designedBy: "Designer", assayStatus: Status.APPROVED)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id,
                 version: newAssay.version, name: newAssay.assayName, value: updatedAssay.assayStatus.id)
         when:
@@ -186,9 +185,9 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     void 'test edit Assay Status with errors'() {
         given:
-        Assay newAssay = Assay.build(version: 0, assayStatus: AssayStatus.APPROVED)
+        Assay newAssay = Assay.build(version: 0, assayStatus: Status.APPROVED)
         InlineEditableCommand inlineEditableCommand =
-            new InlineEditableCommand(pk: newAssay.id, version: newAssay.version, name: newAssay.assayName, value: AssayStatus.APPROVED.id)
+            new InlineEditableCommand(pk: newAssay.id, version: newAssay.version, name: newAssay.assayName, value: Status.APPROVED.id)
         controller.metaClass.message = { Map p -> return "foo" }
 
         when:

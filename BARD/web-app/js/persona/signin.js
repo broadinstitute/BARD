@@ -12,10 +12,10 @@ $(document).ready(function () {
             signinLink.onclick = function () {
                 navigator.id.request({
                     siteName: 'BioActivity Research Database',
-                    siteLogo: '/BARD/images/bard_logo_small.png',   //requires https
-                    termsOfService: '/BARD/about/termsOfUse', //requires https
-                    privacyPolicy: '/BARD/about/privacyPolicy', //requires https
-                    returnTo: '/BARD/bardWebInterface'
+                    siteLogo: bardAppContext + '/images/bard_logo_small.png',   //requires https
+                    termsOfService: bardAppContext + '/about/termsOfUse', //requires https
+                    privacyPolicy: bardAppContext + '/about/privacyPolicy', //requires https
+                    returnTo: bardAppContext + '/bardWebInterface'
 
                 });
             };
@@ -45,7 +45,7 @@ $(document).ready(function () {
             }
             $.ajax({
                 type: 'POST',
-                url: '/BARD/j_spring_persona_security_check', // This is a URL on your website.
+                url: bardAppContext + '/j_spring_persona_security_check', // This is a URL on your website.
                 data: {assertion: assertion},
                 success: function (res, status, xhr) {
                     sessionStorage['currentUser'] = res;

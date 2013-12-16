@@ -16,11 +16,11 @@
             <h3>Schedule Down Time</h3>
 
             <div class="control-group ${hasErrors(bean: downTimeSchedulerCommand, field: 'downTimeAsDate', 'error')}">
+                <p>This is the time the downtime message will expire.   If you select 10pm, then the message will stop appearing at 10pm.</p>
                 <label class="control-label" for="downTimeAsString">
                     <g:message code="downtimescheduler.date.time" default="Date Time"/>:</label>
 
                 <div class="controls">
-
                     <div class="input-append date form_datetime">
                         <input name="downTimeAsString" class="input-xxlarge" type="text" value="${downTimeSchedulerCommand?.downTimeAsString}" readonly>
                         <span class="add-on"><i class="icon-remove"></i></span>
@@ -30,6 +30,10 @@
                     </div>
                 </div>
             </div>
+
+            <p>The following should be the message that you want to appear on each page.  If writing a message about
+            scheduled maintenance, you should include the time of the downtime in the message.  (The value selected above is
+            not shown to the user)</p>
             <div class="control-group ${hasErrors(bean: downTimeSchedulerCommand, field: 'displayValue', 'error')}">
                 <label class="control-label" for="displayValue">
                     <g:message code="downtimescheduler.displayvalue.label" default="Message"/>:</label>

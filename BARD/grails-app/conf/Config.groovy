@@ -35,7 +35,7 @@ grails.mime.use.accept.header = false
 grails.cache.clearAtStartup = true
 grails.cache.config = {
     cache {
-        name 'dictionaryElements'
+        name("elementListPaths")
     }
     cache {
         name(BardCacheUtilsService.CONTEXT_ITEM_ATTRIBUTE_DESCRIPTORS)
@@ -375,7 +375,7 @@ log4j = {
                     to: config.grails.mail.default.to,
                     subject: config.grails.mail.default.subject,
                     SMTPHost: config.grails.mail.host,
-                    layout: pattern(defaultPattern),
+                    layout: pattern("%d [%t] %X{request}\n%-5p %c{1} - %m%n"),
                     threshold: org.apache.log4j.Level.ERROR))
 
         } catch (Exception ex) {
@@ -386,10 +386,9 @@ log4j = {
         }
     }
 
-
     // stdout is a default console appender
     root {
-        error('outputFile', 'stdout', 'mail','accessDeniedAppender','mySQLAppender')
+        error('outputFile', 'stdout', 'mail', 'accessDeniedAppender', 'mySQLAppender')
     }
 
     error('org.codehaus.groovy.grails.web.servlet',  //  controllers
@@ -404,10 +403,10 @@ log4j = {
             'org.hibernate',
             'net.sf.ehcache.hibernate')
 
-
     //Note that other filters are configured in Bootstrap.groovy
+
     //BoneCP errors
-    error(additivity: false, mySQLAppender: ['com.jolbox.bonecp.BoneCP'])
+    error(additivity: false, mySQLAppender: ['com.jolbox.bonecp'])
 
     //Capture errors from the NCGC API (via JDO) but DO NOT send emails about them.
     error(additivity: false, NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService'])
@@ -416,7 +415,6 @@ log4j = {
     //Capture NCGC REST API roundtrip timing.
     info(additivity: false, NCGCRestApiTimingAppender: ['grails.app.services.bard.core.helper.LoggerService'])
 }
-
 
 // Added by the JQuery Validation UI plugin:
 jqueryValidationUi {

@@ -115,7 +115,7 @@ class ProjectExperimentRenderService {
                     'panel': ppe.panelExperiment.panel.name,
                     'eids' : ppe.panelExperiment.experiments.collect {it.id}
             ]
-        } else {
+        } else if(pe instanceof ProjectSingleExperiment) {
             ProjectSingleExperiment pse = (ProjectSingleExperiment)pe;
             peAttributes = [
                     'type':'single',
@@ -129,6 +129,8 @@ class ProjectExperimentRenderService {
                     'eid': pse.experiment?.id,
                     'ename': pse.experiment?.experimentName,
             ]
+        } else {
+            throw new RuntimeException("Unknown projectExperiment type: ${pe?.class?.getName()}")
         }
         return new Node(id: pe?.id, keyValues: peAttributes)
     }

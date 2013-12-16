@@ -1,9 +1,9 @@
 package bard.db.registration
 
 import bard.db.BardIntegrationSpec
-import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.Status
 import bard.db.people.Role
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
@@ -46,9 +46,9 @@ class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
         where:
         desc             | valueUnderTest       | valid | errorCode
         'null not valid' | null                 | false | 'nullable'
-        'valid value'    | AssayStatus.DRAFT    | true  | null
-        'valid value'    | AssayStatus.APPROVED | true  | null
-        'valid value'    | AssayStatus.RETIRED  | true  | null
+        'valid value'    | Status.DRAFT    | true  | null
+        'valid value'    | Status.APPROVED | true  | null
+        'valid value'    | Status.RETIRED  | true  | null
     }
 
     void "test assayName constraints #desc assayName: "() {

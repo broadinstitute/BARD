@@ -3,7 +3,7 @@
     <g:if test="${smiles}">
         <img alt="${smiles}"
              src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: smiles, width: imageWidth, height: imageHeight])}"
-        style="min-width: ${imageWidth}px; min-height: ${imageHeight}px"/>
+             style="min-width: ${imageWidth}px; min-height: ${imageHeight}px"/>
     </g:if>
     <g:else>
         <img alt="CID: ${cid}" title="CID: ${cid}"
@@ -14,7 +14,7 @@
             <div class="text-center">${name}</div>
         </g:if>
         <g:else>
-            <div title="${name}" rel="tooltip" class="text-center">${name.substring(0,14)}...</div>
+            <div title="${name}" rel="tooltip" class="text-center">${name.substring(0, 14)}...</div>
         </g:else>
     </g:if>
     <div class="compound-info-dropdown">
@@ -35,7 +35,8 @@
                 <li><a href="#" data-detail-id="sid_${sid}" class="analogs"
                        data-structure-search-params="Similarity:${cid}">Search For Analogs</a>
                     &nbsp; &nbsp;Threshold (0-100%) : <input type="number" min="0" max="100" step="1" name="cutoff"
-                                                             value="90" size="4" id="cutoff"/>
+                                                             value="90" maxlength="4" size="4" id="cutoff"
+                                                             style="width: auto;"/>
                 </li>
                 <li>
                     <g:link controller="molSpreadSheet" action="showExperimentDetails"
@@ -54,8 +55,8 @@
                             id="${cid}">Bio-activity Summary</g:link>
                 </li>
                 <li>
-                <g:link controller="bardWebInterface" action="bigSunburst"
-                        id="${cid}">Linked Hierarchy Visualization</g:link>
+                    <g:link controller="bardWebInterface" action="bigSunburst"
+                            id="${cid}">Linked Hierarchy Visualization</g:link>
                 </li>
             </ul>
         </span>

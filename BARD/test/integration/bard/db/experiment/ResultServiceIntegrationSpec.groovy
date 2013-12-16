@@ -96,7 +96,6 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
 
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
         resultsService = new ResultsService()
-        resultsService.bulkResultService = Mock(BulkResultService)
         assert springSecurityService != null
         resultsService.springSecurityService = springSecurityService
         resultsService.setItemService(new ItemService())

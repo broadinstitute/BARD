@@ -3,9 +3,8 @@ package bard.db.project
 import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
-import bard.db.enums.ExperimentStatus
 import bard.db.enums.ProjectGroupType
-import bard.db.enums.ProjectStatus
+import bard.db.enums.Status
 import bard.db.experiment.Experiment
 import bard.db.people.Role
 import bard.db.registration.*
@@ -109,15 +108,15 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         response.status == expectedStatus
         where:
         desc                       | projectCommand                                                                                                                                | expectedStatus
-        "Full Project"             | new ProjectCommand(name: "name", description: "description", projectStatus: ProjectStatus.APPROVED, projectGroupType: ProjectGroupType.PANEL) | HttpServletResponse.SC_FOUND
-        "Invalid Project- No name" | new ProjectCommand(description: "description", projectStatus: ProjectStatus.APPROVED, projectGroupType: ProjectGroupType.PANEL)               | HttpServletResponse.SC_OK
+        "Full Project"             | new ProjectCommand(name: "name", description: "description", projectStatus: Status.APPROVED, projectGroupType: ProjectGroupType.PANEL) | HttpServletResponse.SC_FOUND
+        "Invalid Project- No name" | new ProjectCommand(description: "description", projectStatus: Status.APPROVED, projectGroupType: ProjectGroupType.PANEL)               | HttpServletResponse.SC_OK
 
     }
 
     void 'test edit Project Status success'() {
         given:
-        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)
-        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: ProjectStatus.APPROVED)
+        Project newProject = Project.build(version: 0, projectStatus: Status.DRAFT)
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: Status.APPROVED)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
                 version: newProject.version, name: newProject.name, value: updatedProject.projectStatus.id)
         when:
@@ -137,14 +136,14 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test edit Project Status has unapproved experiments'() {
         given:
-        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)
-        Experiment experimentFrom = Experiment.build(experimentStatus: ExperimentStatus.APPROVED)
-        Experiment experimentTo = Experiment.build(experimentStatus: ExperimentStatus.DRAFT)
+        Project newProject = Project.build(version: 0, projectStatus: Status.DRAFT)
+        Experiment experimentFrom = Experiment.build(experimentStatus: Status.APPROVED)
+        Experiment experimentTo = Experiment.build(experimentStatus: Status.DRAFT)
         ProjectSingleExperiment.build(project: newProject, experiment: experimentFrom)
         ProjectSingleExperiment.build(project: newProject, experiment: experimentTo)
 
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
-                version: newProject.version, name: newProject.name, value: ProjectStatus.APPROVED.id)
+                version: newProject.version, name: newProject.name, value: Status.APPROVED.id)
         when:
         controller.editProjectStatus(inlineEditableCommand)
         then:
@@ -154,15 +153,15 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test edit Project Status has retired experiments'() {
         given:
-        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: ProjectStatus.APPROVED)
-        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)
-        Experiment experimentFrom = Experiment.build(experimentStatus: ExperimentStatus.APPROVED)
-        Experiment experimentTo = Experiment.build(experimentStatus: ExperimentStatus.RETIRED)
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: Status.APPROVED)
+        Project newProject = Project.build(version: 0, projectStatus: Status.DRAFT)
+        Experiment experimentFrom = Experiment.build(experimentStatus: Status.APPROVED)
+        Experiment experimentTo = Experiment.build(experimentStatus: Status.RETIRED)
         ProjectSingleExperiment.build(project: newProject, experiment: experimentFrom)
         ProjectSingleExperiment.build(project: newProject, experiment: experimentTo)
 
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
-                version: newProject.version, name: newProject.name, value: ProjectStatus.APPROVED.id)
+                version: newProject.version, name: newProject.name, value: Status.APPROVED.id)
         when:
         controller.editProjectStatus(inlineEditableCommand)
         then:
@@ -180,8 +179,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
     void 'test edit Project Status - access denied'() {
         given:
         accessDeniedRoleMock()
-        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)  //no designer
-        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: ProjectStatus.APPROVED)
+        Project newProject = Project.build(version: 0, projectStatus: Status.DRAFT)  //no designer
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: Status.APPROVED)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
                 version: newProject.version, name: newProject.name, value: updatedProject.projectStatus.id)
         when:
@@ -193,9 +192,9 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test edit Project Status with errors'() {
         given:
-        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.APPROVED)
+        Project newProject = Project.build(version: 0, projectStatus: Status.APPROVED)
         InlineEditableCommand inlineEditableCommand =
-            new InlineEditableCommand(pk: newProject.id, version: newProject.version, name: newProject.name, value: ProjectStatus.APPROVED.id)
+            new InlineEditableCommand(pk: newProject.id, version: newProject.version, name: newProject.name, value: Status.APPROVED.id)
         controller.metaClass.message = { Map p -> return "foo" }
 
         when:
@@ -795,9 +794,9 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
         where:
         desc                                                           | idType      | experimentStatus          | errorMessages | expectedNumExperiments | isAlreadyAssociatedToProject
-        "ADID with approved experiment"                                | IdType.ADID | ExperimentStatus.APPROVED | []            | 1                      | false
-        "ADID with approved experiment, already associated to Project" | IdType.ADID | ExperimentStatus.APPROVED | []            | 0                      | true
-        "ADID with retired experiment"                                 | IdType.ADID | ExperimentStatus.RETIRED  | []            | 0                      | false
+        "ADID with approved experiment"                                | IdType.ADID | Status.APPROVED | []            | 1                      | false
+        "ADID with approved experiment, already associated to Project" | IdType.ADID | Status.APPROVED | []            | 0                      | true
+        "ADID with retired experiment"                                 | IdType.ADID | Status.RETIRED  | []            | 0                      | false
     }
 
     void "test show Experiments To Add Project #desc"() {
@@ -825,7 +824,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         accessDeniedRoleMock()
         Assay assay = Assay.build(ownerRole: role)
         Project project = Project.build(ownerRole: role)
-        Experiment experiment = Experiment.build(assay: assay, experimentStatus: ExperimentStatus.APPROVED, ownerRole: role)
+        Experiment experiment = Experiment.build(assay: assay, experimentStatus: Status.APPROVED, ownerRole: role)
         String sourceEntityIds = experiment.id.toString()
 
         AssociateExperimentsCommand associateExperimentsCommand =
@@ -849,7 +848,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         accessDeniedRoleMock()
         Assay assay = Assay.build(ownerRole: role)
         Project project = Project.build(ownerRole: role)
-        Experiment experiment = Experiment.build(assay: assay, experimentStatus: ExperimentStatus.APPROVED, ownerRole: role)
+        Experiment experiment = Experiment.build(assay: assay, experimentStatus: Status.APPROVED, ownerRole: role)
         String sourceEntityIds = experiment.id.toString()
 
         AssociateExperimentsCommand associateExperimentsCommand =
@@ -873,7 +872,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         accessDeniedRoleMock()
         Assay assay = Assay.build(ownerRole: role)
         Project project = Project.build(ownerRole: role)
-        Experiment experiment = Experiment.build(assay: assay, experimentStatus: ExperimentStatus.APPROVED, ownerRole: role)
+        Experiment experiment = Experiment.build(assay: assay, experimentStatus: Status.APPROVED, ownerRole: role)
         String sourceEntityIds = experiment.id.toString()
 
         AssociateExperimentsCommand associateExperimentsCommand =
@@ -895,7 +894,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         given:
         Assay assay = Assay.build(ownerRole: role)
         Project project = Project.build(ownerRole: role)
-        Experiment experiment = Experiment.build(assay: assay, experimentStatus: ExperimentStatus.APPROVED, ownerRole: role)
+        Experiment experiment = Experiment.build(assay: assay, experimentStatus: Status.APPROVED, ownerRole: role)
         String sourceEntityIds = experiment.id.toString()
 
         AssociateExperimentsCommand associateExperimentsCommand =

@@ -1,14 +1,6 @@
-<%@ page import="bard.db.enums.ExperimentStatus; bard.db.enums.ContextType; bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
-<head>
-    <r:require
-            modules="core,bootstrap,twitterBootstrapAffix"/>
-    <meta name="layout" content="howto"/>
-    <r:external file="css/bootstrap-plus.css"/>
-    <title>BARD How to visualize and capture data</title>
-
-</head>
+<g:render template="howToHeader" model="[title:'BARD How to visualize and capture data']"/>
 
 <body>
 <div class="search-panel">
@@ -45,7 +37,7 @@
                         </h3>
 
                     <p>
-                        Be sure to invest some time reading <a href="../about/howToGetTheMostFromBard">How to Get the Most from BARD</a>. You’ll see sample workflows that demonstrate how these visualization tools work in concert with each other and other features throughout the system to unlock the full potential of the data.
+                        Be sure to invest some time reading <g:link controller="about" action="howToGetTheMostFromBard">How to Get the Most from BARD</g:link>. You’ll see sample workflows that demonstrate how these visualization tools work in concert with each other and other features throughout the system to unlock the full potential of the data.
                         </p>
                     </aside>
 

@@ -1,17 +1,13 @@
 package registration
 
-import bard.db.dictionary.Element
-import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.Status
 import bard.db.people.Role
-import bard.db.registration.*
+import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.AssayDocument
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import org.grails.plugins.springsecurity.service.acl.AclUtilService
-import org.hibernate.Query
-import org.hibernate.Session
-import org.springframework.security.core.GrantedAuthority
-
 
 class AssayService {
 
@@ -92,7 +88,7 @@ class AssayService {
                          Date dateCreated,
                          String designedBy,
                          String assayNamePrefix = "Clone of ",
-                         AssayStatus assayStatus = AssayStatus.DRAFT,
+                         Status assayStatus = Status.DRAFT,
                          ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY) {
         //find the first role that starts with Team
 

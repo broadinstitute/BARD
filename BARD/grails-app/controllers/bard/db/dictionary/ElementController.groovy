@@ -4,6 +4,8 @@ import bard.db.command.BardCommand
 import bard.db.enums.AddChildMethod
 import bard.util.BardCacheUtilsService
 import grails.converters.JSON
+import grails.plugin.cache.CacheEvict
+import grails.plugin.cache.Cacheable
 import grails.plugins.springsecurity.Secured
 import grails.validation.Validateable
 import grails.validation.ValidationErrors
@@ -18,6 +20,7 @@ class ElementController {
     BuildElementPathsService buildElementPathsService
     BardCacheUtilsService bardCacheUtilsService
     ModifyElementAndHierarchyService modifyElementAndHierarchyService
+    OntologyDataAccessService ontologyDataAccessService
 
     def index() {
         redirect(uri: '/')
@@ -32,6 +35,21 @@ class ElementController {
 
         if (!parameterMap.containsKey(errorMessageKey)) {
             return parameterMap
+        } else {
+            render(parameterMap.get(errorMessageKey))
+        }
+    }
+
+    @Secured(['isAuthenticated()'])
+    def select() {}
+
+    @Secured(['isAuthenticated()'])
+    def listAjax() {
+        Map parameterMap = generatePaths()
+
+        if (!parameterMap.containsKey(errorMessageKey)) {
+            Map map = [results: elementService.convertPathsToSelectWidgetStructures(parameterMap.list)]
+            render map as JSON
         } else {
             render(parameterMap.get(errorMessageKey))
         }
@@ -107,7 +125,7 @@ class ElementController {
     }
 
     @Secured(["hasRole('ROLE_CURATOR')"])
-    def edit() {
+    def editHierarchyPath() {
         Map parameterMap = generatePaths()
 
         if (!parameterMap.containsKey(errorMessageKey)) {
@@ -117,6 +135,17 @@ class ElementController {
         }
     }
 
+    @Secured(["hasRole('ROLE_CURATOR')"])
+    def edit(Long id) {
+        Element element = Element.findById(id)
+        if (!element) {
+            flash.message = "Element ${id} does not exist"
+        }
+
+        [element: element, baseUnits: ontologyDataAccessService.getAllUnits()]
+    }
+
+    @Cacheable(value = "elementListPaths")
     private Map generatePaths() {
         Map result = null
         try {
@@ -134,7 +163,7 @@ class ElementController {
     }
 
     @Secured(["hasRole('ROLE_CURATOR')"])
-    def update(ElementEditCommand elementEditCommand) {
+    def updateHierarchyPath(ElementEditCommand elementEditCommand) {
         String errorMessage = null
 
         elementEditCommand.newPathString = elementEditCommand.newPathString?.trim()
@@ -181,12 +210,41 @@ detected loop id's:${idBuilder.toString()}<br/>"""
         }
 
         if (null == errorMessage) {
-            redirect(action: 'edit')
+            redirect(action: 'editHierarchyPath')
         } else {
             render(errorMessage)
         }
     }
 
+    @Secured(["hasRole('ROLE_CURATOR')"])
+    @CacheEvict(value = "elementListPaths")
+    def update() {
+        Element element = Element.findById(params.id)
+        if (!element) {
+            flash.message = "Could not find element ${params.id} for editing"
+            redirect action: "select"
+            return
+        }
+
+        element.properties['label',
+                'elementStatus',
+                'unit',
+                'abbreviation',
+                'synonyms',
+                'expectedValueType',
+                'addChildMethod',
+                'description',
+                'externalURL'] = params
+
+        if (element.save(flush: true)) {
+            bardCacheUtilsService.refreshDueToNonDictionaryEntry()
+            flash.message = "Element ${element.id} saved successfully"
+            redirect action: "select"
+        } else {
+            flash.message = "Failed to update element ${element.id}"
+            render view: "edit", model: [element: element]
+        }
+    }
 
     static Element findElementFromId(Long id) {
         Element result = Element.findById(id)

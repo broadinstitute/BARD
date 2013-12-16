@@ -1,19 +1,21 @@
 package bard.db.registration
 
-import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.DocumentType
 import bard.db.enums.ReadyForExtraction
-import bard.db.enums.hibernate.AssayStatusEnumUserType
+import bard.db.enums.Status
 import bard.db.enums.hibernate.AssayTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
+import bard.db.enums.hibernate.StatusEnumUserType
 import bard.db.experiment.Experiment
 import bard.db.guidance.Guidance
 import bard.db.guidance.GuidanceAware
 import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
+import bard.db.guidance.owner.OneItemPerNonFixedAttributeElementRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 class Assay extends AbstractContextOwner implements GuidanceAware {
     public static final int ASSAY_NAME_MAX_SIZE = 1000
@@ -34,7 +36,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
 
 
     def capPermissionService
-    AssayStatus assayStatus = AssayStatus.DRAFT
+    Status assayStatus = Status.DRAFT
     String assayName
     String assayVersion
     String designedBy
@@ -88,7 +90,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
 
     static mapping = {
         id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
-        assayStatus(type: AssayStatusEnumUserType)
+        assayStatus(type: StatusEnumUserType)
         readyForExtraction(type: ReadyForExtractionEnumUserType)
         assayType(type: AssayTypeEnumUserType)
         assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true', cascade: 'all-delete-orphan')
@@ -173,7 +175,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
 
 
     boolean allowsNewExperiments() {
-        return (assayStatus != AssayStatus.RETIRED && assayType != AssayType.TEMPLATE)
+        return (assayStatus != Status.RETIRED && assayType != AssayType.TEMPLATE)
     }
 
     @Override
@@ -192,6 +194,15 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     List<Guidance> getGuidance() {
         final List<Guidance> guidanceList = []
         guidanceList.addAll(new MinimumOfOneBiologyGuidanceRule(this).getGuidance())
+        guidanceList.addAll(new OneItemPerNonFixedAttributeElementRule(this).getGuidance())
         guidanceList
+    }
+    public boolean permittedToSeeEntity() {
+        if ((assayStatus == Status.DRAFT) &&
+                (!SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR') &&
+                        !SpringSecurityUtils.principalAuthorities.contains(this.ownerRole))) {
+            return false
+        }
+        return true
     }
 }

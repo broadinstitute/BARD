@@ -2,8 +2,8 @@ package bard.db.experiment
 
 import acl.CapPermissionService
 import bard.db.dictionary.Element
-import bard.db.enums.ExperimentStatus
 import bard.db.enums.HierarchyType
+import bard.db.enums.Status
 import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
@@ -186,7 +186,7 @@ class ExperimentService {
     }
 
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    Experiment updateExperimentStatus(final Long id, final ExperimentStatus experimentStatus) {
+    Experiment updateExperimentStatus(final Long id, final Status experimentStatus) {
         Experiment experiment = Experiment.findById(id)
         experiment.experimentStatus = experimentStatus
         experiment.save(flush: true)

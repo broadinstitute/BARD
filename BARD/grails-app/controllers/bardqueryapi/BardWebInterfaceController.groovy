@@ -16,6 +16,7 @@ import bard.core.util.FilterTypes
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
 import bard.db.project.Project
+import bard.db.util.BardNews
 import grails.plugins.springsecurity.Secured
 import molspreadsheet.CompoundSummaryCategorizer
 import molspreadsheet.LinkedVisHierData
@@ -108,7 +109,9 @@ class BardWebInterfaceController {
     }
 
     def index() {
-        render(view: 'homepage')
+        List<BardNews> bardNewsInstances = BardNews.listOrderByEntryDateUpdated(order: "desc", max: 20)
+
+        render(view: 'homepage', model: [bardNewsInstances: bardNewsInstances])
     }
 
     def bardIsGrowing() {
@@ -731,7 +734,7 @@ class BardWebInterfaceController {
             }
 
             final List<FilterTypes> filters = []
-//            filters.add(FilterTypes.TESTED)
+            filters.add(FilterTypes.TESTED)
             Boolean normalizeYAxisFilter = searchCommand.filters.find { SearchFilter searchFilter -> return searchFilter.filterName == 'plot_axis' }?.filterValue
             NormalizeAxis normalizeAxis = normalizeYAxisFilter ? NormalizeAxis.Y_NORM_AXIS : NormalizeAxis.Y_DENORM_AXIS
             if (normalizeAxis == NormalizeAxis.Y_DENORM_AXIS) {
@@ -947,7 +950,7 @@ class SearchHelper {
             final String inputAfterColon = searchStringSplit[1].trim()
 
             if (searchCommand.searchString.toUpperCase().contains(THRESHOLD_STRING) && searchCommand.searchString.toUpperCase().contains(StructureSearchParams.Type.Similarity.toString().toUpperCase())) {
-                inputAfterColon = searchStringSplit[1].toUpperCase().replaceAll(THRESHOLD_STRING, "").trim()
+                inputAfterColon = searchStringSplit[1].replaceAll('(?i)' + THRESHOLD_STRING, "").trim() //makes the replaceAll case-insensitive.
                 thresholdValue = searchStringSplit[2].trim()
             }
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []

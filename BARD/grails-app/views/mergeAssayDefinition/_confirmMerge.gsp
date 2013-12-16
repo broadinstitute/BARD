@@ -1,4 +1,4 @@
-<%@ page import="bard.db.enums.AssayStatus" %>
+<%@ page import="bard.db.enums.Status" %>
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span2">
@@ -25,7 +25,7 @@
                                 <g:link controller="assayDefinition" action="show" id="${sourceAssay.id}"
                                         target="_blank">
                                     ${sourceAssay.id} - ${sourceAssay.assayName}
-                                    <g:if test="${sourceAssay.assayStatus == AssayStatus.RETIRED}">
+                                    <g:if test="${sourceAssay.assayStatus == Status.RETIRED}">
                                         <span class="alert-error">
                                             - ${sourceAssay.assayStatus}
                                         </span>
@@ -46,7 +46,7 @@
                         <g:link controller="assayDefinition" action="show" id="${mergeAssayCommand.targetAssay.id}"
                                 target="_blank">
                             ${mergeAssayCommand.targetAssay.id} - ${mergeAssayCommand.targetAssay.assayName}
-                            <g:if test="${mergeAssayCommand.targetAssay.assayStatus == AssayStatus.RETIRED}">
+                            <g:if test="${mergeAssayCommand.targetAssay.assayStatus == Status.RETIRED}">
                                 <span class="alert-error">
                                     - ${mergeAssayCommand.targetAssay.assayStatus}
                                 </span>

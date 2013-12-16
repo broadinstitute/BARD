@@ -1,5 +1,5 @@
 %{-- Extract this to a taglib to simplify the logic --}%
-<%@ page import="bard.db.enums.ProjectStatus; org.apache.commons.lang3.BooleanUtils" %>
+<%@ page import="bard.db.enums.Status; bard.db.enums.Status; org.apache.commons.lang3.BooleanUtils" %>
 <dl>
     <dt><g:message code="assay.label" default="Assay Definition"/>:</dt>
     <dd>
@@ -25,7 +25,7 @@
     <dd>
         <ul>
             <g:each in="${experiment?.projectExperiments}" var="projectExperiment">
-                <g:if test="${projectExperiment.project.projectStatus != ProjectStatus.RETIRED}">
+                <g:if test="${projectExperiment.project.projectStatus != Status.RETIRED}">
                     <li><g:link controller="project" action="show"
                                 id="${projectExperiment.project.id}">${projectExperiment.project.name}</g:link></li>
                 </g:if>

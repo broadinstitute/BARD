@@ -18,7 +18,7 @@ import spock.lang.Specification
  * To change this template use File | Settings | File Templates.
  */
 class AsyncResultsServiceUnitSpec extends Specification {
-    final static String INITIAL_STATUS = "{\"status\":\"Started...\",\"summary\":null}";
+    final static String INITIAL_STATUS = "{\"status\":\"Started...\",\"summary\":null,\"finished\":false}";
 
     def "test doReloadResultsAsync"() {
         AsyncResultsService service = new AsyncResultsService();
@@ -91,7 +91,8 @@ class AsyncResultsServiceUnitSpec extends Specification {
                         substanceCount: 5,
                         resultsWithRelationships: 6,
                         resultAnnotations: 7,
-                        topLines: [["a"],["b","c"]] ))
+                        topLines: [["a"],["b","c"]] ),
+                finished: true)
 
 
         AsyncResultsService service = new AsyncResultsService()
@@ -111,5 +112,7 @@ class AsyncResultsServiceUnitSpec extends Specification {
         status2.summary.resultsWithRelationships == status.summary.resultsWithRelationships
         status2.summary.resultAnnotations == status.summary.resultAnnotations
         status2.summary.topLines == status.summary.topLines
+        status2.finished == status.finished
+        status2.finished
     }
 }

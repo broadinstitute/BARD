@@ -4,14 +4,12 @@ import bard.db.dictionary.Element
 import bard.db.dictionary.ElementHierarchy
 import bard.db.dictionary.Ontology
 import bard.db.dictionary.OntologyItem
-import bard.db.enums.ExperimentStatus
-import bard.db.enums.ProjectStatus
+import bard.db.enums.Status
 import bard.db.experiment.*
 import bard.db.project.*
 import bard.db.registration.*
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -119,14 +117,14 @@ class ReadyForExtractFlushListenerUnitSpec extends Specification {
 
     def 'test experiment with projects setting ready for extract for #description'() {
         setup:
-        Project projectx = Project.build(projectStatus: ProjectStatus.APPROVED)
+        Project projectx = Project.build(projectStatus: Status.APPROVED)
         Experiment experiment1 = Experiment.build()
         Experiment experiment2 = Experiment.build()
 
         buildStep(ProjectSingleExperiment.build(project: projectx, experiment: experiment1), ProjectSingleExperiment.build(project: projectx, experiment: experiment2))
 
         when:
-        experiment1.experimentStatus = ExperimentStatus.APPROVED
+        experiment1.experimentStatus = Status.APPROVED
         def impacted = new HashSet(ReadyForExtractFlushListener.getObjectsImpactedByChange(experiment1))
 
         then:

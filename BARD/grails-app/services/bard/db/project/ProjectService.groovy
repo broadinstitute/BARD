@@ -2,7 +2,7 @@ package bard.db.project
 
 import acl.CapPermissionService
 import bard.db.dictionary.Element
-import bard.db.enums.ProjectStatus
+import bard.db.enums.Status
 import bard.db.experiment.Experiment
 import bard.db.people.Role
 import org.springframework.security.access.prepost.PreAuthorize
@@ -22,7 +22,7 @@ class ProjectService {
                 '''
 
         final List<Long> projectIds = Project.executeQuery(PROBES_QUERY,
-                [BARD_PROBE_URI, ProjectStatus.APPROVED])
+                [BARD_PROBE_URI, Status.APPROVED])
 
         return projectIds
     }
@@ -36,7 +36,7 @@ class ProjectService {
                 '''
 
         final List cids = Project.executeQuery(PROBES_QUERY,
-                [PUBCHEM_CID_URI, ProjectStatus.APPROVED]) as List<Long>
+                [PUBCHEM_CID_URI, Status.APPROVED]) as List<Long>
 
         return cids.collect{it as Long}
     }
@@ -52,7 +52,7 @@ class ProjectService {
     }
 
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    Project updateProjectStatus(Long id, ProjectStatus newProjectStatus) {
+    Project updateProjectStatus(Long id, Status newProjectStatus) {
         Project project = Project.findById(id)
         project.projectStatus = newProjectStatus
 

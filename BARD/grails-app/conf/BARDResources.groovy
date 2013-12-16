@@ -23,9 +23,9 @@ modules = {
     addAllItemsToCarts {
         resource url: "js/addAllItemsToCart.js"
     }
-    addExperimentsToProject{
+    addExperimentsToProject {
         dependsOn("descriptorSelect2Widget")
-        resource url:"/js/cap/addExperimentsToProject.js"
+        resource url: "/js/cap/addExperimentsToProject.js"
     }
     assaycards {
         dependsOn('card')
@@ -37,10 +37,11 @@ modules = {
         resource url: '/js/cap/assaycompare.js'
     }
     assayshow {
-        dependsOn 'bootstrapplus, card, sectionCounter'
+        dependsOn 'bootstrapplus, card, sectionCounter,tableSorter'
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
         resource url: '/js/cap/assay.show.js'
         resource url: '/css/measures-dynatree.css'
+        resource url: '/css/myBard/myBard.css'
     }
     assaysummary {
         resource url: '/js/cap/editSummary.js'
@@ -125,6 +126,7 @@ modules = {
     descriptorSelect2Widget {
         dependsOn 'core,select2'
         resource url: "/js/cap/descriptorSelect2Widget.js"
+        resource url: '/css/descriptorSelect2Widget.css'
         resource url: '/css/select2PopoverOverride.css'
     }
     dictionaryPage {
@@ -143,7 +145,9 @@ modules = {
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
         resource url: '/js/dynatree-1.2.2/skin/ui.dynatree.css'
     }
-
+    editRole {
+        resource url: '/js/cap/editRole.js'
+    }
     //E
     experimentData {
         //Polyfill for handling History
@@ -223,12 +227,15 @@ modules = {
         dependsOn 'core,bootstrap'
         resource url: '/js/cap/moveExperiments.js'
     }
-
     newTerm {
         dependsOn 'descriptorSelect2Widget'
         resource url: '/css/newterm/newTerms.css'
         resource url: '/js/element/newTerm.js'
 
+    }
+    elementSelect {
+        dependsOn 'descriptorSelect2Widget'
+        resource url: '/js/element/elementList.js'
     }
     myBard {
         dependsOn('core', 'bootstrap', 'tableSorter')
@@ -252,7 +259,7 @@ modules = {
         resource url: "css/promiscuity.css"
     }
     resulttype {
-        dependsOn('descriptorSelect2Widget','bootstrapplus')
+        dependsOn('descriptorSelect2Widget', 'bootstrapplus')
         resource url: "js/resulttypes/resulttype.js"
         resource url: "css/resulttypes/resulttype.css"
     }
@@ -320,5 +327,9 @@ modules = {
         resource url: "/js/zynga-scroller-a44d7c2/Animate.js"
         resource url: "/js/zynga-scroller-a44d7c2/Scroller.js"
         resource url: "/js/zynga-scroller-a44d7c2/render.js"
+    }
+
+    elementEdit {
+        resource url: 'js/element/element.js'
     }
 }

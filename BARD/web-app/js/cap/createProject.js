@@ -18,7 +18,7 @@ $(document).ready(function () {
 
     $('#save-btn').click(function () {
         $('.projectForm').editable('submit', {
-            url: '/BARD/project/save',
+            url: bardAppContext + '/project/save',
             ajaxOptions: {
                 dataType: 'json' //assuming json response
             },

@@ -1,10 +1,10 @@
 package dataexport.experiment
 
 import bard.db.dictionary.Element
-import bard.db.enums.ExperimentStatus
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.Status
 import bard.db.experiment.Experiment
-import bard.db.people.Role
+import bard.db.project.*
 import bard.db.registration.ExternalReference
 import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
@@ -12,11 +12,11 @@ import dataexport.util.ExportAbstractService
 import dataexport.util.UtilityService
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
-import org.codehaus.groovy.grails.web.mapping.LinkGenerator
-import bard.db.project.*
 import org.apache.commons.lang.StringUtils
-import javax.xml.datatype.XMLGregorianCalendar
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
+
 import javax.xml.datatype.DatatypeFactory
+import javax.xml.datatype.XMLGregorianCalendar
 
 class ProjectExportService extends ExportAbstractService {
     MediaTypesDTO mediaTypesDTO
@@ -103,8 +103,8 @@ class ProjectExportService extends ExportAbstractService {
             for (ProjectExperiment projectExperiment : projectExperiments) {
 
                 if (projectExperiment.experiment?.readyForExtraction == ReadyForExtraction.READY ||
-                        projectExperiment.experiment.experimentStatus == ExperimentStatus.APPROVED ||
-                        projectExperiment.experiment.experimentStatus == ExperimentStatus.RETIRED) {
+                        projectExperiment.experiment.experimentStatus == Status.APPROVED ||
+                        projectExperiment.experiment.experimentStatus == Status.RETIRED) {
                     projectExperimentsReadyForExraction.add(projectExperiment)
                 }
             }

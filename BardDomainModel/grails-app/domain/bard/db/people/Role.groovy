@@ -4,6 +4,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 import org.springframework.security.core.GrantedAuthority
 
 class Role implements GrantedAuthority, Comparable<Role> {
+    static final int DISPLAY_NAME_SIZE = 255
+    static final int AUTHORITY_NAME_SIZE = 40
 
     String authority
     Date dateCreated = new Date()
@@ -40,11 +42,11 @@ class Role implements GrantedAuthority, Comparable<Role> {
 
     static transients = ['teamRoles']
     static constraints = {
-        authority(nullable: false, blank: false, unique: true, maxSize: Person.NAME_MAX_SIZE)
+        authority(nullable: false, blank: false, unique: true, maxSize: AUTHORITY_NAME_SIZE)
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: Person.MODIFIED_BY_MAX_SIZE)
-        displayName(nullable: true, blank: false, maxSize: Person.MODIFIED_BY_MAX_SIZE)
+        displayName(nullable: true, blank: false, maxSize: DISPLAY_NAME_SIZE)
 
     }
     static mapping = {

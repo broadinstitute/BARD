@@ -32,7 +32,7 @@ class ContextItemServiceUnitSpec extends Specification {
     def "test create external ontology context item"() {
         ContextItemService service = new ContextItemService()
 
-        Element attribute = Element.build(expectedValueType: ExpectedValueType.EXTERNAL_ONTOLOGY)
+        Element attribute = Element.build(expectedValueType: ExpectedValueType.EXTERNAL_ONTOLOGY, externalURL: "externalUrl")
         AssayContext context = AssayContext.build()
         BasicContextItemCommand command = new BasicContextItemCommand()
         command.context = context

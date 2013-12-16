@@ -15,9 +15,9 @@
                    id="${assay?.assayStatus?.id}"
                    data-type="select"
                    data-value="${assay?.assayStatus?.id}"
-                   data-source="/BARD/assayDefinition/assayStatus"
+                   data-source="${request.contextPath}/assayDefinition/assayStatus"
                    data-pk="${assay.id}"
-                   data-url="/BARD/assayDefinition/editAssayStatus"
+                   data-url="${request.contextPath}/assayDefinition/editAssayStatus"
                    data-original-title="Select Assay Status">${assay?.assayStatus?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status" data-id="${assay?.assayStatus?.id}"></a>
             </dd>
@@ -32,7 +32,7 @@
                    data-type="textarea"
                    data-value="${assay?.assayName}"
                    data-pk="${assay.id}"
-                   data-url="/BARD/assayDefinition/editAssayName"
+                   data-url="${request.contextPath}/assayDefinition/editAssayName"
                    data-placeholder="Required"
                    data-original-title="Edit Assay Name">${assay?.assayName}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Name" data-id="nameId"></a>
@@ -47,9 +47,9 @@
                         id="ownerRoleId"
                         data-type="select"
                         data-value="${assay?.ownerRole?.displayName}"
-                        data-source="/BARD/assayDefinition/roles"
+                        data-source="${request.contextPath}/assayDefinition/roles"
                         data-pk="${assay.id}"
-                        data-url="/BARD/assayDefinition/editOwnerRole"
+                        data-url="${request.contextPath}/assayDefinition/editOwnerRole"
                         data-original-title="Select Owner Role">${assay?.ownerRole?.displayName}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="ownerRoleId" title="Click to edit owner role"></a>
             </dd>
@@ -66,9 +66,9 @@
                    id="assayTypeId"
                    data-type="select"
                    data-value="${assay?.assayType?.id}"
-                   data-source="/BARD/assayDefinition/assayTypes"
+                   data-source="${request.contextPath}/assayDefinition/assayTypes"
                    data-pk="${assay.id}"
-                   data-url="/BARD/assayDefinition/editAssayType"
+                   data-url="${request.contextPath}/assayDefinition/editAssayType"
                    data-original-title="Select Assay Type">${assay?.assayType?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}"  data-id="assayTypeId" title="Click to edit type"></a>
             </dd>

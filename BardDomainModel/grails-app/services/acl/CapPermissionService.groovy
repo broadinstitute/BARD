@@ -1,9 +1,7 @@
 package acl
 
 import bard.acl.CapPermissionInterface
-import bard.db.enums.AssayStatus
-import bard.db.enums.ExperimentStatus
-import bard.db.enums.ProjectStatus
+import bard.db.enums.Status
 import bard.db.experiment.Experiment
 import bard.db.people.Role
 import bard.db.project.Project
@@ -196,11 +194,11 @@ class CapPermissionService implements CapPermissionInterface {
 
         switch (domainClass) {
             case Experiment:
-                return Experiment.findAllByOwnerRoleInListAndExperimentStatusInList(userRoles, [ExperimentStatus.APPROVED, ExperimentStatus.DRAFT])
+                return Experiment.findAllByOwnerRoleInListAndExperimentStatusInList(userRoles, [Status.APPROVED, Status.DRAFT])
             case Assay:
-                return Assay.findAllByOwnerRoleInListAndAssayStatusInList(userRoles, [AssayStatus.APPROVED, AssayStatus.DRAFT]);
+                return Assay.findAllByOwnerRoleInListAndAssayStatusInList(userRoles, [Status.APPROVED, Status.DRAFT]);
             case Project:
-                return Project.findAllByOwnerRoleInListAndProjectStatusInList(userRoles, [ProjectStatus.APPROVED, ProjectStatus.DRAFT])
+                return Project.findAllByOwnerRoleInListAndProjectStatusInList(userRoles, [Status.APPROVED, Status.DRAFT])
             case Panel:
                 return Panel.findAllByOwnerRoleInList(userRoles)
         }

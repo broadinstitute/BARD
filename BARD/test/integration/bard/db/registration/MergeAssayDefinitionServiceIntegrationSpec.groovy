@@ -1,7 +1,7 @@
 package bard.db.registration
 
 import bard.db.audit.BardContextUtils
-import bard.db.enums.AssayStatus
+import bard.db.enums.Status
 import bard.db.experiment.Experiment
 import bard.db.people.Person
 import bard.db.people.PersonRole
@@ -99,7 +99,7 @@ class MergeAssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         then: "We expect that target assay should have one more experiment than it did before the merge"
         assert mergedAssay.experiments.size() == 2
         and: "that the merged Assay should be in a retired state"
-        assert assayTwo.assayStatus == AssayStatus.RETIRED
+        assert assayTwo.assayStatus == Status.RETIRED
         and: "and the merged Assay should have no experiments associated to it"
         assert assayTwo.experiments.size() == 0
     }

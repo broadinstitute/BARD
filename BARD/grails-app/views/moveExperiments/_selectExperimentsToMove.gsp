@@ -1,4 +1,4 @@
-<%@ page import="bard.db.enums.AssayStatus; bard.db.registration.ExternalReference" %>
+<%@ page import="bard.db.enums.Status; bard.db.enums.Status; bard.db.registration.ExternalReference" %>
 <div class="container">
     <div>
         <h2>(${moveExperimentsCommand.experiments?.size()}) Experiments found - choose which ones to move</h2>
@@ -59,7 +59,7 @@
                                 target="_blank">
                             <li>
                                 ${moveExperimentsCommand.targetAssay.id} - ${moveExperimentsCommand.targetAssay.assayName}
-                                <g:if test="${moveExperimentsCommand.targetAssay.assayStatus == AssayStatus.RETIRED}">
+                                <g:if test="${moveExperimentsCommand.targetAssay.assayStatus == Status.RETIRED}">
                                     <span class="alert-error">
                                         - ${moveExperimentsCommand.targetAssay.assayStatus}
                                     </span>

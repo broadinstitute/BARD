@@ -4,6 +4,8 @@ import bard.db.enums.AddChildMethod
 import bard.db.enums.ExpectedValueType
 import bard.db.enums.hibernate.AddChildMethodEnumUserType
 import bard.db.enums.hibernate.ExpectedValueTypeEnumUserType
+import org.apache.commons.lang3.StringUtils
+import org.springframework.validation.Errors
 
 class Element extends AbstractElement {
 
@@ -48,7 +50,13 @@ class Element extends AbstractElement {
 //    }
     static constraints = {
         curationNotes(nullable: true, maxSize: DESCRIPTION_MAX_SIZE)
-        expectedValueType(nullable: false)
+        expectedValueType(nullable: false, validator: { val, obj, errors ->
+            if (val == ExpectedValueType.EXTERNAL_ONTOLOGY && !StringUtils.trimToNull(obj.externalURL)) {
+                errors.rejectValue("externalURL", "When ExpectedValue is set to ExternalOntology, externalURL can not be empty")
+                return false
+            }
+            return true
+        })
         addChildMethod(nullable: false)
 
     }

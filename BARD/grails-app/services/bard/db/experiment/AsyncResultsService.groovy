@@ -92,9 +92,15 @@ class AsyncResultsService {
         }
     }
 
+    public void updateFinished(String jobKey, String status) {
+        redisService.withRedis { Jedis jedis ->
+            jedis.setex( (jobKeyPrefix+jobKey), timeoutInSeconds, asString(new JobStatus(status: status, finished: true)))
+        }
+    }
+
     public void updateResult(String jobKey, ImportSummary summary) {
         redisService.withRedis { Jedis jedis ->
-            jedis.setex( (jobKeyPrefix+jobKey), timeoutInSeconds, asString(new JobStatus(summary: summary)))
+            jedis.setex( (jobKeyPrefix+jobKey), timeoutInSeconds, asString(new JobStatus(summary: summary, status: "Successfully loaded ${summary.resultsCreated} results", finished: true)))
         }
     }
 

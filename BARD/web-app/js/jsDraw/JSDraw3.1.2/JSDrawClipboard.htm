@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<title>JSDraw Clipboard</title>
+</head>
+<body>
+<applet id='jsc' code='com/scilligence/jsdraw/Clipboard' archive="JSDrawClipboard.jar" width="100" height="100"></applet>
+<script type="text/javascript">
+    function getMolfile() {
+        return document.getElementById("jsc").getMolfile();
+    }
+
+    function version() {
+        return document.getElementById("jsc").version();
+    }
+
+    function isReady() {
+        return document.getElementById("jsc").isReady();
+    }
+
+    function JSDrawClipboard_onstart() {
+        try {
+            parent.JSDrawClipboard_onstart();
+            //alert("JSDraw Clipboard is ready.  Please try to paste it again.");
+        }
+        catch (e) {
+            alert(e);
+        }
+    }
+
+    function test() {
+        var s = window.location + "";
+        var p = s.indexOf('?');
+        if (p < 0)
+            return;
+
+        var callback = s.substr(p + 1);
+        eval("parent." + callback);
+    }
+</script>
+</body>
+</html>

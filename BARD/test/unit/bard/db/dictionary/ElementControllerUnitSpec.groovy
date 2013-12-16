@@ -1,6 +1,7 @@
 package bard.db.dictionary
 
 import bard.db.enums.AddChildMethod
+import bard.db.enums.ExpectedValueType
 import bard.util.BardCacheUtilsService
 import grails.buildtestdata.mixin.Build
 import grails.converters.JSON
@@ -30,6 +31,8 @@ class ElementControllerUnitSpec extends Specification {
         this.controller.elementService = Mock(ElementService.class)
         this.controller.bardCacheUtilsService = Mock(BardCacheUtilsService.class)
         this.parentElement = Element.build(label: 'parent label with spaces', addChildMethod: AddChildMethod.DIRECT)
+        this.controller.buildElementPathsService = Mock(BuildElementPathsService)
+        this.controller.ontologyDataAccessService = Mock(OntologyDataAccessService)
     }
 
     void "test buildTopLevelHierarchyTree"() {
@@ -412,5 +415,59 @@ class ElementControllerUnitSpec extends Specification {
 
         then:
         thrown(EmptyPathSectionException)
+    }
+
+    void "test listAjax"() {
+        when:
+        controller.listAjax()
+
+
+        then:
+        controller.buildElementPathsService.buildAll() >> { [] }
+        controller.buildElementPathsService.createListSortedByString(_) >> { new ElementAndFullPathListAndMaxPathLength([], 0) }
+        controller.elementService.convertPathsToSelectWidgetStructures(_) >> { ["results"] }
+
+        assert response.text == '{"results":["results"]}'
+    }
+
+    void "test edit"() {
+        given:
+        Element element = Element.build()
+
+        when:
+        def response = controller.edit(element.id)
+
+        then:
+        controller.ontologyDataAccessService.getAllUnits() >> { [] }
+
+        assert response.element == element
+    }
+
+    void "test update #label"() {
+        given:
+        Element element = Element.build()
+        Element unitElement = Element.build(label: 'unit')
+        params.id = element.id
+        params.label = 'updateLabel'
+        params.elementStatus = ElementStatus.Published
+        params.unit = unitElement
+        params.abbreviation = "updateAbbreviation"
+        params.synonyms = "updateSynonyms"
+        params.expectedValueType = expectedValueType
+        params.addChildMethod = AddChildMethod.RDM_REQUEST
+        params.description = "updateDescription"
+        params.externalURL = externalURL
+
+        when:
+        def response = controller.update()
+
+        then:
+        assert flash.message.contains(expectedFlashMessage)
+
+        where:
+        label                                       | expectedValueType                   | externalURL | expectedFlashMessage
+        'external-ontology with external url'       | ExpectedValueType.EXTERNAL_ONTOLOGY | 'url'       | 'saved successfully'
+        'external-ontology with empty external url' | ExpectedValueType.EXTERNAL_ONTOLOGY | ''          | 'Failed to update element'
+        'external-ontology with empty external url' | ExpectedValueType.FREE_TEXT         | ''          | 'saved successfully'
     }
 }

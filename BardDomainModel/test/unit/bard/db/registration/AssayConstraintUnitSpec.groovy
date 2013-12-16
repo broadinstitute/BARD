@@ -1,9 +1,9 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
-import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.Status
 import bard.db.people.Role
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
@@ -47,9 +47,9 @@ class AssayConstraintUnitSpec extends Specification {
         where:
         desc             | valueUnderTest       | valid | errorCode
         'null not valid' | null                 | false | 'nullable'
-        'valid value'    | AssayStatus.DRAFT    | true  | null
-        'valid value'    | AssayStatus.APPROVED | true  | null
-        'valid value'    | AssayStatus.RETIRED  | true  | null
+        'valid value'    | Status.DRAFT    | true  | null
+        'valid value'    | Status.APPROVED | true  | null
+        'valid value'    | Status.RETIRED  | true  | null
 
     }
 

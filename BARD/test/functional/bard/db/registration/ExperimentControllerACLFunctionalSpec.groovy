@@ -1,9 +1,9 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
-import bard.db.enums.AssayStatus
-import bard.db.enums.ExperimentStatus
+import bard.db.enums.Status
 import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentFile
 import bard.db.experiment.ExperimentMeasure
 import bard.db.people.Role
 import bard.db.project.ExperimentController
@@ -57,15 +57,18 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
             if (!otherRole) {
                 otherRole = Role.build(authority: 'ROLE_TEAM_B', displayName: 'ROLE_TEAM_B').save(flush: true)
             }
-            Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role, assayStatus: AssayStatus.APPROVED).save(flush: true)
+            Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role, assayStatus:Status.APPROVED).save(flush: true)
 
             Element element = Element.findByLabel("Some labelYYY")
             if (!element) {
-                element = Element.build(label: "Some labelYYY").save(flush:true)
+                element = Element.build(label: "Some labelYYY").save(flush: true)
             }
 
             Experiment experiment = Experiment.build(assay: assay, ownerRole: role).save(flush: true)
-            ExperimentMeasure.build(experiment: experiment,resultType:element,priorityElement: true).save(flush: true)
+
+            ExperimentFile.build(experiment: experiment).save(flush: true)
+
+            ExperimentMeasure.build(experiment: experiment, resultType: element, priorityElement: true).save(flush: true)
             return [id: experiment.id, experimentName: experiment.experimentName, assayName: assay.assayName, assayId: assay.id, authority: role.authority]
         })
         assayIdList.add(experimentData.assayId)
@@ -78,6 +81,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
                 dbpassword, driverClassName)
         sql.call("{call bard_context.set_username(?)}", [TEAM_A_1_USERNAME])
         if (experimentData?.id) {
+            sql.execute("DELETE FROM EXPERIMENT_FILE WHERE EXPERIMENT_ID=${experimentData.id}")
             sql.execute("DELETE FROM EXPRMT_CONTEXT WHERE EXPERIMENT_ID=${experimentData.id}")
             sql.execute("DELETE FROM EXPRMT_MEASURE WHERE EXPERIMENT_ID=${experimentData.id}")
             sql.execute("DELETE FROM EXPERIMENT WHERE EXPERIMENT_ID=${experimentData.id}")
@@ -90,7 +94,6 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
             }
 
             sql.execute("DELETE FROM ASSAY_CONTEXT WHERE ASSAY_ID=${assayId}")
-            sql.execute("DELETE FROM MEASURE WHERE ASSAY_ID=${assayId}")
             sql.execute("DELETE FROM EXPERIMENT WHERE ASSAY_ID=${assayId}")
             sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${assayId}")
         }
@@ -409,7 +412,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         Long version = currentDataMap.version
         String oldExperimentStatus = currentDataMap.experimentStatus
         String newExperimentStatus = null
-        for (ExperimentStatus experimentStatus : ExperimentStatus.values()) {
+        for (Status experimentStatus : Status.values()) {
             if (oldExperimentStatus != experimentStatus.id) {
                 newExperimentStatus = experimentStatus.id
                 break;
@@ -440,7 +443,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         Long version = currentDataMap.version
         String oldExperimentStatus = currentDataMap.experimentStatus
         String newExperimentStatus = null
-        for (ExperimentStatus experimentStatus : ExperimentStatus.values()) {
+        for (Status experimentStatus : Status.values()) {
             if (oldExperimentStatus != experimentStatus.id) {
                 newExperimentStatus = experimentStatus.id
                 break;

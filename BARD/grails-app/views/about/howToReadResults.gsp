@@ -1,13 +1,6 @@
-<%@ page import="bard.db.enums.ExperimentStatus; bard.db.enums.ContextType; bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
-<head>
-    <r:require
-            modules="core,bootstrap,twitterBootstrapAffix"/>
-    <meta name="layout" content="howto"/>
-    <r:external file="css/bootstrap-plus.css"/>
-    <title>BARD How to interpret search results</title>
-</head>
+<g:render template="howToHeader" model="[title:'BARD How to interpret search results']"/>
 
 <body>
 <div class="search-panel">
@@ -98,7 +91,7 @@
                         </p>
 
                     <p>
-                        To allow for more detailed information about promiscuity there is a Scaffold Promiscuity Analysis of the individual substructures within the molecule. This field will provide you with a collection of substructures contained within that molecule, each with a predicted value of molecular promiscuity and a link to more details.  These calculations are provided by a plug-in written by BARD collaborator Jeremy Yang as part of the <a href="http://pasilla.health.unm.edu/tomcat/badapple/badapple">'badapple’ project at the University of New Mexico</a>. You can click <a href="../about/howToUsePlugins">here</a> to learn more about writing and using BARD plug-ins.
+                        To allow for more detailed information about promiscuity there is a Scaffold Promiscuity Analysis of the individual substructures within the molecule. This field will provide you with a collection of substructures contained within that molecule, each with a predicted value of molecular promiscuity and a link to more details.  These calculations are provided by a plug-in written by BARD collaborator Jeremy Yang as part of the <a href="http://pasilla.health.unm.edu/tomcat/badapple/badapple">'badapple’ project at the University of New Mexico</a>. You can click <g:link controller="about" action="howToUsePlugins">here</g:link> to learn more about writing and using BARD plug-ins.
                         </p>
 
                     <h3>

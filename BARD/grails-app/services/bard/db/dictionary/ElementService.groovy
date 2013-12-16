@@ -19,7 +19,6 @@ class ElementService {
     SpringSecurityService springSecurityService
     BardCacheUtilsService bardCacheUtilsService
 
-
     /**
      *
      * @param termCommand
@@ -62,7 +61,7 @@ class ElementService {
      * @return List
      */
     List getChildNodes(long elementId, boolean doNotShowRetired, String expectedValueType) {
-        ExpectedValueType expValType = ExpectedValueType.values().find {val -> val?.name()?.toLowerCase() == expectedValueType?.toLowerCase()}
+        ExpectedValueType expValType = ExpectedValueType.values().find { val -> val?.name()?.toLowerCase() == expectedValueType?.toLowerCase() }
         def childNodes = []
         final Element parentElement = Element.get(elementId)
         final List<ElementHierarchy> list = new ArrayList(parentElement.parentHierarchies)
@@ -70,7 +69,7 @@ class ElementService {
         Set<Element> seenSet = new HashSet<Element>()
         for (ElementHierarchy elementHierarchy : hierarchies) {
             final Element childElement = elementHierarchy.childElement
-            if(doNotShowRetired && childElement.elementStatus.equals(ElementStatus.Retired)){
+            if (doNotShowRetired && childElement.elementStatus.equals(ElementStatus.Retired)) {
                 continue
             }
             //Check if this is the element type we are expecting
@@ -96,5 +95,28 @@ class ElementService {
     public List createElementHierarchyTree(boolean doNotShowRetired, String treeRoot, String expectedValueType) {
         Element element = Element.findByLabel(treeRoot)//find the ROOT OF THE TREE ("BARD" or "BARD Dictionary")
         return getChildNodes(element.id, doNotShowRetired, expectedValueType)
+    }
+
+    /**
+     * Converts a list of elements and their paths, represented by List<ElementAndFullPath>, to a data-structure
+     *  that the Select2 widget is expecting.
+     *
+     * @param elementListWithPaths
+     * @return
+     */
+    List convertPathsToSelectWidgetStructures(List<ElementAndFullPath> elementListWithPaths) {
+        List<ElementAndFullPath> select2Elements = []
+
+        for (ElementAndFullPath elementAndFullPath in elementListWithPaths) {
+            select2Elements << [
+                    id: elementAndFullPath.element.id,
+                    text: elementAndFullPath.element.label,
+                    description: elementAndFullPath.element.description,
+                    fullPath: elementAndFullPath.toString(),
+                    parentFullPath: elementAndFullPath.getParentFullPath()
+            ]
+        }
+
+        return select2Elements
     }
 }

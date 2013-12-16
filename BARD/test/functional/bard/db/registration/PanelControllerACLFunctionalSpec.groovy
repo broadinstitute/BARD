@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.enums.Status
 import bard.db.people.Role
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
@@ -56,7 +57,7 @@ class PanelControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
                 otherRole = Role.build(authority: 'ROLE_TEAM_B', displayName: 'ROLE_TEAM_B').save(flush: true)
             }
 
-            Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role).save(flush: true)
+            Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role, assayStatus:Status.APPROVED).save(flush: true)
             Panel panel = Panel.build(name: "Panel Name", description: "Panel Name", ownerRole: role).save(flush: true)
 
             return [assayId: assay.id, panelId: panel.id, panelName: panel.name, roleId: role.authority, otherRoleId: otherRole.authority]

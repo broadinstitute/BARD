@@ -1,15 +1,18 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
-import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ExpectedValueType
+import bard.db.enums.Status
+import bard.db.guidance.owner.OneItemPerNonFixedAttributeElementRule
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule.*
+import static OneItemPerNonFixedAttributeElementRule.getErrorMsg
+import static bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule.ONE_BIOLOGY_ATTRIBUTE_REQUIRED
+import static bard.db.registration.AttributeType.Free
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,9 +34,9 @@ class AssayUnitSpec extends Specification {
 
         where:
         desc              | assayType          | assayStatus         | measureCount | expectedAllowsNewExperiments
-        'retired assay'   | AssayType.REGULAR  | AssayStatus.RETIRED | 1            | false
-        'template assay'  | AssayType.TEMPLATE | AssayStatus.DRAFT   | 1            | false
-        'everything good' | AssayType.REGULAR  | AssayStatus.DRAFT   | 1            | true
+        'retired assay'   | AssayType.REGULAR  | Status.RETIRED | 1            | false
+        'template assay'  | AssayType.TEMPLATE | Status.DRAFT   | 1            | false
+        'everything good' | AssayType.REGULAR  | Status.DRAFT   | 1            | true
     }
 
 
@@ -45,11 +48,9 @@ class AssayUnitSpec extends Specification {
         if (itemMaps) {
             itemMaps.each { List<Map> pairMaps ->
                 final AssayContext assayContext = AssayContext.build(assay: assay)
-                assay.addToAssayContexts(assayContext)
                 final Element attribute = Element.findByLabel(pairMaps.first().label) ?: Element.build(pairMaps.first())
                 final Element valueElement = pairMaps.last() ? (Element.findByLabel(pairMaps.last()?.label) ?: Element.build(pairMaps.last())) : null
                 assayContext.addContextItem(AssayContextItem.build(attributeElement: attribute, valueElement: valueElement, valueDisplay: valueDisplay))
-
             }
         }
 
@@ -65,6 +66,31 @@ class AssayUnitSpec extends Specification {
         'biology required (false)'                                  | { [[[label: 'biology'], []]] }                                                                                  | null         | []
         'biology required with valueElement==small-molecule format' | { [[[label: 'assay format', expectedValueType: ExpectedValueType.ELEMENT], [label: 'small-molecule format']]] } | 'not null'   | []
         'more than 1 biology ok'                                    | { [[[label: 'biology'], []], [[label: 'biology'], []]] }                                                        | null         | []
-
     }
+
+    void 'test that OneItemPerNonFixedAttributeElement is wired into assay'() {
+        given: 'an assay with some context items'
+        final Assay assay = Assay.build()
+        final String attributeLabel = 'biology'
+        final Element attribute = Element.findByLabel(attributeLabel) ?: Element.build([label: attributeLabel])
+
+        // putting each item in it's own context
+        assayContextItemMaps.each { Map assayContextItemMap ->
+            final AssayContext assayContext = AssayContext.build(assay: assay)
+            assayContextItemMap << ['attributeElement': attribute, assayContext: assayContext]
+            final AssayContextItem aci = AssayContextItem.buildWithoutSave(assayContextItemMap)
+        }
+
+        when: 'we have the rule evaluate the assay'
+        final ArrayList<String> actualGuidanceMessages = assay.guidance.message
+
+        then: 'we should see only the expected messages'
+        actualGuidanceMessages == expectedGuidanceMessages
+
+        where:
+        desc                                         | assayContextItemMaps                           | expectedGuidanceMessages
+        '2 items with attributeType != Fixed not ok' | [[attributeType: Free], [attributeType: Free]] | [getErrorMsg('biology')]
+    }
+
+
 }

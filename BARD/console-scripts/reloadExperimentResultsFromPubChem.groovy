@@ -12,14 +12,14 @@ import org.hibernate.Session
 
 def outFile = new File('reload_experiment_result_out.txt')
 outFile.withWriter { writer ->
-    List<Long> eids = []
+    List<String> eids = []
     List<String> failedEids = []
     new File('EIDs.txt').eachLine { String line ->
         String[] eidStrings = line.split(/\s/)
         assert eidStrings.every { String eidString -> eidString.isLong() }, "All EIDs must be a LONG number ${eidStrings}"
-        eids.addAll(eidStrings as List<Long>)
+        eids.addAll(eidStrings)
     }
-    writer.writeLine("EIDs: ${eids.join(', ')}")
+    writer.writeLine("EIDs: ${eids.join(', ')} (${eids.size()})")
     println("EIDs: ${eids.join(', ')}")
 
     SpringSecurityUtils.reauthenticate("gwalzer", null)
@@ -29,7 +29,7 @@ outFile.withWriter { writer ->
 
     def experimentController = ctx.getBean("bard.db.project.ExperimentController")
     assert experimentController, "Could not find ExperimentController"
-    def pubchemImportService = ctx.getBean("pubchemImportService")
+    PubchemImportService pubchemImportService = ctx.getBean("pubchemImportService")
     assert pubchemImportService, "Could not find PubchemImportService"
 
     Integer index = 1
@@ -55,7 +55,7 @@ outFile.withWriter { writer ->
 
                     //      comment below when ready to commit
                     //transactionStatus.setRollbackOnly()
-                    ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid, { msg -> println("\tPubChemService: " + msg); writer.writeLine("\t" + msg) })
+                    ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, eid.toLong(), { msg -> println("\tPubChemService: " + msg); writer.writeLine("\t" + msg) })
 
                     println("\t...Finished")
                     writer.writeLine("\t...Finished")

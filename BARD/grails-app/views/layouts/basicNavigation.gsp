@@ -16,12 +16,12 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span12">
-                    <a class="brand" href="/BARD">
+                    <a class="brand" href="${request.contextPath}">
                         <img width="140" height="43" src="${resource(dir: 'images', file: 'bard_logo_small.png')}"
                              alt="BioAssay Research Database"/>
                     </a>
                     <ul class="nav">
-                        <li><a href="/BARD">CAP</a></li>
+                        <li><a href="${request.contextPath}">CAP</a></li>
 
                         <sec:ifAnyGranted roles="ROLE_BARD_ADMINISTRATOR">
                             <li class="dropdown">

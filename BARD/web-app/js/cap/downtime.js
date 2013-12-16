@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     $("#downtimenotify").notify({
         speed: 500,
         expires: false
@@ -13,7 +14,7 @@ function poll() {
 function execPoll() {
     $.ajax({
         type: 'GET',
-        url: '/BARD/downTimeScheduler/currentDownTimeInfo',
+        url: bardAppContext + '/downTimeScheduler/currentDownTimeInfo',
         success: function (data) {
             if (data) {
                 //Clear it out if it already exist

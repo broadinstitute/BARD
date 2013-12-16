@@ -1,8 +1,8 @@
 package bard.db.registration
 
 import acl.CapPermissionService
-import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
+import bard.db.enums.Status
 import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
@@ -80,7 +80,7 @@ public class AssayDefinitionServiceUnitSpec extends Specification {
     }
     void "test update assay name"() {
         given:
-        final Assay assay = Assay.build(assayName: 'assayName20', assayStatus: AssayStatus.DRAFT, capPermissionService: Mock(CapPermissionService))
+        final Assay assay = Assay.build(assayName: 'assayName20', assayStatus: Status.DRAFT, capPermissionService: Mock(CapPermissionService))
         final String newAssayName = "New Assay Name"
         when:
         final Assay updatedAssay = service.updateAssayName(assay.id, newAssayName)
@@ -90,11 +90,11 @@ public class AssayDefinitionServiceUnitSpec extends Specification {
 
     void "test update assay status"() {
         given:
-        final Assay assay = Assay.build(assayName: 'assayName10', assayStatus: AssayStatus.DRAFT, capPermissionService: Mock(CapPermissionService))
+        final Assay assay = Assay.build(assayName: 'assayName10', assayStatus: Status.DRAFT, capPermissionService: Mock(CapPermissionService))
         when:
-        final Assay updatedAssay = service.updateAssayStatus(assay.id, AssayStatus.APPROVED)
+        final Assay updatedAssay = service.updateAssayStatus(assay.id, Status.APPROVED)
         then:
-        assert AssayStatus.APPROVED == updatedAssay.assayStatus
+        assert Status.APPROVED == updatedAssay.assayStatus
     }
 
     void "test update assay type"() {

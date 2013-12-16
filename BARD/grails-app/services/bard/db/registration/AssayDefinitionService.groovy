@@ -3,8 +3,8 @@ package bard.db.registration
 import acl.CapPermissionService
 import bard.db.context.item.ContextDTO
 import bard.db.context.item.ContextItemDTO
-import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
+import bard.db.enums.Status
 import bard.db.people.Role
 import org.apache.commons.collections.CollectionUtils
 import org.springframework.security.access.prepost.PreAuthorize
@@ -70,7 +70,7 @@ class AssayDefinitionService {
     }
 
     @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    Assay updateAssayStatus(long id, AssayStatus assayStatus) {
+    Assay updateAssayStatus(long id, Status assayStatus) {
         Assay assay = Assay.findById(id)
         assay.assayStatus = assayStatus
         assay.save(flush: true)

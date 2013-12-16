@@ -6,7 +6,7 @@ $(document).on('click', '#searchButton', function (event) {
     if (!smiles) {
         //If the user didn't draw any structure, cancel the search
         event.preventDefault();
-        window.location.href = '/BARD/bardWebInterface/search';
+        window.location.href = bardAppContext + '/bardWebInterface/search';
         return false;
     }
     var structureSearchTypeSelected = $('input:radio[name=structureSearchType]:checked').attr('value');
@@ -22,14 +22,16 @@ $(document).on('click', '#searchButton', function (event) {
         constructedSearch += ' threshold:' + cutoff;
     }
     $('#searchString').attr('value', constructedSearch);
-    jsDrawEditor.writeCookie();
+    var username = $('#jsDrawUsername').text()
+    jsDrawEditor.writeCookie(username);
 });
 
 $(document).ready(function () {
     jsDrawEditor = new JSDraw2.Editor("jsDrawEditorDiv", {popup: false, rxn: false, biology: false});
     adjustJSDrawEditorWindow()
     //Read cached structure
-    jsDrawEditor.readCookie();
+    var username = $('#jsDrawUsername').text()
+    jsDrawEditor.readCookie(username);
 
     $(window).resize(function () {
         adjustJSDrawEditorWindow();
@@ -67,7 +69,7 @@ $('#smilesToMolBtn').on('click', function (event) {
 
     var smiles = $('#convertSmilesTextfield').val();
     $.ajax({
-        url: '/BARD/chemAxon/convertSmilesToMolFormat',
+        url: bardAppContext + '/chemAxon/convertSmilesToMolFormat',
         type: 'POST',
         cache: false,
         data: {smiles: smiles},

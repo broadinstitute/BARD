@@ -4,6 +4,7 @@
     <meta name="layout" content="basic"/>
     <title>Search</title>
     <r:require modules="historyJsHtml5,search,promiscuity,compoundOptions,addAllItemsToCarts"/>
+    <sitemesh:parameter name="noSocialLinks" value="${true}"/>
 </head>
 
 <body>

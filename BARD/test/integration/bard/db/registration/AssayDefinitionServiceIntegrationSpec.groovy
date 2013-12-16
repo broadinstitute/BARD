@@ -1,8 +1,8 @@
 package bard.db.registration
 
 import bard.db.audit.BardContextUtils
-import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
+import bard.db.enums.Status
 import grails.plugin.spock.IntegrationSpec
 import grails.plugins.springsecurity.SpringSecurityService
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
@@ -41,7 +41,7 @@ class AssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
 
     void "test update assay name"() {
         given:
-        final Assay assay = Assay.build(assayName: 'assayName20', assayStatus: AssayStatus.DRAFT)
+        final Assay assay = Assay.build(assayName: 'assayName20', assayStatus: Status.DRAFT)
         final String newAssayName = "New Assay Name"
         when:
         final Assay updatedAssay = assayDefinitionService.updateAssayName(assay.id, newAssayName)
