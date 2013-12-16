@@ -519,19 +519,16 @@ function activateCurrentTab(currentTab) {
             activateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds ");
             deActivateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions (0)');
             deActivateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects (0)');
-            window.location.hash = "#compounds";
             break;
         case 'assaysTab':
             deActivateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds (0)");
             activateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions ');
             deActivateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects (0)');
-            window.location.hash = "#assays";
             break;
         case 'projectsTab':
             deActivateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds (0)");
             deActivateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions (0)');
             activateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects ');
-            window.location.hash = "#projects";
             break;
         default:
             activateCurrentTab('assaysTab');
