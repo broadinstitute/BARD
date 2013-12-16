@@ -28,10 +28,10 @@
                 <g:if test="${descriptor.label}">
                     <tr>
                         <td>
-                            ${descriptor.id}
+                            ${descriptor?.element?.id}
                         </td>
                         <td>
-                            <a name="${descriptor.id}"></a>
+                            <a name="${descriptor?.element?.id}"></a>
                             ${descriptor.label}
                         </td>
                         <td>
