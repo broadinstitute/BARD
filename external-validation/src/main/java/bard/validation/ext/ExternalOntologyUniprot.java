@@ -34,7 +34,7 @@ public class ExternalOntologyUniprot extends ExternalOntologyAPI {
 
 	private UniProtQueryService uniProtQueryService;
 
-    private static final Pattern UNIPROT_ID_PATTERN = Pattern.compile("^[A-Z][0-9]{5}$");
+    private static final Pattern UNIPROT_ID_PATTERN = Pattern.compile("^[A-Z][0-9A-Z]{5}$");
 
 	public ExternalOntologyUniprot() {
 		uniProtQueryService = UniProtJAPI.factory.getUniProtQueryService();
