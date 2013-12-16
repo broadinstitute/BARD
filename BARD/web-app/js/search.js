@@ -13,7 +13,6 @@ var NUMBER_MATCHING_REGEX = /^\s*\d+\s*(?:,?\s*\d+\s*)*(threshold:\d+)*$/;
 //SMILES validation (JavaScript) beyond a length of 5
 var SMILES_MATCHING_REGEX = /^(exact: *|substructure: *|superstructure: *|similarity: *)([^J][0-9BCOHNSOPrIFla@+\-\[\]\(\)\\\/%=#$,.~&!]{6,})$/ig;
 var TAB_ICON_CLASS = 'badge badge-important';
-var OFFSET_PREFIX = '+offset=';
 
 // return a parameter value from a URL
 function getParam ( url, sname ){
@@ -28,93 +27,76 @@ function getParam ( url, sname ){
     return sval;
 }
 
-// Gets the tab anchor from the hash string if present
-function getHashedTabAnchor(){
-    if(window.location.hash){
-        var splitVals = window.location.hash.split(OFFSET_PREFIX);
-        return splitVals[0];
-    }
-    return null;
-}
-
-// Gets the offset for paging from the hash string if present
-function getHashedPageOffset(){
-    if(window.location.hash){
-        var splitVals = window.location.hash.split(OFFSET_PREFIX);
-        if(splitVals.length > 1){
-            return splitVals[1];
-        }
-    }
-    return null;
-}
-
-// Finds the tab based on the anchor in the url and opens the tab
-function activateHashedTab(){
-    var tabHash = getHashedTabAnchor();
-    if(tabHash)
-        $('#resultTabUL').find('a[href="' + tabHash + '"]').tab('show');
-}
-
-//function activateHashedPage(){
-//    var tabHash = getHashedTabAnchor();
-//    var pageOffset = getHashedPageOffset();
-//    if(tabHash && !pageOffset){
-//        window.location.hash = window.location.hash + OFFSET_PREFIX + "0";
-//    }
-//}
-
-// Hash the offset paging when a new page is clicked in a table of items
-function setHashOnPageClicked(url){
-    var newPageOffset = getParam ( url, 'offset');
-    var oldPageOffset = getHashedPageOffset();
-    if(oldPageOffset){
-        var tabHash = getHashedTabAnchor();
-        window.location.hash = tabHash + OFFSET_PREFIX + newPageOffset;
+function logState(message, state){
+    if(state){
+        window.console.log(message + "- State -> Search=" + state.data.search + " Tab=" +  state.data.tab + " SubmitFrom=" + state.data.submitfrom + " PageOffset=" +  state.data.pageoffset + " tittle=" + state.title  + " Url=" + state.url);
     }
     else{
-        window.location.hash = window.location.hash + OFFSET_PREFIX + newPageOffset;
+        window.console.log(message + "- State -> NULL");
     }
 }
 
 $(document).ready(function () {
-    // Listens to the hashchange event and opens the tab when changed
-    $(window).bind('hashchange', function(){
-        activateHashedTab();
-    });
+//    History.options.debug = true;
 
-    // Activate tab if hash is present otherwise set the right hash for the active tab
-    if(window.location.hash){
-        activateHashedTab();
+    var initialState = History.getState();
+
+    //  Set the value in search box
+    if(initialState.data.search){
+        $('#searchString').attr('value', initialState.data.search);
+    }
+    var searchString = $("#searchString").val();
+
+    if(initialState.data.search && initialState.data.tab){
+        $('#resultTabUL').find('a[href="#' + initialState.data.tab + '"]').tab('show');
     }
     else{
-        window.location.hash = $('#resultTabUL li[class="active"] a[data-toggle="tab"]').attr('href');
+        var activeTab = $('#resultTabUL li[class="active"] a[data-toggle="tab"]').attr('href').replace("#", "");
+        History.replaceState({search: searchString, tab: activeTab}, "Search Results - " + activeTab, "?tab=" + activeTab);
     }
 
-    // This show event fires before the new tab has been shown and adds the anchor to the window.location.hash
+    // Bind to State Change
+    History.Adapter.bind(window,'statechange',function(){
+        var state = History.getState(); // Note: We are using History.getState() instead of event.state
+        var currentIndex = History.getCurrentIndex();
+        var previousState = History.getStateByIndex(currentIndex - 1);
+
+        $('#searchString').attr('value', state.data.search);
+        $('#resultTabUL').find('a[href="#' + state.data.tab + '"]').tab('show');
+
+        if(previousState.data.search != state.data.search){
+            if(state.data.submitfrom != "form"){
+                handleMainFormSubmit(state.data.search, state.data.tab, state.data.pageoffset);
+            }
+            else{
+                History.replaceState({search: state.data.search, tab: state.data.tab, pageoffset: state.data.pageoffset}, "Search Results - " + state.data.tab, "?tab=" + state.data.tab + (state.data.pageoffset ? "&offset=" + state.data.pageoffset : ""));
+            }
+        }
+        else{
+            if(state.data.pageoffset){
+                handlePaging(state.data.pageurl);
+            }
+        }
+    });
+
+    // This event is fired when a tab is clicked
     $('#resultTabUL a[data-toggle="tab"]').on('show', function(event){
-        window.location.hash = $(this).attr('href');
+        var searchString = $("#searchString").val();
+        var activeTab = $(this).attr('href').replace("#", "");
+        History.pushState({search: searchString, tab: activeTab}, "Search Results - " + activeTab, "?tab=" + activeTab);
     })
 
     //set up main form submission
     $('#searchForm').submit(function (event) {
         event.preventDefault();	// prevent the default action behaviour to happen
         var searchString = $("#searchString").val();
-        var oldSearchString =  window.location.search;
-        var hashedTab = getHashedTabAnchor();
-        var hashedPageOffset = getHashedPageOffset();
-        if(oldSearchString){
-            var decodedOldSearchString =  decodeURIComponent(oldSearchString.replace("?searchString=", ""));
-            if(decodedOldSearchString != searchString){
-                window.location.hash = $('#resultTabUL li[class="active"] a[data-toggle="tab"]').attr('href');
-                window.location.search = "?searchString=" + encodeURIComponent(searchString);
-                handleMainFormSubmit(searchString, hashedTab, null);
-            }
-            else{
-                handleMainFormSubmit(searchString, hashedTab, hashedPageOffset);
-            }
+        var state = History.getState();
+        if(searchString == state.data.search){
+            handleMainFormSubmit(searchString, state.data.tab, state.data.pageoffset);
         }
         else{
-            handleMainFormSubmit(searchString, hashedTab, hashedPageOffset);
+            handleMainFormSubmit(searchString, state.data.tab, null);
+            History.pushState({search: searchString, tab: state.data.tab, submitfrom: "form"}, "Search Results - " + state.data.tab, "?tab=" + state.data.tab);
         }
         return false; //do not submit form the normal way, use Ajax instead
 
@@ -159,10 +141,10 @@ $(document).ready(function () {
     $(document).on("click", "a.step,li.next a,li.prev a", function (event) {
         event.preventDefault();	// prevent the default action behaviour to happen
         var url = $(this).attr('href');
-
-        setHashOnPageClicked(url);
-
+        var newPageOffset = getParam ( url, 'offset');
+        var state = History.getState();
         handlePaging(url);
+        History.pushState({search: state.data.search, tab: state.data.tab, pageoffset: newPageOffset, pageurl: url}, "Search Results - " + state.data.tab, "?tab=" + state.data.tab + "&offset=" + newPageOffset);
     });
 
     // If there's a string in the search box, then submit it (used for redirect from home page)
@@ -381,7 +363,6 @@ function showTab(tabId) {
  * @param searchString  - The string entered into the main form's search box
  */
 function handleMainFormSubmit(searchString, activeTab, pageOffset) {
-
     var searchType = findSearchType(searchString);
     var offsetParam = pageOffset ? "?offset=" + pageOffset : "";
     switch (searchType.toUpperCase()) {
@@ -434,17 +415,17 @@ function handleMainFormSubmit(searchString, activeTab, pageOffset) {
 function handleAllFreeTextSearches(activeTab, pageOffset) {
     if(activeTab && pageOffset){
         switch (activeTab) {
-            case '#assays':
+            case 'assays':
                 handleSearch('/BARD/bardWebInterface/searchAssays?offset=' + pageOffset, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
                 handleSearch('/BARD/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
                 handleSearch('/BARD/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
                 break;
-            case '#compounds':
+            case 'compounds':
                 handleSearch('/BARD/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
                 handleSearch('/BARD/bardWebInterface/searchCompounds?offset=' + pageOffset, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
                 handleSearch('/BARD/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
                 break;
-            case '#projects':
+            case 'projects':
                 handleSearch('/BARD/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
                 handleSearch('/BARD/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
                 handleSearch('/BARD/bardWebInterface/searchProjects?offset=' + pageOffset, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
@@ -464,17 +445,17 @@ function handleAllFreeTextSearches(activeTab, pageOffset) {
 function handleAllIdSearches(activeTab, pageOffset) {
     if(activeTab && pageOffset){
         switch (activeTab) {
-            case '#assays':
+            case 'assays':
                 handleSearch('/BARD/bardWebInterface/searchAssaysByIDs?offset=' + pageOffset, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
                 handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
                 handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
                 break;
-            case '#compounds':
+            case 'compounds':
                 handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
                 handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs?offset=' + pageOffset, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
                 handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
                 break;
-            case '#projects':
+            case 'projects':
                 handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
                 handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
                 handleSearch('/BARD/bardWebInterface/searchProjectsByIDs?offset=' + pageOffset, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');

@@ -157,7 +157,7 @@ class BardWebInterfaceController {
             String server = request.requestURL - request.requestURI
             String contextPath = request.contextPath
             String base = "${server}${contextPath}" //e.g., 'http://localhost:8080/bardwebclient'
-            redirect(base: base, action: 'searchResults', params: [searchString: params.searchString])
+            redirect(base: base, action: 'searchResults')
         }
     }
 

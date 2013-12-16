@@ -3,7 +3,7 @@
 <head>
     <meta name="layout" content="basic"/>
     <title>Search</title>
-    <r:require modules="search,promiscuity,compoundOptions,addAllItemsToCarts"/>
+    <r:require modules="historyJsHtml5,search,promiscuity,compoundOptions,addAllItemsToCarts"/>
 </head>
 
 <body>
@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <r:require modules="search,promiscuity"/>
+    <r:require modules="historyJsHtml5,search,promiscuity"/>
 
 </div>
 </body>
