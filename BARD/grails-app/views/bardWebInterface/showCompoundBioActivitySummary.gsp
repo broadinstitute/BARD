@@ -30,45 +30,49 @@
 </head>
 
 <body>
+<g:set var="hasData"
+       value="${(tableModel?.data || tableModel?.additionalProperties?.'experimentWithSinglePointDataOnly') as java.lang.Boolean}"/>
 
 <div class="row-fluid">
-    <g:if test="${tableModel?.data || tableModel?.additionalProperties?.'experimentWithSinglePointDataOnly'}">
-        <div class="row-fluid">
-            <div class="span12">
+    <div class="row-fluid">
+        <div class="span12">
+            <g:if test="${hasData}">
                 <g:sunburstSection compoundSummary="${tableModel?.additionalProperties?.compoundSummary}"/>
+            </g:if>
 
-                <h2>Compound Bio Activity Summary <small>(cid: ${tableModel?.additionalProperties?.id})</small>
-                    <g:set var="smiles" value="${tableModel?.additionalProperties?.smiles}"/>
-                    <g:if test="${smiles}">
-                        <img alt="${smiles}"
-                             src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: smiles, width: 300, height: 200])}"
-                             style="min-width: ${200}px; min-height: ${133}px"/>
-                    </g:if>
-                </h2>
+            <h2>Compound Bio Activity Summary <small>(cid: ${tableModel?.additionalProperties?.id})</small>
+                <g:set var="smiles" value="${tableModel?.additionalProperties?.smiles}"/>
+                <g:if test="${smiles}">
+                    <img alt="${smiles}"
+                         src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: smiles, width: 300, height: 200])}"
+                         style="min-width: ${200}px; min-height: ${133}px"/>
+                </g:if>
+            </h2>
 
-                <g:form action="showCompoundBioActivitySummary" id="${params.id}"
-                        class="showCompoundBioActivitySummaryForm">
-                    <g:hiddenField name="compoundId" id='compoundId' value="${params?.id}"/>
-                    <div style="text-align: left; vertical-align: middle;">
-                        <label for="groupByTypeSelect"
-                               style="display: inline; vertical-align: middle;">Group-by:</label>
-                        <g:select id="groupByTypeSelect" name="groupByType"
-                                  from="${[GroupByTypes.ASSAY, GroupByTypes.PROJECT]}" value="${resourceType}"
-                                  style="display: inline; vertical-align: middle;"/>
-                        <g:submitButton class="btn btn-primary" name="groupByTypeButton" value="Group"
-                                        style="display: inline; vertical-align: middle;"/>
-                    </div>
-                </g:form>
-            </div>
+            <g:form action="showCompoundBioActivitySummary" id="${params.id}"
+                    class="showCompoundBioActivitySummaryForm">
+                <g:hiddenField name="compoundId" id='compoundId' value="${params?.id}"/>
+                <div style="text-align: left; vertical-align: middle;">
+                    <label for="groupByTypeSelect"
+                           style="display: inline; vertical-align: middle;">Group-by:</label>
+                    <g:select id="groupByTypeSelect" name="groupByType"
+                              from="${[GroupByTypes.ASSAY, GroupByTypes.PROJECT]}" value="${resourceType}"
+                              style="display: inline; vertical-align: middle;"/>
+                    <g:submitButton class="btn btn-primary" name="groupByTypeButton" value="Group"
+                                    style="display: inline; vertical-align: middle;"/>
+                </div>
+            </g:form>
         </div>
+    </div>
 
-        <div class="row-fluid">
-            <g:render template="facets"
-                      model="['facets': facets, 'formName': FacetFormType.CompoundBioActivitySummaryForm]"/>
-            <g:hiddenField name="compoundId" id='compoundId' value="${params?.id}"/>
+    <div class="row-fluid">
+        <g:render template="facets"
+                  model="['facets': facets, 'formName': FacetFormType.CompoundBioActivitySummaryForm]"/>
+        <g:hiddenField name="compoundId" id='compoundId' value="${params?.id}"/>
 
 
-            <div class="span9">
+        <div class="span9">
+            <g:if test="${hasData}">
                 <div>
                     <g:if test="${tableModel.additionalProperties.activityOutcome == ActivityOutcome.ACTIVE}">
                         <p class="text-info"><i
@@ -107,14 +111,14 @@
                                   model="[tableModel: tableModel, landscapeLayout: false, innerBorder: true]"/>
                     </div>
                 </g:if>
-            </div>
+            </g:if>
+            <g:else>
+                <p class="text-info"><i
+                        class="icon-warning-sign"></i>Either none of the assays that tested this compound demonstrated any activity or all results have been filtered from display
+                </p>
+            </g:else>
         </div>
-    </g:if>
-    <g:else>
-        <p class="text-info"><i
-                class="icon-warning-sign"></i> None of the assays that tested this compound demonstrated any activity ${tableModel?.additionalProperties?.id}
-        </p>
-    </g:else>
+    </div>
 </div>
 </body>
 </html>
