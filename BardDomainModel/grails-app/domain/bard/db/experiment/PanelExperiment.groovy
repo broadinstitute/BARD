@@ -24,6 +24,8 @@ class PanelExperiment {
     // grails auto-timestamp
     Date lastUpdated = new Date()
 
+    String modifiedBy
+
     static mapping = {
         id(column: 'PANEL_EXPRMT_ID', generator: 'sequence', params: [sequence: 'PANEL_EXPRMT_ID_SEQ'])
     }
