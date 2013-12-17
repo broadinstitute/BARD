@@ -78,9 +78,14 @@ public class CommonFunctionalPage extends Page {
 	void waitForPageToLoad() {
 		waitFor(15, 0.5) { title.contains("BARD: Catalog of Assay Protocols") }
 	}
+<<<<<<< HEAD
 	
 	void waitForPageLoad() {
 		waitFor(35000,0.5) { title.contains("EID "+TestData.experimentId) }
 		println "this is waiting for page to load"
+=======
+	void waitForPageLoad() {
+		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { title.contains("EID "+TestData.experimentId) }
+>>>>>>> branch 'functionaltests' of https://github.com/broadinstitute/BARD.git
 	}
 }

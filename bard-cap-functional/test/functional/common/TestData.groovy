@@ -75,6 +75,7 @@ class TestData {
 	]
 
 	final static Map resultType = [
+<<<<<<< HEAD
 		parent:[
 			resultType:'PubChem activity score',
 			statsModifier:'geometric mean'
@@ -99,6 +100,10 @@ class TestData {
 			responseResultType:'percent activity',
 			statsModifier:'maximum'
 		]
+=======
+		resultTypeId:'PubChem activity score',
+		statsModifierId:'geometric mean'
+>>>>>>> branch 'functionaltests' of https://github.com/broadinstitute/BARD.git
 	]
 	final static def assaysToPanel = [8129, 1315]
 
