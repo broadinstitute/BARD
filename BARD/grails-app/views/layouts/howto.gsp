@@ -10,12 +10,21 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
     <link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
           rel='stylesheet' type='text/css'>
+    <r:script disposition='head'>
+        window.bardAppContext = "${request.contextPath}";
+    </r:script>
     <r:require modules="bardHomepage,idSearch,jquerynotifier,downtime,autocomplete"/>
     <!--[if lt IE 9]><link rel="stylesheet" href="${resource(dir:'css/bardHomepage', file: 'ieBardHomepage.css')}" media="screen" /><![endif]-->
     <!--[if IE]><script src="${resource(dir: 'js/bardHomepage', file: 'ie.js')}" /></script><![endif]-->
 
     <g:layoutHead/>
 
+    <noscript>
+        <a href="http://www.enable-javascript.com/" target="javascript">
+            <img src="${resource(dir: 'images', file: 'enable_js.png')}"
+                 alt="Please enable JavaScript to access the full functionality of this site."/>
+        </a>
+    </noscript>
     <r:layoutResources/>
 
     <style type="text/css">
@@ -47,12 +56,6 @@
 </head>
 
 <body>
-<noscript>
-    <a href="http://www.enable-javascript.com/" target="javascript">
-        <img src="${resource(dir: 'images', file: 'enable_js.png')}"
-             alt="Please enable JavaScript to access the full functionality of this site."/>
-    </a>
-</noscript>
 
 <div id="wrapper">
     %{--The control area at the top of the page is all contained within this header--}%
@@ -62,29 +65,32 @@
                 <div class="span3">
                     <g:render template="/layouts/templates/downtime"/>
                 </div>
+            </div>
 
-                <div class="row-fluid">
-                    <div class="span6">
-                        <strong class="logo"><a href="${request.contextPath}">BARD BioAssay Research Database</a></strong>
-                    </div>
+            <div class="row-fluid">
+                <div class="span3" style="min-width: 210px; min-height: 70px;">
+                    <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
+                </div>
 
-                    <div class="span6">
-                        <div class="row-fluid">
-                            <div class="center-aligned span6">
-                                <g:render template="/layouts/templates/socialMedia"/>
-                            </div>
-
-                            <div class="right-aligned span6">
-                                <g:render template="/layouts/templates/loginStrip"/>
-                            </div>
+                <div class="span9">
+                    <div class="row-fluid">
+                        <div class="center-aligned span6">
+                            <g:render template="/layouts/templates/socialMedia"/>
                         </div>
 
-                        <div class="row-fluid">
-                            <nav class="nav-panel span12 right-aligned">
+                        <div class="right-aligned span6">
+                            <g:render template="/layouts/templates/loginStrip"/>
+                        </div>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <nav class="nav-panel right-aligned">
                                 <ul class="nav">
                                     <g:render template="/layouts/templates/howtolinks"/>
                                     <sec:ifLoggedIn>
-                                        <li><a href="${request.contextPath}/bardWebInterface/navigationPage">My BARD</a></li>
+                                        <li><g:link controller="bardWebInterface"
+                                                    action="navigationPage">My BARD</g:link></li>
                                     </sec:ifLoggedIn>
                                 </ul>
                                 <g:if test="${false}">
@@ -95,12 +101,11 @@
                                 </g:if>
                             </nav>
                         </div>
-
                     </div>
                 </div>
             </div>
+        </div>
     </header>
-
 
     %{--Enhanced data and advanced tools block--}%
     %{--<article class="hero-block">--}%
