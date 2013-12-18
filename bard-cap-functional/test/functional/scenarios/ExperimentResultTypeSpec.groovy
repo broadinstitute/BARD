@@ -1,7 +1,7 @@
 package scenarios
 
 import pages.HomePage
-<<<<<<< HEAD
+//<<<<<<< HEAD
 import pages.ResultTypePage
 import pages.ViewExperimentPage
 import spock.lang.Unroll;
@@ -37,7 +37,6 @@ class ExperimentResultTypeSpec extends BardFunctionalSpec {
 		and:"Cleanup result types before adding new one"
 		while(isResultType(resultType)){
 			deleteSpecificResultType(resultType)
-//			to ViewExperimentPage
 		}
 		and:"Navigate to Add Result Type Page"
 		if(TestName=="ResultType"){
@@ -53,7 +52,6 @@ class ExperimentResultTypeSpec extends BardFunctionalSpec {
 		}else if(TestName=="DoseResultType"){
 			addDoseResultType(inputData)
 		}
-//		addResultType(TestData.resultType.parent)
 
 		then:"At view experiment page, Verify result type is added"
 		at ViewExperimentPage
@@ -69,7 +67,6 @@ class ExperimentResultTypeSpec extends BardFunctionalSpec {
 		and:"Cleanup the added result types"
 		while(isResultType(resultType)){
 			deleteSpecificResultType(resultType)
-//			to ViewExperimentPage
 		}
 		and:"User is at show experiment page"
 		at ViewExperimentPage
@@ -99,7 +96,6 @@ class ExperimentResultTypeSpec extends BardFunctionalSpec {
 		and:"Cleanup result types before adding new one"
 		while(isResultType(resultType)){
 			deleteSpecificResultType(resultType)
-//			to ViewExperimentPage
 		}
 		and:"Add new result type before editing"
 		if(TestName=="ResultType"){
@@ -115,7 +111,6 @@ class ExperimentResultTypeSpec extends BardFunctionalSpec {
 		}else if(TestName=="DoseResultType"){
 			addDoseResultType(inputData)
 		}
-//		addResultType(TestData.resultType.parent)
 
 		and:"Verify result type is added"
 		at ViewExperimentPage
@@ -142,7 +137,6 @@ class ExperimentResultTypeSpec extends BardFunctionalSpec {
 		and:"Cleanup the added result types"
 		while(isResultType(editData.resultType)){
 			deleteSpecificResultType(editData.resultType)
-//			to ViewExperimentPage
 		}
 
 		and:"User is at show experiment page"
@@ -155,7 +149,7 @@ class ExperimentResultTypeSpec extends BardFunctionalSpec {
 		"ResultType"		| TestData.resultType.parent	| TestData.resultType.editParent | TestData.resultType.parent.resultType
 		"DoseResultType"	| TestData.resultType.dose		| TestData.resultType.editParent | TestData.resultType.dose.doseResultType
 	}
-/*
+
 	def "Test Add Child Result Type in an Experiment"() {
 		given:"Navigating to Show Experiment page"
 		to ViewExperimentPage
@@ -170,10 +164,8 @@ class ExperimentResultTypeSpec extends BardFunctionalSpec {
 		assert uiResultTypes.sort() == dbResultTypes.sort()
 
 		and:"Cleanup result types before adding new one"
-		while(isAnyResultType()){
-			deleteResultTypes()
-			//			waitForPageLoad()
-			to ViewExperimentPage
+		while(isResultType(TestData.resultType.parent.resultType)){
+			deleteSpecificResultType(TestData.resultType.parent.resultType)
 		}
 		and:"Add new result type before editing"
 		navigateToResultTypePage()
@@ -184,7 +176,7 @@ class ExperimentResultTypeSpec extends BardFunctionalSpec {
 
 		and:"Verify result type is added"
 		at ViewExperimentPage
-		assert isResultType(TestData.resultType.parent)
+		assert isResultType(TestData.resultType.parent.resultType)
 
 		when:"At view experiment page, add child result type"
 		at ViewExperimentPage
@@ -196,7 +188,7 @@ class ExperimentResultTypeSpec extends BardFunctionalSpec {
 
 		and:"Verify result type is edited"
 		at ViewExperimentPage
-		assert isResultType(TestData.resultType.child)
+		assert isResultType(TestData.resultType.child.resultType)
 		def uiResultTypeEdited = getUIRsultTypes()
 		def dbResultTypeEdited = Experiment.getExperimentResultType(TestData.experimentId)
 
@@ -205,9 +197,8 @@ class ExperimentResultTypeSpec extends BardFunctionalSpec {
 		assert uiResultTypeEdited.sort() == dbResultTypeEdited.sort()
 
 		and:"Cleanup the added result types"
-		while(isAnyResultType()){
-			deleteResultTypes()
-			to ViewExperimentPage
+		while(isResultType(TestData.resultType.child.resultType)){
+			deleteSpecificResultType(TestData.resultType.child.resultType)
 		}
 
 		and:"User is at show experiment page"
@@ -215,68 +206,4 @@ class ExperimentResultTypeSpec extends BardFunctionalSpec {
 
 		report ""
 	}
-*/
-=======
-import pages.ResultTypePage;
-import pages.ViewExperimentPage
-import base.BardFunctionalSpec
-import common.Constants
-import common.TestData
-import db.Experiment
-
-/**
- * This class includes all the possible test functions for result types of experiment.
- * @author Muhammad.Rafique
- * Date Created: 2013/11/28
- */
-class ExperimentResultTypeSpec extends BardFunctionalSpec {
-
-	def setup() {
-		logInSomeUser()
-	}
-
-	def "Test Add Result Type and then delete from Experiment"() {
-		given:"Navigating to Show Experiment page"
-		to ViewExperimentPage
-
-		when:"User is at View Experiment Page, Fetch Summary info on UI and DB for validation"
-		at ViewExperimentPage
-		def uiResultTypes = getUIRsultTypes()
-		def dbResultTypes = Experiment.getExperimentResultType(TestData.experimentId)
-		
-		then:"Validate UI result types with database result types"
-		assert uiResultTypes.size() == dbResultTypes.size()
-		assert uiResultTypes.sort() == dbResultTypes.sort()
-		
-		and:"Cleanup result types before adding new one"
-		while(isAnyResultType()){
-			deleteResultTypes()
-		}
-		and:"Navigate to Add Result Type Page"
-		navigateToResultTypePage()
-		
-		when:"At Add Result Type page, Add new result type"
-		at ResultTypePage
-		addResultType(TestData.resultType)
-		
-		then:"At view experiment page, Verify result type is added"
-		at ViewExperimentPage
-		assert isResultType(TestData.resultType)
-		
-		def uiResultTypeAdded = getUIRsultTypes()
-		def dbResultTypeAdded = Experiment.getExperimentResultType(TestData.experimentId)
-		
-		then:"Validate UI result types with database result types"
-		assert uiResultTypeAdded.size() == dbResultTypeAdded.size()
-		assert uiResultTypeAdded.sort() == dbResultTypeAdded.sort()
-		
-		and:"Cleanup the added result types"
-		while(isAnyResultType()){
-			deleteResultTypes()
-		}
-
-		report ""
-	}
->>>>>>> branch 'functionaltests' of https://github.com/broadinstitute/BARD.git
-
 }

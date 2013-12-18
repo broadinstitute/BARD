@@ -25,17 +25,7 @@ public class CommonFunctionalPage extends Page {
 		formLoading { module LoadingModule }
 		navigationMenu { module BardCapHeaderModule, $("ul.nav") }
 	}
-/*
-	boolean isAutocompleteListOk(element, condition){
-		if(element){
-			element.each { elementValue ->
-				if(elementValue.text()){
-					assert elementValue.text().toUpperCase().contains(condition.toUpperCase())
-				}
-			}
-		}
-	}
-*/
+
 	boolean validationError(def element, def condition){
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element }
 		if(element){
@@ -77,15 +67,5 @@ public class CommonFunctionalPage extends Page {
 	}
 	void waitForPageToLoad() {
 		waitFor(15, 0.5) { title.contains("BARD: Catalog of Assay Protocols") }
-	}
-<<<<<<< HEAD
-	
-	void waitForPageLoad() {
-		waitFor(35000,0.5) { title.contains("EID "+TestData.experimentId) }
-		println "this is waiting for page to load"
-=======
-	void waitForPageLoad() {
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { title.contains("EID "+TestData.experimentId) }
->>>>>>> branch 'functionaltests' of https://github.com/broadinstitute/BARD.git
 	}
 }
