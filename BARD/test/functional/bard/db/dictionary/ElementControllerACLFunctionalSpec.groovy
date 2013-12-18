@@ -133,6 +133,20 @@ class ElementControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "ADMIN"   | ADMIN_USERNAME   | ADMIN_PASSWORD   | HttpServletResponse.SC_OK
     }
 
+    def 'test editHierarchyPath #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "editHierarchyPath", team, teamPassword)
+
+        when:
+        final Response response = client.get()
+        then:
+        assert response.statusCode == expectedHttpResponse
+        where:
+        desc      | team             | teamPassword     | expectedHttpResponse
+        "CURATOR" | CURATOR_USERNAME | CURATOR_PASSWORD | HttpServletResponse.SC_OK
+        "ADMIN"   | ADMIN_USERNAME   | ADMIN_PASSWORD   | HttpServletResponse.SC_OK
+    }
+
     def 'test update #desc - forbidden'() {
         given:
         RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
@@ -169,9 +183,42 @@ class ElementControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "ADMIN"   | ADMIN_USERNAME   | ADMIN_PASSWORD   | HttpServletResponse.SC_FOUND
     }
 
+    def 'test updateHierarchyPath #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "updateHierarchyPath", team, teamPassword)
+        String newPathString = "a/b/c"
+        when:
+        final Response response = client.post() {
+            urlenc elementHierarchyIdList: "0", elementId: "0", newPathString: newPathString
+        }
+        then:
+        assert response.statusCode == expectedHttpResponse
+        where:
+        desc      | team             | teamPassword     | expectedHttpResponse
+        "CURATOR" | CURATOR_USERNAME | CURATOR_PASSWORD | HttpServletResponse.SC_OK
+        "ADMIN"   | ADMIN_USERNAME   | ADMIN_PASSWORD   | HttpServletResponse.SC_OK
+    }
+
     def 'test list #desc'() {
         given:
         RESTClient client = getRestClient(controllerUrl, "list", team, teamPassword)
+
+        when:
+        final Response response = client.get()
+        then:
+        assert response.statusCode == expectedHttpResponse
+        where:
+        desc       | team              | teamPassword      | expectedHttpResponse
+        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
+        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
+        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
+        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
+        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
+    }
+
+    def 'test listAjax #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "listAjax", team, teamPassword)
 
         when:
         final Response response = client.get()
