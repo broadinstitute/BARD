@@ -14,7 +14,7 @@ import uk.ac.ebi.ontocat.OntologyService.SearchOptions;
 import uk.ac.ebi.ontocat.OntologyTerm;
 import uk.ac.ebi.ontocat.file.FileOntologyService;
 
-public class ExternalOntologyDisease extends ExternalOntologyAPI {
+public class ExternalOntologyDisease extends AbstractExternalOntology {
 
 	public static class DiseaseCreator implements ExternalOntologyCreator {
 		@Override
@@ -57,7 +57,7 @@ public class ExternalOntologyDisease extends ExternalOntologyAPI {
 			OntologyTerm term = service.getTerm(id);
 			if( term == null )
 				return null;
-			return new ExternalItem(term.getAccession(), term.getLabel());
+			return new ExternalItemImpl(term.getAccession(), term.getLabel());
 		} catch (Exception ex) {
 			throw new ExternalOntologyException(ex);
 		}
@@ -71,7 +71,7 @@ public class ExternalOntologyDisease extends ExternalOntologyAPI {
 			List<OntologyTerm> terms = service.searchAll(name, SearchOptions.EXACT);
 			if( terms == null || terms.size() != 1)
 				return null;
-			return new ExternalItem(terms.get(0).getAccession(), terms.get(0).getLabel());
+			return new ExternalItemImpl(terms.get(0).getAccession(), terms.get(0).getLabel());
 		} catch (Exception ex) {
 			throw new ExternalOntologyException(ex);
 		}
@@ -87,7 +87,7 @@ public class ExternalOntologyDisease extends ExternalOntologyAPI {
 			List<ExternalItem> items = new ArrayList<ExternalItem>(terms.size());
 			for(OntologyTerm oterm: terms) {
 				if( oterm.getLabel().toLowerCase().contains(term) )
-					items.add( new ExternalItem(oterm.getAccession(), oterm.getLabel()) );
+					items.add( new ExternalItemImpl(oterm.getAccession(), oterm.getLabel()) );
 			}
 			return items;
 		} catch (Exception ex) {
@@ -99,7 +99,7 @@ public class ExternalOntologyDisease extends ExternalOntologyAPI {
 		List<ExternalItem> items = new ArrayList<ExternalItem>(map.size());
 		int count = 0;
 		for (Map.Entry<String, String> entry : map.entrySet()) {
-			ExternalItem item = new ExternalItem(entry.getKey(), entry.getValue());
+			ExternalItem item = new ExternalItemImpl(entry.getKey(), entry.getValue());
 			items.add(item);
 			if (limit > 0 && ++count >= limit)
 				break;

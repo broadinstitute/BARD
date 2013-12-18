@@ -34,7 +34,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import edu.scripps.fl.entrez.internal.HttpClientBaseSingleton;
 
-public class ExternalOntologyATCC extends ExternalOntologyAPI {
+public class ExternalOntologyATCC extends AbstractExternalOntology {
 
 	public static class ATCCCreator implements ExternalOntologyCreator {
 		@Override
@@ -86,7 +86,7 @@ public class ExternalOntologyATCC extends ExternalOntologyAPI {
 				Matcher matcher = pattern.matcher(href);
 				if (matcher.find()) {
 					String id = matcher.group(1);
-					item = new ExternalItem(id, "");
+					item = new ExternalItemImpl(id, "");
 					displayTag = new StringBuilder();
 				}
 			}
@@ -211,7 +211,7 @@ public class ExternalOntologyATCC extends ExternalOntologyAPI {
 			if (handler.isNotFound())
 				return null;
 			else
-				return new ExternalItem(id, handler.getDisplay());
+				return new ExternalItemImpl(id, handler.getDisplay());
 		} catch (Exception ex) {
 			throw new ExternalOntologyException(ex);
 		}

@@ -20,7 +20,7 @@ import bard.validation.ext.util.DBUtil;
  * @author southern
  * 
  */
-public class ExternalOntologyGOGeneProduct extends ExternalOntologyAPI {
+public class ExternalOntologyGOGeneProduct extends AbstractExternalOntology {
 
 	public static class GOCreator implements ExternalOntologyCreator {
 		private DataSource dataSource;

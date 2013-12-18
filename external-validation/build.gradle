@@ -1,50 +1,45 @@
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'idea'
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'idea'
 
-repositories {
-    maven {
-        url(mavenRepoUrl)
-    }
-}
-
-group='bard'
-version = '20131218'
-sourceCompatibility = 1.7
-
-
-dependencies {
-    compile "org.slf4j:slf4j-api:1.5.6"
-    compile "commons-collections:commons-collections:3.2.1"
-    compile "commons-lang:commons-lang:2.6"
-    compile "edu.scripps:eutils-java:20130520"
-    compile "mysql:mysql-connector-java:5.1.17"
-    compile "com.jolbox:bonecp:0.8.0-rc1"
-    compile "uk.ac.ebi.uniprot.kraken:uniprotjapi:2013.12"
-    compile "uk.ac.ebi.ols:ols-client:1.18"
-    compile "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
-    compile "ontocat:ontocat:0.9.9.1"
-    compile "owlapi:owlapi:3.2.2"
-
-    runtime "org.slf4j:slf4j-log4j12:1.5.6"
-    runtime "log4j:log4j:1.2.9"
-    testCompile "junit:junit:4.11"
-}
-
-
-task sourcesJar(type: Jar) {
-    classifier 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives sourcesJar
-}
-
-uploadArchives {
-    repositories.mavenDeployer {
-        repository(url: mavenRepoDeployerReleasesUrl) {
-            authentication(userName: mavenRepoUsername, password: mavenRepoPassword)
+    repositories {
+        maven {
+            url(mavenRepoUrl)
         }
     }
+
+    group='bard'
+    archivesBaseName="${getRootProject().name}-${name}"
+    version = '20131218'
+    sourceCompatibility = 1.7
+
+    dependencies {
+        // any common dependencies
+    }
+
+    task sourcesJar(type: Jar) {
+        classifier 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives sourcesJar
+    }
+
+    uploadArchives {
+        repositories.mavenDeployer {
+            repository(url: mavenRepoDeployerReleasesUrl) {
+                authentication(userName: mavenRepoUsername, password: mavenRepoPassword)
+            }
+        }
+    }
+
+    test {
+        maxHeapSize = "512m"
+    }
 }
+
+
+
+

@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 import bard.util.SQLUtil;
 import bard.validation.ext.ExternalItem;
+import bard.validation.ext.ExternalItemImpl;
 import bard.validation.ext.ExternalOntologyException;
 
 public class DBUtil {
@@ -40,7 +41,7 @@ public class DBUtil {
 		List<ExternalItem> items = limit > 0 ? new ArrayList<ExternalItem>(limit) : new ArrayList<ExternalItem>();
 		int counter = 0;
 		while (rs.next()) {
-			ExternalItem item = new ExternalItem(rs.getString(1), rs.getString(2));
+			ExternalItem item = new ExternalItemImpl(rs.getString(1), rs.getString(2));
 			items.add(item);
 			if (limit > 0 & counter++ >= limit)
 				break;
