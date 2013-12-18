@@ -81,8 +81,9 @@ function inspect(s) {
 function nodeToDotDescription(node) {
     var keyValues = node.keyValues;
     var text;
-    if(keyValues.type == "single"){
-        text = node.id + "[style=\"bold,filled\",color=\""+getColorForNode(keyValues)+"\",label=\"" + keyValues.eid + "\\n " + keyValues.stage + "\"" + "];";
+    if(keyValues.type == "single") {
+        var stageText = (keyValues.stage) ? ("\\n " + keyValues.stage) : ""
+        text = node.id + "[style=\"bold,filled\",color=\""+getColorForNode(keyValues)+"\",label=\"" + keyValues.eid + stageText + "\"" + "];";
     } else {
         text = node.id + "[style=\"bold,filled\",color=\""+getColorForNode(keyValues)+"\",label=\"Panel of "+keyValues.eids.length + " experiments\\n" + keyValues.stage + "\"" + "];";
     }
