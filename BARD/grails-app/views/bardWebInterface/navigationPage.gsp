@@ -42,7 +42,7 @@
                                                                    action="list">List Teams</g:link></li>
                                     <li class="controller"><g:link controller="role"
                                                                    action="create">Create new Team</g:link></li>
-                                 </ul>
+                                </ul>
 
                             </li>
                         </sec:ifAnyGranted>
@@ -91,6 +91,16 @@
                                                                action="show">Move Experiments</g:link></li>
                                 <li class="controller"><g:link controller="jobs"
                                                                action="index">My import jobs</g:link></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Elements
+
+                            </a>
+                            <ul>
+                                <li class="controller"><g:link controller="element"
+                                                               action="select">Edit</g:link></li>
                             </ul>
                         </li>
                         <li>
