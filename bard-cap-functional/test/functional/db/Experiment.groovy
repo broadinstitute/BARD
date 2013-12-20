@@ -64,15 +64,15 @@ class Experiment extends DatabaseConnectivity {
 		return resultTypeList
 	}
 	/**
-	 * @param projectId
+	 * this method fetched the documents name and context for specific document type.
+	 * @param experimentId
 	 * @param documentType
 	 * @return documents list associated with specific document type
 	 */
-	public static def getProjectDocuments(def projectId, def documentType) {
-		//def documentMap = [:]
+	public static def getExperimentDocuments(def experimentId, def documentType) {
 		def documentList = []
 		def sql = getSql()
-		sql.eachRow(ProjectQueries.PROJECT_DOCUMENT, [projectId, documentType]) { row ->
+		sql.eachRow(ExperimentQueries.EXPERIMENT_DOCUMENT, [experimentId, documentType]) { row ->
 			documentList.add(row.Name.trim())
 			//documentList.add(documentMap)
 		}

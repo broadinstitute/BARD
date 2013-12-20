@@ -2,45 +2,41 @@ package scenarios
 
 import pages.DocumentPage
 import pages.HomePage
-import pages.ViewProjectDefinitionPage
+import pages.ViewExperimentPage
 import spock.lang.Unroll
 import base.BardFunctionalSpec
 
 import common.Constants
 import common.TestData
-import common.Constants.DocumentAs
 
-import db.Project
+import db.Experiment
 
 /**
+ * This class includes all the test functions related to experiment document section
  * @author Muhammad.Rafique
- * Date Created: 2013/02/07
+ * Date Created: 2013/12/18
  */
 @Unroll
-class ProjectDocumentSpec extends BardFunctionalSpec {
+class ExperimentDocumentSpec extends BardFunctionalSpec {
 	def setup() {
 		logInSomeUser()
 	}
 
-	def "Test Add #TestName Document in Project"(){
-		given:"Navigate to Show Project page"
-		to ViewProjectDefinitionPage
-
-		when:"At View Project Page, Fetching Document Info from UI and DB for validation"
-		at ViewProjectDefinitionPage
+	def "Test Add #TestName Document in Experiment"(){
+		given:"Navigate to Show Experiment page"
+		to ViewExperimentPage
+		when:"At View Experiment Page, Fetching Document Info from UI and DB for validation"
+		at ViewExperimentPage
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
 			deleteDocument(documentHeaders(docHeader), testData.documentName)
 		}
 		def uiDocumetnsBefore = getUIDucuments(documentHeaders(docHeader))
-		def dbDocumentsBefore = Project.getProjectDocuments(TestData.projectId, docType)
-
+		def dbDocumentsBefore = Experiment.getExperimentDocuments(TestData.experimentId, docType)
 		then:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsBefore.size() == dbDocumentsBefore.size()
 		assert uiDocumetnsBefore.sort() == dbDocumentsBefore.sort()
-
 		and: "Navigating to Create Document Page"
 		navigateToCreateDocument(documentHeaders(docHeader))
-
 		when:"At Create Document Page, Creating Description Document"
 		at DocumentPage
 		if(docType == "publication" || docType == "external url"){
@@ -48,29 +44,23 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		}else{
 			createDocument(testData.documentName, testData.documentContent)
 		}
-
-		then:"At View Project Page, Verify that Document is added"
-		at ViewProjectDefinitionPage
+		then:"At View Experiment Page, Verify that Document is added"
+		at ViewExperimentPage
 		assert isDocument(documentHeaders(docHeader), testData.documentName)
-
 		and:"Fetching Document Info from UI and DB for validation"
 		def uiDocumetnsAfter= getUIDucuments(documentHeaders(docHeader))
-		def dbDocumentsAfter= Project.getProjectDocuments(TestData.projectId, docType)
-
+		def dbDocumentsAfter= Experiment.getExperimentDocuments(TestData.experimentId, docType)
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
 		assert uiDocumetnsAfter.size() > uiDocumetnsBefore.size()
 		assert dbDocumentsAfter.size() > dbDocumentsBefore.size()
-
 		and:"Cleaning up documents"
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
 			deleteDocument(documentHeaders(docHeader), testData.documentName)
-
 			when:"Document is cleaned up, Fetching Document Info from UI and DB for validation"
 			def uiDocumetnsAfterDelete = getUIDucuments(documentHeaders(docHeader))
-			def dbDocumentsAfterDelete = Project.getProjectDocuments(TestData.projectId, docType)
-
+			def dbDocumentsAfterDelete = Experiment.getExperimentDocuments(TestData.experimentId, docType)
 			then:"Verifying Document Info with UI & DB"
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
@@ -78,7 +68,6 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
 		report "$TestName"
-
 		where:
 		TestName		| docHeader								| docType								| testData
 		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
@@ -88,26 +77,22 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		"ExternalUrl"	| Constants.documentHeader.Urls			| Constants.documentType.Urls			| TestData.documents
 		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
 	}
-
-	def "Test Add #TestName Document in Project with empty values"(){
-		given:"Navigate to Show Project page"
-		to ViewProjectDefinitionPage
-
-		when:"At View Project Page, Fetching Document Info from UI and DB for validation"
-		at ViewProjectDefinitionPage
+	
+	def "Test Add #TestName Document in Experiment with empty values"(){
+		given:"Navigate to Show Experiment page"
+		to ViewExperimentPage
+		when:"At View Experiment Page, Fetching Document Info from UI and DB for validation"
+		at ViewExperimentPage
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
 			deleteDocument(documentHeaders(docHeader), testData.documentName)
 		}
 		def uiDocumetnsBefore = getUIDucuments(documentHeaders(docHeader))
-		def dbDocumentsBefore = Project.getProjectDocuments(TestData.projectId, docType)
-
+		def dbDocumentsBefore = Experiment.getExperimentDocuments(TestData.experimentId, docType)
 		then:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsBefore.size() == dbDocumentsBefore.size()
 		assert uiDocumetnsBefore.sort() == dbDocumentsBefore.sort()
-
 		and: "Navigating to Create Document Page"
 		navigateToCreateDocument(documentHeaders(docHeader))
-
 		when:"At Create Document Page, Creating Description Document"
 		at DocumentPage
 		if(docType == "publication" || docType == "external url"){
@@ -115,21 +100,16 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		}else{
 			createDocument("", testData.documentContent)
 		}
-
-		then:"At View Project Page, Verify that Document is added"
-		at ViewProjectDefinitionPage
+		then:"At View Experiment Page, Verify that Document is added"
+		at ViewExperimentPage
 		assert !isDocument(documentHeaders(docHeader), testData.documentName)
-
 		and:"Fetching Document Info from UI and DB for validation"
 		def uiDocumetnsAfter= getUIDucuments(documentHeaders(docHeader))
-		def dbDocumentsAfter= Project.getProjectDocuments(TestData.projectId, docType)
-
+		def dbDocumentsAfter= Experiment.getExperimentDocuments(TestData.experimentId, docType)
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
-
 		report "$TestName"
-
 		where:
 		TestName		| docHeader								| docType								| testData
 		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
@@ -140,17 +120,17 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
 	}
 
-	def "Test Edit #TestName Document in Project"(){
-		given:"Navigate to Show Project page"
-		to ViewProjectDefinitionPage
+	def "Test Edit #TestName Document in Experiment"(){
+		given:"Navigate to Show Experiment page"
+		to ViewExperimentPage
 
-		when:"At View Project Page, Fetching Document Info from UI and DB for validation"
-		at ViewProjectDefinitionPage
+		when:"At View Experiment Page, Fetching Document Info from UI and DB for validation"
+		at ViewExperimentPage
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
 			deleteDocument(documentHeaders(docHeader), testData.documentName)
 		}
 		def uiDocumetnsBefore = getUIDucuments(documentHeaders(docHeader))
-		def dbDocumentsBefore = Project.getProjectDocuments(TestData.projectId, docType)
+		def dbDocumentsBefore = Experiment.getExperimentDocuments(TestData.experimentId, docType)
 
 		then:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsBefore.size() == dbDocumentsBefore.size()
@@ -168,8 +148,8 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 				createDocument(testData.documentName, testData.documentContent)
 			}
 
-			and:"Navigating to View Project Page, and edit document"
-			at ViewProjectDefinitionPage
+			and:"Navigating to View Experiment Page, and edit document"
+			at ViewExperimentPage
 			assert isDocument(documentHeaders(docHeader), testData.documentName)
 			if(docType == "external url"){
 				editDocument(documentHeaders(docHeader), testData.documentName, testData.documentName+Constants.edited)
@@ -186,10 +166,10 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		}
 
 		and:"Fetching Document Info from UI and DB for validation"
-		to ViewProjectDefinitionPage
+		to ViewExperimentPage
 		assert isDocument(documentHeaders(docHeader), testData.documentName+Constants.edited)
 		def uiDocumetnsAfter= getUIDucuments(documentHeaders(docHeader))
-		def dbDocumentsAfter= Project.getProjectDocuments(TestData.projectId, docType)
+		def dbDocumentsAfter= Experiment.getExperimentDocuments(TestData.experimentId, docType)
 
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
@@ -201,7 +181,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 
 			when:"Document is cleaned up, Fetching Document Info from UI and DB for validation"
 			def uiDocumetnsAfterDelete = getUIDucuments(documentHeaders(docHeader))
-			def dbDocumentsAfterDelete = Project.getProjectDocuments(TestData.projectId, docType)
+			def dbDocumentsAfterDelete = Experiment.getExperimentDocuments(TestData.experimentId, docType)
 
 			then:"Verifying Document Info with UI & DB"
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
@@ -219,17 +199,17 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
 	}
 
-	def "Test Edit #TestName Document in Project with empty name value"(){
-		given:"Navigate to Show Project page"
-		to ViewProjectDefinitionPage
+	def "Test Edit #TestName Document in Experiment with empty name value"(){
+		given:"Navigate to Show Experiment page"
+		to ViewExperimentPage
 
-		when:"At View Project Page, Fetching Document Info from UI and DB for validation"
-		at ViewProjectDefinitionPage
+		when:"At View Experiment Page, Fetching Document Info from UI and DB for validation"
+		at ViewExperimentPage
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
 			deleteDocument(documentHeaders(docHeader), testData.documentName)
 		}
 		def uiDocumetnsBefore = getUIDucuments(documentHeaders(docHeader))
-		def dbDocumentsBefore = Project.getProjectDocuments(TestData.projectId, docType)
+		def dbDocumentsBefore = Experiment.getExperimentDocuments(TestData.experimentId, docType)
 
 		then:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsBefore.size() == dbDocumentsBefore.size()
@@ -247,8 +227,8 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 				createDocument(testData.documentName, testData.documentContent)
 			}
 
-			and:"Navigating to View Project Page"
-			at ViewProjectDefinitionPage
+			and:"Navigating to View Experiment Page"
+			at ViewExperimentPage
 			assert isDocument(documentHeaders(docHeader), testData.documentName)
 			if(docType == "external url"){
 				editDocument(documentHeaders(docHeader), testData.documentName, "")
@@ -256,19 +236,19 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 				navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
 				at DocumentPage
 				if(docType == "publication"){
-					createDocument(testData.documentName+Constants.edited, testData.documentUrl, true)
+					createDocument("", testData.documentUrl, true)
 				}else{
-					createDocument(testData.documentName+Constants.edited, testData.documentContent, true)
+					createDocument("", testData.documentContent, true)
 				}
 			}
 
 		}
 
 		and:"Fetching Document Info from UI and DB for validation"
-		at ViewProjectDefinitionPage
+		at ViewExperimentPage
 		assert isDocument(documentHeaders(docHeader), testData.documentName)
 		def uiDocumetnsAfter= getUIDucuments(documentHeaders(docHeader))
-		def dbDocumentsAfter= Project.getProjectDocuments(TestData.projectId, docType)
+		def dbDocumentsAfter= Experiment.getExperimentDocuments(TestData.experimentId, docType)
 
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
@@ -280,7 +260,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 
 			when:"Document is cleaned up, Fetching Document Info from UI and DB for validation"
 			def uiDocumetnsAfterDelete = getUIDucuments(documentHeaders(docHeader))
-			def dbDocumentsAfterDelete = Project.getProjectDocuments(TestData.projectId, docType)
+			def dbDocumentsAfterDelete = Experiment.getExperimentDocuments(TestData.experimentId, docType)
 
 			then:"Verifying Document Info with UI & DB"
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
@@ -300,17 +280,17 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 	}
 
 
-	def "Test Delete #TestName Document in Project"(){
-		given:"Navigate to Show Project page"
-		to ViewProjectDefinitionPage
+	def "Test Delete #TestName Document in Experiment"(){
+		given:"Navigate to Show Experiment page"
+		to ViewExperimentPage
 
-		when:"At View Project Page, Fetching Document Info from UI and DB for validation"
-		at ViewProjectDefinitionPage
+		when:"At View Experiment Page, Fetching Document Info from UI and DB for validation"
+		at ViewExperimentPage
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
 			deleteDocument(documentHeaders(docHeader), testData.documentName)
 		}
 		def uiDocumetnsBefore = getUIDucuments(documentHeaders(docHeader))
-		def dbDocumentsBefore = Project.getProjectDocuments(TestData.projectId, docType)
+		def dbDocumentsBefore = Experiment.getExperimentDocuments(TestData.experimentId, docType)
 
 		then:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsBefore.size() == dbDocumentsBefore.size()
@@ -328,8 +308,8 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 				createDocument(testData.documentName, testData.documentContent)
 			}
 
-			and:"Navigating to View Project Page"
-			at ViewProjectDefinitionPage
+			and:"Navigating to View Experiment Page"
+			at ViewExperimentPage
 			assert isDocument(documentHeaders(docHeader), testData.documentName)
 			deleteDocument(documentHeaders(docHeader), testData.documentName)
 		}else{
@@ -338,7 +318,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 
 		and:"Fetching Document Info from UI and DB for validation"
 		def uiDocumetnsAfter= getUIDucuments(documentHeaders(docHeader))
-		def dbDocumentsAfter= Project.getProjectDocuments(TestData.projectId, docType)
+		def dbDocumentsAfter= Experiment.getExperimentDocuments(TestData.experimentId, docType)
 
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()

@@ -9,7 +9,7 @@ class TestData {
 	final static def projectId = 1315
 	final static def assayId = 8129
 	final static int experimentId = 1552
-	final static int panelId = 49
+	final static int panelId = 10
 
 	final static def documents = [
 		documentName:"Document Name",

@@ -24,7 +24,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 	def "Test Add #TestName Document in Assay"(){
 		given:"Navigate to Show Assay page"
 		to ViewAssayDefinitionPage
-		
+
 		when:"At View Assay Page, Fetching Document Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
@@ -47,7 +47,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 		}else{
 			createDocument(testData.documentName, testData.documentContent)
 		}
-		
+
 		then:"At View Assay Page, Verify that Document is added"
 		at ViewAssayDefinitionPage
 		assert isDocument(documentHeaders(docHeader), testData.documentName)
@@ -77,7 +77,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
 		report "$TestName"
-		
+
 		where:
 		TestName		| docHeader								| docType								| testData
 		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
@@ -91,7 +91,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 	def "Test Add #TestName Document in Assay with empty values"(){
 		given:"Navigate to Show Assay page"
 		to ViewAssayDefinitionPage
-		
+
 		when:"At View Assay Page, Fetching Document Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
@@ -114,7 +114,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 		}else{
 			createDocument("", testData.documentContent)
 		}
-		
+
 		then:"At View Assay Page, Verify that Document is added"
 		at ViewAssayDefinitionPage
 		assert !isDocument(documentHeaders(docHeader), testData.documentName)
@@ -128,7 +128,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
 
 		report "$TestName"
-		
+
 		where:
 		TestName		| docHeader								| docType								| testData
 		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
@@ -142,7 +142,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 	def "Test Edit #TestName Document in Assay"(){
 		given:"Navigate to Show Assay page"
 		to ViewAssayDefinitionPage
-		
+
 		when:"At View Assay Page, Fetching Document Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
@@ -166,24 +166,12 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 			}else{
 				createDocument(testData.documentName, testData.documentContent)
 			}
-			
+
 			and:"Navigating to View Assay Page"
 			at ViewAssayDefinitionPage
 			assert isDocument(documentHeaders(docHeader), testData.documentName)
 			if(docType == "external url"){
-				editDocument(documentHeaders(docHeader), testData.documentName+Constants.edited, testData.documentUrl)
-			}else{
-				navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
-				at DocumentPage
-				if(docType == "publication"){
-					createDocument(testData.documentName+Constants.edited, testData.documentUrl, true)
-				}else{
-					createDocument(testData.documentName+Constants.edited, testData.documentContent, true)
-				}
-			}
-		}else{
-			if(docType == "external url"){
-				editDocument(documentHeaders(docHeader), testData.documentName+Constants.edited, testData.documentUrl)
+				editDocument(documentHeaders(docHeader), testData.documentName, testData.documentName+Constants.edited)
 			}else{
 				navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
 				at DocumentPage
@@ -194,11 +182,9 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 				}
 			}
 		}
-
+		
 		and:"Fetching Document Info from UI and DB for validation"
 		to ViewAssayDefinitionPage
-		and:"At View Assay Definition Page"
-		at ViewAssayDefinitionPage
 		assert isDocument(documentHeaders(docHeader), testData.documentName+Constants.edited)
 		def uiDocumetnsAfter= getUIDucuments(documentHeaders(docHeader))
 		def dbDocumentsAfter= Assay.getAssayDocuments(TestData.assayId, docType)
@@ -220,7 +206,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
 		report "$TestName"
-		
+
 		where:
 		TestName		| docHeader								| docType								| testData
 		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
@@ -234,7 +220,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 	def "Test Edit #TestName Document in Assay with empty name value"(){
 		given:"Navigate to Show Assay page"
 		to ViewAssayDefinitionPage
-		
+
 		when:"At View Assay Page, Fetching Document Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
@@ -268,9 +254,9 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 				navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
 				at DocumentPage
 				if(docType == "publication"){
-				createDocument("", testData.documentUrl, true)
+					createDocument("", testData.documentUrl, true)
 				}else{
-				createDocument("", testData.documentContent, true)
+					createDocument("", testData.documentContent, true)
 				}
 			}
 		}
@@ -298,7 +284,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
 		report "$TestName"
-		
+
 		where:
 		TestName		| docHeader								| docType								| testData
 		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
@@ -312,7 +298,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 	def "Test Delete #TestName Document in Assay"(){
 		given:"Navigate to Show Assay page"
 		to ViewAssayDefinitionPage
-		
+
 		when:"At View Assay Page, Fetching Document Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
@@ -352,9 +338,9 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
-		
+
 		report "$TestName"
-		
+
 		where:
 		TestName		| docHeader								| docType								| testData
 		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
