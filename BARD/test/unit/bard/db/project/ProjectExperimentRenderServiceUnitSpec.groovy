@@ -1,5 +1,6 @@
 package bard.db.project
 
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import spock.lang.IgnoreRest
 
 import static org.junit.Assert.*
@@ -29,7 +30,14 @@ import bard.db.registration.ExternalReference
 class ProjectExperimentRenderServiceUnitSpec extends Specification {
     ProjectExperimentRenderService renderService = new ProjectExperimentRenderService()
 
-    void "test process project" () {
+    @Before
+    void setup() {
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return true
+        }
+    }
+
+    void "test process project"() {
         given: "an project"
         Experiment e1 = Experiment.build(id: 1)
         Experiment e2 = Experiment.build(id: 2)
@@ -150,7 +158,7 @@ class ProjectExperimentRenderServiceUnitSpec extends Specification {
 
     }
 
-    void "test count incoming and outgoing edges for nodes"(){
+    void "test count incoming and outgoing edges for nodes"() {
         given: "an"
         Set<Edge> edges = new HashSet<Edge>()
         edges.add(new Edge(from: "1", to: "2"))
@@ -158,18 +166,26 @@ class ProjectExperimentRenderServiceUnitSpec extends Specification {
         edges.add(new Edge(from: "1", to: "4"))
 
         def nodes = []
-        nodes.add(new Node(id: "1", keyValues: [incount:0, outcount:0]))
-        nodes.add(new Node(id: "2", keyValues: [incount:0, outcount:0]))
-        nodes.add(new Node(id: "3", keyValues: [incount:0, outcount:0]))
-        nodes.add(new Node(id: "4", keyValues: [incount:0, outcount:0]))
+        nodes.add(new Node(id: "1", keyValues: [incount: 0, outcount: 0]))
+        nodes.add(new Node(id: "2", keyValues: [incount: 0, outcount: 0]))
+        nodes.add(new Node(id: "3", keyValues: [incount: 0, outcount: 0]))
+        nodes.add(new Node(id: "4", keyValues: [incount: 0, outcount: 0]))
         when:
         renderService.countInOutEdges(edges, nodes)
         then:
-        nodes.each{Node node->
-            if (node.id == "1") {assert node.keyValues.incount == '0'; assert node.keyValues.outcount == '3'}
-            if (node.id == "2") {assert node.keyValues.incount == '1'; assert node.keyValues.outcount == '0'}
-            if (node.id == "3") {assert node.keyValues.incount == '1'; assert node.keyValues.outcount == '0'}
-            if (node.id == "4") {assert node.keyValues.incount == '1'; assert node.keyValues.outcount == '0'}
+        nodes.each { Node node ->
+            if (node.id == "1") {
+                assert node.keyValues.incount == '0'; assert node.keyValues.outcount == '3'
+            }
+            if (node.id == "2") {
+                assert node.keyValues.incount == '1'; assert node.keyValues.outcount == '0'
+            }
+            if (node.id == "3") {
+                assert node.keyValues.incount == '1'; assert node.keyValues.outcount == '0'
+            }
+            if (node.id == "4") {
+                assert node.keyValues.incount == '1'; assert node.keyValues.outcount == '0'
+            }
         }
 
     }
