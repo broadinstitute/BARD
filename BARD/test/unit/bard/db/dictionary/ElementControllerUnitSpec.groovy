@@ -443,15 +443,15 @@ class ElementControllerUnitSpec extends Specification {
         assert response.element == element
     }
 
-    void "test update #label"() {
+    void "test update #testDescription"() {
         given:
         Element element = Element.build()
         Element unitElement = Element.build(label: 'unit')
         params.id = element.id
-        params.label = 'updateLabel'
+        params.label = label
         params.elementStatus = ElementStatus.Published
         params.unit = unitElement
-        params.abbreviation = "updateAbbreviation"
+        params.abbreviation = abbreviation
         params.synonyms = "updateSynonyms"
         params.expectedValueType = expectedValueType
         params.addChildMethod = AddChildMethod.RDM_REQUEST
@@ -465,9 +465,13 @@ class ElementControllerUnitSpec extends Specification {
         assert flash.message.contains(expectedFlashMessage)
 
         where:
-        label                                       | expectedValueType                   | externalURL | expectedFlashMessage
-        'external-ontology with external url'       | ExpectedValueType.EXTERNAL_ONTOLOGY | 'url'       | 'saved successfully'
-        'external-ontology with empty external url' | ExpectedValueType.EXTERNAL_ONTOLOGY | ''          | 'Failed to update element'
-        'external-ontology with empty external url' | ExpectedValueType.FREE_TEXT         | ''          | 'saved successfully'
+        testDescription                                                | expectedValueType                   | externalURL | abbreviation   | label                                     | expectedFlashMessage
+        'external-ontology with external url'                          | ExpectedValueType.EXTERNAL_ONTOLOGY | 'url'       | 'abbreviation' | 'updateLabel'                             | 'saved successfully'
+        'external-ontology with empty external url'                    | ExpectedValueType.EXTERNAL_ONTOLOGY | ''          | 'abbreviation' | 'updateLabel'                             | 'Failed to update element'
+        'external-ontology with empty external url'                    | ExpectedValueType.FREE_TEXT         | ''          | 'abbreviation' | 'updateLabel'                             | 'saved successfully'
+        'abbreviation is empty, label<30, expectedValueType=none'      | ExpectedValueType.NONE              | ''          | ''             | 'updateLabel'                             | 'saved successfully'
+        'abbreviation is empty, label>30, expectedValueType=none'      | ExpectedValueType.NONE              | ''          | ''             | 'label_size_is_grater_than_30_characters' | 'saved successfully'
+        'abbreviation is not empty, label>30, expectedValueType<>none' | ExpectedValueType.NUMERIC           | ''          | 'abbreviation' | 'label_size_is_grater_than_30_characters' | 'saved successfully'
+        'abbreviation is empty, label>30, expectedValueType<>none'     | ExpectedValueType.NUMERIC           | ''          | ''             | 'label_size_is_grater_than_30_characters' | 'Failed to update element'
     }
 }
