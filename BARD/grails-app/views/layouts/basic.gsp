@@ -16,6 +16,26 @@
     <%@ page import="bardqueryapi.IDSearchType" %>
     <r:layoutResources/>
     <ga:trackPageview/>
+    <style>
+        /*Correcting for nav-panel overriding the Finish Editing button. https://www.pivotaltracker.com/story/show/62830700*/
+    .nav-panel .nav {
+        display: inline;
+    }
+
+    .nav-panel .navbar {
+        margin-bottom: 0px;
+    }
+
+    .nav-panel .nav > li > a {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .navbar .nav > li > a {
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+    </style>
 </head>
 
 <body>
@@ -59,7 +79,7 @@
                         <g:render template="/layouts/templates/loginStrip"/>
                     </div>
 
-                    <div class="left-aligned">
+                    <div style="text-align: right;">
                         <g:render template="/layouts/templates/queryCart"/>
                     </div>
 
