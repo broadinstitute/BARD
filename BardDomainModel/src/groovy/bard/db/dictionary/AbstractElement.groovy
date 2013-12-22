@@ -14,7 +14,7 @@ abstract class AbstractElement {
 
     public static final int LABEL_MAX_SIZE = 128
     public static final int DESCRIPTION_MAX_SIZE = 1000
-    public static final int ABBREVIATION_MAX_SIZE = 20
+    public static final int ABBREVIATION_MAX_SIZE = 30
     public static final int SYNONYMS_MAX_SIZE = 1000
     public static final int BARD_URI_MAX_SIZE = 250
     private static final int EXTERNAL_URL_MAX_SIZE = 1000
