@@ -57,7 +57,7 @@ class EditContextPage extends CapScaffoldPage{
 		addContextCard.inputCardName.value(contextName)
 		addContextCard.saveBtn.buttonSubmitPrimary.click()
 //		ajaxRequestCompleted()
-		waitFor { isContext(groupId, contextName) }
+		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { isContext(groupId, contextName) }
 	}
 
 	def deleteContext(def cardGroup, def contextName){

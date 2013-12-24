@@ -20,6 +20,7 @@ import db.Assay
 abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 	def contextCard = "test card"
 	def section
+	def cardGroup
 	def editContextGroup
 	def dbContextType
 //	def oldGroup
@@ -30,7 +31,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
-		def uiContentsBefore = getUIContexts(section)
+		def uiContentsBefore = getUIContexts(cardGroup)
 		def dbContentsBefore = Assay.getAssayContext(dbContextType, TestData.assayId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -64,7 +65,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
-		uiContentsAfterAdd = getUIContexts(section)
+		uiContentsAfterAdd = getUIContexts(cardGroup)
 		dbContentsAfterAdd = Assay.getAssayContext(dbContextType, TestData.assayId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -88,7 +89,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		when:"At VIew Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
-		def uiContents = getUIContexts(section)
+		def uiContents = getUIContexts(cardGroup)
 		def dbContents = Assay.getAssayContext(dbContextType, TestData.assayId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -104,7 +105,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
 		def editedContext = contextCard+Constants.edited
-		def uiContentsBefore = getUIContexts(section)
+		def uiContentsBefore = getUIContexts(cardGroup)
 		def dbContentsBefore = Assay.getAssayContext(dbContextType, TestData.assayId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -144,7 +145,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
-		uiContentsAfterAdd = getUIContexts(section)
+		uiContentsAfterAdd = getUIContexts(cardGroup)
 		dbContentsAfterAdd = Assay.getAssayContext(dbContextType, TestData.assayId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -168,7 +169,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		when:"At VIew Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
-		def uiContents = getUIContexts(section)
+		def uiContents = getUIContexts(cardGroup)
 		def dbContents = Assay.getAssayContext(dbContextType, TestData.assayId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -183,7 +184,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
-		def uiContentsBefore = getUIContexts(section)
+		def uiContentsBefore = getUIContexts(cardGroup)
 		def dbContentsBefore = Assay.getAssayContext(dbContextType, TestData.assayId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -227,7 +228,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
-		uiContentsAfterDelete = getUIContexts(section)
+		uiContentsAfterDelete = getUIContexts(cardGroup)
 		dbContentsAfterDelete = Assay.getAssayContext(dbContextType, TestData.assayId)
 
 		then:"Verifying Context Info with UI & DB"
@@ -242,7 +243,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
-		def uiContentsBefore = getUIContextItems(section, contextCard)
+		def uiContentsBefore = getUIContextItems(cardGroup, contextCard)
 		def dbContentsBefore = Assay.getAssayContextItem(TestData.assayId, dbContextType, contextCard)
 
 		then:"Verifying Context Info with UI & DB"
@@ -298,7 +299,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
-		uiContentsAfterAdd = getUIContextItems(section, contextCard)
+		uiContentsAfterAdd = getUIContextItems(cardGroup, contextCard)
 		dbContentsAfterAdd = Assay.getAssayContextItem(TestData.assayId, dbContextType, contextCard)
 
 		then:"Verifying Context Info with UI & DB"
@@ -327,7 +328,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
-		assert !isContext(section, contextCard)
+		assert !isContext(cardGroup, contextCard)
 		
 		report "$TestName"
 		
@@ -692,7 +693,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
-		def uiContentsBefore = getUIContextItems(section, contextCard)
+		def uiContentsBefore = getUIContextItems(cardGroup, contextCard)
 		def dbContentsBefore = Assay.getAssayContextItem(TestData.assayId, dbContextType, contextCard)
 
 		then:"Verifying Context Info with UI & DB"
@@ -771,7 +772,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
-		uiContentsAfterAdd = getUIContextItems(section, contextCard)
+		uiContentsAfterAdd = getUIContextItems(cardGroup, contextCard)
 		dbContentsAfterAdd = Assay.getAssayContextItem(TestData.assayId, dbContextType, contextCard)
 
 		then:"Verifying Context Info with UI & DB"
@@ -800,7 +801,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
-		assert !isContext(section, contextCard)
+		assert !isContext(cardGroup, contextCard)
 		
 		report "$TestName"
 
@@ -812,15 +813,14 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		"ExOntologyIntegtegrated"	| TestData.contexts.ExtOntology	| TestData.contexts.ExtOntology.attribute
 		//		"ExOntologyNoIntegtegrated"	| TestData.contexts.ExtOntology	| TestData.contexts.ExtOntology.attribute
 	}
-	
-
+/*
 	def "Test Delete #TestName Type Context Item in Assay"(){
 		given:"Navigate to Show Assay page"
 		to ViewAssayDefinitionPage
 		
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
-		def uiContentsBefore = getUIContextItems(section, contextCard)
+		def uiContentsBefore = getUIContextItems(cardGroup, contextCard)
 		def dbContentsBefore = Assay.getAssayContextItem(TestData.assayId, dbContextType, contextCard)
 
 		then:"Verifying Context Info with UI & DB"
@@ -891,7 +891,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
-		assert !isContext(section, contextCard)
+		assert !isContext(cardGroup, contextCard)
 		
 		report "$TestName"
 
@@ -902,5 +902,5 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		"NumericValue"				| TestData.contexts.Numeric		| TestData.contexts.Numeric.attribute
 		"ExOntologyIntegtegrated"	| TestData.contexts.ExtOntology	| TestData.contexts.ExtOntology.attribute
 	}
-	
+	*/
 }

@@ -10,7 +10,7 @@ class AssayContextAssayReadoutSpec extends AssayBaseContextSpec{
 	@Override
 	def setup() {
 		section = "assay-readout-header"
-//		cardGroup = "assay-readout-header"
+		cardGroup = "cardHolderAssayReadout"
 		editContextGroup = "Assay-Readout"
 		dbContextType = "Assay Readout"
 		

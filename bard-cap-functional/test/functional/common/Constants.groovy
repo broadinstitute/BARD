@@ -13,8 +13,8 @@ class Constants {
 	enum SearchBy { ASSAY_ID, ASSAY_NAME, PROJECT_ID, PROJECT_NAME }
 
 	// constants
-	final static int WAIT_INTERVAL = 15;
-	final static int R_INTERVAL = 0.3;
+	final static int WAIT_INTERVAL = 30;
+	final static int R_INTERVAL = 0.5;
 	final static String edited = "-Edited";
 	final static String IS_EMPTY = "Empty";
 //	final static String contextCard = "project management";

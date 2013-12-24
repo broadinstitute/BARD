@@ -6,7 +6,6 @@ import modules.ErrorInlineModule
 import modules.LoadingModule
 import modules.SelectChoicePopupModule
 import modules.SelectToDropModule
-
 import common.Constants
 
 /**
@@ -24,10 +23,11 @@ class ContextItemPage extends CapScaffoldPage{
 		containerControlOpen(wait: true, required: false){ controlGroup.find(".select2-container.span11.select2-container-active.select2-dropdown-open")}
 		attributeFromDictionary { module SelectChoicePopupModule, controlGroup, containerId:"s2id_attributeElementId" }
 		integratedSearch { module SelectChoicePopupModule, controlGroup, containerId:"s2id_extValueSearch" } //External Ontology objects
-		externalOntologyId(wait: true, required: false) { controlGroup.find("input#extValueId") }									//External Ontology objects
-		displayValue(wait: true, required: false) { $("#freeTextValueContainer").find("input#valueDisplay") }										//External Ontology objects
-		qualifier(wait: true, required: false) { controlGroup.find("#qualifier") }													//Numeric Value objects
-		numericValue(wait: true, required: false) { controlGroup.find("input#valueNum") }											//Numeric Value objects
+		externalOntologyId(wait: true, required: false) { controlGroup.find("input#extValueId") }			//External Ontology objects
+		freeTextValueContainer(wait: true, required: false){$("#freeTextValueContainer")}
+		displayValue(wait: true, required: false) { $("#valueDisplay") }
+		qualifier(wait: true, required: false) { controlGroup.find("#qualifier") }								//Numeric Value objects
+		numericValue(wait: true, required: false) { $("#valueNum") }					//Numeric Value objects
 		valueUnit { module SelectChoicePopupModule, controlGroup, containerId:"s2id_valueNumUnitId" }		//Numeric Value objects
 		valueFromDictionary { module SelectChoicePopupModule, controlGroup, containerId:"s2id_valueElementId" }	//Element objects
 		saveBtn { module ButtonsModule, controlGroup, buttonName:"Save" }
@@ -95,6 +95,7 @@ class ContextItemPage extends CapScaffoldPage{
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ integratedSearch }
 		if(isCreate){
 			if(integration){
+				Thread.sleep(5000)
 				selectAutoChoiceValue(integratedSearch, selectToDrop, inputData.integratedSearch)
 				addOrUpdate(isCreate)
 				navigateBackToContext()
@@ -108,6 +109,7 @@ class ContextItemPage extends CapScaffoldPage{
 			}
 		}else{
 			if(integration){
+				Thread.sleep(5000)
 				selectAutoChoiceValue(integratedSearch, selectToDrop, inputData.integratedSearchEdit)
 				addOrUpdate(isCreate)
 				navigateBackToContext()
@@ -176,9 +178,10 @@ class ContextItemPage extends CapScaffoldPage{
 			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}else{
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ numericValue
-				attributeFromDictionary.selectClose }
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	attributeFromDictionary.selectClose }
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ numericValue.displayed }
 			attributeFromDictionary.selectClose.click()
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !numericValue.displayed }
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}
 		if(resultUpload){
@@ -206,9 +209,10 @@ class ContextItemPage extends CapScaffoldPage{
 			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}else{
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ displayValue
-				attributeFromDictionary.selectClose }
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ attributeFromDictionary.selectClose }
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ displayValue.displayed }
 			attributeFromDictionary.selectClose.click()
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !displayValue.displayed }
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}
 		if(resultUpload){
@@ -229,8 +233,8 @@ class ContextItemPage extends CapScaffoldPage{
 			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}else{
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ valueFromDictionary.selectChoice
-				attributeFromDictionary.selectClose }
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ valueFromDictionary.selectChoice }
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	attributeFromDictionary.selectClose }
 			attributeFromDictionary.selectClose.click()
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}
@@ -262,12 +266,11 @@ class ContextItemPage extends CapScaffoldPage{
 		int index = 0
 		if(!element2.dropdown){
 			element1.selectChoice.click()
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){
-				element2.dropdown
-				element2.searchInput
-			}
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element2.dropdown }
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	element2.searchInput }
 		}
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element2.searchResult }
+//		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element2.searchResult }
+		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	element2.searchInput }
 		element2.searchInput.value(inputValue)
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element2.searchResult[index].text().contains(inputValue)}
 		element2.searchResult[index].click()

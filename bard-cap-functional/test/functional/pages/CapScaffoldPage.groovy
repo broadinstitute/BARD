@@ -18,16 +18,16 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		summaryEdit {index -> module EditIconModule, viewSummary.ddValue[index] }
 		editableForm { module EditableFormModule }
 		viewSummary { module SummaryModule, summaryHeader }
-		
-		cardContainer { groupName -> $("#$groupName") }
+
+		cardContainer(required: false) { groupName -> $("#$groupName") }
 		contextTable { groupName -> cardContainer(groupName).find("table.table.table-hover")}
 		cardTable{ groupName, contextTitle -> module CardsHolderModule, contextTable(groupName), contextCard:contextTitle }
 		contextCards{ groupName -> module CardsHolderModule, cardContainer(groupName) }
 		controlError { module ErrorInlineModule }
 		documentHeaders{ docType -> module DocumentSectionModule, documentType:docType }
-		
-//		header { sectionName -> $("#"+sectionName+"-header") }
-//		editContext {sectionName -> module EditIconModule, header(sectionName) }
+
+		//		header { sectionName -> $("#"+sectionName+"-header") }
+		//		editContext {sectionName -> module EditIconModule, header(sectionName) }
 		editContext {sectionName -> module EditIconModule, $("#$sectionName") }
 	}
 	def navigateToEditContext(def section){
@@ -35,18 +35,20 @@ class CapScaffoldPage extends CommonFunctionalPage {
 	}
 	def getUIContexts(def cardGroup){
 		def contexts = []
-		if(contextCards(cardGroup).cardsTitle){
-			contextCards(cardGroup).cardsTitle.each{ cards ->
-				if(cards.find("p")[0].text()){
-					contexts.add(cards.find("p")[0].text())
-				}else{
-					contexts.add(cards.text())
+		if(cardContainer(cardGroup)){
+			if(contextCards(cardGroup).cardsTitle){
+				contextCards(cardGroup).cardsTitle.each{ cards ->
+					if(cards.find("p")[0].text()){
+						contexts.add(cards.find("p")[0].text())
+					}else{
+						contexts.add(cards.text())
+					}
 				}
 			}
 		}
 		return contexts
 	}
-	
+
 	def getUIContextItems(def cardGroup, def card){
 		def contextItems = []
 		def resultMap = [:]
@@ -70,10 +72,12 @@ class CapScaffoldPage extends CommonFunctionalPage {
 	}
 	boolean isContext(def cardGroup, def cardName){
 		boolean found = false
-		if(contextCards(cardGroup)){
-			contextCards(cardGroup).cardsTitle.each{ cards ->
-				if(cards.text().contains(cardName)){
-					found = true
+		if(cardContainer(cardGroup)){
+			if(contextCards(cardGroup)){
+				contextCards(cardGroup).cardsTitle.each{ cards ->
+					if(cards.text().contains(cardName)){
+						found = true
+					}
 				}
 			}
 		}
@@ -108,7 +112,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		}
 		waitFor { !editableForm.buttons.iconOk }
 		waitFor { !editableForm.buttons.iconRemove }
-//		ajaxRequestCompleted()
+		//		ajaxRequestCompleted()
 	}
 	def editDate(def indexValue, def runDate){
 		def errorMessage = "Required and cannot be empty"
@@ -116,16 +120,16 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		summaryEdit(indexValue).editIconPencil.click()
 		waitFor { editableForm.buttons.iconOk }
 		waitFor { editableForm.buttons.iconRemove }
-		
+
 		assert editableForm.selectDay
 		assert editableForm.selectMonth
 		assert editableForm.selectYear
-		
+
 		editableForm.selectDay.value(runDate.day)
 		editableForm.selectMonth.value(runDate.month)
 		editableForm.selectYear.value(runDate.year)
 		editableForm.buttons.iconOk.click()
-		
+
 		waitFor { !editableForm.buttons.iconOk }
 		waitFor { !editableForm.buttons.iconRemove }
 	}
@@ -148,7 +152,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 			def value = viewSummary.ddValue[i].text().trim()
 			if(label.contains('(')){
 				label = label.substring(0, label.indexOf('('))//.replace(":", "").replace(" ", "")
-				
+
 			}
 			if(label.contains(':')){
 				label = label.replace(":", "")
@@ -157,7 +161,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		}
 		return uiSummary
 	}
-	
+
 	def navigateToCreateDocument(def document){
 		assert document.addNewDocument.iconPlus
 		document.addNewDocument.iconPlus.click()
@@ -169,7 +173,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 			document.documentContents(docName).iconPencil.click()
 		}
 	}
-	
+
 	def editDocument(def document, def docName, def editValue){
 		def errorMessage = "Field is required and must not be empty"
 		if(isDocument(document, docName)){
@@ -183,7 +187,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 			}else{
 				fillFieldsInput(editValue)
 			}
-//			ajaxRequestCompleted()
+			//			ajaxRequestCompleted()
 		}
 	}
 
@@ -194,14 +198,14 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		editableForm.inputField.value(editValue)
 		editableForm.buttons.iconOk.click()
 	}
-	
+
 	def deleteDocument(def document, def docName){
 		if(isDocument(document, docName)){
 			assert document.documentContents(docName).iconTrash
 			withConfirm { document.documentContents(docName).iconTrash.click() }
 			ajaxRequestCompleted()
 		}
-	} 
+	}
 
 	boolean isDocument(def document, def docName){
 		if(document.documentContents(docName)){

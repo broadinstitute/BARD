@@ -10,7 +10,7 @@ class AssayContextAssayBiologySpec extends AssayBaseContextSpec{
 	@Override
 	def setup() {
 		section = "biology-header"
-//		cardGroup = "cardHolderBiology"
+		cardGroup = "cardHolderBiology"
 		editContextGroup = "Biology"
 		dbContextType = "Biology"
 

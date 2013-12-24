@@ -10,6 +10,7 @@ class AssayContextUnclassifiedSpec extends AssayBaseContextSpec{
 	@Override
 	def setup() {
 		section = "unclassified-header"
+		cardGroup = "cardHolderUnclassified"
 		editContextGroup = "Unclassified"
 		dbContextType = "Unclassified"
 		

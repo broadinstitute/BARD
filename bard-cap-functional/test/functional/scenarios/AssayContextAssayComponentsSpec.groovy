@@ -10,7 +10,7 @@ class AssayContextAssayComponentsSpec extends AssayBaseContextSpec{
 	@Override
 	def setup() {
 		section = "assay-components-header"
-//		cardGroup = "cardHolderAssayComponents"
+		cardGroup = "cardHolderAssayComponents"
 		editContextGroup = "Assay-Components"
 		dbContextType = "Assay Components"
 		

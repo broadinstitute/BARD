@@ -10,7 +10,7 @@ class AssayContextAssayProtocolSpec extends AssayBaseContextSpec{
 	@Override
 	def setup() {
 		section = "assay-protocol-header"
-//		cardGroup = "cardHolderAssayProtocol"
+		cardGroup = "cardHolderAssayProtocol"
 		editContextGroup = "Assay-Protocol"
 		dbContextType = "Assay Protocol"
 		
