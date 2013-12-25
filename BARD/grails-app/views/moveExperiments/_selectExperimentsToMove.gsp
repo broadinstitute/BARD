@@ -14,12 +14,16 @@
             <g:formRemote url="[controller: 'moveExperiments', action: 'moveSelectedExperiments']"
                           name="splitExperiments"
                           update="[success: 'displayResponseDiv', failure: 'displayResponseDiv']">
-            %{--Select all check boxes by default otherwise toggle--}%
-                <g:checkBox name="selectAll" id="selectAll" class="selectAll" checked="true"/> select all <br/>
                 <table id="myExperiments" class="table table-striped table-hover table-bordered">
                     <thead>
                     <tr>
-                        <th></th><th>Experiment ID</th><th>ADID</th><th>PubChem AID</th><th>Experiment Name</th>
+                        <th>%{--Select all check boxes by default otherwise toggle--}%
+                        <g:checkBox name="selectAll" id="selectAll" class="selectAll" checked="true"/> select all <br/>
+                        </th>
+                        <th>Experiment ID</th>
+                        <th>ADID</th>
+                        <th>PubChem AID</th>
+                        <th>Experiment Name</th>
                     </tr>
                     </thead>
                     <tbody>
