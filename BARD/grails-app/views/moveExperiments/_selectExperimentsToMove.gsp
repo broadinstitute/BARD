@@ -1,7 +1,8 @@
 <%@ page import="bard.db.enums.Status; bard.db.enums.Status; bard.db.registration.ExternalReference" %>
 <div class="container">
     <div>
-        <h2>(${moveExperimentsCommand.experiments?.size()}) Experiments found - choose which ones to move</h2>
+        <g:set var="experimentNum" value="${moveExperimentsCommand.experiments?.size()}"/>
+        <h2>(${experimentNum}) Experiment${experimentNum && experimentNum > 1 ? "s" : ""} found - choose which ones to move</h2>
 
         <g:if test="${warningMessage}">
             <h4>${warningMessage}</h4>
@@ -52,10 +53,11 @@
                 <g:hiddenField name="targetAssay.id" value="${moveExperimentsCommand.targetAssay.id}"/>
                 <br/>
                 <br/>
+
                 <div>
                     <h2>Assay Definition to move to:</h2>
                     <ul>
-                         <g:link controller="assayDefinition" action="show" id="${moveExperimentsCommand.targetAssay.id}"
+                        <g:link controller="assayDefinition" action="show" id="${moveExperimentsCommand.targetAssay.id}"
                                 target="_blank">
                             <li>
                                 ${moveExperimentsCommand.targetAssay.id} - ${moveExperimentsCommand.targetAssay.assayName}
