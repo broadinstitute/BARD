@@ -59,7 +59,7 @@
                     </label>
 
                     <div class="controls">
-                        <g:textField class="input-xxlarge" id="sourceEntityIds" name="sourceEntityIds" required=""/>
+                        <g:textField class="input-xxlarge" id="sourceEntityIds" name="sourceEntityIds" maxlength="2047" required=""/>
                     </div>
                 </div>
 
@@ -67,7 +67,7 @@
                     <label class="control-label" for="idType">Assay Definition to move to (ADID):</label>
 
                     <div class="controls">
-                        <g:textField id="targetAssayId" class="input-mini" name="targetAssayId" required=""/>
+                        <g:textField id="targetAssayId" class="input-mini" name="targetAssayId" maxlength="6" required=""/>
                     </div>
                 </div>
 
