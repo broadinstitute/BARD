@@ -20,13 +20,12 @@ import spock.lang.Unroll
  * Time: 2:07 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay,Experiment,  AssayContext, ExperimentMeasure, AssayContextItem, ExperimentContextItem, ExperimentContext, Element])
-@Mock([Assay,Experiment, ExperimentMeasure, AssayContext,AssayContextItem, ExperimentContextItem, ExperimentContext, Element])
+@Build([Assay, Experiment, AssayContext, ExperimentMeasure, AssayContextItem, ExperimentContextItem, ExperimentContext, Element])
+@Mock([Assay, Experiment, ExperimentMeasure, AssayContext, AssayContextItem, ExperimentContextItem, ExperimentContext, Element])
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(MergeAssayDefinitionService)
 @Unroll
 public class MergeAssayDefinitionServiceUnitSpec extends Specification {
-
 
 
     void 'test convert String To Id List #desc'() {
@@ -41,8 +40,8 @@ public class MergeAssayDefinitionServiceUnitSpec extends Specification {
         "Numbers separated by one space"                       | "123 45 67"                            | [new Long(123), new Long(45), new Long(67)]
         "Numbers separated by one or more spaces"              | "12 3 4   5 6   7"                     | [new Long(12), new Long(3), new Long(4), new Long(5), new Long(6), new Long(7)]
         "Numbers separated by new lines"                       | "12\n3\n \n4   5 6   7"                | [new Long(12), new Long(3), new Long(4), new Long(5), new Long(6), new Long(7)]
-        "Numbers separated by bunch of non-numeric characters" | '''\t12##    $34\r\n%34\t,67&78\t\t''' | [new Long(12), new Long(34), new Long(34), new Long(67), new Long(78)]
-
+        "Numbers separated by bunch of non-numeric characters" | '''\t12##    $34\r\n%35\t,67&78\t\t''' | [new Long(12), new Long(34), new Long(35), new Long(67), new Long(78)]
+        "duplicated numbers"                                   | "1 2 1 3"                              | [new Long(1), new Long(2), new Long(3)]
     }
 
     void 'test validateExperimentContextItem - no assay context item in map'() {
@@ -56,7 +55,6 @@ public class MergeAssayDefinitionServiceUnitSpec extends Specification {
         assert errorMessages
         assert errorMessages.get(0) == "Experiment Context Item : ${experimentContextItem.id}, on Experiment: ${experimentContextItem.experimentContext.experiment.id}, which is part of the Assay: ${experimentContextItem.experimentContext.experiment.assay.id} does not exist as a context item on the target assay"
     }
-
 
 
     void 'test validateConfirmMergeInputs - exceptions #desc'() {
@@ -106,13 +104,13 @@ public class MergeAssayDefinitionServiceUnitSpec extends Specification {
         Assay assayOne = Assay.build()
         AssayContext contextOne = AssayContext.build(assay: assayOne, contextName: "alpha")
         AssayContextItem.build(assayContext: contextOne)
-       // Measure measureOne = Measure.build(assay: assayOne)
+        // Measure measureOne = Measure.build(assay: assayOne)
         //AssayContextMeasure.build(assayContext: contextOne, measure: measureOne)
 
         Assay assayTwo = Assay.build()
         AssayContext contextTwo = AssayContext.build(assay: assayTwo, contextName: "alpha2")
         AssayContextItem.build(assayContext: contextTwo)
-       // Measure measureTwo = Measure.build(assay: assayTwo)
+        // Measure measureTwo = Measure.build(assay: assayTwo)
         //AssayContextMeasure.build(assayContext: contextTwo, measure: measureTwo)
         when:
         service.normalizeEntitiesToMoveToExperimentIds([assayTwo.id, nonExistingAssayId], IdType.ADID, assayOne)
