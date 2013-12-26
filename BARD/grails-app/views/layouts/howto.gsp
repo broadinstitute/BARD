@@ -14,7 +14,7 @@
         window.bardAppContext = "${request.contextPath}";
     </r:script>
     <r:require modules="bardHomepage,idSearch,jquerynotifier,downtime,autocomplete"/>
-    <!--[if lt IE 9]><link rel="stylesheet" href="${resource(dir:'css/bardHomepage', file: 'ieBardHomepage.css')}" media="screen" /><![endif]-->
+    <!--[if lt IE 9]><link rel="stylesheet" href="${resource(dir: 'css/bardHomepage', file: 'ieBardHomepage.css')}" media="screen" /><![endif]-->
     <!--[if IE]><script src="${resource(dir: 'js/bardHomepage', file: 'ie.js')}" /></script><![endif]-->
 
     <g:layoutHead/>
@@ -59,71 +59,7 @@
 
 <div id="wrapper">
     %{--The control area at the top of the page is all contained within this header--}%
-    <header class="navbar navbar-static-top" id="header">
-        <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span3">
-                    <g:render template="/layouts/templates/downtime"/>
-                </div>
-            </div>
-
-            <div class="row-fluid">
-                <div class="span3" style="min-width: 210px; min-height: 70px;">
-                    <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
-                </div>
-
-                <div class="span9">
-                    <div class="row-fluid">
-                        <div class="center-aligned span6">
-                            <g:render template="/layouts/templates/socialMedia"/>
-                        </div>
-
-                        <div class="right-aligned span6">
-                            <g:render template="/layouts/templates/loginStrip"/>
-                        </div>
-                    </div>
-
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <nav class="nav-panel right-aligned">
-                                <ul class="nav">
-                                    <g:render template="/layouts/templates/howtolinks"/>
-                                    <sec:ifLoggedIn>
-                                        <li><g:link controller="bardWebInterface"
-                                                    action="navigationPage">My BARD</g:link></li>
-                                    </sec:ifLoggedIn>
-                                </ul>
-                                <g:if test="${false}">
-                                    <ul class="login-nav">
-                                        <li><a href="#">Sign up</a></li>
-                                        <li><a href="#">Sign in</a></li>
-                                    </ul>
-                                </g:if>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    %{--Enhanced data and advanced tools block--}%
-    %{--<article class="hero-block">--}%
-    %{--<div class="container-fluid">--}%
-    %{--<div class="hero-area">--}%
-
-    %{--<div class="row-fluid">--}%
-    %{--<article class="span8">--}%
-    %{--<h1>Enhanced data and advanced tools to accelerate drug discovery.</h1>--}%
-
-    %{--<p>Introducing BARD, the powerful new bioassay database from the NIH Molecular Libraries Program. Now with unprecedented efficiency, scientists can develop and test hypotheses on the influence of different chemical probes on biological functions.</p>--}%
-    %{--<a href="#" class="btn btn-primary">LEARN MORE</a>--}%
-    %{--</article>--}%
-    %{--<aside class="span4"></aside>--}%
-    %{--</div>--}%
-    %{--</div>--}%
-    %{--</div>--}%
-    %{--</article>--}%
+    <g:render template="/bardWebInterface/homepageHeader"/>
 
     <div class="container-fluid">
         <div class="row-fluid">
