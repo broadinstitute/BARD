@@ -13,7 +13,7 @@
         window.bardAppContext = "${request.contextPath}";
     </r:script>
     <r:require modules="bardHomepage,idSearch,jquerynotifier,downtime,autocomplete,compoundOptions"/>
-    <!--[if lt IE 9]><link rel="stylesheet" href="${resource(dir:'css/bardHomepage', file: 'ieBardHomepage.css')}" media="screen" /><![endif]-->
+    <!--[if lt IE 9]><link rel="stylesheet" href="${resource(dir: 'css/bardHomepage', file: 'ieBardHomepage.css')}" media="screen" /><![endif]-->
     <!--[if IE]><script src="${resource(dir: 'js/bardHomepage', file: 'ie.js')}" /></script><![endif]-->
 
     %{--Make sure that people have their JavaScript turned on--}%
@@ -32,53 +32,7 @@
 <div id="wrapper">
 
     %{--The control area at the top of the page is all contained within this header--}%
-    <header class="navbar navbar-static-top" id="header">
-        <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span3">
-                    <g:render template="/layouts/templates/downtime"/>
-                </div>
-            </div>
-
-            <div class="row-fluid">
-                <div class="span3" style="min-width: 210px; min-height: 70px;">
-                    <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
-                </div>
-
-                <div class="span9">
-                    <div class="row-fluid">
-                        <div class="center-aligned span6">
-                            <g:render template="/layouts/templates/socialMedia"/>
-                        </div>
-
-                        <div class="right-aligned span6">
-                            <g:render template="/layouts/templates/loginStrip"/>
-                        </div>
-                    </div>
-
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <nav class="nav-panel right-aligned">
-                                <ul class="nav">
-                                    <g:render template="/layouts/templates/howtolinks"/>
-                                    <sec:ifLoggedIn>
-                                        <li><g:link controller="bardWebInterface"
-                                                    action="navigationPage">My BARD</g:link></li>
-                                    </sec:ifLoggedIn>
-                                </ul>
-                                <g:if test="${false}">
-                                    <ul class="login-nav">
-                                        <li><a href="#">Sign up</a></li>
-                                        <li><a href="#">Sign in</a></li>
-                                    </ul>
-                                </g:if>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    <g:render template="homepageHeader"/>
 
     %{--Enhanced data and advanced tools block--}%
     <article class="hero-block">
@@ -170,7 +124,8 @@
                                 <h1>Search and analyze your own way.</h1>
 
                                 <p>Keeping the promise of the MLP, BARD gives you nimble access to most all the program’s data through an array of query, analysis and visualization tools.</p>
-                                <g:link controller="about" action="howToVisualizeAndCaptureData" class="btn btn-primary">HOW TO VISUALIZE DATA</g:link>
+                                <g:link controller="about" action="howToVisualizeAndCaptureData"
+                                        class="btn btn-primary">HOW TO VISUALIZE DATA</g:link>
                             </div>
                         </div>
                     </div>
@@ -199,7 +154,8 @@
                 <div class="container-fluid">
                     <div class="row-fluid">
                         <div class="span6 img-box">
-                            <r:img  dir="images/bardHomepage" file="img-03.png" alt="Public bioassay data – organized, standardized and put into context."/>
+                            <r:img dir="images/bardHomepage" file="img-03.png"
+                                   alt="Public bioassay data – organized, standardized and put into context."/>
                         </div>
 
                         <div class="span6 pull-right article">
