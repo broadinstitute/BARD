@@ -23,4 +23,11 @@
 
 </div>
 
+<div class="row-fluid" style="margin: 5px;">
+    <div class="span1 offset11">
+        <g:link action="show" class="btn" value="OK">OK</g:link>
+    </div>
+</div>
+
+
 

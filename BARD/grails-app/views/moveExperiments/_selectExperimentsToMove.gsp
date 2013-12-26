@@ -11,9 +11,11 @@
 
     <div class="row">
         <div class="span12">
-            <g:formRemote url="[controller: 'moveExperiments', action: 'moveSelectedExperiments']"
+            <g:formRemote id="selectExperimentsToMoveForm"
+                          url="[controller: 'moveExperiments', action: 'moveSelectedExperiments']"
                           name="splitExperiments"
-                          update="[success: 'displayResponseDiv', failure: 'displayResponseDiv']">
+                          update="[success: 'displayResponseDiv', failure: 'displayResponseDiv']"
+                          onSuccess="disableFormAndControls(data)">
                 <table id="myExperiments" class="table table-striped table-hover table-bordered">
                     <thead>
                     <tr>
