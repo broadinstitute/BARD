@@ -39,7 +39,7 @@
 
         <div class="span8">
 
-            <g:formRemote class="form-horizontal"
+            <g:formRemote class="form-horizontal" id="moveExperimentsForm"
                           url="[controller: 'moveExperiments', action: 'confirmMoveExperiments']"
                           name="mergeAssays"
                           update="[success: 'confirmMove', failure: 'confirmMove']">
