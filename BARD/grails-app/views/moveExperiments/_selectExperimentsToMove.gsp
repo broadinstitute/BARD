@@ -2,7 +2,7 @@
 <div class="container">
     <div>
         <g:set var="experimentNum" value="${moveExperimentsCommand.experiments?.size()}"/>
-        <h2>${experimentNum} Experiment${experimentNum && experimentNum > 1 ? "s" : ""} found - choose which ones to move</h2>
+        <h2>${experimentNum} Experiment${experimentNum && experimentNum > 1 ? "s found - choose which ones to move" : " found"}</h2>
 
         <g:if test="${warningMessage}">
             <h4>${warningMessage}</h4>
