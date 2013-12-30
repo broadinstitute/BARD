@@ -59,7 +59,7 @@ modules = {
     }
 
     bardHomepage {
-        dependsOn 'core,bootstrap,autocomplete'
+        dependsOn 'core,bootstrap,bootstrap-responsive-css,autocomplete'
         resource url: '/css/bardHomepage/BardHomepage.css'
         resource url: "css/bardHomepage/footer.css"
         resource url: "css/bardHomepage/searchBox.css"
