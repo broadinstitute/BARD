@@ -116,7 +116,7 @@ grails.project.dependency.resolution = {
         compile ":jquery-ui:1.8.15"
         compile ":export:1.5"
         compile ":resources:1.2.RC2"
-        compile ":twitter-bootstrap:3.0.3"
+        compile ":twitter-bootstrap:2.3.0"
         compile(":cbipcrowdauthentication:0.3.4") {
             excludes('spock', 'release', 'google-collections')
         }
@@ -124,6 +124,7 @@ grails.project.dependency.resolution = {
         compile ":spring-mobile:0.4"
         compile ":console:1.2"
         compile ":jquery-validation-ui:1.4.2"
+        compile ":twitter-bootstrap:2.2.2"
         compile(':webflow:2.0.0') {
             exclude 'grails-webflow'
         }
