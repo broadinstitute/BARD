@@ -8,14 +8,17 @@
 
 <div id="dialog_link_experiment" title="Link Experiments">
 
-        <form id="linkExperimentForm">
-            <div id="displayLinkExperimentErrorMessage"></div>
-            <label for="fromExperimentId">From Experiment ID:</label>
-            <input type="text" name="fromExperimentId" id="fromExperimentId" value=""
-                   class="text ui-widget-content ui-corner-all"/>
-            <label for="toExperimentId">To Experiment ID:</label>
-            <input type="text" name="toExperimentId" id="toExperimentId" value=""
-                   class="text ui-widget-content ui-corner-all"/>
-        </form>
+    <form id="linkExperimentForm">
+        <g:set var="projectExperiments" value="${(pexperiment.target.connectedNodes*.keyValues['eid'] + pexperiment.target.isolatedNodes*.keyValues['eid']).sort()}"/>
+        <div id="displayLinkExperimentErrorMessage"></div>
+        <label for="fromExperimentId">From Experiment ID:</label>
+        <g:select name="fromExperimentId" id="fromExperimentId" value=""
+                  from="${projectExperiments}"
+                  class="text ui-widget-content ui-corner-all"/>
+        <label for="toExperimentId">To Experiment ID:</label>
+        <g:select name="toExperimentId" id="toExperimentId" value=""
+                  from="${projectExperiments}"
+                  class="text ui-widget-content ui-corner-all"/>
+    </form>
 
 </div>
