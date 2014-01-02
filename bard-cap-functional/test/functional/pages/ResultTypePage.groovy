@@ -39,15 +39,17 @@ class ResultTypePage extends CapScaffoldPage{
 		return false
 	}
 
-	def addResultType(def inputData){
+	ViewExperimentPage addResultType(def inputData){
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
 		selectAutoChoiceValue(resultTypeId, selectToDrop, inputData.resultType)
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	statsModifierId.selectChoice }
 		selectAutoChoiceValue(statsModifierId, selectToDrop, inputData.statsModifier)
 		saveBtn.click()
+		
+		return new ViewExperimentPage()
 	}
 
-	def addChildResultType(def inputData){
+	ViewExperimentPage addChildResultType(def inputData){
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
 		selectAutoChoiceValue(resultTypeId, selectToDrop, inputData.resultType)
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	statsModifierId.selectChoice }
@@ -55,9 +57,11 @@ class ResultTypePage extends CapScaffoldPage{
 		parentResultTypeId.value(inputData.parentResultType)
 		parentChildRelationshipId.value(inputData.relationship)
 		saveBtn.click()
+		
+		return new ViewExperimentPage()
 	}
 
-	def addDoseResultType(def inputData){
+	ViewExperimentPage addDoseResultType(def inputData){
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
 		selectAutoChoiceValue(doseResultTypeId, selectToDrop, inputData.doseResultType)
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	responseResultTypeId.selectChoice }
@@ -65,9 +69,11 @@ class ResultTypePage extends CapScaffoldPage{
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	statsModifierId.selectChoice }
 		selectAutoChoiceValue(statsModifierId, selectToDrop, inputData.statsModifier)
 		saveBtn.click()
+		
+		return new ViewExperimentPage()
 	}
 
-	def selectAutoChoiceValue(def element1, def element2,  def inputValue){
+	void selectAutoChoiceValue(def element1, def element2,  def inputValue){
 		int index = 0
 		if(!element2.dropdown){
 			element1.selectChoice.click()

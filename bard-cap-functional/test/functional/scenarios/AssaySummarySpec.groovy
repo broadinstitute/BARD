@@ -1,17 +1,13 @@
 package scenarios
-//Updated by Syed.
-import org.openqa.selenium.remote.UnreachableBrowserException;
 
-import pages.CapSearchPage
+import pages.CreateAssayPage
 import pages.HomePage
 import pages.ViewAssayDefinitionPage
-import spock.lang.Ignore;
 import base.BardFunctionalSpec
+
 import common.Constants
-import common.TestData;
-import common.TestDataReader
-import common.Constants.NavigateTo
-import common.Constants.SearchBy
+import common.TestData
+
 import db.Assay
 
 /**
@@ -19,7 +15,6 @@ import db.Assay
  * Date Created: 2013/02/07
  */
 class AssaySummarySpec extends BardFunctionalSpec {
-//	def testData = TestDataReader.getTestData()
 	int statusIndex = 1
 	int nameIndex = 2
 	int designedByIndex = 4
@@ -29,6 +24,28 @@ class AssaySummarySpec extends BardFunctionalSpec {
 		logInSomeUser()
 	}
 
+	def "Test Create New Assay"() {
+		given:"Navigating to Create New Assay page"
+		to CreateAssayPage
+
+		when:"User is at Create New Assay Page"
+		at CreateAssayPage
+		CreateNewAssay(TestData.createAssay)
+
+		then:"Navigate to View Assay page and fetch summary info"
+		at ViewAssayDefinitionPage
+
+		def uiSummary = getUISummaryInfo()
+		def dbSummary = Assay.getCreatedAssaySummary(TestData.createAssay.name)
+
+		and:"Validate the created assay summary info with db and ui"
+		assert uiSummary.ADID.toString() == dbSummary.ADID.toString()
+		assert uiSummary.Name.equalsIgnoreCase(dbSummary.Name)
+		assert uiSummary.Status.equalsIgnoreCase(dbSummary.Status)
+		assert uiSummary.Owner == dbSummary.owner
+
+		report ""
+	}
 
 	def "Test Edit Assay Summary Status"() {
 		given: "Navigate to Show Assay page"

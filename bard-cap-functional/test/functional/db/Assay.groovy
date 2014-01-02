@@ -122,4 +122,17 @@ class Assay extends DatabaseConnectivity {
 		}
 		return documentList
 	}
+	
+	/**
+	 * @param name
+	 * @return created assay summary information
+	 */
+	public static def getCreatedAssaySummary(String name) {
+		def assaySummary = [:]
+		def sql = DatabaseConnectivity.getSql()
+		sql.eachRow(AssayQueries.ASSAY_SUMMARY_CREATED, [name]) {
+			assaySummary = it.toRowResult()
+		}
+		return assaySummary
+	}
 }

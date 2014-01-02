@@ -9,7 +9,7 @@ class TestData {
 	final static def projectId = 1315
 	final static def assayId = 8129
 	final static int experimentId = 1552
-	final static int panelId = 10
+	final static int panelId = 6
 
 	final static def documents = [
 		documentName:"Document Name",
@@ -61,6 +61,27 @@ class TestData {
 		description:"Test Panel Description",
 		owner:"BARD Administrator"
 	]
+	
+	final static Map createProject = [
+		name:"Test Project Name",
+		description:"Test Project Description",
+		status:"Draft",
+		group:"Project",
+		owner:"BARD Administrator"
+	]
+	
+	final static Map createAssay = [
+		name:"Test Assay Name",
+		definitionType:"Regular",
+		owner:"BARD Administrator"
+	]
+	
+	final static Map createExperiment = [
+		name:"Test Experiment Name",
+		description:"Test Experiment Description",
+		owner:"BARD Administrator"
+	]
+	
 	final static Map rundate = [
 		From:[
 			day:'3',
@@ -100,7 +121,7 @@ class TestData {
 			statsModifier:'maximum'
 		]
 	]
-	final static def assaysToPanel = [8129, 1315]
+	final static def assaysToPanel = [4405, 1730, 2529]
 
 
 }

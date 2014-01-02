@@ -78,4 +78,17 @@ class Experiment extends DatabaseConnectivity {
 		}
 		return documentList
 	}
+	
+	/**
+	 * @param name
+	 * @return created experiment summary information
+	 */
+	public static def getCreatedExperimentSummary(String name) {
+		def experimentSummary = [:]
+		def sql = DatabaseConnectivity.getSql()
+		sql.eachRow(ExperimentQueries.EXPERIMENT_SUMMARY_CREATED, [name]) {
+			experimentSummary = it.toRowResult()
+		}
+		return experimentSummary
+	}
 }

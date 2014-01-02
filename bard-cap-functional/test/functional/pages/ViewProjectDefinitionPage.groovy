@@ -48,8 +48,4 @@ class ViewProjectDefinitionPage extends CapScaffoldPage{
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { !formLoading.loading.displayed }
 	}
 	
-//	def navigateToEditContextPage(){
-//		assert projectContextEdit.iconPencil
-//		projectContextEdit.iconPencil.click()
-//	}
 }

@@ -90,4 +90,17 @@ class Project extends DatabaseConnectivity {
 		}
 		return documentList
 	}
+	
+	/**
+	 * @param name
+	 * @return created project summary information
+	 */
+	public static def getCreatedProjectSummary(String name) {
+		def projectSummary = [:]
+		def sql = DatabaseConnectivity.getSql()
+		sql.eachRow(ProjectQueries.PROJECT_SUMMARY_CREATED, [name]) {
+			projectSummary = it.toRowResult()
+		}
+		return projectSummary
+	}
 }

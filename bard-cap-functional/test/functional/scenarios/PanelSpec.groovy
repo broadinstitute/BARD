@@ -13,6 +13,7 @@ import common.TestData
 import db.Panel
 
 /**
+ * This class includes all the possible test functions for Panel module.
  * @author Muhammad.Rafique
  * Date Created: 2013/11/20
  */
@@ -38,10 +39,10 @@ class PanelSpec extends BardFunctionalSpec {
 		def dbSummary = Panel.getPanelOverviewByName(TestData.addPanel.name)
 
 		and:"Varify the added panel from db"
-		assert uiSummary.PanelID == dbSummary.panelId.toString()
-		assert uiSummary.Panel == dbSummary.name
-		assert uiSummary.Description == dbSummary.description
-		assert uiSummary.Owner == dbSummary.owner
+		assert uiSummary.PanelID.toString() == dbSummary.panelId.toString()
+		assert uiSummary.Panel.equalsIgnoreCase(dbSummary.name)
+		assert uiSummary.Description.equalsIgnoreCase(dbSummary.description)
+		assert uiSummary.Owner.equalsIgnoreCase(dbSummary.owner)
 
 		and:"Delete the added panel"
 		deletePanel()
@@ -56,11 +57,14 @@ class PanelSpec extends BardFunctionalSpec {
 		given:"Navigating to Create New Panel page"
 		to ViewPanelPage
 
-		when:"User is at View Panel page"
+		when:"User is at View Panel page, clean up assays from panel"
 		at ViewPanelPage
+		deletePanelAssay()
+		
+		then:"Navigate to Add Assay to Panel page"
 		navigateToAddAssayToPanel()
 
-		then:"Add Assay Definition to Panel"
+		and:"Add Assay Definition to Panel"
 		at PanelAddAssayPage
 		AddAssaysToPanel(TestData.assaysToPanel)
 
@@ -220,4 +224,5 @@ class PanelSpec extends BardFunctionalSpec {
 
 		report ""
 	}
+
 }

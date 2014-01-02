@@ -7,6 +7,7 @@ import modules.EditIconModule
 import modules.EditableFormModule
 import modules.ErrorInlineModule
 import modules.SummaryModule
+import common.Constants
 
 /**
  * @author Muhammad.Rafique
@@ -114,6 +115,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		waitFor { !editableForm.buttons.iconRemove }
 		//		ajaxRequestCompleted()
 	}
+
 	def editDate(def indexValue, def runDate){
 		def errorMessage = "Required and cannot be empty"
 		assert summaryEdit(indexValue).editIconPencil
@@ -133,12 +135,12 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		waitFor { !editableForm.buttons.iconOk }
 		waitFor { !editableForm.buttons.iconRemove }
 	}
-	def selectingComboValue(def editValue){
+	void selectingComboValue(def editValue){
 		assert editableForm.selectInput
 		editableForm.selectInput.value(editValue)
 		editableForm.buttons.iconOk.click()
 	}
-	def fillInputField(def editValue){
+	void fillInputField(def editValue){
 		assert editableForm.inputTextArea
 		assert editableForm.buttons.iconOk
 		editableForm.inputTextArea.value("")
@@ -162,9 +164,11 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		return uiSummary
 	}
 
-	def navigateToCreateDocument(def document){
+	DocumentPage navigateToCreateDocument(def document){
 		assert document.addNewDocument.iconPlus
 		document.addNewDocument.iconPlus.click()
+		
+		return new DocumentPage()
 	}
 
 	def navigateToEditDocument(def document, def docName){

@@ -13,6 +13,7 @@ import common.Constants.DocumentAs
 import db.Project
 
 /**
+ * This class includes all the possible test functions for document section of Project.
  * @author Muhammad.Rafique
  * Date Created: 2013/02/07
  */

@@ -20,15 +20,20 @@ class ViewPanelPage extends CapScaffoldPage {
 		panelAssayTable(wait:true, required: false) { $("table.table tbody tr") }
 	}
 
-	def deletePanel(){
+	MyPanelPage deletePanel(){
 		assert deletePanelButton
 		withConfirm { deletePanelButton.iconTrash.click() }
+		
+		return new MyPanelPage()
 	}
 
-	def navigateToAddAssayToPanel(){
+	PanelAddAssayPage navigateToAddAssayToPanel(){
 		assert addAssayToPanelButton
 		addAssayToPanelButton.iconPlus.click()
+		
+		return new PanelAddAssayPage()
 	}
+	
 	def getUiPanelAssays(){
 		def panelAdids = []
 		if(panelAssayTable){

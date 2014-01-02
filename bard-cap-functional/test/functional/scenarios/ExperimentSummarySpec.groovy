@@ -1,5 +1,6 @@
 package scenarios
 
+import pages.CreateExperimentPage
 import pages.HomePage
 import pages.ViewExperimentPage
 import base.BardFunctionalSpec
@@ -25,6 +26,29 @@ class ExperimentSummarySpec extends BardFunctionalSpec {
 		logInSomeUser()
 	}
 
+	def "Test Create New Experiment"() {
+		given:"Navigating to Create New Experiment page"
+		to CreateExperimentPage
+
+		when:"User is at Create New Experiment Page"
+		at CreateExperimentPage
+		CreateNewExperiment(TestData.createExperiment)
+
+		then:"Navigate to View Experiment page and fetch summary info"
+		at ViewExperimentPage
+
+		def uiSummary = getUISummaryInfo()
+		def dbSummary = Experiment.getCreatedExperimentSummary(TestData.createExperiment.name)
+
+		and:"Validate the created Experiment summary info with db and ui"
+		assert uiSummary.EID.toString() == dbSummary.EID.toString()
+		assert uiSummary.Name.equalsIgnoreCase(dbSummary.Name)
+		assert uiSummary.Status.equalsIgnoreCase(dbSummary.Status)
+		assert uiSummary.Owner == dbSummary.owner
+
+		report ""
+	}
+	
 	def "Test Edit Experiment Summary Status"() {
 		given:"Navigating to Show Experiment page"
 		to ViewExperimentPage
@@ -36,7 +60,8 @@ class ExperimentSummarySpec extends BardFunctionalSpec {
 		def statusOriginal = uiSummary.Status
 		def statusEdited = ""
 		if(statusOriginal != "Approved"){
-			statusEdited = "Approved"
+//			statusEdited = "Approved"
+			statusEdited = "Retired"
 		}else{
 			statusEdited = "Retired"
 		}
@@ -207,9 +232,9 @@ class ExperimentSummarySpec extends BardFunctionalSpec {
 		def dbSummary = Experiment.getExperimentSummaryById(TestData.experimentId)
 
 		then:"Verify Summary Run Date before edit on UI & DB"
-		assert uiSummary.RunDatefrom.equals(dbSummary.RunDateFrom)
-		assert uiSummary.RunDateto.equals(dbSummary.RunDateTo)
-
+		assert uiSummary.RunDatefrom.toString() == dbSummary.RunDateFrom.toString()
+		assert uiSummary.RunDateto.toString() == dbSummary.RunDateTo.toString()
+		
 		and:"Edit/Update Summary Run Date"
 		editDate(runDateFromIndex, TestData.rundate.From)
 		editDate(runDateToIndex, TestData.rundate.To)
@@ -220,8 +245,8 @@ class ExperimentSummarySpec extends BardFunctionalSpec {
 		dbSummary = Experiment.getExperimentSummaryById(TestData.experimentId)
 
 		then:"Verify Summary Run Date after edit on UI & DB"
-		assert uiSummary.RunDatefrom.equals(dbSummary.RunDateFrom)
-		assert uiSummary.RunDateto.equals(dbSummary.RunDateTo)
+		assert uiSummary.RunDatefrom.toString() == dbSummary.RunDateFrom.toString()
+		assert uiSummary.RunDateto.toString() == dbSummary.RunDateTo.toString()
 
 		report ""
 	}

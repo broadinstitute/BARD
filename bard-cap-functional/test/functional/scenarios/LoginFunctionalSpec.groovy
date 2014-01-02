@@ -5,9 +5,9 @@ import pages.LoginPage
 import base.BardFunctionalSpec
 
 /**
+ * This class includes all the possible test functions for login and logout.
  * @author Muhammad.Rafique
  * Date Created: 13/02/11
- * Last Updated: 13/10/07
  */
 
 class LoginFunctionalSpec extends BardFunctionalSpec {

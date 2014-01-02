@@ -12,7 +12,7 @@ import common.TestData
  */
 class ViewExperimentPage extends CapScaffoldPage{
 	static url="experiment/show/"+TestData.experimentId
-	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ title.contains("EID "+TestData.experimentId)} }
+	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ title.contains("EID")} }
 
 	static content = {
 		resultTypeSection(wait:true, required: false) {$("#result-type-header")}
@@ -64,11 +64,13 @@ class ViewExperimentPage extends CapScaffoldPage{
 		return flag
 	}
 
-	def deleteSpecificResultType(def value){
+	ViewExperimentPage deleteSpecificResultType(def value){
 		if(resultTypeTable){
 			withConfirm { resultType.deleteResultType(value).click() }
 		}
 		waitFor(25000, 0.5) { !isResultType(value) }
+		
+		return new ViewExperimentPage()
 	}
 
 	ViewExperimentPage deleteResultTypes(){
@@ -93,17 +95,26 @@ class ViewExperimentPage extends CapScaffoldPage{
 		}
 		return flag
 	}
-	def navigateToResultTypePage(){
+	
+	ResultTypePage navigateToResultTypePage(){
 		assert addResultTypeBtn
 		addResultTypeBtn.click()
+		
+		return new ResultTypePage()
 	}
-	def editResultTypePage(def value){
+	
+	ResultTypePage editResultTypePage(def value){
 		assert resultType.editResultType(value)
 		resultType.editResultType(value).click()
+		
+		return new ResultTypePage()
 	}
-	def navigateToDoseResultTypePage(){
+	
+	ResultTypePage navigateToDoseResultTypePage(){
 		assert addDoseResponseeBtn
 		addDoseResponseeBtn.click()
+		
+		return new ResultTypePage()
 	}
 
 }

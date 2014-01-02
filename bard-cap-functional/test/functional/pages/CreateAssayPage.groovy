@@ -7,25 +7,25 @@ import geb.Page
  * @author Muhammad.Rafique
  * Date Created: 2013/11/20
  */
-class CreatePanelPage extends Page {
-	static url = "panel/create"
-	static at = { title.contains("Create Panel") }
+class CreateAssayPage extends Page {
+	static url = "assayDefinition/create"
+	static at = { title.contains("Create Assay Definition") }
 
 	static content = {
-		nameField { $("#name") }
-		descriptionField { $("#description") }
+		nameField { $("#assayName") }
+		assayType{ $("#assayType") }
 		ownerRole { $("#ownerRole") }
 		form { $("form") }
 		cancelBtn { form.find("a.btn") }
 		createBtn { form.find("input.btn.btn-primary", type:"submit") }
 	}
 	
-	ViewPanelPage CreateNewPanel(def testData){
+	ViewAssayDefinitionPage CreateNewAssay(def testData){
 		nameField.value(testData.name)
-		descriptionField.value(testData.description)
+		assayType.value(testData.definitionType)
 		ownerRole.value(testData.owner)
 		createBtn.click()
 		
-		return new ViewPanelPage()
+		return new ViewAssayDefinitionPage()
 	}
 }

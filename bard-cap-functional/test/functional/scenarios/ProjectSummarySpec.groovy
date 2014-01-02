@@ -1,5 +1,6 @@
 package scenarios
 
+import pages.CreateProjectPage
 import pages.HomePage
 import pages.ViewProjectDefinitionPage
 import base.BardFunctionalSpec
@@ -10,6 +11,7 @@ import common.TestData
 import db.Project
 
 /**
+ * This class includes all the possible test functions for overview section of Project.
  * @author Muhammad.Rafique
  * Date Created: 2013/02/07
  */
@@ -22,6 +24,29 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		logInSomeUser()
 	}
 
+	def "Test Create New Project"() {
+		given:"Navigating to Create New Project page"
+		to CreateProjectPage
+
+		when:"User is at Create New Project Page"
+		at CreateProjectPage
+		CreateNewProject(TestData.createProject)
+
+		then:"Navigate to View Project page and fetch summary info"
+		at ViewProjectDefinitionPage
+
+		def uiSummary = getUISummaryInfo()
+		def dbSummary = Project.getCreatedProjectSummary(TestData.createProject.name)
+
+		and:"Validate the created project summary info with db and ui"
+		assert uiSummary.PID.toString() == dbSummary.PID.toString()
+		assert uiSummary.Name.equalsIgnoreCase(dbSummary.Name)
+		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description)
+		assert uiSummary.Status.equalsIgnoreCase(dbSummary.Status)
+		assert uiSummary.Owner == dbSummary.owner
+
+		report ""
+	}
 
 	def "Test Edit Project Summary Status"() {
 		given:"Navigating to Show Project page"
@@ -194,4 +219,5 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 
 		report ""
 	}
+
 }
