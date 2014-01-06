@@ -45,7 +45,7 @@ class ProjectService {
      * Returns total number of probes. Please note that a probe could be reported either as a CID or an SID (https://www.pivotaltracker.com/story/show/62094690).
      * @return
      */
-    Integer totalNumberOfProbes() {
+    Long totalNumberOfProbes() {
 
         final String TOTAL_PROBES_QUERY = '''
                 SELECT count(*) as total FROM Project project inner join project.contexts context
