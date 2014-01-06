@@ -56,7 +56,8 @@ class MockQueryService implements IQueryService {
     long numberOfSubstances() {
         return 0  //To change body of implemented methods use File | Settings | File Templates.
     }
-    long numberOfExperimentData(){
+
+    long numberOfExperimentData() {
         return 0
     }
 
@@ -605,7 +606,9 @@ class MockQueryService implements IQueryService {
      * @param searchFilters
      * @return
      */
-    Map findCompoundsByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map findCompoundsByTextSearch(
+            final String searchString,
+            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<CompoundAdapter> foundCompoundAdapters = []
 
         Set<Long> keySet = mockCompoundAdapterMap.keySet()
@@ -625,7 +628,9 @@ class MockQueryService implements IQueryService {
      * @param searchFilters
      * @return Map
      */
-    Map findAssaysByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map findAssaysByTextSearch(
+            final String searchString,
+            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<AssayAdapter> foundAssayAdapters = []
         Collection<Value> facets = []
 
@@ -645,7 +650,9 @@ class MockQueryService implements IQueryService {
      * @param searchFilters
      * @return Map
      */
-    Map findProjectsByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map findProjectsByTextSearch(
+            final String searchString,
+            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         List<ProjectAdapter> foundProjectAdapters = []
         Collection<Value> facets = []
 
@@ -1007,6 +1014,10 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
     @Override
     Map getPathsForAssayType(String endNode) {
         return null
+    }
+
+    Long totalNumberOfProbes() {
+        return 0
     }
 }
 
