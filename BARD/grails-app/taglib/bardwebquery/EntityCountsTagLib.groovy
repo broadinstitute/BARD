@@ -50,8 +50,7 @@ class EntityCountsTagLib {
 
 
     def probeCount = { attrs, body ->
-        //long probes = queryService.numberOfProbeProjects()
-        long probes = queryService.numberOfProbeCompounds()
+        Long probes = queryService.totalNumberOfProbes()
         String link = generateLink(probes, "Number of Probes", "#tab-probes")
         out << "${link}"
     }
