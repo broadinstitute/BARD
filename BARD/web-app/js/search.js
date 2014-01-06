@@ -225,10 +225,10 @@ function handleStructureSearch(url, currentFormId) {
             $("#compoundsTab").html(compoundTotal);
             $("#compounds").tab('show');
         },
-        error:function (request, status, error) {
+        error:handleAjaxError(function (request, status, error) {
             $("#compoundsTab").html('Compounds ' + errorImageTwitterBootstrap);
             $("#compounds").html(error);
-        },
+        }),
         complete:function () {
             $("#compounds").trigger('search.complete');
         }
@@ -270,10 +270,10 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
 
             $(tabDivElement).html(total);
         },
-        error:function (request, status, error) {
+        error:handleAjaxError(function (request, status, error) {
             $(tabDivElement).html(prefixOfTextToAppearOnTab + errorImageTwitterBootstrap);
             $(updateDivId).html(error);
-        },
+        }),
         complete:function () {
             $(updateDivId).trigger('search.complete');
         }

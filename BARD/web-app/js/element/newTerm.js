@@ -4,8 +4,12 @@ $(document).ready(function () {
 
 
     var attributeSelect2 = new DescriptorSelect2('#attributeElementId', 'Search for attribute name',{results: []});
-    $.ajax(bardAppContext + "/ontologyJSon/getAttributeDescriptors").done(function (data) {
-        attributeSelect2.initSelect2(data, validateAddToChildren);
+
+    $.ajax(bardAppContext + "/ontologyJSon/getAttributeDescriptors", {
+        success:function (data) {
+            attributeSelect2.initSelect2(data, validateAddToChildren);
+        },
+        error: handleAjaxError()
     });
     $("#attributeElementId").on("change", function (e) {
         // based on the attribute selected only show the appropriate value widgets
@@ -110,9 +114,9 @@ function createHierarchyTree(treeElementName, treeTitle, treeRoot, expectedValue
             updateTermForm(responseText);
             reloadActiveNode();
         },
-        error: function (request, status, error) {
+        error: handleAjaxError(function (request, status, error) {
             updateTermForm(responseText);
-        }
+        })
 
     });
     selectCurrentElement();

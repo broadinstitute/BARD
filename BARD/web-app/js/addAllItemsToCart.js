@@ -41,9 +41,9 @@ $(document).on('click', '#addAllItemsToCart', function () {
                 $(saveAllButtonElement).find('i#addAllItemsToCartButtonIcon').removeClass(); //remove any existing icons
             });
         },
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
+        error: handleAjaxError(function (XMLHttpRequest, textStatus, errorThrown) {
             $(saveAllButtonElement).find('i#addAllItemsToCartButtonIcon').addClass('icon-exclamation-sign') //add an exclamation-sign to the button
-        },
+        }),
         complete:function () {
         }
     });

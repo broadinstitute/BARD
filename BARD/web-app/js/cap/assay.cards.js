@@ -67,11 +67,11 @@ $(document).ready(function () {
             $("#errorCardHolder").addClass("alert alert-success");
             $("#errorCardHolder").html("Successfully created");
         },
-        error: function (response, textStatus, errorThrown) {
+        error: handleAjaxError(function (response, textStatus, errorThrown) {
             $("#errorCardHolder").removeClass("alert alert-success alert-error");
             $("#errorCardHolder").addClass("alert alert-error");
             $("#errorCardHolder").html(response.responseText);
-        }
+        })
     });
 
     $("#dialog_confirm_delete_item").dialog({
@@ -120,11 +120,11 @@ function showDeleteCardConfirmation(cardId, contextClass, section) {
                         $("#errorCardHolder").addClass("alert alert-success");
                         $("#errorCardHolder").html("Successfully deleted");
                     },
-                    error: function (response, textStatus, errorThrown) {
+                    error: handleAjaxError(function (response, textStatus, errorThrown) {
                         $("#errorCardHolder").removeClass("alert alert-success alert-error");
                         $("#errorCardHolder").addClass("alert alert-error");
                         $("#errorCardHolder").html(response.responseText);
-                    }
+                    })
                 });
                 $(this).dialog("close");
             }

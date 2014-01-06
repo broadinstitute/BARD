@@ -9,6 +9,7 @@ modules = {
     }
     core {
         dependsOn 'jquery, jquery-ui, jquery-theme, jquery-validation-ui, dataTables, jqueryform'
+        resource url: '/js/cap/monkeyPatchAjax.js'
         resource url: '/css/datatables/demo_table_jui.css'
         resource url: '/js/application.js'
         resource url: "css/bard.css"

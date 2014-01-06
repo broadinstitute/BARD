@@ -73,8 +73,11 @@ $(document).ready(function () {
     //get result types
     var resultTypeSelect2 = new DescriptorSelect2('#resultTypeId', 'Search for result type', {results: []});
     resultTypeSelect2.initSelect2({results: []});
-    $.ajax(RESULT_TYPE_DESCRIPTORS).done(function (data) {
-        resultTypeSelect2.initSelect2(data, handleResultTypeEditing);
+    $.ajax(RESULT_TYPE_DESCRIPTORS, {
+        success: function (data) {
+            resultTypeSelect2.initSelect2(data, handleResultTypeEditing);
+        },
+        error: handleAjaxError()
     });
 
     $('#resultTypeId').on("select2-highlight", function (e) {
@@ -90,8 +93,11 @@ $(document).ready(function () {
     });
     var statsModifierSelect2 = new DescriptorSelect2('#statsModifierId', 'Search for stats modifiers', {results: []});
     statsModifierSelect2.initSelect2({results: []});
-    $.ajax(STATS_MODIFIER_DESCRIPTORS).done(function (data) {
-        statsModifierSelect2.initSelect2(data, handleStatsModifierEditing);
+    $.ajax(STATS_MODIFIER_DESCRIPTORS, {
+        success: function (data) {
+            statsModifierSelect2.initSelect2(data, handleStatsModifierEditing);
+        },
+        error: handleAjaxError()
     });
 
     $('#statsModifierId').on("select2-highlight", function (e) {
@@ -114,8 +120,11 @@ $(document).ready(function () {
 
     var concentrationResultTypeSelect2 = new DescriptorSelect2('#concentrationResultTypeId', 'Search for result type', {results: []});
     concentrationResultTypeSelect2.initSelect2({results: []});
-    $.ajax(CONCENTRATION_END_POINT_DESCRIPTORS).done(function (data) {
-        concentrationResultTypeSelect2.initSelect2(data, handleConcentrationResultTypeEditing);
+    $.ajax(CONCENTRATION_END_POINT_DESCRIPTORS, {
+        success: function (data) {
+            concentrationResultTypeSelect2.initSelect2(data, handleConcentrationResultTypeEditing);
+        },
+        error: handleAjaxError()
     });
 
     $('#concentrationResultTypeId').on("select2-highlight", function (e) {
@@ -131,8 +140,11 @@ $(document).ready(function () {
     //get response result types  for dose
     var responseResultTypeSelect2 = new DescriptorSelect2('#responseResultTypeId', 'Search for result type', {results: []});
     responseResultTypeSelect2.initSelect2({results: []});
-    $.ajax(RESPONSE_END_POINT_DESCRIPTORS).done(function (data) {
-        responseResultTypeSelect2.initSelect2(data, handleResponseResultTypeEditing);
+    $.ajax(RESPONSE_END_POINT_DESCRIPTORS, {
+        success: function (data) {
+            responseResultTypeSelect2.initSelect2(data, handleResponseResultTypeEditing);
+        },
+        error: handleAjaxError()
     });
 
     $('#responseResultTypeId').on("select2-highlight", function (e) {

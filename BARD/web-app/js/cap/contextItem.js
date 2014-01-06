@@ -98,11 +98,12 @@ $(document).ready(function () {
         else if ('ELEMENT' === expectedValueType) {
             showWidgets('#elementValueContainer');
             $.ajax(bardAppContext + "/ontologyJSon/getValueDescriptorsV2", {
-                data: {attributeId: data.id}
-            }).done(function (valueData) {
-
+                data: {attributeId: data.id},
+                success: (function (valueData) {
                     initializeValueElementSelect2(valueData);
-                });
+                }),
+                error: handleAjaxError()
+            });
 
         }
         else if ('EXTERNAL_ONTOLOGY' === expectedValueType) {
@@ -168,11 +169,13 @@ $(document).ready(function () {
                         elementId: $("#attributeElementId").val(),
                         id: id
                     },
-                    dataType: "json"
-                }).done(function (data) {
+                    dataType: "json",
+                    success: function (data) {
                         callback(data);
                         potentiallyFocus("#extValueSearch");
-                    });
+                    },
+                    error: handleAjaxError()
+                });
             }
         },
         ajax: {
@@ -285,9 +288,13 @@ $(document).ready(function () {
 
     var attributeSelect2 = new DescriptorSelect2('#attributeElementId', 'Search for attribute name',{results: []});
     attributeSelect2.initSelect2({results: []});
-    $.ajax(bardAppContext + "/ontologyJSon/getAttributeDescriptors").done(function (data) {
-        attributeSelect2.initSelect2(data,updateConstraintWidgets);
+    $.ajax("/BARD/ontologyJSon/getAttributeDescriptors", {
+        success:function (data) {
+            attributeSelect2.initSelect2(data,updateConstraintWidgets);
+        },
+        error: handleAjaxError()
     });
+
     $("#attributeElementId").on("change", function (e) {
         // on change of the attribute, clear all value fields
         clearAllValueFields();

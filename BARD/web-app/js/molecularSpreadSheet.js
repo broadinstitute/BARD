@@ -15,9 +15,9 @@ $(document).ready(function () {
             $('#molecularSpreadSheet').html(molSpreadSheetData);
             addPopOver()
         },
-        error:function () {
+        error:handleAjaxError(function () {
             $('#molecularSpreadSheet').html('No data found');
-        },
+        }),
         complete:function () {
 
         }
