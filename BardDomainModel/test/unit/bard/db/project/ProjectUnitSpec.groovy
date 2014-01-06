@@ -4,7 +4,7 @@ import bard.db.dictionary.Element
 import grails.buildtestdata.mixin.Build
 import spock.lang.Specification
 
-import static bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule.ONE_BIOLOGY_ATTRIBUTE_REQUIRED
+import static bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule.ASSAY_ONE_BIOLOGY_ATTRIBUTE_REQUIRED
 
 /**
  * Created with IntelliJ IDEA.
@@ -38,7 +38,7 @@ class ProjectUnitSpec extends Specification {
 
         where:
         desc                     | attributeElementMaps                         | expectedGuidanceMessages
-        'biology required'       | { null }                                     | [ONE_BIOLOGY_ATTRIBUTE_REQUIRED]
+        'biology required'       | { null }                                     | [ASSAY_ONE_BIOLOGY_ATTRIBUTE_REQUIRED]
         'biology required'       | { [[label: 'biology']] }                     | []
         'more than 1 biology ok' | { [[label: 'biology'], [label: 'biology']] } | []
     }
