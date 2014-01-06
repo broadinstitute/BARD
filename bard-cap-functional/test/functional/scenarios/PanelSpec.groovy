@@ -60,7 +60,7 @@ class PanelSpec extends BardFunctionalSpec {
 		when:"User is at View Panel page, clean up assays from panel"
 		at ViewPanelPage
 		deletePanelAssay()
-		
+
 		then:"Navigate to Add Assay to Panel page"
 		navigateToAddAssayToPanel()
 

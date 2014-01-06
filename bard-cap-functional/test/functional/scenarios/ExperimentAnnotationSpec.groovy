@@ -28,7 +28,7 @@ class ExperimentAnnotationSpec extends BardFunctionalSpec {
 		logInSomeUser()
 	}
 
-	def "Test Add Context Card in Experiment"(){
+	def "Test Add and Delete Context Card in Experiment"(){
 		given:"Navigate to Show Experiment page"
 		to ViewExperimentPage
 
@@ -180,6 +180,8 @@ class ExperimentAnnotationSpec extends BardFunctionalSpec {
 		report ""
 	}
 
+	/** Ignore the below test function as it is already covering in the Add Context Card test function **/
+	/*
 	def "Test Delete Context Card in Experiment"(){
 		given:"Navigate to Show Experiment page"
 		to ViewExperimentPage
@@ -238,7 +240,7 @@ class ExperimentAnnotationSpec extends BardFunctionalSpec {
 
 		report ""
 	}
-
+*/
 	def "Test Add #TestName Type Context Item in Experiment"(){
 		given:"Navigate to Show Experiment page"
 		to ViewExperimentPage
@@ -346,19 +348,15 @@ class ExperimentAnnotationSpec extends BardFunctionalSpec {
 	def "Test Add #TestName Type Context Item with Empty Values in Experiment"(){
 		given:"Navigate to Show Experiment page"
 		to ViewExperimentPage
-
 		when:"At View Experiment Definition Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewExperimentPage
 		def uiContentsBefore = getUIContexts(section)
 		def dbContentsBefore = Experiment.getExperimentContext(dbContextType, TestData.experimentId)
-
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsBefore.size() == dbContentsBefore.size()
 		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
 		and:"Navigating to Edit Experiment Context Page"
 		navigateToEditContext(section)
-
 		when:"At Edit Experiment Context Page, Fetching Contexts Info from UI and DB for validation"
 		at EditContextPage
 		while(isContext(editContextGroup, contextCard)){
@@ -367,13 +365,10 @@ class ExperimentAnnotationSpec extends BardFunctionalSpec {
 		then:"Add Context Card, Before adding context item"
 		addNewContextCard(editContextGroup, contextCard)
 		assert isContext(editContextGroup, contextCard)
-
 		and:"Navigating to Context Item Page"
 		navigateToAddContextItem(editContextGroup, contextCard)
-
 		when: "At Context Item Page"
 		at ContextItemPage
-
 		then:"Adding New Context Item"
 		if(TestName == "NoAttribute"){
 			addContextItemValidation("", true, false)
@@ -389,32 +384,24 @@ class ExperimentAnnotationSpec extends BardFunctionalSpec {
 		else if(TestName == "ExOntologyNoIntegtegrated"){
 			addExternalOntologyItem(inputData, true, false, false)
 		}
-
 		and:"Verifying Context Item added"
 		at EditContextPage
 		assert !isContextItem(editContextGroup, contextCard, contextItem)
-
 		when:"Context Item  is added, Fetching Contexts Info from UI and DB for validation"
 		def uiContentsAfterAdd = getUIContextItems(editContextGroup, contextCard)
 		def dbContentsAfterAdd = Experiment.getExperimentContextItem(TestData.experimentId, dbContextType, contextCard)
-
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
-
 		and:"Cleaning up Contexts"
 		while(isContext(editContextGroup, contextCard)){
 			deleteContext(editContextGroup, contextCard)
 		}
-
 		and:"Navigating to View Experiment Definition Page"
 		finishEditing.buttonPrimary.click()
-
 		and:"At View Experiment Definition Page"
 		at ViewExperimentPage
 		assert !isContext(section, contextCard)
-
 		report "$TestName"
-
 		where:
 		TestName					| inputData								| contextItem
 		"NoAttribute"				| TestData.ValueType_Element			| TestData.ValueType_Element.AttributeFromDictionary
@@ -552,6 +539,8 @@ class ExperimentAnnotationSpec extends BardFunctionalSpec {
 		//		"ExOntologyNoIntegtegrated"	| TestData.contexts.ExtOntology	| TestData.contexts.ExtOntology.attribute
 	}
 
+	/** Ignore the below test function as it is already covering in the Add Context Item test function **/
+/*
 	def "Test Delete #TestName Type Context Item in Experiment"(){
 		given:"Navigate to Show Experiment page"
 		to ViewExperimentPage
@@ -609,7 +598,7 @@ class ExperimentAnnotationSpec extends BardFunctionalSpec {
 
 		and:"Verify that Context Item deleted succesfully"
 		assert !isContextItem(editContextGroup, contextCard, contextItem)
-		
+
 		when:"Context Item  is cleaned up, Fetching Contexts Info from UI and DB for validation"
 		at EditContextPage
 		def uiContentsAfterDelete = getUIContextItems(editContextGroup, contextCard)
@@ -639,5 +628,5 @@ class ExperimentAnnotationSpec extends BardFunctionalSpec {
 		"NumericValue"				| TestData.contexts.Numeric		| TestData.contexts.Numeric.attribute
 		"ExOntologyIntegtegrated"	| TestData.contexts.ExtOntology	| TestData.contexts.ExtOntology.attribute
 	}
-
+*/
 }

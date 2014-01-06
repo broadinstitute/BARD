@@ -11,6 +11,7 @@ import common.TestData
 
 import db.Assay
 /**
+ * This class holds all the test functions of Assay Document section
  * @author Muhammad.Rafique
  * Date Created: 2013/02/07
  */
@@ -21,7 +22,7 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 		logInSomeUser()
 	}
 
-	def "Test Add #TestName Document in Assay"(){
+	def "Test Add and Delete #TestName Document in Assay"(){
 		given:"Navigate to Show Assay page"
 		to ViewAssayDefinitionPage
 
@@ -156,33 +157,32 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 		assert uiDocumetnsBefore.sort() == dbDocumentsBefore.sort()
 
 		and:"If document does nto exists, add new before updating"
-		if(!isDocument(documentHeaders(docHeader), testData.documentName)){
-			navigateToCreateDocument(documentHeaders(docHeader))
+		assert !isDocument(documentHeaders(docHeader), testData.documentName)
+		navigateToCreateDocument(documentHeaders(docHeader))
 
-			and:"At Create Document Page, Creating New Document"
+		and:"At Create Document Page, Creating New Document"
+		at DocumentPage
+		if(docType == "publication" || docType == "external url"){
+			createDocument(testData.documentName, testData.documentUrl)
+		}else{
+			createDocument(testData.documentName, testData.documentContent)
+		}
+
+		and:"Navigating to View Assay Page"
+		at ViewAssayDefinitionPage
+		assert isDocument(documentHeaders(docHeader), testData.documentName)
+		if(docType == "external url"){
+			editDocument(documentHeaders(docHeader), testData.documentName, testData.documentName+Constants.edited)
+		}else{
+			navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
 			at DocumentPage
-			if(docType == "publication" || docType == "external url"){
-				createDocument(testData.documentName, testData.documentUrl)
+			if(docType == "publication"){
+				createDocument(testData.documentName+Constants.edited, testData.documentUrl, true)
 			}else{
-				createDocument(testData.documentName, testData.documentContent)
-			}
-
-			and:"Navigating to View Assay Page"
-			at ViewAssayDefinitionPage
-			assert isDocument(documentHeaders(docHeader), testData.documentName)
-			if(docType == "external url"){
-				editDocument(documentHeaders(docHeader), testData.documentName, testData.documentName+Constants.edited)
-			}else{
-				navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
-				at DocumentPage
-				if(docType == "publication"){
-					createDocument(testData.documentName+Constants.edited, testData.documentUrl, true)
-				}else{
-					createDocument(testData.documentName+Constants.edited, testData.documentContent, true)
-				}
+				createDocument(testData.documentName+Constants.edited, testData.documentContent, true)
 			}
 		}
-		
+
 		and:"Fetching Document Info from UI and DB for validation"
 		to ViewAssayDefinitionPage
 		assert isDocument(documentHeaders(docHeader), testData.documentName+Constants.edited)
@@ -234,30 +234,29 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 		assert uiDocumetnsBefore.sort() == dbDocumentsBefore.sort()
 
 		and:"If document does nto exists, add new before updating"
-		if(!isDocument(documentHeaders(TestName), testData.documentName)){
-			navigateToCreateDocument(documentHeaders(docHeader))
+		assert !isDocument(documentHeaders(TestName), testData.documentName)
+		navigateToCreateDocument(documentHeaders(docHeader))
 
-			and:"At Create Document Page, Creating New Document"
+		and:"At Create Document Page, Creating New Document"
+		at DocumentPage
+		if(docType == "publication" || docType == "external url"){
+			createDocument(testData.documentName, testData.documentUrl)
+		}else{
+			createDocument(testData.documentName, testData.documentContent)
+		}
+
+		and:"Navigating to View Assay Page"
+		at ViewAssayDefinitionPage
+		assert isDocument(documentHeaders(docHeader), testData.documentName)
+		if(docType == "external url"){
+			editDocument(documentHeaders(docHeader), testData.documentName, "")
+		}else{
+			navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
 			at DocumentPage
-			if(docType == "publication" || docType == "external url"){
-				createDocument(testData.documentName, testData.documentUrl)
+			if(docType == "publication"){
+				createDocument("", testData.documentUrl, true)
 			}else{
-				createDocument(testData.documentName, testData.documentContent)
-			}
-
-			and:"Navigating to View Assay Page"
-			at ViewAssayDefinitionPage
-			assert isDocument(documentHeaders(docHeader), testData.documentName)
-			if(docType == "external url"){
-				editDocument(documentHeaders(docHeader), testData.documentName, "")
-			}else{
-				navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
-				at DocumentPage
-				if(docType == "publication"){
-					createDocument("", testData.documentUrl, true)
-				}else{
-					createDocument("", testData.documentContent, true)
-				}
+				createDocument("", testData.documentContent, true)
 			}
 		}
 
@@ -295,6 +294,8 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
 	}
 
+	/*** Ignore the below test function as it is already covering in add document  test function.***/
+/*
 	def "Test Delete #TestName Document in Assay"(){
 		given:"Navigate to Show Assay page"
 		to ViewAssayDefinitionPage
@@ -350,5 +351,5 @@ class AssayDocumentSpec extends BardFunctionalSpec {
 		"ExternalUrl"	| Constants.documentHeader.Urls			| Constants.documentType.Urls			| TestData.documents
 		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
 	}
-
+*/
 }

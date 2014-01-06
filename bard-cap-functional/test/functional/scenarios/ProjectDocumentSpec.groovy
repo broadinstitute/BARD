@@ -26,7 +26,6 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 	def "Test Add #TestName Document in Project"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
-
 		when:"At View Project Page, Fetching Document Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
@@ -34,14 +33,11 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		}
 		def uiDocumetnsBefore = getUIDucuments(documentHeaders(docHeader))
 		def dbDocumentsBefore = Project.getProjectDocuments(TestData.projectId, docType)
-
 		then:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsBefore.size() == dbDocumentsBefore.size()
 		assert uiDocumetnsBefore.sort() == dbDocumentsBefore.sort()
-
 		and: "Navigating to Create Document Page"
 		navigateToCreateDocument(documentHeaders(docHeader))
-
 		when:"At Create Document Page, Creating Description Document"
 		at DocumentPage
 		if(docType == "publication" || docType == "external url"){
@@ -49,29 +45,23 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		}else{
 			createDocument(testData.documentName, testData.documentContent)
 		}
-
 		then:"At View Project Page, Verify that Document is added"
 		at ViewProjectDefinitionPage
 		assert isDocument(documentHeaders(docHeader), testData.documentName)
-
 		and:"Fetching Document Info from UI and DB for validation"
 		def uiDocumetnsAfter= getUIDucuments(documentHeaders(docHeader))
 		def dbDocumentsAfter= Project.getProjectDocuments(TestData.projectId, docType)
-
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
 		assert uiDocumetnsAfter.size() > uiDocumetnsBefore.size()
 		assert dbDocumentsAfter.size() > dbDocumentsBefore.size()
-
 		and:"Cleaning up documents"
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
 			deleteDocument(documentHeaders(docHeader), testData.documentName)
-
 			when:"Document is cleaned up, Fetching Document Info from UI and DB for validation"
 			def uiDocumetnsAfterDelete = getUIDucuments(documentHeaders(docHeader))
 			def dbDocumentsAfterDelete = Project.getProjectDocuments(TestData.projectId, docType)
-
 			then:"Verifying Document Info with UI & DB"
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
@@ -79,7 +69,6 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
 		report "$TestName"
-
 		where:
 		TestName		| docHeader								| docType								| testData
 		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
@@ -89,11 +78,9 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		"ExternalUrl"	| Constants.documentHeader.Urls			| Constants.documentType.Urls			| TestData.documents
 		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
 	}
-
 	def "Test Add #TestName Document in Project with empty values"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
-
 		when:"At View Project Page, Fetching Document Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
@@ -101,14 +88,11 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		}
 		def uiDocumetnsBefore = getUIDucuments(documentHeaders(docHeader))
 		def dbDocumentsBefore = Project.getProjectDocuments(TestData.projectId, docType)
-
 		then:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsBefore.size() == dbDocumentsBefore.size()
 		assert uiDocumetnsBefore.sort() == dbDocumentsBefore.sort()
-
 		and: "Navigating to Create Document Page"
 		navigateToCreateDocument(documentHeaders(docHeader))
-
 		when:"At Create Document Page, Creating Description Document"
 		at DocumentPage
 		if(docType == "publication" || docType == "external url"){
@@ -116,21 +100,16 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		}else{
 			createDocument("", testData.documentContent)
 		}
-
 		then:"At View Project Page, Verify that Document is added"
 		at ViewProjectDefinitionPage
 		assert !isDocument(documentHeaders(docHeader), testData.documentName)
-
 		and:"Fetching Document Info from UI and DB for validation"
 		def uiDocumetnsAfter= getUIDucuments(documentHeaders(docHeader))
 		def dbDocumentsAfter= Project.getProjectDocuments(TestData.projectId, docType)
-
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
-
 		report "$TestName"
-
 		where:
 		TestName		| docHeader								| docType								| testData
 		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
@@ -144,7 +123,6 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 	def "Test Edit #TestName Document in Project"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
-
 		when:"At View Project Page, Fetching Document Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
@@ -152,38 +130,32 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		}
 		def uiDocumetnsBefore = getUIDucuments(documentHeaders(docHeader))
 		def dbDocumentsBefore = Project.getProjectDocuments(TestData.projectId, docType)
-
 		then:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsBefore.size() == dbDocumentsBefore.size()
 		assert uiDocumetnsBefore.sort() == dbDocumentsBefore.sort()
-
 		and:"If document does not exists, add new before updating"
-		if(!isDocument(documentHeaders(docHeader), testData.documentName)){
-			navigateToCreateDocument(documentHeaders(docHeader))
-
-			and:"At Create Document Page, Creating New Document"
+		assert !isDocument(documentHeaders(docHeader), testData.documentName)
+		navigateToCreateDocument(documentHeaders(docHeader))
+		and:"At Create Document Page, Creating New Document"
+		at DocumentPage
+		if(docType == "publication" || docType == "external url"){
+			createDocument(testData.documentName, testData.documentUrl)
+		}else{
+			createDocument(testData.documentName, testData.documentContent)
+		}
+		and:"Navigating to View Project Page, and edit document"
+		at ViewProjectDefinitionPage
+		assert isDocument(documentHeaders(docHeader), testData.documentName)
+		if(docType == "external url"){
+			editDocument(documentHeaders(docHeader), testData.documentName, testData.documentName+Constants.edited)
+		}else{
+			navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
 			at DocumentPage
-			if(docType == "publication" || docType == "external url"){
-				createDocument(testData.documentName, testData.documentUrl)
+			if(docType == "publication"){
+				createDocument(testData.documentName+Constants.edited, testData.documentUrl, true)
 			}else{
-				createDocument(testData.documentName, testData.documentContent)
+				createDocument(testData.documentName+Constants.edited, testData.documentContent, true)
 			}
-
-			and:"Navigating to View Project Page, and edit document"
-			at ViewProjectDefinitionPage
-			assert isDocument(documentHeaders(docHeader), testData.documentName)
-			if(docType == "external url"){
-				editDocument(documentHeaders(docHeader), testData.documentName, testData.documentName+Constants.edited)
-			}else{
-				navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
-				at DocumentPage
-				if(docType == "publication"){
-					createDocument(testData.documentName+Constants.edited, testData.documentUrl, true)
-				}else{
-					createDocument(testData.documentName+Constants.edited, testData.documentContent, true)
-				}
-			}
-
 		}
 
 		and:"Fetching Document Info from UI and DB for validation"
@@ -191,25 +163,20 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		assert isDocument(documentHeaders(docHeader), testData.documentName+Constants.edited)
 		def uiDocumetnsAfter= getUIDucuments(documentHeaders(docHeader))
 		def dbDocumentsAfter= Project.getProjectDocuments(TestData.projectId, docType)
-
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
-
 		and:"Cleaning up documents"
 		while(isDocument(documentHeaders(docHeader), testData.documentName+Constants.edited)){
 			deleteDocument(documentHeaders(docHeader), testData.documentName+Constants.edited)
-
 			when:"Document is cleaned up, Fetching Document Info from UI and DB for validation"
 			def uiDocumetnsAfterDelete = getUIDucuments(documentHeaders(docHeader))
 			def dbDocumentsAfterDelete = Project.getProjectDocuments(TestData.projectId, docType)
-
 			then:"Verifying Document Info with UI & DB"
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
 		report "$TestName"
-
 		where:
 		TestName		| docHeader								| docType								| testData
 		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
@@ -237,32 +204,30 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		assert uiDocumetnsBefore.sort() == dbDocumentsBefore.sort()
 
 		and:"If document does nto exists, add new before updating"
-		if(!isDocument(documentHeaders(docHeader), testData.documentName)){
-			navigateToCreateDocument(documentHeaders(docHeader))
+		assert !isDocument(documentHeaders(docHeader), testData.documentName)
+		navigateToCreateDocument(documentHeaders(docHeader))
 
-			and:"At Create Document Page, Creating New Document"
+		and:"At Create Document Page, Creating New Document"
+		at DocumentPage
+		if(docType == "publication" || docType == "external url"){
+			createDocument(testData.documentName, testData.documentUrl)
+		}else{
+			createDocument(testData.documentName, testData.documentContent)
+		}
+
+		and:"Navigating to View Project Page"
+		at ViewProjectDefinitionPage
+		assert isDocument(documentHeaders(docHeader), testData.documentName)
+		if(docType == "external url"){
+			editDocument(documentHeaders(docHeader), testData.documentName, "")
+		}else{
+			navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
 			at DocumentPage
-			if(docType == "publication" || docType == "external url"){
-				createDocument(testData.documentName, testData.documentUrl)
+			if(docType == "publication"){
+				createDocument(testData.documentName+Constants.edited, testData.documentUrl, true)
 			}else{
-				createDocument(testData.documentName, testData.documentContent)
+				createDocument(testData.documentName+Constants.edited, testData.documentContent, true)
 			}
-
-			and:"Navigating to View Project Page"
-			at ViewProjectDefinitionPage
-			assert isDocument(documentHeaders(docHeader), testData.documentName)
-			if(docType == "external url"){
-				editDocument(documentHeaders(docHeader), testData.documentName, "")
-			}else{
-				navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
-				at DocumentPage
-				if(docType == "publication"){
-					createDocument(testData.documentName+Constants.edited, testData.documentUrl, true)
-				}else{
-					createDocument(testData.documentName+Constants.edited, testData.documentContent, true)
-				}
-			}
-
 		}
 
 		and:"Fetching Document Info from UI and DB for validation"
@@ -301,10 +266,11 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 	}
 
 
+	/*** Ignore the below test function as it is already covering in add document  test function.***/
+/*
 	def "Test Delete #TestName Document in Project"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
-
 		when:"At View Project Page, Fetching Document Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
@@ -312,15 +278,12 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		}
 		def uiDocumetnsBefore = getUIDucuments(documentHeaders(docHeader))
 		def dbDocumentsBefore = Project.getProjectDocuments(TestData.projectId, docType)
-
 		then:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsBefore.size() == dbDocumentsBefore.size()
 		assert uiDocumetnsBefore.sort() == dbDocumentsBefore.sort()
-
 		and:"If document does nto exists, add new before deleting"
 		if(!isDocument(documentHeaders(docHeader), testData.documentName)){
 			navigateToCreateDocument(documentHeaders(docHeader))
-
 			and:"At Create Document Page, Creating New Document"
 			at DocumentPage
 			if(docType == "publication" || docType == "external url"){
@@ -328,7 +291,6 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			}else{
 				createDocument(testData.documentName, testData.documentContent)
 			}
-
 			and:"Navigating to View Project Page"
 			at ViewProjectDefinitionPage
 			assert isDocument(documentHeaders(docHeader), testData.documentName)
@@ -336,17 +298,13 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		}else{
 			deleteDocument(documentHeaders(docHeader), testData.documentName)
 		}
-
 		and:"Fetching Document Info from UI and DB for validation"
 		def uiDocumetnsAfter= getUIDucuments(documentHeaders(docHeader))
 		def dbDocumentsAfter= Project.getProjectDocuments(TestData.projectId, docType)
-
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
-
 		report "$TestName"
-
 		where:
 		TestName		| docHeader								| docType								| testData
 		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
@@ -356,4 +314,5 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		"ExternalUrl"	| Constants.documentHeader.Urls			| Constants.documentType.Urls			| TestData.documents
 		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
 	}
+*/
 }

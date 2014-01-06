@@ -16,7 +16,8 @@ class LoginFunctionalSpec extends BardFunctionalSpec {
 	String validUserName = getCredentialsForTest().username
 	String validPassword = getCredentialsForTest().password
 
-	def setup() { // pre-condition of each test: user not currently logged in
+	def setup() { 
+		// pre-condition of each test: user not currently logged in
 		to LoginPage
 		if(isLoggedIn()) {
 			logout()

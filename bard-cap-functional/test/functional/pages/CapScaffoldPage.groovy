@@ -171,11 +171,12 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		return new DocumentPage()
 	}
 
-	def navigateToEditDocument(def document, def docName){
+	DocumentPage navigateToEditDocument(def document, def docName){
 		if(isDocument(document, docName)){
 			assert document.documentContents(docName).iconPencil
 			document.documentContents(docName).iconPencil.click()
 		}
+		return new DocumentPage()
 	}
 
 	def editDocument(def document, def docName, def editValue){

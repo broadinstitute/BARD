@@ -50,7 +50,7 @@ class TestData {
 			integratedSearchNull:"",
 			ontologyIdNull:"",
 			valueDisplayNull:"",
-			integratedSearchEdit:"Golgi cell precursor proliferation",
+			integratedSearchEdit:"Golgi calcium ion homeostasis",
 			ontologyIdEdit:"420",
 			valueDisplayEdit:"Matrilysin Complexed",
 		]

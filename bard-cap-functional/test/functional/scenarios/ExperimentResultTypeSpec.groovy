@@ -1,7 +1,6 @@
 package scenarios
 
 import pages.HomePage
-//<<<<<<< HEAD
 import pages.ResultTypePage
 import pages.ViewExperimentPage
 import spock.lang.Unroll;
@@ -143,7 +142,7 @@ class ExperimentResultTypeSpec extends BardFunctionalSpec {
 		at ViewExperimentPage
 
 		report ""
-		
+
 		where:
 		TestName			| inputData						| editData 						 | resultType
 		"ResultType"		| TestData.resultType.parent	| TestData.resultType.editParent | TestData.resultType.parent.resultType

@@ -95,7 +95,7 @@ class ContextItemPage extends CapScaffoldPage{
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ integratedSearch }
 		if(isCreate){
 			if(integration){
-				Thread.sleep(5000)
+				Thread.sleep(6000)
 				selectAutoChoiceValue(integratedSearch, selectToDrop, inputData.integratedSearch)
 				addOrUpdate(isCreate)
 				navigateBackToContext()
@@ -109,7 +109,7 @@ class ContextItemPage extends CapScaffoldPage{
 			}
 		}else{
 			if(integration){
-				Thread.sleep(5000)
+				Thread.sleep(6000)
 				selectAutoChoiceValue(integratedSearch, selectToDrop, inputData.integratedSearchEdit)
 				addOrUpdate(isCreate)
 				navigateBackToContext()
@@ -153,12 +153,12 @@ class ContextItemPage extends CapScaffoldPage{
 			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}else{
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){
-				integratedSearch
-				attributeFromDictionary.selectClose
-			}
-			attributeFromDictionary.selectClose.click()
-			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	attributeFromDictionary.selectClose	}
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	integratedSearch.selectChoice }
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	externalOntologyId }
+			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	displayValue }
+//			attributeFromDictionary.selectClose.click()
+//			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}
 		if(resultUpload){
 			providedWithResults.click()

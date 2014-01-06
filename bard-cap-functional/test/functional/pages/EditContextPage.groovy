@@ -11,7 +11,7 @@ import common.Constants
  * Date Created: 2013/02/07
  */
 class EditContextPage extends CapScaffoldPage{
-	final static SLEEP_INTERVAL = 2000
+//	final static SLEEP_INTERVAL = 2000
 	static url=""
 	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { $("h4").text().contains("Edit") }
 	}

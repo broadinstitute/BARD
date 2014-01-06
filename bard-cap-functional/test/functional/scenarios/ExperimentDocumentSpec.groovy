@@ -22,7 +22,7 @@ class ExperimentDocumentSpec extends BardFunctionalSpec {
 		logInSomeUser()
 	}
 
-	def "Test Add #TestName Document in Experiment"(){
+	def "Test Add and Delete #TestName Document in Experiment"(){
 		given:"Navigate to Show Experiment page"
 		to ViewExperimentPage
 		when:"At View Experiment Page, Fetching Document Info from UI and DB for validation"
@@ -77,7 +77,7 @@ class ExperimentDocumentSpec extends BardFunctionalSpec {
 		"ExternalUrl"	| Constants.documentHeader.Urls			| Constants.documentType.Urls			| TestData.documents
 		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
 	}
-	
+
 	def "Test Add #TestName Document in Experiment with empty values"(){
 		given:"Navigate to Show Experiment page"
 		to ViewExperimentPage
@@ -137,34 +137,32 @@ class ExperimentDocumentSpec extends BardFunctionalSpec {
 		assert uiDocumetnsBefore.sort() == dbDocumentsBefore.sort()
 
 		and:"If document does not exists, add new before updating"
-		if(!isDocument(documentHeaders(docHeader), testData.documentName)){
-			navigateToCreateDocument(documentHeaders(docHeader))
+		assert !isDocument(documentHeaders(docHeader), testData.documentName)
+		navigateToCreateDocument(documentHeaders(docHeader))
 
-			and:"At Create Document Page, Creating New Document"
-			at DocumentPage
-			if(docType == "publication" || docType == "external url"){
-				createDocument(testData.documentName, testData.documentUrl)
-			}else{
-				createDocument(testData.documentName, testData.documentContent)
-			}
-
-			and:"Navigating to View Experiment Page, and edit document"
-			at ViewExperimentPage
-			assert isDocument(documentHeaders(docHeader), testData.documentName)
-			if(docType == "external url"){
-				editDocument(documentHeaders(docHeader), testData.documentName, testData.documentName+Constants.edited)
-			}else{
-				navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
-				at DocumentPage
-				if(docType == "publication"){
-					createDocument(testData.documentName+Constants.edited, testData.documentUrl, true)
-				}else{
-					createDocument(testData.documentName+Constants.edited, testData.documentContent, true)
-				}
-			}
-
+		and:"At Create Document Page, Creating New Document"
+		at DocumentPage
+		if(docType == "publication" || docType == "external url"){
+			createDocument(testData.documentName, testData.documentUrl)
+		}else{
+			createDocument(testData.documentName, testData.documentContent)
 		}
 
+		and:"Navigating to View Experiment Page, and edit document"
+		at ViewExperimentPage
+		assert isDocument(documentHeaders(docHeader), testData.documentName)
+		if(docType == "external url"){
+			editDocument(documentHeaders(docHeader), testData.documentName, testData.documentName+Constants.edited)
+		}else{
+			navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
+			at DocumentPage
+			if(docType == "publication"){
+				createDocument(testData.documentName+Constants.edited, testData.documentUrl, true)
+			}else{
+				createDocument(testData.documentName+Constants.edited, testData.documentContent, true)
+			}
+		}
+		
 		and:"Fetching Document Info from UI and DB for validation"
 		to ViewExperimentPage
 		assert isDocument(documentHeaders(docHeader), testData.documentName+Constants.edited)
@@ -216,34 +214,32 @@ class ExperimentDocumentSpec extends BardFunctionalSpec {
 		assert uiDocumetnsBefore.sort() == dbDocumentsBefore.sort()
 
 		and:"If document does nto exists, add new before updating"
-		if(!isDocument(documentHeaders(docHeader), testData.documentName)){
-			navigateToCreateDocument(documentHeaders(docHeader))
+		assert !isDocument(documentHeaders(docHeader), testData.documentName)
+		navigateToCreateDocument(documentHeaders(docHeader))
 
-			and:"At Create Document Page, Creating New Document"
-			at DocumentPage
-			if(docType == "publication" || docType == "external url"){
-				createDocument(testData.documentName, testData.documentUrl)
-			}else{
-				createDocument(testData.documentName, testData.documentContent)
-			}
-
-			and:"Navigating to View Experiment Page"
-			at ViewExperimentPage
-			assert isDocument(documentHeaders(docHeader), testData.documentName)
-			if(docType == "external url"){
-				editDocument(documentHeaders(docHeader), testData.documentName, "")
-			}else{
-				navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
-				at DocumentPage
-				if(docType == "publication"){
-					createDocument("", testData.documentUrl, true)
-				}else{
-					createDocument("", testData.documentContent, true)
-				}
-			}
-
+		and:"At Create Document Page, Creating New Document"
+		at DocumentPage
+		if(docType == "publication" || docType == "external url"){
+			createDocument(testData.documentName, testData.documentUrl)
+		}else{
+			createDocument(testData.documentName, testData.documentContent)
 		}
 
+		and:"Navigating to View Experiment Page"
+		at ViewExperimentPage
+		assert isDocument(documentHeaders(docHeader), testData.documentName)
+		if(docType == "external url"){
+			editDocument(documentHeaders(docHeader), testData.documentName, "")
+		}else{
+			navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
+			at DocumentPage
+			if(docType == "publication"){
+				createDocument("", testData.documentUrl, true)
+			}else{
+				createDocument("", testData.documentContent, true)
+			}
+		}
+		
 		and:"Fetching Document Info from UI and DB for validation"
 		at ViewExperimentPage
 		assert isDocument(documentHeaders(docHeader), testData.documentName)
@@ -279,7 +275,8 @@ class ExperimentDocumentSpec extends BardFunctionalSpec {
 		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
 	}
 
-
+	/*** Ignore the below test function as it is already covering in add document  test function.***/
+	/*
 	def "Test Delete #TestName Document in Experiment"(){
 		given:"Navigate to Show Experiment page"
 		to ViewExperimentPage
@@ -335,4 +332,5 @@ class ExperimentDocumentSpec extends BardFunctionalSpec {
 		"ExternalUrl"	| Constants.documentHeader.Urls			| Constants.documentType.Urls			| TestData.documents
 		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
 	}
+	*/
 }

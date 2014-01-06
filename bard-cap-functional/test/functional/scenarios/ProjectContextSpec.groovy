@@ -29,7 +29,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		logInSomeUser()
 	}
 
-	def "Test Add Context Card in Project"(){
+	def "Test Add and Delete Context Card in Project"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
 
@@ -180,7 +180,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		report ""
 	}
-
+	/** Ignore the below test function as it is already covering in the Add Context Card test function **/
+	/*
 	def "Test Delete Context Card in Project"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
@@ -239,7 +240,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		report ""
 	}
-
+*/
 	def "Test Add #TestName Type Context Item in Project"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
@@ -341,7 +342,6 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		"FreeText"					| TestData.contexts.FreeText	| TestData.contexts.FreeText.attribute
 		"NumericValue"				| TestData.contexts.Numeric		| TestData.contexts.Numeric.attribute
 		"ExOntologyIntegtegrated"	| TestData.contexts.ExtOntology	| TestData.contexts.ExtOntology.attribute
-
 	}
 /*
 	def "Test Add #TestName Type Context Item with Empty Values in Project"(){
@@ -453,7 +453,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		addNewContextCard(editContextGroup, contextCard)
 		assert isContext(editContextGroup, contextCard)
 
-		and:"If context Item does nto exists, add new before updating"
+		and:"If context Item does not exists, add new before updating"
 		if(!isContextItem(editContextGroup, contextCard, contextItem)){
 			navigateToAddContextItem(editContextGroup, contextCard)
 			and:"Navigating to Context Item Page"
@@ -553,6 +553,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		//		"ExOntologyNoIntegtegrated"	| TestData.contexts.ExtOntology	| TestData.contexts.ExtOntology.attribute
 	}
 
+	/** Ignore the below test function as it is already covering in the Add Context Item test function **/
+/*
 	def "Test Delete #TestName Type Context Item in Project"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
@@ -610,7 +612,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		and:"Verify that Context Item deleted succesfully"
 		assert !isContextItem(editContextGroup, contextCard, contextItem)
-		
+
 		when:"Context Item  is cleaned up, Fetching Contexts Info from UI and DB for validation"
 		at EditContextPage
 		def uiContentsAfterDelete = getUIContextItems(editContextGroup, contextCard)
@@ -640,5 +642,5 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		"NumericValue"				| TestData.contexts.Numeric		| TestData.contexts.Numeric.attribute
 		"ExOntologyIntegtegrated"	| TestData.contexts.ExtOntology	| TestData.contexts.ExtOntology.attribute
 	}
-
+*/
 }

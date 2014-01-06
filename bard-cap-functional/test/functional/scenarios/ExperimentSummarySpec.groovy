@@ -48,7 +48,7 @@ class ExperimentSummarySpec extends BardFunctionalSpec {
 
 		report ""
 	}
-	
+
 	def "Test Edit Experiment Summary Status"() {
 		given:"Navigating to Show Experiment page"
 		to ViewExperimentPage
@@ -60,7 +60,7 @@ class ExperimentSummarySpec extends BardFunctionalSpec {
 		def statusOriginal = uiSummary.Status
 		def statusEdited = ""
 		if(statusOriginal != "Approved"){
-//			statusEdited = "Approved"
+			//			statusEdited = "Approved"
 			statusEdited = "Retired"
 		}else{
 			statusEdited = "Retired"
@@ -234,7 +234,7 @@ class ExperimentSummarySpec extends BardFunctionalSpec {
 		then:"Verify Summary Run Date before edit on UI & DB"
 		assert uiSummary.RunDatefrom.toString() == dbSummary.RunDateFrom.toString()
 		assert uiSummary.RunDateto.toString() == dbSummary.RunDateTo.toString()
-		
+
 		and:"Edit/Update Summary Run Date"
 		editDate(runDateFromIndex, TestData.rundate.From)
 		editDate(runDateToIndex, TestData.rundate.To)

@@ -11,6 +11,7 @@ import common.TestData
 import db.Assay
 
 /**
+ * This class holds all the test functions of Assay Summary section
  * @author Muhammad.Rafique
  * Date Created: 2013/02/07
  */
@@ -149,6 +150,7 @@ class AssaySummarySpec extends BardFunctionalSpec {
 		
 		report ""
 	}
+/** Following two test function are no longer use because feature is no longer available***/
 /*
 	def "Test Assay Summary Designed By Edit"() {
 		given: "Navigate to Show Assay page"
