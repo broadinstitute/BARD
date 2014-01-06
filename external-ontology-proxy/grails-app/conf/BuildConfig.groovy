@@ -1,7 +1,5 @@
 grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
-grails.project.class.dir = "target/classes"
-grails.project.test.class.dir = "target/test-classes"
-grails.project.test.reports.dir = "target/test-reports"
+grails.project.work.dir = "target"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
@@ -30,10 +28,19 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
-        compile "bard:external-validation:20131213"
+        compile "bard:external-validation-api:20131218"
+        compile "bard:external-validation-impl:20131218"
+
+        compile "org.apache.commons:commons-lang3:3.2"
+        compile "xalan:xalan:2.7.0" // http://jira.grails.org/browse/GRAILS-9740 ( junitreporter fails when Xalan 2.6.0 dependency is declared in Java 1.7.0 env )
+
+        compile "com.cenqua.clover:clover:3.1.12" // Clover core JAR
+        test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
     }
 
     plugins {
+        build ":tomcat:$grailsVersion"
+
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.8.3"
         runtime ":resources:1.1.6"
@@ -42,12 +49,22 @@ grails.project.dependency.resolution = {
         //runtime ":zipped-resources:1.0"
         //runtime ":cached-resources:1.0"
         //runtime ":yui-minify-resources:0.1.5"
-
-
-        build ":tomcat:$grailsVersion"
-
         runtime ":database-migration:1.3.2"
 
         compile ':cache:1.0.1'
+        compile ":clover:3.1.12"
+
+        // test scope
+        test(":spock:0.7") {
+            exclude "spock-grails-support"
+        }
     }
+}
+
+clover {
+    // if you want to use clover put a valid license in the .grails dir in the home dir for this environment
+    final String separator =  System.getProperty("file.separator")
+    license.path = "${System.getProperty("user.home")}${separator}.grails${separator}clover.license"
+    directories: ['src/java', 'src/groovy', 'grails-app']
+    includes = ['**/*.groovy', '**/*.java']
 }

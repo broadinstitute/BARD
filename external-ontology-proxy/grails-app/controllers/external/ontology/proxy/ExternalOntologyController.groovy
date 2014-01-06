@@ -5,7 +5,10 @@ import bard.validation.ext.ExternalOntologyAPI
 import bard.validation.ext.ExternalOntologyException
 import bard.validation.ext.ExternalOntologyFactory
 import grails.converters.JSON
+import org.apache.commons.lang3.StringUtils
 import org.springframework.util.Assert
+
+import javax.servlet.http.HttpServletResponse
 
 import static bard.validation.ext.ExternalOntologyNCBI.NCBI_EMAIL
 import static bard.validation.ext.ExternalOntologyNCBI.NCBI_TOOL
@@ -14,7 +17,8 @@ class ExternalOntologyController {
 
     ExternalOntologyFactory externalOntologyFactory
 
-    private static final int DEFAULT_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE = 50
+    public static final int MAX_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE = 500
+    public static final int MIN_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE = 1
 
     private static final Properties EXTERNAL_ONTOLOGY_PROPERTIES = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'default@bard.nih.gov'])
 
@@ -22,25 +26,27 @@ class ExternalOntologyController {
         Assert.hasText(externalUrl, "externalUrl cannot be blank")
         Assert.hasText(id, "id cannot be blank")
         final Map responseMap = [:]
-
         try {
-            ExternalOntologyAPI externalOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, EXTERNAL_ONTOLOGY_PROPERTIES)
+            final ExternalOntologyAPI externalOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl.decodeURL(), EXTERNAL_ONTOLOGY_PROPERTIES)
+            println(externalOntology)
             if (externalOntology) {
-                final ExternalItem externalItem = externalOntology.findById(id)
+                final String urlDecodedId = id.decodeURL()
+                final ExternalItem externalItem = externalOntology.findById(urlDecodedId)
+                println("externalItem: ${externalItem}")
                 responseMap.putAll(toMapForSelect2(externalItem))
             }
+            render responseMap as JSON
         } catch (ExternalOntologyException e) {
-            log.warn("Exception when calling externalOntology.findById(${id}) with externalUrl: $externalUrl ${e.message}")
-            responseMap.error = "Integrated lookup for the External Ontology Id: ${id} was not successful at this time."
-            throw e
+            String msg = "Exception when calling externalOntology.findById(${id}) with externalUrl: $externalUrl ${e.message}"
+            log.warn(msg, e)
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, msg)
         }
-        render responseMap as JSON
     }
     /**
      *
      * @param externalUrl acts as a key to get an underlying implementation for a resource
      * @param term to search for
-     * @param limit optional, set the max number of items to be returned, defaults to DEFAULT_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE
+     * @param limit max number of items to be returned up to a max of 500 if less than 1 or more than 500 then defaults to DEFAULT_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE
      * @return a MAP as JSON like
      * success :
      * [externalItems: [["id": id, "text": "(id) name", "display": "display"]...]]
@@ -49,24 +55,25 @@ class ExternalOntologyController {
      * ["externalItems": [],"error": "some error message"]
      */
     def findExternalItemsByTerm(String externalUrl, String term, int limit) {
-
         Assert.hasText(externalUrl, "externalUrl cannot be blank")
         Assert.hasText(term, "term cannot be blank")
-        limit = Math.max(limit, DEFAULT_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE)
-        final List<ExternalItem> externalItems = []
+        limit = Math.max(limit,MIN_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE)
+        limit = Math.min(limit,MAX_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE)
         final Map responseMap = ['externalItems': []]
         try {
-            ExternalOntologyAPI externalOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, EXTERNAL_ONTOLOGY_PROPERTIES)
+            final ExternalOntologyAPI externalOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl.decodeURL(), EXTERNAL_ONTOLOGY_PROPERTIES)
             if (externalOntology) {
-                externalItems.addAll(externalOntology.findMatching(term, limit))
+                final List<ExternalItem> matching = externalOntology.findMatching(term.decodeURL(), limit)
+                final List<ExternalItem> externalItems = matching ?: []
+                externalItems.sort(true) { ExternalItem a, ExternalItem b -> a.display?.toLowerCase() <=> b.display?.toLowerCase() }
                 responseMap.externalItems.addAll(externalItems.collect { ExternalItem item -> toMapForSelect2(item) })
             }
-            externalItems.sort(true) { ExternalItem a, ExternalItem b -> a.display?.toLowerCase() <=> b.display?.toLowerCase() }
+            render responseMap as JSON
         } catch (ExternalOntologyException e) {
-            log.warn("Exception when calling externalOntology.findMatching(${term}) with externalUrl: $externalUrl", e)
-            responseMap.error = "Integrated lookup with the term: ${term} was not successful at this time."
+            String msg = "Exception when calling externalOntology.findMatching(${term}) with externalUrl: $externalUrl ${e.message}"
+            log.warn(msg, e)
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, msg)
         }
-        render responseMap as JSON
     }
 
     /**
@@ -77,20 +84,22 @@ class ExternalOntologyController {
     def externalOntologyHasIntegratedSearch(String externalUrl) {
         Map responseMap = [hasSupport: false]
         try {
-            if (externalOntologyFactory.getExternalOntologyAPI(externalUrl, EXTERNAL_ONTOLOGY_PROPERTIES)) {
+            if (StringUtils.isNotBlank(externalUrl) && externalOntologyFactory.getExternalOntologyAPI(externalUrl, EXTERNAL_ONTOLOGY_PROPERTIES)) {
                 responseMap.hasSupport = true
             }
+            render responseMap as JSON
         }
         catch (ExternalOntologyException e) {
-            log.warn("Exception when calling getExternalOntologyAPI with externalUrl: $externalUrl ,therefore, no itegrated search will be presented to user.")
+            String msg = "Exception when calling getExternalOntologyAPI with externalUrl: $externalUrl ${e.message}"
+            log.warn(msg, e)
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
         }
-        render responseMap as JSON
     }
 
     private Map toMapForSelect2(ExternalItem item) {
         Map map = [:]
         if (item) {
-            map = ['id': item.id, 'text': "(${item.id}) ${item.display}", 'display': item.display]
+            map = ['id': item.id, 'display': item.display?:'']
         }
         map
     }
