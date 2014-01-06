@@ -57,7 +57,7 @@ class ContextItemController {
             }
         }
 
-        if (contextItemCommand.createNewContextItem()) {
+        if (contextItemCommand.createNewContextItem() && !contextItemCommand.hasErrors()) {
             render(view: "edit", model: [instance: contextItemCommand, reviewNewItem: true])
         } else {
             render(view: "create", model: [instance: contextItemCommand])
@@ -88,19 +88,18 @@ class ContextItemController {
 
         basicContextItemCommand.delete()
 
-        if(request.getHeader(REFERER)?.contains('/contextItem/')){
+        if (request.getHeader(REFERER)?.contains('/contextItem/')) {
             redirect(action: 'create', params: params)
-        }
-        else{
+        } else {
             redirect(controller: basicContextItemCommand.ownerController, action: "editContext",
-                    params: [id:basicContextItemCommand.contextOwnerId,groupBySection: basicContextItemCommand.context?.contextType.id])
+                    params: [id: basicContextItemCommand.contextOwnerId, groupBySection: basicContextItemCommand.context?.contextType.id])
         }
 
     }
 
     def updatePreferredName(InlineEditableCommand inlineEditableCommand) {
-     attemptUpdate {
-         InlineUpdateCommand command = new InlineUpdateCommand(inlineEditableCommand)
+        attemptUpdate {
+            InlineUpdateCommand command = new InlineUpdateCommand(inlineEditableCommand)
             AbstractContext context = BasicContextItemCommand.getContextClass(command.contextClass).findById(command.id)
             AbstractContextOwner owningContext = context.owner
             if (owningContext instanceof Assay) {
@@ -109,17 +108,17 @@ class ContextItemController {
                 return
             }
             if (owningContext instanceof Experiment) {
-                String name= contextService.updatePreferredExperimentContextName(owningContext.id, context, command.value)
+                String name = contextService.updatePreferredExperimentContextName(owningContext.id, context, command.value)
                 render(status: HttpServletResponse.SC_OK, text: name, contentType: 'text/plain', template: null)
                 return
             }
             if (owningContext instanceof Project) {
-                String name= contextService.updatePreferredProjectContextName(owningContext.id, context, command.value)
+                String name = contextService.updatePreferredProjectContextName(owningContext.id, context, command.value)
                 render(status: HttpServletResponse.SC_OK, text: name, contentType: 'text/plain', template: null)
                 return
             }
 
-           render(status: HttpServletResponse.SC_BAD_REQUEST, text: context.preferredName, contentType: 'text/plain', template: null)
+            render(status: HttpServletResponse.SC_BAD_REQUEST, text: context.preferredName, contentType: 'text/plain', template: null)
         }
     }
 
@@ -150,10 +149,11 @@ class InlineUpdateCommand extends BardCommand {
     String contextClass
     String value //the new value
 
-    InlineUpdateCommand(){}
-    InlineUpdateCommand(InlineEditableCommand inlineEditableCommand){
+    InlineUpdateCommand() {}
+
+    InlineUpdateCommand(InlineEditableCommand inlineEditableCommand) {
         id = inlineEditableCommand.pk
-        contextClass=inlineEditableCommand.name
+        contextClass = inlineEditableCommand.name
         value = inlineEditableCommand.value
     }
     static constraints = {
