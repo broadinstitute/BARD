@@ -7,7 +7,7 @@ grails.server.port.http = 8081
 
 def gebVersion = "0.9.0-RC-1"
 def seleniumVersion = "2.31.0"
-
+def isPublicBard = System.getProperty("bard.public") != null;
 
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
@@ -22,29 +22,28 @@ grails.project.dependency.resolution = {
         inherit(false) // don't repositories from plugins
         grailsPlugins()
         grailsHome()
-        mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
-        grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
 
-        //TODO: Without adding this repos the push-event plugin won't work. Needs further investigations
-       // mavenRepo "https://oss.sonatype.org/content/repositories/snapshots/"
+        if(isPublicBard) {
+            mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
+            grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
+        }
     }
+
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         // build scope
 
         // compile scope
-        compile('cbip:cbip_encoding:0.1') {
-            excludes "junit"
+        if(isPublicBard) {
+            compile('cbip:cbip_encoding:0.1') {
+                excludes "junit"
+            }
         }
+
         compile "org.grails:grails-webflow:$grailsVersion"
         compile "org.apache.httpcomponents:httpclient:4.2.3"
 
-        compile "bard:external-validation:20130717"
-        compile "bard:pubchem-xml:20131010"
-
-        compile "com.oracle:ojdbc6:11.2.0.2.0"
         compile 'org.apache.commons:commons-lang3:3.1'
-        compile 'ChemAxon:ChemAxonJChemBase:5.10'
         compile 'jfree:jfreechart:1.0.13'
         compile('org.apache.httpcomponents:httpclient:4.1.2') {
             excludes "commons-codec", "commons-logging"
@@ -55,7 +54,13 @@ grails.project.dependency.resolution = {
         }
         compile 'log4j:apache-log4j-extras:1.2.17'
 
-        // needed for SMTPAppender (included as a compile dependency because the right one is being picked up for runtime, but
+        compile "bard:external-validation:20130717"
+        compile "bard:pubchem-xml:20131010"
+
+        compile "com.oracle:ojdbc6:11.2.0.2.0"
+        compile 'ChemAxon:ChemAxonJChemBase:5.10'
+
+        // needed for SMTPAppender (included as a compile dependency because the right one is being picked up for runtime, but not for build time)
         compile "log4j:log4j:1.2.16"
         build "log4j:log4j:1.2.16"
 
@@ -117,9 +122,13 @@ grails.project.dependency.resolution = {
         compile ":export:1.5"
         compile ":resources:1.2.RC2"
         compile ":twitter-bootstrap:2.3.0"
-        compile(":cbipcrowdauthentication:0.3.4") {
-            excludes('spock', 'release', 'google-collections')
+
+        if(isPublicBard) {
+            compile(":cbipcrowdauthentication:0.3.4") {
+                excludes('spock', 'release', 'google-collections')
+            }
         }
+
         compile ":clover:3.1.10.1"
         compile ":spring-mobile:0.4"
         compile ":console:1.2"
@@ -151,8 +160,6 @@ grails.project.dependency.resolution = {
         }
         test "org.grails.plugins:geb:$gebVersion"
         test ":remote-control:1.4"
-
-
     }
 }
 
