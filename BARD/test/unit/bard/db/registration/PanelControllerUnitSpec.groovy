@@ -284,35 +284,6 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         notThrown(Exception.class)
     }
 
-    void 'test add to panel with unapproved assays'() {
-        given:
-        controller.panelService = Mock(PanelService)
-        request.method = "POST"
-        panel = Panel.build(name: 'Test')
-        Assay assayRetired = Assay.build(assayName: "assay1", assayStatus: Status.RETIRED)
-        Assay assayApproved = Assay.build(assayName: "assay2", assayStatus: Status.APPROVED)
-        Assay assayDraft = Assay.build(assayName: "assay2", assayStatus: Status.DRAFT)
-        params.id = panel.id
-        params.assayIds = "${assayRetired.id} ${assayApproved.id} ${assayDraft.id}"
-        when:
-        def model = controller.addAssays()
-        then:
-        final AssociatePanelCommand associatePanelCommand = model.associatePanelCommand
-        List<Assay> draftAssays = model.draftAssays
-        List<Assay> retiredAssays = model.retiredAssays
-
-        assert associatePanelCommand
-        assert draftAssays
-        assert draftAssays.size() == 1
-        assert draftAssays.get(0).id == assayDraft.id
-
-        assert retiredAssays
-        assert retiredAssays.size() == 1
-        assert retiredAssays.get(0).id == assayRetired.id
-
-
-    }
-
     void 'test add assays - access denied'() {
         given:
         accessDeniedRoleMock()

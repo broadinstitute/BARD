@@ -57,13 +57,15 @@ function DescriptorSelect2(elementId, placeholderText, backingData, delimiter, d
                         data: {
                             id: id
                         },
-                        dataType: "json"
-                    }).done(function (data) {
+                        dataType: "json",
+                        success: function (data) {
                             callback(data);
                             if (onInitDoneCallback) {
                                 onInitDoneCallback(data);
                             }
-                        });
+                        },
+                        error: handleAjaxError()
+                    });
                 }
             },
             data: this.backingData,

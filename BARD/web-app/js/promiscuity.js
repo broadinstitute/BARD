@@ -33,9 +33,9 @@ var PromiscuityHandler = {
                             ee.stopPropagation();
                         });
                 },
-                error:function () {
+                error:handleAjaxError(function () {
                     $('#' + promiscuityDivId).html('No data found');
-                },
+                }),
                 complete:function () {
                     $(this).addClass("processed");
                 }

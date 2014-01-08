@@ -11,12 +11,15 @@ $(document).ready(function () {
             var experimentMeasuresLink = bardAppContext + "/experiment/loadExperimentMeasuresAsJSON/" + experimentId;
 
             //load measures for this experiment
-            $.ajax(experimentMeasuresLink).done(function (data) {
-                rootUl = parseNodes(data);
-                var root = document.createElement("div");
-                root.className = "span12";
-                root.appendChild(rootUl);
-                $("#result-type-table").html(root);
+            $.ajax(experimentMeasuresLink, {
+                success: function (data) {
+                    rootUl = parseNodes(data);
+                    var root = document.createElement("div");
+                    root.className = "span12";
+                    root.appendChild(rootUl);
+                    $("#result-type-table").html(root);
+                },
+                error: handleAjaxError()
             });
         }
     }
@@ -38,10 +41,15 @@ $(document).ready(function () {
         var answer = confirm("Deleting this result type will also delete all of the child nodes.Are you sure you wish to delete this result type?'!")
         if (answer == true) {
             var experimentMeasureDeleteLink = $(this).attr('href');
-            $.ajax(experimentMeasureDeleteLink).done(function (data) {
-                //reload the current page
-                location.reload();
-            });
+            $.ajax(experimentMeasureDeleteLink,
+                {
+                    success: function (data) {
+                        //reload the current page
+                        location.reload();
+                    },
+                    error: handleAjaxError()
+                }
+            );
         }
 
     });
