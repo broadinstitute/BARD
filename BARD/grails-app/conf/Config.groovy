@@ -23,6 +23,8 @@ bard.cap.home = "${grails.serverURL}"
 bard.cap.assay = "${bard.cap.home}/assayDefinition/show/"
 bard.cap.project = "${bard.cap.home}/project/show/"
 
+bard.externalOntologyProxyUrlBase = "http://localhost:8080/external-ontology-proxy/externalOntology"
+
 //Override in config file
 dataexport.apikey = "test"
 dataexport.dictionary.accept.type = "application/vnd.bard.cap+xml;type=dictionary"
@@ -84,7 +86,7 @@ grails.json.legacy.builder = false
 // enabled native2ascii conversion of i18n properties files
 grails.enable.native2ascii = true
 // packages to include in Spring bean scanning
-grails.spring.bean.packages = []
+grails.spring.bean.packages = ['bard.validation.extext']
 // whether to disable processing of multi part requests
 grails.web.disable.multipart = false
 

@@ -16,9 +16,10 @@ import bard.validation.ext.ExternalOntologyCreator
 // to see why the package name is odd, see
 // http://jira.grails.org/browse/GRAILS-9016
 
-class ExternalOntologyPerson extends ExternalOntologyAPI {
+class ExternalOntologyPerson implements ExternalOntologyAPI {
 	
 	public static String PERSON_URL = "http://www.bard.nih.gov/person#"
+    private static int DEFAULT_LIMIT = 50
 	
 	@Override
 	public ExternalItem findById(String id) throws ExternalOntologyException {
@@ -59,8 +60,12 @@ class ExternalOntologyPerson extends ExternalOntologyAPI {
 		throw new ExternalOntologyException("Unimplemented method findByName(String name)")
 	}
 
+    @Override
+    List<ExternalItem> findMatching(String s) throws ExternalOntologyException {
+        return findMatching(s, DEFAULT_LIMIT)
+    }
 
-	@Override
+    @Override
 	public String getExternalURL(String id) {
 		throw new ExternalOntologyException("Unimplemented method getExternalURL(String id)")
 	}
@@ -71,8 +76,25 @@ class ExternalOntologyPerson extends ExternalOntologyAPI {
 	}
 
     @Override
+    String cleanId(String s) {
+        return StringUtils.trimToEmpty(s)  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    String cleanName(String s) {
+        return StringUtils.trimToEmpty(s)  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     boolean matchesId(String s) {
         return NumberUtils.isDigits(s);
+    }
+
+    @Override
+    boolean validate(String name, String id) throws ExternalOntologyException {
+        ExternalItem item = findByName(cleanName(name));
+        ExternalItem item2 = findById(cleanId(id));
+        return item.equals(item2);
     }
 
     public static ExternalItem getItem(Person p){
@@ -80,8 +102,8 @@ class ExternalOntologyPerson extends ExternalOntologyAPI {
 		ExternalItem extItem;
 		if(p){
 			String fullname = StringUtils.trimToEmpty(p.fullName)
-			String display = (p.userName != null ? "(${p.userName}) " : "") + fullname
-			extItem = new ExternalItem(p.id.toString(), display.trim())
+			String display = StringUtils.trimToEmpty((p.userName != null ? "(${p.userName}) " : "") + fullname)
+			extItem = new bard.validation.ext.ExternalItemImpl(p.id as String,display)
 		}		
 		return extItem;
 	}

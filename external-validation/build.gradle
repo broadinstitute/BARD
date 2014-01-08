@@ -11,8 +11,9 @@ subprojects {
 
     group='bard'
     archivesBaseName="${getRootProject().name}-${name}"
-    version = '20131220'
-    sourceCompatibility = 1.7
+    version = '20140106'
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
 
     dependencies {
         // any common dependencies

@@ -41,7 +41,7 @@ grails.project.dependency.resolution = {
     plugins {
         build ":tomcat:$grailsVersion"
 
-        runtime ":hibernate:$grailsVersion"
+//        runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.8.3"
         runtime ":resources:1.1.6"
 
@@ -53,6 +53,7 @@ grails.project.dependency.resolution = {
 
         compile ':cache:1.0.1'
         compile ":clover:3.1.12"
+        compile ":greenmail:1.3.3"
 
         // test scope
         test(":spock:0.7") {

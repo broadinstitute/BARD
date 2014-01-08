@@ -1,7 +1,8 @@
-package bard.validation.ext
+package bard.validation.extext
 
 import bard.db.audit.BardContextUtils
 import bard.db.people.Person
+import bard.validation.ext.ExternalItem
 import bard.validation.extext.ExternalOntologyPerson
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils

@@ -39,7 +39,7 @@ grails.project.dependency.resolution = {
         compile "org.grails:grails-webflow:$grailsVersion"
         compile "org.apache.httpcomponents:httpclient:4.2.3"
 
-        compile "bard:external-validation:20131213"
+        compile "bard:external-validation-api:20140106"
         compile "bard:pubchem-xml:20131010"
 
         compile "com.oracle:ojdbc6:11.2.0.2.0"
@@ -50,7 +50,7 @@ grails.project.dependency.resolution = {
             excludes "commons-codec", "commons-logging"
         }
         compile 'com.thoughtworks.xstream:xstream:1.4.2'
-        compile "org.codehaus.groovy.modules.remote:remote-transport-http:0.5", {
+        compile ("org.codehaus.groovy.modules.remote:remote-transport-http:0.5") {
             excludes "servlet-api"
         }
         compile 'log4j:apache-log4j-extras:1.2.17'
@@ -78,9 +78,9 @@ grails.project.dependency.resolution = {
         runtime 'org.springframework:spring-test:3.1.2.RELEASE'
 
         // test scope
-        test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
-        test "org.objenesis:objenesis:1.3" // used by spock for Mocking object that lack no args constructor
-        test "org.gebish:geb-spock:$gebVersion"
+        test ("org.spockframework:spock-grails-support:0.7-groovy-2.0")
+        test ("org.objenesis:objenesis:1.3") // used by spock for Mocking object that lack no args constructor
+        test ("org.gebish:geb-spock:$gebVersion")
         test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
             excludes "xml-apis", "commons-io"
         }

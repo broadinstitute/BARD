@@ -1,5 +1,7 @@
-package bard.validation.ext
+package bard.validation.extext
 
+import bard.validation.ext.ExternalItem
+import bard.validation.ext.ExternalOntologyException
 import bard.validation.extext.ExternalOntologyPerson
 import grails.buildtestdata.mixin.Build
 import spock.lang.Specification
