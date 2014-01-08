@@ -59,6 +59,7 @@ class ContextItemPage extends CapScaffoldPage{
 			navigateBackToContext()
 		}
 	}
+
 	def isFreeTextTYpe(def inputData, def isCreate){
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ displayValue }
 		if(isCreate){
@@ -73,6 +74,7 @@ class ContextItemPage extends CapScaffoldPage{
 			navigateBackToContext()
 		}
 	}
+
 	def isNumericType(def inputData, def isCreate){
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ numericValue }
 		if(isCreate){
@@ -123,11 +125,13 @@ class ContextItemPage extends CapScaffoldPage{
 			}
 		}
 	}
+
 	def isFreeConstraint(){
 		valueContraintFree.click()
 		addOrUpdate(ci)
 		navigateBackToContext()
 	}
+
 	def addOrUpdate(boolean isCreate){
 		if(isCreate){
 			saveBtn.buttonSubmitPrimary.click()
@@ -135,9 +139,11 @@ class ContextItemPage extends CapScaffoldPage{
 			updateBtn.buttonSubmitPrimary.click()
 		}
 	}
+
 	def navigateBackToContext(){
 		backToContextBtn.button.click()
 	}
+
 	boolean alertError(def element, def condition){
 		if(element){
 			if(element.text()){
@@ -157,20 +163,10 @@ class ContextItemPage extends CapScaffoldPage{
 			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	integratedSearch.selectChoice }
 			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	externalOntologyId }
 			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	displayValue }
-//			attributeFromDictionary.selectClose.click()
-//			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
+			//			attributeFromDictionary.selectClose.click()
+			//			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}
-		if(resultUpload){
-			providedWithResults.click()
-			if(valuConstraint=="Free"){
-				isFreeConstraint()
-			}else if(valuConstraint=="List"){
-				valueConstraintList.click()
-				isExternalOntologyType(inputData, isCreate, isIntegration)
-			}
-		}else{
-			isExternalOntologyType(inputData, isCreate, isIntegration)
-		}
+		isExternalOntologyType(inputData, isCreate, isIntegration)
 	}
 
 	def addNumericValueItem(def inputData, boolean isCreate=true, def resultUpload=false){
@@ -184,24 +180,7 @@ class ContextItemPage extends CapScaffoldPage{
 			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !numericValue.displayed }
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}
-		if(resultUpload){
-			providedWithResults.click()
-			if(valuConstraint=="Free"){
-				isFreeConstraint()
-			}else if(valuConstraint=="List"){
-				valueConstraintList.click()
-				isNumericType(inputData, isCreate)
-			}else if(valuConstraint=="Range"){
-				valueConstraintRange.click()
-				valueMin.value(inputData.valueMin)
-				valueMax.value(inputData.valueMax)
-				addOrUpdate(ci)
-				navigateBackToContext()
-			}
-
-		}else{
-			isNumericType(inputData, isCreate)
-		}
+		isNumericType(inputData, isCreate)
 	}
 
 	def addFreeTextItem(def inputData, boolean isCreate=true, def resultUpload=false){
@@ -215,18 +194,8 @@ class ContextItemPage extends CapScaffoldPage{
 			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !displayValue.displayed }
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}
-		if(resultUpload){
-			providedWithResults.click()
-			if(valuConstraint=="Free"){
-				isFreeConstraint()
-			}else if(valuConstraint=="List"){
-				valueConstraintList.click()
-				isFreeTextTYpe(inputData, isCreate)
-			}
 
-		}else{
-			isFreeTextTYpe(inputData, isCreate)
-		}
+		isFreeTextTYpe(inputData, isCreate)
 	}
 	def addElementContextItem(def inputData, boolean isCreate=true, def resultUpload=false){
 		if(isCreate){
@@ -269,7 +238,7 @@ class ContextItemPage extends CapScaffoldPage{
 			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element2.dropdown }
 			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	element2.searchInput }
 		}
-//		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element2.searchResult }
+		//		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element2.searchResult }
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	element2.searchInput }
 		element2.searchInput.value(inputValue)
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element2.searchResult[index].text().contains(inputValue)}

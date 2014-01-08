@@ -107,7 +107,7 @@ class TestData {
 		child:[
 			resultType:'categorical result',
 			statsModifier:'relative',
-			parentResultType:"PubChem activity score",	//this should be resultType value of parent map
+			parentResultType:"PubChem activity score",	//this should be the same as resultType value of parent map
 			relationship:'supported by'
 		],
 		dose:[

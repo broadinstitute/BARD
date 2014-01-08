@@ -11,7 +11,6 @@ import spock.lang.Shared
  * Created by GGTS.
  * User: mrafique
  * Date Created: 13/02/06
- * Date Updated: 13/02/13
  */
 abstract class BardFunctionalSpec extends GebReportingSpec {
 	@Shared protected Map<String, Map> usernameUserPropsMap = [:]
@@ -22,7 +21,6 @@ abstract class BardFunctionalSpec extends GebReportingSpec {
 		// def mockUsers = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers }
 //		def mockUsers = remote { ctx.grailsApplication.config.mockUsers }
 		def mockUsers = Holders.config.mockUsers
-		//Map userProps =[:]
 		mockUsers.each {user ->
 			Map userProps = user.value
 			usernameUserPropsMap.put(userProps.username, userProps)
@@ -34,7 +32,6 @@ abstract class BardFunctionalSpec extends GebReportingSpec {
 		Map.Entry<String, Map> userInfoMap = usernameUserPropsMap.find { k, v ->
 			v.roles.contains(role)
 		}
-
 		return logInAsUser(userInfoMap.key)
 	}
 
