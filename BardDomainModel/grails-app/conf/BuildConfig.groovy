@@ -6,8 +6,6 @@ grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 grails.project.target.level = 1.6
 
-
-
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
@@ -41,10 +39,6 @@ grails.project.dependency.resolution = {
         build(":improx:0.2") { export = false } // Interactive Mode Proxy; useful for IDE integration
         compile(":clover:3.1.10.1") { export = false }
         compile(":console:1.2") { export = false }
-        compile(":cbipcrowdauthentication:0.3.4") {
-		export = false
-		excludes('spock', 'release', 'google-collections')
-        }
         compile(":spring-security-acl:1.1.1")
         compile(":database-migration:1.3.2") { export = true }
         compile(":spock:0.7") {

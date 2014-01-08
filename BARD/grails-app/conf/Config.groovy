@@ -5,6 +5,7 @@ import org.apache.log4j.DailyRollingFileAppender
 import org.apache.log4j.net.SMTPAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
+def isPublicBard = System.getProperty("bard.public") != null;
 
 bard.users.email = "bard-users@broadinstitute.org"
 bard.users.mailing.list = "https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users"
@@ -194,11 +195,19 @@ grails.plugins.springsecurity.rememberMe.key = rememberme.key
 
 switch (Environment.current) {
     case Environment.PRODUCTION:
-        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+        if(isPublicBard) {
+            grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+        } else {
+            grails.plugins.springsecurity.providerNames = ['inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+        }
         break;
     default:
         //use basic auth and in memory security services in no-production environments
-        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+        if(isPublicBard) {
+            grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+        } else {
+            grails.plugins.springsecurity.providerNames = ['inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+        }
         break;
 }
 
