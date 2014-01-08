@@ -16,6 +16,26 @@
     <%@ page import="bardqueryapi.IDSearchType" %>
     <r:layoutResources/>
     <ga:trackPageview/>
+    <style>
+        /*Correcting for nav-panel overriding the Finish Editing button. https://www.pivotaltracker.com/story/show/62830700*/
+    .nav-panel .nav {
+        display: inline;
+    }
+
+    .nav-panel .navbar {
+        margin-bottom: 0px;
+    }
+
+    .nav-panel .nav > li > a {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .navbar .nav > li > a {
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+    </style>
 </head>
 
 <body>
@@ -59,7 +79,7 @@
                         <g:render template="/layouts/templates/loginStrip"/>
                     </div>
 
-                    <div class="left-aligned">
+                    <div style="text-align: right;">
                         <g:render template="/layouts/templates/queryCart"/>
                     </div>
 
@@ -104,6 +124,40 @@
             </div>
             <g:layoutBody/>
         </div>
+    </div>
+</div>
+
+<%-- Dialog for ajax errors --%>
+<div class="hide" id="ajax-failure-dialog" title="An error has occurred">
+    <div>
+        <p>
+            <b>We're sorry, we encountered the following problem:</b>
+        </p>
+
+        <div id="ajax-failure-list"></div>
+
+        <p>
+            We apologize for the inconvenience. An email has been sent to the BARD Development Team, and we will investigate the problem as soon as possible.
+        </p>
+        <p>
+            In the meantime, you can try:
+        <ul>
+            <li>
+                Waiting a little bit and then repeating what you were doing, in case the error is only temporary;
+            </li>
+            <li>
+                Reporting the problem to the bard-users mailing list with a description of what you are trying to do. This will help us to resolve the problem more quickly.
+            </li>
+        </ul>
+
+        <p>
+            Thank you for your patience.
+        </p>
+
+        <p>
+            Sincerely,<br>
+            The BARD Development Team
+        </p>
     </div>
 </div>
 

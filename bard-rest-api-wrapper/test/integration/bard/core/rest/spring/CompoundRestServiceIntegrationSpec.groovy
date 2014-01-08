@@ -27,8 +27,6 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
     List<Long> cids = [2722L, 5394L]
 
 
-
-
     void "searchCompoundsByCIDs #label"() {
         when:
         CompoundResult compoundResult = compoundRestService.searchCompoundsByCids(compoundIds, searchParams)
@@ -315,7 +313,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
     void "test Structure Search : #label"() {
         given: "Structure Paramaters with top #top  and skip #skip and a threshhold of 0.9"
         final StructureSearchParams structureSearchParams =
-            new StructureSearchParams(smiles)
+                new StructureSearchParams(smiles)
         structureSearchParams.setSkip(skip).setTop(top);
         BigDecimal threshold = 0.9
         structureSearchParams.setThreshold(threshold)
@@ -340,7 +338,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
     void "test SubStructure Search with brackets in smiles: #label"() {
         given: "Structure Paramaters with top #top  and skip #skip"
         StructureSearchParams structureSearchParams =
-            new StructureSearchParams(smiles)
+                new StructureSearchParams(smiles)
         structureSearchParams.setSkip(skip)
         structureSearchParams.setTop(top);
         when: "We call the search method of the Compound Service"
@@ -536,7 +534,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         final CompoundResult compoundsByFreeTextSearch = this.compoundRestService.findCompoundsByFreeTextSearch(params)
         then:
         assert compoundsByFreeTextSearch
-        final Compound compoundTemplate = compoundsByFreeTextSearch.compounds.get(0)
+        final Compound compoundTemplate = compoundsByFreeTextSearch.compounds.find { it.cid == 3899L }
         assert compoundTemplate.isDrug() == isDrug
         assert compoundTemplate.isProbe() == isProbe
         where:

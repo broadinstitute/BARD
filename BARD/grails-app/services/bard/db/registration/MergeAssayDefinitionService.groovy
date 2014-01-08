@@ -115,7 +115,7 @@ class MergeAssayDefinitionService {
         idsAsList.each {
             ids << Long.valueOf(it.trim())
         }
-        return ids
+        return ids.unique()
     }
 
     void validateConfirmMergeInputs(final Long targetAssayId, final String assayIdsToMerge, final IdType idType) {

@@ -9,6 +9,7 @@ modules = {
     }
     core {
         dependsOn 'jquery, jquery-ui, jquery-theme, jquery-validation-ui, dataTables, jqueryform'
+        resource url: '/js/cap/monkeyPatchAjax.js'
         resource url: '/css/datatables/demo_table_jui.css'
         resource url: '/js/application.js'
         resource url: "css/bard.css"
@@ -176,12 +177,8 @@ modules = {
     }
 
     historyJsHtml5 {
-//        history.js commit a6e2554cd5e10bd07f162bb876b0bbf48514b900
-
-        resource url: "js/history.js-master-commit-a6e2554/scripts/bundled-uncompressed/html4+html5/jquery.history.js"
-
+        resource url: "js/historyjs/jquery.history.js"
     }
-
     //I
     idSearch {
         resource url: "js/idSearchDialog.js"

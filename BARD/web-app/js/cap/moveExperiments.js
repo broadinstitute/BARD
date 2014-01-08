@@ -19,8 +19,6 @@ $(document).ready(function () {
     }).trigger("change");
 
 
-
-
 });
 function isChecked(checkboxId) {
     var id = '#' + checkboxId;
@@ -34,4 +32,9 @@ function resetSelectAll() {
     } else {
         $("#selectAll").removeAttr("checked");
     }
+}
+
+//Called on an onSuccess event, to disable the form and the controls.
+function disableFormAndControls(data) {
+    $('#moveExperimentsForm input, #moveExperimentsForm select, #selectExperimentsToMoveForm input').attr('disabled', 'true');
 }

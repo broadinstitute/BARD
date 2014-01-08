@@ -225,10 +225,10 @@ function handleStructureSearch(url, currentFormId) {
             $("#compoundsTab").html(compoundTotal);
             $("#compounds").tab('show');
         },
-        error:function (request, status, error) {
+        error:handleAjaxError(function (request, status, error) {
             $("#compoundsTab").html('Compounds ' + errorImageTwitterBootstrap);
             $("#compounds").html(error);
-        },
+        }),
         complete:function () {
             $("#compounds").trigger('search.complete');
         }
@@ -270,10 +270,10 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
 
             $(tabDivElement).html(total);
         },
-        error:function (request, status, error) {
+        error:handleAjaxError(function (request, status, error) {
             $(tabDivElement).html(prefixOfTextToAppearOnTab + errorImageTwitterBootstrap);
             $(updateDivId).html(error);
-        },
+        }),
         complete:function () {
             $(updateDivId).trigger('search.complete');
         }
@@ -519,19 +519,16 @@ function activateCurrentTab(currentTab) {
             activateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds ");
             deActivateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions (0)');
             deActivateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects (0)');
-            window.location.hash = "#compounds";
             break;
         case 'assaysTab':
             deActivateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds (0)");
             activateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions ');
             deActivateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects (0)');
-            window.location.hash = "#assays";
             break;
         case 'projectsTab':
             deActivateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds (0)");
             deActivateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions (0)');
             activateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects ');
-            window.location.hash = "#projects";
             break;
         default:
             activateCurrentTab('assaysTab');

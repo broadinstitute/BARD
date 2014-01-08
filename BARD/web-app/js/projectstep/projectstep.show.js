@@ -82,7 +82,13 @@ function nodeToDotDescription(node) {
     var keyValues = node.keyValues;
     var text;
     if(keyValues.type == "single"){
-        text = node.id + "[style=\"bold,filled\",color=\""+getColorForNode(keyValues)+"\",label=\"" + keyValues.eid + "\\n " + keyValues.stage + "\"" + "];";
+        // set fillcolor for box to lightgray if user is not allowed to see a draft experiment
+        if(keyValues.cansee){
+            text = node.id + "[style=\"bold,filled\",color=\""+getColorForNode(keyValues)+"\",label=\"" + keyValues.eid + "\\n " + keyValues.stage + "\"" + "];";
+        }
+        else{
+            text = node.id + "[style=\"bold,filled\", fillcolor=\"lightgray\",color=\""+getColorForNode(keyValues)+"\",label=\"" + keyValues.eid + "\\n Work in progress" + "\"];";
+        }
     } else {
         text = node.id + "[style=\"bold,filled\",color=\""+getColorForNode(keyValues)+"\",label=\"Panel of "+keyValues.eids.length + " experiments\\n" + keyValues.stage + "\"" + "];";
     }
@@ -171,34 +177,45 @@ function layoutGraph() {
     var nodeSelectionTemplate = Handlebars.compile($("#node-selection-template").html())
     var edgeSelectionTemplate = Handlebars.compile($("#edge-selection-template").html());
 
+    var nodeMap = {};
+    for (var i = 0; i < allNodes.length; i++) {
+        nodeMap[allNodes[i].id]  =  allNodes[i];
+    }
+
     // set up click handling on nodes
     $(".node").click(function () {
-        // reset previous selections
-        deselectPrevious();
+        var clickedNodeId = $(this).find('title').text();
+        var selectedNode = nodeMap[clickedNodeId];
+        // only show draft experiment details if user it's allowed to see it or it is an experiment panel
+        if(selectedNode.keyValues.type == "panel" || selectedNode.keyValues.cansee){
+            // reset previous selections
+            deselectPrevious();
 
-        var clickedNode = $(this).find('title').text();
-        var thisId = $(this).attr("id");
+            var clickedNode = $(this).find('title').text();
+            var thisId = $(this).attr("id");
 
-        var thisPolygon = "#"+thisId + " polygon";
-        $(thisPolygon).attr("fill", "#00FFFF")
+            var thisPolygon = "#"+thisId + " polygon";
+            $(thisPolygon).attr("fill", "#00FFFF");
 
-        var projectId = $('#projectIdForStep').val();
+            var projectId = $('#projectIdForStep').val();
 
-        for (var i = 0; i < allNodes.length; i++) {
-            var keyValues = allNodes[i].keyValues;
-            if (allNodes[i].id == clickedNode) {
-                assignFillColor(thisId, "#00FFFF");
-                var params = {selected:keyValues, projectId:projectId, selectedNodeId:thisId};
-                $('#selection-details').html(nodeSelectionTemplate(params));
+            for (var i = 0; i < allNodes.length; i++) {
+                var keyValues = allNodes[i].keyValues;
+                if (allNodes[i].id == clickedNode) {
+                    assignFillColor(thisId, "#00FFFF");
+                    var params = {selected:keyValues, projectId:projectId, selectedNodeId:thisId};
+                    $('#selection-details').html(nodeSelectionTemplate(params));
+                }
             }
+
+            $('.projectStageId').editable({
+                mode:'inline',
+                success: function (response, newValue) {
+                    refreshProjectSteps();
+                }
+            });
         }
 
-        $('.projectStageId').editable({
-            mode:'inline',
-            success: function (response, newValue) {
-                refreshProjectSteps();
-            }
-        });
     });
 
     var edges = graphInJSON.edges;

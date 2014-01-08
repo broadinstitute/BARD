@@ -6,7 +6,7 @@
             modules="core,bootstrap,twitterBootstrapAffix,xeditable,experimentsummary,canEditWidget,richtexteditorForEdit, sectionCounter, card,histogram"/>
     <meta name="layout" content="basic"/>
     <r:external file="css/bootstrap-plus.css"/>
-    <title>EID ${instance?.id}: ${instance?.experimentName}</title>
+    <title>EID ${instance?.id}: ${instance?.permittedToSeeEntity() ? instance?.experimentName : 'Experiment Pending'}</title>
 
 </head>
 

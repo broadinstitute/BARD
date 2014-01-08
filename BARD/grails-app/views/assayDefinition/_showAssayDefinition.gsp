@@ -150,36 +150,36 @@
             </g:if>
         </g:if>
     </div>
-</section>
-<br/>
-<section id="assay-design-header">
+    <section id="assay-design-header">
 
-    <h4 class="subsect">Assay Design <g:link target="dictionary" controller="element"
-                                             action="showTopLevelHierarchyHelp"><i
-                class="icon-question-sign"></i></g:link></h4>
+        <h4 class="subsect">Assay Design <g:link target="dictionary" controller="element"
+                                                 action="showTopLevelHierarchyHelp"><i
+                    class="icon-question-sign"></i></g:link></h4>
 
-    <g:if test="${assayInstance.groupAssayDesign()?.value}">
-        <div class="row-fluid">
-            <div id="cardHolderAssayDesign" class="span12">
-                <g:render template="/context/currentCard"
-                          model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayDesign(), subTemplate: 'show', renderEmptyGroups: false]"/>
+        <g:if test="${assayInstance.groupAssayDesign()?.value}">
+            <div class="row-fluid">
+                <div id="cardHolderAssayDesign" class="span12">
+                    <g:render template="/context/currentCard"
+                              model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayDesign(), subTemplate: 'show', renderEmptyGroups: false]"/>
 
-            </div>
-        </div>
-        <br/>
-    </g:if>
-    <div class="row-fluid">
-        <g:if test="${!uneditable}">
-            <g:if test="${editable == 'canedit'}">
-                <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
-                            params="[groupBySection: ContextType.ASSAY_DESIGN.id.encodeAsURL()]"
-                            class="btn"><i class="icon-pencil"></i> Edit Assay Design</g:link>
-                    <br/><br/>
                 </div>
-            </g:if>
+            </div>
+            <br/>
         </g:if>
-    </div>
+        <div class="row-fluid">
+            <g:if test="${!uneditable}">
+                <g:if test="${editable == 'canedit'}">
+                    <div class="span12">
+                        <g:link action="editContext" id="${assayInstance?.id}"
+                                params="[groupBySection: ContextType.ASSAY_DESIGN.id.encodeAsURL()]"
+                                class="btn"><i class="icon-pencil"></i> Edit Assay Design</g:link>
+                        <br/><br/>
+                    </div>
+                </g:if>
+            </g:if>
+        </div>
+    </section>
+    <br/>
     <section id="assay-readout-header">
 
         <h4 class="subsect">Assay Readout <g:link target="dictionary" controller="element"

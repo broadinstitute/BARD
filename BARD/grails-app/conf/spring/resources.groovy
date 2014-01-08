@@ -1,5 +1,6 @@
 import acl.CapPermissionService
 import acl.SpringSecurityUiService
+import bard.PreservingExceptionGrailsExceptionResolver
 import bard.auth.InMemMapAuthenticationProviderService
 import bard.core.helper.LoggerService
 import bard.core.rest.spring.*
@@ -168,6 +169,10 @@ beans = {
         externalUrlDTO = ref('externalUrlDTO')
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
+    }
+
+    exceptionHandler(PreservingExceptionGrailsExceptionResolver){
+        exceptionMappings = ['java.lang.Exception': '/error']
     }
 
     switch (Environment.current) {

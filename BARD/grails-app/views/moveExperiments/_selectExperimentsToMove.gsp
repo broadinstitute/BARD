@@ -1,7 +1,8 @@
 <%@ page import="bard.db.enums.Status; bard.db.enums.Status; bard.db.registration.ExternalReference" %>
 <div class="container">
     <div>
-        <h2>(${moveExperimentsCommand.experiments?.size()}) Experiments found - choose which ones to move</h2>
+        <g:set var="experimentNum" value="${moveExperimentsCommand.experiments?.size()}"/>
+        <h2>${experimentNum} Experiment${experimentNum && experimentNum > 1 ? "s found - choose which ones to move" : " found"}</h2>
 
         <g:if test="${warningMessage}">
             <h4>${warningMessage}</h4>
@@ -10,15 +11,21 @@
 
     <div class="row">
         <div class="span12">
-            <g:formRemote url="[controller: 'moveExperiments', action: 'moveSelectedExperiments']"
+            <g:formRemote id="selectExperimentsToMoveForm"
+                          url="[controller: 'moveExperiments', action: 'moveSelectedExperiments']"
                           name="splitExperiments"
-                          update="[success: 'displayResponseDiv', failure: 'displayResponseDiv']">
-            %{--Select all check boxes by default otherwise toggle--}%
-                <g:checkBox name="selectAll" id="selectAll" class="selectAll" checked="true"/> select all <br/>
+                          update="[success: 'displayResponseDiv', failure: 'displayResponseDiv']"
+                          onSuccess="disableFormAndControls(data)">
                 <table id="myExperiments" class="table table-striped table-hover table-bordered">
                     <thead>
                     <tr>
-                        <th></th><th>Experiment ID</th><th>ADID</th><th>PubChem AID</th><th>Experiment Name</th>
+                        <th>%{--Select all check boxes by default otherwise toggle--}%
+                        <g:checkBox name="selectAll" id="selectAll" class="selectAll" checked="true"/> select all <br/>
+                        </th>
+                        <th>Experiment ID</th>
+                        <th>ADID</th>
+                        <th>PubChem AID</th>
+                        <th>Experiment Name</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -52,10 +59,11 @@
                 <g:hiddenField name="targetAssay.id" value="${moveExperimentsCommand.targetAssay.id}"/>
                 <br/>
                 <br/>
+
                 <div>
                     <h2>Assay Definition to move to:</h2>
                     <ul>
-                         <g:link controller="assayDefinition" action="show" id="${moveExperimentsCommand.targetAssay.id}"
+                        <g:link controller="assayDefinition" action="show" id="${moveExperimentsCommand.targetAssay.id}"
                                 target="_blank">
                             <li>
                                 ${moveExperimentsCommand.targetAssay.id} - ${moveExperimentsCommand.targetAssay.assayName}

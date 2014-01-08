@@ -128,6 +128,7 @@ class ProjectExperimentRenderService {
                     'outcount': 0,
                     'eid': pse.experiment?.id,
                     'ename': pse.experiment?.experimentName,
+                    'cansee': pse.experiment?.permittedToSeeEntity(),
             ]
         } else {
             throw new RuntimeException("Unknown projectExperiment type: ${pe?.class?.getName()}")

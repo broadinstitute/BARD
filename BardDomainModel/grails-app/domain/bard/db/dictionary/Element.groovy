@@ -58,7 +58,13 @@ class Element extends AbstractElement {
             return true
         })
         addChildMethod(nullable: false)
-
+        label(nullable: false, validator: { val, obj, errors ->
+            if (val.size() > 30 && obj.expectedValueType != ExpectedValueType.NONE && !StringUtils.trimToNull(obj.abbreviation)) {
+                errors.rejectValue("abbreviation", "If the label length is > 30 char and expected value_type is not 'none', then the abbreviation must be not empty")
+                return false
+            }
+            return true
+        })
     }
 
     OntologyBreadcrumb getOntologyBreadcrumb() {

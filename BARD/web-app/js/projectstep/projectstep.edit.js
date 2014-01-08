@@ -29,6 +29,21 @@ function initProjectEditFunction() {
             $("#linkExperimentForm").clearForm();
             $("#serviceResponse").html("");
             $("#dialog_link_experiment").dialog("open");
+            //Update the link-from/link-to select inputs with project's eids.
+            var graphInJSON = $.parseJSON($('#stepGraph').html());
+            var connectedNodes = graphInJSON.connectedNodes;
+            var isolatedNodes = graphInJSON.isolatedNodes;
+            var eids = new Array();
+            $.each(connectedNodes.concat(isolatedNodes), function (i, node) {
+                eids.push(node.keyValues.eid);
+            });
+            $('#fromExperimentId').html('<option value=""></option>');
+            $('#toExperimentId').html('<option value=""></option>');
+            $.each(eids.sort(), function (i, eid) {
+                var selectOptionString = '<option value="' + eid + '">' + eid + '</option>';
+                $('#fromExperimentId').append(selectOptionString);
+                $('#toExperimentId').append(selectOptionString);
+            });
         });
     $("#dialog_link_experiment").dialog({
         autoOpen: false,
@@ -125,7 +140,8 @@ function deleteItem(experimentId, projectId) {
                     data: data,
                     success: function (data) {
                         handleSuccess(data)
-                    }
+                    },
+                    error: handleAjaxError()
                 });
                 $(this).dialog("close");
             }
@@ -155,7 +171,8 @@ function deleteEdge(fromId, toId, projectId) {
                     data: data,
                     success: function (data) {
                         handleSuccess(data)
-                    }
+                    },
+                    error: handleAjaxError()
                 });
                 $(this).dialog("close");
             }

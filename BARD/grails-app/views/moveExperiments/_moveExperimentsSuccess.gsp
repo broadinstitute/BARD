@@ -5,7 +5,9 @@
 <div class="alert alert-success">
 
     <div class="control-group">
-        <label><h3>Successfully moved the following ${movedExperiments?.size()} experiment(s) to Assay :  ${targetAssay?.id}</h3></label>
+        <g:set var="experimentNum" value="${movedExperiments?.size()}"/>
+        <label><h3>Successfully moved the following ${experimentNum} experiment${experimentNum && experimentNum > 1 ? "s" : ""} to ADID :  ${targetAssay?.id}</h3>
+        </label>
     </div>
 
     <div class="control-group">
@@ -20,5 +22,12 @@
     </div>
 
 </div>
+
+<div class="row-fluid" style="margin: 5px;">
+    <div class="span1 offset11">
+        <g:link action="show" class="btn" value="OK">OK</g:link>
+    </div>
+</div>
+
 
 

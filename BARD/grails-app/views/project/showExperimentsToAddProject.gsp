@@ -52,15 +52,15 @@
 
 
                 <h5><div>Paste Ids to add to project (space delimited).<br/>
-                If you chose the AssayDefinition ID option above, you would be prompted to select the experiments
-                 from the ADID(s) below, on the next page.
+                    If you chose the AssayDefinition ID option above, you would be prompted to select the experiments
+                    from the ADID(s) below, on the next page.
                 </div></h5>
                 <g:textArea class="input-xxlarge" id="sourceEntityIds" name="sourceEntityIds"
                             value="${command.sourceEntityIds}" required=""/>
 
 
                 <h5><div>Experiment Stage</div></h5>
-                <g:hiddenField id="stageId" name="stageId" class="span10"
+                <g:hiddenField id="stageId" name="stageId" class="span10" style="margin-left: 0;"
                                value="${command?.stage?.id}"/>
                 <br/>
                 <br/>

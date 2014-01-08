@@ -11,7 +11,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static OneItemPerNonFixedAttributeElementRule.getErrorMsg
-import static bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule.ONE_BIOLOGY_ATTRIBUTE_REQUIRED
+import static bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule.ASSAY_ONE_BIOLOGY_ATTRIBUTE_REQUIRED
 import static bard.db.registration.AttributeType.Free
 
 /**
@@ -62,7 +62,7 @@ class AssayUnitSpec extends Specification {
 
         where:
         desc                                                        | attributeElementValueElementMaps                                                                                | valueDisplay | expectedGuidanceMessages
-        'biology required (true)'                                   | { null }                                                                                                        | null         | [ONE_BIOLOGY_ATTRIBUTE_REQUIRED]
+        'biology required (true)'                                   | { null }                                                                                                        | null         | [ASSAY_ONE_BIOLOGY_ATTRIBUTE_REQUIRED]
         'biology required (false)'                                  | { [[[label: 'biology'], []]] }                                                                                  | null         | []
         'biology required with valueElement==small-molecule format' | { [[[label: 'assay format', expectedValueType: ExpectedValueType.ELEMENT], [label: 'small-molecule format']]] } | 'not null'   | []
         'more than 1 biology ok'                                    | { [[[label: 'biology'], []], [[label: 'biology'], []]] }                                                        | null         | []

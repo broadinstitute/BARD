@@ -30,10 +30,15 @@ public interface IQueryService {
     long numberOfExperimentData()
 
     int numberOfProbeProjects()
+
     int numberOfProbeCompounds()
 
+    Long totalNumberOfProbes()
+
     List<Long> findAllProbeProjects()
+
     Map findAllProbeCompounds()
+
     List<Assay> findRecentlyAddedAssays(int numberOfAssays)
 
     List<ExperimentSearch> findRecentlyAddedExperiments(int numberOfExperiments)
@@ -77,7 +82,8 @@ public interface IQueryService {
      * @param searchFilters {@link SearchFilter}'s
      * @return Map of results
      */
-    Map findCompoundsByTextSearch(final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
+    Map findCompoundsByTextSearch(
+            final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
     /**
      *
      * @param cids
@@ -86,7 +92,8 @@ public interface IQueryService {
      * @param searchFilters
      * @return Map of results
      */
-    Map searchCompoundsByCids(final List<Long> cids, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
+    Map searchCompoundsByCids(
+            final List<Long> cids, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
 
     /**
      *
@@ -96,7 +103,9 @@ public interface IQueryService {
      * @param searchFilters
      * @return Map of results
      */
-    Map findAssaysByCapIds(final List<Long> capAssayIds, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
+    Map findAssaysByCapIds(
+            final List<Long> capAssayIds,
+            final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
 
     /**
      * @param capProjectIds
@@ -105,7 +114,9 @@ public interface IQueryService {
      * @param searchFilters
      * @return Map of results
      */
-    Map findProjectsByCapIds(final List<Long> capProjectIds, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
+    Map findProjectsByCapIds(
+            final List<Long> capProjectIds,
+            final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
 
     /**
      * @param searchString
@@ -114,7 +125,8 @@ public interface IQueryService {
      * @param searchFilters {@link SearchFilter}'s
      * @return Map of results
      */
-    Map findAssaysByTextSearch(final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
+    Map findAssaysByTextSearch(
+            final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
 
     /**
      * @param searchString
@@ -123,7 +135,8 @@ public interface IQueryService {
      * @param searchFilters {@link SearchFilter}'s
      * @return Map
      */
-    Map findProjectsByTextSearch(final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
+    Map findProjectsByTextSearch(
+            final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
 
     //====================================== Structure Searches ========================================
     /**
