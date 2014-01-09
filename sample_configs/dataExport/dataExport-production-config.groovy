@@ -9,4 +9,4 @@ dataSource {
     dbCreate='no-val'
 }
 
- 
+bard.services.resultService.archivePath = "RESULTS_PATH"
