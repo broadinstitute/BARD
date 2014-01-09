@@ -92,7 +92,7 @@ beans = {
         }
     }
 
-    if(Environment.current != Environment.PRODUCTION) {
+    if(!isPublicBard ||Environment.current != Environment.PRODUCTION) {
         inMemMapAuthenticationProviderService(InMemMapAuthenticationProviderService) {
             // grailsApplication = application
         }
