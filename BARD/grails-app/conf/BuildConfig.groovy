@@ -23,10 +23,14 @@ grails.project.dependency.resolution = {
         grailsPlugins()
         grailsHome()
 
-        if(isPublicBard) {
+        
+	if(isPublicBard) {
             mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
             grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
-        }
+        } else {
+	    grailsCentral()
+            mavenCentral()
+	}
     }
 
     dependencies {
