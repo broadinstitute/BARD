@@ -68,6 +68,12 @@ grails.project.dependency.resolution = {
         compile "log4j:log4j:1.2.16"
         build "log4j:log4j:1.2.16"
 
+	// needed to override the version of the spring-mobile-device library to one resolvable via maven central
+	// this is only needed by the spring-mobile plugin.  If we drop that plugin, we can drop this reference
+	compile 'org.springframework.mobile:spring-mobile-device:1.1.0.RELEASE', {
+             excludes 'javax.servlet-api', 'spring-web', 'spring-webmvc'
+        }
+
         // runtime scope
         // runtime 'mysql:mysql-connector-java:5.1.16'
         runtime('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
