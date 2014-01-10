@@ -3,7 +3,6 @@ package base
 import java.sql.Date;
 
 import geb.spock.GebReportingSpec
-import grails.util.Holders
 import pages.HomePage
 import pages.LoginPage
 import spock.lang.Shared
@@ -15,12 +14,8 @@ import spock.lang.Shared
 abstract class BardFunctionalSpec extends GebReportingSpec {
 	@Shared protected Map<String, Map> usernameUserPropsMap = [:]
 	def setupSpec() {
-//		RemoteControl remote = new RemoteControl()
-//		 String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
-
-		// def mockUsers = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers }
-//		def mockUsers = remote { ctx.grailsApplication.config.mockUsers }
-		def mockUsers = Holders.config.mockUsers
+        def config = new ConfigSlurper().parse(new File('grails-app/conf/Config.groovy').toURL())
+		def mockUsers = config.mockUsers
 		mockUsers.each {user ->
 			Map userProps = user.value
 			usernameUserPropsMap.put(userProps.username, userProps)

@@ -3,9 +3,6 @@
  See: http://www.gebish.org/manual/current/configuration.html
  */
 
-//import org.codehaus.groovy.grails.commons.ConfigurationHolder;
-import grails.util.Holders;
-
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxProfile
@@ -15,11 +12,11 @@ import org.openqa.selenium.remote.CapabilityType
 import org.openqa.selenium.remote.DesiredCapabilities
 
 driver = {
-	def driver = new HtmlUnitDriver()
-	driver.javascriptEnabled = true
-	driver
+	def d = new HtmlUnitDriver()
+	d.javascriptEnabled = true
+	d
 }
-baseUrl = Holders.config.grails.serverURL
+baseUrl = System.properties.getProperty('server.url') ?: "http://localhost:8080/BARD/"
 environments {
 
 	chrome {

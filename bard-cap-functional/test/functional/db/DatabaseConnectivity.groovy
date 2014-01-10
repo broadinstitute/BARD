@@ -1,6 +1,5 @@
 package db
 
-import grails.util.Holders
 import groovy.sql.Sql
 
 import common.Constants
@@ -19,9 +18,8 @@ class DatabaseConnectivity{
 	static def getDatasource(){
 		def dbDatasource
 
-//		RemoteControl remote = new RemoteControl()
-//		def applicationURL = remote { ctx.grailsApplication.config.grails.serverURL }
-		def applicationURL = Holders.config.grails.serverURL
+        def config = new ConfigSlurper().parse(new File('grails-app/conf/Config.groovy').toURL())
+		def applicationURL = config.grails.serverURL
 		if(applicationURL.indexOf("qa") > -1){
 			dbDatasource = Constants.qaDatasource
 		}else if(applicationURL.indexOf("dev") > -1){
