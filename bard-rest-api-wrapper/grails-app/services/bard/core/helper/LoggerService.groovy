@@ -1,6 +1,8 @@
 package bard.core.helper
 
 import org.apache.commons.lang3.time.StopWatch
+import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
 
 class LoggerService {
     def transactional=false
@@ -18,13 +20,12 @@ class LoggerService {
      * Stop the stop-watch and log the time.
      * @param sw
      */
-    public void stopStopWatch(StopWatch sw, String loggingString) {
+    public void stopStopWatch(StopWatch sw, HttpStatus status, HttpMethod method, String loggingString) {
         sw.stop()
-        Date now = new Date()
-        Map loggingMap = [time: now.format('MM/dd/yyyy  HH:mm:ss.S'), responseTimeInMilliSeconds: sw.time, info: loggingString]
         Date start = new Date(sw.getStartTime())
-        String logInfo = "start:\t${start.format('MM/dd/yyyy  HH:mm:ss.S')}\tduration:\t${sw.toString()}\t${loggingString}"
-        log.info(logInfo)
+        Date end = new Date(sw.getStartTime() + sw.getTime())
+        String message = createMessage(start, end, sw.toString(), status, method, loggingString)
+        log.info(message)
     }
 
     /**
@@ -34,12 +35,20 @@ class LoggerService {
      * @param loggingString
      * @param throwable
      */
-    public void stopStopWatchError(StopWatch sw, String loggingString, Throwable throwable) {
+    public void stopStopWatchError(StopWatch sw, HttpStatus status, HttpMethod method, String loggingString, Throwable throwable) {
         sw.stop()
-        Date now = new Date()
-        Map loggingMap = [time: now.format('MM/dd/yyyy  HH:mm:ss.S'), responseTimeInMilliSeconds: sw.time, info: loggingString]
         Date start = new Date(sw.getStartTime())
-        String logInfo = "start:\t${start.format('MM/dd/yyyy  HH:mm:ss.S')}\tduration:\t${sw.toString()}\t${loggingString}"
-        log.error(logInfo, throwable)
+        Date end = new Date(sw.getStartTime() + sw.getTime())
+        String message = createMessage(start, end, sw.toString(), status, method, loggingString)
+        log.error(message, throwable)
+    }
+
+    private static String createMessage(Date start, Date end, String duration, HttpStatus status, HttpMethod method, String loggingString) {
+        String message = "s: ${start.format('HH:mm:ss.SSS')} e: ${end.format('HH:mm:ss.SSS')} d: ${duration} ${method.toString()} ";
+        if (status != null) {
+            message += "[${status.toString()} - ${status.reasonPhrase}] "
+        }
+        message += "${loggingString}"
+        return message
     }
 }
