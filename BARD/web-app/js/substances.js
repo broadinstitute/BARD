@@ -21,9 +21,9 @@ function loadProbe(url) {
             $('#probe').html(probes);
 
         },
-        error:function () {
+        error:handleAjaxError(function () {
             $('#probe').html('No Project found for Probe');
-        },
+        }),
         complete:function () {
 
         }
@@ -42,9 +42,9 @@ function loadSubstances(url) {
             $('#sids').html(listOfSIDS);
 
         },
-        error:function () {
+        error:handleAjaxError(function () {
             $('#sids').html('No SIDS found for Compound');
-        },
+        }),
         complete:function () {
 
         }

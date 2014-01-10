@@ -59,15 +59,7 @@ class PanelController {
         if (associatePanelCommand.hasErrors()) {
             return [associatePanelCommand: associatePanelCommand]
         }
-        Map unApprovedAssays = associatePanelCommand.getUnApprovedAssays()
-        if (unApprovedAssays) {
-            // unApprovedAssays.put("associatePanelCommand",associatePanelCommand)
-            return [
-                    associatePanelCommand: associatePanelCommand,
-                    draftAssays: unApprovedAssays.draftAssays,
-                    retiredAssays: unApprovedAssays.retiredAssays
-            ]
-        }
+
         this.panelService.associateAssays(associatePanelCommand.id, associatePanelCommand.assays)
 
         redirect(controller: "panel", action: "show", id: associatePanelCommand.id)

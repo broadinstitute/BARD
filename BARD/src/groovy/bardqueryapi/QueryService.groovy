@@ -44,7 +44,9 @@ class QueryService implements IQueryService {
     //========================================================== Free Text Searches ================================
 
 
-    Map searchCompoundsByCids(final List<Long> cids, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map searchCompoundsByCids(
+            final List<Long> cids,
+            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
 
         final List<CompoundAdapter> foundCompoundAdapters = []
         Collection<Value> facets = []
@@ -78,7 +80,9 @@ class QueryService implements IQueryService {
      * @param searchFilters {@link SearchFilter}'s
      * @return Map of results
      */
-    Map findCompoundsByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map findCompoundsByTextSearch(
+            final String searchString,
+            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<CompoundAdapter> foundCompoundAdapters = []
         Collection<Value> facets = []
         int nhits = 0
@@ -100,7 +104,9 @@ class QueryService implements IQueryService {
         return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
 
-    Map findAssaysByCapIds(final List<Long> capAssayIds, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map findAssaysByCapIds(
+            final List<Long> capAssayIds,
+            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<AssayAdapter> foundAssayAdapters = []
         Collection<Value> facets = []
         int nhits = 0
@@ -125,7 +131,9 @@ class QueryService implements IQueryService {
      * @param searchFilters {@link SearchFilter}'s
      * @return Map of results
      */
-    Map findAssaysByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map findAssaysByTextSearch(
+            final String searchString,
+            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<AssayAdapter> foundAssayAdapters = []
         Collection<Value> facets = []
         int nhits = 0
@@ -152,7 +160,9 @@ class QueryService implements IQueryService {
      * @param searchFilters {@link SearchFilter}'s
      * @return Map of results
      */
-    Map findProjectsByCapIds(final List<Long> capProjectIds, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map findProjectsByCapIds(
+            final List<Long> capProjectIds,
+            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         List<ProjectAdapter> foundProjectAdapters = []
         Collection<Value> facets = []
         int nhits = 0
@@ -207,7 +217,9 @@ class QueryService implements IQueryService {
  * @param searchFilters {@link SearchFilter}'s
  * @return Map
  */
-    Map findProjectsByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map findProjectsByTextSearch(
+            final String searchString,
+            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         List<ProjectAdapter> foundProjectAdapters = []
         Collection<Value> facets = []
         String eTag = null
@@ -259,7 +271,7 @@ class QueryService implements IQueryService {
         if (smiles) {
             //construct search parameters
             final StructureSearchParams structureSearchParams =
-                new StructureSearchParams(smiles, structureSearchParamsType).setSkip(skip).setTop(top);
+                    new StructureSearchParams(smiles, structureSearchParamsType).setSkip(skip).setTop(top);
 
             if (structureSearchParamsType == StructureSearchParams.Type.Similarity) {
                 structureSearchParams.setThreshold(threshold)
@@ -433,14 +445,14 @@ class QueryService implements IQueryService {
             exptDataList.sort { Activity lExptData, Activity rExptData ->
                 Long lConfidenceLevel = experimentsMap[lExptData.bardExptId]?.first()?.confidenceLevel ?: 0
                 Long rConfidenceLevel = experimentsMap[rExptData.bardExptId]?.first()?.confidenceLevel ?: 0
-                return rConfidenceLevel <=> lConfidenceLevel
+                return rConfidenceLevel<=>lConfidenceLevel
             }
         }
         //Then sort the resources (assays or projects) based on the first activity they have
         List<Long> sortedKeys = groupedByExperimentalData.keySet().sort { Long l, Long r ->
             ExperimentSearch lExperiment = experimentsMap[groupedByExperimentalData[l]?.first()?.bardExptId].first()
             ExperimentSearch rExperiment = experimentsMap[groupedByExperimentalData[r]?.first()?.bardExptId].first()
-            return rExperiment?.confidenceLevel <=> lExperiment?.confidenceLevel
+            return rExperiment?.confidenceLevel<=>lExperiment?.confidenceLevel
         }
 
         //Build the table
@@ -468,7 +480,7 @@ class QueryService implements IQueryService {
     Map findExperimentDataById(Long experimentId, Integer top, Integer skip, List<FilterTypes> filterTypes = [FilterTypes.TESTED]) {
         List<Activity> activities = []
         final ExperimentShow experimentShow =
-            experimentRestService.getExperimentById(experimentId)
+                experimentRestService.getExperimentById(experimentId)
 
         NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
         if (filterTypes.contains(FilterTypes.Y_DENORM_AXIS)) {
@@ -745,6 +757,10 @@ class QueryService implements IQueryService {
 
     int numberOfProbeCompounds() {
         return projectService.findApprovedProbeCompounds()?.size()
+    }
+
+    Long totalNumberOfProbes() {
+        return projectService.totalNumberOfProbes()
     }
 
     List<Long> findAllProbeProjects() {

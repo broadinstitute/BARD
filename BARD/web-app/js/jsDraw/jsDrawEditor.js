@@ -82,9 +82,9 @@ $('#smilesToMolBtn').on('click', function (event) {
             jsDrawEditor.clear();
             jsDrawEditor.setMolfile(data);
         },
-        error: function (XMLHTTPRequest, textStatus, errorThrown) {
+        error: handleAjaxError(function (XMLHTTPRequest, textStatus, errorThrown) {
             $('#smilesImportErrorLabel').html('<i class="icon-exclamation-sign"/>There was a problem with that SMILES')
-        },
+        }),
         complete: function () {
             //Clear the textfield
             $('#convertSmilesTextfield').val('');

@@ -26,6 +26,7 @@ class ProjectService {
 
         return projectIds
     }
+
     List<Long> findApprovedProbeCompounds() {
 
         final String PROBES_QUERY = '''
@@ -38,8 +39,27 @@ class ProjectService {
         final List cids = Project.executeQuery(PROBES_QUERY,
                 [PUBCHEM_CID_URI, Status.APPROVED]) as List<Long>
 
-        return cids.collect{it as Long}
+        return cids.collect { it as Long }
     }
+    /**
+     * Returns total number of probes. Please note that a probe could be reported either as a CID or an SID (https://www.pivotaltracker.com/story/show/62094690).
+     * @return
+     */
+    Long totalNumberOfProbes() {
+
+        final String TOTAL_PROBES_QUERY = '''
+                SELECT count(*) as total FROM Project project inner join project.contexts context
+                inner join context.contextItems contextItem
+                inner join contextItem.attributeElement element WHERE element.bardURI=? and
+                project.ncgcWarehouseId is not null and project.projectStatus=?
+                '''
+
+        final Long total = Project.executeQuery(TOTAL_PROBES_QUERY,
+                [BARD_PROBE_URI, Status.APPROVED]).first()
+
+        return total
+    }
+
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Project updateOwnerRole(Long id, Role ownerRole) {
         Project project = Project.findById(id)

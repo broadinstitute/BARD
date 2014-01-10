@@ -6,7 +6,6 @@ import bard.db.guidance.GuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractContextOwner
-import groovy.transform.TypeChecked
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +19,8 @@ import groovy.transform.TypeChecked
 class MinimumOfOneBiologyGuidanceRule implements GuidanceRule {
 
     private static final String BIOLOGY_LABEL = 'biology'
-    private static final String ONE_BIOLOGY_ATTRIBUTE_REQUIRED = "There should be at least 1 context with an item where either the attribute is 'biology' or where the attribute is 'assay format' and the value 'small molecule'."
+    private static final String ASSAY_ONE_BIOLOGY_ATTRIBUTE_REQUIRED = "There should be at least 1 context with an item where either the attribute is 'biology' or where the attribute is 'assay format' and the value 'small molecule'."
+    private static final String PROJECT_ONE_BIOLOGY_ATTRIBUTE_REQUIRED = "There should be at least 1 context with an item where the attribute is 'biology'."
     AbstractContextOwner owner
 
     MinimumOfOneBiologyGuidanceRule(AbstractContextOwner owner) {
@@ -31,14 +31,8 @@ class MinimumOfOneBiologyGuidanceRule implements GuidanceRule {
     List<Guidance> getGuidance() {
 
         final List<Guidance> guidance = []
-        List<AbstractContextItem> itemsWithAttributeOfBiology = []
-        //Find all context-items where attribute=='assay format' and valueElement=='small-molecule format'
-        List<AbstractContextItem> itemsWithAssayFormatEqualsSmallMoleculeFormat = this.owner.contexts?.collect { AbstractContext context ->
-            return context.contextItems?.findAll { AbstractContextItem contextItem ->
-                return (contextItem.attributeElement?.label == 'assay format' && contextItem.valueElement?.label == 'small-molecule format')
-            }
-        }.flatten()
 
+        List<AbstractContextItem> itemsWithAttributeOfBiology = []
         for (AbstractContext context in owner.contexts) {
             for (AbstractContextItem item in context.contextItems) {
                 if (item.attributeElement.label == BIOLOGY_LABEL) {
@@ -47,9 +41,24 @@ class MinimumOfOneBiologyGuidanceRule implements GuidanceRule {
             }
         }
 
-        if (itemsWithAttributeOfBiology.isEmpty() && itemsWithAssayFormatEqualsSmallMoleculeFormat.isEmpty()) {
-            guidance.add(new DefaultGuidanceImpl(ONE_BIOLOGY_ATTRIBUTE_REQUIRED))
+        if(owner.getClass().simpleName.equals("Assay")){
+            //Find all context-items where attribute=='assay format' and valueElement=='small-molecule format'
+            List<AbstractContextItem> itemsWithAssayFormatEqualsSmallMoleculeFormat = this.owner.contexts?.collect { AbstractContext context ->
+                return context.contextItems?.findAll { AbstractContextItem contextItem ->
+                    return (contextItem.attributeElement?.label == 'assay format' && contextItem.valueElement?.label == 'small-molecule format')
+                }
+            }.flatten()
+
+            if (itemsWithAttributeOfBiology.isEmpty() && itemsWithAssayFormatEqualsSmallMoleculeFormat.isEmpty()) {
+                guidance.add(new DefaultGuidanceImpl(ASSAY_ONE_BIOLOGY_ATTRIBUTE_REQUIRED))
+            }
         }
+        else if(owner.getClass().simpleName.equals("Project")){
+            if (itemsWithAttributeOfBiology.isEmpty()) {
+                guidance.add(new DefaultGuidanceImpl(PROJECT_ONE_BIOLOGY_ATTRIBUTE_REQUIRED))
+            }
+        }
+
         return guidance
     }
 }

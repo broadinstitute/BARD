@@ -13,9 +13,7 @@ $(document).ready(function () {
         success:function (data) {
             $('#bardIsGrowing').html(data);
         },
-        error:function (data) {
-            $('#bardIsGrowing').html(data);
-        },
+        error:handleAjaxError(),
         complete:function () {
 
         }
