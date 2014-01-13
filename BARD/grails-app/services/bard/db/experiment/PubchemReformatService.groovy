@@ -388,6 +388,9 @@ class PubchemReformatService {
                 }
                 ResultMapContextColumn col = new ResultMapContextColumn(attribute: row.CONTEXTITEM, tid: row.TID, qualifierTid: row.QUALIFIERTID)
                 ResultMapRecord record = byTid[row.CONTEXTTID.toString()]
+                if(record == null) {
+                    throw new RuntimeException("Could not find tid ${row.CONTEXTTID} referenced by tid ${row.TID}")
+                }
                 record.contextItemColumns.add(col)
 
                 unusedTids.remove(col.tid)

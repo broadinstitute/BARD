@@ -6,6 +6,8 @@ import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.assays.*
 import bard.core.util.ExternalUrlDTO
 import grails.test.mixin.TestFor
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
 import spock.lang.Shared
 import spock.lang.Specification
@@ -32,7 +34,7 @@ class AssayRestServiceUnitSpec extends Specification {
         when:
         List<Assay> assays = service.searchAssaysByCapIds(searchParams, etags)
         then:
-        restTemplate.getForObject(_, _) >> {[new Assay()]}
+        restTemplate.getForEntity(_ as URI, List.class) >> {new ResponseEntity<List>([new Assay()],HttpStatus.OK)}
         assert (!assays.isEmpty()) == expected
         where:
         label        | searchParams                       | etags          | expected
@@ -45,7 +47,7 @@ class AssayRestServiceUnitSpec extends Specification {
         when:
         List<Assay> assays = service.searchAssaysByCapIds(searchParams, etags)
         then:
-        restTemplate.getForObject(_, _) >> {[new Assay()]}
+        restTemplate.getForEntity(_ as URI, List.class) >> {new ResponseEntity<List>([new Assay()],HttpStatus.OK)}
         assert (!assays.isEmpty()) == expected
         where:
         label           | searchParams                       | etags          | expected
@@ -122,7 +124,7 @@ class AssayRestServiceUnitSpec extends Specification {
         when:
         BardAnnotation annotations = service.findAnnotations(adid)
         then:
-        this.restTemplate.getForObject(_, _) >> {new BardAnnotation()}
+        restTemplate.getForEntity(_ as URI, BardAnnotation.class) >> {new ResponseEntity<BardAnnotation>(new BardAnnotation(),HttpStatus.OK)}
         assert annotations
     }
 
@@ -130,7 +132,7 @@ class AssayRestServiceUnitSpec extends Specification {
         when:
         ExpandedAssay expandedAssay = service.getAssayById(adid)
         then:
-        restTemplate.getForObject(_, _, _) >> {assay}
+        restTemplate.getForEntity(_ as URI, ExpandedAssay.class) >> {new ResponseEntity<ExpandedAssay>(assay,HttpStatus.OK)}
         assert (expandedAssay != null) == noErrors
         where:
         label                | adid | assay               | noErrors
@@ -157,7 +159,7 @@ class AssayRestServiceUnitSpec extends Specification {
         final AssayResult assayResult =
             service.findAssaysByFreeTextSearch(searchParams)
         then:
-        restTemplate.getForObject(_, _) >> {new AssayResult()}
+        restTemplate.getForEntity(_ as URI, AssayResult.class) >> {new ResponseEntity<AssayResult>(new AssayResult(),HttpStatus.OK)}
         assert assayResult != null
     }
 
@@ -201,7 +203,7 @@ class AssayRestServiceUnitSpec extends Specification {
         when:
         final Map<String, List<String>> suggest = service.suggest(suggestParams)
         then:
-        restTemplate.getForObject(_, _) >> {["a": ["b"]]}
+        restTemplate.getForEntity(_ as URI, Map.class) >> {new ResponseEntity<Map>(["a": ["b"]],HttpStatus.OK)}
         assert suggest == expectedMap
     }
 }
