@@ -20,6 +20,7 @@ import org.springframework.util.MultiValueMap
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.util.UriTemplate
 
 abstract class AbstractRestService {
     RestTemplate restTemplate
@@ -456,90 +457,88 @@ abstract class AbstractRestService {
     }
 
     public Object getForObject(URI uri, Class clazz) {
+        StopWatch sw = this.loggerService.startStopWatch()
+        String logMessage = "GET\t${uri}"
         try {
-
-            StopWatch sw = this.loggerService.startStopWatch()
             def result = this.restTemplate.getForObject(uri, clazz)
-            this.loggerService.stopStopWatch(sw, "method=getForObject(URI uri, Class clazz); uri='${uri}'; class=${clazz}")
+            this.loggerService.stopStopWatch(sw, logMessage)
             return result
         }
         catch (HttpClientErrorException httpClientErrorException) { //throws a 4xx exception
-            log.error(uri.toString(), httpClientErrorException)
+            this.loggerService.stopStopWatchError(sw, logMessage, httpClientErrorException)
             throw httpClientErrorException
         } catch (RestClientException restClientException) {
-            log.error(uri.toString(), restClientException)
+            this.loggerService.stopStopWatchError(sw, logMessage, restClientException)
             throw new RestApiException(restClientException)
         }
-
+        finally {
+            sw.stop() // make sure it's stopped
+        }
     }
 
-    public Object getForObject(final String uri, final Class clazz, Map map = [:]) {
-        try {
-
-            StopWatch sw = this.loggerService.startStopWatch()
-            def result = this.restTemplate.getForObject(uri, clazz, map)
-            this.loggerService.stopStopWatch(sw, "method=getForObject(final String uri, final Class clazz, Map map = [:]); uri='${uri}'; class=${clazz}; map=${map}")
-            return result
-        }
-        catch (HttpClientErrorException httpClientErrorException) { //throws a 4xx exception
-            log.error(uri.toString(), httpClientErrorException)
-            throw httpClientErrorException
-        } catch (RestClientException restClientException) {
-            final String uriString = uri + map
-            log.error(uriString, restClientException)
-            throw new RestApiException(restClientException)
-        }
-
+    public Object getForObject(final String uriString, final Class clazz, Map map = [:]) {
+        URI uri = new UriTemplate(uriString).expand(map)
+        return getForObject(uri, clazz)
     }
 
     public Object postForObject(final URI uri, final Class clazz, Map map = [:]) {
+        StopWatch sw = this.loggerService.startStopWatch()
+        String logMessage = "POST\t${uri}\tparams=${map}"
         try {
-            StopWatch sw = this.loggerService.startStopWatch()
             def result = this.restTemplate.postForObject(uri, map, clazz)
-            this.loggerService.stopStopWatch(sw, "method=postForObject(final URI uri, final Class clazz, Map map = [:]); uri='${uri}'; class=${clazz}; map=${map}")
+            this.loggerService.stopStopWatch(sw, logMessage)
             return result
         }
         catch (HttpClientErrorException httpClientErrorException) { //throws a 4xx exception
-            log.error(uri.toString(), httpClientErrorException)
+            this.loggerService.stopStopWatchError(sw, logMessage, httpClientErrorException)
             throw httpClientErrorException
         }
         catch (RestClientException restClientException) {
-            final String uriString = uri.toString() + map
-            log.error(uriString, restClientException)
+            this.loggerService.stopStopWatchError(sw, logMessage, restClientException)
             throw new RestApiException(restClientException)
+        }
+        finally {
+            sw.stop() // make sure it's stopped
         }
     }
 
     public Object postExchange(String url, HttpEntity<List> entity, Class clazz) {
+        StopWatch sw = this.loggerService.startStopWatch()
+        String logMessage = "POST\t${url}\theaders=${entity.headers}\tbody=${entity.body}"
         try {
-
-            StopWatch sw = this.loggerService.startStopWatch()
             def result = restTemplate.exchange(url, HttpMethod.POST, entity, clazz);
-            this.loggerService.stopStopWatch(sw, "method=postExchange(String url, HttpEntity<List> entity, Class clazz); url='${url}'; class=${clazz}")
+            this.loggerService.stopStopWatch(sw, logMessage)
             return result
         }
         catch (HttpClientErrorException httpClientErrorException) { //throws a 4xx exception
-            log.error(url, httpClientErrorException)
+            this.loggerService.stopStopWatchError(sw, logMessage, httpClientErrorException)
             throw httpClientErrorException
         }
         catch (RestClientException restClientException) {
-            log.error(url.toString(), restClientException)
+            this.loggerService.stopStopWatchError(sw, logMessage, restClientException)
             throw new RestApiException(restClientException)
+        }
+        finally {
+            sw.stop() // make sure it's stopped
         }
     }
 
     public Object getExchange(URI uri, HttpEntity<List> entity, Class clazz) {
+        StopWatch sw = this.loggerService.startStopWatch()
+        String logMessage = "GET\t${uri}\theaders=${entity.headers}\tbody=${entity.body}"
         try {
-            StopWatch sw = this.loggerService.startStopWatch()
             def result = restTemplate.exchange(uri, HttpMethod.GET, entity, clazz);
-            this.loggerService.stopStopWatch(sw, "method=getExchange(URI uri, HttpEntity<List> entity, Class clazz); uri='${uri}'; class=${clazz}")
+            this.loggerService.stopStopWatch(sw, logMessage)
             return result
         } catch (HttpClientErrorException httpClientErrorException) { //throws a 4xx exception
-            log.error(uri.toString(), httpClientErrorException)
+            this.loggerService.stopStopWatchError(sw, logMessage, httpClientErrorException)
             throw httpClientErrorException
         } catch (RestClientException restClientException) {
-            log.error(uri.toString(), restClientException)
+            this.loggerService.stopStopWatchError(sw, logMessage, restClientException)
             throw new RestApiException(restClientException)
+        }
+        finally {
+            sw.stop() // make sure it's stopped
         }
     }
 

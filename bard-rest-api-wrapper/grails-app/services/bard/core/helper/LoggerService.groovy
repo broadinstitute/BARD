@@ -22,6 +22,24 @@ class LoggerService {
         sw.stop()
         Date now = new Date()
         Map loggingMap = [time: now.format('MM/dd/yyyy  HH:mm:ss.S'), responseTimeInMilliSeconds: sw.time, info: loggingString]
-        log.info(loggingMap.toString())
+        Date start = new Date(sw.getStartTime())
+        String logInfo = "start:\t${start.format('MM/dd/yyyy  HH:mm:ss.S')}\tduration:\t${sw.toString()}\t${loggingString}"
+        log.info(logInfo)
+    }
+
+    /**
+     * Stops the stop-watch, logs the time and an exception message.
+     *
+     * @param sw
+     * @param loggingString
+     * @param throwable
+     */
+    public void stopStopWatchError(StopWatch sw, String loggingString, Throwable throwable) {
+        sw.stop()
+        Date now = new Date()
+        Map loggingMap = [time: now.format('MM/dd/yyyy  HH:mm:ss.S'), responseTimeInMilliSeconds: sw.time, info: loggingString]
+        Date start = new Date(sw.getStartTime())
+        String logInfo = "start:\t${start.format('MM/dd/yyyy  HH:mm:ss.S')}\tduration:\t${sw.toString()}\t${loggingString}"
+        log.error(logInfo, throwable)
     }
 }
