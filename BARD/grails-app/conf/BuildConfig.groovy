@@ -29,6 +29,7 @@ grails.project.dependency.resolution = {
             grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
         } else {
 	    grailsCentral()
+            mavenLocal()
             mavenCentral()
 	}
     }
@@ -59,7 +60,9 @@ grails.project.dependency.resolution = {
         compile 'log4j:apache-log4j-extras:1.2.17'
 
         compile "bard:external-validation:20130717"
-        compile "bard:pubchem-xml:20131010"
+        if(isPublicBard) {
+          compile "bard:pubchem-xml:20131010"
+	}
 
         compile "com.oracle:ojdbc6:11.2.0.2.0"
         compile 'ChemAxon:ChemAxonJChemBase:5.10'
@@ -67,12 +70,6 @@ grails.project.dependency.resolution = {
         // needed for SMTPAppender (included as a compile dependency because the right one is being picked up for runtime, but not for build time)
         compile "log4j:log4j:1.2.16"
         build "log4j:log4j:1.2.16"
-
-	// needed to override the version of the spring-mobile-device library to one resolvable via maven central
-	// this is only needed by the spring-mobile plugin.  If we drop that plugin, we can drop this reference
-	compile 'org.springframework.mobile:spring-mobile-device:1.1.0.RELEASE', {
-             excludes 'javax.servlet-api', 'spring-web', 'spring-webmvc'
-        }
 
         // runtime scope
         // runtime 'mysql:mysql-connector-java:5.1.16'
@@ -140,7 +137,7 @@ grails.project.dependency.resolution = {
         }
 
         compile ":clover:3.1.10.1"
-        compile ":spring-mobile:0.4"
+        compile ":spring-mobile:0.5.1"
         compile ":console:1.2"
         compile ":jquery-validation-ui:1.4.2"
         compile ":twitter-bootstrap:2.2.2"
