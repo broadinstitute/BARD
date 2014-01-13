@@ -16,8 +16,7 @@
             </g:if>
             <g:elseif test="${compound.isProbe()}">
                 <span class="badge badge-info">Probe</span>
-            </g:elseif>
-            <small>(PubChem CID: ${compound?.id})</small></h1>
+            </g:elseif></h1>
         <g:saveToCartButton id="${compound.id}"
                             name="${JavaScriptUtility.cleanup(compound.name)}"
                             type="${querycart.QueryItemType.Compound}"
@@ -53,31 +52,12 @@
             <g:if test="${compound?.probeId}">
                 <dt>Probe ID:</dt>
                 <dd>${compound.probeId}</dd>
-
                 <div id="probe"
                      href="${createLink(controller: 'bardWebInterface', action: 'probe', params: [probeId: compound.probeId])}">
                 </div>
-                <g:if test="${compound?.getProbeAnnotations()}">
-
-                    <div class="caption">
-                        <ul>
-                            <g:if test="${compound?.getProbe()}">
-                                <li><a href="${compound.getProbe().getUrl()}">Download probe report from Molecular Library BookShelf</a>
-                                </li>
-                            </g:if>
-                            <g:if test="${compound?.getProbeCid()}">
-                                <li><a href="${compound.getProbeCid().getUrl()}"
-                                       target="_blank">View Probe by CID (${compound.id}) in PubChem</a></li>
-
-                            </g:if>
-                            <g:if test="${compound?.getProbeSid()}">
-                                <li><a href="${compound.getProbeSid().getUrl()}"
-                                       target="_blank">View Probe by SID (${compound.getProbeSid().getDisplay()}) in PubChem</a>
-                                </li>
-
-                            </g:if>
-                        </ul>
-                    </div>
+                <g:if test="${compound?.getProbeAnnotations() && compound?.getProbe()}">
+                    <dt>Probe Report:</dt>
+                    <dd><a href="${compound.getProbe().getUrl()}" target="_blank">Download from Molecular Libraries Bookshelf</a></dd>
                 </g:if>
             </g:if>
 
@@ -87,6 +67,10 @@
             </g:if>
             <dt>SMILES:</dt>
             <dd>${compound?.getSmiles()}</dd>
+            <dt>PubChem CID:</dt>
+            <dd><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=${compound?.id}" target="_blank">
+                <img src="${resource(dir: 'images', file: 'pubchem.png')}" alt="PubChem"/>
+                ${compound?.id}</a></dd>
             <g:if test="${compound?.getRegistryNumbers()}">
                 <dt>CAS Registry Numbers:</dt>
                 <dd>${compound?.getRegistryNumbers()?.collect {it}?.join(', ')}</dd>

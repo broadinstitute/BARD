@@ -1,15 +1,12 @@
 package bardqueryapi
-
 import bard.core.IntValue
 import bard.core.SearchParams
 import bard.core.Value
 import bard.core.adapter.CompoundAdapter
 import bard.core.rest.spring.assays.Assay
-import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.experiment.ExperimentSearch
-import bard.core.rest.spring.substances.Substance
 import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
@@ -27,7 +24,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
-
 /**
  *
  * TODO: Refactor into individual classes. Class is too big. We need to have different controllers for each entity
@@ -294,13 +290,13 @@ class BardWebInterfaceController {
             CompoundAdapter compoundAdapter = queryService.findProbe(probeId)
             if (compoundAdapter && compoundAdapter.bardProjectId != -1) {
                 Project project = Project.findByNcgcWarehouseId(compoundAdapter.bardProjectId)
-                render(template: 'probes', model: [projectId: project.id])
+                render(template: 'probes', model: [projectId: project.id, projectName: project.name])
             } else {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND)
             }
         }
         catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request
-            String message = "Probe with ID ${probeId} does not exists"
+            String message = "Probe with ID ${probeId} does not exist"
             handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
         }
         catch (Exception ee) {
