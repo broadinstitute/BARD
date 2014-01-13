@@ -11,6 +11,8 @@ import bard.core.rest.spring.substances.SubstanceResult
 import bard.core.rest.spring.util.SubstanceSearchType
 import bard.core.util.ExternalUrlDTO
 import grails.test.mixin.TestFor
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
 import spock.lang.Shared
 import spock.lang.Specification
@@ -38,7 +40,9 @@ class SubstanceRestServiceUnitSpec extends Specification {
         final Substance foundSubstance = service.getSubstanceById(sid)
 
         then:
-        restTemplate.getForObject(_, _, _) >> {substance}
+        restTemplate.getForEntity(_ as URI, Substance.class) >> {new ResponseEntity<Substance>(substance,HttpStatus.OK)}
+
+
         assert (foundSubstance != null) == noErrors
         where:
         label                    | sid | substance       | noErrors
@@ -59,7 +63,7 @@ class SubstanceRestServiceUnitSpec extends Specification {
         when:
         final List<Activity> activities = service.findExperimentData(sids, bardExperimentIds)
         then:
-        0 * restTemplate.postForObject(_, _, _)
+        0 * restTemplate.postForEntity(_ as URI, _ as Map, _ as Class)
         assert !activities
         where:
         label                        | sids | bardExperimentIds
@@ -73,7 +77,7 @@ class SubstanceRestServiceUnitSpec extends Specification {
         when:
         final List<Activity> activities = service.findExperimentData(sids, bardExperimentIds)
         then:
-        1 * restTemplate.postForObject(_, _, _) >> {[new Activity()]}
+        1 * restTemplate.postForEntity(_ as URI, _ as Map, _ as Class) >> {new ResponseEntity<Activity[]>([new Activity()],HttpStatus.OK)}
         assert activities
         where:
         label                        | sids      | bardExperimentIds
@@ -109,7 +113,7 @@ class SubstanceRestServiceUnitSpec extends Specification {
         when:
         List<Substance> substances = service.findSubstancesByCidExpandedSearch(cid)
         then:
-        restTemplate.getForObject(_, _) >> {[new Substance()]}
+        restTemplate.getForEntity(_ as URI, Substance[].class) >> {new ResponseEntity<Substance[]>([new Substance()],HttpStatus.OK)}
         assert substances
 
 
@@ -119,7 +123,7 @@ class SubstanceRestServiceUnitSpec extends Specification {
         when:
         List<Long> substances = service.findSubstancesByCid(cid)
         then:
-        restTemplate.getForObject(_, _) >> {expectedSubstances}
+        restTemplate.getForEntity(_ as URI, String[].class) >> {new ResponseEntity<String[]>(expectedSubstances,HttpStatus.OK)}
         assert substances.isEmpty() == expectedResults
 
         where:
@@ -134,7 +138,7 @@ class SubstanceRestServiceUnitSpec extends Specification {
         when:
         ExperimentData experimentData = service.findExperimentDataBySid(sid)
         then:
-        restTemplate.getForObject(_, _) >> {new ExperimentData()}
+        restTemplate.getForEntity(_ as URI, ExperimentData.class) >> {new ResponseEntity<ExperimentData>(new ExperimentData(),HttpStatus.OK)}
         assert experimentData
     }
 
@@ -144,7 +148,7 @@ class SubstanceRestServiceUnitSpec extends Specification {
         when:
         ExperimentSearchResult experimentSearchResult = service.findExperimentsBySid(sid)
         then:
-        restTemplate.getForObject(_, _) >> {new ExperimentSearchResult()}
+        restTemplate.getForEntity(_ as URI, ExperimentSearchResult.class) >> {new ResponseEntity<ExperimentSearchResult>(new ExperimentSearchResult(),HttpStatus.OK)}
         assert experimentSearchResult
     }
 
@@ -167,7 +171,7 @@ class SubstanceRestServiceUnitSpec extends Specification {
         when:
         SubstanceResult substanceResult = service.findSubstances(SubstanceSearchType.MLSMR, searchParam)
         then:
-        restTemplate.getForObject(_, _, _) >> {new SubstanceResult()}
+        restTemplate.getForEntity(_ as URI, SubstanceResult.class) >> {new ResponseEntity<SubstanceResult>(new SubstanceResult(),HttpStatus.OK)}
         assert substanceResult
 
     }
