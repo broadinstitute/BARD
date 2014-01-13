@@ -41,6 +41,7 @@ grails.project.dependency.resolution = {
 
         compile "org.apache.commons:commons-lang3:3.2"
         compile "xalan:xalan:2.7.0" // http://jira.grails.org/browse/GRAILS-9740 ( junitreporter fails when Xalan 2.6.0 dependency is declared in Java 1.7.0 env )
+        compile 'log4j:apache-log4j-extras:1.2.17'
 
         compile "com.cenqua.clover:clover:3.1.12" // Clover core JAR
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
