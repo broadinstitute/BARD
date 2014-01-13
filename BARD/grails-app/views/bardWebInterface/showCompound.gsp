@@ -52,20 +52,12 @@
             <g:if test="${compound?.probeId}">
                 <dt>Probe ID:</dt>
                 <dd>${compound.probeId}</dd>
-
                 <div id="probe"
                      href="${createLink(controller: 'bardWebInterface', action: 'probe', params: [probeId: compound.probeId])}">
                 </div>
-                <g:if test="${compound?.getProbeAnnotations()}">
-
-                    <div class="caption">
-                        <ul>
-                            <g:if test="${compound?.getProbe()}">
-                                <li><a href="${compound.getProbe().getUrl()}">Download probe report from Molecular Library BookShelf</a>
-                                </li>
-                            </g:if>
-                        </ul>
-                    </div>
+                <g:if test="${compound?.getProbeAnnotations() && compound?.getProbe()}">
+                    <dt>Probe Report:</dt>
+                    <dd><a href="${compound.getProbe().getUrl()}" target="_blank">Download from Molecular Libraries Bookshelf</a></dd>
                 </g:if>
             </g:if>
 
