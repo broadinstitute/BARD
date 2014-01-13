@@ -10,6 +10,8 @@ import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.project.ProjectStep
 import bard.core.util.ExternalUrlDTO
 import grails.test.mixin.TestFor
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
 import spock.lang.Shared
 import spock.lang.Specification
@@ -36,7 +38,7 @@ class ProjectRestServiceUnitSpec extends Specification {
         when:
         List<Project> projectResult = service.searchProjectsByCapIds(searchParams, etags)
         then:
-        restTemplate.getForObject(_, _) >> {[new Project()]}
+        restTemplate.getForEntity(_ as URI, List.class) >> {new ResponseEntity<List>([new Project()],HttpStatus.OK)}
         assert projectResult.isEmpty() == expected
         where:
         label              | searchParams                       | etags          | expected
@@ -49,7 +51,7 @@ class ProjectRestServiceUnitSpec extends Specification {
         when:
         List<ProjectStep> projectSteps = service.findProjectSteps(123)
         then:
-        restTemplate.getForObject(_, _) >> {[new ProjectStep()]}
+        restTemplate.getForEntity(_ as URI, List.class) >> {new ResponseEntity<List>([new ProjectStep()],HttpStatus.OK)}
         assert projectSteps
     }
 
@@ -57,7 +59,7 @@ class ProjectRestServiceUnitSpec extends Specification {
         when:
         List<Project> projectResult = service.searchProjectsByCapIds(searchParams, etags)
         then:
-        restTemplate.getForObject(_, _) >> {[new Project()]}
+        restTemplate.getForEntity(_ as URI, List.class) >> {new ResponseEntity<List>([new Project()],HttpStatus.OK)}
         assert (projectResult != null) == expected
         where:
         label        | searchParams                       | etags          | expected
@@ -107,7 +109,8 @@ class ProjectRestServiceUnitSpec extends Specification {
         when:
         BardAnnotation foundBardAnnotation = service.findAnnotations(pid)
         then:
-        restTemplate.getForObject(_, _) >> {new BardAnnotation()}
+        restTemplate.getForEntity(_ as URI, BardAnnotation.class) >> {new ResponseEntity<BardAnnotation>(new BardAnnotation(),HttpStatus.OK)}
+
         assert foundBardAnnotation
 
 
@@ -118,7 +121,7 @@ class ProjectRestServiceUnitSpec extends Specification {
         final ProjectExpanded resultProject = service.getProjectById(pid)
 
         then:
-        restTemplate.getForObject(_, _, _) >> {project}
+        restTemplate.getForEntity(_ as URI, ProjectExpanded.class) >> {new ResponseEntity<ProjectExpanded>(project,HttpStatus.OK)}
         assert (resultProject != null) == noErrors
         where:
         label                  | pid | project               | noErrors
@@ -153,7 +156,7 @@ class ProjectRestServiceUnitSpec extends Specification {
         final ProjectResult projectResult =
             service.findProjectsByFreeTextSearch(searchParams)
         then:
-        restTemplate.getForObject(_, _) >> {new ProjectResult()}
+        restTemplate.getForEntity(_ as URI, ProjectResult.class) >> {new ResponseEntity<ProjectResult>(new ProjectResult(),HttpStatus.OK)}
         assert projectResult != null
     }
 
