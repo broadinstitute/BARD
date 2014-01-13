@@ -1,6 +1,8 @@
 package bard.core.helper
 
 import org.apache.commons.lang3.time.StopWatch
+import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -33,10 +35,23 @@ class LoggerServiceUnitSpec extends Specification {
         sw.start()
 
         when:
-        loggerService.stopStopWatch(sw, "test string")
+        loggerService.stopStopWatch(sw, HttpStatus.OK, HttpMethod.GET, "test string")
 
         then:
         assert true
     }
+
+    void "test stopStopWatchError"() {
+        given:
+        StopWatch sw = new StopWatch()
+        sw.start()
+
+        when:
+        loggerService.stopStopWatchError(sw, HttpStatus.OK, HttpMethod.GET, "test string", new RuntimeException())
+
+        then:
+        assert true
+    }
+
 }
 

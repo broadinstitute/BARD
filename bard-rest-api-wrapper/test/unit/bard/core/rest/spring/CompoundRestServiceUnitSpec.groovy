@@ -48,7 +48,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         List<Compound> compounds = service.searchCompoundsByCids(searchParams, etags)
         then:
-        restTemplate.getForObject(_, _) >> {[new Compound()]}
+        restTemplate.getForEntity(_ as URI, List.class) >> {new ResponseEntity<List>([new Compound()],HttpStatus.OK)}
         assert (!compounds.isEmpty()) == expected
         where:
         label        | searchParams                       | etags          | expected
@@ -61,7 +61,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         List<Compound> compounds = service.searchCompoundsByCids(searchParams, etags)
         then:
-        restTemplate.getForObject(_, _) >> {[new Compound()]}
+        restTemplate.getForEntity(_ as URI, List.class) >> {new ResponseEntity<List>([new Compound()],HttpStatus.OK)}
         assert (!compounds.isEmpty()) == expected
         where:
         label           | searchParams                       | etags          | expected
@@ -74,7 +74,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         Compound probe = service.findProbe(mlNumber)
         then:
-        restTemplate.getForObject(_, _) >> {compounds}
+        restTemplate.getForEntity(_ as URI, List.class) >> {new ResponseEntity<List>(compounds,HttpStatus.OK)}
         assert (probe != null) == expected
         where:
         label             | mlNumber | compounds        | expected
@@ -323,7 +323,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         CompoundSummary compoundSummary = service.getSummaryForCompound(cid)
         then:
-        restTemplate.getForObject(_, _) >> {new CompoundSummary()}
+        restTemplate.getForEntity(_ as URI, CompoundSummary.class) >> {new ResponseEntity<CompoundSummary>(new CompoundSummary(),HttpStatus.OK)}
         assert compoundSummary
     }
 
@@ -331,7 +331,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         List<Assay> assays = service.getTestedAssays(cid, activeOnly)
         then:
-        restTemplate.getForObject(_, _) >> {new AssayResult(assays: [new Assay()])}
+        restTemplate.getForEntity(_ as URI, AssayResult.class) >> {new ResponseEntity<AssayResult>(new AssayResult(assays: [new Assay()]),HttpStatus.OK)}
         assert assays
         where:
         label            | cid | activeOnly
@@ -348,7 +348,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         final CompoundAnnotations annotations = service.findAnnotations(cid)
         then:
-        this.restTemplate.getForObject(_, _) >> {new CompoundAnnotations()}
+        restTemplate.getForEntity(_ as URI, CompoundAnnotations.class) >> {new ResponseEntity<CompoundAnnotations>(new CompoundAnnotations(),HttpStatus.OK)}
         assert annotations
     }
 
@@ -400,7 +400,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         final CompoundResult compoundResult =
             service.findCompoundsByFreeTextSearch(searchParams)
         then:
-        restTemplate.getForObject(_, _) >> {new CompoundResult()}
+        restTemplate.getForEntity(_ as URI, CompoundResult.class) >> {new ResponseEntity<CompoundResult>(new CompoundResult(),HttpStatus.OK)}
         assert compoundResult != null
     }
 
@@ -410,7 +410,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         final PromiscuityScore promiscuityScore = service.findPromiscuityScoreForCompound(cid)
         then:
-        restTemplate.getForObject(_, _, _) >> {new PromiscuityScore()}
+        restTemplate.getForEntity(_ as URI, PromiscuityScore.class) >> {new ResponseEntity<PromiscuityScore>(new PromiscuityScore(),HttpStatus.OK)}
         assert promiscuityScore != null
     }
 
@@ -420,7 +420,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         final Promiscuity promiscuity = service.findPromiscuityForCompound(cid)
         then:
-        restTemplate.getForObject(_, _, _) >> {new Promiscuity()}
+        restTemplate.getForEntity(_ as URI, Promiscuity.class) >> {new ResponseEntity<Promiscuity>(new Promiscuity(),HttpStatus.OK)}
         assert promiscuity != null
     }
 
@@ -428,7 +428,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         List<String> synonyms = service.getSynonymsForCompound(200)
         then:
-        restTemplate.getForObject(_, _, _) >> {["String"]}
+        restTemplate.getForEntity(_ as URI, List.class) >> {new ResponseEntity<List>(["String"],HttpStatus.OK)}
         assert synonyms
     }
 
@@ -437,7 +437,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         final List<ETag> eTags = service.getETags(10, 10)
         then:
-        this.restTemplate.getForObject(_, _) >> {new ETagCollection(etags: [new ETag()])}
+        restTemplate.getForEntity(_ as URI, ETagCollection.class) >> {new ResponseEntity<ETagCollection>(new ETagCollection(etags: [new ETag()]),HttpStatus.OK)}
         assert eTags
     }
 
@@ -445,7 +445,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         List<Facet> facets = service.getFacetsByETag("etag")
         then:
-        restTemplate.getForObject(_, _) >> {[new Facet()]}
+        restTemplate.getForEntity(_ as URI, Facet[].class) >> {new ResponseEntity<Facet[]>([new Facet()],HttpStatus.OK)}
         assert facets
     }
 
@@ -453,7 +453,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         int count = service.getResourceCount()
         then:
-        restTemplate.getForObject(_, _) >> {"1"}
+        restTemplate.getForEntity(_ as URI, String.class) >> {new ResponseEntity<String>("1",HttpStatus.OK)}
         assert count == 1
     }
 
@@ -462,7 +462,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         CompoundResult returnedCompoundResult = service.findCompoundsByETag(eTagId)
 
         then:
-        1 * this.restTemplate.getForObject(_, _) >> { compounds }
+        1 * restTemplate.getForEntity(_ as URI, Compound[].class) >> {new ResponseEntity<Compound[]>(compounds,HttpStatus.OK)}
         assert returnedCompoundResult.compounds*.name == expextedCompoundNames
 
         where:
@@ -476,7 +476,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         final Compound returnedCompound = service.findCompoundById(cid)
 
         then:
-        1 * this.restTemplate.getForObject(_, _, _) >> {compounds}
+        1 * restTemplate.getForEntity(_ as URI, List.class) >> {new ResponseEntity<List>(compounds,HttpStatus.OK)}
         assert (returnedCompound == null) == expectedResults
 
         where:

@@ -3,15 +3,15 @@ package bard.core.rest.spring
 import bard.core.SearchParams
 import bard.core.helper.LoggerService
 import bard.core.interfaces.RestApiConstants
+import bard.core.rest.spring.experiment.*
 import bard.core.util.ExternalUrlDTO
 import bard.core.util.FilterTypes
 import grails.test.mixin.TestFor
-import org.springframework.http.HttpHeaders
+import org.springframework.http.*
 import org.springframework.web.client.RestTemplate
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.rest.spring.experiment.*
 
 @Unroll
 @TestFor(ExperimentRestService)
@@ -36,8 +36,9 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         final ExperimentData experimentData = service.activitiesByEIDs(eids, new SearchParams())
         then:
-        service.postForObject(_, _, _) >> {activities}
+        restTemplate.postForEntity(_ as URI, _ as Map, Activity[].class) >> {new ResponseEntity<Activity[]>(activities,HttpStatus.OK)}
         assert expectResults == (experimentData != null)
+
         where:
         label            | eids  | expectResults | activities
         "Empty EID list" | []    | false         | []
@@ -48,7 +49,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         final ExperimentData experimentData = service.activitiesByADIDs(adids, new SearchParams())
         then:
-        service.postForObject(_, _, _) >> {activities}
+        restTemplate.postForEntity(_ as URI, _ as Map, Activity[].class) >> {new ResponseEntity<Activity[]>(activities,HttpStatus.OK)}
         assert expectResults == (experimentData != null)
         where:
         label            | adids | expectResults | activities
@@ -60,7 +61,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         final ExperimentData experimentData = service.activitiesByCIDs(cids, new SearchParams())
         then:
-        service.postForObject(_, _, _) >> {activities}
+        restTemplate.postForEntity(_ as URI, _ as Map, Activity[].class) >> {new ResponseEntity<Activity[]>(activities,HttpStatus.OK)}
         assert expectResults == (experimentData != null)
         where:
         label            | cids  | expectResults | activities
@@ -72,7 +73,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         final ExperimentData experimentData = service.activitiesBySIDs(sids, new SearchParams())
         then:
-        service.postForObject(_, _, _) >> {activities}
+        restTemplate.postForEntity(_ as URI, _ as Map, Activity[].class) >> {new ResponseEntity<Activity[]>(activities,HttpStatus.OK)}
         assert expectResults == (experimentData != null)
         where:
         label            | sids  | expectResults | activities
@@ -100,7 +101,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         final ExperimentData experimentData = service.activities(experimentId, etag, top, skip, [FilterTypes.TESTED])
         then:
-        this.restTemplate.getForObject(_, _) >> {new ExperimentData()}
+        restTemplate.getForEntity(_ as URI, ExperimentData.class) >> {new ResponseEntity<ExperimentData>(new ExperimentData(),HttpStatus.OK)}
         assert experimentData
 
     }
@@ -114,7 +115,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         final ExperimentData experimentData = service.activities(experimentId, etag, top, skip, [FilterTypes.TESTED])
         then:
-        this.restTemplate.getForObject(_, _) >> {[new Activity()]}
+        restTemplate.getForEntity(_ as URI, Activity[].class) >> {new ResponseEntity<Activity[]>([new Activity()],HttpStatus.OK)}
         assert experimentData
 
     }
@@ -131,7 +132,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         List<Long> ids = service.compoundsForExperiment(eid)
         then:
-        restTemplate.getForObject(_, _) >> {expectedMap}
+        restTemplate.getForEntity(_ as URI, Map.class) >> {new ResponseEntity<Map>(expectedMap,HttpStatus.OK)}
         assert ids == expectedIds
         where:
         label                   | eid | expectedMap                                                               | expectedIds
@@ -145,7 +146,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         ExperimentShow experimentShow = service.getExperimentById(eid)
         then:
-        restTemplate.getForObject(_, _, _) >> {experiment}
+        restTemplate.getForEntity(_ as URI, ExperimentShow.class) >> {new ResponseEntity<ExperimentShow>(experiment,HttpStatus.OK)}
         assert (experimentShow != null) == noErrors
         where:
         label                     | eid | experiment           | noErrors
@@ -157,7 +158,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         final ExperimentSearchResult experimentSearchResult = service.searchExperimentsByIds(eids)
         then:
-        expectedNumberOfInvocations * restTemplate.postExchange(_, _, _)
+        expectedNumberOfInvocations * restTemplate.exchange(_ as String, _ as HttpMethod, _ as HttpEntity, List.class)
         assert experimentSearchResult == null
         where:
         label                        | eids       | expectedNumberOfInvocations
@@ -172,7 +173,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         ExperimentData experimentData = service.activities(experimentId, etag)
         then:
-        this.restTemplate.getForObject(_, _) >> {[new Activity()]}
+        restTemplate.getForEntity(_ as URI, Activity[].class) >> {new ResponseEntity<Activity[]>([new Activity()],HttpStatus.OK)}
         assert experimentData
         assert experimentData.activities
         assert experimentData.activities.size() == 1
@@ -185,7 +186,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         ExperimentData experimentData = service.activities(experimentId)
         then:
-        this.restTemplate.getForObject(_, _) >> {new ExperimentData(activities: [new Activity()])}
+        restTemplate.getForEntity(_ as URI, ExperimentData.class) >> {new ResponseEntity<ExperimentData>(new ExperimentData(activities: [new Activity()]),HttpStatus.OK)}
         assert experimentData
         assert experimentData.activities
         assert experimentData.activities.size() == 1
@@ -198,7 +199,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         ExperimentData experimentData = service.activities(experimentSearch.bardExptId)
         then:
-        this.restTemplate.getForObject(_, _) >> {new ExperimentData(activities: [new Activity()])}
+        restTemplate.getForEntity(_ as URI, ExperimentData.class) >> {new ResponseEntity<ExperimentData>(new ExperimentData(activities: [new Activity()]),HttpStatus.OK)}
         assert experimentData
         assert experimentData.activities
         assert experimentData.activities.size() == 1
@@ -237,7 +238,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         int count = service.getResourceCount(searchParams)
         then:
-        this.restTemplate.getForObject(_, _) >> {"2"}
+        restTemplate.getForEntity(_ as URI, String.class) >> {new ResponseEntity<String>("2",HttpStatus.OK)}
         assert count == 2
         where:
         label       | searchParams

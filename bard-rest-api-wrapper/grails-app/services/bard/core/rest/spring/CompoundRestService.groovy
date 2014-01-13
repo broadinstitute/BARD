@@ -33,7 +33,7 @@ class CompoundRestService extends AbstractRestService {
         String urlString = addTopAndSkip(getResource(), true, top, skip)
 
         final URL url = new URL(urlString)
-        final CompoundResult compoundResult = (CompoundResult) getForObject(url.toURI(), CompoundResult.class)
+        final CompoundResult compoundResult = getForObject(url.toURI(), CompoundResult.class)
         return compoundResult
     }
 
@@ -227,22 +227,15 @@ class CompoundRestService extends AbstractRestService {
     public CompoundSummary getSummaryForCompound(final Long cid) {
         final String resource = buildQueryForCompoundSummary(cid)
         final URL url = new URL(resource)
-        final CompoundSummary compoundSummary = (CompoundSummary) getForObject(url.toURI(), CompoundSummary.class)
+        final CompoundSummary compoundSummary = getForObject(url.toURI(), CompoundSummary.class)
         return compoundSummary
     }
 
-
-    public CompoundSummary getSummaryForCompoundFROM_PREVIOUS_VERSION(final Long cid) {
-        //  final String resource = buildQueryForCompoundSummary(cid)
-        final URL url = new URL("http://bard.nih.gov/api/v12/compounds/2382353/summary?expand=true")
-        final CompoundSummary compoundSummary = (CompoundSummary) getForObject(url.toURI(), CompoundSummary.class)
-        return compoundSummary
-    }
 
     public List<Assay> getTestedAssays(Long cid, boolean activeOnly) {
         final String resource = buildQueryForTestedAssays(cid, activeOnly);
         final URL url = new URL(resource)
-        final AssayResult assayResult = (AssayResult) getForObject(url.toURI(), AssayResult.class)
+        final AssayResult assayResult = getForObject(url.toURI(), AssayResult.class)
         return assayResult.assays
     }
 
@@ -367,7 +360,7 @@ class CompoundRestService extends AbstractRestService {
         //just passing in the string would cause the URI to be encoded twice
         //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
         final URL url = new URL(urlString)
-        final CompoundResult compoundSearchResult = (CompoundResult) getForObject(url.toURI(), CompoundResult.class)
+        final CompoundResult compoundSearchResult = getForObject(url.toURI(), CompoundResult.class)
         return compoundSearchResult;
     }
 
@@ -438,7 +431,7 @@ class CompoundRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        final ExperimentSearchResult experimentResult = (ExperimentSearchResult) getForObject(url.toURI(), ExperimentSearchResult.class)
+        final ExperimentSearchResult experimentResult = getForObject(url.toURI(), ExperimentSearchResult.class)
         return experimentResult
 
     }
@@ -451,7 +444,7 @@ class CompoundRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        final AssayResult assayResult = (AssayResult) getForObject(url.toURI(), AssayResult.class)
+        final AssayResult assayResult = getForObject(url.toURI(), AssayResult.class)
         return assayResult
 
     }
@@ -464,7 +457,7 @@ class CompoundRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        ProjectResult projectResult = (ProjectResult) getForObject(url.toURI(), ProjectResult.class)
+        ProjectResult projectResult = getForObject(url.toURI(), ProjectResult.class)
         return projectResult
 
     }
@@ -552,7 +545,7 @@ class CompoundRestService extends AbstractRestService {
     def findAnnotations = { Long cid ->
         final String resource = getResource(cid.toString() + RestApiConstants.ANNOTATIONS)
         final URL url = new URL(resource)
-        final CompoundAnnotations annotations = (CompoundAnnotations) getForObject(url.toURI(), CompoundAnnotations.class)
+        final CompoundAnnotations annotations = getForObject(url.toURI(), CompoundAnnotations.class)
         return annotations;
     }
     /**

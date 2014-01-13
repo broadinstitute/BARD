@@ -61,7 +61,7 @@ class RestServiceExceptionsUnitSpec extends Specification {
         when:
         service.getForObject(new URI("http://test.com"), String.class)
         then:
-        restTemplate.getForObject(_, _) >> {throw exceptionThrown}
+        restTemplate.getForEntity(_ as URI, _ as Class) >> {throw exceptionThrown}
         thrown(expectedThrownExceptionClass)
         where:
         label                 | exceptionThrown                                    | expectedThrownExceptionClass
@@ -74,7 +74,7 @@ class RestServiceExceptionsUnitSpec extends Specification {
         when:
         service.getForObject("http://test.com", String.class, [:])
         then:
-        restTemplate.getForObject(_, _, _) >> {throw exceptionThrown}
+        restTemplate.getForEntity(_ as URI, _ as Class) >> {throw exceptionThrown}
         thrown(expectedThrownExceptionClass)
         where:
         label                 | exceptionThrown                                    | expectedThrownExceptionClass
@@ -87,7 +87,7 @@ class RestServiceExceptionsUnitSpec extends Specification {
         when:
         service.postForObject(new URI("http://test.com"), String.class, [:])
         then:
-        restTemplate.postForObject(_, _, _) >> {throw exceptionThrown}
+        restTemplate.postForEntity(_ as URI, _ as Map, _ as Class) >> {throw exceptionThrown}
         thrown(expectedThrownExceptionClass)
         where:
         label                 | exceptionThrown                                    | expectedThrownExceptionClass
