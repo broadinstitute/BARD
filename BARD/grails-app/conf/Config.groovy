@@ -23,7 +23,7 @@ bard.cap.home = "${grails.serverURL}"
 bard.cap.assay = "${bard.cap.home}/assayDefinition/show/"
 bard.cap.project = "${bard.cap.home}/project/show/"
 
-bard.externalOntologyProxyUrlBase = "http://localhost:8080/external-ontology-proxy/externalOntology"
+bard.externalOntologyProxyUrlBase = "http://bard-ext-ont-vm:8080/external-ontology-proxy/externalOntology"
 
 //Override in config file
 dataexport.apikey = "test"

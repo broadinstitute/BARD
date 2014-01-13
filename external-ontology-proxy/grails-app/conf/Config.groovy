@@ -7,24 +7,27 @@ import org.apache.log4j.net.SMTPAppender
 // This will look like 'grails -DprimaryConfigDir=[directory name] [target]'
 // Otherwise, look for these files in the user's home .grails/projectdb directory
 // If there are no external config files in either location, don't override anything in this Config.groovy
+
 String primaryOverrideDirName = System.properties.get('primaryConfigDir')
 String secondaryOverrideDirName = "${userHome}/.grails/${appName}"
 
 List<String> fileNames = ["${appName}-commons-config.groovy", "${appName}-${Environment.current.name}-config.groovy"]
+def locations = []
 fileNames.each { fileName ->
     String primaryFullName = "${primaryOverrideDirName}/${fileName}"
     String secondaryFullName = "${secondaryOverrideDirName}/${fileName}"
 
     if (new File(primaryFullName).exists()) {
         println "Overriding Config.groovy with $primaryFullName"
-        grails.config.locations << "file:$primaryFullName"
+        locations << "file:$primaryFullName"
     } else if (new File(secondaryFullName).exists()) {
         println "Overriding Config.groovy with $secondaryFullName"
-        grails.config.locations << "file:$secondaryFullName"
+        locations << "file:$secondaryFullName"
     } else {
         println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
     }
 }
+grails.config.locations = locations
 
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination

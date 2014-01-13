@@ -28,8 +28,16 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
-        compile "bard:external-validation-api:20131218"
-        compile "bard:external-validation-impl:20131218"
+        def externalValidationVersion = 20140106
+        compile "bard:external-validation-api:${externalValidationVersion}"
+        // excluding icu4j transitive dependency
+        // was seeing SEVERE: Unable to process Jar entry [com/ibm/icu/impl/data/LocaleElements_zh__PINYIN.class] from Jar [jar:file:/local/bard/server/external-ontology-proxy/apache-tomcat-7.0.47/webapps/external-ontology-proxy/WEB-INF/lib/icu4j-2.6.1.jar!/] for annotations
+        // org.apache.tomcat.util.bcel.classfile.ClassFormatException: Invalid byte tag in constant pool: 60
+        // http://stackoverflow.com/questions/6751920/tomcat-7-servlet-3-0-invalid-byte-tag-in-constant-pool
+        compile ("bard:external-validation-impl:${externalValidationVersion}"){
+            excludes "icu4j"
+        }
+        compile "com.ibm.icu:icu4j:3.4.4"
 
         compile "org.apache.commons:commons-lang3:3.2"
         compile "xalan:xalan:2.7.0" // http://jira.grails.org/browse/GRAILS-9740 ( junitreporter fails when Xalan 2.6.0 dependency is declared in Java 1.7.0 env )
