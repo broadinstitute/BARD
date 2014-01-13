@@ -5,9 +5,11 @@ import bard.db.guidance.GuidanceRule
 import bard.db.guidance.context.BiologyShouldHaveOneSupportingReferencePerContextRule
 import bard.db.guidance.context.OneBiologyAttributePerContextRule
 import bard.db.guidance.owner.OneItemPerNonFixedAttributeElementRule
+
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractContextOwner
+import bard.db.guidance.owner.ItemsWithAttributeTypeFixedInExperimentalVars
 
 class AssayContext extends AbstractContext {
 
@@ -83,6 +85,7 @@ class AssayContext extends AbstractContext {
         rules.add(new OneBiologyAttributePerContextRule(this))
         rules.add(new BiologyShouldHaveOneSupportingReferencePerContextRule(this))
         rules.add(new OneItemPerNonFixedAttributeElementRule(this))
+        rules.add(new ItemsWithAttributeTypeFixedInExperimentalVars(this))
         rules
     }
 }
