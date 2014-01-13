@@ -171,7 +171,7 @@ class ProbeAnnotation extends JsonUtil {
     }
     public boolean isProbeLink(){
         boolean isProbe = false
-        if(this.url?.startsWith(PROBE_URL_PREFIX)){
+        if(this.url?.startsWith(PROBE_URL_PREFIX) || this.url?.startsWith(BOOKSHELF_URL_PREFIX)){
             isProbe =  true;
         }
         return isProbe;
@@ -191,6 +191,7 @@ class ProbeAnnotation extends JsonUtil {
         return isSID;
     }
     static final String PROBE_URL_PREFIX = "https://mli.nih.gov/mli/?dl_id="
+    static final String BOOKSHELF_URL_PREFIX = "https://www.ncbi.nlm.nih.gov/books"
     static final String PUBCHEM_CID_PREFIX = "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid="
     static final String PUBCHEM_SID_PREFIX = "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid="
 }
