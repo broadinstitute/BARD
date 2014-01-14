@@ -111,9 +111,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 				fillInputField(editValue)
 			}
 		}
-		waitFor { !editableForm.buttons.iconOk }
-		waitFor { !editableForm.buttons.iconRemove }
-		//		ajaxRequestCompleted()
+
 	}
 
 	def editDate(def indexValue, def runDate){
