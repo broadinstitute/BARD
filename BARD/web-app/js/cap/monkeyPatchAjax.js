@@ -52,11 +52,13 @@ var ajaxFailureCallback = function(jqXHR, textStatus, errorThrown) {
     //}
 };
 
-var handleAjaxError = function ( callback ) {
+var handleAjaxError = function ( callback, useCallbackAndDefault ) {
     return function(request, status, error) {
         if(callback) {
             callback(request, status, error);
-        } else {
+        }
+
+        if(!callback || useCallbackAndDefault) {
             ajaxFailureCallback(request, status, error);
         }
     }
