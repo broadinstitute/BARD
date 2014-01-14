@@ -1,5 +1,6 @@
 apply plugin: "groovy"
 apply plugin: "idea"
+apply plugin: "wrapper"
 
 repositories {
     //mavenCentral()
@@ -19,7 +20,7 @@ dependencies {
     testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
 
     // Need a driver implementation
-    def seleniumVersion = "2.35.0"
+    def seleniumVersion = "2.39.0"
     testCompile "org.seleniumhq.selenium:selenium-chrome-driver:${seleniumVersion}"
     testCompile "org.seleniumhq.selenium:selenium-firefox-driver:${seleniumVersion}"
     testCompile "org.seleniumhq.selenium:selenium-htmlunit-driver:${seleniumVersion}"
@@ -38,7 +39,10 @@ sourceSets {
         }
     }
 }
-
+tasks.withType(Test) {
+    maxParallelForks = 4 
+    // maxParallelForks = Runtime.runtime.availableProcessors() / 2
+}
 test {
     systemProperties = System.getProperties()
     outputs.upToDateWhen { false }
@@ -53,11 +57,11 @@ task createDirs << {
         ant.touch(file: new File(dir, ".gitignore"), mkdirs: true)
     }
 }
-task wrapper(type: Wrapper) {
-    gradleVersion = "1.8"
-}
 
 task(console, dependsOn: "classes", type: JavaExec) {
     main = "groovy.ui.Console"
     classpath = sourceSets.main.runtimeClasspath
 }
+
+//todo write task to download standalone jar
+//http://selenium.googlecode.com/files/selenium-server-standalone-2.39.0.jar
