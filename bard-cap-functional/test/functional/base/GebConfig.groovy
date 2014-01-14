@@ -10,39 +10,57 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.ie.InternetExplorerDriver
 import org.openqa.selenium.remote.CapabilityType
 import org.openqa.selenium.remote.DesiredCapabilities
+import org.openqa.selenium.remote.RemoteWebDriver
 
 driver = {
-	def d = new HtmlUnitDriver()
-	d.javascriptEnabled = true
-	d
+    def d = new HtmlUnitDriver()
+    d.javascriptEnabled = true
+    d
 }
+atCheckWaiting = true
 baseUrl = System.properties.getProperty('server.url') ?: "http://localhost:8080/BARD/"
 environments {
 
-	chrome {
-		// Set the location of the chromedriver executable
-		System.setProperty("webdriver.chrome.driver", "test/resources/chromedriver.exe")
-		DesiredCapabilities capabilities = new DesiredCapabilities()
-		capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"))
-		capabilities.setCapability("chrome.switches", Arrays.asList("--start-maximized"))
-		driver = { new ChromeDriver(capabilities) }
-	}
+    chrome {
+        // Set the location of the chromedriver executable
+        System.setProperty("webdriver.chrome.driver", "test/resources/chromedriver.exe")
+        DesiredCapabilities capabilities = new DesiredCapabilities()
+        capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"))
+        capabilities.setCapability("chrome.switches", Arrays.asList("--start-maximized"))
+        driver = { new ChromeDriver(capabilities) }
+    }
 
-	firefox {
-		File profileDir = new File("target/firefoxProfile")
-		if (!profileDir.exists()) { profileDir.mkdir() }
-		FirefoxProfile profile = new FirefoxProfile(profileDir)
-		profile.setPreference("webdriver.load.strategy", "unstable");
-		profile.setAssumeUntrustedCertificateIssuer(true);
-		driver = { new FirefoxDriver() }
-	}
+    firefox {
+        File profileDir = new File("target/firefoxProfile")
+        if (!profileDir.exists()) {
+            profileDir.mkdir()
+        }
+        FirefoxProfile profile = new FirefoxProfile(profileDir)
+        profile.setPreference("webdriver.load.strategy", "unstable");
+        profile.setAssumeUntrustedCertificateIssuer(true);
+        driver = { new FirefoxDriver() }
+    }
 
-	ie {
-		System.setProperty("webdriver.ie.driver", "test/resources/IEDriverServer.exe")
-		DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
-		capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true)
-		capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true)
-		driver = { new InternetExplorerDriver(capabilities) }
-	}
+    ie {
+        System.setProperty("webdriver.ie.driver", "test/resources/IEDriverServer.exe")
+        DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
+        capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true)
+        capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true)
+        driver = { new InternetExplorerDriver(capabilities) }
+    }
+    remote {
+        File profileDir = new File("target/firefoxProfile")
+        if (!profileDir.exists()) {
+            profileDir.mkdir()
+        }
+        FirefoxProfile profile = new FirefoxProfile(profileDir)
+        profile.setPreference("webdriver.load.strategy", "unstable");
+        profile.setAssumeUntrustedCertificateIssuer(true);
+
+
+        DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+        capabilities.setCapability(FirefoxDriver.PROFILE, profile)
+        driver = { new RemoteWebDriver(capabilities) }
+    }
 
 }
