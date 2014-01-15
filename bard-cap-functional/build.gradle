@@ -40,8 +40,8 @@ sourceSets {
     }
 }
 tasks.withType(Test) {
-    maxParallelForks = 4 
-    // maxParallelForks = Runtime.runtime.availableProcessors() / 2
+    //maxParallelForks = 4
+    maxParallelForks = Runtime.runtime.availableProcessors() / 2
 }
 test {
     systemProperties = System.getProperties()
