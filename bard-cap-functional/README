@@ -1,0 +1,11 @@
+gradle build how to
+
+if you don't have gradle installed you can use the wrapper ( gradlew.bat or gradlew files in the project dir )
+
+if using the wrapper replace gradle command with gradlew
+
+#running a single test
+gradle -Dserver.url=https://bard-qa.broadinstitute.org/BARD/ -Dgeb.env=firefox test -Dtest.single=PanelSpec
+
+# or
+gradle -Dserver.url=https://bard-qa.broadinstitute.org/BARD/ -Dgeb.env=firefox test -Dtest.single=*SummarySpec
