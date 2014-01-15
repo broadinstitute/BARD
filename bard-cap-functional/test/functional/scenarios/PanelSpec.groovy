@@ -1,16 +1,13 @@
 package scenarios
 
+import base.BardFunctionalSpec
+import common.Constants
+import common.TestData
+import db.Panel
 import pages.CreatePanelPage
-import pages.HomePage
 import pages.MyPanelPage
 import pages.PanelAddAssayPage
 import pages.ViewPanelPage
-import base.BardFunctionalSpec
-
-import common.Constants
-import common.TestData
-
-import db.Panel
 
 /**
  * This class includes all the possible test functions for Panel module.
@@ -23,6 +20,7 @@ class PanelSpec extends BardFunctionalSpec {
 	def setup() {
 		logInSomeUser()
 	}
+
 
 	def "Test Create and Delete New Panel"() {
 		given:"Navigating to Create New Panel page"
@@ -101,10 +99,8 @@ class PanelSpec extends BardFunctionalSpec {
 		then:"Verify Summary Name before edit on UI & DB"
 		assert uiSummary.Panel.equalsIgnoreCase(dbSummary.Name)
 
-		and:"Edit/Update Summary Name"
-		editSummary(nameIndex, nameEdited)
-
-		when:"Summary Name is Updated, Fetch Summary info on UI and DB for validation"
+		when:"Edit/Update Summary Name, Fetch Summary info on UI and DB for validation"
+        editSummary(nameIndex, nameEdited)
 		at ViewPanelPage
 		uiSummary = getUISummaryInfo()
 		dbSummary = Panel.getPanelOverviewById(TestData.panelId)
@@ -113,10 +109,8 @@ class PanelSpec extends BardFunctionalSpec {
 		assert uiSummary.Panel.equalsIgnoreCase(nameEdited)
 		assert uiSummary.Panel.equalsIgnoreCase(dbSummary.Name)
 
-		and:"Revert Edit/Update Summary Name"
-		editSummary(nameIndex, nameOriginal)
-
-		when:"Summary Name is reverted, Fetch Summary info on UI and DB for validation"
+		when:"Revert Edit/Update Summary Name, Fetch Summary info on UI and DB for validation"
+        editSummary(nameIndex, nameOriginal)
 		at ViewPanelPage
 		uiSummary = getUISummaryInfo()
 		dbSummary = Panel.getPanelOverviewById(TestData.panelId)
@@ -125,7 +119,6 @@ class PanelSpec extends BardFunctionalSpec {
 		assert uiSummary.Panel.equalsIgnoreCase(nameOriginal)
 		assert uiSummary.Panel.equalsIgnoreCase(dbSummary.Name)
 
-		report ""
 	}
 
 	def "Test Edit Panel Summary Name with empty value"() {
@@ -170,31 +163,28 @@ class PanelSpec extends BardFunctionalSpec {
 		then:"Verify Summary Description before edit on UI & DB"
 		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())
 
-		and:"Edit/Update Summary Description"
-		editSummary(descriptionIndex, projectDescriptionEdited)
-
 		when:"Summary Description is Updated, Fetch Summary info on UI and DB for validation"
-		at ViewPanelPage
+        editSummary(descriptionIndex, projectDescriptionEdited)
+        at ViewPanelPage
 		uiSummary = getUISummaryInfo()
 		dbSummary = Panel.getPanelOverviewById(TestData.panelId)
 
 		then:"Verify Summary Description after edit on UI & DB"
+
 		assert uiSummary.Description.equalsIgnoreCase(projectDescriptionEdited)
 		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())
 
-		and:"Revert Edit/Update Summary Description"
-		editSummary(descriptionIndex, projectDescriptionOriginal)
+		and:
 
-		when:"Summary Description is reverted, Fetch Summary info on UI and DB for validation"
-		at ViewPanelPage
+        when:"Revert Edit/Update Summary Description"
+        editSummary(descriptionIndex, projectDescriptionOriginal)
+        at ViewPanelPage
 		uiSummary = getUISummaryInfo()
 		dbSummary = Panel.getPanelOverviewById(TestData.panelId)
 
 		then:"Verify Summary Description after revert on UI & DB"
 		assert uiSummary.Description.equalsIgnoreCase(projectDescriptionOriginal)
 		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description)
-
-		report ""
 	}
 
 	def "Test Edit Panel Summary Description with empty value"() {

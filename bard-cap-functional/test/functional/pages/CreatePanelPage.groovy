@@ -12,7 +12,7 @@ class CreatePanelPage extends Page {
 	static at = { title.contains("Create Panel") }
 
 	static content = {
-		nameField { $("#name") }
+		nameField(wait:true) { $("#name") }
 		descriptionField { $("#description") }
 		ownerRole { $("#ownerRole") }
 		form { $("form") }
