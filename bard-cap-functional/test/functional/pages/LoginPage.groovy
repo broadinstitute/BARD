@@ -11,18 +11,12 @@ class LoginPage extends ScaffoldPage {
 
 	static content = {
 		loginForm { $("form#loginForm") }
-		errorMessage { $("div.login_message") }
+		errorMessage(wait:true) { $("div.login_message") }
 		signIn { $("button", type:"submit") }
 	}
 
 	HomePage logIn(String username, String password) {
-		if (!isLoggedInAsUser(username)) {
-			if(isLoggedIn()) {                  // logged in as someone else
-				logout()
-				waitFor(5, 0.5){$(id: "username")}
-			}
-			logInNoValidation(username, password)
-		}
+        logInNoValidation(username,password)
 
 		assert isLoggedInAsUser(username), "Not logged in as $username"
 

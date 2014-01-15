@@ -11,88 +11,78 @@ import base.BardFunctionalSpec
  */
 
 class LoginFunctionalSpec extends BardFunctionalSpec {
-	String invalidUserName = "baduser"
-	String invalidPassword = "badpassword"
-	String validUserName = getCredentialsForTest().username
-	String validPassword = getCredentialsForTest().password
+    String invalidUserName = "baduser"
+    String invalidPassword = "badpassword"
+    String validUserName = getCredentialsForTest().username
+    String validPassword = getCredentialsForTest().password
 
-	def setup() { 
-		// pre-condition of each test: user not currently logged in
-		to LoginPage
-		if(isLoggedIn()) {
-			logout()
-		}
-		assert !isLoggedIn()
-	}
+    def setup() {
+        to LoginPage
+    }
 
-	def "Test login with invalid username"() {
-		given: "User visits the Login page"
-		to LoginPage
+    def "Test login with invalid username"() {
+        given: "User visits the Login page"
+        to LoginPage
 
-		when: "User attempts to login with an invalid username"
-		at LoginPage
-		logInNoValidation(invalidUserName, validPassword)
+        when: "User attempts to login with an invalid username"
+        at LoginPage
+        logInNoValidation(invalidUserName, validPassword)
 
-		then: "The system should redirect the user to the login page"
-		at LoginPage
-		assert !isLoggedIn()
-		waitFor {
-			errorMessage.text() ==~ 'Sorry, we were not able to find a user with that username and password.'
-		}
-		!loginForm.j_username
-		!loginForm.j_password
-		
-		report "LoginwithInvalidUsername"
-	}
+        then: "The system should redirect the user to the login page"
+        at LoginPage
+        errorMessage.text() ==~ 'Sorry, we were not able to find a user with that username and password.'
 
-	def "Test login with invalid password"() {
-		given: "User visits the Login page"
-		to LoginPage
+        !loginForm.j_username
+        !loginForm.j_password
 
-		when: "User attempts to login with an invalid password"
-		at LoginPage
-		logInNoValidation(validUserName, invalidPassword)
+        report "LoginwithInvalidUsername"
+    }
 
-		then: "The system should redirect the user to the login page"
-		at LoginPage
-		assert !isLoggedIn()
-		waitFor {
-			errorMessage.text() ==~ 'Sorry, we were not able to find a user with that username and password.'
-		}
-		!loginForm.j_username
-		!loginForm.j_password
-		
-		report "LoginwithInvalidPassword"
-	}
+    def "Test login with invalid password"() {
+        given: "User visits the Login page"
+        to LoginPage
 
-	def "Test login with valid credentials"() {
-		given: "User visits the Login page"
-		to LoginPage
+        when: "User attempts to login with an invalid password"
+        at LoginPage
+        logInNoValidation(validUserName, invalidPassword)
 
-		when: "User attempts to login with an invalid username"
-		at LoginPage
-		logInNoValidation(validUserName, validPassword)
+        then: "The system should redirect the user to the login page"
+        at LoginPage
+        errorMessage.text() ==~ 'Sorry, we were not able to find a user with that username and password.'
+        !loginForm.j_username
+        !loginForm.j_password
 
-		then: "The system should display a message stating that the user is logged in"
-		at HomePage
-		assert isLoggedInAsUser(validUserName)
-		
-		report "LoginwithValidCredentials"
-	}
+        report "LoginwithInvalidPassword"
+    }
 
-	def "Test logout"() {
-		given: "User is logged in to the system"
-		to LoginPage
-		logInNoValidation(validUserName, validPassword)
-		assert isLoggedInAsUser(validUserName)
+    def "Test login with valid credentials"() {
+        given: "User visits the Login page"
+        to LoginPage
 
-		when: "User clicks the 'Log Out' link"
-		at HomePage
-		logout()
+        when: "User attempts to login with an invalid username"
+        at LoginPage
+        logInNoValidation(validUserName, validPassword)
 
-		then: "The user should be logged out of the system"
-		assert !isLoggedIn()
-		
-		report "Logout"
-	}
+        then: "The system should display a message stating that the user is logged in"
+        at HomePage
+        assert isLoggedInAsUser(validUserName)
+
+        report "LoginwithValidCredentials"
+    }
+
+    def "Test logout"() {
+        given: "User is logged in to the system"
+        to LoginPage
+        logInNoValidation(validUserName, validPassword)
+        assert isLoggedInAsUser(validUserName)
+
+        when: "User clicks the 'Log Out' link"
+        at HomePage
+        logout()
+
+        then: "The user should be logged out of the system"
+        at LoginPage
+
+        report "Logout"
+    }
 }

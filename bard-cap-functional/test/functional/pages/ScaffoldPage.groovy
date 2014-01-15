@@ -28,22 +28,8 @@ class ScaffoldPage extends CommonFunctionalPage {
     }
 
     boolean isLoggedInAsUser(String username) {
-        checkFor($(id: "logoutForm"), "Logged in as") && checkFor($(id: "logoutForm"), "$username")
-    }
-
-    boolean checkFor(Navigator element, String condition) {
-        waitForPageToLoad()
-        if (element) {
-            if (element.text()) {
-                if (element.text().contains(condition)) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-    void waitForPageToLoad() {
-        waitFor(5, 0.5) { title.contains("BioAssay Research Database") }
+        def logoutFormText = waitFor { $(id: "logoutForm").text()}
+        logoutFormText.contains( "Logged in as") &&  logoutFormText.contains(username)
     }
 
 }
