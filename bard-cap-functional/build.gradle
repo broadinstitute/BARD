@@ -12,23 +12,25 @@ repositories {
 configurations {
     testCompile.transitive = true
 }
+def seleniumVersion = "2.39.0"
+
 dependencies {
-    testCompile 'com.oracle:ojdbc6:11.2.0.2.0'
     testCompile "org.codehaus.groovy:groovy-all:2.0.7"
 
-    testCompile "org.gebish:geb-spock:0.9.2"
-    testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
+    testCompile 'com.oracle:ojdbc6:11.2.0.2.0'
+    testCompile "org.apache.commons:commons-lang3:3.1"
 
+    testCompile "com.github.detro.ghostdriver:phantomjsdriver:1.0.4"
     // Need a driver implementation
-    def seleniumVersion = "2.39.0"
+    testCompile "org.seleniumhq.selenium:selenium-java:${seleniumVersion}"
     testCompile "org.seleniumhq.selenium:selenium-chrome-driver:${seleniumVersion}"
     testCompile "org.seleniumhq.selenium:selenium-firefox-driver:${seleniumVersion}"
-    testCompile "org.seleniumhq.selenium:selenium-htmlunit-driver:${seleniumVersion}"
     testCompile "org.seleniumhq.selenium:selenium-ie-driver:${seleniumVersion}"
     testCompile "org.seleniumhq.selenium:selenium-support:${seleniumVersion}"
     testCompile "xml-apis:xml-apis:1.4.01"
 
-
+    testCompile "org.gebish:geb-spock:0.9.2"
+    testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
     testCompile "junit:junit:4.11"
 }
 
