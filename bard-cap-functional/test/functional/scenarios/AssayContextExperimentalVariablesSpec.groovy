@@ -12,6 +12,7 @@ import common.Constants.SearchBy
  * @author Muhammad.Rafique
  * Date Created: 2013/02/07
  */
+@org.junit.Ignore
 class AssayContextExperimentalVariablesSpec extends AssayBaseContextSpec{
 	@Override
 	def setup() {

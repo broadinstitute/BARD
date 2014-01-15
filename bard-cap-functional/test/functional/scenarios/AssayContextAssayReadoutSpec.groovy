@@ -1,5 +1,6 @@
 package scenarios
 
+import org.junit.Ignore
 import pages.HomePage
 
 /**
@@ -7,6 +8,7 @@ import pages.HomePage
  * @author Muhammad.Rafique
  * Date Created: 2013/02/07
  */
+@Ignore
 class AssayContextAssayReadoutSpec extends AssayBaseContextSpec{
 	@Override
 	def setup() {
