@@ -1,0 +1,28 @@
+#running the gradle build
+#
+# this is a multiproject build that produces 2 artifacts an api jar and impl jar
+# a dependency UniprotJapi has a dependency on java 1.7 so be sure to use that jdk
+# the sources should be compiled for java 1.6 source compatibility as specified in build.gradle
+#
+# IDE itegration
+# should generate eclipse project files
+gradle eclipse
+
+# for intellij you can use the import project feature and use the build.gradle file and intellij does a good job
+
+# you should cp gradle.properties_template gradle.properties
+# the gradle.properties file will be ignored by git and automatically read by the build
+# if deploying to a maven repo you will need a username and password ( for artifactory, login to artifactory and a hash so you don't need to send your password in the clear )
+# the folowing command to deploy to a maven repo
+# prior to releasing a new version to the repo up the version in the build.gradle file
+gradle uploadArchive
+
+# to install in your maven local do
+gradle install
+
+# to run all tests
+
+gradle test
+
+# if you don't have gradle installed you can use the gradle wrapper by supstituting ./gradlew or ./gradle.bat
+# to run gradle
