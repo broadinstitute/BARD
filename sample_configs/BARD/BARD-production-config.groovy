@@ -14,4 +14,9 @@ CbipCrowd {
 }
 
 bard.services.resultService.archivePath = "RESULTS_PATH"
+bard.hostname = "WEB_SERVER_HOSTNAME"
+
+grails.serverURL = "http://${bard.hostname}:${server.port}/${appName}"
+ncgc.server.root.url = "WAREHOUSE_API/v17.3"
+promiscuity.badapple.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/"
 grails.jesque.enabled = true

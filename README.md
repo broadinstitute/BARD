@@ -40,7 +40,9 @@ mvn install:install-file -Dfile=instantjchem/instantjchem/modules/ext/MarvinBean
 
 Use git to clone the BARD repo locally.
 
-```git clone https://github.com/broadinstitute/BARD.git```
+```
+git clone https://github.com/broadinstitute/BARD.git
+```
 
 In the following, I'll refer to this directory as $BARD_CHECKOUT
 
@@ -59,22 +61,32 @@ cp $BARD_CHECKOUT/sample_configs/BARD/BARD-production-config.groovy ~/.grails/BA
 cp $BARD_CHECKOUT/sample_configs/dataExport/dataExport-production-config.groovy ~/.grails/dataExport
 ```
 
-Edit the files in ~/.grails/BARD and ~/.grails/dataExport setting values for DATABASE_HOST, DATABASE_SID, USERNAME, PASSWORD, RESULTS_PATH
-
+Edit the files in ~/.grails/BARD and ~/.grails/dataExport replacing the following text with values for:
+* DATABASE_HOST - The host the oracle database is running on
+* DATABASE_SID - The oracle SID on that host to connect to
+* USERNAME - The oracle user within the database which will hold the data for BARD
+* PASSWORD - The oracle user password
+* RESULTS_PATH - The path to a directory where results can be saved for transfering to the warehouse.  The amount of space needed will depend on the volume of results loaded.
+* WEB_SERVER_HOSTNAME - The name of the server which the webserver is running on.
+* WAREHOUSE_API - The URL of the local warehouse API.  (for example "http://bard.nih.gov/api" is the value used by public BARD)
  
 ### Build and deploy BARD application
-```cd $BARD_CHECKOUT/BARD
-grails compile```
+```
+cd $BARD_CHECKOUT/BARD
+grails compile
+```
 
 
 ### Set up database
 
 The following will create all the necessary objects in the configured schema and populate reference data.
 
-```grails -Dgrails.env=production dbm-update --contexts=standard,insert-reference
+```
+grails -Dgrails.env=production dbm-update --contexts=standard,insert-reference
 Create BARD war and deploy
 grails war BARD.war
 ```
+
 Copy the BARD.war to your tomcat's webapp directory to deploy it.
 
 
@@ -89,7 +101,9 @@ Copy the dataExport.war to your tomcat's webapp directory to deploy it
 ### Set up environment variable for Tomcat
 Add the following to the environment by editing your .bashrc file or simply executing the following before starting tomcat to increase the amount of memory that BARD is allowed to use.
 
-```export CATALINA_OPTS="-server -Djava.awt.headless=true -Xmx1024m -XX:MaxPermSize=512m"```
+```
+export CATALINA_OPTS="-server -Djava.awt.headless=true -Xmx1024m -XX:MaxPermSize=512m"
+```
 
 With the WAR files in place, you can now start tomcat, and BARD should be accessible as "/BARD" once tomcat has finished starting.
 
