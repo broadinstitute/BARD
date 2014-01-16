@@ -28,6 +28,7 @@ grails.project.dependency.resolution = {
         //TODO: Without adding this repos the push-event plugin won't work. Needs further investigations
        // mavenRepo "https://oss.sonatype.org/content/repositories/snapshots/"
     }
+
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         // build scope
@@ -46,7 +47,20 @@ grails.project.dependency.resolution = {
 
         compile "com.oracle:ojdbc6:11.2.0.2.0"
         compile 'org.apache.commons:commons-lang3:3.1'
-        compile 'ChemAxon:ChemAxonJChemBase:5.10'
+
+        ["MarvinBeans-concurrent",
+                "MarvinBeans-diverse-modules",
+                "MarvinBeans-formats-peptide",
+                "MarvinBeans-formats-smiles",
+                "MarvinBeans-formats.cml",
+                "MarvinBeans-formats.image",
+                "MarvinBeans-formats",
+                "MarvinBeans-license",
+                "MarvinBeans-plugin",
+                "MarvinBeans"].each {
+            compile "ChemAxon:${it}:5.10.4"
+        }
+
         compile 'jfree:jfreechart:1.0.13'
         compile('org.apache.httpcomponents:httpclient:4.1.2') {
             excludes "commons-codec", "commons-logging"
