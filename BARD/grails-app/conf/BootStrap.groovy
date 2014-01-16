@@ -25,21 +25,12 @@ class BootStrap {
         addLog4jFilters()
 
         SpringSecurityUtils.clientRegisterFilter('personaAuthenticationFilter', SecurityFilterPosition.SECURITY_CONTEXT_FILTER.order + 10)
-        loadPersonOntology()
         bardCacheUtilsService.refreshDueToNonDictionaryEntry()
 
 
     }
 
     def destroy = {
-    }
-
-    void loadPersonOntology() {
-        try {
-            externalOntologyFactory.getCreators().add(new PersonCreator())
-        } catch (Exception ee) {
-            log.error(ee, ee)
-        }
     }
     /**
      *

@@ -1,0 +1,47 @@
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+
+    repositories {
+        maven {
+            url(mavenRepoUrl)
+        }
+    }
+
+    group='bard'
+    archivesBaseName="${getRootProject().name}-${name}"
+    version = '20140106'
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+
+    dependencies {
+        // any common dependencies
+    }
+
+    task sourcesJar(type: Jar) {
+        classifier 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives sourcesJar
+    }
+
+    uploadArchives {
+        repositories.mavenDeployer {
+            repository(url: mavenRepoDeployerReleasesUrl) {
+                authentication(userName: mavenRepoUsername, password: mavenRepoPassword)
+            }
+        }
+    }
+
+    test {
+        maxHeapSize = "512m"
+    }
+}
+
+
+
+

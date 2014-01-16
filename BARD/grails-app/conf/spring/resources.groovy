@@ -10,6 +10,7 @@ import bard.core.util.ExternalUrlDTO
 import bard.db.ReadyForExtractFlushListener
 import bard.db.util.BardEditorRegistrar
 import bard.hibernate.ModifiedByListener
+import bard.validation.extext.BardExternalOntologyFactory
 import bardqueryapi.ETagsService
 import bardqueryapi.QueryService
 import bardqueryapi.experiment.ExperimentBuilder
@@ -27,7 +28,9 @@ def isPublicBard = System.getProperty("bard.public") != null;
 // Place your Spring DSL code here
 beans = {
 
-
+    externalOntologyFactory(bard.validation.extext.BardExternalOntologyFactory){bean ->
+        bean.autowire = "byName"
+    }
     customPropertyEditorRegistrar(BardEditorRegistrar)
     springSecurityUiService(SpringSecurityUiService) {
         messageSource = ref('messageSource')
@@ -120,9 +123,9 @@ beans = {
         springSecurityService = ref("springSecurityService")
     }
 
-    def extOntologyFactory = externalOntologyFactory(bard.validation.ext.RegisteringExternalOntologyFactory) { bean ->
-        bean.factoryMethod = "getInstance"
-    }
+//    def extOntologyFactory = externalOntologyFactory(bard.validation.ext.RegisteringExternalOntologyFactory) { bean ->
+//        bean.factoryMethod = "getInstance"
+//    }
 
     // from web-client
     String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url

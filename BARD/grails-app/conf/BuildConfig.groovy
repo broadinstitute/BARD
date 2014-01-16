@@ -29,6 +29,7 @@ grails.project.dependency.resolution = {
             grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
         } else {
 	    grailsCentral()
+            mavenLocal()
             mavenCentral()
 	}
     }
@@ -44,6 +45,7 @@ grails.project.dependency.resolution = {
             }
         }
 
+        compile "net.logstash.log4j:jsonevent-layout:1.5"
         compile "org.grails:grails-webflow:$grailsVersion"
         compile "org.apache.httpcomponents:httpclient:4.2.3"
 
@@ -51,15 +53,18 @@ grails.project.dependency.resolution = {
         compile 'jfree:jfreechart:1.0.13'
         compile('org.apache.httpcomponents:httpclient:4.1.2') {
             excludes "commons-codec", "commons-logging"
-        }
+	}
+
         compile 'com.thoughtworks.xstream:xstream:1.4.2'
-        compile "org.codehaus.groovy.modules.remote:remote-transport-http:0.5", {
+        compile ("org.codehaus.groovy.modules.remote:remote-transport-http:0.5") {
             excludes "servlet-api"
         }
         compile 'log4j:apache-log4j-extras:1.2.17'
 
-        compile "bard:external-validation:20130717"
-        compile "bard:pubchem-xml:20131010"
+        compile "bard:external-validation-api:20140106"
+        if(isPublicBard) {
+          compile "bard:pubchem-xml:20131010"
+	}
 
         compile "com.oracle:ojdbc6:11.2.0.2.0"
         compile 'ChemAxon:ChemAxonJChemBase:5.10'
@@ -67,12 +72,6 @@ grails.project.dependency.resolution = {
         // needed for SMTPAppender (included as a compile dependency because the right one is being picked up for runtime, but not for build time)
         compile "log4j:log4j:1.2.16"
         build "log4j:log4j:1.2.16"
-
-	// needed to override the version of the spring-mobile-device library to one resolvable via maven central
-	// this is only needed by the spring-mobile plugin.  If we drop that plugin, we can drop this reference
-	compile 'org.springframework.mobile:spring-mobile-device:1.1.0.RELEASE', {
-             excludes 'javax.servlet-api', 'spring-web', 'spring-webmvc'
-        }
 
         // runtime scope
         // runtime 'mysql:mysql-connector-java:5.1.16'
@@ -93,9 +92,9 @@ grails.project.dependency.resolution = {
         runtime 'org.springframework:spring-test:3.1.2.RELEASE'
 
         // test scope
-        test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
-        test "org.objenesis:objenesis:1.3" // used by spock for Mocking object that lack no args constructor
-        test "org.gebish:geb-spock:$gebVersion"
+        test ("org.spockframework:spock-grails-support:0.7-groovy-2.0")
+        test ("org.objenesis:objenesis:1.3") // used by spock for Mocking object that lack no args constructor
+        test ("org.gebish:geb-spock:$gebVersion")
         test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
             excludes "xml-apis", "commons-io"
         }
@@ -140,7 +139,7 @@ grails.project.dependency.resolution = {
         }
 
         compile ":clover:3.1.10.1"
-        compile ":spring-mobile:0.4"
+        compile ":spring-mobile:0.5.1"
         compile ":console:1.2"
         compile ":jquery-validation-ui:1.4.2"
         compile ":twitter-bootstrap:2.2.2"
