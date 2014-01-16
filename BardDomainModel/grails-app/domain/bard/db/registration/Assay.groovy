@@ -15,6 +15,7 @@ import bard.db.guidance.owner.OneItemPerNonFixedAttributeElementRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
+import bard.db.project.ProjectSingleExperiment
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 class Assay extends AbstractContextOwner implements GuidanceAware {
@@ -171,6 +172,22 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
 
     List<AssayContext> getContexts() {
         this.assayContexts
+    }
+
+    int getMaxNumProjectsInExperiments(){
+        int maxProjectExperiments = 0;
+        for(Experiment exp : this.experiments){
+            int count = 0;
+            exp.projectExperiments.each { ProjectSingleExperiment pe ->
+                if (pe.project.projectStatus != Status.RETIRED) {
+                    count++
+                }
+            }
+            if(count > maxProjectExperiments){
+                maxProjectExperiments = count
+            }
+        }
+        return maxProjectExperiments;
     }
 
 
