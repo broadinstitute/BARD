@@ -44,18 +44,35 @@ sourceSets {
 tasks.withType(Test) {
     //maxParallelForks = 4
     maxParallelForks = Runtime.runtime.availableProcessors() / 2
-}
-test {
     systemProperties = System.getProperties()
     outputs.upToDateWhen { false }
+    testLogging {
+        events "started", "skipped", "passed", "failed"
+        exceptionFormat "full"
+    }
 }
 
-task createDirs << {
-    sourceSets*.allSource.srcDirs*.each { dir ->
-        ant.touch(file: new File(dir, ".gitignore"), mkdirs: true)
+/**
+ * include a subset of tests and methods while we look at options for performance tuning
+ */
+task quickTest(type: Test, dependsOn: testClasses) {
+    filter {
+
+        includeTestsMatching 'scenarios.AssayDocumentSpec.Test Add*'
+        includeTestsMatching 'scenarios.ExperimentDocumentSpec.Test Add*'
+        includeTestsMatching 'scenarios.ProjectDocumentSpec.Test Add*'
+
+        includeTestsMatching 'scenarios.AssaySummarySpec.*New*'
+        includeTestsMatching 'scenarios.ExperimentSummarySpec.*New*'
+        includeTestsMatching 'scenarios.ProjectSummarySpec.*New*'
+
+        includeTestsMatching 'scenarios.PanelSpec.*New*'
+
     }
-    sourceSets*.resources.srcDirs*.each { dir ->
-        ant.touch(file: new File(dir, ".gitignore"), mkdirs: true)
+}
+task smokeTest(type: Test, dependsOn: testClasses) {
+    filter {
+        includeTestsMatching 'scenarios.PanelSpec.*New*'
     }
 }
 

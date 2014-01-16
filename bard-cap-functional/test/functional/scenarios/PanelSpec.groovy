@@ -15,204 +15,195 @@ import pages.ViewPanelPage
  * Date Created: 2013/11/20
  */
 class PanelSpec extends BardFunctionalSpec {
-	int nameIndex = 1
-	int descriptionIndex = 2
-	def setup() {
-		logInSomeUser()
-	}
+    int nameIndex = 1
+    int descriptionIndex = 2
 
+    def setup() {
+        logInSomeUser()
+    }
 
-	def "Test Create and Delete New Panel"() {
-		given:"Navigating to Create New Panel page"
-		to CreatePanelPage
+    def "Test Create and Delete New Panel"() {
+        given: "Navigating to Create New Panel page"
+        to CreatePanelPage
 
-		when:"User is at Create New Panel Page"
-		at CreatePanelPage
-		CreateNewPanel(TestData.addPanel)
+        when: "User is at Create New Panel Page"
+        at CreatePanelPage
+        CreateNewPanel(TestData.addPanel)
 
-		then:"Verify Summary Status before edit on UI & DB"
-		at ViewPanelPage
+        then: "Verify Summary Status before edit on UI & DB"
+        at ViewPanelPage
 
-		def uiSummary = getUISummaryInfo()
-		def dbSummary = Panel.getPanelOverviewByName(TestData.addPanel.name)
+        def uiSummary = getUISummaryInfo()
+        def dbSummary = Panel.getPanelOverviewByName(TestData.addPanel.name)
 
-		and:"Varify the added panel from db"
-		assert uiSummary.PanelID.toString() == dbSummary.panelId.toString()
-		assert uiSummary.Panel.equalsIgnoreCase(dbSummary.name)
-		assert uiSummary.Description.equalsIgnoreCase(dbSummary.description)
-		assert uiSummary.Owner.equalsIgnoreCase(dbSummary.owner)
+        and: "Varify the added panel from db"
+        assert uiSummary.PanelID.toString() == dbSummary.panelId.toString()
+        assert uiSummary.Panel.equalsIgnoreCase(dbSummary.name)
+        assert uiSummary.Description.equalsIgnoreCase(dbSummary.description)
+        assert uiSummary.Owner.equalsIgnoreCase(dbSummary.owner)
 
-		and:"Delete the added panel"
-		deletePanel()
+        and: "Delete the added panel"
+        deletePanel()
 
-		and:"User is navigated to My Panel page"
-		at MyPanelPage
+        and: "User is navigated to My Panel page"
+        at MyPanelPage
+    }
 
-		report ""
-	}
+    def "Test Add Assay to Panel"() {
+        given: "Navigating to Create New Panel page"
+        to ViewPanelPage
 
-	def "Test Add Assay to Panel"() {
-		given:"Navigating to Create New Panel page"
-		to ViewPanelPage
+        when: "User is at View Panel page, clean up assays from panel"
+        at ViewPanelPage
+        deletePanelAssay()
 
-		when:"User is at View Panel page, clean up assays from panel"
-		at ViewPanelPage
-		deletePanelAssay()
+        then: "Navigate to Add Assay to Panel page"
+        navigateToAddAssayToPanel()
 
-		then:"Navigate to Add Assay to Panel page"
-		navigateToAddAssayToPanel()
+        and: "Add Assay Definition to Panel"
+        at PanelAddAssayPage
+        AddAssaysToPanel(TestData.assaysToPanel)
 
-		and:"Add Assay Definition to Panel"
-		at PanelAddAssayPage
-		AddAssaysToPanel(TestData.assaysToPanel)
+        and: "Delete the added panel"
+        at ViewPanelPage
+        def uiPanelAdids = getUiPanelAssays()
+        def dbPanelAdids = Panel.getPanelAssays(TestData.panelId)
 
-		and:"Delete the added panel"
-		at ViewPanelPage
-		def uiPanelAdids = getUiPanelAssays()
-		def dbPanelAdids = Panel.getPanelAssays(TestData.panelId)
+        and: "Validate UI Panel Assays with DB Panel Assays"
+        assert uiPanelAdids.sort() == dbPanelAdids.sort()
 
-		and:"Validate UI Panel Assays with DB Panel Assays"
-		assert uiPanelAdids.sort() == dbPanelAdids.sort()
+        and: "Delete Panel Assays"
+        deletePanelAssay()
+        def uiPanelAdidsList = getUiPanelAssays()
+        def dbPanelAdidsList = Panel.getPanelAssays(TestData.panelId)
 
-		and:"Delete Panel Assays"
-		deletePanelAssay()
-		def uiPanelAdidsList = getUiPanelAssays()
-		def dbPanelAdidsList = Panel.getPanelAssays(TestData.panelId)
+        and: "Validate UI Panel Assays with DB Panel Assays"
+        assert uiPanelAdidsList.sort() == dbPanelAdidsList.sort()
+    }
 
-		and:"Validate UI Panel Assays with DB Panel Assays"
-		assert uiPanelAdidsList.sort() == dbPanelAdidsList.sort()
+    def "Test Edit Panel Summary Name"() {
+        given: "Navigating to Show Panel page"
+        to ViewPanelPage
 
-		report ""
-	}
+        when: "User is at View Panel Page, Fetch Summary info on UI and DB for validation"
+        at ViewPanelPage
+        def uiSummary = getUISummaryInfo()
+        def dbSummary = Panel.getPanelOverviewById(TestData.panelId)
+        def nameOriginal = uiSummary.Panel
+        def nameEdited = nameOriginal + Constants.edited
 
-	def "Test Edit Panel Summary Name"() {
-		given:"Navigating to Show Panel page"
-		to ViewPanelPage
+        then: "Verify Summary Name before edit on UI & DB"
+        assert uiSummary.Panel.equalsIgnoreCase(dbSummary.Name)
 
-		when:"User is at View Panel Page, Fetch Summary info on UI and DB for validation"
-		at ViewPanelPage
-		def uiSummary = getUISummaryInfo()
-		def dbSummary = Panel.getPanelOverviewById(TestData.panelId)
-		def nameOriginal = uiSummary.Panel
-		def nameEdited = nameOriginal+Constants.edited
-
-		then:"Verify Summary Name before edit on UI & DB"
-		assert uiSummary.Panel.equalsIgnoreCase(dbSummary.Name)
-
-		when:"Edit/Update Summary Name, Fetch Summary info on UI and DB for validation"
+        when: "Edit/Update Summary Name, Fetch Summary info on UI and DB for validation"
         editSummary(nameIndex, nameEdited)
-		at ViewPanelPage
-		uiSummary = getUISummaryInfo()
-		dbSummary = Panel.getPanelOverviewById(TestData.panelId)
+        at ViewPanelPage
+        uiSummary = getUISummaryInfo()
+        dbSummary = Panel.getPanelOverviewById(TestData.panelId)
 
-		then:"Verify Summary Name after edit on UI & DB"
-		assert uiSummary.Panel.equalsIgnoreCase(nameEdited)
-		assert uiSummary.Panel.equalsIgnoreCase(dbSummary.Name)
+        then: "Verify Summary Name after edit on UI & DB"
+        assert uiSummary.Panel.equalsIgnoreCase(nameEdited)
+        assert uiSummary.Panel.equalsIgnoreCase(dbSummary.Name)
 
-		when:"Revert Edit/Update Summary Name, Fetch Summary info on UI and DB for validation"
+        when: "Revert Edit/Update Summary Name, Fetch Summary info on UI and DB for validation"
         editSummary(nameIndex, nameOriginal)
-		at ViewPanelPage
-		uiSummary = getUISummaryInfo()
-		dbSummary = Panel.getPanelOverviewById(TestData.panelId)
+        at ViewPanelPage
+        uiSummary = getUISummaryInfo()
+        dbSummary = Panel.getPanelOverviewById(TestData.panelId)
 
-		then:"Verify Summary Name after revert on UI & DB"
-		assert uiSummary.Panel.equalsIgnoreCase(nameOriginal)
-		assert uiSummary.Panel.equalsIgnoreCase(dbSummary.Name)
+        then: "Verify Summary Name after revert on UI & DB"
+        assert uiSummary.Panel.equalsIgnoreCase(nameOriginal)
+        assert uiSummary.Panel.equalsIgnoreCase(dbSummary.Name)
+    }
 
-	}
+    def "Test Edit Panel Summary Name with empty value"() {
+        given: "Navigating to Show Panel page"
+        to ViewPanelPage
 
-	def "Test Edit Panel Summary Name with empty value"() {
-		given:"Navigating to Show Panel page"
-		to ViewPanelPage
+        when: "User is at View Panel Page, Fetch Summary info on UI and DB for validation"
+        at ViewPanelPage
+        def uiSummary = getUISummaryInfo()
+        def dbSummary = Panel.getPanelOverviewById(TestData.panelId)
+        def projectNameOriginal = uiSummary.Panel
 
-		when:"User is at View Panel Page, Fetch Summary info on UI and DB for validation"
-		at ViewPanelPage
-		def uiSummary = getUISummaryInfo()
-		def dbSummary = Panel.getPanelOverviewById(TestData.panelId)
-		def projectNameOriginal = uiSummary.Panel
+        then: "Verify Summary Description before edit on UI & DB"
+        assert uiSummary.Panel.equalsIgnoreCase(dbSummary.Name.toString())
 
-		then:"Verify Summary Description before edit on UI & DB"
-		assert uiSummary.Panel.equalsIgnoreCase(dbSummary.Name.toString())
+        and: "Edit/Update Summary Description"
+        editSummary(nameIndex, "")
 
-		and:"Edit/Update Summary Description"
-		editSummary(nameIndex, "")
+        when: "Summary Description is Updated, Fetch Summary info on UI and DB for validation"
+        at ViewPanelPage
+        uiSummary = getUISummaryInfo()
+        dbSummary = Panel.getPanelOverviewById(TestData.panelId)
 
-		when:"Summary Description is Updated, Fetch Summary info on UI and DB for validation"
-		at ViewPanelPage
-		uiSummary = getUISummaryInfo()
-		dbSummary = Panel.getPanelOverviewById(TestData.panelId)
+        then: "Verify Summary Description after edit on UI & DB"
+        assert uiSummary.Panel.equalsIgnoreCase(projectNameOriginal)
+        assert uiSummary.Panel.equalsIgnoreCase(dbSummary.Name.toString())
+    }
 
-		then:"Verify Summary Description after edit on UI & DB"
-		assert uiSummary.Panel.equalsIgnoreCase(projectNameOriginal)
-		assert uiSummary.Panel.equalsIgnoreCase(dbSummary.Name.toString())
+    def "Test Edit Panel Summary Description"() {
+        given: "Navigating to Show Panel page"
+        to ViewPanelPage
 
-		report ""
-	}
+        when: "User is at View Panel Page, Fetch Summary info on UI and DB for validation"
+        at ViewPanelPage
+        def uiSummary = getUISummaryInfo()
+        def dbSummary = Panel.getPanelOverviewById(TestData.panelId)
+        def projectDescriptionOriginal = uiSummary.Description
+        def projectDescriptionEdited = projectDescriptionOriginal + Constants.edited
 
-	def "Test Edit Panel Summary Description"() {
-		given:"Navigating to Show Panel page"
-		to ViewPanelPage
+        then: "Verify Summary Description before edit on UI & DB"
+        assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())
 
-		when:"User is at View Panel Page, Fetch Summary info on UI and DB for validation"
-		at ViewPanelPage
-		def uiSummary = getUISummaryInfo()
-		def dbSummary = Panel.getPanelOverviewById(TestData.panelId)
-		def projectDescriptionOriginal = uiSummary.Description
-		def projectDescriptionEdited = projectDescriptionOriginal+Constants.edited
-
-		then:"Verify Summary Description before edit on UI & DB"
-		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())
-
-		when:"Summary Description is Updated, Fetch Summary info on UI and DB for validation"
+        when: "Summary Description is Updated, Fetch Summary info on UI and DB for validation"
         editSummary(descriptionIndex, projectDescriptionEdited)
         at ViewPanelPage
-		uiSummary = getUISummaryInfo()
-		dbSummary = Panel.getPanelOverviewById(TestData.panelId)
+        uiSummary = getUISummaryInfo()
+        dbSummary = Panel.getPanelOverviewById(TestData.panelId)
 
-		then:"Verify Summary Description after edit on UI & DB"
+        then: "Verify Summary Description after edit on UI & DB"
 
-		assert uiSummary.Description.equalsIgnoreCase(projectDescriptionEdited)
-		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())
+        assert uiSummary.Description.equalsIgnoreCase(projectDescriptionEdited)
+        assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())
 
-		and:
+        and:
 
-        when:"Revert Edit/Update Summary Description"
+        when: "Revert Edit/Update Summary Description"
         editSummary(descriptionIndex, projectDescriptionOriginal)
         at ViewPanelPage
-		uiSummary = getUISummaryInfo()
-		dbSummary = Panel.getPanelOverviewById(TestData.panelId)
+        uiSummary = getUISummaryInfo()
+        dbSummary = Panel.getPanelOverviewById(TestData.panelId)
 
-		then:"Verify Summary Description after revert on UI & DB"
-		assert uiSummary.Description.equalsIgnoreCase(projectDescriptionOriginal)
-		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description)
-	}
+        then: "Verify Summary Description after revert on UI & DB"
+        assert uiSummary.Description.equalsIgnoreCase(projectDescriptionOriginal)
+        assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description)
+    }
 
-	def "Test Edit Panel Summary Description with empty value"() {
-		given:"Navigating to Show Panel page"
-		to ViewPanelPage
+    def "Test Edit Panel Summary Description with empty value"() {
+        given: "Navigating to Show Panel page"
+        to ViewPanelPage
 
-		when:"User is at View Panel Page, Fetch Summary info on UI and DB for validation"
-		at ViewPanelPage
-		def uiSummary = getUISummaryInfo()
-		def dbSummary = Panel.getPanelOverviewById(TestData.panelId)
-		def projectDescriptionOriginal = uiSummary.Description
+        when: "User is at View Panel Page, Fetch Summary info on UI and DB for validation"
+        at ViewPanelPage
+        def uiSummary = getUISummaryInfo()
+        def dbSummary = Panel.getPanelOverviewById(TestData.panelId)
+        def projectDescriptionOriginal = uiSummary.Description
 
-		then:"Verify Summary Description before edit on UI & DB"
-		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())
+        then: "Verify Summary Description before edit on UI & DB"
+        assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())
 
-		and:"Edit/Update Summary Description"
-		editSummary(descriptionIndex, "")
+        and: "Edit/Update Summary Description"
+        editSummary(descriptionIndex, "")
 
-		when:"Summary Description is Updated, Fetch Summary info on UI and DB for validation"
-		at ViewPanelPage
-		uiSummary = getUISummaryInfo()
-		dbSummary = Panel.getPanelOverviewById(TestData.panelId)
+        when: "Summary Description is Updated, Fetch Summary info on UI and DB for validation"
+        at ViewPanelPage
+        uiSummary = getUISummaryInfo()
+        dbSummary = Panel.getPanelOverviewById(TestData.panelId)
 
-		then:"Verify Summary Description after edit on UI & DB"
-		assert uiSummary.Description.equalsIgnoreCase(projectDescriptionOriginal)
-		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())
-
-		report ""
-	}
+        then: "Verify Summary Description after edit on UI & DB"
+        assert uiSummary.Description.equalsIgnoreCase(projectDescriptionOriginal)
+        assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())
+    }
 
 }

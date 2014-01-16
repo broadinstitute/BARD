@@ -6,6 +6,7 @@ import common.TestData
 import db.Assay
 import pages.CreateAssayPage
 import pages.ViewAssayDefinitionPage
+import spock.lang.IgnoreRest
 
 /**
  * This class holds all the test functions of Assay Summary section
@@ -41,8 +42,6 @@ class AssaySummarySpec extends BardFunctionalSpec {
 		assert uiSummary.Name.equalsIgnoreCase(dbSummary.Name)
 		assert uiSummary.Status.equalsIgnoreCase(dbSummary.Status)
 		assert uiSummary.Owner == dbSummary.owner
-
-		report ""
 	}
 
 	def "Test Edit Assay Summary Status"() {
