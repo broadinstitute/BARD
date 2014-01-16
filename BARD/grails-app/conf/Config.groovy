@@ -340,6 +340,13 @@ log4j = {
             String logDir = "$baselogDir/logs"
             String defaultPattern = '%d [%t] %-5p %c{1} - %m%n' // see http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html
             console(name: "stdout", layout: pattern(defaultPattern));
+
+            appender(new DailyRollingFileAppender(
+                name:"jsonEventAppender",
+                file: "$logDir/events.json",
+                layout: new net.logstash.log4j.JSONEventLayout(),
+                immediateFlush: true))
+
             appender(new DailyRollingFileAppender(
                     name: "NCGCErrorAppender",
                     file: "$logDir/NCGC_Errors.log",
@@ -399,7 +406,7 @@ log4j = {
 
     // stdout is a default console appender
     root {
-        error('outputFile', 'stdout', 'mail', 'accessDeniedAppender', 'mySQLAppender')
+        error('outputFile', 'stdout', 'mail', 'accessDeniedAppender', 'mySQLAppender', 'jsonEventAppender')
     }
 
     info(stdout: ['liquibase'])
@@ -423,8 +430,11 @@ log4j = {
 
     //Capture errors from the NCGC API (via JDO) but DO NOT send emails about them.
     error(additivity: false, NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService'])
+    error(additivity: false, jsonEventAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService'])
+
     //Capture JavaScript errors from the client (via the ErrorHandling controller)
     error(additivity: true, JavaScriptErrorsAppender: ['grails.app.controllers.bardqueryapi.ErrorHandlingController'])
+
     //Capture NCGC REST API roundtrip timing.
     info(additivity: false, NCGCRestApiTimingAppender: ['grails.app.services.bard.core.helper.LoggerService'])
 }

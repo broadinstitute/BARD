@@ -228,12 +228,13 @@ function handleStructureSearch(url, currentFormId) {
         error:handleAjaxError(function (request, status, error) {
             $("#compoundsTab").html('Compounds ' + errorImageTwitterBootstrap);
             $("#compounds").html(error);
-        }),
+        }, true),
         complete:function () {
             $("#compounds").trigger('search.complete');
         }
     });
 }
+
 /**
  *
  * @param controllerAction - The name of the controller action that would handle this request e.g 'searchAssays'
@@ -273,7 +274,7 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
         error:handleAjaxError(function (request, status, error) {
             $(tabDivElement).html(prefixOfTextToAppearOnTab + errorImageTwitterBootstrap);
             $(updateDivId).html(error);
-        }),
+        }, true),
         complete:function () {
             $(updateDivId).trigger('search.complete');
         }
