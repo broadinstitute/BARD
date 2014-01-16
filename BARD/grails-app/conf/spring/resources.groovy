@@ -23,7 +23,7 @@ import persona.OnlinePersonaVerifyer
 import persona.PersonaAuthenticationFilter
 import persona.PersonaAuthenticationProvider
 
-def isPublicBard = System.getProperty("bard.public") != null;
+def useCrowd = System.getProperty("useCrowd") != null;
 
 // Place your Spring DSL code here
 beans = {
@@ -83,8 +83,7 @@ beans = {
         ]
     }
 
-
-    if(isPublicBard) {
+    if(useCrowd) {
         crowdAuthenticationProviderService(CrowdAuthenticationProviderService) {
             crowdClient = ref('crowdClient')
             grailsApplication = application
@@ -95,7 +94,7 @@ beans = {
         }
     }
 
-    if(!isPublicBard ||Environment.current != Environment.PRODUCTION) {
+    if(!useCrowd || Environment.current != Environment.PRODUCTION) {
         inMemMapAuthenticationProviderService(InMemMapAuthenticationProviderService) {
             // grailsApplication = application
         }
@@ -103,20 +102,6 @@ beans = {
 
     userDetailsService(BardUserDetailsService) {
     }
-
-//    if ( && isPublicBard ) {
-//            //don't use in memory map in production
-//            userDetailsService(BardUserDetailsService) {
-//                delegates = [ref('bardAuthorizationProviderService'), ref('personaAuthenticationProvider')]
-//            }
-//    } else if (isPublicBard) {
-//            userDetailsService(BardUserDetailsService) {
-//                delegates = [ref('inMemMapAuthenticationProviderService'), ref('bardAuthorizationProviderService'), ref('personaAuthenticationProvider')]
-//            }
-//    } else {
-//                delegates = [ref('inMemMapAuthenticationProviderService'), ref('personaAuthenticationProvider')]
-//            }
-//    }
 
     capPermissionService(CapPermissionService) {
         aclUtilService = ref("aclUtilService")
