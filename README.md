@@ -55,7 +55,10 @@ Change to the external-valuation directory
 ```
 cd $BARD_CHECKOUT/external-validation
 ./gradlew api:install
-Create local configuration files
+```
+
+### Create local configuration files
+```
 mkdir ~/.grails
 mkdir ~/.grails/BARD
 mkdir ~/.grails/dataExport
@@ -82,10 +85,12 @@ grails compile
 ### Set up database
 
 The following will create all the necessary objects in the configured schema and populate reference data.
-
 ```
 grails -Dgrails.env=production dbm-update --contexts=standard,insert-reference
-Create BARD war and deploy
+```
+
+### Create BARD war and deploy
+```
 grails war BARD.war
 ```
 
