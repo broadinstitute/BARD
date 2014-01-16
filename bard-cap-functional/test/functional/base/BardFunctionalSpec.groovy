@@ -1,5 +1,7 @@
 package base
 
+import org.openqa.selenium.Dimension
+
 import java.sql.Date;
 
 import geb.spock.GebReportingSpec
@@ -20,7 +22,7 @@ abstract class BardFunctionalSpec extends GebReportingSpec {
 			Map userProps = user.value
 			usernameUserPropsMap.put(userProps.username, userProps)
 		}
-		driver.manage().window().maximize()
+		driver.manage().window().setSize(new Dimension(1200, 1000))// maximize was creating tall skiny viewport on ghostdriver so specifically setting
 	}
 
 	HomePage logInWithRole(String role) {
