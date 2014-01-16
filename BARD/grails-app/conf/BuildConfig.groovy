@@ -1,4 +1,4 @@
-def useCrowd = System.getProperty("useCrowd") != null;
+def useCrowd = true;
 
 grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
 grails.project.work.dir = "target"

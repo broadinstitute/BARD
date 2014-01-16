@@ -5,7 +5,7 @@ import org.apache.log4j.DailyRollingFileAppender
 import org.apache.log4j.net.SMTPAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
-def useCrowd = System.getProperty("useCrowd") != null;
+def useCrowd = true;
 
 bard.users.email = "bard-users@broadinstitute.org"
 bard.users.mailing.list = "https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users"

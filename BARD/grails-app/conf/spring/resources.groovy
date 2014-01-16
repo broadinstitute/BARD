@@ -23,7 +23,7 @@ import persona.OnlinePersonaVerifyer
 import persona.PersonaAuthenticationFilter
 import persona.PersonaAuthenticationProvider
 
-def useCrowd = System.getProperty("useCrowd") != null;
+def useCrowd = true;
 
 // Place your Spring DSL code here
 beans = {
@@ -84,7 +84,7 @@ beans = {
     }
 
     if(useCrowd) {
-        crowdAuthenticationProviderService(CrowdAuthenticationProviderService) {
+        crowdAuthenticationProviderService(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {
             crowdClient = ref('crowdClient')
             grailsApplication = application
         }
