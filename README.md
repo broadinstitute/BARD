@@ -18,7 +18,9 @@ The driver should be free, however, the license does not allow us to redistribut
 
 Install the oracle driver in your local maven repo with the following command:
 
-```mvn install:install-file -Dfile=ojdbc6-11.2.0.2.0.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0.2.0 -Dpackaging=jar```
+```
+mvn install:install-file -Dfile=ojdbc6-11.2.0.2.0.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0.2.0 -Dpackaging=jar
+```
 
 ### Download instant JChem from ChemAxon and install jars into local maven repo
 This will require you register with ChemAxon.   Download instant JChem version 5.10.4, and specifically download the `instantjchem-5_10_4.zip` file.   Extract the zip file and execute the following to import the needed jars into your repo.
