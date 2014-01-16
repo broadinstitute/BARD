@@ -18,8 +18,8 @@ class DatabaseConnectivity{
 	static def getDatasource(){
 		def dbDatasource
 
-        def config = new ConfigSlurper().parse(new File('grails-app/conf/Config.groovy').toURL())
-		def applicationURL = config.grails.serverURL
+        def config = new ConfigSlurper().parse(new File('localConfig.groovy').toURI().toURL())
+		def applicationURL = config.server.url
 		if(applicationURL.indexOf("qa") > -1){
 			dbDatasource = Constants.qaDatasource
 		}else if(applicationURL.indexOf("dev") > -1){

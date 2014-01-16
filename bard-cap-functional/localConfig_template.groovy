@@ -6,3 +6,4 @@ mockUsers {
 		email = 'someUser@nowhere.com'
 	}
 }
+server.url=System.properties.getProperty('server.url') ?: "http://localhost:8080/BARD/"

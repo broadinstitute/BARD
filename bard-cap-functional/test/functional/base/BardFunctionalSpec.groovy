@@ -14,7 +14,7 @@ import spock.lang.Shared
 abstract class BardFunctionalSpec extends GebReportingSpec {
 	@Shared protected Map<String, Map> usernameUserPropsMap = [:]
 	def setupSpec() {
-        def config = new ConfigSlurper().parse(new File('grails-app/conf/Config.groovy').toURL())
+        def config = new ConfigSlurper().parse(new File('localConfig.groovy').toURI().toURL())
 		def mockUsers = config.mockUsers
 		mockUsers.each {user ->
 			Map userProps = user.value
