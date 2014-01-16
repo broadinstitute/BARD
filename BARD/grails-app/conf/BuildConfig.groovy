@@ -36,6 +36,8 @@ grails.project.dependency.resolution = {
         compile('cbip:cbip_encoding:0.1') {
             excludes "junit"
         }
+
+        compile "net.logstash.log4j:jsonevent-layout:1.5"
         compile "org.grails:grails-webflow:$grailsVersion"
         compile "org.apache.httpcomponents:httpclient:4.2.3"
 
