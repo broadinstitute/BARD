@@ -50,6 +50,20 @@ grails.project.dependency.resolution = {
         compile "org.apache.httpcomponents:httpclient:4.2.3"
 
         compile 'org.apache.commons:commons-lang3:3.1'
+
+        ["MarvinBeans-concurrent",
+                "MarvinBeans-diverse-modules",
+                "MarvinBeans-formats-peptide",
+                "MarvinBeans-formats-smiles",
+                "MarvinBeans-formats.cml",
+                "MarvinBeans-formats.image",
+                "MarvinBeans-formats",
+                "MarvinBeans-license",
+                "MarvinBeans-plugin",
+                "MarvinBeans"].each {
+            compile "ChemAxon:${it}:5.10.4"
+        }
+
         compile 'jfree:jfreechart:1.0.13'
         compile('org.apache.httpcomponents:httpclient:4.1.2') {
             excludes "commons-codec", "commons-logging"
