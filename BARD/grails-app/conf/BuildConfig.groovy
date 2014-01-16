@@ -1,3 +1,5 @@
+def useCrowd = System.getProperty("useCrowd") != null;
+
 grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
 grails.project.work.dir = "target"
 grails.project.target.level = 1.6
@@ -7,7 +9,6 @@ grails.server.port.http = 8081
 
 def gebVersion = "0.9.0-RC-1"
 def seleniumVersion = "2.31.0"
-
 
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
@@ -22,40 +23,69 @@ grails.project.dependency.resolution = {
         inherit(false) // don't repositories from plugins
         grailsPlugins()
         grailsHome()
-        mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
-        grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
 
-        //TODO: Without adding this repos the push-event plugin won't work. Needs further investigations
-       // mavenRepo "https://oss.sonatype.org/content/repositories/snapshots/"
+
+        if (useCrowd) {
+            mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
+            grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
+        } else {
+            grailsCentral()
+            mavenLocal()
+            mavenCentral()
+        }
     }
+
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         // build scope
 
         // compile scope
-        compile('cbip:cbip_encoding:0.1') {
-            excludes "junit"
+        if (useCrowd) {
+            compile('cbip:cbip_encoding:0.1') {
+                excludes "junit"
+            }
         }
+
+        compile "net.logstash.log4j:jsonevent-layout:1.5"
         compile "org.grails:grails-webflow:$grailsVersion"
         compile "org.apache.httpcomponents:httpclient:4.2.3"
 
-        compile "bard:external-validation-api:20140106"
-        compile "bard:pubchem-xml:20131010"
-
-        compile "com.oracle:ojdbc6:11.2.0.2.0"
         compile 'org.apache.commons:commons-lang3:3.1'
-        compile 'ChemAxon:ChemAxonJChemBase:5.10'
+
+        ["MarvinBeans-concurrent",
+                "MarvinBeans-diverse-modules",
+                "MarvinBeans-formats-peptide",
+                "MarvinBeans-formats-smiles",
+                "MarvinBeans-formats.cml",
+                "MarvinBeans-formats.image",
+                "MarvinBeans-formats",
+                "MarvinBeans-license",
+                "MarvinBeans-plugin",
+                "MarvinBeans"].each {
+            compile "ChemAxon:${it}:5.10.4"
+        }
+
         compile 'jfree:jfreechart:1.0.13'
         compile('org.apache.httpcomponents:httpclient:4.1.2') {
             excludes "commons-codec", "commons-logging"
         }
+
         compile 'com.thoughtworks.xstream:xstream:1.4.2'
-        compile ("org.codehaus.groovy.modules.remote:remote-transport-http:0.5") {
+        compile("org.codehaus.groovy.modules.remote:remote-transport-http:0.5") {
             excludes "servlet-api"
         }
         compile 'log4j:apache-log4j-extras:1.2.17'
 
-        // needed for SMTPAppender (included as a compile dependency because the right one is being picked up for runtime, but
+        compile "bard:external-validation-api:20140106"
+        if (useCrowd) {
+            // this isn't so much because crowd is needed for this lib as much as this lib is only
+            // used to run adhoc scripts run at the Broad.
+            compile "bard:pubchem-xml:20131010"
+        }
+
+        compile "com.oracle:ojdbc6:11.2.0.2.0"
+
+        // needed for SMTPAppender (included as a compile dependency because the right one is being picked up for runtime, but not for build time)
         compile "log4j:log4j:1.2.16"
         build "log4j:log4j:1.2.16"
 
@@ -78,9 +108,9 @@ grails.project.dependency.resolution = {
         runtime 'org.springframework:spring-test:3.1.2.RELEASE'
 
         // test scope
-        test ("org.spockframework:spock-grails-support:0.7-groovy-2.0")
-        test ("org.objenesis:objenesis:1.3") // used by spock for Mocking object that lack no args constructor
-        test ("org.gebish:geb-spock:$gebVersion")
+        test("org.spockframework:spock-grails-support:0.7-groovy-2.0")
+        test("org.objenesis:objenesis:1.3") // used by spock for Mocking object that lack no args constructor
+        test("org.gebish:geb-spock:$gebVersion")
         test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
             excludes "xml-apis", "commons-io"
         }
@@ -117,11 +147,15 @@ grails.project.dependency.resolution = {
         compile ":export:1.5"
         compile ":resources:1.2.RC2"
         compile ":twitter-bootstrap:2.3.0"
-        compile(":cbipcrowdauthentication:0.3.4") {
-            excludes('spock', 'release', 'google-collections')
+
+        if (useCrowd) {
+            compile(":cbipcrowdauthentication:0.3.4") {
+                excludes('spock', 'release', 'google-collections')
+            }
         }
+
         compile ":clover:3.1.10.1"
-        compile ":spring-mobile:0.4"
+        compile ":spring-mobile:0.5.1"
         compile ":console:1.2"
         compile ":jquery-validation-ui:1.4.2"
         compile ":twitter-bootstrap:2.2.2"
@@ -134,7 +168,7 @@ grails.project.dependency.resolution = {
         compile ":mail:1.0.1"
         compile ":greenmail:1.3.3"
         compile ":cache:1.0.1"
-       // compile ':events-push:1.0.M7'
+        // compile ':events-push:1.0.M7'
         compile ":famfamfam:1.0.1"
         //compile ":spring-security-ui:0.2"
 
@@ -151,8 +185,6 @@ grails.project.dependency.resolution = {
         }
         test "org.grails.plugins:geb:$gebVersion"
         test ":remote-control:1.4"
-
-
     }
 }
 
@@ -166,12 +198,14 @@ grails.plugin.location.'shopping-cart:0.8.2' = "../shopping-cart-0.8.2"
 grails.plugin.location.'bard-rest-api-wrapper' = "../bard-rest-api-wrapper"
 grails.plugin.location.'functional-spock' = "../functional-spock"
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
+
 codenarc.reports = {
     html('html') {
         outputFile = 'target/codenarc-reports/html/BARD-CodeNarc-Report.html'
         title = 'BARD CodeNarc Report'
     }
 }
+
 codenarc {
     exclusions = ['**/grails-app/migrations/*']
 }

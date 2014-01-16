@@ -2,10 +2,14 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'idea'
+    apply plugin: 'eclipse'
 
     repositories {
+        mavenCentral()
+        if(hasProperty('mavenRepoUrl')) {
         maven {
             url(mavenRepoUrl)
+        }
         }
     }
 
@@ -28,12 +32,14 @@ subprojects {
         archives sourcesJar
     }
 
+    if(hasProperty('mavenRepoDeployerReleasesUrl')) {
     uploadArchives {
         repositories.mavenDeployer {
             repository(url: mavenRepoDeployerReleasesUrl) {
                 authentication(userName: mavenRepoUsername, password: mavenRepoPassword)
             }
         }
+    }
     }
 
     test {
