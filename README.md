@@ -44,7 +44,7 @@ Use git to clone the BARD repo locally.
 
 ```git clone https://github.com/broadinstitute/BARD.git```
 
-In the following, I'll refer to this directory as $BARD_CHECKOUT
+In the following, I'll refer to the checked out directory (BARD) as $BARD_CHECKOUT
 
 
 ### Build external lookup api for querying external ontologies and install jar in local maven repo
