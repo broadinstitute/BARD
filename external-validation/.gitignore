@@ -1,0 +1,8 @@
+.idea/
+.gradle/
+build/
+out/
+# any intellij project files
+*.iml
+# developer specific gradle.properites file
+gradle.properties

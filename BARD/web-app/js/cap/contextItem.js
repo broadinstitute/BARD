@@ -291,6 +291,7 @@ $(document).ready(function () {
     $.ajax("/BARD/ontologyJSon/getAttributeDescriptors", {
         success:function (data) {
             attributeSelect2.initSelect2(data,updateConstraintWidgets);
+            initialFocus();
         },
         error: handleAjaxError()
     });

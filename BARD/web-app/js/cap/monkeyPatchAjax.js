@@ -25,16 +25,11 @@ var notifyAjaxFailure = function(msg) {
     }
     listHtml.push("</ul>");
 
-    console.log("msg", msg);
-    console.log("ajaxErrors", ajaxErrors);
-    console.log("listHtml", listHtml)
-
     $("#ajax-failure-list").html(listHtml.join(""));
 };
 
 var ajaxFailureCallback = function(jqXHR, textStatus, errorThrown) {
     // override error handling
-    console.log("error", jqXHR, textStatus, errorThrown);
 
     var contentType = jqXHR.getResponseHeader("Content-Type");
     if(contentType)
@@ -46,8 +41,6 @@ var ajaxFailureCallback = function(jqXHR, textStatus, errorThrown) {
         return error(jqXHR, textStatus, errorThrown);
     } else {
     */
-    console.log("contentType=",contentType);
-    console.log("responseText=",jqXHR.responseText);
 
         if(jqXHR.status == 403) {
             notifyAjaxFailure("Permission denied");
@@ -63,24 +56,9 @@ var handleAjaxError = function ( callback ) {
     return function(request, status, error) {
         if(callback) {
             callback(request, status, error);
+        } else {
+            ajaxFailureCallback(request, status, error);
         }
-        ajaxFailureCallback(request, status, error);
     }
 }
 
-/*
-$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
-    console.log("options", options);
-    console.log("originalOptions", originalOptions);
-
-    var success = options.success;
-    options.success = function(data, textStatus, jqXHR) {
-        // override success handling
-        console.log("success");
-        if(typeof(success) === "function") return success(data, textStatus, jqXHR);
-    };
-
-    var error = options.error;
-    options.error = ;
-});
-*/

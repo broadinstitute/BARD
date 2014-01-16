@@ -6,6 +6,7 @@ import bard.db.dictionary.OntologyDataAccessService
 import bard.db.enums.ExpectedValueType
 import bard.validation.ext.ExternalItem
 import bard.validation.ext.ExternalOntologyException
+import bard.validation.extext.ExternalItemImpl
 import grails.buildtestdata.TestDataConfigurationHolder
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
@@ -157,7 +158,7 @@ class OntologyJsonControllerUnitSpec extends Specification {
         where:
         desc               | serviceReturnValue                                        | expectedMap
         'no item found'    | { null }                                                  | [:]
-        'item found'       | { new ExternalItem('1', 'item 1') }                       | [id: '1', text: '(1) item 1', display: 'item 1']
+        'item found'       | { new ExternalItemImpl('1', 'item 1') }                   | [id: '1', text: '(1) item 1', display: 'item 1']
         'exception thrown' | { throw new ExternalOntologyException("some Exception") } | [error: 'Integrated lookup for the External Ontology Id: foo was not successful at this time.']
     }
 
@@ -182,10 +183,10 @@ class OntologyJsonControllerUnitSpec extends Specification {
         resultMap == expectedMap
 
         where:
-        desc               | serviceReturnValue                                                     | expectedMap
-        'no items found'   | { [] }                                                                 | [externalItems: []]
-        '1 item found'     | { [new ExternalItem('1', 'item 1')] }                                  | [externalItems: [[id: '1', text: '(1) item 1', display: 'item 1']]]
-        '2 items found'    | { [new ExternalItem('1', 'item 1'), new ExternalItem('2', 'item 2')] } | [externalItems: [[id: '1', text: '(1) item 1', display: 'item 1'], [id: '2', text: '(2) item 2', display: 'item 2']]]
-        'exception thrown' | { throw new ExternalOntologyException("some Exception") }              | [error: 'Integrated lookup for attribute label1 with the term: foo was not successful at this time.  Please try again or, enter the External Ontology Id and Display Value directly.', externalItems: []]
+        desc               | serviceReturnValue                                                             | expectedMap
+        'no items found'   | { [] }                                                                         | [externalItems: []]
+        '1 item found'     | { [new ExternalItemImpl('1', 'item 1')] }                                      | [externalItems: [[id: '1', text: '(1) item 1', display: 'item 1']]]
+        '2 items found'    | { [new ExternalItemImpl('1', 'item 1'), new ExternalItemImpl('2', 'item 2')] } | [externalItems: [[id: '1', text: '(1) item 1', display: 'item 1'], [id: '2', text: '(2) item 2', display: 'item 2']]]
+        'exception thrown' | { throw new ExternalOntologyException("some Exception") }                      | [error: 'Integrated lookup for attribute label1 with the term: foo was not successful at this time.  Please try again or, enter the External Ontology Id and Display Value directly.', externalItems: []]
     }
 }
