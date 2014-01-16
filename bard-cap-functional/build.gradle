@@ -48,7 +48,6 @@ tasks.withType(Test) {
 test {
     systemProperties = System.getProperties()
     outputs.upToDateWhen { false }
-    systemProperties "geb.build.reportsDir": "${reporting.baseDir}/geb"
 }
 
 task createDirs << {

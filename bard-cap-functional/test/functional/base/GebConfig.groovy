@@ -22,6 +22,7 @@ driver = {
 }
 atCheckWaiting = true
 baseUrl = System.properties.getProperty('server.url') ?: "http://localhost:8080/BARD/"
+reportsDir = "build/geb-reports"
 environments {
 
     chrome {
@@ -77,7 +78,7 @@ public static String getPhantomJsExecutablePath() {
 }
 
 private void getFirefoxProfile() {
-    File profileDir = new File("target/firefoxProfile")
+    File profileDir = new File("build/firefoxProfile")
     if (!profileDir.exists()) {
         profileDir.mkdir()
     }
