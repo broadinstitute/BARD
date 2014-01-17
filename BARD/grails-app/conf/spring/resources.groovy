@@ -1,7 +1,9 @@
 import acl.CapPermissionService
 import acl.SpringSecurityUiService
 import bard.PreservingExceptionGrailsExceptionResolver
+import bard.auth.BardUserDetailsService
 import bard.auth.InMemMapAuthenticationProviderService
+import bard.auth.BardUserDetailsService
 import bard.core.helper.LoggerService
 import bard.core.rest.spring.*
 import bard.core.util.ExternalUrlDTO
@@ -20,6 +22,9 @@ import org.springframework.web.client.RestTemplate
 import persona.OnlinePersonaVerifyer
 import persona.PersonaAuthenticationFilter
 import persona.PersonaAuthenticationProvider
+import org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService
+
+def useCrowd = true;
 
 // Place your Spring DSL code here
 beans = {
@@ -79,28 +84,24 @@ beans = {
         ]
     }
 
+    if(useCrowd) {
+        crowdAuthenticationProviderService(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {
+            crowdClient = ref('crowdClient')
+            grailsApplication = application
+        }
 
-    bardAuthorizationProviderService(bard.auth.BardAuthorizationProviderService) {// beans here
-        crowdClient = ref('crowdClient')
-        grailsApplication = application
+        bardAuthorizationProviderService(bard.auth.BardAuthorizationProviderService) {
+            delegate = ref('crowdAuthenticationProviderService')
+        }
     }
 
-    //if production then eliminate the mock user because it is a security hole in production
+    if(!useCrowd || Environment.current != Environment.PRODUCTION) {
+        inMemMapAuthenticationProviderService(InMemMapAuthenticationProviderService) {
+            // grailsApplication = application
+        }
+    }
 
-    switch (Environment.current) {
-        case Environment.PRODUCTION:
-            //don't use in memory map in production
-            userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService) {
-                crowdAuthenticationProviders = [ref('bardAuthorizationProviderService'), ref('personaAuthenticationProvider')]
-            }
-            break
-        default:
-            inMemMapAuthenticationProviderService(InMemMapAuthenticationProviderService) {
-                grailsApplication = application
-            }
-            userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService) {
-                crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('bardAuthorizationProviderService'), ref('personaAuthenticationProvider')]
-            }
+    userDetailsService(BardUserDetailsService) {
     }
 
     capPermissionService(CapPermissionService) {
@@ -108,6 +109,9 @@ beans = {
         springSecurityService = ref("springSecurityService")
     }
 
+//    def extOntologyFactory = externalOntologyFactory(bard.validation.ext.RegisteringExternalOntologyFactory) { bean ->
+//        bean.factoryMethod = "getInstance"
+//    }
 
     // from web-client
     String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url

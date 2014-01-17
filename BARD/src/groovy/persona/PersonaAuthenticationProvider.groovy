@@ -5,26 +5,28 @@ package persona
  * and modified slightly for BARD
  *
  */
-import bard.auth.BardAuthorizationProviderService
 import bard.db.people.Person
-import bard.db.people.Role
-import org.broadinstitute.cbip.crowd.CbipUser
-import org.broadinstitute.cbip.crowd.Email
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException
+import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import util.BardUser
+import util.Email
 
-public class PersonaAuthenticationProvider extends BardAuthorizationProviderService {
+public class PersonaAuthenticationProvider implements AuthenticationProvider {
 
     OnlinePersonaVerifyer onlinePersonaVerifyer;
 
     public PersonaAuthenticationProvider() {
 
+    }
+
+    @Override
+    public boolean supports(Class<? extends Object> authentication) {
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 
     @Override
@@ -88,21 +90,5 @@ public class PersonaAuthenticationProvider extends BardAuthorizationProviderServ
         } catch (Exception ee) {
             throw new UsernameNotFoundException(ee.getMessage());
         }
-    }
-
-    List<CbipUser> findUsersInGroup(String group) {
-        return []  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    List<GrantedAuthority> getNamesOfGroupsForUser(String userName) {
-        return []//To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    List<CbipUser> getUsersOfGroup(String groupName) {
-        return [] //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    boolean isUserDirectGroupMember(String username, String groupName) {
-        return false  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
