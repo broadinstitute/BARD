@@ -1,66 +1,52 @@
 <!DOCTYPE html>
+<g:render template="/layouts/templates/handleOldBrowsers"/>
 <html>
 <head>
-    <r:require modules="core,bootstrap,bootstrapplus,card"/>
-    <meta name="layout" content="basic"/>
-    <title>CAP-Login</title>
-    <r:script>
-
+    <title>BioAssay Research Database</title>
+    <r:require modules="core,bootstrap,login"/>
+    <r:script disposition='head'>
+        window.bardAppContext = "${request.contextPath}";
     </r:script>
+    <r:layoutResources/>
 </head>
 
 <body>
+<div class="container">
 
-	<div class="row-fluid">
-	    <div class="span12">
-	    	<div class="hero-unit-v1" style="text-align:center;">
-	        	<h3>Welcome to CAP - Catalog of Assay Protocols</h3>
-	        </div>
-	    </div>
-	</div>
+    <div>
+        <a class="brand" href="${request.contextPath}">
+            <img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database"/>
+        </a>
+    </div>
+    <br/>
 
-	<g:if test="${flash.message}">
-	    <div class="row-fluid">
-		    <div class="span12">
-		        <div class="ui-widget">
-		            <div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
-		                <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-		                    <strong>${flash.message}</strong>
-		            </div>
-		        </div>
-		    </div>
-	    </div>
-    </g:if>
+    <p>
+        <span class="brand">BARD</span> <strong>offers a convenient way to sign in or create an account.</strong> By
+        signing into BARD with Persona, a BARD account will automatically be created if you do not already have a
+        BARD account.
+    </p>
 
-	<div class="row-fluid">
-		<div class="span4 offset4">
-			<div class="bs-docs" style="padding: 20px 20px 20px; width: 400px;">
-				<form class="form-horizontal" action='${postUrl}' method='POST' id='loginForm' autocomplete='off'>
-					<legend>Login:</legend>
-					<div class="control-group">
-		    			<label class="control-label" for="username"><g:message code="springSecurity.login.username.label"/>:</label>
-		    			<div class="controls">
-		      				<input type="text" name='j_username' id='username' placeholder="Username" autofocus="true">
-		    			</div>
-		  			</div>
+    <p>
+        By logging in, you accept BARD's
+        <g:link controller="about" action="termsOfUse" target="_blank">Terms</g:link> and
+        <g:link controller="about" action="privacyPolicy" target="_blank">Privacy Policy</g:link>.
 
-		  			<div class="control-group">
-		    			<label class="control-label" for="password"><g:message code="springSecurity.login.password.label"/>:</label>
-		    			<div class="controls">
-		      				<input type="password" name='j_password' id='password' placeholder="Password">
-		    			</div>
-		  			</div>
+    </p>
 
-		  			<div class="control-group">
-		    			<div class="controls">
-		    				<label class="checkbox">
-        						<input type="checkbox" name='${rememberMeParameter}' id='remember_me' <g:if test='${hasCookie}'>checked='checked'</g:if>> Remember me
-     	 					</label>
-		    			</div>
-	  				</div>
-				</form>
-			</div>
-		</div>
-	</div>
+    <a class="btn btn-medium btn-info persona-button persona-orange" title="Sign in with your email"
+       id='signin'><img src="${resource(dir: 'images', file: 'email_sign_in_blue.png')}"
+                        alt="Sign in with your Email"/></a>
+    <br/>
+    <br/>
+
+    <div class="btnMessage"><a href="https://login.persona.org/about"
+                               target="_blank">Mozilla Persona</a> is a simple sign-in system from the non-profit behind Firefox
+    </div>
+</div>
+
+
+
+<r:layoutResources/>
+
 </body>
 </html>

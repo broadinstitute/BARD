@@ -22,9 +22,6 @@ import org.springframework.web.client.RestTemplate
 import persona.OnlinePersonaVerifyer
 import persona.PersonaAuthenticationFilter
 import persona.PersonaAuthenticationProvider
-import org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService
-
-def useCrowd = true;
 
 // Place your Spring DSL code here
 beans = {
@@ -84,21 +81,7 @@ beans = {
         ]
     }
 
-    if(useCrowd) {
-        crowdAuthenticationProviderService(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {
-            crowdClient = ref('crowdClient')
-            grailsApplication = application
-        }
-
-        bardAuthorizationProviderService(bard.auth.BardAuthorizationProviderService) {
-            delegate = ref('crowdAuthenticationProviderService')
-        }
-    }
-
-    if(!useCrowd || Environment.current != Environment.PRODUCTION) {
-        inMemMapAuthenticationProviderService(InMemMapAuthenticationProviderService) {
-            // grailsApplication = application
-        }
+    inMemMapAuthenticationProviderService(InMemMapAuthenticationProviderService) {
     }
 
     userDetailsService(BardUserDetailsService) {
@@ -108,10 +91,6 @@ beans = {
         aclUtilService = ref("aclUtilService")
         springSecurityService = ref("springSecurityService")
     }
-
-//    def extOntologyFactory = externalOntologyFactory(bard.validation.ext.RegisteringExternalOntologyFactory) { bean ->
-//        bean.factoryMethod = "getInstance"
-//    }
 
     // from web-client
     String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url

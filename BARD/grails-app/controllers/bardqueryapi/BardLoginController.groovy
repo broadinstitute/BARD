@@ -53,7 +53,7 @@ class BardLoginController {
         String view = mobileService.detect(request) ? "/mobile${AUTH_VIEW}" : AUTH_VIEW
 
         String postUrl = "${request.contextPath}${config.apf.filterProcessesUrl}"
-        render template: view, model: [postUrl: postUrl,
+        render view: view, model: [postUrl: postUrl,
                 rememberMeParameter: config.rememberMe.parameter]
     }
 
