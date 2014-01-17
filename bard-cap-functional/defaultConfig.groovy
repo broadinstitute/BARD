@@ -7,3 +7,5 @@ mockUsers {
 	}
 }
 server.url=System.properties.getProperty('server.url') ?: "http://localhost:8080/BARD/"
+
+dbInfoMap=[url:"changeme", username:"changeme", password:"changeme", driver:"oracle.jdbc.OracleDriver"]

@@ -28,7 +28,4 @@ class Constants {
 	final static def documentHeader = [Description:"description",Protocol:"protocol",Comment:"comment",Publication:"publication",Urls:"urls",Other:"other"]
 	final static def documentType = [Description:"description",Protocol:"protocol",Comment:"comments",Publication:"publication",Urls:"external url",Other:"other"]
 
-	//Database instances strings
-	final static def devDatasource = [url:"jdbc:oracle:thin:@barddev:1521:barddev", username:"bard_dev", password:"prEWr9safra8ahu", driver:"oracle.jdbc.OracleDriver"]
-	final static def qaDatasource = [url:"jdbc:oracle:thin:@barddev:1521:barddev", username:"bard_qa_cap", password:"Ze3eqe2T", driver:"oracle.jdbc.OracleDriver"]
 }
