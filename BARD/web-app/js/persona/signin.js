@@ -4,31 +4,6 @@ $(document).ready(function () {
 
     var href = window.location.href;
 
-
-    var signinLink = document.getElementById('signin');
-
-    if (signinLink) {
-        if (href.match("^https")) {
-            signinLink.onclick = function () {
-                navigator.id.request({
-                    siteName: 'BioActivity Research Database',
-                    siteLogo: bardAppContext + '/images/bard_logo_small.png',   //requires https
-                    termsOfService: bardAppContext + '/about/termsOfUse', //requires https
-                    privacyPolicy: bardAppContext + '/about/privacyPolicy', //requires https
-                    returnTo: bardAppContext + '/bardWebInterface'
-
-                });
-            };
-        } else {
-            signinLink.onclick = function () {
-                navigator.id.request({
-                    siteName: 'BioActivity Research Database'
-                });
-            };
-        }
-
-    }
-
     var signoutLink = document.getElementById('logoutButton');
     if (signoutLink) {
         signoutLink.onclick = function () {
@@ -49,7 +24,14 @@ $(document).ready(function () {
                 data: {assertion: assertion},
                 success: function (res, status, xhr) {
                     sessionStorage['currentUser'] = res;
-                    window.location.reload();
+
+                    var returnToUrl = $("#returnToUrl").val();
+                    if(returnToUrl) {
+                        // redirect browser to the page we logged in from
+                        window.location.pathname = returnToUrl;
+                    } else {
+                        window.location.reload();
+                    }
                 },
                 error: function (xhr, status, err) {
                     navigator.id.logout();

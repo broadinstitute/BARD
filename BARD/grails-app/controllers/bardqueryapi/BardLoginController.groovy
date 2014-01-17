@@ -42,7 +42,6 @@ class BardLoginController {
      * Show the login page.
      */
     def auth = {
-
         def config = SpringSecurityUtils.securityConfig
 
         if (springSecurityService.isLoggedIn()) {
@@ -54,7 +53,8 @@ class BardLoginController {
 
         String postUrl = "${request.contextPath}${config.apf.filterProcessesUrl}"
         render view: view, model: [postUrl: postUrl,
-                rememberMeParameter: config.rememberMe.parameter]
+                rememberMeParameter: config.rememberMe.parameter,
+                returnToUrl: params.returnToUrl]
     }
 
     /**
