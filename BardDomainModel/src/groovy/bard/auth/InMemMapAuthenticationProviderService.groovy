@@ -2,6 +2,7 @@ package bard.auth
 
 import bard.db.people.Role
 import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
+import org.springframework.beans.factory.InitializingBean
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -12,7 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import util.BardUser
 import util.Email
 
-class InMemMapAuthenticationProviderService implements AuthenticationProvider, GrailsApplicationAware {
+class InMemMapAuthenticationProviderService implements AuthenticationProvider, GrailsApplicationAware, InitializingBean {
     /**
      * the Config object representing the  CbipCrowd config
      */
@@ -21,12 +22,25 @@ class InMemMapAuthenticationProviderService implements AuthenticationProvider, G
     private Map<String, UserDetails> mockUserMap = [:]
 
     private def initializeUserMap() {
-        this.config.CbipCrowd?.mockUsers?.each {user ->
-            Map userProps = user.value
+        List users = []
 
-            assert userProps.username, "we're really expecting a username here! Please review the CbipCrowd section of Config.groovy"
-            assert userProps.password, "we're really expecting a password here! Please review the CbipCrowd section of Config.groovy"
-            assert userProps.roles, "we're really expecting a roles list here! Please review the CbipCrowd section of Config.groovy"
+        // try using the original name because we have lots of old config files that
+        // refer to local users with this name.
+        if(this.config.CbipCrowd?.mockUsers)  {
+            this.config.CbipCrowd?.mockUsers.each {user ->
+                users << user.value
+            }
+        }
+
+        if(this.config.localUsers) {
+            users.addAll(this.config.localUsers)
+        }
+
+        users.each {userProps ->
+
+            assert userProps.username, "we're really expecting a username here! Please review the localUsers section of Config.groovy"
+            assert userProps.password, "we're really expecting a password here! Please review the localUsers section of Config.groovy"
+            assert userProps.roles, "we're really expecting a roles list here! Please review the localUsers section of Config.groovy"
 
             final List<GrantedAuthority> grantedAuthorities = userProps.roles.collect {role -> new Role(authority: role, displayName: role)}
             mockUserMap.put(userProps.username, new BardUser(username: userProps.username,
@@ -85,7 +99,10 @@ class InMemMapAuthenticationProviderService implements AuthenticationProvider, G
     @Override
     void setGrailsApplication(org.codehaus.groovy.grails.commons.GrailsApplication grailsApplication) {
         this.config = grailsApplication.config
-        initializeUserMap()
     }
 
+    @Override
+    void afterPropertiesSet() throws Exception {
+        initializeUserMap()
+    }
 }

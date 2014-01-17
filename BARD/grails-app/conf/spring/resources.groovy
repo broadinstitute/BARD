@@ -82,9 +82,11 @@ beans = {
     }
 
     inMemMapAuthenticationProviderService(InMemMapAuthenticationProviderService) {
+        grailsApplication = application
     }
 
     userDetailsService(BardUserDetailsService) {
+        inMemMapAuthenticationProviderService = ref('inMemMapAuthenticationProviderService')
     }
 
     capPermissionService(CapPermissionService) {

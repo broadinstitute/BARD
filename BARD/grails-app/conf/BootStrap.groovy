@@ -95,13 +95,6 @@ class BootStrap {
         authenticationExpressionFilter.activateOptions()
         excludeFilters.add(authenticationExpressionFilter)
 
-        //exclude authorization errors
-        ExpressionFilter bardAuthorizationFilter = new ExpressionFilter()
-        bardAuthorizationFilter.expression = "EXCEPTION ~= bard.auth.BardAuthorizationProviderService"
-        bardAuthorizationFilter.acceptOnMatch = false
-        bardAuthorizationFilter.activateOptions()
-        excludeFilters.add(bardAuthorizationFilter)
-
         //exclude access denied errors
         ExpressionFilter accessDeniedFilter = new ExpressionFilter()
         accessDeniedFilter.expression = "EXCEPTION ~= org.springframework.security.access.AccessDeniedException"

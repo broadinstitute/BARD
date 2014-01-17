@@ -1,6 +1,7 @@
 package bard.auth
 
 import bard.db.people.Person
+import grails.util.Environment
 import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUserDetailsService
 import org.springframework.dao.DataAccessException
 import org.springframework.security.authentication.AuthenticationProvider
@@ -20,13 +21,31 @@ import util.Email
  * To change this template use File | Settings | File Templates.
  */
 class BardUserDetailsService implements GrailsUserDetailsService {
+    InMemMapAuthenticationProviderService inMemMapAuthenticationProviderService
+
     UserDetails loadUserByUsername(String username, boolean loadRoles) throws UsernameNotFoundException, DataAccessException {
         return loadUserByUsername(username)
     }
 
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
-        Person person = Person.findByUserNameIlike(username);
-        return new BardUser(username: person.userName, fullName: person.fullName, email: new Email(person.emailAddress), isActive: true,
-                authorities: person.roles);
+        BardUser user;
+
+        if(inMemMapAuthenticationProviderService != null) {
+            user = inMemMapAuthenticationProviderService.findByUserName(username)
+        }
+
+        if(user == null) {
+            Person person = Person.findByUserNameIlike(username);
+            if(person != null) {
+                user = new BardUser(username: person.userName, fullName: person.fullName, email: new Email(person.emailAddress), isActive: true,
+                        authorities: person.roles);
+            }
+        }
+
+        if (user == null) {
+            throw new UsernameNotFoundException("Could not find user with username ${username}");
+        }
+
+        return user;
     }
 }
