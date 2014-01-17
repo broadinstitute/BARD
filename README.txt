@@ -1,1 +1,0 @@
-To browse the data model click the Wiki link above
