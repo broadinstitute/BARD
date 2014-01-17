@@ -2,16 +2,15 @@ package bard.auth
 
 import bard.db.people.Person
 import bard.db.people.Role
-import org.springframework.security.authentication.AuthenticationProvider
+import org.broadinstitute.cbip.crowd.CbipUser
+import org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import util.BardUser
 
-class BardAuthorizationProviderService implements AuthenticationProvider {
-    AuthenticationProvider delegate;
-
+class BardAuthorizationProviderService extends CrowdAuthenticationProviderService {
     /**
      *
      * @param authentication
@@ -20,13 +19,14 @@ class BardAuthorizationProviderService implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) {
         try {
-            UsernamePasswordAuthenticationToken authenticate = (UsernamePasswordAuthenticationToken) delegate.authenticate(authentication);
+            //get the authenticated user from crowd
+            UsernamePasswordAuthenticationToken authenticate = (UsernamePasswordAuthenticationToken) super.authenticate(authentication)
             final Object principal = authenticate.principal
             BardUser bardUser = null
-            if (principal instanceof BardUser || principal == null) {
+            if (principal instanceof CbipUser) {
+                bardUser = new BardUser((CbipUser) principal)
+            } else {//it must be a BardUser
                 bardUser = (BardUser) principal
-            } else {
-                bardUser = new BardUser(principal)
             }
 
             def credentials = authenticate.credentials
@@ -36,12 +36,12 @@ class BardAuthorizationProviderService implements AuthenticationProvider {
             log.error(ee,ee)
             throw ee
         }
-    }
 
-    boolean supports(Class<? extends Object> aClass) {
-        return delegate.supports(aClass);
     }
-
+    /**
+     *
+     * @param bardUser
+     */
     public void addRolesFromDatabase(final BardUser bardUser) {
 
         final String userName = bardUser.username
@@ -56,4 +56,52 @@ class BardAuthorizationProviderService implements AuthenticationProvider {
             }
         }
      }
+    /**
+     *
+     * @param userName
+     * @return
+     * @throws UsernameNotFoundException
+     */
+    @Override
+    public BardUser findByUserName(String userName) throws UsernameNotFoundException {
+        try {
+            final Object user = super.findByUserName(userName)
+            BardUser bardUser = null
+            if(user instanceof CbipUser){
+                bardUser = new BardUser((CbipUser)user)
+            }
+            else if(user instanceof BardUser){
+                bardUser = (BardUser)user
+            }
+            addRolesFromDatabase(bardUser)
+            return bardUser
+        } catch (Exception ee) {
+            log.error(ee,ee)
+            throw new UsernameNotFoundException(ee.getMessage());
+        }
+    }
+
+    /**
+     * Get the names of the CAP supported roles that this user belongs to
+     * @param userName
+     * @return {@link List} of {@GrantedAuthority}
+     */
+    @Override
+    List<GrantedAuthority> getNamesOfGroupsForUser(String userName) {
+
+        return []
+    }
+
+    /**
+     *
+     * @param username
+     * @param groupName
+     * @return true if this user is a direct member of this group
+     */
+    @Override
+    boolean isUserDirectGroupMember(String username, String groupName) {
+
+        return false
+    }
+
 }

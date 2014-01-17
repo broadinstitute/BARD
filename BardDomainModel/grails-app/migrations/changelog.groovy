@@ -69,7 +69,6 @@ databaseChangeLog = {
 
     // do last
 
-    include file: 'load-reference-data.groovy'
     include file: 'manage-audit-procedures.groovy'
     include file: 'manage-stored-procedures.groovy'
     include file: 'manage-names-pkg.groovy'

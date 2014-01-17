@@ -1,8 +1,8 @@
 package bard.auth
 
 import bard.db.people.Role
-import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
-import org.springframework.security.authentication.AuthenticationProvider
+import org.broadinstitute.cbip.crowd.AbstractCrowdAuthenticationProviderService
+import org.broadinstitute.cbip.crowd.Email
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -10,14 +10,8 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import util.BardUser
-import util.Email
 
-class InMemMapAuthenticationProviderService implements AuthenticationProvider, GrailsApplicationAware {
-    /**
-     * the Config object representing the  CbipCrowd config
-     */
-    protected ConfigObject config
-
+class InMemMapAuthenticationProviderService extends AbstractCrowdAuthenticationProviderService {
     private Map<String, UserDetails> mockUserMap = [:]
 
     private def initializeUserMap() {
@@ -70,6 +64,7 @@ class InMemMapAuthenticationProviderService implements AuthenticationProvider, G
         return null // returning null to allow another authenticationProvider a chance
     }
 
+    @Override
     public BardUser findByUserName(String userName) throws UsernameNotFoundException {
         def bardUser = this.mockUserMap.get(userName)
         if (bardUser) {
@@ -78,14 +73,40 @@ class InMemMapAuthenticationProviderService implements AuthenticationProvider, G
         throw new UsernameNotFoundException("Mock username ${userName} not found");
     }
 
+    @Override
+    List<BardUser> findUsersInGroup(String group) {
+        GrantedAuthority groupWithPrefixedRole = toApplicationRole(group)
+        return this.mockUserMap.findAll {String username, BardUser user ->
+            // user can have multiple roles, so if any match the group return the user
+            user.authorities.find {authority -> authority == groupWithPrefixedRole }
+        }
+        .values() as List
+
+    }
+
+    @Override
+    List<GrantedAuthority> getNamesOfGroupsForUser(String userName) {
+        return this.mockUserMap.get(userName)?.authorities ?: []
+    }
+
+    @Override
+    List<BardUser> getUsersOfGroup(String groupName) {
+        return findUsersInGroup(groupName)
+    }
+
+    @Override
+    boolean isUserDirectGroupMember(String username, String groupName) {
+        GrantedAuthority groupWithPrefixedRole = toApplicationRole(groupName)
+        return findByUserName(username)?.authorities?.find {authority -> authority == groupWithPrefixedRole }
+    }
+
     /**
      * have the grailsApplication set by the spring context and initialize the
      * @param grailsApplication
      */
     @Override
     void setGrailsApplication(org.codehaus.groovy.grails.commons.GrailsApplication grailsApplication) {
-        this.config = grailsApplication.config
+        super.setGrailsApplication(grailsApplication)
         initializeUserMap()
     }
-
 }

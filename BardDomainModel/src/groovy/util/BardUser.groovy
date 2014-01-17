@@ -1,8 +1,13 @@
 package util
 
+import bard.db.people.Person
+import bard.db.people.Role
+import grails.plugins.springsecurity.SpringSecurityService
+import org.broadinstitute.cbip.crowd.CbipUser
+import org.broadinstitute.cbip.crowd.Email
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.userdetails.UserDetails
-
+import org.springframework.security.core.authority.GrantedAuthorityImpl
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,67 +16,24 @@ import org.springframework.security.core.userdetails.UserDetails
  * Time: 10:35 AM
  * To change this template use File | Settings | File Templates.
  */
-class BardUser implements UserDetails {
-
-    Email email
-    Collection<GrantedAuthority> authorities;
-    String fullName;
-    boolean isActive;
-    String username;
-    String password;
+class BardUser extends CbipUser {
 
     BardUser() {
 
     }
 
-    boolean isAccountNonExpired() {
-        return isActive;
+    public BardUser(CbipUser cbipUser) {
+        this.email = cbipUser.email;
+        this.fullName = cbipUser.fullName
+        this.authorities = cbipUser.authorities;
+        this.isActive = cbipUser.isActive;
+        this.username = cbipUser.username;
     }
-
-    boolean isAccountNonLocked() {
-        return isActive;
-    }
-
-    boolean isCredentialsNonExpired() {
-        return isActive;
-    }
-
-    boolean isEnabled() {
-        return isActive;
-    }
-
-    public BardUser(def user) {
-        if(user instanceof Map) {
-            this.metaClass.setProperties(this, user)
-            return
-        }
-
-        // use duck typing to work with CbipUser instances as well as Person instances
-        // not entirely sure what/how this is used.  May want to figure that out at some point.
-        if(user.metaClass.hasProperty(user, "email")) {
-            this.email = new Email(email: user.email.email);
-        } else if(user.metaClass.hasProperty(user, "emailAddress")) {
-            this.email = new Email(email: user.emailAddress)
-        }
-
-        this.fullName = user.fullName
-
-        if(user.metaClass.hasProperty(user, "authorities")) {
-            this.authorities = user.authorities;
-        } else if(user.metaClass.hasProperty(user, "roles")) {
-            this.authorities = user.roles;
-        }
-
-        if(user.metaClass.hasProperty(user, "isActive")) {
-            this.isActive = user.isActive;
-        } else if(user.metaClass.respondsTo(user, "isAccountLocked")) {
-            this.isActive = user.isAccountLocked()?false:true
-        }
-
-        if(user.metaClass.hasProperty("username")) {
-            this.username = user.username;
-        } else if(user.metaClass.hasProperty("userName")) {
-            this.username = person.userName
-        }
-    }
+    public BardUser(Person person){
+        this.email = new Email(email:person.emailAddress)
+        this.fullName = person.fullName
+        this.authorities = person.roles
+        this.isActive = person.isAccountLocked()?false:true
+        this.username = person.userName
+     }
 }

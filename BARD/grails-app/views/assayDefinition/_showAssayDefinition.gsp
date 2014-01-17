@@ -279,7 +279,7 @@
 
     <div class="row-fluid">
         <g:render template="showExperiments"
-                  model="['assay': assayInstance, 'experimentsActiveVsTested': experimentsActiveVsTested, 'maxNumProjectsInExperiments': assayInstance.getMaxNumProjectsInExperiments()]"/>
+                  model="['assay': assayInstance, 'experimentsActiveVsTested': experimentsActiveVsTested]"/>
     </div>
     <section id="experimental-variables-header">
 
