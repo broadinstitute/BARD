@@ -82,7 +82,7 @@ class BardLoginController {
      */
     def full = {
         def config = SpringSecurityUtils.securityConfig
-        render template: AUTH_VIEW, params: params,
+        render view: AUTH_VIEW, params: params,
                 model: [hasCookie: authenticationTrustResolver.isRememberMe(SCH.context?.authentication),
                         postUrl: "${request.contextPath}${config.apf.filterProcessesUrl}"]
     }
