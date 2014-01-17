@@ -31,7 +31,11 @@ class BardUserDetailsService implements GrailsUserDetailsService {
         BardUser user;
 
         if(inMemMapAuthenticationProviderService != null) {
-            user = inMemMapAuthenticationProviderService.findByUserName(username)
+            try {
+                user = inMemMapAuthenticationProviderService.findByUserName(username)
+            } catch (UsernameNotFoundException ex) {
+                // if no user found keep going
+            }
         }
 
         if(user == null) {
