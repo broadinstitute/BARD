@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate
 import persona.OnlinePersonaVerifyer
 import persona.PersonaAuthenticationFilter
 import persona.PersonaAuthenticationProvider
+import org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService
 
 def useCrowd = true;
 
