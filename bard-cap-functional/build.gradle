@@ -1,0 +1,80 @@
+apply plugin: "groovy"
+apply plugin: "idea"
+apply plugin: "wrapper"
+
+repositories {
+    //mavenCentral()
+    maven {
+        url "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
+    }
+}
+
+configurations {
+    compile.transitive = true
+    testCompile.transitive = true
+}
+def seleniumVersion = "2.39.0"
+
+dependencies {
+    compile "org.codehaus.groovy:groovy-all:2.0.7"
+
+    compile 'com.oracle:ojdbc6:11.2.0.2.0'
+    compile 'com.jolbox:bonecp:0.8.0.RELEASE'
+    compile "org.apache.commons:commons-lang3:3.1"
+
+    compile "com.github.detro.ghostdriver:phantomjsdriver:1.0.4"
+    // Need a driver implementation
+    compile "org.seleniumhq.selenium:selenium-java:${seleniumVersion}"
+    compile "org.seleniumhq.selenium:selenium-chrome-driver:${seleniumVersion}"
+    compile "org.seleniumhq.selenium:selenium-firefox-driver:${seleniumVersion}"
+    compile "org.seleniumhq.selenium:selenium-ie-driver:${seleniumVersion}"
+    compile "org.seleniumhq.selenium:selenium-support:${seleniumVersion}"
+    compile "xml-apis:xml-apis:1.4.01"
+
+    compile "org.gebish:geb-spock:0.9.2"
+    testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
+    testCompile "junit:junit:4.11"
+}
+
+tasks.withType(Test) {
+    //maxParallelForks = 4
+    maxParallelForks = Runtime.runtime.availableProcessors() / 2
+    systemProperties = System.getProperties()
+    outputs.upToDateWhen { false }
+    testLogging {
+        events "started", "skipped", "passed", "failed"
+        exceptionFormat "full"
+    }
+}
+
+/**
+ * include a subset of tests and methods while we look at options for performance tuning
+ */
+task quickTest(type: Test, dependsOn: testClasses) {
+    filter {
+
+        includeTestsMatching 'scenarios.AssayDocumentSpec.Test Add*'
+        includeTestsMatching 'scenarios.ExperimentDocumentSpec.Test Add*'
+        includeTestsMatching 'scenarios.ProjectDocumentSpec.Test Add*'
+
+        includeTestsMatching 'scenarios.AssaySummarySpec.*New*'
+        includeTestsMatching 'scenarios.ExperimentSummarySpec.*New*'
+        includeTestsMatching 'scenarios.ProjectSummarySpec.*New*'
+
+        includeTestsMatching 'scenarios.PanelSpec.*New*'
+
+    }
+}
+task smokeTest(type: Test, dependsOn: testClasses) {
+    filter {
+        includeTestsMatching 'scenarios.PanelSpec.*New*'
+    }
+}
+
+task(console, dependsOn: "classes", type: JavaExec) {
+    main = "groovy.ui.Console"
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+//todo write task to download standalone jar
+//http://selenium.googlecode.com/files/selenium-server-standalone-2.39.0.jar
