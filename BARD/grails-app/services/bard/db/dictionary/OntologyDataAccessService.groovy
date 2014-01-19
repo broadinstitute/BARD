@@ -24,7 +24,8 @@ class OntologyDataAccessService {
 
     ExternalOntologyFactory externalOntologyFactory
 
-    protected static final Properties EXTERNAL_ONTOLOGY_PROPERTIES = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'default@bard.nih.gov'])
+    protected static
+    final Properties EXTERNAL_ONTOLOGY_PROPERTIES = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'default@bard.nih.gov'])
 
     /**
      * for like query using single backslash as the escape char, as a literal here needs to be escaped itself
@@ -43,7 +44,10 @@ class OntologyDataAccessService {
         this.computeTrees(true)
     }
 
-    public void addChildren(final Element element, final Collection<ElementSummary> results, final Set<Element> seen, final Map<Element, List<ElementHierarchy>> parentToChildren) {
+    public void addChildren(
+            final Element element,
+            final Collection<ElementSummary> results,
+            final Set<Element> seen, final Map<Element, List<ElementHierarchy>> parentToChildren) {
         if (!seen.contains(element)) {
             seen.add(element)
 
@@ -216,7 +220,7 @@ class OntologyDataAccessService {
             """)
             query.addEntity(BardDescriptor)
             query.setLong("ancestorElementId", elementId)
-            query.setParameterList("allowedExpectedValueTypes", [ExpectedValueType.NONE.id, ExpectedValueType.ELEMENT.id])
+            query.setParameterList("allowedExpectedValueTypes", [ExpectedValueType.NONE.id, ExpectedValueType.ELEMENT.id, ExpectedValueType.NUMERIC.id])
             query.setString('elementStatus', ElementStatus.Retired.name())
             query.setReadOnly(true)
             results = query.list()
@@ -282,7 +286,7 @@ class OntologyDataAccessService {
             log.warn("Exception when calling externalOntology.findMatching(${term}) with externalUrl: $externalUrl")
             throw e
         }
-        externalItems.sort(true) { ExternalItem a, ExternalItem b -> a.display?.toLowerCase() <=> b.display?.toLowerCase() }
+        externalItems.sort(true) { ExternalItem a, ExternalItem b -> a.display?.toLowerCase()<=>b.display?.toLowerCase() }
     }
 
     /**
