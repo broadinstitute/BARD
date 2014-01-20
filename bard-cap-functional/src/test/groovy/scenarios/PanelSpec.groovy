@@ -1,11 +1,13 @@
 package test.groovy.scenarios
 
-import main.groovy.common.TestData;
-import main.groovy.db.Panel;
-import main.groovy.pages.CreatePanelPage;
-import main.groovy.pages.MyPanelPage;
-import main.groovy.pages.ViewPanelPage;
-import test.groovy.base.BardFunctionalSpec;
+import main.groovy.common.Constants
+import main.groovy.common.TestData
+import main.groovy.db.Panel
+import main.groovy.pages.CreatePanelPage
+import main.groovy.pages.MyPanelPage
+import main.groovy.pages.PanelAddAssayPage
+import main.groovy.pages.ViewPanelPage
+import test.groovy.base.BardFunctionalSpec
 
 
 /**

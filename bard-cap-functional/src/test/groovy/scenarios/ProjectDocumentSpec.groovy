@@ -20,7 +20,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		logInSomeUser()
 	}
 
-	def "Test Add #TestName Document in Project"(){
+	def "Test Add and Delete #TestName Document in Project"(){
 		given:"Navigate to Show Project page"
 		to ViewProjectDefinitionPage
 		
@@ -59,7 +59,6 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
 			deleteDocument(documentHeaders(docHeader), testData.documentName)
 		}
-		assert !isDocument(documentHeaders(docHeader), testData.documentName)
 		
 		where:
 		TestName		| docHeader								| docType								| testData
@@ -165,7 +164,6 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		while(isDocument(documentHeaders(docHeader), testData.documentName+Constants.edited)){
 			deleteDocument(documentHeaders(docHeader), testData.documentName+Constants.edited)
 		}
-		assert !isDocument(documentHeaders(docHeader), testData.documentName+Constants.edited)
 		
 		where:
 		TestName		| docHeader								| docType								| testData
@@ -229,7 +227,6 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		while(isDocument(documentHeaders(docHeader), testData.documentName)){
 			deleteDocument(documentHeaders(docHeader), testData.documentName)
 		}
-		assert !isDocument(documentHeaders(docHeader), testData.documentName)
 		
 		where:
 		

@@ -1,9 +1,12 @@
 package test.groovy.scenarios
 
-import main.groovy.common.TestData;
-import main.groovy.pages.ContextItemPage;
-import main.groovy.pages.EditContextPage;
-import main.groovy.pages.ViewAssayDefinitionPage;
+import main.groovy.common.Constants
+import main.groovy.common.TestData
+import main.groovy.db.Assay
+import main.groovy.pages.ContextItemPage
+import main.groovy.pages.EditContextPage
+import main.groovy.pages.ViewAssayDefinitionPage
+
 import spock.lang.Unroll
 import test.groovy.base.BardFunctionalSpec
 

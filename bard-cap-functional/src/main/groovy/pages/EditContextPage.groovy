@@ -1,13 +1,18 @@
 package main.groovy.pages
 
+import main.groovy.common.Constants
+import main.groovy.modules.AddContextCardModule
+import main.groovy.modules.ButtonsModule
+import main.groovy.modules.CardsHolderModule
+import main.groovy.modules.LoadingModule
+
 /**
  * @author Muhammad.Rafique
  * Date Created: 2013/02/07
  */
 class EditContextPage extends CapScaffoldPage{
-//	final static SLEEP_INTERVAL = 2000
 	static url=""
-	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { $("h4").text().contains("Edit") }
+	static at = { waitFor { $("h4").text().contains("Edit") }
 	}
 	def itemName
 	static content = {

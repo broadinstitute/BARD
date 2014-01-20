@@ -1,4 +1,4 @@
-package db
+package main.groovy.db
 
 /**
  * This class includes all the database query functions to fetch data from database for experiments.

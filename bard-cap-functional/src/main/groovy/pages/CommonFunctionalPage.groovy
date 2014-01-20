@@ -1,21 +1,20 @@
 package main.groovy.pages
 
-import main.groovy.common.Constants;
-import main.groovy.common.Constants.NavigateTo;
-import main.groovy.modules.BardCapHeaderModule;
-import main.groovy.modules.LoadingModule;
 import geb.Page
+import main.groovy.common.Constants.NavigateTo
+import main.groovy.modules.BardCapHeaderModule
+import main.groovy.modules.LoadingModule
 
 public class CommonFunctionalPage extends Page {
-	def seachADID = "Search by Assay Definition ID"
-	def seachADN = "Search by Assay Definition Name"
-	def seachPDN = "Search by Project Name"
-	def seachPDID = "Search by Project ID"
-	def createPD = "Create a New Project"
-	def capMenu = "CAP"
-	def ADMenu = "Assay Definitions"
-	def projectMenu = "Projects"
-	def webClientMenu = "Bard Web Client"
+//	def seachADID = "Search by Assay Definition ID"
+//	def seachADN = "Search by Assay Definition Name"
+//	def seachPDN = "Search by Project Name"
+//	def seachPDID = "Search by Project ID"
+//	def createPD = "Create a New Project"
+//	def capMenu = "CAP"
+//	def ADMenu = "Assay Definitions"
+//	def projectMenu = "Projects"
+//	def webClientMenu = "Bard Web Client"
 	
 	static url = ""
 	static at = {}
@@ -36,10 +35,10 @@ public class CommonFunctionalPage extends Page {
 	}
 
 	boolean ajaxRequestCompleted(){
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !formLoading.loading.displayed }
+		waitFor { !formLoading.loading.displayed }
 	}
 	
-	def navigateTo(NavigateTo to){
+	/*def navigateTo(NavigateTo to){
 		switch(to){
 			case NavigateTo.ASSAY_BY_ID:
 				navigation(ADMenu, seachADID)
@@ -55,7 +54,7 @@ public class CommonFunctionalPage extends Page {
 				break;
 
 		}
-	}
+	}*/
 
 	def navigation(def tabName, def menuName){
 		assert navigationMenu.menuTab(tabName)

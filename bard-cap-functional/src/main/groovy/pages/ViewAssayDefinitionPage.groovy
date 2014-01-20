@@ -1,6 +1,5 @@
 package main.groovy.pages
 
-import main.groovy.common.Constants
 import main.groovy.common.TestData
 
 /**
@@ -9,7 +8,7 @@ import main.groovy.common.TestData
  */
 class ViewAssayDefinitionPage extends CapScaffoldPage{
 	static url="assayDefinition/show/"+TestData.assayId
-	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){$("h4").text().contains("View Assay Definition")}}
+	static at = { waitFor {$("h4").text().contains("View Assay Definition")}}
 
 	static content = {
 		//		editAssayMeasureBtn { $("a.btn", text:"Edit Measures") } // Edit Measure btn

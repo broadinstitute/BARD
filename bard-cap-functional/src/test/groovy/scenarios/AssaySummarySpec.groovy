@@ -1,9 +1,11 @@
 package test.groovy.scenarios
 
-import main.groovy.common.TestData;
-import main.groovy.pages.CreateAssayPage;
-import main.groovy.pages.ViewAssayDefinitionPage;
-import test.groovy.base.BardFunctionalSpec;
+import main.groovy.common.Constants
+import main.groovy.common.TestData
+import main.groovy.db.Assay
+import main.groovy.pages.CreateAssayPage
+import main.groovy.pages.ViewAssayDefinitionPage
+import test.groovy.base.BardFunctionalSpec
 
 
 /**

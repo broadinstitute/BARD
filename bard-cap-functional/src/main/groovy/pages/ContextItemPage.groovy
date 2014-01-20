@@ -1,5 +1,13 @@
 package main.groovy.pages
 
+import main.groovy.common.Constants
+import main.groovy.modules.ButtonsModule
+import main.groovy.modules.CardsHolderModule
+import main.groovy.modules.ErrorInlineModule
+import main.groovy.modules.LoadingModule
+import main.groovy.modules.SelectChoicePopupModule
+import main.groovy.modules.SelectToDropModule
+
 
 /**
  * @author Muhammad.Rafique
@@ -7,7 +15,7 @@ package main.groovy.pages
  */
 class ContextItemPage extends CapScaffoldPage{
 	static url=""
-	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { $("h2").text().contains("Item") } }
+	static at = { waitFor { $("h2").text().contains("Item") } }
 	static content = {
 		cardTable{ contextTitle -> module CardsHolderModule, $("div.card.roundedBorder.card-table-container").find("table.table.table-hover"), contextCard:contextTitle }
 		formLoading { module LoadingModule}

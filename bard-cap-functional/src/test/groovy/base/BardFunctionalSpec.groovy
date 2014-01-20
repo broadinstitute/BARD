@@ -1,13 +1,12 @@
-package base
-
-import common.ConfigHelper
-import org.openqa.selenium.Dimension
-
-import java.sql.Date;
+package test.groovy.base
 
 import geb.spock.GebReportingSpec
-import pages.HomePage
-import pages.LoginPage
+import main.groovy.common.ConfigHelper
+import main.groovy.pages.HomePage
+import main.groovy.pages.LoginPage
+
+import org.openqa.selenium.Dimension
+
 import spock.lang.Shared
 /**
  * Created by GGTS.

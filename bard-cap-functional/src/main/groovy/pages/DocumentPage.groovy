@@ -11,7 +11,7 @@ import main.groovy.modules.ErrorInlineModule;
  */
 class DocumentPage extends CommonFunctionalPage{
 	static url=""
-	static at = { $("input#documentType") }
+	static at =  { waitFor{$("#documentType")} }
 
 	static content = {
 		documentName { $("#documentName") }

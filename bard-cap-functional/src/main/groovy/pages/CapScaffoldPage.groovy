@@ -1,11 +1,11 @@
 package main.groovy.pages
 
-import main.groovy.modules.CardsHolderModule;
-import main.groovy.modules.DocumentSectionModule;
-import main.groovy.modules.EditIconModule;
-import main.groovy.modules.EditableFormModule;
-import main.groovy.modules.ErrorInlineModule;
-import main.groovy.modules.SummaryModule;
+import main.groovy.modules.CardsHolderModule
+import main.groovy.modules.DocumentSectionModule
+import main.groovy.modules.EditIconModule
+import main.groovy.modules.EditableFormModule
+import main.groovy.modules.ErrorInlineModule
+import main.groovy.modules.SummaryModule
 
 
 /**
@@ -203,7 +203,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		if(isDocument(document, docName)){
 			assert document.documentContents(docName).iconTrash
 			withConfirm { document.documentContents(docName).iconTrash.click() }
-			ajaxRequestCompleted()
+//			ajaxRequestCompleted()
 		}
 	}
 

@@ -1,6 +1,6 @@
 package main.groovy.pages
 
-import main.groovy.common.TestData;
+import main.groovy.common.TestData
 import main.groovy.modules.EditIconModule
 import main.groovy.modules.SummaryModule
 

@@ -1,12 +1,12 @@
 package test.groovy.scenarios
 
-import main.groovy.common.TestData;
-import main.groovy.db.Experiment;
-import main.groovy.pages.ResultTypePage;
-import main.groovy.pages.ViewExperimentPage;
+import main.groovy.common.TestData
+import main.groovy.db.Experiment
+import main.groovy.pages.ResultTypePage
+import main.groovy.pages.ViewExperimentPage
 
 import spock.lang.Unroll
-import test.groovy.base.BardFunctionalSpec;
+import test.groovy.base.BardFunctionalSpec
 
 /**
  * This class includes all the possible test functions for result types of experiment.

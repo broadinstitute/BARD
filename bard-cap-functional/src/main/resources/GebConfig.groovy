@@ -1,4 +1,5 @@
-import common.ConfigHelper
+import main.groovy.common.ConfigHelper;
+
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.SystemUtils
 import org.openqa.selenium.chrome.ChromeDriver
@@ -29,7 +30,7 @@ environments {
         System.setProperty("webdriver.chrome.driver", "test/resources/chromedriver.exe")
         DesiredCapabilities capabilities = new DesiredCapabilities()
         capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"))
-        capabilities.setCapability("chrome.switches", Arrays.asList("--start-maximized"))
+//        capabilities.setCapability("chrome.switches", Arrays.asList("--start-maximized"))
         driver = { new ChromeDriver(capabilities) }
     }
 
