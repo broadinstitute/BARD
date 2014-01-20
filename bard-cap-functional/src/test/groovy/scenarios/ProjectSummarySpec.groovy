@@ -1,14 +1,12 @@
-package scenarios
+package test.groovy.scenarios
 
-import pages.CreateProjectPage
-import pages.HomePage
-import pages.ViewProjectDefinitionPage
-import base.BardFunctionalSpec
+import main.groovy.common.Constants;
+import main.groovy.common.TestData;
+import main.groovy.db.Project;
+import main.groovy.pages.CreateProjectPage;
+import main.groovy.pages.ViewProjectDefinitionPage;
+import test.groovy.base.BardFunctionalSpec;
 
-import common.Constants
-import common.TestData
-
-import db.Project
 
 /**
  * This class includes all the possible test functions for overview section of Project.

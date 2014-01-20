@@ -1,4 +1,5 @@
-package db
+package main.groovy.db
+
 
 
 /**

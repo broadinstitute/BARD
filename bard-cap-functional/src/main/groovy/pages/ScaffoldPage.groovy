@@ -1,4 +1,4 @@
-package pages
+package main.groovy.pages
 
 
 import geb.Page

@@ -1,16 +1,12 @@
-package scenarios
+package test.groovy.scenarios
 
-import pages.ContextItemPage
-import pages.EditContextPage
-import pages.HomePage
-import pages.ViewExperimentPage
+import main.groovy.common.TestData;
+import main.groovy.db.Experiment;
+import main.groovy.pages.EditContextPage;
+import main.groovy.pages.ViewExperimentPage;
+
 import spock.lang.Unroll
-import base.BardFunctionalSpec
-
-import common.Constants
-import common.TestData
-
-import db.Experiment
+import test.groovy.base.BardFunctionalSpec;
 
 /**
  * This class holds all the test functions of Experiment Annotations including context card and context item add/edit/delete

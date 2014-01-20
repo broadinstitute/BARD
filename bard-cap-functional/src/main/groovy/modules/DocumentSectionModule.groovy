@@ -1,8 +1,6 @@
-package modules
+package main.groovy.modules
 
 import geb.Module
-import modules.EditIconModule
-import geb.navigator.Navigator
 /**
  * @author Muhammad.Rafique
  * Date Created: 2013/02/07

@@ -1,13 +1,12 @@
-package pages
+package main.groovy.pages
 
-import geb.Page
-import modules.CardsHolderModule
-import modules.DocumentSectionModule
-import modules.EditIconModule
-import modules.EditableFormModule
-import modules.ErrorInlineModule
-import modules.SummaryModule
-import common.Constants
+import main.groovy.modules.CardsHolderModule;
+import main.groovy.modules.DocumentSectionModule;
+import main.groovy.modules.EditIconModule;
+import main.groovy.modules.EditableFormModule;
+import main.groovy.modules.ErrorInlineModule;
+import main.groovy.modules.SummaryModule;
+
 
 /**
  * @author Muhammad.Rafique
@@ -27,8 +26,6 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		controlError { module ErrorInlineModule }
 		documentHeaders{ docType -> module DocumentSectionModule, documentType:docType }
 
-		//		header { sectionName -> $("#"+sectionName+"-header") }
-		//		editContext {sectionName -> module EditIconModule, header(sectionName) }
 		editContext {sectionName -> module EditIconModule, $("#$sectionName") }
 	}
 	def navigateToEditContext(def section){
@@ -111,7 +108,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 				fillInputField(editValue)
 			}
 		}
-
+		waitFor { !editableForm.buttons }
 	}
 
 	def editDate(def indexValue, def runDate){

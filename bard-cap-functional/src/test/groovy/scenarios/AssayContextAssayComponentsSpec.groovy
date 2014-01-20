@@ -1,4 +1,4 @@
-package scenarios
+package test.groovy.scenarios
 /**
  * This class extends all the test functions from AssayBaseContextSpec and override data values
  * @author Muhammad.Rafique

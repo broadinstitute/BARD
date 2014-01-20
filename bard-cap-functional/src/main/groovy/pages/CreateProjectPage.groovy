@@ -1,6 +1,5 @@
-package pages
+package main.groovy.pages
 
-import modules.ButtonsModule;
 import geb.Page
 
 /**

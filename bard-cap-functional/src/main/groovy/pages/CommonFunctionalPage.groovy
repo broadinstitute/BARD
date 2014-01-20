@@ -1,12 +1,10 @@
-package pages
+package main.groovy.pages
 
+import main.groovy.common.Constants;
+import main.groovy.common.Constants.NavigateTo;
+import main.groovy.modules.BardCapHeaderModule;
+import main.groovy.modules.LoadingModule;
 import geb.Page
-import geb.navigator.Navigator
-import modules.BardCapHeaderModule;
-import modules.LoadingModule
-import common.Constants
-import common.Constants.NavigateTo;
-import common.TestData;
 
 public class CommonFunctionalPage extends Page {
 	def seachADID = "Search by Assay Definition ID"
@@ -27,7 +25,7 @@ public class CommonFunctionalPage extends Page {
 	}
 
 	boolean validationError(def element, def condition){
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element }
+		waitFor{ element }
 		if(element){
 			if(element.text()){
 				element.text().contains(condition)

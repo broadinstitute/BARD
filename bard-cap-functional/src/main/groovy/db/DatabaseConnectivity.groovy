@@ -1,8 +1,7 @@
-package db
+package main.groovy.db
 
 import groovy.sql.Sql
-
-import common.Constants
+import main.groovy.common.Constants
 
 class DatabaseConnectivity{
 	static def dataSource = getDatasource()

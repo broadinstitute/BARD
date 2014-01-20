@@ -1,4 +1,4 @@
-package db
+package main.groovy.db
 
 /**
  * this class holds all the database queries to fetch data.

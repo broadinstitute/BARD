@@ -1,14 +1,11 @@
-package scenarios
+package test.groovy.scenarios
 
-import pages.CreateExperimentPage
-import pages.HomePage
-import pages.ViewExperimentPage
-import base.BardFunctionalSpec
+import main.groovy.common.TestData;
+import main.groovy.db.Experiment;
+import main.groovy.pages.CreateExperimentPage;
+import main.groovy.pages.ViewExperimentPage;
+import test.groovy.base.BardFunctionalSpec;
 
-import common.Constants
-import common.TestData
-
-import db.Experiment
 
 /**
  * This class includes all the possible test functions for overview section of experiment.

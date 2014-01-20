@@ -1,15 +1,6 @@
-package scenarios
-import pages.CapSearchPage
-import pages.HomePage
-import pages.ViewAssayDefinitionPage
+package test.groovy.scenarios
 import spock.lang.Ignore
-import base.BardFunctionalSpec
-
-import common.TestDataReader
-import common.Constants.NavigateTo
-import common.Constants.SearchBy
-
-import db.Assay
+import test.groovy.base.BardFunctionalSpec;
 /**
  * @author Muhammad.Rafique
  * Date Created: 13/02/07

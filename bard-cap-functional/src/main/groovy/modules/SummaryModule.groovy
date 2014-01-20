@@ -1,4 +1,4 @@
-package modules
+package main.groovy.modules
 
 import geb.Page
 import geb.Module

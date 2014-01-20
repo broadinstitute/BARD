@@ -1,9 +1,8 @@
-package pages
+package main.groovy.pages
 
-import geb.Page
+import main.groovy.common.Constants
+import main.groovy.common.TestData
 
-import common.Constants
-import common.TestData
 /**
  * @author Muhammad.Rafique
  * Date Created: 2013/02/07

@@ -1,10 +1,9 @@
-package scenarios
-import base.BardFunctionalSpec;
-import spock.lang.Ignore;
+package test.groovy.scenarios
+import main.groovy.db.Assay;
+import main.groovy.pages.EditAssayMeasurePage
+import spock.lang.Ignore
 import spock.lang.Stepwise
-import pages.ViewAssayDefinitionPage
-//import pages.EditAssayContextPage
-import db.Assay
+import test.groovy.base.BardFunctionalSpec;
 /**
  * @author Muhammad.Rafique
  * Date Created: 13/02/07
@@ -17,7 +16,7 @@ class AssayMeasureSpec extends BardFunctionalSpec {
 	String resultTypeChildMeasure = testData.resultTypeChildMeasure
 	String resultValueChildMeasure = testData.resultValueChildMeasure
 	String contextCard = testData.cardForAssociation
-	def assays = new Assay()
+//	def assays = new Assay()
 	final static WAIT_INTERVAL = 15
 	final static R_INTERVAL = 3
 	def setupSpec() {
@@ -34,7 +33,7 @@ class AssayMeasureSpec extends BardFunctionalSpec {
 		def uiMeasures = []
 		def dbMeasures = []
 		uiMeasures = getUIMeasures()
-		dbMeasures = assays.getAssayMeasures(testData.assayId)
+		dbMeasures = Assay.getAssayMeasures(testData.assayId)
 		
 		then: "Validate assay measures"
 		assert uiMeasures.size() == dbMeasures.size()

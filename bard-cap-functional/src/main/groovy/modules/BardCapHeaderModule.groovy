@@ -1,4 +1,4 @@
-package modules
+package main.groovy.modules
 
 import javax.imageio.ImageIO.ContainsFilter;
 

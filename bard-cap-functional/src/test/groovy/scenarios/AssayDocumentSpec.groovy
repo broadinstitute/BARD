@@ -1,15 +1,12 @@
-package scenarios
+package test.groovy.scenarios
 
-import pages.DocumentPage
-import pages.HomePage
-import pages.ViewAssayDefinitionPage
+import main.groovy.common.Constants;
+import main.groovy.common.TestData;
+import main.groovy.pages.DocumentPage;
+import main.groovy.pages.ViewAssayDefinitionPage;
+
 import spock.lang.Unroll
-import base.BardFunctionalSpec
-
-import common.Constants
-import common.TestData
-
-import db.Assay
+import test.groovy.base.BardFunctionalSpec;
 /**
  * This class holds all the test functions of Assay Document section
  * @author Muhammad.Rafique

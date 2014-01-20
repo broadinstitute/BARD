@@ -1,4 +1,4 @@
-package pages
+package main.groovy.pages
 
 /**
  * @author Muhammad.Rafique

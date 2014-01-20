@@ -1,8 +1,7 @@
-package pages
+package main.groovy.pages
 
+import main.groovy.common.Constants.SearchBy;
 import geb.Page
-
-import common.Constants.SearchBy
 
 class CapSearchPage extends Page {
 	static url = ""

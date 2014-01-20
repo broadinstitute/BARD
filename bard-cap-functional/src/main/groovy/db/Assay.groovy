@@ -1,4 +1,4 @@
-package db
+package main.groovy.db
 
 
 class Assay extends DatabaseConnectivity {

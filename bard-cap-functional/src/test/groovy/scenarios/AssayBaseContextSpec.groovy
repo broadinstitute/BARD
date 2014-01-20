@@ -1,13 +1,11 @@
-package scenarios
+package test.groovy.scenarios
 
-import base.BardFunctionalSpec
-import common.Constants
-import common.TestData
-import db.Assay
-import pages.ContextItemPage
-import pages.EditContextPage
-import pages.ViewAssayDefinitionPage
+import main.groovy.common.TestData;
+import main.groovy.pages.ContextItemPage;
+import main.groovy.pages.EditContextPage;
+import main.groovy.pages.ViewAssayDefinitionPage;
 import spock.lang.Unroll
+import test.groovy.base.BardFunctionalSpec
 
 /**
  * This class extends all the test functions used for Assay Biology, Assay Component, Assay Design, Assay Protocol, Assay Readout, Experimental Variables sections

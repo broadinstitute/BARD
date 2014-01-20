@@ -1,8 +1,6 @@
-package pages
+package main.groovy.pages
 
-import common.TestData;
-
-import modules.ButtonsModule;
+import main.groovy.common.TestData;
 import geb.Page
 
 /**

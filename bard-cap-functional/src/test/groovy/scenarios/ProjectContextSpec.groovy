@@ -1,16 +1,11 @@
-package scenarios
+package test.groovy.scenarios
 
-import pages.ContextItemPage
-import pages.EditContextPage
-import pages.HomePage
-import pages.ViewProjectDefinitionPage
+import main.groovy.common.TestData;
+import main.groovy.pages.EditContextPage;
+import main.groovy.pages.ViewProjectDefinitionPage;
+
 import spock.lang.Unroll
-import base.BardFunctionalSpec
-
-import common.Constants
-import common.TestData
-
-import db.Project
+import test.groovy.base.BardFunctionalSpec;
 
 /**
  * This class includes all the possible test functions for annotation or context section of Project.

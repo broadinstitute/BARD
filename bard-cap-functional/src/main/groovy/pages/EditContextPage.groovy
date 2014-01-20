@@ -1,11 +1,5 @@
-package pages
+package main.groovy.pages
 
-import modules.AddContextCardModule
-import modules.ButtonsModule
-import modules.CardsHolderModule
-import modules.LoadingModule
-
-import common.Constants
 /**
  * @author Muhammad.Rafique
  * Date Created: 2013/02/07

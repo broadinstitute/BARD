@@ -1,13 +1,11 @@
-import java.awt.TextArea;
-import java.util.Map;
+package main.groovy.pages
 
-import geb.Page
 import geb.Module
+import geb.Page
 import geb.navigator.Navigator
-import modules.SelectToDropModule
-import modules.SelectChoicePopupModule
-import modules.AddContextCardModule
-import modules.CardsHolderModule
+import main.groovy.modules.AddContextCardModule
+import main.groovy.modules.SelectChoicePopupModule
+import main.groovy.modules.SelectToDropModule
 
 class EditAssayMeasurePage extends Page{
 	final static WAIT_INTERVAL = 15

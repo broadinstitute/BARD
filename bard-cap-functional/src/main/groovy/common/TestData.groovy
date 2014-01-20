@@ -1,4 +1,4 @@
-package common
+package main.groovy.common
 
 /**
  * @author Muhammad.Rafique

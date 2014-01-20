@@ -1,12 +1,10 @@
-package scenarios
+package test.groovy.scenarios
 
-import base.BardFunctionalSpec
-import common.Constants
-import common.TestData
-import db.Assay
-import pages.CreateAssayPage
-import pages.ViewAssayDefinitionPage
-import spock.lang.IgnoreRest
+import main.groovy.common.TestData;
+import main.groovy.pages.CreateAssayPage;
+import main.groovy.pages.ViewAssayDefinitionPage;
+import test.groovy.base.BardFunctionalSpec;
+
 
 /**
  * This class holds all the test functions of Assay Summary section

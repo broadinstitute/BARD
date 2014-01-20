@@ -1,9 +1,10 @@
-package pages
+package main.groovy.pages
 
-import geb.waiting.Wait;
-import modules.ResultTableModule
-import common.Constants
-import common.TestData
+import main.groovy.common.Constants;
+import main.groovy.common.TestData;
+import main.groovy.modules.ResultTableModule;
+
+
 
 /**
  * this is show experiment page class, most of the contents are inherited from CapScaffoldPage class to reuse.

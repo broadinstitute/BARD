@@ -1,11 +1,8 @@
-package pages
+package main.groovy.pages
 
-import geb.Page
-import geb.navigator.Navigator
-import modules.ButtonsModule
-import modules.ErrorInlineModule
+import main.groovy.modules.ButtonsModule;
+import main.groovy.modules.ErrorInlineModule;
 
-import common.Constants.DocumentAs
 
 /**
  * @author Muhammad.Rafique
