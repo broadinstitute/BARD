@@ -1,3 +1,4 @@
+import common.ConfigHelper
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.SystemUtils
 import org.openqa.selenium.chrome.ChromeDriver
@@ -19,7 +20,7 @@ driver = {
     new PhantomJSDriver(getPhantomjsDesiredCapabilities())
 }
 atCheckWaiting = true
-baseUrl = System.properties.getProperty('server.url') ?: "http://localhost:8080/BARD/"
+baseUrl = ConfigHelper.config.server.url
 reportsDir = "build/geb-reports"
 environments {
 

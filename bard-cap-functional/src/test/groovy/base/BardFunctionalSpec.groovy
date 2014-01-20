@@ -1,11 +1,13 @@
-package test.groovy.base
+package base
 
-import geb.spock.GebReportingSpec
-import main.groovy.pages.HomePage
-import main.groovy.pages.LoginPage
-
+import common.ConfigHelper
 import org.openqa.selenium.Dimension
 
+import java.sql.Date;
+
+import geb.spock.GebReportingSpec
+import pages.HomePage
+import pages.LoginPage
 import spock.lang.Shared
 /**
  * Created by GGTS.
@@ -15,8 +17,7 @@ import spock.lang.Shared
 abstract class BardFunctionalSpec extends GebReportingSpec {
 	@Shared protected Map<String, Map> usernameUserPropsMap = [:]
 	def setupSpec() {
-        def config = new ConfigSlurper().parse(new File('localConfig.groovy').toURI().toURL())
-		def mockUsers = config.mockUsers
+		def mockUsers = ConfigHelper.config.mockUsers
 		mockUsers.each {user ->
 			Map userProps = user.value
 			usernameUserPropsMap.put(userProps.username, userProps)

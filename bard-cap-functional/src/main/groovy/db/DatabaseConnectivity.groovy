@@ -1,29 +1,37 @@
-package main.groovy.db
+package db
 
+import com.jolbox.bonecp.BoneCPDataSource
+import common.ConfigHelper
 import groovy.sql.Sql
-import main.groovy.common.Constants
 
-class DatabaseConnectivity{
-	static def dataSource = getDatasource()
-	static def _url = dataSource.url
-	static def _username = dataSource.username
-	static def _password = dataSource.password
-	static def _driver = dataSource.driver
+import javax.sql.DataSource
 
-	public static def getSql = {
-		Sql.newInstance(_url, _username, _password, _driver)
-	}
+class DatabaseConnectivity {
 
-	static def getDatasource(){
-		def dbDatasource
+    private static final DataSource dataSource = getDataSource()
 
-        def config = new ConfigSlurper().parse(new File('localConfig.groovy').toURI().toURL())
-		def applicationURL = config.server.url
-		if(applicationURL.indexOf("qa") > -1){
-			dbDatasource = Constants.qaDatasource
-		}else if(applicationURL.indexOf("dev") > -1){
-			dbDatasource = Constants.devDatasource
-		}
-		return dbDatasource
-	}
+    public static Sql getSql() {
+        Sql.newInstance(dataSource)
+    }
+
+    public static def withSql(Closure closure) {
+        final Sql sql = getSql()
+        try {
+            return closure.call(sql)
+        }
+        finally {
+            sql.close()
+        }
+    }
+
+    private static DataSource getDataSource() {
+        final Map dbInfoMap = ConfigHelper.config.dbInfoMap
+        final BoneCPDataSource ds = new BoneCPDataSource()
+        ds.setDriverClass(dbInfoMap.driver)
+        ds.setUsername(dbInfoMap.username)
+        ds.setPassword(dbInfoMap.password)
+        ds.setJdbcUrl(dbInfoMap.url)
+        return ds
+    }
+
 }
