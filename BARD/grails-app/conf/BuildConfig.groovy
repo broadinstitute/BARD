@@ -1,4 +1,4 @@
-def useCrowd = System.getProperty("useCrowd") != null;
+def useBroadRepo = true
 
 grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
 grails.project.work.dir = "target"
@@ -24,8 +24,7 @@ grails.project.dependency.resolution = {
         grailsPlugins()
         grailsHome()
 
-
-        if (useCrowd) {
+        if (useBroadRepo) {
             mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
             grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
         } else {
@@ -40,12 +39,6 @@ grails.project.dependency.resolution = {
         // build scope
 
         // compile scope
-        if (useCrowd) {
-            compile('cbip:cbip_encoding:0.1') {
-                excludes "junit"
-            }
-        }
-
         compile "net.logstash.log4j:jsonevent-layout:1.5"
         compile "org.grails:grails-webflow:$grailsVersion"
         compile "org.apache.httpcomponents:httpclient:4.2.3"
@@ -77,8 +70,8 @@ grails.project.dependency.resolution = {
         compile 'log4j:apache-log4j-extras:1.2.17'
 
         compile "bard:external-validation-api:20140106"
-        if (useCrowd) {
-            // this isn't so much because crowd is needed for this lib as much as this lib is only
+        if (useBroadRepo) {
+            // this largely because this lib is only
             // used to run adhoc scripts run at the Broad.
             compile "bard:pubchem-xml:20131010"
         }
@@ -148,12 +141,6 @@ grails.project.dependency.resolution = {
         compile ":resources:1.2.RC2"
         compile ":twitter-bootstrap:2.3.0"
 
-        if (useCrowd) {
-            compile(":cbipcrowdauthentication:0.3.4") {
-                excludes('spock', 'release', 'google-collections')
-            }
-        }
-
         compile ":clover:3.1.10.1"
         compile ":spring-mobile:0.5.1"
         compile ":console:1.2"
@@ -190,11 +177,7 @@ grails.project.dependency.resolution = {
 
 // making the domain plugin an in-place plugin
 grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
-//grails.plugin.location.'crowd-user-registration' = "../crowdUserRegistration"
-
-
 grails.plugin.location.'shopping-cart:0.8.2' = "../shopping-cart-0.8.2"
-
 grails.plugin.location.'bard-rest-api-wrapper' = "../bard-rest-api-wrapper"
 grails.plugin.location.'functional-spock' = "../functional-spock"
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"

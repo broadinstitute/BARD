@@ -61,13 +61,12 @@ class BardLoginControllerUnitSpec extends Specification {
         mobileService.detect(_) >> {isMobile}
         assert response.status == expectedResponseStatus
         assert response.redirectUrl == expectedRedirectUrl
-        assert response.text.contains(expectedResponseText)
 
         where:
         label                       | isLoggedIn | expectedResponseStatus | expectedRedirectUrl | isMobile | expectedResponseText
         'logged in'                 | true       | 302                    | '/'                 | false    | ''
         'not logged in, mobile'     | false      | 200                    | null                | true     | '$.mobile.ajaxEnabled = false;'
-        'not logged in, not mobile' | false      | 200                    | null                | false    | '<r:require modules="core,bootstrap,login"></r:require>'
+        'not logged in, not mobile' | false      | 200                    | null                | false    | ''
     }
 
     void "test authAjax()"() {

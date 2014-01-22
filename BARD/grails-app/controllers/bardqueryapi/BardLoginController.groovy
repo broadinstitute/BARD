@@ -42,7 +42,6 @@ class BardLoginController {
      * Show the login page.
      */
     def auth = {
-
         def config = SpringSecurityUtils.securityConfig
 
         if (springSecurityService.isLoggedIn()) {
@@ -53,8 +52,9 @@ class BardLoginController {
         String view = mobileService.detect(request) ? "/mobile${AUTH_VIEW}" : AUTH_VIEW
 
         String postUrl = "${request.contextPath}${config.apf.filterProcessesUrl}"
-        render template: view, model: [postUrl: postUrl,
-                rememberMeParameter: config.rememberMe.parameter]
+        render view: view, model: [postUrl: postUrl,
+                rememberMeParameter: config.rememberMe.parameter,
+                returnToUrl: params.returnToUrl]
     }
 
     /**
@@ -82,7 +82,7 @@ class BardLoginController {
      */
     def full = {
         def config = SpringSecurityUtils.securityConfig
-        render template: AUTH_VIEW, params: params,
+        render view: AUTH_VIEW, params: params,
                 model: [hasCookie: authenticationTrustResolver.isRememberMe(SCH.context?.authentication),
                         postUrl: "${request.contextPath}${config.apf.filterProcessesUrl}"]
     }

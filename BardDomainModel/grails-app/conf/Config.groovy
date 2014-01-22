@@ -38,6 +38,24 @@ if (appName) {
     }
 }
 
+grails {
+    plugins {
+        springsecurity {
+            userLookup.userDomainClassName = 'bard.db.people.Person'
+            userLookup.usernamePropertyName = 'userName'
+            userLookup.enabledPropertyName = 'enabled'
+            userLookup.passwordPropertyName = 'password'
+            userLookup.authoritiesPropertyName = 'authorities'
+            userLookup.accountExpiredPropertyName = 'accountExpired'
+            userLookup.accountLockedPropertyName = 'accountLocked'
+            userLookup.passwordExpiredPropertyName = 'passwordExpired'
+            userLookup.authorityJoinClassName = 'bard.db.people.PersonRole'
+            authority.className = 'bard.db.people.Role'
+            authority.nameField = 'authority'
+        }
+    }
+}
+
 log4j = {
     // Example of changing the log pattern for the default console
     // appender:
@@ -72,7 +90,7 @@ grails.views.gsp.encoding = "UTF-8"
 grails {
     plugins {
         springsecurity {
-            providerNames = ['inMemMapAuthenticationProviderService', 'crowdAuthenticationProvider']
+            providerNames = ['inMemMapAuthenticationProviderService']
             ipRestrictions = [
                     '/console/**': '127.0.0.1'
             ]

@@ -7,7 +7,8 @@
         </g:form>
     </sec:ifLoggedIn>
     <sec:ifNotLoggedIn>
-        <g:form name="loginForm" controller="bardLogin">
+        <g:form name="loginForm" controller="bardLogin" action="auth" method="POST">
+            <g:hiddenField name="returnToUrl" value="${request.forwardURI}"/>
             Logged in anonymously&nbsp;&nbsp;
             <button id="loginButton" type="submit" class="btn btn-mini"
                     style="padding: 0 6px; font-size: 10.5px;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;line-height: 20px;text-align: center;vertical-align: middle;">Sign in</button>
