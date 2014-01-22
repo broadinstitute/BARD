@@ -1,11 +1,11 @@
-package main.groovy.pages
+package pages
 
 import geb.Module
 import geb.Page
 import geb.navigator.Navigator
-import main.groovy.modules.AddContextCardModule
-import main.groovy.modules.SelectChoicePopupModule
-import main.groovy.modules.SelectToDropModule
+import modules.AddContextCardModule
+import modules.SelectChoicePopupModule
+import modules.SelectToDropModule
 
 class EditAssayMeasurePage extends Page{
 	final static WAIT_INTERVAL = 15

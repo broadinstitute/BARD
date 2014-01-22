@@ -1,4 +1,4 @@
-package main.groovy.modules
+package modules
 
 import geb.Module
 import geb.navigator.Navigator

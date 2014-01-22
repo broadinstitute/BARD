@@ -1,13 +1,14 @@
-package test.groovy.base
+package base
 
 import geb.spock.GebReportingSpec
-import main.groovy.common.ConfigHelper
-import main.groovy.pages.HomePage
-import main.groovy.pages.LoginPage
 
 import org.openqa.selenium.Dimension
 
+import pages.HomePage
+import pages.LoginPage
 import spock.lang.Shared
+
+import common.ConfigHelper
 /**
  * Created by GGTS.
  * User: mrafique

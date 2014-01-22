@@ -1,4 +1,4 @@
-package main.groovy.db
+package db
 
 /**
  * @author Muhammad.Rafique

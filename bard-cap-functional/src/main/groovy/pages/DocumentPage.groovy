@@ -1,7 +1,8 @@
-package main.groovy.pages
+package pages
 
-import main.groovy.modules.ButtonsModule;
-import main.groovy.modules.ErrorInlineModule;
+import modules.ButtonsModule
+import modules.ErrorInlineModule
+
 
 
 /**

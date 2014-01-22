@@ -1,6 +1,7 @@
-package main.groovy.pages
+package pages
 
-import main.groovy.common.TestData
+import common.TestData
+
 
 /**
  * @author Muhammad.Rafique
@@ -14,7 +15,7 @@ class ViewAssayDefinitionPage extends CapScaffoldPage{
 		//		editAssayMeasureBtn { $("a.btn", text:"Edit Measures") } // Edit Measure btn
 	}
 
-	Map<String, String> getUIAssociatedMeasure(def cardName){
+	/*Map<String, String> getUIAssociatedMeasure(def cardName){
 		def contextMeasure = [:]
 		if(cardHolders.cardTable){
 			cardHolders.cardTable.each{ cards ->
@@ -27,5 +28,6 @@ class ViewAssayDefinitionPage extends CapScaffoldPage{
 			}
 		}
 		return contextMeasure
-	}
+	}*/
+
 }

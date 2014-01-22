@@ -1,4 +1,4 @@
-package main.groovy.common
+package common
 
 class TestDataReader {
 	

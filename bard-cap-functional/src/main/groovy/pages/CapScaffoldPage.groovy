@@ -1,11 +1,12 @@
-package main.groovy.pages
+package pages
 
-import main.groovy.modules.CardsHolderModule
-import main.groovy.modules.DocumentSectionModule
-import main.groovy.modules.EditIconModule
-import main.groovy.modules.EditableFormModule
-import main.groovy.modules.ErrorInlineModule
-import main.groovy.modules.SummaryModule
+import modules.CardsHolderModule
+import modules.DocumentSectionModule
+import modules.EditIconModule
+import modules.EditableFormModule
+import modules.ErrorInlineModule
+import modules.SummaryModule
+
 
 
 /**
@@ -28,9 +29,11 @@ class CapScaffoldPage extends CommonFunctionalPage {
 
 		editContext {sectionName -> module EditIconModule, $("#$sectionName") }
 	}
-	def navigateToEditContext(def section){
+	EditContextPage navigateToEditContext(def section){
 		editContext(section).iconPencil.click()
+		return new EditContextPage()
 	}
+
 	def getUIContexts(def cardGroup){
 		def contexts = []
 		if(cardContainer(cardGroup)){
@@ -50,13 +53,14 @@ class CapScaffoldPage extends CommonFunctionalPage {
 	def getUIContextItems(def cardGroup, def card){
 		def contextItems = []
 		def resultMap = [:]
-		if(isContextCardNotEmpty(cardGroup, card))
+		if(isContextCardNotEmpty(cardGroup, card)){
 			if(cardTable(cardGroup, card).contextItemRows){
 				cardTable(cardGroup, card).contextItemRows.each{
 					resultMap = ['attributeLabel':it.find("td")[1].text(), 'valueDisplay':it.find("td")[2].text()==""?"null":it.find("td")[2].text()]
 					contextItems.add(resultMap)
 				}
 			}
+		}
 		return contextItems
 	}
 	boolean isContextCardNotEmpty(def cardGroup, def cardName){
@@ -162,7 +166,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 	DocumentPage navigateToCreateDocument(def document){
 		assert document.addNewDocument.iconPlus
 		document.addNewDocument.iconPlus.click()
-		
+
 		return new DocumentPage()
 	}
 
@@ -203,7 +207,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		if(isDocument(document, docName)){
 			assert document.documentContents(docName).iconTrash
 			withConfirm { document.documentContents(docName).iconTrash.click() }
-//			ajaxRequestCompleted()
+			//			ajaxRequestCompleted()
 		}
 	}
 
@@ -224,4 +228,5 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		}
 		return uiDocuments
 	}
+
 }

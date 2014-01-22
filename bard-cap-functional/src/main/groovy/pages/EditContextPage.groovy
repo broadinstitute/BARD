@@ -1,10 +1,10 @@
-package main.groovy.pages
+package pages
 
-import main.groovy.common.Constants
-import main.groovy.modules.AddContextCardModule
-import main.groovy.modules.ButtonsModule
-import main.groovy.modules.CardsHolderModule
-import main.groovy.modules.LoadingModule
+import modules.AddContextCardModule
+import modules.ButtonsModule
+import modules.CardsHolderModule
+import modules.LoadingModule
+
 
 /**
  * @author Muhammad.Rafique
@@ -56,14 +56,14 @@ class EditContextPage extends CapScaffoldPage{
 		addContextCard.inputCardName.value(contextName)
 		addContextCard.saveBtn.buttonSubmitPrimary.click()
 //		ajaxRequestCompleted()
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { isContext(groupId, contextName) }
+		waitFor { isContext(groupId, contextName) }
 	}
 
 	def deleteContext(def cardGroup, def contextName){
 		if(isContextCardNotEmpty(cardGroup, contextName)){
 			while(isContextCardNotEmpty(cardGroup, contextName)){
 				cleanUpContext(cardGroup,contextName)
-				ajaxRequestCompleted()
+//				ajaxRequestCompleted()
 			}
 			withConfirm {cardTable(cardGroup, contextName).contextBtnGroup.iconTrash.click()}
 		}else{
@@ -84,5 +84,9 @@ class EditContextPage extends CapScaffoldPage{
 			}
 		}
 		waitFor { isContext(cardGroup, editedValue) }
+	}
+	
+	def finishEditing(){
+		finishEditing.buttonPrimary.click()
 	}
 }

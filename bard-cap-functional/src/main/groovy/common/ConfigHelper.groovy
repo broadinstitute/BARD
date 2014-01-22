@@ -1,8 +1,8 @@
-package main.groovy.common
+package common
 
 import static org.apache.commons.lang3.SystemUtils.FILE_SEPARATOR
 import static org.apache.commons.lang3.SystemUtils.getUserHome
-
+//testign the package imports 
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin

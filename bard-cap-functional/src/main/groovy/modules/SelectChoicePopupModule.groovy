@@ -1,7 +1,7 @@
-package main.groovy.modules
+package modules
 
-import geb.Page
 import geb.Module
+import geb.Page
 import geb.navigator.Navigator
 
 class SelectChoicePopupModule extends Module {

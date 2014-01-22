@@ -1,8 +1,10 @@
-package main.groovy.pages
+package pages
 
-import main.groovy.common.Constants
-import main.groovy.modules.SelectChoicePopupModule
-import main.groovy.modules.SelectToDropModule
+import modules.SelectChoicePopupModule
+import modules.SelectToDropModule
+
+import common.Constants
+
 
 
 /**

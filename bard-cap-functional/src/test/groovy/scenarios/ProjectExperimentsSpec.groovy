@@ -1,8 +1,7 @@
-package test.groovy.scenarios
+package scenarios
 
-import main.groovy.pages.HomePage
 import spock.lang.Ignore
-import test.groovy.base.BardFunctionalSpec
+import base.BardFunctionalSpec
 /**
  * @author Muhammad.Rafique
  * Date Created: 13/02/07

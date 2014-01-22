@@ -1,9 +1,6 @@
-package main.groovy.pages
+package pages
 
 import geb.Page
-import main.groovy.common.Constants.NavigateTo
-import main.groovy.modules.BardCapHeaderModule
-import main.groovy.modules.LoadingModule
 
 public class CommonFunctionalPage extends Page {
 //	def seachADID = "Search by Assay Definition ID"

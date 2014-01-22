@@ -1,5 +1,3 @@
-import main.groovy.common.ConfigHelper;
-
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.SystemUtils
 import org.openqa.selenium.chrome.ChromeDriver
@@ -11,6 +9,8 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService
 import org.openqa.selenium.remote.CapabilityType
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
+
+import common.ConfigHelper;
 
 /*
  This is the Geb configuration file.

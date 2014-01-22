@@ -1,11 +1,14 @@
-package test.groovy.scenarios
+package scenarios
 
-import main.groovy.common.Constants
-import main.groovy.common.TestData
-import main.groovy.db.Assay
-import main.groovy.pages.CreateAssayPage
-import main.groovy.pages.ViewAssayDefinitionPage
-import test.groovy.base.BardFunctionalSpec
+import pages.CreateAssayPage
+import pages.ViewAssayDefinitionPage
+import base.BardFunctionalSpec
+
+import common.Constants
+import common.TestData
+
+import db.Assay
+
 
 
 /**

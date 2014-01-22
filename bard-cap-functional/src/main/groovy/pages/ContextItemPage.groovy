@@ -1,12 +1,14 @@
-package main.groovy.pages
+package pages
 
-import main.groovy.common.Constants
-import main.groovy.modules.ButtonsModule
-import main.groovy.modules.CardsHolderModule
-import main.groovy.modules.ErrorInlineModule
-import main.groovy.modules.LoadingModule
-import main.groovy.modules.SelectChoicePopupModule
-import main.groovy.modules.SelectToDropModule
+import modules.ButtonsModule
+import modules.CardsHolderModule
+import modules.ErrorInlineModule
+import modules.LoadingModule
+import modules.SelectChoicePopupModule
+import modules.SelectToDropModule
+
+import common.Constants
+
 
 
 /**

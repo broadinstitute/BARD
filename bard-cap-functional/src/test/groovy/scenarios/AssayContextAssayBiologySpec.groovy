@@ -1,4 +1,4 @@
-package test.groovy.scenarios
+package scenarios
 
 
 /**

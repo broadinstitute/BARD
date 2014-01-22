@@ -1,9 +1,8 @@
-package test.groovy.scenarios
+package scenarios
 
-import main.groovy.pages.HomePage;
-import main.groovy.pages.LoginPage;
-import test.groovy.base.BardFunctionalSpec;
-
+import pages.HomePage
+import pages.LoginPage
+import base.BardFunctionalSpec
 
 /**
  * This class includes all the possible test functions for login and logout.

@@ -1,6 +1,7 @@
-package main.groovy.pages
+package pages
 
-import main.groovy.common.TestData
+import common.TestData
+
 
 /**
  * @author Muhammad.Rafique

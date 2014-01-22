@@ -1,6 +1,7 @@
-package main.groovy.pages
+package pages
 
-import main.groovy.common.Constants.SearchBy;
+import common.Constants.SearchBy;
+
 import geb.Page
 
 class CapSearchPage extends Page {

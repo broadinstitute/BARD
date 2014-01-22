@@ -1,8 +1,10 @@
-package main.groovy.pages
+package pages
 
-import main.groovy.common.TestData
-import main.groovy.modules.EditIconModule
-import main.groovy.modules.SummaryModule
+import modules.EditIconModule
+import modules.SummaryModule
+
+import common.TestData
+
 
 /**
  * This class hold methods which are performed on show panel page. 

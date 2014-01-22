@@ -1,13 +1,14 @@
-package test.groovy.scenarios
+package scenarios
 
-import main.groovy.common.Constants
-import main.groovy.common.TestData
-import main.groovy.db.Experiment
-import main.groovy.pages.DocumentPage
-import main.groovy.pages.ViewExperimentPage
-
+import pages.DocumentPage
+import pages.ViewExperimentPage
 import spock.lang.Unroll
-import test.groovy.base.BardFunctionalSpec
+import base.BardFunctionalSpec
+
+import common.Constants
+import common.TestData
+
+import db.Experiment
 
 /**
  * This class includes all the test functions related to experiment document section
