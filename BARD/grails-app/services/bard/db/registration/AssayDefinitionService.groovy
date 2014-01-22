@@ -7,6 +7,8 @@ import bard.db.enums.AssayType
 import bard.db.enums.Status
 import bard.db.people.Role
 import org.apache.commons.collections.CollectionUtils
+import org.hibernate.Query
+import org.hibernate.Session
 import org.springframework.security.access.prepost.PreAuthorize
 import registration.AssayService
 
@@ -99,4 +101,32 @@ class AssayDefinitionService {
     Assay cloneAssayForEditing(Assay assay, String designedBy) {
         return assayService.cloneAssayForEditing(assay, designedBy)
     }
+
+//    Object getApprovalInfoForAssayStatus(Long id){
+//        Assay.withSession { Session session ->
+//            Query query = session.createSQLQuery("""
+//                        select *
+//                        from(
+//                        select
+//                        arl.AUDIT_TIMESTAMP
+//                        ,arl.USERNAME audit_username
+//                        ,p.USERNAME   person_username
+//                        ,p.FULL_NAME
+//                        from AUDIT_ROW_LOG arl
+//                        join AUDIT_COLUMN_LOG acl on acl.AUDIT_ID = arl.AUDIT_ID
+//                        join ASSAY a on a.ASSAY_ID = arl.PRIMARY_KEY
+//                        left outer join PERSON p on p.USERNAME = arl.USERNAME
+//                        where arl.TABLE_NAME = 'ASSAY'
+//                        and acl.COLUMN_NAME = 'ASSAY_STATUS'
+//                        and arl.ACTION = 'UPDATE'
+//                        and a.ASSAY_ID = :assayId
+//                        order by arl.AUDIT_TIMESTAMP desc
+//                        )
+//                        where rownum = 1
+//                    """)
+//            query.setLong('assayId', id)
+//            query.setReadOnly(true)
+//            return query.uniqueResult()
+//        }
+//    }
 }
