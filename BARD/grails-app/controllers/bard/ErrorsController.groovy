@@ -33,12 +33,17 @@ class ErrorsController {
     }
 
     def error500 () {
+        Exception exception
         try {
-            Exception exception = request.exception
+            exception = request.exception
 
             String errorId = UUID.randomUUID().toString();
 
-            log.error("Error ${errorId}: Uncaught exception ${System.identityHashCode(exception)}", exception)
+            if(exception == null) {
+                log.error("Error ${errorId}: Requested URI ${request.requestURI} -> Forwarded URI ${request.forwardURI}")
+            } else {
+                log.error("Error ${errorId}: Requested URI ${request.requestURI}, Uncaught exception", exception)
+            }
 
             boolean wasAjaxRequest = request.getHeader("X-Requested-With") == "XMLHttpRequest";
             boolean wasApiException = exception != null && isApiException(exception)
@@ -60,6 +65,8 @@ class ErrorsController {
             log.error("Exception writing error page", ex)
             def trace = ExceptionUtils.getFullStackTrace(ex)
             println("exception writing error page: ${trace}")
+            if(exception != null)
+                log.error("Original exception which resulted in error rendering error page", exception)
         }
     }
 
