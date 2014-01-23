@@ -78,7 +78,7 @@ Edit the files in ~/.grails/BARD and ~/.grails/dataExport replacing the followin
 ### Build and deploy BARD application
 ```
 cd $BARD_CHECKOUT/BARD
-grails compile
+grails compile -DuseBroadRepo=false
 ```
 
 
@@ -86,12 +86,12 @@ grails compile
 
 The following will create all the necessary objects in the configured schema and populate reference data.
 ```
-grails -Dgrails.env=production dbm-update --contexts=standard,insert-reference
+grails -Dgrails.env=production -DuseBroaddRepo=false dbm-update --contexts=standard,insert-reference
 ```
 
 ### Create BARD war and deploy
 ```
-grails war BARD.war
+grails war -DuseBroadRepo=false BARD.war
 ```
 
 Copy the BARD.war to your tomcat's webapp directory to deploy it.
@@ -100,7 +100,7 @@ Copy the BARD.war to your tomcat's webapp directory to deploy it.
 ### Create dataExport API war and deploy
 ```
 cd $BARD_CHECKOUT/dataExport
-grails war dataExport.war
+grails war -DuseBroadRepo=false dataExport.war
 ```
 Copy the dataExport.war to your tomcat's webapp directory to deploy it
 
