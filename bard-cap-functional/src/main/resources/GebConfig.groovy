@@ -71,7 +71,7 @@ public static String getPhantomJsExecutablePath() {
     } else if (SystemUtils.IS_OS_MAC_OSX) {
         return "/usr/local/bin/phantomjs"   // assuming brew was used to install
     } else if (SystemUtils.IS_OS_LINUX) {
-        return "/cbplat/bard/dev_tools/phantomjs/phantomjs-1.9.2-linux-x86_64/bin"
+        return "/cbplat/bard/dev_tools/phantomjs/phantomjs-1.9.2-linux-x86_64/bin/phantomjs"
     } else {
         throw new RuntimeException("Unsure of OS, so couldn't pick an executable for phantomjs")
     }
