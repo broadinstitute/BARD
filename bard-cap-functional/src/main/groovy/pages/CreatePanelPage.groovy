@@ -1,6 +1,5 @@
 package pages
 
-import modules.ButtonsModule;
 import geb.Page
 
 /**

@@ -1,14 +1,14 @@
 package base
 
-import common.ConfigHelper
+import geb.spock.GebReportingSpec
+
 import org.openqa.selenium.Dimension
 
-import java.sql.Date;
-
-import geb.spock.GebReportingSpec
 import pages.HomePage
 import pages.LoginPage
 import spock.lang.Shared
+
+import common.ConfigHelper
 /**
  * Created by GGTS.
  * User: mrafique

@@ -1,12 +1,15 @@
 package scenarios
 
-import base.BardFunctionalSpec
-import common.Constants
-import common.TestData
-import db.Assay
 import pages.CreateAssayPage
 import pages.ViewAssayDefinitionPage
-import spock.lang.IgnoreRest
+import base.BardFunctionalSpec
+
+import common.Constants
+import common.TestData
+
+import db.Assay
+
+
 
 /**
  * This class holds all the test functions of Assay Summary section

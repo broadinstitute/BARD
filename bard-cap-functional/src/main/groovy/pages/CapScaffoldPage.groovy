@@ -1,13 +1,13 @@
 package pages
 
-import geb.Page
 import modules.CardsHolderModule
 import modules.DocumentSectionModule
 import modules.EditIconModule
 import modules.EditableFormModule
 import modules.ErrorInlineModule
 import modules.SummaryModule
-import common.Constants
+
+
 
 /**
  * @author Muhammad.Rafique
@@ -27,13 +27,13 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		controlError { module ErrorInlineModule }
 		documentHeaders{ docType -> module DocumentSectionModule, documentType:docType }
 
-		//		header { sectionName -> $("#"+sectionName+"-header") }
-		//		editContext {sectionName -> module EditIconModule, header(sectionName) }
 		editContext {sectionName -> module EditIconModule, $("#$sectionName") }
 	}
-	def navigateToEditContext(def section){
+	EditContextPage navigateToEditContext(def section){
 		editContext(section).iconPencil.click()
+		return new EditContextPage()
 	}
+
 	def getUIContexts(def cardGroup){
 		def contexts = []
 		if(cardContainer(cardGroup)){
@@ -53,13 +53,14 @@ class CapScaffoldPage extends CommonFunctionalPage {
 	def getUIContextItems(def cardGroup, def card){
 		def contextItems = []
 		def resultMap = [:]
-		if(isContextCardNotEmpty(cardGroup, card))
+		if(isContextCardNotEmpty(cardGroup, card)){
 			if(cardTable(cardGroup, card).contextItemRows){
 				cardTable(cardGroup, card).contextItemRows.each{
 					resultMap = ['attributeLabel':it.find("td")[1].text(), 'valueDisplay':it.find("td")[2].text()==""?"null":it.find("td")[2].text()]
 					contextItems.add(resultMap)
 				}
 			}
+		}
 		return contextItems
 	}
 	boolean isContextCardNotEmpty(def cardGroup, def cardName){
@@ -111,7 +112,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 				fillInputField(editValue)
 			}
 		}
-
+		waitFor { !editableForm.buttons }
 	}
 
 	def editDate(def indexValue, def runDate){
@@ -165,7 +166,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 	DocumentPage navigateToCreateDocument(def document){
 		assert document.addNewDocument.iconPlus
 		document.addNewDocument.iconPlus.click()
-		
+
 		return new DocumentPage()
 	}
 
@@ -206,7 +207,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		if(isDocument(document, docName)){
 			assert document.documentContents(docName).iconTrash
 			withConfirm { document.documentContents(docName).iconTrash.click() }
-			ajaxRequestCompleted()
+			//			ajaxRequestCompleted()
 		}
 	}
 
@@ -227,4 +228,5 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		}
 		return uiDocuments
 	}
+
 }

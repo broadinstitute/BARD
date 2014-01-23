@@ -1,9 +1,8 @@
 package pages
 
-import common.TestData;
-
-import modules.ButtonsModule;
 import geb.Page
+
+import common.TestData
 
 /**
  * @author Muhammad.Rafique

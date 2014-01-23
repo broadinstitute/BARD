@@ -1,8 +1,8 @@
 package pages
 
-import geb.Page
+import common.Constants.SearchBy;
 
-import common.Constants.SearchBy
+import geb.Page
 
 class CapSearchPage extends Page {
 	static url = ""

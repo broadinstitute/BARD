@@ -1,4 +1,6 @@
 package scenarios
+
+
 /**
  * This class extends all the test functions from AssayBaseContextSpec and override data values
  * @author Muhammad.Rafique
@@ -6,13 +8,13 @@ package scenarios
  */
 class AssayContextAssayComponentsSpec extends AssayBaseContextSpec{
 	@Override
-	def setup() {
+	def setupSpec() {
 		section = "assay-components-header"
 		cardGroup = "cardHolderAssayComponents"
 		editContextGroup = "Assay-Components"
 		dbContextType = "Assay Components"
 		
-		logInSomeUser()
+		
 	}
 
 }

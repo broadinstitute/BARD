@@ -1,11 +1,9 @@
 package pages
 
-import geb.Page
-import geb.navigator.Navigator
 import modules.ButtonsModule
 import modules.ErrorInlineModule
 
-import common.Constants.DocumentAs
+
 
 /**
  * @author Muhammad.Rafique
@@ -14,7 +12,7 @@ import common.Constants.DocumentAs
  */
 class DocumentPage extends CommonFunctionalPage{
 	static url=""
-	static at = { $("input#documentType") }
+	static at =  { waitFor{$("#documentType")} }
 
 	static content = {
 		documentName { $("#documentName") }

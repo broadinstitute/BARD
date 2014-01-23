@@ -1,11 +1,12 @@
 package scenarios
 
-import pages.HomePage
 import pages.ResultTypePage
 import pages.ViewExperimentPage
-import spock.lang.Unroll;
+import spock.lang.Unroll
 import base.BardFunctionalSpec
+
 import common.TestData
+
 import db.Experiment
 
 /**

@@ -1,4 +1,3 @@
-import common.ConfigHelper
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.SystemUtils
 import org.openqa.selenium.chrome.ChromeDriver
@@ -10,6 +9,8 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService
 import org.openqa.selenium.remote.CapabilityType
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
+
+import common.ConfigHelper;
 
 /*
  This is the Geb configuration file.
@@ -29,7 +30,7 @@ environments {
         System.setProperty("webdriver.chrome.driver", "test/resources/chromedriver.exe")
         DesiredCapabilities capabilities = new DesiredCapabilities()
         capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"))
-        capabilities.setCapability("chrome.switches", Arrays.asList("--start-maximized"))
+//        capabilities.setCapability("chrome.switches", Arrays.asList("--start-maximized"))
         driver = { new ChromeDriver(capabilities) }
     }
 
@@ -70,7 +71,7 @@ public static String getPhantomJsExecutablePath() {
     } else if (SystemUtils.IS_OS_MAC_OSX) {
         return "/usr/local/bin/phantomjs"   // assuming brew was used to install
     } else if (SystemUtils.IS_OS_LINUX) {
-        return "/cbplat/bard/dev_tools/phantomjs/phantomjs-1.9.2-linux-x86_64/bin/phantomjs"
+        return "/cbplat/bard/dev_tools/phantomjs/phantomjs-1.9.2-linux-x86_64/bin"
     } else {
         throw new RuntimeException("Unsure of OS, so couldn't pick an executable for phantomjs")
     }

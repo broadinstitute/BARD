@@ -1,13 +1,11 @@
-import java.awt.TextArea;
-import java.util.Map;
+package pages
 
-import geb.Page
 import geb.Module
+import geb.Page
 import geb.navigator.Navigator
-import modules.SelectToDropModule
-import modules.SelectChoicePopupModule
 import modules.AddContextCardModule
-import modules.CardsHolderModule
+import modules.SelectChoicePopupModule
+import modules.SelectToDropModule
 
 class EditAssayMeasurePage extends Page{
 	final static WAIT_INTERVAL = 15

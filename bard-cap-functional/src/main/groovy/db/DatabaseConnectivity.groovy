@@ -1,10 +1,11 @@
 package db
 
-import com.jolbox.bonecp.BoneCPDataSource
-import common.ConfigHelper
 import groovy.sql.Sql
 
 import javax.sql.DataSource
+
+import com.jolbox.bonecp.BoneCPDataSource
+import common.ConfigHelper
 
 class DatabaseConnectivity {
 

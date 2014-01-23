@@ -6,7 +6,10 @@ import modules.ErrorInlineModule
 import modules.LoadingModule
 import modules.SelectChoicePopupModule
 import modules.SelectToDropModule
+
 import common.Constants
+
+
 
 /**
  * @author Muhammad.Rafique
@@ -14,7 +17,7 @@ import common.Constants
  */
 class ContextItemPage extends CapScaffoldPage{
 	static url=""
-	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { $("h2").text().contains("Item") } }
+	static at = { waitFor { $("h2").text().contains("Item") } }
 	static content = {
 		cardTable{ contextTitle -> module CardsHolderModule, $("div.card.roundedBorder.card-table-container").find("table.table.table-hover"), contextCard:contextTitle }
 		formLoading { module LoadingModule}

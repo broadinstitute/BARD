@@ -1,9 +1,7 @@
 package pages
 
-import modules.AddLinkExperimentModule
-import modules.ButtonsModule
-import common.Constants
-import common.TestData;
+import common.TestData
+
 
 /**
  * @author Muhammad.Rafique
@@ -11,19 +9,17 @@ import common.TestData;
  */
 class ViewProjectDefinitionPage extends CapScaffoldPage{
 	static url="project/show/"+TestData.projectId
-	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	$("h2").text().contains("Project")} }
+	static at = { $("h2").text().contains("Project") }
 
 	static content = {
-//		contextHeader { $("#contexts-header") }
-		experimentHeader { $("#experiment-and-step-header") }
-		addExperimentBtn { module ButtonsModule, experimentHeader, buttonName:"Add Experiment" }
-		linkExperimentBtn { module ButtonsModule, experimentHeader, buttonName:"Link Experiments" }
-		addLinkExperiment { module AddLinkExperimentModule }
-//		projectContextEdit { module EditIconModule, contextHeader}
-		experimentBtns { module ExperimentBtnsModule }
+//		experimentHeader { $("#experiment-and-step-header") }
+//		addExperimentBtn { module ButtonsModule, experimentHeader, buttonName:"Add Experiment" }
+//		linkExperimentBtn { module ButtonsModule, experimentHeader, buttonName:"Link Experiments" }
+//		addLinkExperiment { module AddLinkExperimentModule }
+//		experimentBtns { module ExperimentBtnsModule }
 	}
 
-	def addExperiment(def addByValue, def stageVal){
+/*	def addExperiment(def addByValue, def stageVal){
 		assert addExperimentBtn.buttonBtn
 		addExperimentBtn.buttonBtn.click()
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ addLinkExperiment.title }
@@ -46,6 +42,6 @@ class ViewProjectDefinitionPage extends CapScaffoldPage{
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { element2.searchResult[index].text() != "Searching..." && element2.searchResult[index].text() != "Please enter 1 more characters"}
 		element2.searchResult[index].click()
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { !formLoading.loading.displayed }
-	}
+	}*/
 	
 }

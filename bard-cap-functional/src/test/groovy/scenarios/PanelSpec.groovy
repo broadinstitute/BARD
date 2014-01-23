@@ -1,13 +1,17 @@
 package scenarios
 
-import base.BardFunctionalSpec
-import common.Constants
-import common.TestData
-import db.Panel
 import pages.CreatePanelPage
 import pages.MyPanelPage
 import pages.PanelAddAssayPage
 import pages.ViewPanelPage
+import base.BardFunctionalSpec
+
+import common.Constants
+import common.TestData
+
+import db.Panel
+
+
 
 /**
  * This class includes all the possible test functions for Panel module.
