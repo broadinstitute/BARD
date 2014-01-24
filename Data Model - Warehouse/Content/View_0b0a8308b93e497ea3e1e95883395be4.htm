@@ -22,7 +22,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE VIEW BBDS_STAGING.V_LOG4O_TAIL</TT><BR><TT>(ID, LOGGER, SESSION_ID, LOG_LEVEL, LOG_TIME, MESSAGE) AS</TT><BR><TT>select&nbsp&nbsp "ID","LOGGER","SESSION_ID","LOG_LEVEL","LOG_TIME","MESSAGE"</TT><BR><TT>from (</TT><BR><TT>&nbsp&nbsp select * from log4o_log order by id desc</TT><BR><TT>)</TT><BR><TT>where&nbsp&nbsp&nbsp rownum <= 100</TT><BR><TT>order by rownum desc</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE VIEW BBDS_STAGING.V_LOG4O_TAIL</TT><BR><TT>(ID, LOGGER, SESSION_ID, LOG_LEVEL, LOG_TIME, MESSAGE) AS</TT><BR><TT>select&nbsp&nbsp "ID","LOGGER","SESSION_ID","LOG_LEVEL","LOG_TIME","MESSAGE"</TT><BR><TT>from (</TT><BR><TT>&nbsp&nbsp select * from log4o_log order by id desc</TT><BR><TT>)</TT><BR><TT>where&nbsp&nbsp&nbsp rownum <= 100</TT><BR><TT>order by id desc</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>

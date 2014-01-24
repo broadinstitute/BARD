@@ -3,7 +3,7 @@
 <A NAME = "Index_92852439e22549c68449911588fc86b3"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">ANNOTATION_SET.ANNOTATION_SET_PK&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">ANNOTATION_SET.PK_ANNOTATION_SET&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
@@ -47,7 +47,7 @@
 <P>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">ANNOTATION_SET.ANNOTATION_SET_PK Index Columns&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">ANNOTATION_SET.PK_ANNOTATION_SET Index Columns&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
@@ -63,7 +63,7 @@
 <P>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">ANNOTATION_SET.ANNOTATION_SET_PK Properties&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">ANNOTATION_SET.PK_ANNOTATION_SET Properties&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
@@ -171,11 +171,11 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PK/UK Constraint Name&nbsp;</FONT></B></TD>
@@ -341,7 +341,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE INDEX BI_RSLT_VL_MN_RF ON RESULT(VALUE_MIN_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE BITMAP INDEX BI_RSLT_VL_MN_RF ON RESULT(VALUE_MIN_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -356,7 +356,7 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_fe72b1d0823046f2b20ff1a3e7e5dfe3">VALUE_MIN_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_13b36c0714e345ba8e88dd5056ed73b0">VALUE_MIN_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -413,7 +413,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Type&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Bitmap&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Byte Order&nbsp;</FONT></TD>
@@ -633,7 +633,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE INDEX BI_RSLT_SBSTNC_RF ON RESULT(Substance_ref)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE INDEX BI_RSLT_SBSTNC_RF ON RESULT(SUBSTANCE_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -648,7 +648,7 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_ace240171d4f4445b56ab3915729f658">Substance_ref</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_49d537c723d44de389e6089ef657dd13">SUBSTANCE_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -794,7 +794,7 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_fae156d798c344fbb42d13fb614325c1">EXPERIMENT_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_95013b332bb64a5fa59063bc9266af4c">EXPERIMENT_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -925,7 +925,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE INDEX BI_RSLT_UNT_RF ON RESULT(Unit_ref)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE INDEX BI_RSLT_UNT_RF ON RESULT(UNIT_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -940,7 +940,7 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_4290996fa9904dacb4a399f469618430">Unit_ref</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_964e881f3a0548f4ab383849400f1a5f">UNIT_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -1086,7 +1086,7 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_24fc36b9baba4a26925fa57acb16ed87">RESULT_TYPE_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_3db5e27b756441f081d430820207ca51">RESULT_TYPE_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -1232,7 +1232,7 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_4eb6fa5f251647158044819c58d4420e">QUALIFIER_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_20949cd0ab064b5eaff1ec0051493908">QUALIFIER_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -1378,7 +1378,7 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_13792d8595c9414f9f65f0194c74cc16">ASSAY_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_ce3e0b078fef47319faf819284c547ff">ASSAY_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -1524,7 +1524,7 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_cc7afb0ad99249feb21d042d14319f39">SCREENING_CONCENTRATION_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_1ab4b6070973471e992224f1188572a5">SCREENING_CONCENTRATION_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -1670,7 +1670,7 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_5cf78dff2a34455f88ae474c8ab88547">VALUE_MAX_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_bf7b735aa06f4735b2a42f6a202031d9">VALUE_MAX_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -1816,7 +1816,7 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_f1fd68285bdb4e0db0c40de4b1c01442">VALUE_NUM_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_e4ea2679b98b4532bd757a72935d33cd">VALUE_NUM_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -2108,7 +2108,7 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_7b81fad392cd485fbe6f5bc6b3c569cc">ANNOTATION_SET_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_9b61addfbc084f8bb4c1bd1a5c1dca2d">ANNOTATION_SET_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -2254,7 +2254,7 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_b8a2fdcbf4c6478799ecef4d9a376c00">RESULT_HIERARCHY_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_df41c3a28461475c9aac4b69db11dd25">RESULT_HIERARCHY_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -2400,7 +2400,7 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_588fd0aa85dc4fdd86e8ab1aec10f083">SUBSTANCE_EXPRMT_OUTCOME_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_c2127a6cef124bf69900a09f8f6a824a_Attr.htm#Attr_2e825be8eea24fef8e0675defdd5dfbc">SUBSTANCE_EXPRMT_OUTCOME_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>

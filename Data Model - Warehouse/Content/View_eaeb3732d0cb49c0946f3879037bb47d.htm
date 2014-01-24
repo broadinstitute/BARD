@@ -10,7 +10,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Owner&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">BBDS_STAGING&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
@@ -22,7 +22,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE OR REPLACE VIEW experiment_load_detail_v (</TT><BR><TT>&nbsp&nbsp experiment_id,</TT><BR><TT>&nbsp&nbsp annotation_status,</TT><BR><TT>&nbsp&nbsp n_annotation_set,</TT><BR><TT>&nbsp&nbsp n_annotation_context,</TT><BR><TT>&nbsp&nbsp t_annotation_load,</TT><BR><TT>&nbsp&nbsp result_status,</TT><BR><TT>&nbsp&nbsp n_result,</TT><BR><TT>&nbsp&nbsp n_result_loaded,</TT><BR><TT>&nbsp&nbsp t_result_load,</TT><BR><TT>&nbsp&nbsp t_result_delete,</TT><BR><TT>&nbsp&nbsp load_id,</TT><BR><TT>&nbsp&nbsp load_date</TT><BR><TT>) AS</TT><BR><TT>with latest_detail as (</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp select&nbsp&nbsp *</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp from&nbsp&nbsp&nbsp&nbsp (</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp select a.*,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp row_number() over(partition by experiment_id order by load_id desc) rseq$</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp from&nbsp&nbsp&nbsp load_detail a</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp )</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp where&nbsp&nbsp&nbsp rseq$ = 1</TT><BR><TT>)</TT><BR><TT>select</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a.experiment_id</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.annotation_status</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.n_annotation_set</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.n_annotation_context</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.t_annotation_load</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.result_status</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.n_result</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.n_result_loaded</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.t_result_load</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.t_result_delete</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.load_id</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,b.end_time as load_date</TT><BR><TT>from&nbsp&nbsp&nbsp&nbsp latest_detail a, load_summary b</TT><BR><TT>where&nbsp&nbsp&nbsp a.load_id = b.load_id</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE VIEW BBDS_STAGING.EXPERIMENT_LOAD_DETAIL_V</TT><BR><TT>(EXPERIMENT_ID, ANNOTATION_STATUS, N_ANNOTATION_SET, N_ANNOTATION_CONTEXT, T_ANNOTATION_LOAD, RESULT_STATUS, N_RESULT, N_RESULT_LOADED, T_RESULT_LOAD, T_RESULT_DELETE, LOAD_ID, LOAD_DATE) AS</TT><BR><TT>with latest_detail as (</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp select&nbsp&nbsp *</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp from&nbsp&nbsp&nbsp&nbsp (</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp select a.*,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp row_number() over(partition by experiment_id order by load_id desc) rseq$</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp from&nbsp&nbsp&nbsp load_detail a</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp )</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp where&nbsp&nbsp&nbsp rseq$ = 1</TT><BR><TT>)</TT><BR><TT>select</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a.experiment_id</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.annotation_status</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.n_annotation_set</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.n_annotation_context</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.t_annotation_load</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.result_status</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.n_result</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.n_result_loaded</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.t_result_load</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.t_result_delete</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,a.load_id</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ,b.end_time as load_date</TT><BR><TT>from&nbsp&nbsp&nbsp&nbsp latest_detail a, load_summary b</TT><BR><TT>where&nbsp&nbsp&nbsp a.load_id = b.load_id</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -36,6 +36,11 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Column Name / Expression&nbsp;</FONT></B></TD>
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Alias Name&nbsp;</FONT></B></TD>
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table Name&nbsp;</FONT></B></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">END_TIME&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">LOAD_DATE&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_048f6862ad054df7869cd045eff699b5.htm">LOAD_SUMMARY</A>&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
