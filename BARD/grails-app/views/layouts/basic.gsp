@@ -17,7 +17,16 @@
     <r:layoutResources/>
     <ga:trackPageview/>
     <style>
-        /*Correcting for nav-panel overriding the Finish Editing button. https://www.pivotaltracker.com/story/show/62830700*/
+    /*https://www.pivotaltracker.com/story/show/63819008*/
+    .nav-panel {
+        position: inherit;
+    }
+
+    .nav-panel .navbar ul.nav {
+        float: right;
+    }
+
+    /*Correcting for nav-panel overriding the Finish Editing button. https://www.pivotaltracker.com/story/show/62830700*/
     .nav-panel .nav {
         display: inline;
     }
@@ -62,7 +71,7 @@
                     </strong>
                 </div>
 
-                <div class="span8" style="min-width: 350px;">
+                <div class="span7" style="min-width: 350px;">
                     <div class="search-block left-aligned">
                         <g:render template="/layouts/templates/searchBlock"/>
                     </div>
@@ -73,33 +82,30 @@
                     </g:if>
                 </div>
 
-                <div class="span2"></div>
-                <nav class="nav-panel" style="min-width: 150px; ">
-                    <div class="right-aligned">
-                        <g:render template="/layouts/templates/loginStrip"/>
-                    </div>
-
-                    <div style="text-align: right;">
-                        <g:render template="/layouts/templates/queryCart"/>
-                    </div>
-
-
-
-                    <sec:ifLoggedIn>
+                <div class="span3">
+                    <nav class="nav-panel" style="min-width: 300px; ">
                         <div class="right-aligned">
-                            <g:link controller="bardWebInterface" action="navigationPage"
-                                    class="my-bard-button btn">My BARD</g:link>
+                            <g:render template="/layouts/templates/loginStrip"/>
                         </div>
-                    </sec:ifLoggedIn>
 
-                    <div class="navbar right-aligned hidden-phone">
-                        <ul class="nav">
-                            <g:render template="/layouts/templates/howtolinks"/>
-                        </ul>
-                    </div>
+                        <div style="text-align: right;">
+                            <g:render template="/layouts/templates/queryCart"/>
+                        </div>
 
-                </nav>
+                        <sec:ifLoggedIn>
+                            <div class="right-aligned">
+                                <g:link controller="bardWebInterface" action="navigationPage"
+                                        class="my-bard-button btn">My BARD</g:link>
+                            </div>
+                        </sec:ifLoggedIn>
 
+                        <div class="navbar right-aligned hidden-phone">
+                            <ul class="nav">
+                                <g:render template="/layouts/templates/howtolinks"/>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
             </div>
         </div>
     </div>
@@ -139,6 +145,7 @@
         <p>
             We apologize for the inconvenience. An email has been sent to the BARD Development Team, and we will investigate the problem as soon as possible.
         </p>
+
         <p>
             In the meantime, you can try:
         <ul>
