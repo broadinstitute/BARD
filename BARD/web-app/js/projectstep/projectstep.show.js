@@ -81,14 +81,21 @@ function inspect(s) {
 function nodeToDotDescription(node) {
     var keyValues = node.keyValues;
     var text;
+
     if(keyValues.type == "single"){
         // set fillcolor for box to lightgray if user is not allowed to see a draft experiment
+        var color = getColorForNode(keyValues);
+        var fillcolor;
+        var label;
         if(keyValues.cansee){
-            text = node.id + "[style=\"bold,filled\",color=\""+getColorForNode(keyValues)+"\",label=\"" + keyValues.eid + "\\n " + keyValues.stage + "\"" + "];";
+            fillcolor = "white";
+            label = keyValues.eid + ((keyValues.stage) ? ("\\n " + keyValues.stage) : "");
+        } else{
+            fillcolor = "lightgray";
+            label =  keyValues.eid + "\\n Work in progress" ;
         }
-        else{
-            text = node.id + "[style=\"bold,filled\", fillcolor=\"lightgray\",color=\""+getColorForNode(keyValues)+"\",label=\"" + keyValues.eid + "\\n Work in progress" + "\"];";
-        }
+
+        text = node.id + "[style=\"bold,filled\",color=\""+color+"\",label=\"" +label+ "\"" + " fillcolor=\""+fillcolor+"\"];";
     } else {
         text = node.id + "[style=\"bold,filled\",color=\""+getColorForNode(keyValues)+"\",label=\"Panel of "+keyValues.eids.length + " experiments\\n" + keyValues.stage + "\"" + "];";
     }
