@@ -6,14 +6,11 @@ package scenarios
  */
 class AssayContextAssayProtocolSpec extends AssayBaseContextSpec{
 	@Override
-	def setup() {
+	def setupSpec() {
 		section = "assay-protocol-header"
 		cardGroup = "cardHolderAssayProtocol"
 		editContextGroup = "Assay-Protocol"
 		dbContextType = "Assay Protocol"
-		
-		logInSomeUser()
-
 	}
 
 }

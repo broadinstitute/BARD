@@ -1,6 +1,5 @@
 package pages
 
-import geb.Page
 
 /**
  * @author Muhammad.Rafique
@@ -13,6 +12,5 @@ class HomePage extends ScaffoldPage {
 	static content = {
 		logOut { $("form#logoutForm").find("button") }
 		bardBrandLogo { $("a.brand") }
-		//		navigationMenu {index -> moduleList BardCapHeaderModule, $("ul.nav").children(), index }
 	}
 }

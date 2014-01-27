@@ -13,8 +13,6 @@ class AssayContextAssayComponentsSpec extends AssayBaseContextSpec{
 		cardGroup = "cardHolderAssayComponents"
 		editContextGroup = "Assay-Components"
 		dbContextType = "Assay Components"
-		
-		
 	}
 
 }

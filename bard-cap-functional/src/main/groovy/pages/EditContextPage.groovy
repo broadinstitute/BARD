@@ -26,10 +26,11 @@ class EditContextPage extends CapScaffoldPage{
 		cardTable{ groupName, contextTitle -> module CardsHolderModule, contextTable(groupName), contextCard:contextTitle }
 	}
 
-	def navigateToAddContextItem(def cardGroup, def contextName){
+	ContextItemPage navigateToAddContextItem(def cardGroup, def contextName){
 		assert cardTable(cardGroup, contextName).contextTitle
 		assert cardTable(cardGroup, contextName).contextBtnGroup.iconPlus
 		cardTable(cardGroup, contextName).contextBtnGroup.iconPlus.click()
+		return new ContextItemPage()
 	}
 
 	def navigateToUpdateContextItem(def cardGroup, def contextName, def contextItemName){

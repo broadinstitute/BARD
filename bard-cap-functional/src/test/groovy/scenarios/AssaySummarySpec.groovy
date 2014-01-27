@@ -4,12 +4,9 @@ import pages.CreateAssayPage
 import pages.ViewAssayDefinitionPage
 import base.BardFunctionalSpec
 
-import common.Constants
 import common.TestData
 
 import db.Assay
-
-
 
 /**
  * This class holds all the test functions of Assay Summary section
@@ -86,7 +83,7 @@ class AssaySummarySpec extends BardFunctionalSpec {
 		def uiSummary = getUISummaryInfo()
 		def dbSummary = Assay.getAssaySummaryById(TestData.assayId)
 		def nameOriginal = uiSummary.Name
-		def nameEdited = nameOriginal+Constants.edited
+		def nameEdited = nameOriginal+TestData.edited
 
 		then:"Verify Summary Name before edit on UI & DB"
 		assert uiSummary.Name.equalsIgnoreCase(dbSummary.Name)

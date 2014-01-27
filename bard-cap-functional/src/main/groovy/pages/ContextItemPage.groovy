@@ -7,9 +7,7 @@ import modules.LoadingModule
 import modules.SelectChoicePopupModule
 import modules.SelectToDropModule
 
-import common.Constants
-
-
+import common.TestData
 
 /**
  * @author Muhammad.Rafique
@@ -49,7 +47,7 @@ class ContextItemPage extends CapScaffoldPage{
 	}
 
 	def isElementType(def inputData, def isCreate){
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){
+		waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){
 			valueFromDictionary.selectChoice
 		}
 		if(isCreate){
@@ -64,7 +62,7 @@ class ContextItemPage extends CapScaffoldPage{
 	}
 
 	def isFreeTextTYpe(def inputData, def isCreate){
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ displayValue }
+		waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ displayValue }
 		if(isCreate){
 			displayValue.value("")
 			displayValue.value(inputData.valueDisplay)
@@ -79,7 +77,7 @@ class ContextItemPage extends CapScaffoldPage{
 	}
 
 	def isNumericType(def inputData, def isCreate){
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ numericValue }
+		waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ numericValue }
 		if(isCreate){
 			qualifier.value(inputData.qualifier)
 			numericValue.value("")
@@ -97,7 +95,7 @@ class ContextItemPage extends CapScaffoldPage{
 
 	}
 	def isExternalOntologyType(def inputData, def isCreate, def integration){
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ integratedSearch }
+		waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ integratedSearch }
 		if(isCreate){
 			if(integration){
 				Thread.sleep(6000)
@@ -159,13 +157,13 @@ class ContextItemPage extends CapScaffoldPage{
 
 	def addExternalOntologyItem(def inputData, boolean isCreate=true, def resultUpload=false, def isIntegration = true){
 		if(isCreate){
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ !selectToDrop.searchNoResult }
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}else{
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	attributeFromDictionary.selectClose	}
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	integratedSearch.selectChoice }
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	externalOntologyId }
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	displayValue }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){	attributeFromDictionary.selectClose	}
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){	integratedSearch.selectChoice }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){	externalOntologyId }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){	displayValue }
 			//			attributeFromDictionary.selectClose.click()
 			//			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}
@@ -174,13 +172,13 @@ class ContextItemPage extends CapScaffoldPage{
 
 	def addNumericValueItem(def inputData, boolean isCreate=true, def resultUpload=false){
 		if(isCreate){
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ !selectToDrop.searchNoResult }
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}else{
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	attributeFromDictionary.selectClose }
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ numericValue.displayed }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){	attributeFromDictionary.selectClose }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ numericValue.displayed }
 			attributeFromDictionary.selectClose.click()
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !numericValue.displayed }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ !numericValue.displayed }
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}
 		isNumericType(inputData, isCreate)
@@ -188,13 +186,13 @@ class ContextItemPage extends CapScaffoldPage{
 
 	def addFreeTextItem(def inputData, boolean isCreate=true, def resultUpload=false){
 		if(isCreate){
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ !selectToDrop.searchNoResult }
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}else{
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ attributeFromDictionary.selectClose }
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ displayValue.displayed }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ attributeFromDictionary.selectClose }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ displayValue.displayed }
 			attributeFromDictionary.selectClose.click()
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !displayValue.displayed }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ !displayValue.displayed }
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}
 
@@ -202,11 +200,11 @@ class ContextItemPage extends CapScaffoldPage{
 	}
 	def addElementContextItem(def inputData, boolean isCreate=true, def resultUpload=false){
 		if(isCreate){
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !selectToDrop.searchNoResult }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ !selectToDrop.searchNoResult }
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}else{
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ valueFromDictionary.selectChoice }
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	attributeFromDictionary.selectClose }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ valueFromDictionary.selectChoice }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){	attributeFromDictionary.selectClose }
 			attributeFromDictionary.selectClose.click()
 			selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.attribute)
 		}
@@ -238,13 +236,13 @@ class ContextItemPage extends CapScaffoldPage{
 		int index = 0
 		if(!element2.dropdown){
 			element1.selectChoice.click()
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element2.dropdown }
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	element2.searchInput }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ element2.dropdown }
+			waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){	element2.searchInput }
 		}
-		//		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element2.searchResult }
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	element2.searchInput }
+		//		waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ element2.searchResult }
+		waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){	element2.searchInput }
 		element2.searchInput.value(inputValue)
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element2.searchResult[index].text().contains(inputValue)}
+		waitFor(TestData.WAIT_INTERVAL, TestData.R_INTERVAL){ element2.searchResult[index].text().contains(inputValue)}
 		element2.searchResult[index].click()
 	}
 }

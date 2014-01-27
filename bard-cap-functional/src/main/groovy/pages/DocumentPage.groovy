@@ -1,16 +1,15 @@
 package pages
 
+import geb.Page
 import modules.ButtonsModule
 import modules.ErrorInlineModule
-
-
 
 /**
  * @author Muhammad.Rafique
  * Date Created: 13/02/07
  * Date Updated: 13/10/30
  */
-class DocumentPage extends CommonFunctionalPage{
+class DocumentPage extends Page{
 	static url=""
 	static at =  { waitFor{$("#documentType")} }
 

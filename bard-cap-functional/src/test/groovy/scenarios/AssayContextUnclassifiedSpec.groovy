@@ -6,13 +6,11 @@ package scenarios
  */
 class AssayContextUnclassifiedSpec extends AssayBaseContextSpec{
 	@Override
-	def setup() {
+	def setupSpec() {
 		section = "unclassified-header"
 		cardGroup = "cardHolderUnclassified"
 		editContextGroup = "Unclassified"
 		dbContextType = "Unclassified"
-		
-		logInSomeUser()
 	}
 
 }

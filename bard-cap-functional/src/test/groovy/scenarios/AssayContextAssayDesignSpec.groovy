@@ -6,13 +6,11 @@ package scenarios
  */
 class AssayContextAssayDesignSpec extends AssayBaseContextSpec{
 	@Override
-	def setup() {
+	def setupSpec() {
 		section = "assay-design-header"
 		cardGroup = "cardHolderAssayDesign"
 		editContextGroup = "Assay-Design"
 		dbContextType = "Assay Design"
-		
-		logInSomeUser()
 	}
 
 }

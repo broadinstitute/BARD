@@ -4,7 +4,6 @@ import pages.CreateExperimentPage
 import pages.ViewExperimentPage
 import base.BardFunctionalSpec
 
-import common.Constants
 import common.TestData
 
 import db.Experiment
@@ -88,7 +87,7 @@ class ExperimentSummarySpec extends BardFunctionalSpec {
 		def uiSummary = getUISummaryInfo()
 		def dbSummary = Experiment.getExperimentSummaryById(TestData.experimentId)
 		def nameOriginal = uiSummary.Name
-		def nameEdited = nameOriginal+Constants.edited
+		def nameEdited = nameOriginal+TestData.edited
 
 		then:"Verify Summary Name before edit on UI & DB"
 		assert uiSummary.Name.equalsIgnoreCase(dbSummary.Name)
@@ -147,7 +146,7 @@ class ExperimentSummarySpec extends BardFunctionalSpec {
 		def uiSummary = getUISummaryInfo()
 		def dbSummary = Experiment.getExperimentSummaryById(TestData.experimentId)
 		def experimentDescriptionOriginal  = uiSummary.Description
-		def experimentDescriptionEdited  = experimentDescriptionOriginal +Constants.edited
+		def experimentDescriptionEdited  = experimentDescriptionOriginal +TestData.edited
 
 		then:"Verify Summary Description before edit on UI & DB"
 		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())

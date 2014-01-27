@@ -2,7 +2,6 @@ package pages
 
 import modules.ResultTableModule
 
-import common.Constants
 import common.TestData
 
 
@@ -13,7 +12,7 @@ import common.TestData
  */
 class ViewExperimentPage extends CapScaffoldPage{
 	static url="experiment/show/"+TestData.experimentId
-	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ title.contains("EID")} }
+	static at = { waitFor { title.contains("EID")} }
 
 	static content = {
 		resultTypeSection(wait:true, required: false) {$("#result-type-header")}

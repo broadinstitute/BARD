@@ -6,7 +6,6 @@ import pages.PanelAddAssayPage
 import pages.ViewPanelPage
 import base.BardFunctionalSpec
 
-import common.Constants
 import common.TestData
 
 import db.Panel
@@ -94,7 +93,7 @@ class PanelSpec extends BardFunctionalSpec {
         def uiSummary = getUISummaryInfo()
         def dbSummary = Panel.getPanelOverviewById(TestData.panelId)
         def nameOriginal = uiSummary.Panel
-        def nameEdited = nameOriginal + Constants.edited
+        def nameEdited = nameOriginal + TestData.edited
 
         then: "Verify Summary Name before edit on UI & DB"
         assert uiSummary.Panel.equalsIgnoreCase(dbSummary.Name)
@@ -155,7 +154,7 @@ class PanelSpec extends BardFunctionalSpec {
         def uiSummary = getUISummaryInfo()
         def dbSummary = Panel.getPanelOverviewById(TestData.panelId)
         def projectDescriptionOriginal = uiSummary.Description
-        def projectDescriptionEdited = projectDescriptionOriginal + Constants.edited
+        def projectDescriptionEdited = projectDescriptionOriginal + TestData.edited
 
         then: "Verify Summary Description before edit on UI & DB"
         assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())

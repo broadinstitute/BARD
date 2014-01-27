@@ -4,7 +4,6 @@ import pages.CreateProjectPage
 import pages.ViewProjectDefinitionPage
 import base.BardFunctionalSpec
 
-import common.Constants
 import common.TestData
 
 import db.Project
@@ -84,7 +83,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		def uiSummary = getUISummaryInfo()
 		def dbSummary = Project.getProjectSummaryById(TestData.projectId)
 		def nameOriginal = uiSummary.Name
-		def nameEdited = nameOriginal+Constants.edited
+		def nameEdited = nameOriginal+TestData.edited
 
 		then:"Verify Summary Name before edit on UI & DB"
 		assert uiSummary.Name.equalsIgnoreCase(dbSummary.Name)
@@ -143,7 +142,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		def uiSummary = getUISummaryInfo()
 		def dbSummary = Project.getProjectSummaryById(TestData.projectId)
 		def projectDescriptionOriginal = uiSummary.Description
-		def projectDescriptionEdited = projectDescriptionOriginal+Constants.edited
+		def projectDescriptionEdited = projectDescriptionOriginal+TestData.edited
 
 		then:"Verify Summary Description before edit on UI & DB"
 		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())

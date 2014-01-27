@@ -5,7 +5,6 @@ import pages.ViewExperimentPage
 import spock.lang.Unroll
 import base.BardFunctionalSpec
 
-import common.Constants
 import common.TestData
 
 import db.Experiment
@@ -64,12 +63,12 @@ class ExperimentDocumentSpec extends BardFunctionalSpec {
 
 		where:
 		TestName		| docHeader								| docType								| testData
-		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
-		"Protocol"		| Constants.documentHeader.Protocol		| Constants.documentType.Protocol		| TestData.documents
-		"Comment"		| Constants.documentHeader.Comment		| Constants.documentType.Comment		| TestData.documents
-		"Publication"	| Constants.documentHeader.Publication	| Constants.documentType.Publication	| TestData.documents
-		"ExternalUrl"	| Constants.documentHeader.Urls			| Constants.documentType.Urls			| TestData.documents
-		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
+		"Descriptoin"	| TestData.documentHeader.Description	| TestData.documentType.Description	| TestData.documents
+		"Protocol"		| TestData.documentHeader.Protocol		| TestData.documentType.Protocol		| TestData.documents
+		"Comment"		| TestData.documentHeader.Comment		| TestData.documentType.Comment		| TestData.documents
+		"Publication"	| TestData.documentHeader.Publication	| TestData.documentType.Publication	| TestData.documents
+		"ExternalUrl"	| TestData.documentHeader.Urls			| TestData.documentType.Urls			| TestData.documents
+		"Other"			| TestData.documentHeader.Other		| TestData.documentType.Other			| TestData.documents
 	}
 
 	def "Test Add #TestName Document in Experiment with empty values"(){
@@ -108,12 +107,12 @@ class ExperimentDocumentSpec extends BardFunctionalSpec {
 
 		where:
 		TestName		| docHeader								| docType								| testData
-		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
-		"Protocol"		| Constants.documentHeader.Protocol		| Constants.documentType.Protocol		| TestData.documents
-		"Comment"		| Constants.documentHeader.Comment		| Constants.documentType.Comment		| TestData.documents
-		"Publication"	| Constants.documentHeader.Publication	| Constants.documentType.Publication	| TestData.documents
-		"ExternalUrl"	| Constants.documentHeader.Urls			| Constants.documentType.Urls			| TestData.documents
-		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
+		"Descriptoin"	| TestData.documentHeader.Description	| TestData.documentType.Description	| TestData.documents
+		"Protocol"		| TestData.documentHeader.Protocol		| TestData.documentType.Protocol		| TestData.documents
+		"Comment"		| TestData.documentHeader.Comment		| TestData.documentType.Comment		| TestData.documents
+		"Publication"	| TestData.documentHeader.Publication	| TestData.documentType.Publication	| TestData.documents
+		"ExternalUrl"	| TestData.documentHeader.Urls			| TestData.documentType.Urls			| TestData.documents
+		"Other"			| TestData.documentHeader.Other		| TestData.documentType.Other			| TestData.documents
 	}
 
 	def "Test Edit #TestName Document in Experiment"(){
@@ -144,18 +143,18 @@ class ExperimentDocumentSpec extends BardFunctionalSpec {
 		at ViewExperimentPage
 		assert isDocument(documentHeaders(docHeader), testData.documentName)
 		if(docType == "external url"){
-			editDocument(documentHeaders(docHeader), testData.documentName, testData.documentName+Constants.edited)
+			editDocument(documentHeaders(docHeader), testData.documentName, testData.documentName+TestData.edited)
 		}else{
 			navigateToEditDocument(documentHeaders(docHeader), testData.documentName)
 			at DocumentPage
 			if(docType == "publication"){
-				createDocument(testData.documentName+Constants.edited, testData.documentUrl, true)
+				createDocument(testData.documentName+TestData.edited, testData.documentUrl, true)
 			}else{
-				createDocument(testData.documentName+Constants.edited, testData.documentContent, true)
+				createDocument(testData.documentName+TestData.edited, testData.documentContent, true)
 			}
 		}
 		to ViewExperimentPage
-		assert isDocument(documentHeaders(docHeader), testData.documentName+Constants.edited)
+		assert isDocument(documentHeaders(docHeader), testData.documentName+TestData.edited)
 		def uiDocumetnsAfter= getUIDucuments(documentHeaders(docHeader))
 		def dbDocumentsAfter= Experiment.getExperimentDocuments(TestData.experimentId, docType)
 
@@ -164,19 +163,19 @@ class ExperimentDocumentSpec extends BardFunctionalSpec {
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
 
 		and:"Cleaning up documents"
-		while(isDocument(documentHeaders(docHeader), testData.documentName+Constants.edited)){
-			deleteDocument(documentHeaders(docHeader), testData.documentName+Constants.edited)
+		while(isDocument(documentHeaders(docHeader), testData.documentName+TestData.edited)){
+			deleteDocument(documentHeaders(docHeader), testData.documentName+TestData.edited)
 		}
 		report "$TestName"
 
 		where:
 		TestName		| docHeader								| docType								| testData
-		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
-		"Protocol"		| Constants.documentHeader.Protocol		| Constants.documentType.Protocol		| TestData.documents
-		"Comment"		| Constants.documentHeader.Comment		| Constants.documentType.Comment		| TestData.documents
-		"Publication"	| Constants.documentHeader.Publication	| Constants.documentType.Publication	| TestData.documents
-		"ExternalUrl"	| Constants.documentHeader.Urls			| Constants.documentType.Urls			| TestData.documents
-		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
+		"Descriptoin"	| TestData.documentHeader.Description	| TestData.documentType.Description	| TestData.documents
+		"Protocol"		| TestData.documentHeader.Protocol		| TestData.documentType.Protocol		| TestData.documents
+		"Comment"		| TestData.documentHeader.Comment		| TestData.documentType.Comment		| TestData.documents
+		"Publication"	| TestData.documentHeader.Publication	| TestData.documentType.Publication	| TestData.documents
+		"ExternalUrl"	| TestData.documentHeader.Urls			| TestData.documentType.Urls			| TestData.documents
+		"Other"			| TestData.documentHeader.Other		| TestData.documentType.Other			| TestData.documents
 	}
 
 	def "Test Edit #TestName Document in Experiment with empty name value"(){
@@ -235,11 +234,11 @@ class ExperimentDocumentSpec extends BardFunctionalSpec {
 
 		where:
 		TestName		| docHeader								| docType								| testData
-		"Descriptoin"	| Constants.documentHeader.Description	| Constants.documentType.Description	| TestData.documents
-		"Protocol"		| Constants.documentHeader.Protocol		| Constants.documentType.Protocol		| TestData.documents
-		"Comment"		| Constants.documentHeader.Comment		| Constants.documentType.Comment		| TestData.documents
-		"Publication"	| Constants.documentHeader.Publication	| Constants.documentType.Publication	| TestData.documents
-		"ExternalUrl"	| Constants.documentHeader.Urls			| Constants.documentType.Urls			| TestData.documents
-		"Other"			| Constants.documentHeader.Other		| Constants.documentType.Other			| TestData.documents
+		"Descriptoin"	| TestData.documentHeader.Description	| TestData.documentType.Description	| TestData.documents
+		"Protocol"		| TestData.documentHeader.Protocol		| TestData.documentType.Protocol		| TestData.documents
+		"Comment"		| TestData.documentHeader.Comment		| TestData.documentType.Comment		| TestData.documents
+		"Publication"	| TestData.documentHeader.Publication	| TestData.documentType.Publication	| TestData.documents
+		"ExternalUrl"	| TestData.documentHeader.Urls			| TestData.documentType.Urls			| TestData.documents
+		"Other"			| TestData.documentHeader.Other		| TestData.documentType.Other			| TestData.documents
 	}
 }

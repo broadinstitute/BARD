@@ -10,7 +10,7 @@ import geb.navigator.Navigator
  * Date Updated: 13/10/07
  *
  */
-class ScaffoldPage extends CommonFunctionalPage {
+class ScaffoldPage extends Page {
     static content = {
         heading { $("h1") }
     }

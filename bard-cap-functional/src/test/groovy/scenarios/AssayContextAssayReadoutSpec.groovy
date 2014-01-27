@@ -6,13 +6,11 @@ package scenarios
  */
 class AssayContextAssayReadoutSpec extends AssayBaseContextSpec{
 	@Override
-	def setup() {
+	def setupSpec() {
 		section = "assay-readout-header"
 		cardGroup = "cardHolderAssayReadout"
 		editContextGroup = "Assay-Readout"
 		dbContextType = "Assay Readout"
-		
-		logInSomeUser()
 	}
 
 }

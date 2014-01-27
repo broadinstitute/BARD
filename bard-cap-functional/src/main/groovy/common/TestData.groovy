@@ -11,6 +11,13 @@ class TestData {
 	final static int experimentId = 1552
 	final static int panelId = 6
 
+	final static String edited = "-Edited";
+	final static int WAIT_INTERVAL = 30;
+	final static int R_INTERVAL = 0.5;
+	//	final static String IS_EMPTY = "Empty";
+	final static def documentHeader = [Description:"description",Protocol:"protocol",Comment:"comment",Publication:"publication",Urls:"urls",Other:"other"]
+	final static def documentType = [Description:"description",Protocol:"protocol",Comment:"comments",Publication:"publication",Urls:"external url",Other:"other"]
+
 	final static def documents = [
 		documentName:"Document Name",
 		documentContent:"this is document contents",
@@ -61,7 +68,7 @@ class TestData {
 		description:"Test Panel Description",
 		owner:"BARD Administrator"
 	]
-	
+
 	final static Map createProject = [
 		name:"Test Project Name",
 		description:"Test Project Description",
@@ -69,19 +76,19 @@ class TestData {
 		group:"Project",
 		owner:"BARD Administrator"
 	]
-	
+
 	final static Map createAssay = [
 		name:"Test Assay Name",
 		definitionType:"Regular",
 		owner:"BARD Administrator"
 	]
-	
+
 	final static Map createExperiment = [
 		name:"Test Experiment Name",
 		description:"Test Experiment Description",
 		owner:"BARD Administrator"
 	]
-	
+
 	final static Map rundate = [
 		From:[
 			day:'3',

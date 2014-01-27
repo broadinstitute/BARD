@@ -1,10 +1,12 @@
 package pages
 
+import geb.Page
 import modules.CardsHolderModule
 import modules.DocumentSectionModule
 import modules.EditIconModule
 import modules.EditableFormModule
 import modules.ErrorInlineModule
+import modules.LoadingModule
 import modules.SummaryModule
 
 
@@ -13,7 +15,7 @@ import modules.SummaryModule
  * @author Muhammad.Rafique
  * Date Created: 2013/02/07
  */
-class CapScaffoldPage extends CommonFunctionalPage {
+class CapScaffoldPage extends Page {
 	static content = {
 		summaryHeader { $("#summary-header") }
 		summaryEdit {index -> module EditIconModule, viewSummary.ddValue[index] }
@@ -23,11 +25,12 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		cardContainer(required: false) { groupName -> $("#$groupName") }
 		contextTable { groupName -> cardContainer(groupName).find("table.table.table-hover")}
 		cardTable{ groupName, contextTitle -> module CardsHolderModule, contextTable(groupName), contextCard:contextTitle }
-		contextCards{ groupName -> module CardsHolderModule, cardContainer(groupName) }
+		contextCards(required: false){ groupName -> module CardsHolderModule, cardContainer(groupName) }
 		controlError { module ErrorInlineModule }
 		documentHeaders{ docType -> module DocumentSectionModule, documentType:docType }
 
 		editContext {sectionName -> module EditIconModule, $("#$sectionName") }
+		formLoading { module LoadingModule }
 	}
 	EditContextPage navigateToEditContext(def section){
 		editContext(section).iconPencil.click()
@@ -227,6 +230,21 @@ class CapScaffoldPage extends CommonFunctionalPage {
 			}
 		}
 		return uiDocuments
+	}
+	
+	boolean validationError(def element, def condition){
+		waitFor{ element }
+		if(element){
+			if(element.text()){
+				element.text().contains(condition)
+				return true
+			}
+		}
+		return false
+	}
+
+	boolean ajaxRequestCompleted(){
+		waitFor { !formLoading.loading.displayed }
 	}
 
 }
