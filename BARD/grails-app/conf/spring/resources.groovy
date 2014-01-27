@@ -56,9 +56,10 @@ beans = {
         authenticationFailureHandler = ref('authenticationFailureHandler')
         authenticationManager = ref('authenticationManager')
     }
+
     onlinePersonaVerifyer(OnlinePersonaVerifyer) {
         restTemplate = ref('restTemplate')
-        audience = grailsApplication.config.Persona.audience
+        audience = grailsApplication.config.grails.serverURL
         verificationUrl = grailsApplication.config.Persona.verificationUrl
     }
 

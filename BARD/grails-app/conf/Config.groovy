@@ -5,7 +5,6 @@ import org.apache.log4j.DailyRollingFileAppender
 import org.apache.log4j.net.SMTPAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
-
 bard.users.email = "bard-users@broadinstitute.org"
 bard.users.mailing.list = "https://groups.google.com/a/broadinstitute.org/forum/#!newtopic/bard-users"
 
@@ -211,9 +210,9 @@ security.acl.authority.changeAclDetails = 'ROLE_BARD_ADMINISTRATOR'
 //Persona configs
 Persona {
     verificationUrl = "https://verifier.login.persona.org/verify"
-    audience = "${bard.cap.home}"
     filterProcessesUrl = "/j_spring_persona_security_check"
 }
+
 CbipCrowd {
     application.url = 'https://crowd.somewhere.com/crowd/'
     register.url = 'https://crowd.somewhere.com/crowd/'
