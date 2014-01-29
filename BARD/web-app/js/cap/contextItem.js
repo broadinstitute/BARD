@@ -97,13 +97,6 @@ $(document).ready(function () {
         }
         else if ('ELEMENT' === expectedValueType) {
             showWidgets('#elementValueContainer');
-//            $.ajax(bardAppContext + "/ontologyJSon/getValueDescriptorsV2", {
-//                data: {attributeId: data.id},
-//                success: (function (valueData) {
-//                    initializeValueElementSelect2(valueData);
-//                }),
-//                error: handleAjaxError()
-//            });
             initializeValueElementSelect2({results: []});
         }
         else if ('EXTERNAL_ONTOLOGY' === expectedValueType) {
@@ -144,8 +137,6 @@ $(document).ready(function () {
     function initializeValueElementSelect2(backingData) {
         $('#valueElementId').off().select2("destroy"); //remove any pre-existing select2 objects and all registered event handlers.
         var valueElementSelect2 = new DescriptorSelect2('#valueElementId', 'Search for a value');
-        var blockSelect2OpeningEvenHandler = true;
-        var needValueElementRefresh = true;
         valueElementSelect2.initSelect2(backingData);
         $('#valueElementId').on("change",function (e) {
             var selectedData = $("#valueElementId").select2("data");
@@ -153,37 +144,21 @@ $(document).ready(function () {
             $('#valueDescription').val(selectedData.description);
             $('button.btn-primary').focus();
         }).on("select2-highlight",function (e) {
-                valueElementSelect2.updateSelect2DescriptionPopover(e.choice);
-            }).on("select2-opening",function (e) {
-                if (blockSelect2OpeningEvenHandler) {
-                    e.preventDefault(); //block the original opening of the select2; generate a new opening event
-                }
-                blockSelect2OpeningEvenHandler = true;
-                if (needValueElementRefresh) {
-                    needValueElementRefresh = false;
-                    var selectedData = $("#attributeElementId").select2("data");
-                    $.ajax(bardAppContext + "/ontologyJSon/getValueDescriptorsV2", {
-                        data: {attributeId: selectedData.id},
-                        success: (function (valueData) {
-                            valueElementSelect2.backingData.results = valueData.results;
-                            $('#valueElementId').select2("data", valueData);
-                            blockSelect2OpeningEvenHandler = false;
-                            $('#valueElementId').select2("open");
-                        }),
-//                        error: handleAjaxError(),
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            alert("ERROR!")
-                        },
-                        complete: function () {
-                        }
-                    });
-                }
-            }).on("select2-open", function () {
-                blockSelect2OpeningEvenHandler = true;
-                needValueElementRefresh = true;
+            valueElementSelect2.updateSelect2DescriptionPopover(e.choice);
+        }).on("select2-opening", function (e) {
+            var selectedData = $("#attributeElementId").select2("data");
+            $.ajax(bardAppContext + "/ontologyJSon/getValueDescriptorsV2", {
+                async: false,
+                data: {attributeId: selectedData.id},
+                success: (function (valueData) {
+                    valueElementSelect2.backingData.results = valueData.results;
+                    $('#valueElementId').select2("data", valueData);
+                }),
+                error: handleAjaxError()
             });
+        });
         $('#elementValueContainer').show();
-//        potentiallyFocus("#valueElementId");
+        potentiallyFocus("#valueElementId");
     }
 
 
@@ -222,10 +197,10 @@ $(document).ready(function () {
             }
         }
     }).on("change", function (e) {
-            $("#extValueId").val($("#extValueSearch").select2("data").id);
-            $("#valueDisplay").val($("#extValueSearch").select2("data").text);
-            $('button.btn-primary').focus();
-        });
+        $("#extValueId").val($("#extValueSearch").select2("data").id);
+        $("#valueDisplay").val($("#extValueSearch").select2("data").text);
+        $('button.btn-primary').focus();
+    });
     if ($("#extValueSearch").val()) {
         $("#extValueSearch").select2("data", {id: $("#extValueSearch").val(), text: $("#extValueText").val()});
     }
@@ -336,8 +311,8 @@ $(document).ready(function () {
         updateConstraintWidgets(selectedData);
         $('#attributeDescription').val(selectedData.description);
     }).on("select2-highlight", function (e) {
-            attributeSelect2.updateSelect2DescriptionPopover(e.choice);
-        });
+        attributeSelect2.updateSelect2DescriptionPopover(e.choice);
+    });
     initialFocus();
 
 // set up the radio buttons so that widgets are shown based on which type of constraint
