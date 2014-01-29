@@ -97,14 +97,14 @@ $(document).ready(function () {
         }
         else if ('ELEMENT' === expectedValueType) {
             showWidgets('#elementValueContainer');
-            $.ajax(bardAppContext + "/ontologyJSon/getValueDescriptorsV2", {
-                data: {attributeId: data.id},
-                success: (function (valueData) {
-                    initializeValueElementSelect2(valueData);
-                }),
-                error: handleAjaxError()
-            });
-
+//            $.ajax(bardAppContext + "/ontologyJSon/getValueDescriptorsV2", {
+//                data: {attributeId: data.id},
+//                success: (function (valueData) {
+//                    initializeValueElementSelect2(valueData);
+//                }),
+//                error: handleAjaxError()
+//            });
+            initializeValueElementSelect2({results: []});
         }
         else if ('EXTERNAL_ONTOLOGY' === expectedValueType) {
             showExternalOntologyHelpText(data);
@@ -142,18 +142,48 @@ $(document).ready(function () {
     }
 
     function initializeValueElementSelect2(backingData) {
+        $('#valueElementId').off().select2("destroy"); //remove any pre-existing select2 objects and all registered event handlers.
         var valueElementSelect2 = new DescriptorSelect2('#valueElementId', 'Search for a value');
+        var blockSelect2OpeningEvenHandler = true;
+        var needValueElementRefresh = true;
         valueElementSelect2.initSelect2(backingData);
-        $('#valueElementId').on("change", function (e) {
-                var selectedData = $("#valueElementId").select2("data");
-                $("#valueDisplay").val(selectedData.text);
-                $('#valueDescription').val( selectedData.description);
-                $('button.btn-primary').focus();
-        }).on("select2-highlight", function(e) {
+        $('#valueElementId').on("change",function (e) {
+            var selectedData = $("#valueElementId").select2("data");
+            $("#valueDisplay").val(selectedData.text);
+            $('#valueDescription').val(selectedData.description);
+            $('button.btn-primary').focus();
+        }).on("select2-highlight",function (e) {
                 valueElementSelect2.updateSelect2DescriptionPopover(e.choice);
-        });
+            }).on("select2-opening",function (e) {
+                if (blockSelect2OpeningEvenHandler) {
+                    e.preventDefault(); //block the original opening of the select2; generate a new opening event
+                }
+                blockSelect2OpeningEvenHandler = true;
+                if (needValueElementRefresh) {
+                    needValueElementRefresh = false;
+                    var selectedData = $("#attributeElementId").select2("data");
+                    $.ajax(bardAppContext + "/ontologyJSon/getValueDescriptorsV2", {
+                        data: {attributeId: selectedData.id},
+                        success: (function (valueData) {
+                            valueElementSelect2.backingData.results = valueData.results;
+                            $('#valueElementId').select2("data", valueData);
+                            blockSelect2OpeningEvenHandler = false;
+                            $('#valueElementId').select2("open");
+                        }),
+//                        error: handleAjaxError(),
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert("ERROR!")
+                        },
+                        complete: function () {
+                        }
+                    });
+                }
+            }).on("select2-open", function () {
+                blockSelect2OpeningEvenHandler = true;
+                needValueElementRefresh = true;
+            });
         $('#elementValueContainer').show();
-        potentiallyFocus("#valueElementId");
+//        potentiallyFocus("#valueElementId");
     }
 
 
@@ -253,7 +283,7 @@ $(document).ready(function () {
         }
     }
 
-    var updateConstraintWidgets = function(data) {
+    var updateConstraintWidgets = function (data) {
         if ($("#providedWithResults").is(':checked')) {
 
             $("#valueConstraintContainer").show();
@@ -272,8 +302,8 @@ $(document).ready(function () {
         }
     };
 
-    // set up "Value to be provided as part of result upload" checkbox to show the radio buttons
-    // for type constraint if checked
+// set up "Value to be provided as part of result upload" checkbox to show the radio buttons
+// for type constraint if checked
     $('#providedWithResults').on('change', function (e) {
         var buttons = $('input:radio[name=valueConstraintType]');
         buttons.prop('checked', false);
@@ -286,17 +316,17 @@ $(document).ready(function () {
         updateConstraintWidgets($("#attributeElementId").select2('data'));
     })
 
-    var attributeSelect2 = new DescriptorSelect2('#attributeElementId', 'Search for attribute name',{results: []});
+    var attributeSelect2 = new DescriptorSelect2('#attributeElementId', 'Search for attribute name', {results: []});
     attributeSelect2.initSelect2({results: []});
     $.ajax("/BARD/ontologyJSon/getAttributeDescriptors", {
-        success:function (data) {
-            attributeSelect2.initSelect2(data,updateConstraintWidgets);
+        success: function (data) {
+            attributeSelect2.initSelect2(data, updateConstraintWidgets);
             initialFocus();
         },
         error: handleAjaxError()
     });
 
-    $("#attributeElementId").on("change", function (e) {
+    $("#attributeElementId").on("change",function (e) {
         // on change of the attribute, clear all value fields
         clearAllValueFields();
         // hide any existing error messages, will be redisplayed when user submits with new attribute
@@ -304,13 +334,13 @@ $(document).ready(function () {
         // based on the attribute selected only show the appropriate value widgets
         var selectedData = $("#attributeElementId").select2("data");
         updateConstraintWidgets(selectedData);
-        $('#attributeDescription').val( selectedData.description);
-    }).on("select2-highlight", function(e) {
+        $('#attributeDescription').val(selectedData.description);
+    }).on("select2-highlight", function (e) {
             attributeSelect2.updateSelect2DescriptionPopover(e.choice);
         });
     initialFocus();
 
-    // set up the radio buttons so that widgets are shown based on which type of constraint
+// set up the radio buttons so that widgets are shown based on which type of constraint
     $('input[name="valueConstraintType"]').on('change', function (e) {
         showWidgetsForConstraints($("#attributeElementId").select2('data'))
     })
@@ -323,4 +353,5 @@ $(document).ready(function () {
         $(this).attr('href', currentHref + '?attributeElementId=' + attributeElementId)
     });
 
-});
+})
+;
