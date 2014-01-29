@@ -14,8 +14,6 @@ class Person {
     Date lastUpdated
     String modifiedBy
 
-
-
     static mapping = {
         table('PERSON')
         id(column: 'PERSON_ID', generator: "sequence", params: [sequence: 'PERSON_ID_SEQ'])
@@ -26,7 +24,11 @@ class Person {
 
     static constraints = {
         userName(blank: false, maxSize: NAME_MAX_SIZE)
-        emailAddress(nullable: true, maxSize: NAME_MAX_SIZE)
+        emailAddress(nullable: true, maxSize: NAME_MAX_SIZE, validator: {
+            if(it != null && it.toLowerCase() != it.toLowerCase()) {
+                return 'email.not.lowercase'
+            }
+        })
         fullName(nullable: true, maxSize: NAME_MAX_SIZE)
         dateCreated(nullable: false)
         lastUpdated(nullable: true)

@@ -49,7 +49,6 @@ public class PersonaAuthenticationProvider implements AuthenticationProvider {
 
         final String email = verification.getEmail();
 
-
         final BardUser bardUser = getOrCreateUser(email);
 
         if (!bardUser) {
@@ -61,32 +60,35 @@ public class PersonaAuthenticationProvider implements AuthenticationProvider {
 
 
     private BardUser getOrCreateUser(final String email) {
+        String emailLowercase = email.toLowerCase();
+        BardUser bardUser = null
+
         try {
-            return findByUserName(email);
+            bardUser = findByEmail(emailLowercase);
         } catch (final UsernameNotFoundException e) {
             log.warn(e.message)
         }
-        BardUser bardUser = null
-        Person.withTransaction {
 
-            Person person = new Person(userName: email, emailAddress: email, fullName: email, modifiedBy: email)
-            person.save(flush: true)
+        if(bardUser == null) {
+            println("could not find ${emailLowercase}")
+            Person.withTransaction {
+                Person person = new Person(userName: emailLowercase, emailAddress: emailLowercase, fullName: emailLowercase, modifiedBy: emailLowercase)
+                person.save(flush: true)
 
-            person = Person.findByUserNameIlike(email)
-            bardUser = new BardUser(username: person.userName, fullName: person.fullName, email: new Email(person.emailAddress), isActive: true,
-                    authorities: person.roles);
+                bardUser = findByEmail(emailLowercase);
+            }
         }
+
         return bardUser
     }
 
-    BardUser findByUserName(String userName) {
+    BardUser findByEmail(String emailLowercase) {
         try {
-            assert userName, "User Name is required"
+            assert emailLowercase, "email is required"
 
-            Person person = Person.findByUserNameIlike(userName);
+            Person person = Person.findByEmailAddress(emailLowercase)
             return new BardUser(username: person.userName, fullName: person.fullName, email: new Email(person.emailAddress), isActive: true,
                     authorities: person.roles);
-
         } catch (Exception ee) {
             throw new UsernameNotFoundException(ee.getMessage());
         }
