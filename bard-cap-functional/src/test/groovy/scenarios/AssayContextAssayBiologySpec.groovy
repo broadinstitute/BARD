@@ -1,6 +1,5 @@
 package scenarios
 
-import pages.HomePage
 
 /**
  * This class extends all the test functions from AssayBaseContextSpec and override data values

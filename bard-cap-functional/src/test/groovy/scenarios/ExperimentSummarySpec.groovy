@@ -1,7 +1,6 @@
 package scenarios
 
 import pages.CreateExperimentPage
-import pages.HomePage
 import pages.ViewExperimentPage
 import base.BardFunctionalSpec
 
@@ -9,6 +8,8 @@ import common.Constants
 import common.TestData
 
 import db.Experiment
+
+
 
 /**
  * This class includes all the possible test functions for overview section of experiment.

@@ -1,13 +1,15 @@
 package scenarios
 
-import base.BardFunctionalSpec
-import common.Constants
-import common.TestData
-import db.Assay
 import pages.ContextItemPage
 import pages.EditContextPage
 import pages.ViewAssayDefinitionPage
 import spock.lang.Unroll
+import base.BardFunctionalSpec
+
+import common.Constants
+import common.TestData
+
+import db.Assay
 
 /**
  * This class extends all the test functions used for Assay Biology, Assay Component, Assay Design, Assay Protocol, Assay Readout, Experimental Variables sections
@@ -16,182 +18,80 @@ import spock.lang.Unroll
  */
 @Unroll
 abstract class AssayBaseContextSpec extends BardFunctionalSpec {
-	def contextCard = "test card"
-	def section
-	def cardGroup
-	def editContextGroup
-	def dbContextType
-
-
-	def "Test Add and Delete Context Card in Assay"(){
+	static def contextCard = "test card"
+	static def section
+	static def cardGroup
+	static def editContextGroup
+	static def dbContextType
+	def setup(){
+		logInSomeUser()
 		given:"Navigate to Show Assay page"
 		to ViewAssayDefinitionPage
 
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
-		def uiContentsBefore = getUIContexts(cardGroup)
-		def dbContentsBefore = Assay.getAssayContext(dbContextType, TestData.assayId)
+		def uiContexts = getUIContexts(cardGroup)
+		def dbContexts = Assay.getAssayContext(dbContextType, TestData.assayId)
+		def uiContextItems = getUIContextItems(cardGroup, contextCard)
+		def dbContextItems = Assay.getAssayContextItem(TestData.assayId, dbContextType, contextCard)
 
 		then:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
+		assert uiContexts.size() == dbContexts.size()
+		assert uiContexts.sort() == dbContexts.sort()
+		assert uiContextItems.size() == dbContextItems.size()
+		assert uiContextItems.sort() == dbContextItems.sort()
 
-		and:"Nagating to Edit Assay Context Page"
-		navigateToEditContext(section)
-
-		when:"At Edit Assay Context Page, Fetching Contexts Info from UI and DB for validation"
-		at EditContextPage
-		while(isContext(editContextGroup, contextCard)){
-			deleteContext(editContextGroup, contextCard)
-		}
-
-		then:"Navigating to Context Item Page"
-		addNewContextCard(editContextGroup, contextCard)
-
-		and:"Verifying Context added successfully"
-		assert isContext(editContextGroup, contextCard)
-
-		when:"Context is added, Fetching Contexts Info from UI and DB for validation"
-		def uiContentsAfterAdd = getUIContexts(editContextGroup)
-		def dbContentsAfterAdd = Assay.getAssayContext(dbContextType, TestData.assayId)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
-
-		and:"Navigating to View Assay Page"
-		finishEditing.buttonPrimary.click()
-
-		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
-		at ViewAssayDefinitionPage
-		uiContentsAfterAdd = getUIContexts(cardGroup)
-		dbContentsAfterAdd = Assay.getAssayContext(dbContextType, TestData.assayId)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
-
-		and:"Cleaning up Context Items"
+		and:"Navigate to Edit Assay Context Page and Add/Edit context"
 		navigateToEditContext(section)
 		at EditContextPage
 		while(isContext(editContextGroup, contextCard)){
 			deleteContext(editContextGroup, contextCard)
-
-			when:"Context is cleaned up, Fetching Contexts Info from UI and DB for validation"
-			def uiContentsAfterDelete = getUIContexts(editContextGroup)
-			def dbContentsAfterDelete = Assay.getAssayContext(dbContextType, TestData.assayId)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
-		and:"Navigating to View Assay Page"
-		finishEditing.buttonPrimary.click()
-
-		when:"At VIew Assay Page, Fetching Contexts Info from UI and DB for validation"
-		at ViewAssayDefinitionPage
-		def uiContents = getUIContexts(cardGroup)
-		def dbContents = Assay.getAssayContext(dbContextType, TestData.assayId)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContents.sort() == dbContents.sort()
-
-		report ""
 	}
 
-	def "Test Edit Context Card in Assay"(){
-		given:"Navigate to Show Assay page"
-		to ViewAssayDefinitionPage
-
-		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
-		at ViewAssayDefinitionPage
-		def editedContext = contextCard+Constants.edited
-		def uiContentsBefore = getUIContexts(cardGroup)
-		def dbContentsBefore = Assay.getAssayContext(dbContextType, TestData.assayId)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-		and:"Nagating to Edit Assay Context Page"
-		navigateToEditContext(section)
-
-		when:"At Edit Assay Context Page, Fetching Contexts Info from UI and DB for validation"
+	def "Test #TestName Context Card in Assay"(){
+		when:"Navigate to Edit Assay Context Page and Add/Edit context"
 		at EditContextPage
-		while(isContext(editContextGroup, contextCard)){
-			deleteContext(editContextGroup, contextCard)
-		}
-
-		then:"Edting Context"
-		if(!isContext(editContextGroup, contextCard)){
-			addNewContextCard(editContextGroup, contextCard)
-			waitFor { isContext(editContextGroup, contextCard) }
-			editContext(editContextGroup, contextCard, editedContext)
+		if(TestName == "Add and Delete"){
+			addNewContextCard(editContextGroup, inputData)
 		}else{
-			editContext(editContextGroup, contextCard, editedContext)
+			addNewContextCard(editContextGroup, inputData)
+			editContext(editContextGroup, inputData, inputData+Constants.edited)
 		}
-
-		and:"Verifying Context edited successfully"
-		assert isContext(editContextGroup, editedContext)
-
-		when:"Context is edited, Fetching Contexts Info from UI and DB for validation"
 		def uiContentsAfterAdd = getUIContexts(editContextGroup)
 		def dbContentsAfterAdd = Assay.getAssayContext(dbContextType, TestData.assayId)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
 
-		and:"Navigating to View Assay Page"
-		finishEditing.buttonPrimary.click()
-
-		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
+		when:"Finish editing and Fetching Contexts Info from UI and DB for validation"
+		finishEditing()
 		at ViewAssayDefinitionPage
 		uiContentsAfterAdd = getUIContexts(cardGroup)
 		dbContentsAfterAdd = Assay.getAssayContext(dbContextType, TestData.assayId)
 
-		then:"Verifying Context Info with UI & DB"
+		then:"Verifying Context Info with UI & DB and then cleanup the context"
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
-
-		and:"Cleaning up Context Items"
 		navigateToEditContext(section)
 		at EditContextPage
-		while(isContext(editContextGroup, editedContext)){
-			deleteContext(editContextGroup, editedContext)
-
-			when:"Context is cleaned up, Fetching Contexts Info from UI and DB for validation"
-			def uiContentsAfterDelete = getUIContexts(editContextGroup)
-			def dbContentsAfterDelete = Assay.getAssayContext(dbContextType, TestData.assayId)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
+		if(TestName == "Add and Delete"){
+			while(isContext(editContextGroup, inputData)){
+				deleteContext(editContextGroup, inputData)
+			}
+		}else{
+			while(isContext(editContextGroup, inputData+Constants.edited)){
+				deleteContext(editContextGroup, inputData)
+			}
 		}
-		and:"Navigating to View Assay Page"
-		finishEditing.buttonPrimary.click()
-
-		when:"At VIew Assay Page, Fetching Contexts Info from UI and DB for validation"
-		at ViewAssayDefinitionPage
-		def uiContents = getUIContexts(cardGroup)
-		def dbContents = Assay.getAssayContext(dbContextType, TestData.assayId)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContents.sort() == dbContents.sort()
-
-		report ""
+		report "$TestName"
+		where:
+		TestName				| inputData
+		"Add and Delete"		| contextCard
+		"Edit and Delete"		| contextCard
 	}
+
 
 	def "Test Add #TestName Type Context Item in Assay"(){
-		given:"Navigate to Show Assay page"
-		to ViewAssayDefinitionPage
-
-		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
-		at ViewAssayDefinitionPage
-		def uiContentsBefore = getUIContextItems(cardGroup, contextCard)
-		def dbContentsBefore = Assay.getAssayContextItem(TestData.assayId, dbContextType, contextCard)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-		and:"Navigating to Edit Assay Context Page"
-		navigateToEditContext(section)
-
 		when:"At Edit Assay Context Page, Fetching Contexts Info from UI and DB for validation"
 		at EditContextPage
 		while(isContext(editContextGroup, contextCard)){
@@ -233,7 +133,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
 
-		and:"Navigating to View Assay Page"
+		and:"Navigate to View Assay Page"
 		finishEditing.buttonPrimary.click()
 
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
@@ -257,18 +157,6 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 			then:"Verifying Context Info with UI & DB"
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
-		and:"Cleaning up Contexts"
-		while(isContext(editContextGroup, contextCard)){
-			deleteContext(editContextGroup, contextCard)
-		}
-
-		and:"Navigating to View Assay Definition Page"
-		finishEditing.buttonPrimary.click()
-
-		and:"At View Assay Definition Page"
-		at ViewAssayDefinitionPage
-		assert !isContext(cardGroup, contextCard)
-
 		report "$TestName"
 
 		where:
@@ -280,21 +168,6 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 	}
 
 	def "Test Edit #TestName Type Context Item in Assay"(){
-		given:"Navigate to Show Assay page"
-		to ViewAssayDefinitionPage
-
-		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
-		at ViewAssayDefinitionPage
-		def uiContentsBefore = getUIContextItems(cardGroup, contextCard)
-		def dbContentsBefore = Assay.getAssayContextItem(TestData.assayId, dbContextType, contextCard)
-
-		then:"Verifying Context Info with UI & DB"
-		assert uiContentsBefore.size() == dbContentsBefore.size()
-		assert uiContentsBefore.sort() == dbContentsBefore.sort()
-
-		and:"Nagating to Edit Assay Context Page"
-		navigateToEditContext(section)
-
 		when:"At Edit Assay Context Page, Fetching Contexts Info from UI and DB for validation"
 		at EditContextPage
 		while(isContext(editContextGroup, contextCard)){
@@ -360,7 +233,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
 
 		and:"Navigating to View Assay Page"
-		finishEditing.buttonPrimary.click()
+		finishEditing()
 
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
@@ -383,18 +256,6 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 			then:"Verifying Context Info with UI & DB"
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
-		and:"Cleaning up Contexts"
-		while(isContext(editContextGroup, contextCard)){
-			deleteContext(editContextGroup, contextCard)
-		}
-
-		and:"Navigating to View Assay Definition Page"
-		finishEditing.buttonPrimary.click()
-
-		and:"At View Assay Definition Page"
-		at ViewAssayDefinitionPage
-		assert !isContext(cardGroup, contextCard)
-
 		report "$TestName"
 
 		where:
@@ -406,4 +267,12 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		//		"ExOntologyNoIntegtegrated"	| TestData.contexts.ExtOntology	| TestData.contexts.ExtOntology.attribute
 	}
 
+	def cleanup(){
+		while(isContext(editContextGroup, contextCard)){
+			deleteContext(editContextGroup, contextCard)
+		}
+		finishEditing()
+		at ViewAssayDefinitionPage
+		assert !isContext(cardGroup, contextCard)
+	}
 }

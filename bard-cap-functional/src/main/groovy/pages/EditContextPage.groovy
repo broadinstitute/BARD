@@ -5,15 +5,14 @@ import modules.ButtonsModule
 import modules.CardsHolderModule
 import modules.LoadingModule
 
-import common.Constants
+
 /**
  * @author Muhammad.Rafique
  * Date Created: 2013/02/07
  */
 class EditContextPage extends CapScaffoldPage{
-//	final static SLEEP_INTERVAL = 2000
 	static url=""
-	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { $("h4").text().contains("Edit") }
+	static at = { waitFor { $("h4").text().contains("Edit") }
 	}
 	def itemName
 	static content = {
@@ -57,14 +56,14 @@ class EditContextPage extends CapScaffoldPage{
 		addContextCard.inputCardName.value(contextName)
 		addContextCard.saveBtn.buttonSubmitPrimary.click()
 //		ajaxRequestCompleted()
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { isContext(groupId, contextName) }
+		waitFor { isContext(groupId, contextName) }
 	}
 
 	def deleteContext(def cardGroup, def contextName){
 		if(isContextCardNotEmpty(cardGroup, contextName)){
 			while(isContextCardNotEmpty(cardGroup, contextName)){
 				cleanUpContext(cardGroup,contextName)
-				ajaxRequestCompleted()
+//				ajaxRequestCompleted()
 			}
 			withConfirm {cardTable(cardGroup, contextName).contextBtnGroup.iconTrash.click()}
 		}else{
@@ -85,5 +84,9 @@ class EditContextPage extends CapScaffoldPage{
 			}
 		}
 		waitFor { isContext(cardGroup, editedValue) }
+	}
+	
+	def finishEditing(){
+		finishEditing.buttonPrimary.click()
 	}
 }

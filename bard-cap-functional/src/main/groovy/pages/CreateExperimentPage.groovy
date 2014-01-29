@@ -1,9 +1,8 @@
 package pages
 
-import common.TestData;
-
-import modules.ButtonsModule;
 import geb.Page
+
+import common.TestData
 
 /**
  * This class includes create experiment page objects and also related functions.

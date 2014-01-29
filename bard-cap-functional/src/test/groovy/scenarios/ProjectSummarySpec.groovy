@@ -1,7 +1,6 @@
 package scenarios
 
 import pages.CreateProjectPage
-import pages.HomePage
 import pages.ViewProjectDefinitionPage
 import base.BardFunctionalSpec
 

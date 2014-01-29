@@ -1,9 +1,7 @@
 package modules
 
-import javax.imageio.ImageIO.ContainsFilter;
-
-import geb.Page
 import geb.Module
+import geb.Page
 import geb.navigator.Navigator
 
 class BardCapHeaderModule extends Module {

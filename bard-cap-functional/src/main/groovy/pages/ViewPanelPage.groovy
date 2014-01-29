@@ -1,9 +1,11 @@
 package pages
 
-import geb.Page
-import modules.EditIconModule;
+import modules.EditIconModule
 import modules.SummaryModule
+
 import common.TestData
+
+
 /**
  * This class hold methods which are performed on show panel page. 
  * @author Muhammad.Rafique

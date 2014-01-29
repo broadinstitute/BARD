@@ -1,4 +1,4 @@
-def useBroadRepo = true
+def useBroadRepo = System.getProperty("useBroadRepo") != "false"
 
 grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
 grails.project.work.dir = "target"
@@ -39,6 +39,7 @@ grails.project.dependency.resolution = {
         // build scope
 
         // compile scope
+
         compile "net.logstash.log4j:jsonevent-layout:1.5"
         compile "org.grails:grails-webflow:$grailsVersion"
         compile "org.apache.httpcomponents:httpclient:4.2.3"
@@ -74,6 +75,9 @@ grails.project.dependency.resolution = {
             // this largely because this lib is only
             // used to run adhoc scripts run at the Broad.
             compile "bard:pubchem-xml:20131010"
+            compile('cbip:cbip_encoding:0.1') {
+                excludes "junit"
+            }
         }
 
         compile "com.oracle:ojdbc6:11.2.0.2.0"

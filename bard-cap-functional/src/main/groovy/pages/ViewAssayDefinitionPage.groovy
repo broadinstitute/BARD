@@ -1,22 +1,21 @@
 package pages
 
-import geb.Page
-
-import common.Constants
 import common.TestData
+
+
 /**
  * @author Muhammad.Rafique
  * Date Created: 2013/02/07
  */
 class ViewAssayDefinitionPage extends CapScaffoldPage{
 	static url="assayDefinition/show/"+TestData.assayId
-	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){$("h4").text().contains("View Assay Definition")}}
+	static at = { waitFor {$("h4").text().contains("View Assay Definition")}}
 
 	static content = {
 		//		editAssayMeasureBtn { $("a.btn", text:"Edit Measures") } // Edit Measure btn
 	}
 
-	Map<String, String> getUIAssociatedMeasure(def cardName){
+	/*Map<String, String> getUIAssociatedMeasure(def cardName){
 		def contextMeasure = [:]
 		if(cardHolders.cardTable){
 			cardHolders.cardTable.each{ cards ->
@@ -29,5 +28,6 @@ class ViewAssayDefinitionPage extends CapScaffoldPage{
 			}
 		}
 		return contextMeasure
-	}
+	}*/
+
 }

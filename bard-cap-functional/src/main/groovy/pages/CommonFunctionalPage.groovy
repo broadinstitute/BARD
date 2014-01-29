@@ -1,23 +1,17 @@
 package pages
 
 import geb.Page
-import geb.navigator.Navigator
-import modules.BardCapHeaderModule;
-import modules.LoadingModule
-import common.Constants
-import common.Constants.NavigateTo;
-import common.TestData;
 
 public class CommonFunctionalPage extends Page {
-	def seachADID = "Search by Assay Definition ID"
-	def seachADN = "Search by Assay Definition Name"
-	def seachPDN = "Search by Project Name"
-	def seachPDID = "Search by Project ID"
-	def createPD = "Create a New Project"
-	def capMenu = "CAP"
-	def ADMenu = "Assay Definitions"
-	def projectMenu = "Projects"
-	def webClientMenu = "Bard Web Client"
+//	def seachADID = "Search by Assay Definition ID"
+//	def seachADN = "Search by Assay Definition Name"
+//	def seachPDN = "Search by Project Name"
+//	def seachPDID = "Search by Project ID"
+//	def createPD = "Create a New Project"
+//	def capMenu = "CAP"
+//	def ADMenu = "Assay Definitions"
+//	def projectMenu = "Projects"
+//	def webClientMenu = "Bard Web Client"
 	
 	static url = ""
 	static at = {}
@@ -27,7 +21,7 @@ public class CommonFunctionalPage extends Page {
 	}
 
 	boolean validationError(def element, def condition){
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element }
+		waitFor{ element }
 		if(element){
 			if(element.text()){
 				element.text().contains(condition)
@@ -38,10 +32,10 @@ public class CommonFunctionalPage extends Page {
 	}
 
 	boolean ajaxRequestCompleted(){
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !formLoading.loading.displayed }
+		waitFor { !formLoading.loading.displayed }
 	}
 	
-	def navigateTo(NavigateTo to){
+	/*def navigateTo(NavigateTo to){
 		switch(to){
 			case NavigateTo.ASSAY_BY_ID:
 				navigation(ADMenu, seachADID)
@@ -57,7 +51,7 @@ public class CommonFunctionalPage extends Page {
 				break;
 
 		}
-	}
+	}*/
 
 	def navigation(def tabName, def menuName){
 		assert navigationMenu.menuTab(tabName)
