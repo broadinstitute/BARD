@@ -1,3 +1,4 @@
+<%@ page import="bard.db.enums.Status" %>
 <g:hiddenField name="version" id="versionId" value="${assay.version}"/>
 <div class="row-fluid">
     <div class="span9">
@@ -21,6 +22,15 @@
                    data-original-title="Select Assay Status">${assay?.assayStatus?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status" data-id="${assay?.assayStatus?.id}"></a>
             </dd>
+
+            <g:if test="${assay?.assayStatus.equals(Status.APPROVED)}">
+                <dt><g:message code="assay.approvedBy.label" default="Approved By"/>:</dt>
+                <dd id="approvedById">
+                    <g:if test="${assay.approvedBy}">
+                        ${assay?.approvedBy} (<g:formatDate date="${assay.approvedDate}" format="MM/dd/yyyy"/>)
+                    </g:if>
+                </dd>
+            </g:if>
 
             <dt><g:message code="assay.assayName.label" default="Fix i18n"/>:</dt>
             <dd>
