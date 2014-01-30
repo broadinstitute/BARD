@@ -1,5 +1,8 @@
 // Mozilla Persona Stuff
 
+function forgetCurrentUser() {
+    sessionStorage.removeItem('currentUser');
+}
 $(document).ready(function () {
 
     var href = window.location.href;
@@ -15,7 +18,9 @@ $(document).ready(function () {
     navigator.id.watch({
         loggedInUser: currentUser,
         onlogin: function (assertion) {
+            console.log("onlogin");
             if (sessionStorage['currentUser'] != undefined) {
+                console.log("currentUser != undefined");
                 return;
             }
             $.ajax({
@@ -39,8 +44,9 @@ $(document).ready(function () {
             });
         },
         onlogout: function () {
-            sessionStorage.removeItem('currentUser');
+            forgetCurrentUser();
             currentUser = null;
         }
     });
 });
+

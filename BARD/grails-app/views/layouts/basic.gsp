@@ -55,6 +55,15 @@
     </a>
 </noscript>
 
+<%-- Persona maintains state on the client to remember if we're logged in or not.  However, on the server side
+ we also keep track of whether we're logged in or not.   These can get out of sync, so on the server side, if the
+ current request is not logged in, emit some javascript which tells the client that it's not logged in.  --%>
+<sec:ifNotLoggedIn>
+    <r:script>
+        forgetCurrentUser();
+    </r:script>
+</sec:ifNotLoggedIn>
+
 <header class="container-fluid" id="header">
 
     <div class="search-panel">
