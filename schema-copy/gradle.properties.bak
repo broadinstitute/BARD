@@ -1,0 +1,8 @@
+mavenRepoUrl=http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo
+
+devenv.url='jdbc:oracle:thin:@vmbarddev:1521:barddev
+devenv.username=ycruz
+devenv.password=ch3mb10
+
+excluded.dataTables=AUDIT_COLUMN_LOG,AUDIT_ROW_LOG,DATABASECHANGELOGLOCK
+excluded.schemaTables=DATABASECHANGELOGLOCK,DATABASECHANGELOG

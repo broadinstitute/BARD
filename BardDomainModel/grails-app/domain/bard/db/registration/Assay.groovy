@@ -23,6 +23,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     private static final int ASSAY_VERSION_MAX_SIZE = 10
     public static final int DESIGNED_BY_MAX_SIZE = 100
     private static final int MODIFIED_BY_MAX_SIZE = 40
+    private static final int APPROVED_BY_MAX_SIZE = 40
     private static final int ASSAY_SHORT_NAME_MAX_SIZE = 250
 
     /**
@@ -37,6 +38,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
 
 
     def capPermissionService
+    def springSecurityService
     Status assayStatus = Status.DRAFT
     String assayName
     String assayVersion
@@ -49,6 +51,8 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     // grails auto-timestamp
     Date dateCreated
     Date lastUpdated = new Date()
+    String approvedBy
+    Date approvedDate
 
     Set<Experiment> experiments = [] as Set<Experiment>
     //TODO: Mark for deletion
@@ -87,6 +91,8 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
         lastUpdated(nullable: false)
         ownerRole(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+        approvedBy(nullable: true, blank: false, maxSize: APPROVED_BY_MAX_SIZE)
+        approvedDate(nullable: true)
     }
 
     static mapping = {
@@ -104,6 +110,12 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
         }
     }
 
+    def beforeUpdate(){
+        if(assayStatus.equals(Status.APPROVED) && this.isDirty('assayStatus')){
+            approvedBy = springSecurityService.authentication.name
+            approvedDate = new Date()
+        }
+    }
 
     String getOwner() {
         final String objectOwner = this.ownerRole?.displayName
