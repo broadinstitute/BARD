@@ -18,9 +18,7 @@ $(document).ready(function () {
     navigator.id.watch({
         loggedInUser: currentUser,
         onlogin: function (assertion) {
-            console.log("onlogin");
             if (sessionStorage['currentUser'] != undefined) {
-                console.log("currentUser != undefined");
                 return;
             }
             $.ajax({
