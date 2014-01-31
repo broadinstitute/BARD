@@ -3,9 +3,11 @@ package bard.db.registration
 import acl.CapPermissionService
 import bard.db.ContextService
 import bard.db.command.BardCommand
+import bard.db.dictionary.Element
 import bard.db.enums.AssayType
 import bard.db.enums.ContextType
 import bard.db.enums.Status
+import bard.db.enums.ValueType
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
 import bard.db.project.InlineEditableCommand
@@ -151,11 +153,10 @@ class AssayDefinitionController {
             if (updatedAssay.hasErrors()) {
                 // in this case specifically looking for field error on assayStatus from Assay.validateItems() method
                 final FieldError error = updatedAssay.errors.getFieldError('assayStatus')
-                if(error){
-                    conflictMessage(error.getDefaultMessage())
-                }
-                else{
-                    conflictMessage(updatedAssay.errors.allErrors*.getDefaultMessage().join('\n'))
+                if (error) {
+                    editBadUserInputErrorMessage(error.getDefaultMessage())
+                } else {
+                    editBadUserInputErrorMessage(updatedAssay.errors.allErrors*.getDefaultMessage().join('\n'))
                 }
             } else {
                 generateAndRenderJSONResponse(updatedAssay.version, updatedAssay.modifiedBy, updatedAssay.lastUpdated, updatedAssay.assayStatus.id)
@@ -286,23 +287,18 @@ class AssayDefinitionController {
 
     @Secured(['isAuthenticated()'])
     def save(AssayCommand assayCommand) {
-        if (!assayCommand.validate()) {
-            create(assayCommand)
-            return
-        }
-        final Assay assay = assayCommand.createNewAssay()
-        if (assay) {
-            redirect(action: "show", id: assay.id)
-            return
+        if (assayCommand.validate()) {
+            final Assay assay = assayCommand.createNewAssay()
+            if (assay) {
+                redirect(action: "show", id: assay.id)
+                return
+            }
         }
         render(view: "create", model: [assayCommand: assayCommand])
     }
 
     @Secured(['isAuthenticated()'])
     def create(AssayCommand assayCommand) {
-        if (!assayCommand) {
-            projectCommand: new AssayCommand()
-        }
         [assayCommand: new AssayCommand()]
     }
 
@@ -485,7 +481,10 @@ class AssayCommand extends BardCommand {
 
     String assayName
     String assayVersion = "1"
+
     Date dateCreated = new Date()
+    final Long assayFormatId = 6L // will need to be updated if assay format element ever changes ids
+    Long assayFormatValueId
     AssayType assayType = AssayType.REGULAR
     String ownerRole
 
@@ -497,6 +496,7 @@ class AssayCommand extends BardCommand {
 
     static constraints = {
         importFrom(Assay, exclude: ['ownerRole', 'assayStatus', 'readyForExtraction', 'lastUpdated'])
+        assayFormatValueId(nullable: false)
         ownerRole(nullable: false, blank: false, validator: { value, command, err ->
             Role role = Role.findByAuthority(value)
             /*We make it required in the command object even though it is optional in the domain.
@@ -512,24 +512,59 @@ class AssayCommand extends BardCommand {
 
 
     Assay createNewAssay() {
-        Assay assayToReturn = null
-        if (validate()) {
-            Assay tempAssay = new Assay()
-            copyFromCmdToDomain(tempAssay)
-            if (attemptSave(tempAssay)) {
-                assayToReturn = tempAssay
+        final Element assayFormatValue = attemptFindById(Element, this.assayFormatId)
+        if (!hasErrors()) {
+            final Assay assayToReturn = new Assay()
+            copyFromCmdToDomain(assayToReturn)
+            attemptSave(assayToReturn)
+            createContextsAndContextItems(assayToReturn, assayFormatValue)
+            if(hasErrors()){
+                assayToReturn.delete()
             }
+            return assayToReturn
         }
-        return assayToReturn
+        return null
     }
 
+    void createContextsAndContextItems(Assay assay, Element assayFormatValue) {
+
+        if ("small molecule format" != assayFormatValue.label) {
+            buildAssaySection(ContextType.BIOLOGY, 'biology', ['biology'], assay)
+        }
+
+        buildAssaySection(ContextType.ASSAY_PROTOCOL, 'assay format', ['assay format', 'assay type', 'assay method'], assay)
+        buildAssaySection(ContextType.ASSAY_DESIGN, 'assay footprint', ['assay footprint'], assay)
+
+        buildAssaySection(ContextType.ASSAY_READOUT, 'assay readout', ['assay readout', 'readout type', 'readout signal direction'], assay)
+        buildAssaySection(ContextType.ASSAY_READOUT, 'detection method', ['measured component', 'detection role'], assay)
+        buildAssaySection(ContextType.ASSAY_READOUT, 'detection method type', ['detection method type', 'detection instrument name'], assay)
+
+        buildAssaySection(ContextType.ASSAY_COMPONENTS, 'assay component 1', ['assay component name', 'assay component type', 'assay component role'], assay)
+    }
+
+    void buildAssaySection(ContextType contextType, String contextName, List<String> attributeLabels, Assay assay) {
+        final AssayContext context = assay.assayContexts.find { it.contextName == contextName } ?: new AssayContext(contextType: contextType, contextName: contextName)
+        assay.addToAssayContexts(context)
+        if (context.id == null){
+            attemptSave(context)
+        }
+        for (String label in attributeLabels) {
+            final Element attribute = Element.findByLabel(label)
+            final AssayContextItem item = new AssayContextItem(valueType: ValueType.NONE, attributeElement: attribute)
+            context.addToAssayContextItems(item)
+            attemptSave(item)
+        }
+    }
 
     void copyFromCmdToDomain(Assay assay) {
         assay.designedBy = springSecurityService.principal?.username
         assay.modifiedBy = assay.designedBy
         assay.ownerRole = Role.findByAuthority(ownerRole)
+
         for (String field in PROPS_FROM_CMD_TO_DOMAIN) {
             assay[(field)] = this[(field)]
         }
+        //attemptFindById(Element ,this.assayFormatId)
+
     }
 }
