@@ -11,6 +11,10 @@
         return document.getElementById("jsc").getMolfile();
     }
 
+    function setMolfile(molfile, rtf) {
+        return document.getElementById("jsc").setMolfile(molfile, rtf);
+    }
+
     function version() {
         return document.getElementById("jsc").version();
     }
@@ -20,6 +24,11 @@
     }
 
     function JSDrawClipboard_onstart() {
+        if (window == parent) {
+            alert("JSDrawClipboard tool works.");
+            return;
+        }
+
         try {
             parent.JSDrawClipboard_onstart();
             //alert("JSDraw Clipboard is ready.  Please try to paste it again.");
@@ -27,16 +36,6 @@
         catch (e) {
             alert(e);
         }
-    }
-
-    function test() {
-        var s = window.location + "";
-        var p = s.indexOf('?');
-        if (p < 0)
-            return;
-
-        var callback = s.substr(p + 1);
-        eval("parent." + callback);
     }
 </script>
 </body>
