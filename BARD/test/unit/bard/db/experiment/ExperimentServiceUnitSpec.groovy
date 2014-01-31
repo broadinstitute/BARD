@@ -148,6 +148,7 @@ public class ExperimentServiceUnitSpec extends Specification {
         given:
         final Experiment experiment = Experiment.build(experimentName: 'experimentName20', experimentStatus: Status.DRAFT)
         final Status newExperimentStatus = Status.APPROVED
+        Experiment.metaClass.isDirty = {String field -> false}
         when:
         final Experiment updatedExperiment = service.updateExperimentStatus(experiment.id, newExperimentStatus)
         then:

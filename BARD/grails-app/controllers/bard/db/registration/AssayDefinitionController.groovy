@@ -23,6 +23,7 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.access.PermissionEvaluator
 import org.springframework.security.acls.domain.BasePermission
+import org.springframework.validation.FieldError
 
 import javax.servlet.http.HttpServletResponse
 import java.text.DateFormat
@@ -93,7 +94,7 @@ class AssayDefinitionController {
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.assayType.id)
         }
         catch (AccessDeniedException ade) {
-           log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -127,7 +128,7 @@ class AssayDefinitionController {
 
         }
         catch (AccessDeniedException ade) {
-           log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -146,12 +147,22 @@ class AssayDefinitionController {
                 conflictMessage(message)
                 return
             }
-            assay = assayDefinitionService.updateAssayStatus(inlineEditableCommand.pk, assayStatus)
-            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.assayStatus.id)
-
+            final Assay updatedAssay = assayDefinitionService.updateAssayStatus(inlineEditableCommand.pk, assayStatus)
+            if (updatedAssay.hasErrors()) {
+                // in this case specifically looking for field error on assayStatus from Assay.validateItems() method
+                final FieldError error = updatedAssay.errors.getFieldError('assayStatus')
+                if(error){
+                    conflictMessage(error.getDefaultMessage())
+                }
+                else{
+                    conflictMessage(updatedAssay.errors.allErrors*.getDefaultMessage().join('\n'))
+                }
+            } else {
+                generateAndRenderJSONResponse(updatedAssay.version, updatedAssay.modifiedBy, updatedAssay.lastUpdated, updatedAssay.assayStatus.id)
+            }
         }
         catch (AccessDeniedException ade) {
-           log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -183,7 +194,7 @@ class AssayDefinitionController {
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.assayName)
         }
         catch (AccessDeniedException ade) {
-           log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
@@ -216,7 +227,7 @@ class AssayDefinitionController {
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.lastUpdated, assay.designedBy)
         }
         catch (AccessDeniedException ade) {
-           log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee, ee)
@@ -351,7 +362,7 @@ class AssayDefinitionController {
                 log.error(ee, ee)
             }
             // Don't allow caching if the page is editable
-            if(editable){
+            if (editable) {
                 response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
                 response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
                 response.setDateHeader("Expires", 0); // Proxies
@@ -407,6 +418,7 @@ class AssayDefinitionController {
         }
     }
 }
+
 class EditingHelper {
     static final DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy")
 
@@ -466,6 +478,7 @@ class EditingHelper {
 
 
 }
+
 @InheritConstructors
 @Validateable
 class AssayCommand extends BardCommand {
@@ -479,7 +492,8 @@ class AssayCommand extends BardCommand {
     SpringSecurityService springSecurityService
 
 
-    public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['assayType', 'assayName', 'assayVersion', 'dateCreated'].asImmutable()
+    public static
+    final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['assayType', 'assayName', 'assayVersion', 'dateCreated'].asImmutable()
 
     static constraints = {
         importFrom(Assay, exclude: ['ownerRole', 'assayStatus', 'readyForExtraction', 'lastUpdated'])
@@ -495,7 +509,6 @@ class AssayCommand extends BardCommand {
     }
 
     AssayCommand() {}
-
 
 
     Assay createNewAssay() {

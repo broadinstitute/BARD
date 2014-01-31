@@ -40,9 +40,11 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                     | valueUnderTest      | valid | errorCode
-        'null is not valid'      | { null }            | false | 'nullable'
-        'valid attributeElement' | { Element.build(expectedValueType: ExpectedValueType.FREE_TEXT ) } | true  | null
+        desc                     | valueUnderTest                                                    | valid | errorCode
+        'null is not valid'      | {
+            null
+        }                                                                                            | false | 'nullable'
+        'valid attributeElement' | { Element.build(expectedValueType: ExpectedValueType.FREE_TEXT) } | true  | null
     }
 
     void "test deriveDisplayValue  #desc"() {
@@ -69,10 +71,10 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
         instance.deriveDisplayValue() == expectedDisplayValue
 
         where:
-        desc                            | expectedDisplayValue | attributeElementMap            | instanceMap                    | valueElementMap | qualifier | valueNum | unitElementMap         | valueMin | valueMax | valueDisplay
-        'only valueElement'             | 't'                  | [expectedValueType: ELEMENT]   | [valueType: ValueType.ELEMENT] | [label: 't']    | null      | null     | null                   | null     | null     | 'some value'
-        'qualifier and valueNum'        | '1.0'              | [expectedValueType: NUMERIC]   | [valueType: ValueType.NUMERIC] | null            | '= '      | 1.0      | null                   | null     | null     | 'some value'
-        'qualifier, valueNum and units' | '1.0 abbr'         | [expectedValueType: NUMERIC]   | [valueType: ValueType.NUMERIC] | null            | '= '      | 1.0      | [abbreviation: 'abbr'] | null     | null     | 'some value'
+        desc                            | expectedDisplayValue | attributeElementMap          | instanceMap                    | valueElementMap | qualifier | valueNum | unitElementMap         | valueMin | valueMax | valueDisplay
+        'only valueElement'             | 't'                  | [expectedValueType: ELEMENT] | [valueType: ValueType.ELEMENT] | [label: 't']    | null      | null     | null                   | null     | null     | 'some value'
+        'qualifier and valueNum'        | '1.0'                | [expectedValueType: NUMERIC] | [valueType: ValueType.NUMERIC] | null            | '= '      | 1.0      | null                   | null     | null     | 'some value'
+        'qualifier, valueNum and units' | '1.0 abbr'           | [expectedValueType: NUMERIC] | [valueType: ValueType.NUMERIC] | null            | '= '      | 1.0      | [abbreviation: 'abbr'] | null     | null     | 'some value'
     }
 
     /**
@@ -87,7 +89,7 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
      * @see <a href="https://github.com/broadinstitute/BARD/wiki/Business-rules#general-business-rules-for-assay_context_item">general-business-rules-for-assay_context_item</a>
      *
      */
-    void "test validation  #desc"() {
+    void "test (AbstractContextItem) validation with #desc"() {
 
         given:
         Element attributeElement = optionallyCreateElement(attributeElementMap)
@@ -159,6 +161,9 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
 
         'valid dictionary reference value but extValueId not null'   | [expectedValueType: ELEMENT]                               | [label: 'foo']  | [extValueId: 'someId', qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: 'someDisplay'] | false         | ['contextItem.attribute.expectedValueType.ELEMENT.required.fields']   | [extValueId: 'contextItem.extValueId.not.null', valueElement: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]
         'valid dictionary reference value but qualifier not null'    | [expectedValueType: ELEMENT]                               | [label: 'foo']  | [extValueId: null, qualifier: '= ', valueNum: null, valueMin: null, valueMax: null, valueDisplay: 'someDisplay',]    | false         | ['contextItem.attribute.expectedValueType.ELEMENT.required.fields']   | [extValueId: null, valueElement: null, qualifier: 'contextItem.qualifier.not.null', valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]
+        'valid dictionary reference value but valueNum not null'     | [expectedValueType: ELEMENT]                               | [label: 'foo']  | [extValueId: null, qualifier: null, valueNum: 1, valueMin: null, valueMax: null, valueDisplay: 'someDisplay',]       | false         | ['contextItem.attribute.expectedValueType.ELEMENT.required.fields']   | [extValueId: null, valueElement: null, qualifier: null, valueNum: 'contextItem.valueNum.not.null', valueMin: null, valueMax: null, valueDisplay: null]
+        'valid dictionary reference value but valueMin not null'     | [expectedValueType: ELEMENT]                               | [label: 'foo']  | [extValueId: null, qualifier: null, valueNum: null, valueMin: 1, valueMax: null, valueDisplay: 'someDisplay',]       | false         | ['contextItem.attribute.expectedValueType.ELEMENT.required.fields']   | [extValueId: null, valueElement: null, qualifier: null, valueNum: null, valueMin: 'contextItem.valueMin.not.null', valueMax: null, valueDisplay: null]
+        'valid dictionary reference value but valueMax not null'     | [expectedValueType: ELEMENT]                               | [label: 'foo']  | [extValueId: null, qualifier: null, valueNum: null, valueMin: null, valueMax: 1, valueDisplay: 'someDisplay',]       | false         | ['contextItem.attribute.expectedValueType.ELEMENT.required.fields']   | [extValueId: null, valueElement: null, qualifier: null, valueNum: null, valueMin: null, valueMax: 'contextItem.valueMax.not.null', valueDisplay: null]
 
         'valid NONE state no values (default testing config) '       | [expectedValueType: NONE]                                  | null            | [extValueId: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]              | true          | []                                                                    | [extValueId: null, valueElement: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]
         'invalid NONE state extValueId not null '                    | [expectedValueType: NONE]                                  | null            | [extValueId: 'someId', qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]          | false         | ['contextItem.attribute.expectedValueType.NONE.required.fields']      | [extValueId: 'contextItem.extValueId.not.null', valueElement: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]

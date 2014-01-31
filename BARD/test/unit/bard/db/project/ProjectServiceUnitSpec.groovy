@@ -60,6 +60,7 @@ public class ProjectServiceUnitSpec extends Specification {
     void "test update project status"() {
         given:
         final Project project = Project.build(name: 'projectName10', projectStatus: Status.DRAFT)
+        Project.metaClass.isDirty = {String field -> false}
         when:
         final Project updatedProject = service.updateProjectStatus(project.id, Status.APPROVED)
         then:
