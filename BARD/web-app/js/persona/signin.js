@@ -1,5 +1,8 @@
 // Mozilla Persona Stuff
 
+function forgetCurrentUser() {
+    sessionStorage.removeItem('currentUser');
+}
 $(document).ready(function () {
 
     var href = window.location.href;
@@ -39,8 +42,9 @@ $(document).ready(function () {
             });
         },
         onlogout: function () {
-            sessionStorage.removeItem('currentUser');
+            forgetCurrentUser();
             currentUser = null;
         }
     });
 });
+
