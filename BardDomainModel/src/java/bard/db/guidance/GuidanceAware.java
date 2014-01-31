@@ -21,6 +21,11 @@ import java.util.List;
 public interface GuidanceAware {
 
     /**
+     * @return a list of guidance rules that should be applied
+     */
+    public List<GuidanceRule> getGuidanceRules();
+
+    /**
      * @return a list of Guidance objects containing messages for the end user
      */
     public List<Guidance> getGuidance();

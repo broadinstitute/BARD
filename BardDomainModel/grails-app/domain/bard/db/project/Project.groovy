@@ -9,6 +9,8 @@ import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.experiment.Experiment
 import bard.db.guidance.Guidance
 import bard.db.guidance.GuidanceAware
+import bard.db.guidance.GuidanceRule
+import bard.db.guidance.GuidanceUtils
 import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
@@ -185,11 +187,15 @@ class Project extends AbstractContextOwner implements GuidanceAware {
     }
 
     @Override
-    List<Guidance> getGuidance() {
-        final List<Guidance> guidanceList = []
-        guidanceList.addAll(new MinimumOfOneBiologyGuidanceRule(this).getGuidance())
-        guidanceList
+    List<GuidanceRule> getGuidanceRules() {
+        return [new MinimumOfOneBiologyGuidanceRule(this)]
     }
+
+    @Override
+    List<Guidance> getGuidance() {
+        GuidanceUtils.getGuidance(getGuidanceRules())
+    }
+
     public boolean permittedToSeeEntity() {
         if ((projectStatus == Status.DRAFT) &&
                 (!SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR') &&
