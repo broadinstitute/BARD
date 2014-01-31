@@ -92,9 +92,10 @@ public class AssayDefinitionServiceUnitSpec extends Specification {
         given:
         final Assay assay = Assay.build(assayName: 'assayName10', assayStatus: Status.DRAFT, capPermissionService: Mock(CapPermissionService))
         when:
-        final Assay updatedAssay = service.updateAssayStatus(assay.id, Status.APPROVED)
+        final boolean updated = service.updateAssayStatus(assay.id, Status.APPROVED)
         then:
-        assert Status.APPROVED == updatedAssay.assayStatus
+        assert updated
+        assert Status.APPROVED == assay.assayStatus
     }
 
     void "test update assay type"() {

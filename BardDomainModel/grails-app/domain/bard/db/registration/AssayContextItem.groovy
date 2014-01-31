@@ -110,7 +110,7 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
         }
     }
 
-    private boolean allValueColumnsAreNull() {
+    public boolean allValueColumnsAreNull() {
         [valueElement, extValueId, qualifier, valueNum, valueMin, valueMax, valueDisplay].every{ it == null}
     }
 

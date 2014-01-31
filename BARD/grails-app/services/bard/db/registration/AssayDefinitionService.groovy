@@ -74,7 +74,7 @@ class AssayDefinitionService {
         Assay assay = Assay.findById(id)
         assay.assayStatus = assayStatus
         assay.save(flush: true)
-        return Assay.findById(id)
+        return assay
     }
 
     @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")

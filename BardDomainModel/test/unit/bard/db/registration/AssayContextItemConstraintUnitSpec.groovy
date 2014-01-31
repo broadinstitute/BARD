@@ -8,8 +8,9 @@ import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Unroll
 
+import static bard.db.enums.ExpectedValueType.*
 import static bard.db.enums.Status.*
-import static bard.db.enums.ValueType.*
+//import static bard.db.enums.ValueType
 import static bard.db.registration.AttributeType.Fixed
 import static bard.db.registration.AttributeType.Free
 import static bard.db.registration.AttributeType.List as ListAttrType
@@ -180,36 +181,6 @@ class AssayContextItemConstraintUnitSpec extends AbstractContextItemConstraintUn
 
     }
 
-//    void "test (AssayContextItem) validation with setMethods #desc"() {
-//
-//        given:
-//        Element attributeElement = optionallyCreateElement(attributeElementMap)
-//
-//
-//        domainInstance.assayContext.assay.assayStatus = status
-////        domainInstance.attributeType = attributeType
-//          mutate(domainInstance)
-//
-//        when:
-//        domainInstance.validate()
-//
-//        then: 'verify field errors'
-//        for (entry in fieldErrorCodes) {
-//            assertFieldValidationExpectations(domainInstance, entry.key, expectedValid, entry.value)
-//        }
-//        and: 'verify global errors'
-//        domainInstance.errors?.getGlobalErrors()?.code == globalErrorsCodes
-//
-//        // attributeType Fixed covered in generic test case
-//        where:
-//        attributeElementMap       | type              | status   | mutate
-//        [expectedValueType: NONE] | ELEMENT           | APPROVED | { AssayContextItem i -> i.setDictionaryValue(optionallyCreateElement([:])) }
-//        [expectedValueType: NONE] | NONE              | APPROVED | { AssayContextItem i -> i.setNoneValue() }
-//        [expectedValueType: NONE] | NUMERIC           | APPROVED | { AssayContextItem i -> i.setNumericValue("= ", 5) }
-//        [expectedValueType: NONE] | FREE_TEXT         | APPROVED | { AssayContextItem i -> i.setFreeTextValue("x") }
-//        [expectedValueType: NONE] | EXTERNAL_ONTOLOGY | APPROVED | { AssayContextItem i -> i.setExternalOntologyValue("xv", "disp") }
-//        [expectedValueType: NONE] | RANGE             | APPROVED | { AssayContextItem i -> i.setRange(2, 3) }
-//    }
     /**
      * Business rules for validating a contextItem are pretty complicated
      *
@@ -399,5 +370,24 @@ class AssayContextItemConstraintUnitSpec extends AbstractContextItemConstraintUn
         then:
         instance.validate()
         instance.deriveDisplayValue() == "0.0 - 100.0 abbr"
+    }
+
+    void "test #desc "() {
+
+        when:
+        AssayContextItem assayContextItem = new AssayContextItem(valueMap)
+
+        then:
+        assayContextItem.allValueColumnsAreNull() == expectedAllValueColumnsAreNull
+
+        where:
+        desc                    | valueMap                       | expectedAllValueColumnsAreNull
+        'all vals null'         | [:]                            | true
+        'non null extValueId'   | [extValueId: 'extValueId']     | false
+        'non null qualifier'    | [qualifier: ' =']              | false
+        'non null valueNum'     | [valueNum: 1]                  | false
+        'non null valueMin'     | [valueMin: 1]                  | false
+        'non null valueMax'     | [valueMax: 1]                  | false
+        'non null valueDisplay' | [valueDisplay: 'valueDisplay'] | false
     }
 }
