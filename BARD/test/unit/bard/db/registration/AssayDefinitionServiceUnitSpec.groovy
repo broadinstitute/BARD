@@ -91,6 +91,7 @@ public class AssayDefinitionServiceUnitSpec extends Specification {
     void "test update assay status"() {
         given:
         final Assay assay = Assay.build(assayName: 'assayName10', assayStatus: Status.DRAFT, capPermissionService: Mock(CapPermissionService))
+        Assay.metaClass.isDirty = {String field -> false}
         when:
         final Assay updatedAssay = service.updateAssayStatus(assay.id, Status.APPROVED)
         then:
