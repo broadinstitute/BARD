@@ -28,6 +28,8 @@
 
                     <section class="shiftedSection">
                     <dl class='unindentedDefinition'>
+						<dt><a href="${resource(dir: 'documentation', file: 'Bittker_BARD_SLAS2014.pdf')}">Building the BioAssay Research Database:  A Next-Generation Platform for Annotating and Understanding Chemical Biology Datasets</a></dt><dd>J. A. Bittker</dd>
+						<br/>
                         <dt><a href="${resource(dir: 'documentation', file: 'BARD_ACS_0_Sep2013.pdf')}">Integrative Chemogenomics Knowledge Mining Using NIH Open Access Resources -- Introductory remarks</a></dt><dd>P. Clemons</dd>
                         <br/>
                         <dt><a href="${resource(dir: 'documentation', file: 'BARD_ACS_2_Sep2013.pdf')}">Pushing Chemical Biology Data Through the Pipes</a></dt><dd>R. Guha, J. Braisted, A. Jadhav, D. Nguyen, T. Peryea, N. Sothall</dd>
