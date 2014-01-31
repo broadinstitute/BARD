@@ -9,6 +9,8 @@ import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.experiment.Experiment
 import bard.db.guidance.Guidance
 import bard.db.guidance.GuidanceAware
+import bard.db.guidance.GuidanceRule
+import bard.db.guidance.GuidanceUtils
 import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
@@ -19,8 +21,10 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 class Project extends AbstractContextOwner implements GuidanceAware {
     public static final int PROJECT_NAME_MAX_SIZE = 256
     public static final int MODIFIED_BY_MAX_SIZE = 40
+    private static final int APPROVED_BY_MAX_SIZE = 40
     public static final int DESCRIPTION_MAX_SIZE = 1000
     def capPermissionService
+    def springSecurityService
 
     String name
     ProjectGroupType groupType = ProjectGroupType.PROJECT
@@ -32,6 +36,8 @@ class Project extends AbstractContextOwner implements GuidanceAware {
     Date dateCreated
     Date lastUpdated = new Date()
     String modifiedBy
+    String approvedBy
+    Date approvedDate
 
     List<ProjectContext> contexts = [] as List
     Set<ProjectExperiment> projectExperiments = [] as Set
@@ -91,6 +97,8 @@ class Project extends AbstractContextOwner implements GuidanceAware {
         dateCreated(nullable: false)
         ownerRole(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+        approvedBy(nullable: true, blank: false, maxSize: APPROVED_BY_MAX_SIZE)
+        approvedDate(nullable: true)
     }
     /**
      * for all the associated projectExperiments, using the spread dot operator
@@ -166,17 +174,28 @@ class Project extends AbstractContextOwner implements GuidanceAware {
         }
     }
 
+    def beforeUpdate(){
+        if(projectStatus.equals(Status.APPROVED) && this.isDirty('projectStatus')){
+            approvedBy = springSecurityService.authentication.name
+            approvedDate = new Date()
+        }
+    }
+
     String getOwner() {
         final String objectOwner = this.ownerRole?.displayName
         return objectOwner
     }
 
     @Override
-    List<Guidance> getGuidance() {
-        final List<Guidance> guidanceList = []
-        guidanceList.addAll(new MinimumOfOneBiologyGuidanceRule(this).getGuidance())
-        guidanceList
+    List<GuidanceRule> getGuidanceRules() {
+        return [new MinimumOfOneBiologyGuidanceRule(this)]
     }
+
+    @Override
+    List<Guidance> getGuidance() {
+        GuidanceUtils.getGuidance(getGuidanceRules())
+    }
+
     public boolean permittedToSeeEntity() {
         if ((projectStatus == Status.DRAFT) &&
                 (!SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR') &&

@@ -6,6 +6,7 @@ import bard.db.enums.ContextType
 import bard.db.guidance.Guidance
 import bard.db.guidance.GuidanceAware
 import bard.db.guidance.GuidanceRule
+import bard.db.guidance.GuidanceUtils
 import bard.db.registration.AssayContextItem
 import bard.db.registration.AttributeType
 
@@ -123,6 +124,7 @@ abstract class AbstractContext implements GuidanceAware {
     /**
      * subclasses that need to utilize some guidance should override and add rules
      */
+    @Override
     List<GuidanceRule> getGuidanceRules(){
         []
     }
@@ -132,11 +134,7 @@ abstract class AbstractContext implements GuidanceAware {
      */
     @Override
     List<Guidance> getGuidance() {
-        final List<Guidance> guidanceList = []
-        for (GuidanceRule rule : guidanceRules) {
-            guidanceList.add(rule.getGuidance())
-        }
-        guidanceList.flatten()
+        GuidanceUtils.getGuidance(getGuidanceRules())
     }
 
 }

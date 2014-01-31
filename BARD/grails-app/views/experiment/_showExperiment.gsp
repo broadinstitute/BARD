@@ -73,6 +73,15 @@
                    data-id="${instance?.experimentStatus?.id}"></a>
             </dd>
 
+            <g:if test="${instance?.experimentStatus?.equals(Status.APPROVED)}">
+                <dt><g:message code="instance.approvedBy.label" default="Approved By"/>:</dt>
+                <dd id="approvedById">
+                    <g:if test="${instance.approvedBy}">
+                        ${instance?.approvedBy} (<g:formatDate date="${instance.approvedDate}" format="MM/dd/yyyy"/>)
+                    </g:if>
+                </dd>
+            </g:if>
+
             <dt><g:message code="experiment.experimentName.label" default="Name"/>:</dt>
             <dd>
                 <span

@@ -4,6 +4,7 @@ import bard.db.dictionary.Element
 import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.Status
+import bard.db.enums.ValueType
 import bard.db.people.Role
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
@@ -14,12 +15,15 @@ import spock.lang.Unroll
 import static bard.db.registration.Assay.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
+import static bard.db.registration.AttributeType.Fixed
+import static bard.db.enums.ValueType.*
+import static bard.db.enums.Status.*
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@Build([Assay, Element,Role])
-@Mock([Assay, Element,Role])
+@Build([Assay, AssayContext, AssayContextItem, Element, Role])
+@Mock([Assay, AssayContext, AssayContextItem, Element, Role])
 @Unroll
 class AssayConstraintUnitSpec extends Specification {
     Assay domainInstance
@@ -31,6 +35,11 @@ class AssayConstraintUnitSpec extends Specification {
 
     void "test assayStatus constraints #desc assayStatus: '#valueUnderTest'"() {
         final String field = 'assayStatus'
+        final AssayContext assayContext = AssayContext.buildWithoutSave(assay: domainInstance)
+        if (itemMap) {
+            itemMap.put('assayContext', assayContext)
+            final AssayContextItem assayContextItem = AssayContextItem.buildWithoutSave(itemMap)
+        }
 
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
@@ -39,18 +48,17 @@ class AssayConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domain can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
-
         where:
-        desc             | valueUnderTest       | valid | errorCode
-        'null not valid' | null                 | false | 'nullable'
-        'valid value'    | Status.DRAFT    | true  | null
-        'valid value'    | Status.APPROVED | true  | null
-        'valid value'    | Status.RETIRED  | true  | null
+        desc                                         | valueUnderTest | itemMap                                                          | valid | errorCode
+        'null not valid'                             | null           | [:]                                                              | false | 'nullable'
+        'valid value'                                | DRAFT          | [:]                                                              | true  | null
+        'valid value'                                | APPROVED       | [:]                                                              | true  | null
+        'valid value'                                | RETIRED        | [:]                                                              | true  | null
 
+        'valid DRAFT with null contextItem values'   | DRAFT          | [attributeType: Fixed, valueType: NONE, valueDisplay: null]      | true  | null
+        'invalid APPROVED with null item values'     | APPROVED       | [attributeType: Fixed, valueType: NONE, valueDisplay: null]      | false | 'assay.assayStatus.requires.items.with.values'
+        'valid APPROVED with non null item values'   | APPROVED       | [attributeType: Fixed, valueType: NONE, valueDisplay: 'someVal'] | true  | null
+        'valid RETIRED with null contextItem values' | RETIRED        | [attributeType: Fixed, valueType: NONE, valueDisplay: null]      | true  | null
     }
 
     void "test assayName constraints #desc assayName: "() {
@@ -275,5 +283,6 @@ class AssayConstraintUnitSpec extends Specification {
         'null not valid'   | { null }         | false | 'nullable'
         'owner role valid' | { Role.build() } | true  | null
     }
+
 }
 

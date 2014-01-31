@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import bard.db.enums.ExpectedValueType
+import bard.db.enums.Status
 import bard.db.model.AbstractContextItem
 import groovy.transform.TypeChecked
 import org.springframework.validation.Errors
@@ -39,7 +40,7 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
         final Assay assay = assayContext.assay
 
         if (assay.experiments) {
-           return safeToDeleteContextItem(assayContextItem)
+            return safeToDeleteContextItem(assayContextItem)
         }
         return true
     }
@@ -49,14 +50,13 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
      *
      * <a href="https://www.pivotaltracker.com/story/show/60861600">see pivotal story that caused latest change</a>
      *
-     * @param assayContextItem  the item to potentially allow delete
+     * @param assayContextItem the item to potentially allow delete
      * @return true for Fixed items or true if there are more than 1 Free, Range or List items for a given attributeElement
      */
-    protected static boolean safeToDeleteContextItem(AssayContextItem assayContextItem){
+    protected static boolean safeToDeleteContextItem(AssayContextItem assayContextItem) {
         if (assayContextItem.attributeType == AttributeType.Fixed) {
             return true
-        }
-        else {  // all the non Fixed, Experiment time constraint items
+        } else {  // all the non Fixed, Experiment time constraint items
             final ArrayList<AssayContextItem> allItems = assayContextItem.assayContext.assay.assayContextItems
             final ArrayList<AssayContextItem> nonFixedItems = allItems.findAll { AssayContextItem aci -> aci.attributeType != AttributeType.Fixed }
             final Map<Element, List<AssayContextItem>> attributeElementToItemMap = nonFixedItems.groupBy { AssayContextItem aci -> aci.attributeElement }
@@ -78,10 +78,16 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
     @TypeChecked
     protected void valueValidation(Errors errors) {
         //Do not validate context items if this is false
-        if(!this?.assayContext?.assay?.fullyValidateContextItems){
-           return
+        if (!this?.assayContext?.assay?.fullyValidateContextItems) {
+            return
         }
         if (attributeElement) {
+            // special condition to allow for creating assays with required contexts and context items
+            // as long as all the value columns are null we'll skip any of the standard validation rules
+            // if any of the value columns are non null than all the standard validation rules apply
+            if (assayContext.assay.assayStatus != Status.APPROVED && valueType == valueType.NONE && allValueColumnsAreNull()) {
+                return
+            }
             switch (attributeType) {
                 case AttributeType.Fixed: // so with Fixed and List all the standard validations apply
                 case AttributeType.List:
@@ -102,6 +108,10 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
                     break
             }
         }
+    }
+
+    public boolean allValueColumnsAreNull() {
+        [valueElement, extValueId, qualifier, valueNum, valueMin, valueMax, valueDisplay].every{ it == null}
     }
 
     protected freeTypeConstraints(Errors errors) {

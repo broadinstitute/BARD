@@ -21,8 +21,10 @@ class Experiment extends AbstractContextOwner {
     static final DateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy", Locale.US)
     public static final int EXPERIMENT_NAME_MAX_SIZE = 1000
     private static final int MODIFIED_BY_MAX_SIZE = 40
+    private static final int APPROVED_BY_MAX_SIZE = 40
     public static final int DESCRIPTION_MAX_SIZE = 1000
     def capPermissionService
+    def springSecurityService
     String experimentName
     Status experimentStatus = Status.DRAFT
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
@@ -41,6 +43,8 @@ class Experiment extends AbstractContextOwner {
     Long ncgcWarehouseId;
     Integer confidenceLevel = 1
     PanelExperiment panel;
+    String approvedBy
+    Date approvedDate
 
     List<ExperimentContext> experimentContexts = []
     Set<ProjectSingleExperiment> projectExperiments = [] as Set
@@ -101,6 +105,8 @@ class Experiment extends AbstractContextOwner {
 
         ncgcWarehouseId(nullable: true)
         ownerRole(nullable: false)
+        approvedBy(nullable: true, blank: false, maxSize: APPROVED_BY_MAX_SIZE)
+        approvedDate(nullable: true)
     }
 
     String getDisplayName() {
@@ -127,6 +133,13 @@ class Experiment extends AbstractContextOwner {
     def afterInsert() {
         Experiment.withNewSession {
             capPermissionService?.addPermission(this)
+        }
+    }
+
+    def beforeUpdate(){
+        if(experimentStatus.equals(Status.APPROVED) && this.isDirty('experimentStatus')){
+            approvedBy = springSecurityService.authentication.name
+            approvedDate = new Date()
         }
     }
 

@@ -1,4 +1,4 @@
-<%@ page import="bard.db.enums.ContextType; bard.db.model.AbstractContextOwner; bard.db.registration.DocumentKind; bard.db.project.*" %>
+<%@ page import="bard.db.enums.ContextType; bard.db.model.AbstractContextOwner; bard.db.enums.Status; bard.db.registration.DocumentKind; bard.db.project.*" %>
 
 <div class="container-fluid">
     <div class="row-fluid">

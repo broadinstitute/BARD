@@ -10,6 +10,9 @@ import bard.db.enums.hibernate.StatusEnumUserType
 import bard.db.experiment.Experiment
 import bard.db.guidance.Guidance
 import bard.db.guidance.GuidanceAware
+import bard.db.guidance.GuidanceRule
+import bard.db.guidance.GuidanceUtils
+import bard.db.guidance.owner.ContextItemShouldHaveValueRule
 import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
 import bard.db.guidance.owner.OneItemPerNonFixedAttributeElementRule
 import bard.db.model.AbstractContext
@@ -17,12 +20,15 @@ import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
 import bard.db.project.ProjectSingleExperiment
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.grails.datastore.mapping.validation.ValidationErrors
+import org.springframework.validation.Errors
 
 class Assay extends AbstractContextOwner implements GuidanceAware {
     public static final int ASSAY_NAME_MAX_SIZE = 1000
     private static final int ASSAY_VERSION_MAX_SIZE = 10
     public static final int DESIGNED_BY_MAX_SIZE = 100
     private static final int MODIFIED_BY_MAX_SIZE = 40
+    private static final int APPROVED_BY_MAX_SIZE = 40
     private static final int ASSAY_SHORT_NAME_MAX_SIZE = 250
 
     /**
@@ -35,8 +41,8 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     boolean fullyValidateContextItems = true
 
 
-
     def capPermissionService
+    def springSecurityService
     Status assayStatus = Status.DRAFT
     String assayName
     String assayVersion
@@ -49,10 +55,12 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     // grails auto-timestamp
     Date dateCreated
     Date lastUpdated = new Date()
+    String approvedBy
+    Date approvedDate
 
     Set<Experiment> experiments = [] as Set<Experiment>
     //TODO: Mark for deletion
-   // Set<Measure> measures = [] as Set<Measure>
+    // Set<Measure> measures = [] as Set<Measure>
     List<AssayContext> assayContexts = [] as List<AssayContext>
     Set<AssayDocument> assayDocuments = [] as Set<AssayDocument>
     Set<PanelAssay> panelAssays = [] as Set
@@ -74,7 +82,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     ]
 
     static constraints = {
-        assayStatus()
+        assayStatus(validator: { Status status, Assay instance, Errors errors -> instance.validateItems(errors) })
         assayName(maxSize: ASSAY_NAME_MAX_SIZE, blank: false)
         assayVersion(maxSize: ASSAY_VERSION_MAX_SIZE, blank: false)
         designedBy(nullable: true, maxSize: DESIGNED_BY_MAX_SIZE)
@@ -87,6 +95,8 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
         lastUpdated(nullable: false)
         ownerRole(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+        approvedBy(nullable: true, blank: false, maxSize: APPROVED_BY_MAX_SIZE)
+        approvedDate(nullable: true)
     }
 
     static mapping = {
@@ -104,6 +114,12 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
         }
     }
 
+    def beforeUpdate(){
+        if(assayStatus.equals(Status.APPROVED) && this.isDirty('assayStatus')){
+            approvedBy = springSecurityService.authentication.name
+            approvedDate = new Date()
+        }
+    }
 
     String getOwner() {
         final String objectOwner = this.ownerRole?.displayName
@@ -112,37 +128,49 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
 
 
     List<AssayDocument> getPublications() {
-        final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION } as List<AssayDocument>
+        final List<AssayDocument> documents = assayDocuments.findAll {
+            it.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION
+        } as List<AssayDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
 
     List<AssayDocument> getExternalURLs() {
-        final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_EXTERNAL_URL } as List<AssayDocument>
+        final List<AssayDocument> documents = assayDocuments.findAll {
+            it.documentType == DocumentType.DOCUMENT_TYPE_EXTERNAL_URL
+        } as List<AssayDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
 
     List<AssayDocument> getComments() {
-        final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_COMMENTS } as List<AssayDocument>
+        final List<AssayDocument> documents = assayDocuments.findAll {
+            it.documentType == DocumentType.DOCUMENT_TYPE_COMMENTS
+        } as List<AssayDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
 
     List<AssayDocument> getDescriptions() {
-        final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_DESCRIPTION } as List<AssayDocument>
+        final List<AssayDocument> documents = assayDocuments.findAll {
+            it.documentType == DocumentType.DOCUMENT_TYPE_DESCRIPTION
+        } as List<AssayDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
 
     List<AssayDocument> getProtocols() {
-        final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PROTOCOL } as List<AssayDocument>
+        final List<AssayDocument> documents = assayDocuments.findAll {
+            it.documentType == DocumentType.DOCUMENT_TYPE_PROTOCOL
+        } as List<AssayDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
 
     List<AssayDocument> getOtherDocuments() {
-        final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_OTHER } as List<AssayDocument>
+        final List<AssayDocument> documents = assayDocuments.findAll {
+            it.documentType == DocumentType.DOCUMENT_TYPE_OTHER
+        } as List<AssayDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
@@ -174,16 +202,16 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
         this.assayContexts
     }
 
-    int getMaxNumProjectsInExperiments(){
+    int getMaxNumProjectsInExperiments() {
         int maxProjectExperiments = 0;
-        for(Experiment exp : this.experiments){
+        for (Experiment exp : this.experiments) {
             int count = 0;
             exp.projectExperiments.each { ProjectSingleExperiment pe ->
                 if (pe.project.projectStatus != Status.RETIRED) {
                     count++
                 }
             }
-            if(count > maxProjectExperiments){
+            if (count > maxProjectExperiments) {
                 maxProjectExperiments = count
             }
         }
@@ -208,12 +236,15 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     }
 
     @Override
-    List<Guidance> getGuidance() {
-        final List<Guidance> guidanceList = []
-        guidanceList.addAll(new MinimumOfOneBiologyGuidanceRule(this).getGuidance())
-        guidanceList.addAll(new OneItemPerNonFixedAttributeElementRule(this).getGuidance())
-        guidanceList
+    List<GuidanceRule> getGuidanceRules() {
+        [new MinimumOfOneBiologyGuidanceRule(this), new OneItemPerNonFixedAttributeElementRule(this), new ContextItemShouldHaveValueRule(this)]
     }
+
+    @Override
+    List<Guidance> getGuidance() {
+        GuidanceUtils.getGuidance(getGuidanceRules())
+    }
+
     public boolean permittedToSeeEntity() {
         if ((assayStatus == Status.DRAFT) &&
                 (!SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR') &&
@@ -222,4 +253,25 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
         }
         return true
     }
+    /**
+     * if the status is Approved look at all the contextItems an ensure all Fixed items have values
+     * for Draft or Retired, fixed contextItems can have null values. ( guidance will ask the user to fill in values )
+     * @param errors
+     */
+    void validateItems(Errors errors) {
+        final List<String> itemLabels = []
+        if (this.assayStatus == Status.APPROVED) {
+            for (AssayContextItem assayContextItem in this.assayContexts.assayContextItems.flatten()) {
+                if (ContextItemShouldHaveValueRule.isFixedAndAllValuesNull(assayContextItem)) {
+                    itemLabels.add(assayContextItem.attributeElement.label)
+                }
+            }
+        }
+        if (itemLabels) {
+            final String quotedCommaSeparatedlabels =   itemLabels.sort().collect{"'$it'"}.join(',')
+            final String msg = "You must provide values for the following annotations before this assay can be approved: ${quotedCommaSeparatedlabels}"
+            errors.rejectValue('assayStatus', 'assay.assayStatus.requires.items.with.values', msg)
+        }
+    }
+
 }
