@@ -512,7 +512,7 @@ class AssayCommand extends BardCommand {
 
 
     Assay createNewAssay() {
-        final Element assayFormatValue = attemptFindById(Element, this.assayFormatId)
+        final Element assayFormatValue = attemptFindById(Element, this.assayFormatValueId)
         if (!hasErrors()) {
             final Assay assayToReturn = new Assay()
             copyFromCmdToDomain(assayToReturn)
@@ -550,9 +550,11 @@ class AssayCommand extends BardCommand {
         }
         for (String label in attributeLabels) {
             final Element attribute = Element.findByLabel(label)
-            final AssayContextItem item = new AssayContextItem(valueType: ValueType.NONE, attributeElement: attribute)
-            context.addToAssayContextItems(item)
-            attemptSave(item)
+            if(attribute){
+                final AssayContextItem item = new AssayContextItem(valueType: ValueType.NONE, attributeElement: attribute)
+                context.addToAssayContextItems(item)
+                attemptSave(item)
+            }
         }
     }
 
