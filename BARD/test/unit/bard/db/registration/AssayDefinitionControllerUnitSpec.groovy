@@ -24,6 +24,7 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
+import spock.lang.Ignore
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
@@ -66,8 +67,9 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     void 'test save success'() {
         given:
+        final Element assayFormatValue = Element.build(label:'small molecule format')
         Role role = Role.build()
-        AssayCommand assayCommand = new AssayCommand(assayName: "Some Name", assayType: AssayType.TEMPLATE, springSecurityService: controller.springSecurityService, ownerRole: role.authority)
+        AssayCommand assayCommand = new AssayCommand(assayName: "Some Name", assayFormatValueId: assayFormatValue.id.longValue(), springSecurityService: controller.springSecurityService, ownerRole: role.authority)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
         }
