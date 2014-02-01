@@ -89,9 +89,11 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
             Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role).save(flush: true)
             AssayContext context = AssayContext.build(assay: assay, contextName: "alpha").save(flush: true)
 
+            final Element smallMoleculeFormatElement = Element.build(label:'small molecule format').save(flush:true)
             //create assay context
             return [id: assay.id, assayName: assay.assayName, assayContextId: context.id,
-                    measureId: childMeasure.id, parentMeasureId: parentMeasure.id, roleId: role.authority, otherRoleId: otherRole.authority]
+                    measureId: childMeasure.id, parentMeasureId: parentMeasure.id, roleId: role.authority,
+                    otherRoleId: otherRole.authority, smallMoleculeFormatElementId: smallMoleculeFormatElement.id]
         })
         assayIdList.add(assayData.id)
 
@@ -154,14 +156,14 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
     def 'test save #desc'() {
         given:
-
         String name = "My Assay Name_" + team
         RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
         when:
 
 
+
         Response response = client.post() {
-            urlenc assayName: name, ownerRole: assayData.roleId
+            urlenc assayName: name, ownerRole: assayData.roleId , assayFormatValueId: assayData.smallMoleculeFormatElementId
         }
         then:
         assert response.statusCode == expectedHttpResponse
@@ -180,7 +182,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
         when:
         client.post() {
-            urlenc assayName: name, ownerRole: assayData.roleId
+            urlenc assayName: name, ownerRole: assayData.roleId , assayFormatValueId: assayData.smallMoleculeFormatElementId
         }
         then:
         def ex = thrown(RESTClientException)
