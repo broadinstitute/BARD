@@ -51,8 +51,7 @@
                     <g:else>
                         <p> You need to be part of a team to create Assays. Follow this <g:link controller="assayDefinition" action="teams">link</g:link> to the Teams Page</p>
                     </g:else>
-
-
+                    <p class="help-inline"><g:fieldError field="ownerRole" bean="${assayCommand}"/></p>
                 </div>
             </div>
             <div class="control-group">
