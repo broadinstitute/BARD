@@ -3,6 +3,7 @@ package iteration_042
 databaseChangeLog = {
 
     changeSet(author: "ycruz", id: "iteration-042/00-populate-assay-approvedby-and-date", dbms: "oracle", context: "standard") {
+
         grailsChange {
             change {
                 sql.execute("""BEGIN
@@ -132,7 +133,13 @@ databaseChangeLog = {
                 println("Finished - Updating ${processedCountExp} experiments")
             }
         }
-
     }
 
+    changeSet(author: 'pmontgom', id: 'iteration-042/01-substance-count-not-null', dbms: 'oracle', context: 'standard') {
+        grailsChange {
+            change {
+                sql.execute("alter table experiment_file modify substance_count not null")
+            }
+        }
+    }
 }
