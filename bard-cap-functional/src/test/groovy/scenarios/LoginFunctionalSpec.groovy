@@ -15,6 +15,7 @@ class LoginFunctionalSpec extends BardFunctionalSpec {
     String invalidPassword = "badpassword"
     String validUserName = getCredentialsForTest().username
     String validPassword = getCredentialsForTest().password
+	String validEmail = getCredentialsForTest().email
 
     def setup() {
         to LoginPage
@@ -26,8 +27,8 @@ class LoginFunctionalSpec extends BardFunctionalSpec {
 
         when: "User attempts to login with an invalid username"
         at LoginPage
-        logInNoValidation(invalidUserName, validPassword)
-
+        logInNoValidation(invalidUserName, validPassword, validEmail)
+		
         then: "The system should redirect the user to the login page"
         at LoginPage
         errorMessage.text() ==~ 'Sorry, we were not able to find a user with that username and password.'
