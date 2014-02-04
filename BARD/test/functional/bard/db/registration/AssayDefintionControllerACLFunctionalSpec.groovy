@@ -9,6 +9,7 @@ import bard.db.experiment.ExperimentMeasure
 import bard.db.people.Role
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 import wslite.json.JSONArray
@@ -89,9 +90,11 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
             Assay assay = Assay.build(assayName: "Assay Name10", ownerRole: role).save(flush: true)
             AssayContext context = AssayContext.build(assay: assay, contextName: "alpha").save(flush: true)
 
+            final Element smallMoleculeFormatElement = Element.findByLabel('small molecule format') ?: Element.build(label:'small molecule format').save(flush:true)
             //create assay context
             return [id: assay.id, assayName: assay.assayName, assayContextId: context.id,
-                    measureId: childMeasure.id, parentMeasureId: parentMeasure.id, roleId: role.authority, otherRoleId: otherRole.authority]
+                    measureId: childMeasure.id, parentMeasureId: parentMeasure.id, roleId: role.authority,
+                    otherRoleId: otherRole.authority, smallMoleculeFormatElementId: smallMoleculeFormatElement.id]
         })
         assayIdList.add(assayData.id)
 
@@ -154,14 +157,14 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
     def 'test save #desc'() {
         given:
-
         String name = "My Assay Name_" + team
         RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
         when:
 
 
+
         Response response = client.post() {
-            urlenc assayName: name, ownerRole: assayData.roleId
+            urlenc assayName: name, ownerRole: assayData.roleId , assayFormatValueId: assayData.smallMoleculeFormatElementId
         }
         then:
         assert response.statusCode == expectedHttpResponse
@@ -173,22 +176,23 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_FOUND
     }
 
-
     def 'test save, selected role not in users role list #desc'() {
         given:
         String name = "My Assay Name_" + team
         RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
         when:
-        client.post() {
-            urlenc assayName: name, ownerRole: assayData.roleId
+        Response response = client.post() {
+            urlenc assayName: name, ownerRole: assayData.roleId , assayFormatValueId: assayData.smallMoleculeFormatElementId
         }
+
         then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
+        response.url.toString().contains('assayDefinition/save')   // there will be a validation failure message on the web page
+        response.statusCode ==   expectedHttpResponse
+
         where:
         desc      | team              | teamPassword      | expectedHttpResponse
-        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_NOT_FOUND
-        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_NOT_FOUND
+        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
+        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
     }
 
     def 'test index #desc'() {

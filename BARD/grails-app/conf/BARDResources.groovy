@@ -101,6 +101,9 @@ modules = {
         dependsOn 'bootstrapplus, card, descriptorSelect2Widget'
         resource url: '/js/cap/contextItem.js'
     }
+    createAssay {
+        resource url: '/js/cap/createAssay.js'
+    }
     createProject {
         resource url: '/js/cap/createProject.js'
     }

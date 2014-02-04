@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-    <r:require modules="core,bootstrap,assayshow"/>
+    <r:require modules="core,bootstrap,descriptorSelect2Widget,createAssay"/>
     <meta name="layout" content="basic"/>
     <title>Create Assay Definition</title>
 
@@ -14,26 +14,29 @@
         <g:form class="form-horizontal" action="save" controller="assayDefinition">
 
             <div class="control-group ${hasErrors(bean: assayCommand, field: 'assayName', 'error')}">
-                <label class="control-label" for="assayName">
-                    <g:message code="assay.assayName.label"/>:</label>
+                <label class="control-label" for="assayName">* <g:message code="assay.assayName.label"/>:</label>
 
                 <div class="controls">
-                    <g:textArea id="assayName" name="assayName" value="${assayCommand?.assayName}" required="" class="input-xxlarge"/>
+                    <g:textArea id="assayName" name="assayName" value="${assayCommand?.assayName}" required="" class="span10"/>
                     <span class="help-inline"><g:fieldError field="assayName" bean="assay"/></span>
                 </div>
             </div>
 
-            <div class="control-group ${hasErrors(bean: assayCommand, field: 'assayType', 'error')}">
-                <label class="control-label" for="assayType">* <g:message code="assay.assayType.label"/>:</label>
+            <g:hiddenField class="" id="assayFormatId" name="assayFormatId" value="${assayCommand?.assayFormatId}" />
+
+            <div class="control-group ${hasErrors(bean: assayCommand, field: 'assayFormatValueId', 'error')}">
+
+                <label class="control-label" for="assayFormatValueId">* <g:message code="assay.assayFormat.label"/>:</label>
 
                 <div class="controls">
-                    <g:select name="assayType" id="assayType"
-                              from="${AssayType.values()}"
-                              value="${assayCommand?.assayType}"
-                              optionValue="id"/>
-
+                    <g:hiddenField class="span10" id="assayFormatValueId" name="assayFormatValueId"
+                                   value="${assayCommand?.assayFormatValueId}" />
+                    <p class="help-inline"><g:fieldError field="assayFormatValueId" bean="${assayCommand}"/></p>
                 </div>
+
             </div>
+
+
             <div class="control-group ${hasErrors(bean: assayCommand, field: 'ownerRole', 'error')}">
                 <label class="control-label" for="ownerRole">* <g:message code="entity.ownerRole.label"/>:</label>
 
@@ -42,13 +45,13 @@
                         <g:select name="ownerRole" id="ownerRole"  required="required"
                                   from="${BardCommand.userRoles()}"
                                   value="${assayCommand?.ownerRole}"
-                                  optionValue="displayName" optionKey="authority"/>
+                                  optionValue="displayName" optionKey="authority"
+                                  />
                     </g:if>
                     <g:else>
                         <p> You need to be part of a team to create Assays. Follow this <g:link controller="assayDefinition" action="teams">link</g:link> to the Teams Page</p>
                     </g:else>
-
-
+                    <p class="help-inline"><g:fieldError field="ownerRole" bean="${assayCommand}"/></p>
                 </div>
             </div>
             <div class="control-group">
