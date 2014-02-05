@@ -54,5 +54,26 @@
             </dl>
         </div>
     </div>
+    <div class="row-fluid">
+        <g:render template="/layouts/templates/tableSorterTip"/>
+        <table class="table table-striped table-hover table-bordered">
+            <caption>Team Members</caption>
+            <thead>
+            <tr>
+                <th data-sort="string-ins">Name</th>
+                <th data-sort="string-ins">Email Address</th>
+            </tr>
+            </thead>
+            <tbody>
+            <g:each in="${teamMembers}" var="member">
+                    <tr>
+                        <td>${member.fullName}</td>
+                        <td>${member.emailAddress}</td>
+                    </tr>
+            </g:each>
+            </tbody>
+        </table>
+        <br/>
+    </div>
     </body>
 </html>

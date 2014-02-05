@@ -34,8 +34,10 @@ class RoleController {
             redirect(action: "list")
             return
         }
-        [roleInstance: roleInstance, editable: 'canedit']
+        def persons = PersonRole.findAllByRole(roleInstance, [sort: "person.fullName", order: "asc"]).collect { it.person } as Set
+        [roleInstance: roleInstance, editable: 'canedit', teamMembers: persons]
     }
+
     def save() {
         String authority = params.authority
 
