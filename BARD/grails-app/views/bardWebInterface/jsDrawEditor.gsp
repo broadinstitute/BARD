@@ -8,7 +8,8 @@
     <script type="text/javascript" src="${request.contextPath}/js/dojo-min/dojo/dojo.js"></script>
     <script type="text/javascript"
             src="${request.contextPath}/js/jsDraw/JSDraw3.1.3/Scilligence.JSDraw2.Pro.js"></script>
-    <script type="text/javascript" src="${request.contextPath}/js/jsDraw/license.js"></script>
+
+    <script type="text/javascript" src="<g:createLink controller="jsDraw" action="license"/>"></script>
     <r:require modules="jquery, jquery-ui, jquery-theme, core, bootstrap, jsDrawEditor"/>
     <r:script disposition='head'>
         window.bardAppContext = "${request.contextPath}";
