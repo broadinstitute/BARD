@@ -38,6 +38,23 @@ class RoleController {
         [roleInstance: roleInstance, editable: 'canedit', teamMembers: persons]
     }
 
+    def addUserToTeam(String email, Long roleId){
+        def person = Person.findByEmailAddress(email)
+        if(person){
+            Role role = Role.get(roleId)
+            PersonRole personRole = new PersonRole(person: person, role: role)
+            if(!personRole.save(flush: true)){
+                flash.error = "ERROR: Unable to  save user ${person.fullName} (${person.emailAddress}) was successfully added to team ${role.displayName}"
+            }
+            flash.success = "User ${person.fullName} (${person.emailAddress}) was successfully added to team ${role.displayName}"
+            redirect(action: "show", id: roleId)
+        }
+        else{
+            flash.error = "${email} is not a registered BARD user"
+            redirect(action: "show", id: roleId)
+        }
+    }
+
     def save() {
         String authority = params.authority
 

@@ -9,7 +9,8 @@
 </head>
 
 <body>
-<g:hiddenField name="version" id="versionId" value="${roleInstance?.version}"/>
+<div class="container-fluid">
+    <g:hiddenField name="version" id="versionId" value="${roleInstance?.version}"/>
     <div class="row-fluid">
         <div class="span3"></div>
         <div class="span9">
@@ -54,6 +55,28 @@
             </dl>
         </div>
     </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <g:if test="${flash.success}">
+                <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>${flash.success}</strong></div>
+            </g:if>
+            <g:if test="${flash.error}">
+                <div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>${flash.error}</strong></div>
+            </g:if>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span3"></div>
+        <div class="span9">
+        <g:form class="form-inline" action="addUserToTeam" controller="role">
+            <g:hiddenField class="" id="roleId" name="roleId" value="${roleInstance?.id}" />
+            <g:textField name="email" value="" placeholder="Email address" required="required"/>
+            <input type="submit" class="btn btn-primary" value="Add to team">
+        </g:form>
+        </div>
+    </div>
+
     <div class="row-fluid">
         <g:render template="/layouts/templates/tableSorterTip"/>
         <table class="table table-striped table-hover table-bordered">
@@ -74,6 +97,7 @@
             </tbody>
         </table>
         <br/>
+    </div>
     </div>
     </body>
 </html>
