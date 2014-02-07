@@ -331,7 +331,9 @@ class AssayDefinitionController {
                 return [message: messageStr]
             }        // sanity check the context items
             for (context in assayInstance.assayContexts) {
-                assert context.id != null
+                if (context?.id == null) {
+                    throw new RuntimeException("Context of ${assayInstance.id} missing context.  Display order probably needs to be updated.")
+                }
                 for (item in context.contextItems) {
                     if (item?.id == null) {
                         throw new RuntimeException("Context ${context.id} missing context item.  Display order probably needs to be updated.")
