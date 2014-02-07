@@ -16,6 +16,7 @@ import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
 import bard.db.registration.ExternalReference
+import org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsHibernateUtil
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 class Project extends AbstractContextOwner implements GuidanceAware {
@@ -56,10 +57,11 @@ class Project extends AbstractContextOwner implements GuidanceAware {
 
     Set<Experiment> findUnApprovedExperiments() {
         Set<Experiment> unApprovedExperiments = new HashSet<Experiment>()
-        projectExperiments.each { ProjectSingleExperiment projectExperiment ->
-            final Experiment experiment = projectExperiment.experiment
-            if (experiment.experimentStatus != Status.APPROVED && experiment.experimentStatus != Status.RETIRED) {
-                unApprovedExperiments.add(experiment)
+        projectExperiments.each { ProjectExperiment projectExperiment ->
+            projectExperiment.experiments.each { Experiment experiment ->
+                if (experiment.experimentStatus != Status.APPROVED && experiment.experimentStatus != Status.RETIRED) {
+                    unApprovedExperiments.add(experiment)
+                }
             }
         }
         return unApprovedExperiments

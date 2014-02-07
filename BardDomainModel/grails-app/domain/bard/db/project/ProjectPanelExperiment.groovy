@@ -1,5 +1,6 @@
 package bard.db.project
 
+import bard.db.experiment.Experiment
 import bard.db.experiment.PanelExperiment
 
 /**
@@ -16,4 +17,9 @@ class ProjectPanelExperiment extends ProjectExperiment {
     }
 
     PanelExperiment panelExperiment;
+
+    @Override
+    Collection<Experiment> getExperiments() {
+        return Collections.unmodifiableCollection(panelExperiment.experiments);
+    }
 }

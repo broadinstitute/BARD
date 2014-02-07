@@ -19,4 +19,9 @@ class ProjectSingleExperiment extends ProjectExperiment {
     static constraints = {
         experiment()
     }
+
+    @Override
+    Collection<Experiment> getExperiments() {
+        return Collections.singleton(experiment)
+    }
 }
