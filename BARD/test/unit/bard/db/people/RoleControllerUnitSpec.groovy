@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @TestFor(RoleController)
 @Build([Role])
-@Mock([Role])
+@Mock([Role,PersonRole])
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
 class RoleControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
