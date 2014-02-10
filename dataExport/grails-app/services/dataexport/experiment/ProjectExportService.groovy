@@ -101,11 +101,12 @@ class ProjectExportService extends ExportAbstractService {
             final Set<ProjectExperiment> projectExperiments = project.projectExperiments
             final Set<ProjectExperiment> projectExperimentsReadyForExraction = new HashSet<ProjectExperiment>()
             for (ProjectExperiment projectExperiment : projectExperiments) {
-
-                if (projectExperiment.experiment?.readyForExtraction == ReadyForExtraction.READY ||
-                        projectExperiment.experiment.experimentStatus == Status.APPROVED ||
-                        projectExperiment.experiment.experimentStatus == Status.RETIRED) {
-                    projectExperimentsReadyForExraction.add(projectExperiment)
+                for(experiment in projectExperiment.experiments) {
+                    if (experiment.readyForExtraction == ReadyForExtraction.READY ||
+                            experiment.experimentStatus == Status.APPROVED ||
+                            experiment.experimentStatus == Status.RETIRED) {
+                        projectExperimentsReadyForExraction.add(projectExperiment)
+                    }
                 }
             }
             if (projectExperimentsReadyForExraction) {
@@ -303,14 +304,8 @@ class ProjectExportService extends ExportAbstractService {
     }
 
     protected void generateProjectExperiment(MarkupBuilder markupBuilder, ProjectExperiment projectExperiment) {
-        if (projectExperiment instanceof ProjectSingleExperiment) {
-            Experiment experiment = ((ProjectSingleExperiment) projectExperiment).experiment
-            generateProjectSingleExperiment(markupBuilder, projectExperiment.id, projectExperiment.stage, experiment,)
-        } else {
-            ProjectPanelExperiment panel = (ProjectPanelExperiment) projectExperiment;
-            for (experiment in panel.panelExperiment.experiments) {
-                generateProjectSingleExperiment(markupBuilder, projectExperiment.id, projectExperiment.stage, experiment)
-            }
+        for (experiment in projectExperiment.experiments) {
+            generateProjectSingleExperiment(markupBuilder, projectExperiment.id, projectExperiment.stage, experiment)
         }
     }
 
