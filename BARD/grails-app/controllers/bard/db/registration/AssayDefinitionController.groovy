@@ -479,20 +479,22 @@ class EditingHelper {
 @Validateable
 class AssayCommand extends BardCommand {
 
-    String assayName
-    String assayVersion = "1"
+    public static final String SMALL_MOLECULE_FORMAT_LABEL = "small-molecule format"
 
+    public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['assayType', 'assayName', 'assayVersion', 'dateCreated'].asImmutable()
+
+    String assayName
+
+    String assayVersion = "1"
     Date dateCreated = new Date()
     final Long assayFormatId = 6L // will need to be updated if assay format element ever changes ids
     Long assayFormatValueId
     AssayType assayType = AssayType.REGULAR
+
     String ownerRole
 
+
     SpringSecurityService springSecurityService
-
-
-    public static
-    final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['assayType', 'assayName', 'assayVersion', 'dateCreated'].asImmutable()
 
     static constraints = {
         importFrom(Assay, exclude: ['ownerRole', 'assayStatus', 'readyForExtraction', 'lastUpdated'])
@@ -528,7 +530,7 @@ class AssayCommand extends BardCommand {
 
     void createContextsAndContextItems(Assay assay, Element assayFormatValue) {
 
-        if ("small-molecule format" != assayFormatValue.label) {
+        if (SMALL_MOLECULE_FORMAT_LABEL != assayFormatValue.label) {
             buildAssaySection(ContextType.BIOLOGY, 'biology', ['biology'], assay)
         }
 
@@ -536,7 +538,9 @@ class AssayCommand extends BardCommand {
 
         // set the assay format the user selected
         AssayContextItem assayFormatItem = assay.contexts.contextItems.flatten().find{it.attributeElement.label == 'assay format'}
-        assayFormatItem.setDictionaryValue(assayFormatValue)
+        if(assayFormatItem){
+            assayFormatItem.setDictionaryValue(assayFormatValue)
+        }
 
         buildAssaySection(ContextType.ASSAY_DESIGN, 'assay footprint', ['assay footprint'], assay)
 

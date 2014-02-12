@@ -8,6 +8,8 @@ import grails.test.mixin.Mock
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static bard.db.registration.AssayCommand.SMALL_MOLECULE_FORMAT_LABEL
+
 /**
  * Created by ddurkin on 2/11/14.
  */
@@ -27,7 +29,7 @@ class AssayCommandUnitSpec extends Specification {
     void setup() {
         TestDataConfigurationHolder.reset()
         5.times { Element.build() }
-        Element.build(label: 'small-molecule format')// want this to have ID 6
+        Element.build(label: SMALL_MOLECULE_FORMAT_LABEL)// want this to have ID 6
 
         ATTRIBUTE_LABELS.each { Element.build(label: it) }
     }
@@ -49,14 +51,13 @@ class AssayCommandUnitSpec extends Specification {
 
         where:
         assayFormatValueLabel      | expectedContextNames | expectedBiologyContextItemLabels
-        'small-molecule format'    | []                   | []
+        SMALL_MOLECULE_FORMAT_LABEL    | []                   | []
         'not mall-molecule format' | ['biology']          | ['biology']
     }
 
     void "test AssayCommand non biology contexts"() {
         given: 'an assay command with an assay format set'
-        final String assayFormatValueLabel = 'small-molecule format'
-        final Element assayFormatValue = Element.findByLabel(assayFormatValueLabel) ?: Element.build(label: assayFormatValueLabel)
+        final Element assayFormatValue = Element.findByLabel(SMALL_MOLECULE_FORMAT_LABEL) ?: Element.build(label: SMALL_MOLECULE_FORMAT_LABEL)
         final AssayCommand assayCommand = new AssayCommand()
         assayCommand.springSecurityService = springSecurityService
         assayCommand.assayFormatValueId = assayFormatValue.id.longValue()
