@@ -528,11 +528,16 @@ class AssayCommand extends BardCommand {
 
     void createContextsAndContextItems(Assay assay, Element assayFormatValue) {
 
-        if ("small molecule format" != assayFormatValue.label) {
+        if ("small-molecule format" != assayFormatValue.label) {
             buildAssaySection(ContextType.BIOLOGY, 'biology', ['biology'], assay)
         }
 
         buildAssaySection(ContextType.ASSAY_PROTOCOL, 'assay format', ['assay format', 'assay type', 'assay method'], assay)
+
+        // set the assay format the user selected
+        AssayContextItem assayFormatItem = assay.contexts.contextItems.flatten().find{it.attributeElement.label == 'assay format'}
+        assayFormatItem.setDictionaryValue(assayFormatValue)
+
         buildAssaySection(ContextType.ASSAY_DESIGN, 'assay footprint', ['assay footprint'], assay)
 
         buildAssaySection(ContextType.ASSAY_READOUT, 'assay readout', ['assay readout', 'readout type', 'readout signal direction'], assay)
