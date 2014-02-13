@@ -19,6 +19,7 @@ import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
 import bard.db.project.ProjectSingleExperiment
+import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.grails.datastore.mapping.validation.ValidationErrors
 import org.springframework.validation.Errors
@@ -117,6 +118,9 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     def beforeUpdate(){
         if(assayStatus.equals(Status.APPROVED) && this.isDirty('assayStatus')){
             approvedBy = springSecurityService.authentication.name
+            if(approvedBy && approvedBy.contains('@')){
+                approvedBy = StringUtils.substringBefore(approvedBy,'@')
+            }
             approvedDate = new Date()
         }
     }
