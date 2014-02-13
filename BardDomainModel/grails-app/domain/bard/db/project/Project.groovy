@@ -16,6 +16,7 @@ import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
 import bard.db.registration.ExternalReference
+import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsHibernateUtil
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
@@ -179,6 +180,9 @@ class Project extends AbstractContextOwner implements GuidanceAware {
     def beforeUpdate(){
         if(projectStatus.equals(Status.APPROVED) && this.isDirty('projectStatus')){
             approvedBy = springSecurityService.authentication.name
+            if(approvedBy && approvedBy.contains('@')){
+                approvedBy = StringUtils.substringBefore(approvedBy,'@')
+            }
             approvedDate = new Date()
         }
     }
