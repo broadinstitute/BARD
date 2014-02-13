@@ -142,4 +142,9 @@ databaseChangeLog = {
             }
         }
     }
+
+    changeSet(author: "pmontgom", id: "iteration-042/03-ready-for-extract-constraint", dbms: "oracle", context: "standard") {
+        sqlFile(path: "iteration_042/03-ready-for-extract-constraint.sql", stripComments: true)
+    }
+
 }
