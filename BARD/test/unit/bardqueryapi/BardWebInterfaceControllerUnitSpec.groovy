@@ -31,7 +31,6 @@ import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.servlet.ModelAndView
 import querycart.CartAssay
 import spock.lang.Ignore
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -55,11 +54,16 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     BardUtilitiesService bardUtilitiesService
     QueryProjectExperimentRenderService queryProjectExperimentRenderService
     ExperimentService experimentService
-    @Shared List<SearchFilter> searchFilters = [new SearchFilter(filterName: 'group1', filterValue: 'facet1'), new SearchFilter(filterName: 'group2', filterValue: 'facet2')]
-    @Shared Value facet1 = new IntValue(source: new DataSource(), id: 'group1', value: null, children: [new IntValue(source: new DataSource(), id: 'facet1', value: 1)])
-    @Shared Value facet3 = new IntValue(source: new DataSource(), id: 'group3', value: null, children: [new IntValue(source: new DataSource(), id: 'facet3', value: 1)])
-    @Shared List<SearchFilter> searchFilters1 = [new SearchFilter(filterName: "a", filterValue: "b")]
-    @Shared String EMPTY_STRING = ''
+    @Shared
+    List<SearchFilter> searchFilters = [new SearchFilter(filterName: 'group1', filterValue: 'facet1'), new SearchFilter(filterName: 'group2', filterValue: 'facet2')]
+    @Shared
+    Value facet1 = new IntValue(source: new DataSource(), id: 'group1', value: null, children: [new IntValue(source: new DataSource(), id: 'facet1', value: 1)])
+    @Shared
+    Value facet3 = new IntValue(source: new DataSource(), id: 'group3', value: null, children: [new IntValue(source: new DataSource(), id: 'facet3', value: 1)])
+    @Shared
+    List<SearchFilter> searchFilters1 = [new SearchFilter(filterName: "a", filterValue: "b")]
+    @Shared
+    String EMPTY_STRING = ''
 
     void setup() {
         controller.metaClass.mixin(InetAddressUtil)
@@ -108,9 +112,9 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert expectedStatusCode == response.status
         assert response.redirectedUrl == expectedView
         where:
-        label            | searchString    | isMobile | expectedStatusCode | expectedView
-        "Regular search" | "Search String" | false    | 302                | 'http://localhost:80/bardWebInterface/searchResults'
-        "Mobile Search"  | "Search String" | true     | 200                | null
+        label            | searchString    | isMobileDevice | expectedStatusCode | expectedView
+        "Regular search" | "Search String" | false          | 302                | 'http://localhost:80/bardWebInterface/searchResults'
+        "Mobile Search"  | "Search String" | true           | 200                | null
     }
 
     void "test searchResults"() {
@@ -129,9 +133,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         experimentService.previewResults(experiment.id) >> { new TableModel() }
         assert response.status == statusCode
         where:
-        label                  | instance                                                        | statusCode
-        "No Experiment File"   | { Experiment.build() }                                          | HttpServletResponse.SC_FOUND
-        "With Experiment File" | { Experiment.build(experimentFiles: [ExperimentFile.build()]) } | HttpServletResponse.SC_OK
+        label                  | instance | statusCode
+        "No Experiment File"   | {
+            Experiment.build()
+        }                                 | HttpServletResponse.SC_FOUND
+        "With Experiment File" | {
+            Experiment.build(experimentFiles: [ExperimentFile.build()])
+        }                                 | HttpServletResponse.SC_OK
 
     }
 
@@ -259,10 +267,16 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == statusCode
 
         where:
-        label                              | eid                                      | statusCode                         | webQueryTableModel | normalizeAxis
-        "Empty Null EID - Bad Request"     | { null }                                 | HttpServletResponse.SC_BAD_REQUEST | null               | 'Normalize Y-Axis'
-        "Good request with normalization"  | { Experiment.build(ncgcWarehouseId: 3) } | HttpServletResponse.SC_OK          | new TableModel()   | 'Normalize Y-Axis'
-        "Good request with denormaliztion" | { Experiment.build(ncgcWarehouseId: 3) } | HttpServletResponse.SC_OK          | new TableModel()   | null
+        label                              | eid | statusCode                         | webQueryTableModel | normalizeAxis
+        "Empty Null EID - Bad Request"     | {
+            null
+        }                                        | HttpServletResponse.SC_BAD_REQUEST | null               | 'Normalize Y-Axis'
+        "Good request with normalization"  | {
+            Experiment.build(ncgcWarehouseId: 3)
+        }                                        | HttpServletResponse.SC_OK          | new TableModel()   | 'Normalize Y-Axis'
+        "Good request with denormaliztion" | {
+            Experiment.build(ncgcWarehouseId: 3)
+        }                                        | HttpServletResponse.SC_OK          | new TableModel()   | null
 
     }
 
@@ -364,7 +378,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.toString()
         Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: "searchString"]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
@@ -404,7 +418,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
                 searchString: "searchString",
                 filters: searchFilters1
         ]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
@@ -422,7 +436,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: "searchString", filters: searchFilters1]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
@@ -474,23 +488,23 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.toString()
         Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: searchFilters1]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
         params.skip = "0"
         params.top = "10"
-        controller.handleAssaySearches(this.queryService, searchCommand, isMobile, "user")
+        controller.handleAssaySearches(this.queryService, searchCommand, isMobileDevice, "user")
         then:
         _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> { assayAdapterMap }
         assert response.status == statusCode
 
         where:
-        label                                  | searchString  | isMobile | statusCode                                   | assayAdapterMap
-        "Empty Search String - Bad Request"    | ""            | false    | HttpServletResponse.SC_BAD_REQUEST           | null
-        "Search String- Internal Server Error" | "Some String" | false    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
-        "Success"                              | "1234,5678"   | false    | HttpServletResponse.SC_OK                    | [assayAdapters: [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2]
-        "Success"                              | "1234,5678"   | true     | HttpServletResponse.SC_OK                    | [assayAdapters: [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2]
+        label                                  | searchString  | isMobileDevice | statusCode                                   | assayAdapterMap
+        "Empty Search String - Bad Request"    | ""            | false          | HttpServletResponse.SC_BAD_REQUEST           | null
+        "Search String- Internal Server Error" | "Some String" | false          | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
+        "Success"                              | "1234,5678"   | false          | HttpServletResponse.SC_OK                    | [assayAdapters: [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2]
+        "Success"                              | "1234,5678"   | true           | HttpServletResponse.SC_OK                    | [assayAdapters: [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2]
 
 
     }
@@ -500,22 +514,24 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.toString()
         Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: null]
-        controller.metaClass.getParams = {-> paramMap }
+        controller.metaClass.getParams = { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         List foundAssayAdapters = [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")]
 
         when:
         params.skip = "0"
         params.top = "10"
-        controller.handleAssaySearches(this.queryService, searchCommand, isMobile, "user")
+        controller.handleAssaySearches(this.queryService, searchCommand, isMobileDevice, "user")
         then:
-        numberOfTimesCalled * this.queryService.findAssaysByTextSearch(_, _, _, _) >> { [assayAdapters: foundAssayAdapters, facets: facets, nHits: 0, eTag: null] }
+        numberOfTimesCalled * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {
+            [assayAdapters: foundAssayAdapters, facets: facets, nHits: 0, eTag: null]
+        }
 
         where:
-        label                | searchString | isMobile | facets                                                                                                                   | numberOfTimesCalled
-        "Draft only"         | "Not empty"  | false    | [new Value(id: 'assay_status', children: [new IntValue(id: 'draft', value: 1)])]                                         | 1
-        "Approved  only"     | "Not empty"  | false    | [new Value(id: 'assay_status', children: [new IntValue(id: 'dpproved', value: 1)])]                                      | 1
-        "Draft and Approved" | "Not empty"  | false    | [new Value(id: 'assay_status', children: [new IntValue(id: 'draft', value: 1), new IntValue(id: 'approved', value: 1)])] | 2
+        label                | searchString | isMobileDevice | facets                                                                                                                   | numberOfTimesCalled
+        "Draft only"         | "Not empty"  | false          | [new Value(id: 'assay_status', children: [new IntValue(id: 'draft', value: 1)])]                                         | 1
+        "Approved  only"     | "Not empty"  | false          | [new Value(id: 'assay_status', children: [new IntValue(id: 'dpproved', value: 1)])]                                      | 1
+        "Draft and Approved" | "Not empty"  | false          | [new Value(id: 'assay_status', children: [new IntValue(id: 'draft', value: 1), new IntValue(id: 'approved', value: 1)])] | 2
     }
 
     void "test handle Project Searches #label"() {
@@ -526,23 +542,23 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
                 searchString: searchString,
                 filters: searchFilters1
         ]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
         params.skip = "0"
         params.top = "10"
-        controller.handleProjectSearches(this.queryService, searchCommand, isMobile, "user")
+        controller.handleProjectSearches(this.queryService, searchCommand, isMobileDevice, "user")
         then:
         _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> { projectAdapterMap }
         assert response.status == statusCode
 
         where:
-        label                                  | searchString  | statusCode                                   | isMobile | projectAdapterMap
-        "Empty Search String"                  | ""            | HttpServletResponse.SC_BAD_REQUEST           | false    | null
-        "Search String- Internal Server Error" | "Some String" | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | false    | null
-        "Success"                              | "1234,5678"   | HttpServletResponse.SC_OK                    | false    | [projectAdapters: [buildProjectAdapter(1234, "assay1"), buildProjectAdapter(1234, "assay2")], facets: [], nHits: 2]
-        "Success, with Mobile"                 | "1234,5678"   | HttpServletResponse.SC_OK                    | true     | [projectAdapters: [buildProjectAdapter(1234, "assay1"), buildProjectAdapter(1234, "assay2")], facets: [], nHits: 2]
+        label                                  | searchString  | statusCode                                   | isMobileDevice | projectAdapterMap
+        "Empty Search String"                  | ""            | HttpServletResponse.SC_BAD_REQUEST           | false          | null
+        "Search String- Internal Server Error" | "Some String" | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | false          | null
+        "Success"                              | "1234,5678"   | HttpServletResponse.SC_OK                    | false          | [projectAdapters: [buildProjectAdapter(1234, "assay1"), buildProjectAdapter(1234, "assay2")], facets: [], nHits: 2]
+        "Success, with Mobile"                 | "1234,5678"   | HttpServletResponse.SC_OK                    | true           | [projectAdapters: [buildProjectAdapter(1234, "assay1"), buildProjectAdapter(1234, "assay2")], facets: [], nHits: 2]
 
     }
 
@@ -550,23 +566,23 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: searchFilters1]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
         params.skip = "0"
         params.top = "10"
-        controller.handleCompoundSearches(this.queryService, searchCommand, isMobile, "user")
+        controller.handleCompoundSearches(this.queryService, searchCommand, isMobileDevice, "user")
         then:
         _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> { compoundAdapterMap }
         assert response.status == statusCode
 
         where:
-        label                                  | searchString  | isMobile | statusCode                                   | compoundAdapterMap
-        "Empty Search String"                  | ""            | false    | HttpServletResponse.SC_BAD_REQUEST           | null
-        "Search String- Internal Server Error" | "Some String" | false    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
-        "Success"                              | "1234,5678"   | false    | HttpServletResponse.SC_OK                    | [compoundAdapters: [buildCompoundAdapter(1234), buildCompoundAdapter(4567)], facets: [], nHits: 2]
-        "Success"                              | "1234,5678"   | true     | HttpServletResponse.SC_OK                    | [compoundAdapters: [buildCompoundAdapter(1234), buildCompoundAdapter(4567)], facets: [], nHits: 2]
+        label                                  | searchString  | isMobileDevice | statusCode                                   | compoundAdapterMap
+        "Empty Search String"                  | ""            | false          | HttpServletResponse.SC_BAD_REQUEST           | null
+        "Search String- Internal Server Error" | "Some String" | false          | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
+        "Success"                              | "1234,5678"   | false          | HttpServletResponse.SC_OK                    | [compoundAdapters: [buildCompoundAdapter(1234), buildCompoundAdapter(4567)], facets: [], nHits: 2]
+        "Success"                              | "1234,5678"   | true           | HttpServletResponse.SC_OK                    | [compoundAdapters: [buildCompoundAdapter(1234), buildCompoundAdapter(4567)], facets: [], nHits: 2]
     }
 
     void "test apply Filters to projects #label"() {
@@ -574,7 +590,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.ProjectFacetForm.toString()
         Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: searchFilters1]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
@@ -594,7 +610,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: searchFilters1]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
@@ -613,7 +629,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.toString()
         Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: searchFilters1]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
@@ -740,7 +756,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: filters]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
@@ -764,7 +780,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: "searchString"]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
@@ -784,7 +800,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: "searchString", max: "max"]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
@@ -803,7 +819,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: filters]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
@@ -865,7 +881,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.ProjectFacetForm.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: []]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when: "We call the removeDuplicates method with the given search string"
@@ -886,7 +902,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.ProjectFacetForm.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: filters]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
@@ -909,7 +925,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: filters]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
@@ -933,7 +949,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: filters]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
@@ -958,7 +974,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: "233"]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
@@ -980,7 +996,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.ProjectFacetForm.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: "111"]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
@@ -996,14 +1012,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     }
 
 
-
     void "test searchCompoundsByIDs With Exception #label"() {
         given:
         String searchString = "1234"
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString]
-        controller.metaClass.getParams {-> paramMap }
+        controller.metaClass.getParams { -> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
@@ -1225,32 +1240,32 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.handleMobile(dataModel, modelAndView)
 
         then:
-        1 * this.mobileService.detect(_) >> { isMobile }
+        1 * this.mobileService.detect(_) >> { isMobileDevice }
         (0..1) * this.mobileService.gspExists(_) >> { gspExists }
         assert modelAndView.viewName == expectedViewName
 
         where:
-        dataModel          | viewName | isMobile | gspExists | expectedViewName | label
-        [data: 'someData'] | '/view1' | true     | true      | '/mobile/view1'  | 'mobile-platform request'
-        [data: 'someData'] | '/view1' | false    | true      | '/view1'         | 'regular request'
-        [data: 'someData'] | '/view1' | true     | false     | '/view1'         | 'missing GSP'
+        dataModel          | viewName | isMobileDevice | gspExists | expectedViewName | label
+        [data: 'someData'] | '/view1' | true           | true      | '/mobile/view1'  | 'mobile-platform request'
+        [data: 'someData'] | '/view1' | false          | true      | '/view1'         | 'regular request'
+        [data: 'someData'] | '/view1' | true           | false     | '/view1'         | 'missing GSP'
     }
 
     @Ignore
-    void "test isMobile #label"() {
+    void "test isMobileDevice #label"() {
         given:
 
         when:
-        Boolean result = controller.isMobile()
+        Boolean result = controller.isMobileDevice()
 
         then:
-        1 * this.mobileService.detect(_) >> { isMobile }
-        assert result == isMobile
+        1 * this.mobileService.detect(_) >> { isMobileDevice }
+        assert result == isMobileDevice
 
         where:
-        isMobile | label
-        true     | 'mobile-platform request'
-        false    | 'regular request'
+        isMobileDevice | label
+        true           | 'mobile-platform request'
+        false          | 'regular request'
     }
 
     void "test handleSearchParams #label"() {
@@ -1284,10 +1299,16 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == statusCode
 
         where:
-        label                              | eid                                      | statusCode                         | webQueryTableModel | normalizeAxis
-        "Empty Null EID - Bad Request"     | { null }                                 | HttpServletResponse.SC_BAD_REQUEST | null               | 'Normalize Y-Axis'
-        "Good request with normalization"  | { Experiment.build(ncgcWarehouseId: 3) } | HttpServletResponse.SC_OK          | new TableModel()   | 'Normalize Y-Axis'
-        "Good request with denormaliztion" | { Experiment.build(ncgcWarehouseId: 3) } | HttpServletResponse.SC_OK          | new TableModel()   | null
+        label                              | eid | statusCode                         | webQueryTableModel | normalizeAxis
+        "Empty Null EID - Bad Request"     | {
+            null
+        }                                        | HttpServletResponse.SC_BAD_REQUEST | null               | 'Normalize Y-Axis'
+        "Good request with normalization"  | {
+            Experiment.build(ncgcWarehouseId: 3)
+        }                                        | HttpServletResponse.SC_OK          | new TableModel()   | 'Normalize Y-Axis'
+        "Good request with denormaliztion" | {
+            Experiment.build(ncgcWarehouseId: 3)
+        }                                        | HttpServletResponse.SC_OK          | new TableModel()   | null
 
     }
 
