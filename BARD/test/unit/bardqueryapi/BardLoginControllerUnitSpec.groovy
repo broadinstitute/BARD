@@ -42,7 +42,7 @@ class BardLoginControllerUnitSpec extends Specification {
         controller.index()
 
         then:
-        springSecurityService.isLoggedIn() >> {isLoggedIn}
+        springSecurityService.isLoggedIn() >> { isLoggedIn }
         assert response.status == expectedResponseStatus
         assert response.redirectUrl == expectedRedirectUrl
 
@@ -57,16 +57,16 @@ class BardLoginControllerUnitSpec extends Specification {
         controller.auth()
 
         then:
-        springSecurityService.isLoggedIn() >> {isLoggedIn}
-        mobileService.detect(_) >> {isMobile}
+        springSecurityService.isLoggedIn() >> { isLoggedIn }
+        mobileService.detect(_) >> { isMobileDevice }
         assert response.status == expectedResponseStatus
         assert response.redirectUrl == expectedRedirectUrl
 
         where:
-        label                       | isLoggedIn | expectedResponseStatus | expectedRedirectUrl | isMobile | expectedResponseText
-        'logged in'                 | true       | 302                    | '/'                 | false    | ''
-        'not logged in, mobile'     | false      | 200                    | null                | true     | '$.mobile.ajaxEnabled = false;'
-        'not logged in, not mobile' | false      | 200                    | null                | false    | ''
+        label                       | isLoggedIn | expectedResponseStatus | expectedRedirectUrl | isMobileDevice | expectedResponseText
+        'logged in'                 | true       | 302                    | '/'                 | false          | ''
+        'not logged in, mobile'     | false      | 200                    | null                | true           | '$.mobile.ajaxEnabled = false;'
+        'not logged in, not mobile' | false      | 200                    | null                | false          | ''
     }
 
     void "test authAjax()"() {
@@ -83,8 +83,8 @@ class BardLoginControllerUnitSpec extends Specification {
         controller.denied()
 
         then:
-        this.springSecurityService.isLoggedIn() >> {isLoggedIn}
-        this.authenticationTrustResolver.isRememberMe(_) >> {isRememberMe}
+        this.springSecurityService.isLoggedIn() >> { isLoggedIn }
+        this.authenticationTrustResolver.isRememberMe(_) >> { isRememberMe }
         assert response.redirectedUrl == expectedUrl
 
         where:
@@ -98,7 +98,7 @@ class BardLoginControllerUnitSpec extends Specification {
         controller.full()
 
         then:
-        this.authenticationTrustResolver.isRememberMe(_) >> {true}
+        this.authenticationTrustResolver.isRememberMe(_) >> { true }
         assert response.status == 200
     }
 
@@ -127,7 +127,7 @@ class BardLoginControllerUnitSpec extends Specification {
         controller.authfail()
 
         then:
-        this.springSecurityService.isAjax(_) >> {isAjax}
+        this.springSecurityService.isAjax(_) >> { isAjax }
         assert (isAjax) ? (response?.json?.'error' == expectedResult) : (response.redirectedUrl == '/bardLogin/auth')
 
         where:
@@ -141,8 +141,8 @@ class BardLoginControllerUnitSpec extends Specification {
         controller.ajaxSuccess()
 
         then:
-        this.springSecurityService.getAuthentication() >> {this.testingAuthenticationToken}
-        this.testingAuthenticationToken.getName() >> {'aName'}
+        this.springSecurityService.getAuthentication() >> { this.testingAuthenticationToken }
+        this.testingAuthenticationToken.getName() >> { 'aName' }
         assert response.json.'success' == true
         assert response.json.'username' == 'aName'
     }
