@@ -363,7 +363,10 @@ class AssayDefinitionController {
                 response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
                 response.setDateHeader("Expires", 0); // Proxies
             }
-            return [assayInstance: assayInstance, assayOwner: owner, editable: editable ? 'canedit' : 'cannotedit', experimentsActiveVsTested: experimentsActiveVsTested]
+            return [assayInstance: assayInstance, assayOwner: owner,
+                    editable: editable ? 'canedit' : 'cannotedit',
+                    contextItemSubTemplate: editable ? 'edit' :'show',
+                    experimentsActiveVsTested: experimentsActiveVsTested]
         } else {
             String messageStr = "A Valid Assay Definition ID is required"
             return [message: messageStr]

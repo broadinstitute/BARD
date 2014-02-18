@@ -77,7 +77,7 @@
         </g:each>
         </tbody>
     </table>
-    <g:render template="/common/guidance" model="[guidanceList: context.guidance]" />
+    <g:render template="/common/guidance" model="[guidanceList: context.guidance, editable: 'canedit']" />
 </div>
 
 
