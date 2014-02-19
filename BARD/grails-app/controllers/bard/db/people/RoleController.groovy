@@ -40,8 +40,8 @@ class RoleController {
         }
 //        def persons = PersonRole.findAllByRole(roleInstance, [sort: "person.fullName", order: "asc"]).collect { it.person } as Set
         def persons = PersonRole.findAllByRole(roleInstance, [sort: "person.fullName", order: "asc"])
-        boolean isTeamManage = personService.isTeamManager(roleInstance.id)
-        [roleInstance: roleInstance, editable: 'canedit', teamMembers: persons, isTeamManager: isTeamManage]
+        boolean isTeamManager = personService.isTeamManager(id)
+        [roleInstance: roleInstance, editable: 'canedit', teamMembers: persons, isTeamManager: isTeamManager]
     }
 
     def addUserToTeam(String email, Long roleId){
