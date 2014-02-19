@@ -711,7 +711,7 @@ class ResultsService {
 
                 // populate the top few lines in the summary.
                 errors.topLines = parser.reader.topLines
-                errors.substanceCount = parser.sampleIds.size()
+                errors.substanceCount += parser.sampleIds.size()
 
                 if(rows == null) {
                     break;
