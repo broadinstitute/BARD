@@ -20,7 +20,6 @@ class RowParser {
     ImportSummary summary;
 
     Set<Long> sampleIds = new java.util.HashSet()
-    Long currentSampleId = null;
     ResultsService.LineReader reader;
     Closure lineCallback
     Row lastReadRow = null;
@@ -110,27 +109,36 @@ class RowParser {
             return null;
         }
 
+        Long currentSampleId = null;
         List<Row> rows = []
-        if(lastReadRow != null) {
-            rows.add(lastReadRow)
-        }
 
         while (true) {
-            List<String> values = reader.readLine() as List
-            if (values == null) {
-                reachedEnd = true;
-                break;
-            }
+            Row row;
 
-            boolean good = preprocessLine(columns, values, summary, reader.lineNumber)
+            boolean keepGoing = true;
 
-            if (good) {
-                // pass to the callback
-                Row row = lineCallback(reader.lineNumber, values)
-                if(row == null) {
-                    continue
+            if(lastReadRow != null) {
+                row = lastReadRow
+                lastReadRow = null;
+            } else {
+                List<String> values = reader.readLine() as List
+                if (values == null) {
+                    reachedEnd = true;
+                    break;
                 }
 
+                keepGoing = preprocessLine(columns, values, summary, reader.lineNumber)
+
+                if (keepGoing) {
+                    // pass to the callback
+                    row = lineCallback(reader.lineNumber, values)
+                    if(row == null) {
+                        continue
+                    }
+                }
+            }
+
+            if(keepGoing) {
                 // make sure the row is for the current sample
                 if(currentSampleId == null || row.sid == currentSampleId) {
                     rows.add(row)
@@ -146,7 +154,6 @@ class RowParser {
                 } else {
                     // if the row is for a new sample, flush this row by returning it
                     lastReadRow = row
-                    currentSampleId = null
                     break
                 }
             }
@@ -154,6 +161,12 @@ class RowParser {
             if (summary.tooMany()) {
                 break
             }
+        }
+
+        // double check to make sure we have only rows for a single sample
+        Set uniqueSamples = new HashSet(rows.collect { it.sid })
+        if (uniqueSamples.size() > 1) {
+            throw new RuntimeException("Expected a single sample, but got "+uniqueSamples);
         }
 
         return rows;
