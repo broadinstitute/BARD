@@ -12,6 +12,10 @@
 
 <div class="container-fluid">
     <div class="row-fluid">
+        <h3>My Experiments</h3>
+    </div>
+
+    <div class="row-fluid">
         <g:if test="${experiments}">
             <g:render template="/layouts/templates/tableSorterTip"/>
 
@@ -26,7 +30,8 @@
                     <caption><b>Total:</b> ${experiments.size()}</caption>
                     <thead>
                     <tr>
-                        <th data-sort="int">Experiment ID</th><th data-sort="string-ins">Name</th><th data-sort="string">Status</th>
+                        <th data-sort="int">Experiment ID</th><th data-sort="string-ins">Name</th><th
+                            data-sort="string">Status</th>
                         <th data-sort="int">Belongs to ADID</th>
                         <th data-sort="int">Date Created</th>
                     </tr>
@@ -42,7 +47,8 @@
                                 <g:link controller="assayDefinition" id="${experiment.assay.id}"
                                         action="show">${experiment.assay.id}</g:link>
                             </p></td>
-                            <td data-sort-value="${experiment.dateCreated?.time}"><g:formatDate date="${experiment.dateCreated}" format="MM/dd/yyyy"/></td>
+                            <td data-sort-value="${experiment.dateCreated?.time}"><g:formatDate
+                                    date="${experiment.dateCreated}" format="MM/dd/yyyy"/></td>
                         </tr>
                     </g:each>
                     </tbody>
