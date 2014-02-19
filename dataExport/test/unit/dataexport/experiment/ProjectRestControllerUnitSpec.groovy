@@ -79,6 +79,5 @@ class ProjectRestControllerUnitSpec extends Specification {
         "Status Code 400,incorrect mime type" | 2    | "bogus.mime.type"                              | HttpServletResponse.SC_BAD_REQUEST
         "Status Code 400, null id"            | null | "application/vnd.bard.cap+xml;type=projectDoc" | HttpServletResponse.SC_BAD_REQUEST
         "Status Code 200"                     | 5    | "application/vnd.bard.cap+xml;type=projectDoc" | HttpServletResponse.SC_OK
-
     }
 }

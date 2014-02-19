@@ -18,8 +18,6 @@ class ResourcesUpAndValidSpec extends Specification {
     String apiKeyHashed = System.getProperty('apikey.hashed') ?: "changeMe"
     String externalSchemaLocation = System.getProperty('schema.url') ?: "${serverUrl}/dataExport/schemas/BARDexportSchema.xsd"
 
-
-
     def "Test top level resource #label"() {
         given: "A service end point to get to the root elements"
         final String topLevelUrl = [baseUrl, resourcePath].findAll().join('/')
@@ -106,5 +104,4 @@ class ResourcesUpAndValidSpec extends Specification {
 
         return serverResponse
     }
-
 }

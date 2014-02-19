@@ -29,6 +29,7 @@ public enum ReadyForExtraction implements IEnumUserType {
             case READY:
             case STARTED:
             case COMPLETE:
+            case FAILED:
                 isAllowed = true
             default:
                 // no op
