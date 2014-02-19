@@ -5,7 +5,7 @@
     <r:require
             modules="core,bootstrap"/>
     <meta name="layout" content="basic"/>
-    <title>Move Experiments Into New Assay</title>
+    <title>Split Assay Definition</title>
 </head>
 
 <body>
@@ -16,6 +16,7 @@
         </div>
 
         <div class="span8">
+            <h3>Split Assay Definition</h3>
             <g:formRemote url="[controller: 'splitAssayDefinition', action: 'selectExperimentsToMove']"
                           name="splitExperiments"
                           update="[success: 'confirmSplit', failure: 'confirmSplit']">

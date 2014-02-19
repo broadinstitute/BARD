@@ -11,13 +11,18 @@
 <body>
 <div class="container-fluid">
     <div class="row-fluid">
+        <h3>My Assay Definitions</h3>
+    </div>
+
+    <div class="row-fluid">
         <g:if test="${assays}">
             <g:render template="/layouts/templates/tableSorterTip"/>
             <table>
                 <caption><b>Total:</b> ${assays.size()}</caption>
                 <thead>
                 <tr>
-                    <th data-sort="int">ADID</th><th data-sort="string-ins">Name</th><th data-sort="string">Status</th> <th data-sort="int">Date Created</th>
+                    <th data-sort="int">ADID</th><th data-sort="string-ins">Name</th><th
+                        data-sort="string">Status</th> <th data-sort="int">Date Created</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,12 +32,13 @@
                                     action="show">${assay.id}</g:link></td>
                         <td style="line-height: 150%"><p>${assay.assayName?.trim()}</p></td>
                         <td>${assay.assayStatus.id}</td>
-                        <td data-sort-value="${assay.dateCreated.time}"><g:formatDate date="${assay.dateCreated}" format="MM/dd/yyyy"/></td>
+                        <td data-sort-value="${assay.dateCreated.time}"><g:formatDate date="${assay.dateCreated}"
+                                                                                      format="MM/dd/yyyy"/></td>
                     </tr>
                 </g:each>
                 </tbody>
             </table>
-         </g:if>
+        </g:if>
         <br/>
     </div>
 </div>

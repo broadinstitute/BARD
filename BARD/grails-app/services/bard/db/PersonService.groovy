@@ -3,8 +3,11 @@ package bard.db
 import bard.db.people.Person
 import bard.db.people.PersonRole
 import bard.db.people.Role
+import grails.plugins.springsecurity.SpringSecurityService
 
 class PersonService {
+
+    SpringSecurityService springSecurityService
 
     Person update(Person person, String userName, String fullName, String emailAddress,Collection<Role> roles) {
         person.userName = userName
@@ -29,5 +32,19 @@ class PersonService {
         person.save(failOnError: true, flush: true)
 
         return person
+    }
+
+    String getTeamRole(Long roleId){
+        String username = springSecurityService.principal?.username
+        Person user = Person.findByUserName(username)
+        PersonRole pr = PersonRole.findByPersonAndRole(user, Role.get(roleId))
+        return (pr != null ? pr.teamRole : null)
+
+    }
+
+    boolean isTeamManager(Long roleId){
+        String personRole = getTeamRole(roleId)
+        boolean isManager = personRole != null ? personRole.equals("Manager") : false
+        return isManager
     }
 }
