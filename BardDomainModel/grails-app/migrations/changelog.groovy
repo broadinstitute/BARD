@@ -61,8 +61,8 @@ databaseChangeLog = {
     include(file: "iteration_037/037_changelog.groovy")
     include(file: "iteration_038/038_changelog.groovy")
     include(file: "iteration_039/039_changelog.groovy")
-//    include(file: "iteration_041/041_changelog.groovy")
-//    include(file: "iteration_042/042_changelog.groovy")
+    include(file: "iteration_041/041_changelog.groovy")
+    include(file: "iteration_042/042_changelog.groovy")
     include(file: "iteration_043/043_changelog.groovy")
 
     // views

@@ -143,11 +143,6 @@ databaseChangeLog = {
         }
     }
 
-    changeSet(author: "pmontgom", id: "iteration-042/03-ready-for-extract-constraint", dbms: "oracle", context: "standard") {
-        sqlFile(path: "iteration_042/03-ready-for-extract-constraint.sql", stripComments: true)
-    }
-
-
     changeSet(author: 'ddurkin', id: 'iteration-042/03-update-expected-value-for-measured-component', dbms: 'oracle', context: 'standard') {
         grailsChange {
             change {
