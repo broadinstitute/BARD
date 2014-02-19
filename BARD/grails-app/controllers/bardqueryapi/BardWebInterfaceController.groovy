@@ -66,7 +66,7 @@ class BardWebInterfaceController {
         }
     }
 
-    Boolean isMobile() {
+    Boolean isMobileDevice() {
 //        return mobileService.detect(request)
         return false
     }
@@ -152,7 +152,7 @@ class BardWebInterfaceController {
 
     def search() {
         flash.searchString = params.searchString
-        if (!isMobile()) {
+        if (!this.isMobileDevice()) {
             String server = request.requestURL - request.requestURI
             String contextPath = request.contextPath
             String base = "${server}${contextPath}" //e.g., 'http://localhost:8080/bardwebclient'
@@ -380,7 +380,7 @@ class BardWebInterfaceController {
             Map compoundAdapterMap = this.queryService.searchCompoundsByCids(cids, top, skip, searchFilters)
             List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
 
-            String template = isMobile() ? "/mobile/bardWebInterface/compounds" : "compounds"
+            String template = this.isMobileDevice() ? "/mobile/bardWebInterface/compounds" : "compounds"
             render(template: template, model: [
                     compoundAdapters: compoundAdapters,
                     facets: compoundAdapterMap.facets,
@@ -433,7 +433,7 @@ class BardWebInterfaceController {
                 capIds.add(new Long(id))
             }
 
-            String template = isMobile() ? "/mobile/bardWebInterface/assays" : "assays"
+            String template = this.isMobileDevice() ? "/mobile/bardWebInterface/assays" : "assays"
             final Map assayAdapterMap = this.queryService.findAssaysByCapIds(capIds, top, skip, searchFilters)
             render(template: template, model: [
                     assayAdapters: assayAdapterMap.assayAdapters,
@@ -489,7 +489,7 @@ class BardWebInterfaceController {
             }
             Map projectAdapterMap = this.queryService.findProjectsByCapIds(capIds, top, skip, searchFilters)
 
-            String template = isMobile() ? "/mobile/bardWebInterface/projects" : "projects"
+            String template = this.isMobileDevice() ? "/mobile/bardWebInterface/projects" : "projects"
             render(template: template, model: [
                     projectAdapters: projectAdapterMap.projectAdapters,
                     facets: projectAdapterMap.facets,
@@ -612,7 +612,7 @@ class BardWebInterfaceController {
  */
     def searchCompounds(SearchCommand searchCommand) {
 
-        handleCompoundSearches(this.queryService, searchCommand, isMobile(), bardUtilitiesService.username)
+        handleCompoundSearches(this.queryService, searchCommand, this.isMobileDevice(), bardUtilitiesService.username)
 
     }
 /**
@@ -621,14 +621,14 @@ class BardWebInterfaceController {
  */
     def searchAssays(SearchCommand searchCommand) {
 
-        handleAssaySearches(this.queryService, searchCommand, isMobile(), this.bardUtilitiesService.username)
+        handleAssaySearches(this.queryService, searchCommand, this.isMobileDevice(), this.bardUtilitiesService.username)
     }
 /**
  *
  * Find Projects annotated with Search String
  */
     def searchProjects(SearchCommand searchCommand) {
-        handleProjectSearches(this.queryService, searchCommand, isMobile(), this.bardUtilitiesService.username)
+        handleProjectSearches(this.queryService, searchCommand, this.isMobileDevice(), this.bardUtilitiesService.username)
     }
 
 /**
@@ -663,7 +663,7 @@ class BardWebInterfaceController {
         if (params.searchString) {
             results.put("searchString", params.searchString)
         }
-        String template = isMobile() ? "/mobile/bardWebInterface/compounds" : "compounds"
+        String template = this.isMobileDevice() ? "/mobile/bardWebInterface/compounds" : "compounds"
         render(template: template,
                 model: [
                         compoundAdapters: results.compoundAdapters,

@@ -12,6 +12,7 @@ import bard.db.project.ProjectSingleExperiment
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
 import bard.db.registration.MeasureCaseInsensitiveDisplayLabelComparator
+import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 import java.text.DateFormat
@@ -139,6 +140,9 @@ class Experiment extends AbstractContextOwner {
     def beforeUpdate(){
         if(experimentStatus.equals(Status.APPROVED) && this.isDirty('experimentStatus')){
             approvedBy = springSecurityService.authentication.name
+            if(approvedBy && approvedBy.contains('@')){
+                approvedBy = StringUtils.substringBefore(approvedBy,'@')
+            }
             approvedDate = new Date()
         }
     }

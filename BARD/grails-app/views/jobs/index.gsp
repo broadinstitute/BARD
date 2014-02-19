@@ -4,12 +4,15 @@
     <r:require
             modules="core,bootstrap,tableSorter"/>
     <meta name="layout" content="basic"/>
-    <title>My Experiments</title>
+    <title>My Import Jobs</title>
 </head>
 
 <body>
 
 <div class="container-fluid">
+    <div class="row-fluid">
+        <h3>My Import Jobs</h3>
+        </div>
     <div class="row-fluid">
         <table id="myJobs" class="table table-striped table-hover table-bordered">
             <caption><b>Total:</b> ${jobs.size()}</caption>
