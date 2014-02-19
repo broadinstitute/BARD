@@ -704,14 +704,12 @@ class ResultsService {
 
             ParseTimer timer = new ParseTimer(options.statusCallback);
 
+            // populate the top few lines in the summary.
+            errors.topLines = parser.reader.topLines
             while(true) {
                 List<Row> rows = parser.readNextSampleRows();
                 errors.linesParsed = parser.reader.lineNumber
                 timer.updateCount(errors.linesParsed)
-
-                // populate the top few lines in the summary.
-                errors.topLines = parser.reader.topLines
-                errors.substanceCount += parser.sampleIds.size()
 
                 if(rows == null) {
                     break;
@@ -731,6 +729,8 @@ class ResultsService {
                     persister.addResultsForSample(resultsForSample)
                 }
             }
+
+            errors.substanceCount = parser.sampleIds.size()
 
             if (!errors.hasErrors() && errors.resultsCreated == 0) {
                 errors.addError(0, 0, "No results were produced")
