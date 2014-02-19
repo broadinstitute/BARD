@@ -1,18 +1,22 @@
 package bard.db.people
 
+import bard.db.PersonService
 import bard.db.project.InlineEditableCommand
 import bard.db.registration.EditingHelper
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.access.AccessDeniedException
+import groovy.util.Eval
+import bard.db.enums.TeamRole
 
 @Mixin(EditingHelper)
 @Secured(["hasRole('ROLE_BARD_ADMINISTRATOR')"])
 class RoleController {
 
-    static allowedMethods = [save: "POST", update: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", modifyTeamRoles: "POST"]
     SpringSecurityService springSecurityService
+    PersonService personService
 
     def index() {
         redirect(action: "list", params: params)
@@ -34,8 +38,10 @@ class RoleController {
             redirect(action: "list")
             return
         }
-        def persons = PersonRole.findAllByRole(roleInstance, [sort: "person.fullName", order: "asc"]).collect { it.person } as Set
-        [roleInstance: roleInstance, editable: 'canedit', teamMembers: persons]
+//        def persons = PersonRole.findAllByRole(roleInstance, [sort: "person.fullName", order: "asc"]).collect { it.person } as Set
+        def persons = PersonRole.findAllByRole(roleInstance, [sort: "person.fullName", order: "asc"])
+        boolean isTeamManage = personService.isTeamManager(roleInstance.id)
+        [roleInstance: roleInstance, editable: 'canedit', teamMembers: persons, isTeamManager: isTeamManage]
     }
 
     def addUserToTeam(String email, Long roleId){
@@ -44,7 +50,7 @@ class RoleController {
             Role role = Role.get(roleId)
             PersonRole personRole = new PersonRole(person: person, role: role)
             if(!personRole.save(flush: true)){
-                flash.error = "ERROR: Unable to  save user ${person.fullName} (${person.emailAddress}) was successfully added to team ${role.displayName}"
+                flash.error = "ERROR: Unable to  save user ${person.fullName} (${person.emailAddress})"
             }
             flash.success = "User ${person.fullName} (${person.emailAddress}) was successfully added to team ${role.displayName}"
             redirect(action: "show", id: roleId)
@@ -53,6 +59,43 @@ class RoleController {
             flash.error = "${email} is not a registered BARD user"
             redirect(action: "show", id: roleId)
         }
+    }
+
+    def myTeams(){
+        def username = springSecurityService.principal?.username
+        Person user = Person.findByUserName(username)
+//        def roles = PersonRole.findAllByTeamRoleAndPerson('Manager', user).collect{it.role} as Set
+        def roles = PersonRole.findAllByTeamRoleAndPerson('Manager', user)
+        [teams: roles]
+    }
+
+    def modifyTeamRoles(){
+        def successfulSaves = []
+        def errorSaves = []
+        def personRoleArray = params.list("checkboxes")
+        for (int i = 0; i < personRoleArray.size(); i++){
+            PersonRole personRole = PersonRole.get(personRoleArray.get(i))
+            if(personRole){
+                def personName = personRole.person.fullName
+                personRole.teamRole = params.teamRole
+                if(!personRole.save(flush: true)){
+                    errorSaves.add(personName)
+                }
+                else{
+                    successfulSaves.add(personName)
+                }
+            }
+            else{
+                errorSaves.add("No record found")
+            }
+        }
+        if(successfulSaves.size() > 0){
+            flash.success = "Team role '${params.teamRole}' was successfully applied to user(s) ${successfulSaves.join(", ")}."
+        }
+        if(errorSaves.size() > 0){
+            flash.error = "ERROR: Unable to set team role ${params.teamRole} for user(s) ${errorSaves.join(", ")}."
+        }
+        redirect(action: "show", id: params.roleId)
     }
 
     def save() {
