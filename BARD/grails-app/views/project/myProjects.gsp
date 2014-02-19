@@ -10,6 +10,10 @@
 <body>
 <div class="container-fluid">
     <div class="row-fluid">
+        <h3>My Projects</h3>
+    </div>
+
+    <div class="row-fluid">
         <g:if test="${projects}">
             <g:render template="/layouts/templates/tableSorterTip"/>
             <table>
@@ -33,7 +37,7 @@
                 </g:each>
                 </tbody>
             </table>
-         </g:if>
+        </g:if>
         <br/>
     </div>
 </div>

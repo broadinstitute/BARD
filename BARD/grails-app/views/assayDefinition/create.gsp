@@ -9,60 +9,69 @@
 </head>
 
 <body>
-<div class="row-fluid">
-    <div class="span12">
-        <g:form class="form-horizontal" action="save" controller="assayDefinition">
+<div class="container-fluid">
+    <div class="row-fluid">
+        <h3>Create a New Assay Definition</h3>
+    </div>
 
-            <div class="control-group ${hasErrors(bean: assayCommand, field: 'assayName', 'error')}">
-                <label class="control-label" for="assayName">* <g:message code="assay.assayName.label"/>:</label>
+    <div class="row-fluid">
+        <div class="span12">
+            <g:form class="form-horizontal" action="save" controller="assayDefinition">
 
-                <div class="controls">
-                    <g:textArea id="assayName" name="assayName" value="${assayCommand?.assayName}" required="" class="span10"/>
-                    <span class="help-inline"><g:fieldError field="assayName" bean="assay"/></span>
-                </div>
-            </div>
+                <div class="control-group ${hasErrors(bean: assayCommand, field: 'assayName', 'error')}">
+                    <label class="control-label" for="assayName">* <g:message code="assay.assayName.label"/>:</label>
 
-            <g:hiddenField class="" id="assayFormatId" name="assayFormatId" value="${assayCommand?.assayFormatId}" />
-
-            <div class="control-group ${hasErrors(bean: assayCommand, field: 'assayFormatValueId', 'error')}">
-
-                <label class="control-label" for="assayFormatValueId">* <g:message code="assay.assayFormat.label"/>:</label>
-
-                <div class="controls">
-                    <g:hiddenField class="span10" id="assayFormatValueId" name="assayFormatValueId"
-                                   value="${assayCommand?.assayFormatValueId}" />
-                    <p class="help-inline"><g:fieldError field="assayFormatValueId" bean="${assayCommand}"/></p>
+                    <div class="controls">
+                        <g:textArea id="assayName" name="assayName" value="${assayCommand?.assayName}" required=""
+                                    class="span10"/>
+                        <span class="help-inline"><g:fieldError field="assayName" bean="assay"/></span>
+                    </div>
                 </div>
 
-            </div>
+                <g:hiddenField class="" id="assayFormatId" name="assayFormatId" value="${assayCommand?.assayFormatId}"/>
 
+                <div class="control-group ${hasErrors(bean: assayCommand, field: 'assayFormatValueId', 'error')}">
 
-            <div class="control-group ${hasErrors(bean: assayCommand, field: 'ownerRole', 'error')}">
-                <label class="control-label" for="ownerRole">* <g:message code="entity.ownerRole.label"/>:</label>
+                    <label class="control-label" for="assayFormatValueId">* <g:message
+                            code="assay.assayFormat.label"/>:</label>
 
-                <div class="controls">
-                    <g:if test="${bard.db.command.BardCommand.userRoles()}">
-                        <g:select name="ownerRole" id="ownerRole"  required="required"
-                                  from="${BardCommand.userRoles()}"
-                                  value="${assayCommand?.ownerRole}"
-                                  optionValue="displayName" optionKey="authority"
-                                  />
-                    </g:if>
-                    <g:else>
-                        <p> You need to be part of a team to create Assays. Follow this <g:link controller="assayDefinition" action="teams">link</g:link> to the Teams Page</p>
-                    </g:else>
-                    <p class="help-inline"><g:fieldError field="ownerRole" bean="${assayCommand}"/></p>
+                    <div class="controls">
+                        <g:hiddenField class="span10" id="assayFormatValueId" name="assayFormatValueId"
+                                       value="${assayCommand?.assayFormatValueId}"/>
+                        <p class="help-inline"><g:fieldError field="assayFormatValueId" bean="${assayCommand}"/></p>
+                    </div>
+
                 </div>
-            </div>
-            <div class="control-group">
-                <div class="controls">
-                    <g:link controller="assayDefinition" action="myAssays"
-                            class="btn">Cancel</g:link>
-                    <input type="submit" class="btn btn-primary" value="Create New Assay Definition">
-                </div>
-            </div>
 
-        </g:form>
+
+                <div class="control-group ${hasErrors(bean: assayCommand, field: 'ownerRole', 'error')}">
+                    <label class="control-label" for="ownerRole">* <g:message code="entity.ownerRole.label"/>:</label>
+
+                    <div class="controls">
+                        <g:if test="${bard.db.command.BardCommand.userRoles()}">
+                            <g:select name="ownerRole" id="ownerRole" required="required"
+                                      from="${BardCommand.userRoles()}"
+                                      value="${assayCommand?.ownerRole}"
+                                      optionValue="displayName" optionKey="authority"/>
+                        </g:if>
+                        <g:else>
+                            <p>You need to be part of a team to create Assays. Follow this <g:link
+                                    controller="assayDefinition" action="teams">link</g:link> to the Teams Page</p>
+                        </g:else>
+                        <p class="help-inline"><g:fieldError field="ownerRole" bean="${assayCommand}"/></p>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <g:link controller="assayDefinition" action="myAssays"
+                                class="btn">Cancel</g:link>
+                        <input type="submit" class="btn btn-primary" value="Create New Assay Definition">
+                    </div>
+                </div>
+
+            </g:form>
+        </div>
     </div>
 </div>
 </body>
