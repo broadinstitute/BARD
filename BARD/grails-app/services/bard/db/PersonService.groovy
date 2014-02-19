@@ -37,7 +37,8 @@ class PersonService {
     String getTeamRole(Long roleId){
         String username = springSecurityService.principal?.username
         Person user = Person.findByUserName(username)
-        PersonRole pr = PersonRole.findByPersonAndRole(user, Role.get(roleId))
+        Role role = Role.get(roleId)
+        PersonRole pr = PersonRole.findByPersonAndRole(user, role)
         return (pr != null ? pr.teamRole : null)
 
     }
