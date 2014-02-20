@@ -49,12 +49,12 @@
                         <dl>
                             <dt>Broad Institute of MIT and Harvard</dt>
                             <dd>Benjamin Alexander, Jacob Asiedu, Kay Aubrey, Joshua Bittker, Steve Brudz,
-                            Simon Chatwin, Paul Clemons, Vlado Dancik, Siva Dandapani, Andrea DeSouza,
+                            Simon Chatwin, Paul Clemons, Vlado Dancik, Siva Dandapani, <i>Andrea DeSouza (Program Lead)</i>,
                             Dan Durkin, David Lahr, Phil Montgomery, Jose Perez, Shaita Picard, Jason Rose,
                                 <i>Stuart Schreiber (PI)</i>, Gil Walzer, Xiaorong Xiang</dd>
                             <dt>National Center for Advancing Translational Sciences</dt>
                             <dd><i>Chris Austin (PI)</i>, John Braisted, Rajarshi Guha, Ajit Jadhav,
-                            Dac-Trung Nguyen, Tyler Peryea, Noel Southall, Cordelle Tanega, Henrike Veith</dd>
+                            Dac-Trung Nguyen, Tyler Peryea, <i>Noel Southall (Program Lead)</i>, Cordelle Tanega, Henrike Veith</dd>
                             <dt>NIH Molecular Libraries</dt>
                             <dd>Carson Loomis, Ron Margolis, Mike North, <i>Ajay Pillai (Program Officer)</i></dd>
                             <dt>Sanford|Burnham Medical Research Institute</dt>
@@ -93,8 +93,10 @@
                             <dt>Concept Generation</dt>
                             <dd>Lauren Solomon of Broad Communications</dd>
                             <dt>DNA Helix Image</dt>
-                            <dd>Jarrod Smith and Sabuj Pattanayek from the <a href="http://structbio.vanderbilt.edu/"
+                            <dd>Eric Dawson with Jarrod Smith and Sabuj Pattanayek from the <a href="http://structbio.vanderbilt.edu/"
                                                                               target="_blank">Vanderbilt Center for Structural Biology</a></dd>
+                            <dt>Adderol Molecule Image</dt>
+                            <dd>Eric Dawson</dd>
                             <dt>Input and Review</dt>
                             <dd>The BARD team</dd>
                         </dl>
