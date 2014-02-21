@@ -52,6 +52,10 @@ class BasicContextItemCommand extends BardCommand {
         return CONTEXT_NAME_TO_OWNER_CLASS[name]
     }
 
+    static String getOwnerController(String name) {
+        return CONTEXT_NAME_TO_CONTROLLER[name]
+    }
+
 //    MessageSource messageSource
     AbstractContext context
     AbstractContextItem contextItem
@@ -238,7 +242,7 @@ class BasicContextItemCommand extends BardCommand {
      * @return
      */
     String getOwnerController() {
-        return CONTEXT_NAME_TO_CONTROLLER[contextClass]
+        return getOwnerController(contextClass)
     }
 
     BigDecimal convertToBigDecimal(String field, String value, Element unit) {

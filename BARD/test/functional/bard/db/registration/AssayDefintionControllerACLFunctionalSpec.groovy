@@ -45,7 +45,6 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     @Shared
     List<Long> assayIdList = []  //we keep ids of all assays here so we can delete after all the tests have finished
 
-
     def setupSpec() {
         String reauthenticateWithUser = TEAM_A_1_USERNAME
 
@@ -133,8 +132,6 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_OK
     }
 
-
-
     def 'test edit owner role, selected role not in users role list #desc'() {
         given:
         Long pk = assayData.id
@@ -213,40 +210,6 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         "CURATOR"            | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FOUND
     }
 
-    def 'test reloadCardHolder #desc'() {
-        given:
-        RESTClient client = getRestClient(controllerUrl, "", team, teamPassword)
-
-        when:
-        final Response response = client.get(path: '/reloadCardHolder', query: [assayId: assayData.id, include_entities: true])
-        then:
-        assert response.statusCode == expectedHttpResponse
-
-        where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
-    }
-
-    def 'test reloadCardHolder unauthorized #desc'() {
-        given:
-        RESTClient client = getRestClient(controllerUrl, "", team, teamPassword)
-
-        when:
-        client.get(path: '/reloadCardHolder', query: [assayId: assayData.id, include_entities: true])
-        then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
-
-
-        where:
-        desc                 | team | teamPassword | expectedHttpResponse
-        "Not Logged in User" | null | null         | HttpServletResponse.SC_UNAUTHORIZED
-    }
-
     def 'test show not logged in #desc'() {
         given:
         RESTClient client = getRestClient(controllerUrl, "show/${assayData.id}", team, teamPassword)
@@ -284,59 +247,6 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
     }
 
-
-    /**
-     * Forwards user to the edit Context page
-     * @return
-     */
-    def 'test editContext #desc'() {
-        given:
-        long assayId = assayData.id
-        String groupBySection = ContextType.BIOLOGY.id
-        RESTClient client = getRestClient(controllerUrl, "editContext", team, teamPassword)
-
-        when:
-        def response = client.post() {
-            urlenc id: assayId, groupBySection: groupBySection
-        }
-
-        then:
-        assert response.statusCode == expectedHttpResponse
-        assert response.text.contains("Edit Assay (ADID:${assayId}) Contexts")
-
-        where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
-
-    }
-    /**
-     * Forwards user to the edit Context page
-     * @return
-     */
-    def 'test editContext  not logged in #desc'() {
-        given:
-        long assayId = assayData.id
-        String groupBySection = ContextType.BIOLOGY.id
-        RESTClient client = getRestClient(controllerUrl, "editContext", team, teamPassword)
-
-        when:
-        def response = client.post() {
-            urlenc id: assayId, groupBySection: groupBySection
-        }
-
-        then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
-        where:
-        desc                 | team | teamPassword | expectedHttpResponse
-        "Not Logged in User" | null | null         | HttpServletResponse.SC_UNAUTHORIZED
-    }
-
-
     def 'test cloneAssay #desc'() {
         given:
         RESTClient client = getRestClient(controllerUrl, "cloneAssay/${assayData.id}", team, teamPassword)
@@ -370,7 +280,6 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         desc                 | team | teamPassword | expectedHttpResponse
         "Not Logged in User" | null | null         | HttpServletResponse.SC_UNAUTHORIZED
     }
-
 
     def 'test assayTypes #desc'() {
         given:
@@ -417,10 +326,6 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         "CURATOR"            | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
     }
 
-
-
-
-
     def 'test editDesignedBy #desc'() {
         given:
         long id = assayData.id
@@ -446,8 +351,6 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
 
     }
-
-
 
     def 'test editDesignedBy #desc forbidden'() {
         given:
@@ -636,46 +539,6 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
         def response = client.post() {
             urlenc version: version, pk: id, value: newAssayType
-        }
-
-        then:
-        assert response.statusCode == expectedHttpResponse
-        where:
-        desc                | team              | teamPassword      | expectedHttpResponse
-        "User A_1 Can Edit" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2 Can Edit" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN Can Edit"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-    }
-
-
-    def 'test updateCardName - unauthorized #desc'() {
-        given:
-        RESTClient client = getRestClient(controllerUrl, "updateCardName", team, teamPassword)
-        long assayContextId = assayData.assayContextId
-
-        when:
-        client.post() {
-            urlenc edit_card_name: "My New Card Name", contextId: assayContextId
-        }
-
-        then:
-        def ex = thrown(RESTClientException)
-        assert ex.response.statusCode == expectedHttpResponse
-
-        where:
-        desc                  | team              | teamPassword      | expectedHttpResponse
-        "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
-    }
-
-    def 'test updateCardName #desc'() {
-        given:
-        RESTClient client = getRestClient(controllerUrl, "updateCardName", team, teamPassword)
-        long assayContextId = assayData.assayContextId
-
-        when:
-        def response = client.post() {
-            urlenc edit_card_name: "My New Card Name", contextId: assayContextId
         }
 
         then:

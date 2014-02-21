@@ -135,13 +135,14 @@
                         <br/><br/>
                     </div>
 
-                    <g:render template="../context/show"
-                              model="[contextOwner: contextOwner, additionalContexts: contextOwner.groupContexts(),
-                                      uneditable: true, showCheckBoxes: true, existingContextIds: resultTypeCommand.contextIds]"/>
                     <g:render template="../context/currentCard"
-                              model="[contextOwner: contextOwner, currentCard: contextOwner.groupExperimentalVariables(), subTemplate: 'show', renderEmptyGroups: false,
-                                      showCheckBoxes: true, existingContextIds: resultTypeCommand.contextIds
-                              ]"/>
+                              model="[contextOwner: contextOwner, additionalContexts: contextOwner.groupUnclassified(),
+                                      subTemplate: 'show',
+                                      showCheckBoxes: true, existingContextIds: resultTypeCommand.contextIds]"/>
+                    <g:render template="../context/currentCard"
+                              model="[contextOwner: contextOwner, currentCard: contextOwner.groupExperimentalVariables(),
+                                      subTemplate: 'show', renderEmptyGroups: false,
+                                      showCheckBoxes: true, existingContextIds: resultTypeCommand.contextIds]"/>
 
                 </div>
             </g:if>

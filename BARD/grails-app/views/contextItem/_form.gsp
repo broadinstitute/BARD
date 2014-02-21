@@ -238,22 +238,33 @@
                 contextClass: instance?.context.simpleClassName, contextOwnerId: instance?.contextOwnerId,
                 groupBySection: instance?.context?.getContextType()?.id?.encodeAsURL()]}"></g:set>
         <g:if test="${reviewNewItem}">
-            <g:link controller="${instance?.ownerController}" action="editContext"
+            <g:link controller="${instance?.ownerController}" action="show"
                     id="${instance?.contextOwnerId}"
                     params="${contextItemParams}"
+                    fragment="card-${instance?.contextId}"
                     class="btn">Back to Context</g:link>
             <g:link action="edit" class="btn" params="${contextItemParams}">Edit</g:link>
             <g:link action="create" class="btn btn-primary focus"
                     params="${contextItemParams}">Add Another Item</g:link>
         </g:if>
         <g:else>
-            <g:link controller="${instance?.ownerController}" action="editContext"
+            <g:link controller="${instance?.ownerController}" action="show"
                     id="${instance?.contextOwnerId}"
                     params="${contextItemParams}"
+                    fragment="card-${instance?.contextId}"
                     class="btn">Cancel</g:link>
             <button type="submit" class="btn btn-primary">${action}</button>
 
         </g:else>
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="span10 offset1">
+        <h3>Current context:</h3>
+        <g:render template="edit" model="${[context: instance.context,
+                disableHeaderEdits: true,
+                highlightedItemId: instance.contextItemId]}"/>
     </div>
 </div>
 

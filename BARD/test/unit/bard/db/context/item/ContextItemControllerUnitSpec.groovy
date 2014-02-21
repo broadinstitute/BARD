@@ -5,6 +5,9 @@ import bard.db.ContextService
 import bard.db.context.item.BasicContextItemCommand
 import bard.db.context.item.ContextItemController
 import bard.db.enums.ContextType
+import bard.db.experiment.ExperimentContext
+import bard.db.experiment.ExperimentContextItem
+import bard.db.model.AbstractContext
 import bard.db.project.Project
 import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
@@ -14,6 +17,7 @@ import bard.db.registration.AssayContextItem
 import bard.db.registration.EditingHelper
 import grails.buildtestdata.mixin.Build
 import grails.plugins.springsecurity.SpringSecurityService
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
@@ -30,7 +34,8 @@ import javax.servlet.http.HttpServletResponse
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(ContextItemController)
-@Build([ProjectContext, ProjectContextItem, AssayContext, AssayContextItem])
+@Build([ProjectContext, ProjectContextItem, AssayContext, AssayContextItem, ExperimentContext, ExperimentContextItem])
+@Mock([ProjectContext, ProjectContextItem, AssayContext, AssayContextItem, ExperimentContext, ExperimentContextItem])
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
 class ContextItemControllerUnitSpec extends Specification {
@@ -50,8 +55,8 @@ class ContextItemControllerUnitSpec extends Specification {
         ProjectContextItem contextItem = ProjectContextItem.build(context: projectContext)
 
         BasicContextItemCommand basicContextItemCommand =
-            new BasicContextItemCommand(context: projectContext, contextItem: contextItem, contextId: projectContext.id,
-                    contextItemId: contextItem.id, attributeElementId: contextItem.attributeElement.id)
+                new BasicContextItemCommand(context: projectContext, contextItem: contextItem, contextId: projectContext.id,
+                        contextItemId: contextItem.id, attributeElementId: contextItem.attributeElement.id)
         basicContextItemCommand.contextItemService = Mock(ContextItemService)
         when:
         controller.update(basicContextItemCommand)
@@ -129,8 +134,8 @@ class ContextItemControllerUnitSpec extends Specification {
         ProjectContextItem contextItem = ProjectContextItem.build(context: projectContext)
 
         BasicContextItemCommand basicContextItemCommand =
-            new BasicContextItemCommand(context: projectContext, contextItem: contextItem, contextId: projectContext.id,
-                    contextItemId: contextItem.id, attributeElementId: contextItem.attributeElement.id)
+                new BasicContextItemCommand(context: projectContext, contextItem: contextItem, contextId: projectContext.id,
+                        contextItemId: contextItem.id, attributeElementId: contextItem.attributeElement.id)
         basicContextItemCommand.contextItemService = Mock(ContextItemService)
 
         when:
@@ -151,8 +156,8 @@ class ContextItemControllerUnitSpec extends Specification {
         ProjectContextItem contextItem = ProjectContextItem.build(context: projectContext)
 
         BasicContextItemCommand basicContextItemCommand =
-            new BasicContextItemCommand(context: projectContext, contextItem: contextItem, contextId: projectContext.id,
-                    contextItemId: contextItem.id, attributeElementId: contextItem.attributeElement.id)
+                new BasicContextItemCommand(context: projectContext, contextItem: contextItem, contextId: projectContext.id,
+                        contextItemId: contextItem.id, attributeElementId: contextItem.attributeElement.id)
         basicContextItemCommand.contextItemService = Mock(ContextItemService)
 
         when:
@@ -191,10 +196,10 @@ class ContextItemControllerUnitSpec extends Specification {
         AssayContextItem contextItem = AssayContextItem.build(context: assayContext)
 
         BasicContextItemCommand basicContextItemCommand =
-            new BasicContextItemCommand(context: assayContext,
-                    contextItem: contextItem, contextId: assayContext.id, contextItemId: contextItem.id,
-                    contextClass: 'AssayContext',
-                    attributeElementId: contextItem.attributeElement.id)
+                new BasicContextItemCommand(context: assayContext,
+                        contextItem: contextItem, contextId: assayContext.id, contextItemId: contextItem.id,
+                        contextClass: 'AssayContext',
+                        attributeElementId: contextItem.attributeElement.id)
         basicContextItemCommand.contextItemService = Mock(ContextItemService)
 
         when:
@@ -209,13 +214,14 @@ class ContextItemControllerUnitSpec extends Specification {
 
     void "test delete #desc"() {
         given:
-        ProjectContext projectContext = ProjectContext.build(contextType: ContextType.UNCLASSIFIED)
-        ProjectContextItem contextItem = ProjectContextItem.build(context: projectContext)
+        final def contextItem = contextItemClass.build()
+        final def context = contextItem.context
 
         BasicContextItemCommand basicContextItemCommand = new BasicContextItemCommand(
-                contextOwnerId: projectContext.owner.id,
-                context: projectContext,
-                contextId: projectContext.id,
+                contextOwnerId: context.owner.id,
+                contextClass: context.getClass().simpleName,
+                context: context,
+                contextId: context.id,
                 contextItem: contextItem,
                 contextItemId: contextItem.id)
         basicContextItemCommand.contextItemService = Mock(ContextItemService)
@@ -228,9 +234,15 @@ class ContextItemControllerUnitSpec extends Specification {
         assert response.redirectedUrl.startsWith(expectedRedirect)
 
         where:
-        desc                                                         | refererUrl              | expectedRedirect
-        'delete on editContext page, gets redirected to editContext' | "/project/editContext/" | "/project/editContext/"
-        'delete on contextItem page, gets redirected to contextItem' | "/contextItem/"         | "/contextItem/"
-        'delete with no referer, gets redirected to editContext'     | ""                      | "/project/editContext/"
+        desc                              | contextItemClass      | refererUrl               | expectedRedirect
+        'delete on project/show '         | ProjectContextItem    | "/project/show/"         | "/project/show/"
+        'delete on contextItem page'      | ProjectContextItem    | "/contextItem/"          | "/contextItem/"
+        'delete with no referer'          | ProjectContextItem    | ""                       | "/project/show/"
+        'delete on assayDefinition/show ' | AssayContextItem      | "/assayDefinition/show/" | "/assayDefinition/show/"
+        'delete on contextItem page'      | AssayContextItem      | "/contextItem/"          | "/contextItem/"
+        'delete with no referer'          | AssayContextItem      | ""                       | "/assayDefinition/show/"
+        'delete on experiment/show '      | ExperimentContextItem | "/experiment/show/"      | "/experiment/show/"
+        'delete on contextItem page'      | ExperimentContextItem | "/contextItem/"          | "/contextItem/"
+        'delete with no referer'          | ExperimentContextItem | ""                       | "/experiment/show/"
     }
 }
