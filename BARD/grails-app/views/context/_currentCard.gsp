@@ -1,6 +1,5 @@
-<g:if test="subTemplate=='edit'">
+<g:if test="${'edit'.equals(subTemplate)}">
     <div class="row-fluid">
-
         <div class="span12">
             <g:link controller="context" action="addCard"
                     params="[contextClass:contextOwner.class.simpleName + 'Context' ,ownerId : contextOwner.id, cardSection: currentCard.key]"
