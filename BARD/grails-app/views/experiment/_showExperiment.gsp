@@ -232,23 +232,11 @@
             class="icon-question-sign"></i></g:link></h3>
 
     <div class="row-fluid">
-        <g:render template="../context/show"
-                  model="[contextOwner: instance, additionalContexts: [], uneditable: true]"/>
+        <g:render template="/context/currentCard"
+                  model="[contextOwner: instance, currentCard: instance.groupUnclassified(),
+                          subTemplate: contextItemSubTemplate]"/>
     </div>
-    <br/>
 
-    <div class="row-fluid">
-        <g:if test="${!uneditable || true}">
-            <g:if test="${editable == 'canedit'}">
-                <div class="span12">
-                    <g:link action="editContext" id="${instance?.id}"
-                            params="[groupBySection: ContextType.UNCLASSIFIED.id.encodeAsURL()]"
-                            class="btn"><i class="icon-pencil"></i> Edit Contexts</g:link>
-                </div>
-            </g:if>
-        </g:if>
-    </div>
-    <br/>
 </section>
 
 <section id="referenced-contexts-header">
@@ -284,7 +272,6 @@
                   model="[contextOwner: instance.assay,
                           currentCard: assayExperimentalVariablesContextGroup,
                           subTemplate: 'show',
-                          uneditable: true,
                           showCheckBoxes: false,
                           existingContextIds: contextIds,
                           displayNonFixedContextsOnly: true,

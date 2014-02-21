@@ -106,27 +106,12 @@
                 <div class="row-fluid">
                     <div id="cardHolderAssayComponents" class="span12">
                         <g:render template="/context/currentCard"
-                                  model="[contextOwner: instance, currentCard: instance.groupUnclassified(), subTemplate: 'show', renderEmptyGroups: false]"/>
+                                  model="[contextOwner: instance, currentCard: instance.groupUnclassified(),
+                                          subTemplate: contextItemSubTemplate, renderEmptyGroups: false]"/>
                     </div>
                 </div>
 
-                <br/>
-
-                <div class="row-fluid">
-                    <g:if test="${!uneditable}">
-                        <g:if test="${editable == 'canedit'}">
-                            <div class="span12">
-                                <g:link action="editContext" id="${instance?.id}"
-                                        params="[groupBySection: ContextType.UNCLASSIFIED.id.encodeAsURL()]"
-                                        class="btn"><i class="icon-pencil"></i>Edit Contexts</g:link>
-                            </div>
-                        </g:if>
-                    </g:if>
-                </div>
-
             </section>
-
-            <br/>
 
             <g:if test="${projectAdapter?.biology}">
                 <section id="biology-info">

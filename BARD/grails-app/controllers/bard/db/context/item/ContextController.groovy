@@ -19,6 +19,10 @@ import javax.servlet.http.HttpServletResponse
 class ContextController {
     ContextService contextService
 
+    def addCard(String contextClass, Long ownerId, String cardSection){
+        render(view: 'addCard', model: [contextClass:contextClass, ownerId: ownerId, cardSection: cardSection, ownerController: BasicContextItemCommand.getOwnerController(contextClass)])
+    }
+
     def createCard(String contextClass, Long ownerId, String cardName, String cardSection) {
         ContextType contextType = ContextType.byId(cardSection)
         if (ownerId == null) {
@@ -41,7 +45,7 @@ class ContextController {
             render(status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null)
             return
         }
-        render(template: "/context/list", model: [contextOwner: owningContext, contexts: owningContext.groupBySection(contextType), subTemplate: 'edit'])
+        redirect(controller: BasicContextItemCommand.getOwnerController(contextClass), action:'show', id:ownerId )
     }
 
     def deleteEmptyCard(String contextClass, Long contextId, String section) {
@@ -77,7 +81,7 @@ class ContextController {
                 break
         }
         controller = controller.replaceAll('Controller', '')
-        redirect(controller: controller, action: 'editContext', params: [groupBySection: section, 'id': owningContext.id])
+        redirect(controller: controller, action: 'show', params: ['id': owningContext.id])
     }
 
 }

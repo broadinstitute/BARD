@@ -19,13 +19,6 @@
 <div class="row-fluid">
     <div class="span12">
         <g:render template="form" model="${[instance: instance, action: 'Update', reviewNewItem: reviewNewItem]}"/>
-        <div class="row-fluid">
-            <div class="span6 offset2">
-                <h3>Current context:</h3>
-                <g:render template="edit"
-                          model="${[context: instance.context, highlightedItemId: instance.contextItemId]}"/>
-            </div>
-        </div>
     </div>
 </div>
 </body>

@@ -23,7 +23,8 @@
     </g:if>
     <g:else>
         <g:render template="showProject"
-                  model="[instance: instance, editable: editable, uneditable: uneditable, projectAdapter:projectAdapter,experiments:experiments,assays:assays]"/>
+                  model="[instance: instance, editable: editable, contextItemSubTemplate:contextItemSubTemplate,
+                          projectAdapter:projectAdapter,experiments:experiments,assays:assays]"/>
     </g:else>
 </g:if>
 
