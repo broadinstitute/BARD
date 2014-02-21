@@ -383,7 +383,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         then:
         assert response.statusCode == expectedHttpResponse
-        assert response.text.contains("Edit Contexts") == buttonExist
+        assert response.text.contains("Add Card") == buttonExist
         assert response.text.contains("Add New Publication") == buttonExist
 
 
@@ -618,26 +618,6 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         when:
         Response response = client.post() {
             urlenc instanceId: id
-        }
-        then:
-        assert response.statusCode == expectedHttpResponse
-        where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
-    }
-
-    def 'test edit context #desc'() {
-        given:
-        Long id = projectData.id
-        String groupBySection = ContextType.BIOLOGY.id
-        RESTClient client = getRestClient(controllerUrl, "editContext", team, teamPassword)
-        when:
-        Response response = client.post() {
-            urlenc id: id, groupBySection: groupBySection
         }
         then:
         assert response.statusCode == expectedHttpResponse
