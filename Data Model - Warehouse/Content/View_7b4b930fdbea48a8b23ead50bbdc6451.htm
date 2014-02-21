@@ -22,7 +22,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE VIEW BBDS_STAGING.EXPERIMENT_LOAD_COST_V</TT><BR><TT>(EXPERIMENT_ID, LOAD_COST, FILE_SIZE, N_RESULT) AS</TT><BR><TT>select a.experiment_id,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp decode(b.n_result, null, floor(a.file_size/10), b.n_result) load_cost,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a.file_size,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp b.n_result</TT><BR><TT>from&nbsp&nbsp bbds.X_EXPERIMENT_FILE a, EXPERIMENT_LOAD b</TT><BR><TT>where a.experiment_id = b.experiment_id (+)</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE VIEW BBDS_STAGING.EXPERIMENT_LOAD_COST_V</TT><BR><TT>(EXPERIMENT_ID, LOAD_COST, FILE_SIZE, N_RESULT) AS</TT><BR><TT>select a.experiment_id,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp decode(b.n_result, null, floor(a.file_size/11), b.n_result) load_cost,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a.file_size,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp b.n_result</TT><BR><TT>from&nbsp&nbsp bbds.x_experiment_file a, experiment_load b</TT><BR><TT>where a.experiment_id = b.experiment_id (+)</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
