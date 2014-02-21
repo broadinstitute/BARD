@@ -268,6 +268,7 @@ class ProjectController {
                 projectOwner: owner,
                 pexperiment: projectExperimentRenderService.contructGraph(projectInstance),
                 editable: editable ? 'canedit' : 'cannotedit',
+                contextItemSubTemplate: editable ? 'edit' :'show',
                 projectAdapter: projectMap?.projectAdapter,
                 experiments: projectMap?.experiments,
                 assays: projectMap?.assays,

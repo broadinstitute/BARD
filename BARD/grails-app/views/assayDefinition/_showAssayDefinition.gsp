@@ -124,16 +124,6 @@
         </div>
         <br/>
     </g:if>
-    <div class="row-fluid">
-            <g:if test="${editable == 'canedit'}">
-                <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
-                            params="[groupBySection: ContextType.ASSAY_PROTOCOL.id.encodeAsURL()]"
-                            class="btn"><i class="icon-pencil"></i> Edit Assay Protocol</g:link>
-                    <br/> <br/>
-                </div>
-            </g:if>
-    </div>
     <section id="assay-design-header">
 
         <h4 class="subsect">Assay Design <g:link target="dictionary" controller="element"
@@ -150,16 +140,6 @@
             </div>
             <br/>
         </g:if>
-        <div class="row-fluid">
-                <g:if test="${editable == 'canedit'}">
-                    <div class="span12">
-                        <g:link action="editContext" id="${assayInstance?.id}"
-                                params="[groupBySection: ContextType.ASSAY_DESIGN.id.encodeAsURL()]"
-                                class="btn"><i class="icon-pencil"></i> Edit Assay Design</g:link>
-                        <br/><br/>
-                    </div>
-                </g:if>
-        </div>
     </section>
     <br/>
     <section id="assay-readout-header">
@@ -178,16 +158,6 @@
             </div>
             <br/>
         </g:if>
-        <div class="row-fluid">
-                <g:if test="${editable == 'canedit'}">
-                    <div class="span12">
-                        <g:link action="editContext" id="${assayInstance?.id}"
-                                params="[groupBySection: ContextType.ASSAY_READOUT.id.encodeAsURL()]"
-                                class="btn"><i class="icon-pencil"></i> Edit Assay Readout</g:link>
-                        <br/><br/>
-                    </div>
-                </g:if>
-        </div>
     </section>
     <br/>
     <section id="assay-components-header">
@@ -206,16 +176,6 @@
             </div>
             <br/>
         </g:if>
-        <div class="row-fluid">
-                <g:if test="${editable == 'canedit'}">
-                    <div class="span12">
-                        <g:link action="editContext" id="${assayInstance?.id}"
-                                params="[groupBySection: ContextType.ASSAY_COMPONENTS.id.encodeAsURL()]"
-                                class="btn"><i class="icon-pencil"></i> Edit Assay Component</g:link>
-                        <br/><br/>
-                    </div>
-                </g:if>
-        </div>
     </section>
     <br/>
     <section id="unclassified-header">
@@ -229,18 +189,6 @@
                 </div>
             </div>
             <br/>
-        </g:if>
-        <g:if test="${assayInstance.groupUnclassified()}">
-            <div class="row-fluid">
-                    <g:if test="${editable == 'canedit'}">
-                        <div class="span12">
-                            <g:link action="editContext" id="${assayInstance?.id}"
-                                    params="[groupBySection: ContextType.UNCLASSIFIED.id.encodeAsURL()]"
-                                    class="btn"><i class="icon-pencil"></i> Edit Unclassified</g:link>
-                            <br/> <br/>
-                        </div>
-                    </g:if>
-            </div>
         </g:if>
     </section>
     <br/>
@@ -270,20 +218,6 @@
 
                 </div>
             </div>
-                <g:if test="${editable == 'canedit'}">
-                    <br/>
-
-                    <div class="row-fluid">
-
-                        <div class="span12">
-                            <g:link action="editContext" id="${assayInstance?.id}"
-                                    params="[groupBySection: ContextType.EXPERIMENT.id.encodeAsURL()]"
-                                    class="btn"><i class="icon-pencil"></i> Edit Experimental Variables</g:link>
-                            <br/> <br/>
-                        </div>
-
-                    </div>
-                </g:if>
         </g:if>
     </section>
 </section>

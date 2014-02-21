@@ -49,12 +49,9 @@
         </g:if>
 
         <g:if test="${contextOwner.groupUnclassified()?.value}">
-            <div id="cardHolder" class="span12">
                 <g:render template="/context/currentCard"
                           model="[contextOwner: contextOwner, currentCard: contextOwner.groupUnclassified(), subTemplate: 'show', renderEmptyGroups: false,
                                   showCheckBoxes: showCheckBoxes, existingContextIds: existingContextIds]"/>
-
-            </div>
         </g:if>
     </div>
 </div>

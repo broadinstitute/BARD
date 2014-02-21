@@ -13,7 +13,7 @@
 <div id="card-${context.id}" class="card roundedBorder card-table-container">
     <table class="table table-hover">
         <caption id="${context.id}" class="assay_context">
-            <div class="cardTitle">
+            <span class="cardTitle">
                 %{--We will put error messages on this card--}%
                 <div id="${context.id}_Errors"></div>
                 <g:if test="${!disableHeaderEdits}">
@@ -23,10 +23,9 @@
                 <g:else>
                     <strong>${context.preferredName}</strong>
                 </g:else>
-            </div>
-
+            </span>
             <g:if test="${!disableHeaderEdits}">
-                <div class="btn-group pull-right">
+                <span class="btn-group pull-right">
                     <g:link class="btn btn btn-info btn-mini" title="Add item" controller="contextItem"
                             action="create"
                             params="${[contextId: context?.id, contextClass: context?.class?.simpleName, contextOwnerId: context?.owner?.id]}"><i
@@ -37,9 +36,8 @@
                                 params="[contextClass: context?.class?.simpleName, contextId: context?.id, section: cardSection]"><i
                                 class="icon-trash"></i></g:link>
                     </g:if>
-                </div>
+                </span>
             </g:if>
-
         </caption>
         <tbody>
         <g:each in="${context.contextItems}" status="i" var="contextItem">

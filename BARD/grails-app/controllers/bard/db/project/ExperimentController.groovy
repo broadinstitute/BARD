@@ -125,6 +125,7 @@ class ExperimentController {
                     contextIds: contextIds,
                     experimentOwner: owner,
                     editable: editable ? 'canedit' : 'cannotedit',
+                    contextItemSubTemplate: editable ? 'edit' :'show',
                     isAdmin: isAdmin
             ]
         } else {
