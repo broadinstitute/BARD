@@ -1,14 +1,19 @@
 package bard.db.people
 
+import bard.db.enums.TeamRole
 import org.apache.commons.lang.builder.HashCodeBuilder
 
 class PersonRole implements Serializable {
+
+    public static final int TEAM_ROLE_MAX_SIZE = 40
 
     Person person
     Role role
     Date dateCreated = new Date()
     Date lastUpdated
     String modifiedBy
+//    TeamRole teamRole = TeamRole.MEMBER
+    String teamRole = "Member"
     boolean equals(other) {
         if (!(other instanceof PersonRole)) {
             return false
@@ -56,6 +61,7 @@ class PersonRole implements Serializable {
     static mapping = {
         table('PERSON_ROLE')
         id(column: 'PERSON_ROLE_ID', generator: "sequence", params: [sequence: 'PERSON_ROLE_ID_SEQ'])
+//        teamRole(type: TeamRole)
         //id composite: ['role', 'person']
 
     }
@@ -64,5 +70,6 @@ class PersonRole implements Serializable {
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: Person.MODIFIED_BY_MAX_SIZE)
+        teamRole(nullable: true, blank: false, maxSize: TEAM_ROLE_MAX_SIZE)
     }
 }

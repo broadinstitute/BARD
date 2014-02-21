@@ -42,6 +42,8 @@
                                                                    action="list">List Teams</g:link></li>
                                     <li class="controller"><g:link controller="role"
                                                                    action="create">Create new Team</g:link></li>
+                                    <li class="controller"><g:link controller="role"
+                                                                   action="myTeams">My Teams</g:link></li>
                                 </ul>
 
                             </li>

@@ -1,11 +1,13 @@
 package dataexport.experiment
 
+import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.ArchivePathService
 import bard.db.experiment.Experiment
 import dataexport.cap.experiment.ExperimentRestController
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -90,10 +92,31 @@ class ExperimentRestControllerUnitSpec extends Specification {
         "Status Code 500" | new BardHttpResponse(httpResponseCode: 400) | HttpServletResponse.SC_BAD_REQUEST
         "Status Code 200" | new BardHttpResponse(httpResponseCode: 200) | HttpServletResponse.SC_OK
     }
+
+    void "test update ready for extract with value #label"() {
+        given:
+        Integer experimentId = 2
+        when: "We send an HTTP GET Request to the experiments action"
+        request.method = 'PUT'
+        request.content= label
+        request.addHeader(HttpHeaders.IF_MATCH,"0")
+        params.start = "0"
+        controller.updateExperiment(experimentId)
+        then: "We expect a response with the given status code"
+        controller.experimentExportService.update(_, _, newValue) >> { new BardHttpResponse(httpResponseCode: 200) }
+        HttpServletResponse.SC_OK == response.status
+
+        where:
+        label           | newValue
+        "Complete"      | ReadyForExtraction.COMPLETE
+        "Failed"        | ReadyForExtraction.FAILED
+        "Started"       | ReadyForExtraction.STARTED
+    }
+
     /**
      *
      */
-    void "test  experiment fail #label #id"() {
+    void "test experiment fail #label #id"() {
 
         when: "We send an HTTP GET request for a specific experiment"
         request.method = 'GET'

@@ -1,5 +1,6 @@
 package bard.db.people
 
+import bard.db.PersonService
 import bard.db.project.InlineEditableCommand
 import bard.db.registration.AbstractInlineEditingControllerUnitSpec
 import bard.db.registration.EditingHelper
@@ -37,6 +38,7 @@ class RoleControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         }
         controller.metaClass.mixin(EditingHelper)
         controller.springSecurityService = Mock(SpringSecurityService)
+        controller.personService = Mock(PersonService)
 
     }
 
