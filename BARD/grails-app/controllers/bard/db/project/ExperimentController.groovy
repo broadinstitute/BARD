@@ -355,19 +355,6 @@ class ExperimentController {
     }
 
     @Secured(['isAuthenticated()'])
-    def editContext(Long id, String groupBySection) {
-        Experiment instance = Experiment.get(id)
-        if (!instance) {
-            // FIXME:  Should not use flash if we do not redirect afterwards
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'experiment.label', default: 'Experiment'), id])
-            return
-
-        }
-        AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(ContextType.byId(groupBySection?.decodeURL()))
-        render view: '../project/editContext', model: [instance: instance, contexts: [contextGroup]]
-    }
-
-    @Secured(['isAuthenticated()'])
     def create(ExperimentCommand experimentCommand) {
         if (!experimentCommand.fromCreatePage) { //if we are not coming from the create page then there is an error and we display that to users
             experimentCommand.clearErrors()

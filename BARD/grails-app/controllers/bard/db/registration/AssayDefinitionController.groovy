@@ -372,50 +372,6 @@ class AssayDefinitionController {
             return [message: messageStr]
         }
     }
-
-    @Secured(['isAuthenticated()'])
-    def editContext(Long id, String groupBySection) {
-        def assayInstance = Assay.get(id)
-
-        if (!assayInstance) {
-            // FIXME:  Should not use flash if we do not redirect afterwards
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
-            return
-        }
-        AbstractContextOwner.ContextGroup contextGroup = assayInstance.groupBySection(ContextType.byId(groupBySection?.decodeURL()))
-
-        [assayInstance: assayInstance, contexts: [contextGroup]]
-    }
-
-    @Secured(['isAuthenticated()'])
-    def reloadCardHolder(Long assayId) {
-        def assay = Assay.get(assayId)
-        if (assay) {
-            render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-        } else {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
-        }
-    }
-    //cannot find anywhere that it is used
-    @Deprecated
-    def launchEditItemInCard(Long assayContextId, Long assayContextItemId) {
-        def assayContextItem = AssayContextItem.get(assayContextItemId)
-        render(template: "editItemForm", model: [assayContextItem: assayContextItem, assayContextId: assayContextId])
-    }
-    //cannot find anywhere that it is used
-    @Secured(['isAuthenticated()'])
-    def updateCardName(String edit_card_name, Long contextId) {
-        try {
-            AssayContext assayContext = AssayContext.findById(contextId)
-            Assay assay = assayContext.assay
-            assayContext = assayContextService.updateCardName(contextId, edit_card_name, assay.id)
-            assay = assayContext.assay
-            render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-        } catch (AccessDeniedException aee) {
-            log.error("Update care Name", aee)
-            render accessDeniedErrorMessage()
-        }
-    }
 }
 
 class EditingHelper {

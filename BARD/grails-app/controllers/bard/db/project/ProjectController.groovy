@@ -375,19 +375,6 @@ class ProjectController {
     }
 
     @Secured(['isAuthenticated()'])
-    def editContext(Long id, String groupBySection) {
-        Project instance = Project.get(id)
-        if (!instance) {
-            // FIXME:  Should not use flash if we do not redirect afterwards
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), id])
-            return
-
-        }
-        AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(ContextType.byId(groupBySection?.decodeURL()))
-        [instance: instance, contexts: [contextGroup]]
-    }
-
-    @Secured(['isAuthenticated()'])
     def updateProjectStage(InlineEditableCommand inlineEditableCommand) {
         //pass in the project experiment
         try {

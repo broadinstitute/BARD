@@ -81,7 +81,7 @@ class ContextController {
                 break
         }
         controller = controller.replaceAll('Controller', '')
-        redirect(controller: controller, action: 'show', params: [groupBySection: section, 'id': owningContext.id])
+        redirect(controller: controller, action: 'show', params: ['id': owningContext.id])
     }
 
 }
