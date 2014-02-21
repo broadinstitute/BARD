@@ -49,7 +49,7 @@
                         <dl>
                             <dt>Broad Institute of MIT and Harvard</dt>
                             <dd>Benjamin Alexander, Jacob Asiedu, Kay Aubrey, Joshua Bittker, Steve Brudz,
-                            Simon Chatwin, Paul Clemons, Vlado Dancik, Siva Dandapani, <i>Andrea DeSouza (Program Lead)</i>,
+                            Simon Chatwin, Paul Clemons, Vlado Dancik, Siva Dandapani, <i>Andrea de Souza (Program Lead)</i>,
                             Dan Durkin, David Lahr, Phil Montgomery, Jose Perez, Shaita Picard, Jason Rose,
                                 <i>Stuart Schreiber (PI)</i>, Gil Walzer, Xiaorong Xiang</dd>
                             <dt>National Center for Advancing Translational Sciences</dt>
@@ -91,7 +91,7 @@
                             <dt>Final Design</dt>
                             <dd>Steven Lee of <a href="http://www.graphiko.com/" target="_blank">Studio Graphiko</a></dd>
                             <dt>Concept Generation</dt>
-                            <dd>Lauren Solomon of Broad Communications</dd>
+                            <dd>Andrea de Souza, Lauren Solomon of Broad Communications</dd>
                             <dt>DNA Helix Image</dt>
                             <dd>Eric Dawson with Jarrod Smith and Sabuj Pattanayek from the <a href="http://structbio.vanderbilt.edu/"
                                                                               target="_blank">Vanderbilt Center for Structural Biology</a></dd>
