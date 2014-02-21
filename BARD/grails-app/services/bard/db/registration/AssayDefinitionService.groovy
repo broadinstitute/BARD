@@ -5,8 +5,10 @@ import bard.db.context.item.ContextDTO
 import bard.db.context.item.ContextItemDTO
 import bard.db.enums.AssayType
 import bard.db.enums.Status
+import bard.db.people.Person
 import bard.db.people.Role
 import org.apache.commons.collections.CollectionUtils
+import org.apache.commons.lang3.StringUtils
 import org.hibernate.Query
 import org.hibernate.Session
 import org.springframework.security.access.prepost.PreAuthorize
@@ -15,6 +17,7 @@ import registration.AssayService
 class AssayDefinitionService {
     AssayService assayService
     CapPermissionService capPermissionService
+    def springSecurityService
 
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Assay updateOwnerRole(Long id, Role ownerRole) {
@@ -75,6 +78,11 @@ class AssayDefinitionService {
     Assay updateAssayStatus(long id, Status assayStatus) {
         Assay assay = Assay.findById(id)
         assay.assayStatus = assayStatus
+        if(assayStatus.equals(Status.APPROVED) && assay.isDirty('assayStatus')){
+            Person currentUser = Person.findByUserName(springSecurityService.authentication.name)
+            assay.approvedBy = currentUser
+            assay.approvedDate = new Date()
+        }
         assay.save(flush: true)
         return assay
     }

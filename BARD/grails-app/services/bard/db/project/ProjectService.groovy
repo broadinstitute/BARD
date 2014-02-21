@@ -4,11 +4,14 @@ import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.enums.Status
 import bard.db.experiment.Experiment
+import bard.db.people.Person
 import bard.db.people.Role
+import org.apache.commons.lang3.StringUtils
 import org.springframework.security.access.prepost.PreAuthorize
 
 class ProjectService {
     CapPermissionService capPermissionService
+    def springSecurityService
     final static String BARD_PROBE_URI = "http://www.bard.nih.gov/ontology/bard#BARD_0001682"
     final static String PUBCHEM_CID_URI = "http://www.bard.nih.gov/ontology/bard#BARD_0001205"
 
@@ -75,7 +78,11 @@ class ProjectService {
     Project updateProjectStatus(Long id, Status newProjectStatus) {
         Project project = Project.findById(id)
         project.projectStatus = newProjectStatus
-
+        if(newProjectStatus.equals(Status.APPROVED) && project.isDirty('projectStatus')){
+            Person currentUser = Person.findByUserName(springSecurityService.authentication.name)
+            project.approvedBy = currentUser
+            project.approvedDate = new Date()
+        }
         project.save(flush: true)
         return Project.findById(id)
     }

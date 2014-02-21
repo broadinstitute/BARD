@@ -76,8 +76,8 @@
             <g:if test="${instance?.experimentStatus?.equals(Status.APPROVED)}">
                 <dt><g:message code="instance.approvedBy.label" default="Approved By"/>:</dt>
                 <dd id="approvedById">
-                    <g:if test="${instance.approvedBy}">
-                        ${instance?.approvedBy} (<g:formatDate date="${instance.approvedDate}" format="MM/dd/yyyy"/>)
+                    <g:if test="${instance.approvedBy?.fullName}">
+                        ${instance.approvedBy?.fullName} (<g:formatDate date="${instance.approvedDate}" format="MM/dd/yyyy"/>)
                     </g:if>
                 </dd>
             </g:if>

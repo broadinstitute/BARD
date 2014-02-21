@@ -4,6 +4,7 @@ import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
 import bard.db.enums.Status
+import bard.db.people.Person
 import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
@@ -189,6 +190,11 @@ class ExperimentService {
     Experiment updateExperimentStatus(final Long id, final Status experimentStatus) {
         Experiment experiment = Experiment.findById(id)
         experiment.experimentStatus = experimentStatus
+        if(experimentStatus.equals(Status.APPROVED) && experiment.isDirty('experimentStatus')){
+            Person currentUser = Person.findByUserName(springSecurityService.authentication.name)
+            experiment.approvedBy = currentUser
+            experiment.approvedDate = new Date()
+        }
         experiment.save(flush: true)
         return Experiment.findById(id)
     }
