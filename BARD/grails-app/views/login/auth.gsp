@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>BioAssay Research Database</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <r:require modules="core,bootstrap,login"/>
     <r:script disposition='head'>
         window.bardAppContext = "${request.contextPath}";
