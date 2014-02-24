@@ -50,7 +50,7 @@
                             <dt>Broad Institute of MIT and Harvard</dt>
                             <dd>Benjamin Alexander, Jacob Asiedu, Kay Aubrey, Joshua Bittker, Steve Brudz,
                             Simon Chatwin, Paul Clemons, Vlado Dancik, Siva Dandapani, <i>Andrea de Souza (Program Lead)</i>,
-                            Dan Durkin, David Lahr, Phil Montgomery, Jose Perez, Shaita Picard, Jason Rose,
+                            Dan Durkin, Eleanor Howe, David Lahr, Phil Montgomery, Jose Perez, Shaita Picard, Jason Rose,
                                 <i>Stuart Schreiber (PI)</i>, Gil Walzer, Xiaorong Xiang</dd>
                             <dt>National Center for Advancing Translational Sciences</dt>
                             <dd><i>Chris Austin (PI)</i>, John Braisted, Rajarshi Guha, Ajit Jadhav,
