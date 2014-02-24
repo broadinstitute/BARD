@@ -112,8 +112,6 @@
                                 <ul class="dropdown-menu">
                                     <li><a onclick="submitTeamRoleForm('Member');">Member</a>
                                     <li><a onclick="submitTeamRoleForm('Manager');">Manager</a>
-                                    %{--<li><g:link action="modifyTeamRoles" id="Member" params="[roleId: roleInstance?.id]">Member</g:link></li>--}%
-                                    %{--<li><g:link action="modifyTeamRoles" id="Manager" params="[roleId: roleInstance?.id]">Manager</g:link></li>--}%
                                     <li></li>
                                 </ul>
                             </li>

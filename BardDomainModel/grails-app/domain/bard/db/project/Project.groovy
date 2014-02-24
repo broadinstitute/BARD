@@ -14,6 +14,7 @@ import bard.db.guidance.GuidanceUtils
 import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
+import bard.db.people.Person
 import bard.db.people.Role
 import bard.db.registration.ExternalReference
 import org.apache.commons.lang3.StringUtils
@@ -38,7 +39,7 @@ class Project extends AbstractContextOwner implements GuidanceAware {
     Date dateCreated
     Date lastUpdated = new Date()
     String modifiedBy
-    String approvedBy
+    Person approvedBy
     Date approvedDate
 
     List<ProjectContext> contexts = [] as List
@@ -88,6 +89,7 @@ class Project extends AbstractContextOwner implements GuidanceAware {
         readyForExtraction(type: ReadyForExtractionEnumUserType)
         groupType(type: ProjectGroupTypeEnumUserType)
         contexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
+        approvedBy(column: "APPROVED_BY")
     }
 
     static constraints = {
@@ -100,7 +102,7 @@ class Project extends AbstractContextOwner implements GuidanceAware {
         dateCreated(nullable: false)
         ownerRole(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
-        approvedBy(nullable: true, blank: false, maxSize: APPROVED_BY_MAX_SIZE)
+        approvedBy(nullable: true)
         approvedDate(nullable: true)
     }
     /**
@@ -174,16 +176,6 @@ class Project extends AbstractContextOwner implements GuidanceAware {
     def afterInsert() {
         Project.withNewSession {
             capPermissionService?.addPermission(this)
-        }
-    }
-
-    def beforeUpdate(){
-        if(projectStatus.equals(Status.APPROVED) && this.isDirty('projectStatus')){
-            approvedBy = springSecurityService.authentication.name
-            if(approvedBy && approvedBy.contains('@')){
-                approvedBy = StringUtils.substringBefore(approvedBy,'@')
-            }
-            approvedDate = new Date()
         }
     }
 

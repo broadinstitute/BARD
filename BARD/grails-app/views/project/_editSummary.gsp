@@ -26,8 +26,8 @@
             <g:if test="${project?.projectStatus.equals(Status.APPROVED)}">
                 <dt><g:message code="project.approvedBy.label" default="Approved By"/>:</dt>
                 <dd id="approvedById">
-                    <g:if test="${project.approvedBy}">
-                        ${project?.approvedBy} (<g:formatDate date="${project.approvedDate}" format="MM/dd/yyyy"/>)
+                    <g:if test="${project.approvedBy?.fullName}">
+                        ${project.approvedBy?.fullName} (<g:formatDate date="${project.approvedDate}" format="MM/dd/yyyy"/>)
                     </g:if>
                 </dd>
             </g:if>
