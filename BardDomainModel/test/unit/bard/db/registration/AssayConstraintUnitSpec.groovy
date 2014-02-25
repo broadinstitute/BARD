@@ -36,10 +36,6 @@ class AssayConstraintUnitSpec extends Specification {
     void "test assayStatus constraints #desc assayStatus: '#valueUnderTest'"() {
         final String field = 'assayStatus'
         final AssayContext assayContext = AssayContext.buildWithoutSave(assay: domainInstance)
-        if (itemMap) {
-            itemMap.put('assayContext', assayContext)
-            final AssayContextItem assayContextItem = AssayContextItem.buildWithoutSave(itemMap)
-        }
 
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
@@ -49,16 +45,13 @@ class AssayConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                                         | valueUnderTest | itemMap                                                          | valid | errorCode
-        'null not valid'                             | null           | [:]                                                              | false | 'nullable'
-        'valid value'                                | DRAFT          | [:]                                                              | true  | null
-        'valid value'                                | APPROVED       | [:]                                                              | true  | null
-        'valid value'                                | RETIRED        | [:]                                                              | true  | null
+        desc                                         | valueUnderTest | valid | errorCode
+        'null not valid'                             | null           | false | 'nullable'
+        'valid value'                                | DRAFT          | true  | null
+        'valid value'                                | APPROVED       | true  | null
+        'valid value'                                | RETIRED        | true  | null
 
-        'valid DRAFT with null contextItem values'   | DRAFT          | [attributeType: Fixed, valueType: NONE, valueDisplay: null]      | true  | null
-        'invalid APPROVED with null item values'     | APPROVED       | [attributeType: Fixed, valueType: NONE, valueDisplay: null]      | false | 'assay.assayStatus.requires.items.with.values'
-        'valid APPROVED with non null item values'   | APPROVED       | [attributeType: Fixed, valueType: NONE, valueDisplay: 'someVal'] | true  | null
-        'valid RETIRED with null contextItem values' | RETIRED        | [attributeType: Fixed, valueType: NONE, valueDisplay: null]      | true  | null
+
     }
 
     void "test assayName constraints #desc assayName: "() {

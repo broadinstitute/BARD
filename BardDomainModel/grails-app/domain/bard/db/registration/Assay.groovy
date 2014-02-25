@@ -84,7 +84,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     ]
 
     static constraints = {
-        assayStatus(validator: { Status status, Assay instance, Errors errors -> instance.validateItems(errors) })
+        assayStatus()
         assayName(maxSize: ASSAY_NAME_MAX_SIZE, blank: false)
         assayVersion(maxSize: ASSAY_VERSION_MAX_SIZE, blank: false)
         designedBy(nullable: true, maxSize: DESIGNED_BY_MAX_SIZE)
@@ -252,21 +252,37 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     /**
      * if the status is Approved look at all the contextItems an ensure all Fixed items have values
      * for Draft or Retired, fixed contextItems can have null values. ( guidance will ask the user to fill in values )
-     * @param errors
+     *
+     * Initially, had this wired into the validation for the assayStatus field, but, this resulted in some errors
+     * see http://naleid.com/blog/2010/11/21/grails-issue-not-processed-by-flush-root-causes which mentions reading dependent
+     * objects in as part of a validation.
      */
-    void validateItems(Errors errors) {
+    void validateItems() {
+        validate()
         final List<String> itemLabels = []
         if (this.assayStatus == Status.APPROVED) {
-            for (AssayContextItem assayContextItem in this.assayContexts.assayContextItems.flatten()) {
+
+            for (AssayContextItem assayContextItem in AssayContext.findByAssay(this).assayContextItems.flatten()) {
                 if (ContextItemShouldHaveValueRule.isFixedAndAllValuesNull(assayContextItem)) {
                     itemLabels.add(assayContextItem.attributeElement.label)
                 }
             }
+
         }
         if (itemLabels) {
-            final String quotedCommaSeparatedlabels =   itemLabels.sort().collect{"'$it'"}.join(',')
+            final String quotedCommaSeparatedlabels = itemLabels.sort().collect { "'$it'" }.join(',')
             final String msg = "You must provide values for the following annotations before this assay can be approved: ${quotedCommaSeparatedlabels}"
-            errors.rejectValue('assayStatus', 'assay.assayStatus.requires.items.with.values', msg)
+            final ValidationErrors localErrors = new ValidationErrors(this)
+            localErrors.rejectValue('assayStatus', 'assay.assayStatus.requires.items.with.values', msg)
+            addToErrors(localErrors)
+        }
+    }
+
+    protected addToErrors(ValidationErrors localErrors) {
+        if (errors) {
+            errors.addAllErrors(localErrors)
+        } else {
+            setErrors(localErrors)
         }
     }
 

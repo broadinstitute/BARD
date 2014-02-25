@@ -77,13 +77,18 @@ class AssayDefinitionService {
     @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Assay updateAssayStatus(long id, Status assayStatus) {
         Assay assay = Assay.findById(id)
+        final Status originalStatus = assay.assayStatus
+
         assay.assayStatus = assayStatus
-        if(assayStatus.equals(Status.APPROVED) && assay.isDirty('assayStatus')){
-            Person currentUser = Person.findByUserName(springSecurityService.authentication.name)
-            assay.approvedBy = currentUser
-            assay.approvedDate = new Date()
+        assay.validateItems()
+        if(!assay.hasErrors())    {
+            if(Status.APPROVED.equals(assay.assayStatus) && originalStatus != assay.assayStatus){
+                Person currentUser = Person.findByUserName(springSecurityService.authentication.name)
+                assay.approvedBy = currentUser
+                assay.approvedDate = new Date()
+            }
+            assay.save(flush: true)
         }
-        assay.save(flush: true)
         return assay
     }
 
