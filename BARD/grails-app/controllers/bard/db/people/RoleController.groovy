@@ -40,8 +40,9 @@ class RoleController {
         }
 //        def persons = PersonRole.findAllByRole(roleInstance, [sort: "person.fullName", order: "asc"]).collect { it.person } as Set
         def persons = PersonRole.findAllByRole(roleInstance, [sort: "person.fullName", order: "asc"])
-        boolean isTeamManager = personService.isTeamManager(id)
-        [roleInstance: roleInstance, editable: 'canedit', teamMembers: persons, isTeamManager: isTeamManager]
+        boolean canManageTeam = personService.canManageTeam(id)
+        boolean isAdmin = SpringSecurityUtils.ifAnyGranted("ROLE_BARD_ADMINISTRATOR")
+        [roleInstance: roleInstance, editable: 'canedit', teamMembers: persons, canManageTeam: canManageTeam, isAdmin: isAdmin]
     }
 
     def addUserToTeam(String email, Long roleId){
@@ -64,8 +65,7 @@ class RoleController {
     def myTeams(){
         def username = springSecurityService.principal?.username
         Person user = Person.findByUserName(username)
-//        def roles = PersonRole.findAllByTeamRoleAndPerson('Manager', user).collect{it.role} as Set
-        def roles = PersonRole.findAllByTeamRoleAndPerson('Manager', user)
+        def roles = PersonRole.findAllByTeamRoleAndPerson(TeamRole.MANAGER, user)
         [teams: roles]
     }
 

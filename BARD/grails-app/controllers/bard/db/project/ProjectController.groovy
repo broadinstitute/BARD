@@ -640,7 +640,7 @@ class ProjectCommand extends BardCommand {
         ownerRole(nullable: false, blank: false, validator: { value, command, err ->
             Role role = Role.findByAuthority(value)
             if (!isRoleInUsersRoleList(role)) {
-                err.rejectValue('ownerRole', "message.code", "You do not have the privileges to create Projects for this team : ${value.displayName}");
+                err.rejectValue('ownerRole', "message.code", "You do not have the privileges to create Projects for this team : ${value.getDisplayName}");
             }
         })
     }
