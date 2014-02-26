@@ -77,7 +77,7 @@ class RoleController {
             PersonRole personRole = PersonRole.get(personRoleArray.get(i))
             if(personRole){
                 def personName = personRole.person.fullName
-                personRole.teamRole = params.teamRole
+                personRole.teamRole = TeamRole.byId(params.teamRole)
                 if(!personRole.save(flush: true)){
                     errorSaves.add(personName)
                 }
