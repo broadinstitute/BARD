@@ -97,11 +97,12 @@
             <caption><strong>Team Members</strong></caption>
 
             <thead>
+            <g:if test="${canManageTeam || isAdmin}">
             <tr>
             <th colspan="4">
             <div class="row-fluid">
                 <div class="span3">
-                    <g:if test="${isTeamManager}">
+                    <g:if test="${canManageTeam}">
                     <div class="btn-group">
                         <button class="btn">Actions</button>
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
@@ -120,6 +121,7 @@
                     </g:if>
                 </div>
                 <div class="span9">
+                    <g:if test="${canManageTeam || isAdmin}">
                     <g:form id="addUserToTeam" name="addUserToTeam" action="addUserToTeam" controller="role">
                         <div class="input-append">
                             <g:hiddenField class="" id="roleId" name="roleId" value="${roleInstance?.id}" />
@@ -127,13 +129,15 @@
                             <input type="submit" class="btn btn-primary" value="Add to team">
                         </div>
                     </g:form>
+                    </g:if>
                 </div>
             </div>
             </th>
             </tr>
+            </g:if>
 
             <tr>
-                <g:if test="${isTeamManager}"><th></th></g:if>
+                <g:if test="${canManageTeam}"><th></th></g:if>
                 <th data-sort="string-ins">Name</th>
                 <th data-sort="string-ins">Email Address</th>
                 <th data-sort="string-ins">Role</th>
@@ -145,17 +149,17 @@
                     <g:hiddenField id="teamRole" name="teamRole" value="" />
                     <g:each in="${teamMembers}" var="member">
                             <tr>
-                                <g:if test="${isTeamManager}"><td><g:checkBox id="checkboxes" name="checkboxes" value="${member.id}" checked="" /></td></g:if>
+                                <g:if test="${canManageTeam}"><td><g:checkBox id="checkboxes" name="checkboxes" value="${member.id}" checked="" /></td></g:if>
                                 <td>${member.person.fullName}</td>
                                 <td>${member.person.emailAddress}</td>
-                                <g:if test="${member.teamRole.equals("Member")}">
-                                    <td><span class="label">${member.teamRole}</span></td>
+                                <g:if test="${member.teamRole.id.equals("Member")}">
+                                    <td><span class="label">${member.teamRole.id}</span></td>
                                 </g:if>
-                                <g:elseif test="${member.teamRole.equals("Manager")}">
-                                    <td><span class="label label-success">${member.teamRole}</span></td>
+                                <g:elseif test="${member.teamRole.id.equals("Manager")}">
+                                    <td><span class="label label-success">${member.teamRole.id}</span></td>
                                 </g:elseif>
                                 <g:else>
-                                    <td><span class="label label-info">${member.teamRole}</span></td>
+                                    <td><span class="label label-info">${member.teamRole.id}</span></td>
                                 </g:else>
                             </tr>
                     </g:each>

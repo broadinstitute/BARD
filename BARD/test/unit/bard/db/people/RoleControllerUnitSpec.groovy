@@ -100,7 +100,7 @@ class RoleControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         then:
         assert response.redirectedUrl.startsWith(expectedRedirectUrl)
         where:
-        desc          | authority       | displayName         | expectedRedirectUrl
+        desc          | authority       | getDisplayName         | expectedRedirectUrl
         "Starts with" | "ROLE_TEAM_CCC" | "Some display Name" | "/role/show"
         "Starts with" | "role_team_vvv" | "Some display Name" | "/role/show"
         "Starts with" | "team_yyyy"     | "Some display Name" | "/role/show"
@@ -115,10 +115,10 @@ class RoleControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         then:
         assert model.roleInstance
         assert model.roleInstance.authority == authority
-        assert model.roleInstance.displayName == displayName
+        assert model.roleInstance.getDisplayName == displayName
         assert view == '/role/create'
         where:
-        desc           | authority | displayName
+        desc           | authority | getDisplayName
         "No authority" | ""        | "Some display Name"
     }
 

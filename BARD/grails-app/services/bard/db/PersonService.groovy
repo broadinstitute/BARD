@@ -1,9 +1,11 @@
 package bard.db
 
+import bard.db.enums.TeamRole
 import bard.db.people.Person
 import bard.db.people.PersonRole
 import bard.db.people.Role
 import grails.plugins.springsecurity.SpringSecurityService
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 class PersonService {
 
@@ -44,13 +46,15 @@ class PersonService {
 
     boolean isTeamManager(Long roleId){
         PersonRole pr = getPersonRole(roleId)
-        String personRole = pr != null ? pr.teamRole : null
-        boolean isManager = personRole != null ? personRole.equals("Manager") : false
+        String personRole = pr != null ? pr.teamRole.id : null
+        boolean isManager = personRole != null ? personRole.equals(TeamRole.MANAGER.id) : false
         return isManager
     }
 
-    boolean isInTeam(Long roleId){
-        PersonRole pr = getPersonRole(roleId)
-        return pr != null ? true : false
+    boolean canManageTeam(Long roleId){
+        def role = Role.get(roleId)
+        boolean isTeamManager = isTeamManager(roleId)
+        boolean isAdminAndTeamMember = SpringSecurityUtils.ifAllGranted("ROLE_BARD_ADMINISTRATOR,${role.authority}")
+        return isTeamManager || isAdminAndTeamMember
     }
 }

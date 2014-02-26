@@ -46,14 +46,14 @@
                         <td>${teamRole.role.authority}</td>
                         <td>${teamRole.role.displayName}</td>
 
-                        <g:if test="${teamRole.teamRole.equals("Member")}">
-                            <td><span class="label">${teamRole.teamRole}</span></td>
+                        <g:if test="${teamRole.teamRole.id.equals("Member")}">
+                            <td><span class="label">${teamRole.teamRole.id}</span></td>
                         </g:if>
-                        <g:elseif test="${teamRole.teamRole.equals("Manager")}">
-                            <td><span class="label label-success">${teamRole.teamRole}</span></td>
+                        <g:elseif test="${teamRole.teamRole.id.equals("Manager")}">
+                            <td><span class="label label-success">${teamRole.teamRole.id}</span></td>
                         </g:elseif>
                         <g:else>
-                            <td><span class="label label-info">${teamRole.teamRole}</span></td>
+                            <td><span class="label label-info">${teamRole.teamRole.id}</span></td>
                         </g:else>
 
                         <td>${teamRole.role.modifiedBy}</td>
