@@ -49,32 +49,51 @@
             <td><a href="http://bard.nih.gov/api/latest/plugins/badapple/_manifest">Badapple</a></td>	<td>Jeremy Yang</td><td>UNM</td><td>Evidence-based promiscuity scores</td><td>released Oct 2012</td>
         </tr>
         <tr>
-            <td><a href="http://bard.nih.gov/api/latest/plugins/smartcyp/_manifest">SmartCyp</a></td>	<td>Rajarshi Guha</td><td>NCGC</td><td>Prediction of which sites in a molecule that are most liable to metabolism by Cytochrome P450</td><td>released March 2013</td>
+            <td>HScaf</td>	<td>Jeremy Yang</td><td>UNM</td><td>Hierarchical scaffold analysis</td><td>In development</td>
         </tr>
         <tr>
-            <td><a href="http://bard.nih.gov/api/latest/plugins/whichcyp/_manifest">WhichCyp</a></td>	<td>Rajarshi Guha</td><td>NCGC</td><td>Prediction of which Cytochrome P450 isoform(s) is(are) likely to bind a drug-like molecule</td><td>released June 2013</td>
+            <td><a href="http://bard.nih.gov/api/latest/plugins/smartcyp/_manifest">SmartCyp</a></td>	<td>Rajarshi Guha</td><td>NCATS</td><td>Prediction of which sites in a molecule are most liable to metabolism by Cytochrome P450</td><td>released March 2013</td>
         </tr>
         <tr>
-            <td>HScaf</td>	<td>Jeremy Yang</td><td>UNM</td><td>Scaffold analysis</td><td>In development</td>
+            <td><a href="http://bard.nih.gov/api/latest/plugins/whichcyp/_manifest">WhichCyp</a></td>	<td>Rajarshi Guha</td><td>NCATS</td><td>Prediction of which Cytochrome P450 isoform(s) is(are) likely to bind a drug-like molecule</td><td>released June 2013</td>
         </tr>
         <tr>
-            <td>TBE (kNN)</td>	<td>Oleg Ursu</td><td>UNM</td><td>kNN, nearest neighbors bioactivity profiler</td><td>In development</td>
+            <td><a href="http://bard.nih.gov/api/latest/plugins/protclass/_manifest">ProtClass</a></td>	<td>Rajarshi Guha</td><td>NCATS</td><td>Protein classifications (Panther) based on Uniprot IDs</td><td>released October 2013</td>
+        </tr>
+
+        <tr>
+            <td><a href="http://bard.nih.gov/api/latest/plugins/knnbioactivity/_manifest">kNNBioactivity</a></td>	<td>Oleg Ursu</td><td>UNM</td><td>kNN machine learning, bioactivity profile prediction</td><td>released October 2013</td>
+        </tr>
+
+        <tr>
+            <td><a href="http://bard.nih.gov/api/latest/plugins/qed/_manifest">QED</a></td>	<td>Oleg Ursu</td><td>UNM</td><td>Quantitative Estimate of Drug-likeness (Molecular Property & Filtering Suite)</td><td>released January 2014</td>
         </tr>
         <tr>
-            <td>TBE (Filtering)</td>	<td>Jeremy Yang</td><td>UNM</td><td>Druglike/leadlike/probelike suitability filtering</td><td>In development</td>
+            <td>Ro5</td>	<td>Jeremy Yang</td><td>UNM</td><td>Lipinski Rule of 5 (Molecular Property & Filtering Suite)</td><td>In development</td>
         </tr>
         <tr>
-            <td>Assay based similarity</td>	<td>Vlado Dancik</td><td>Broad</td><td>Compound similarity based on bioactivity</td><td>In development</td>
+            <td>SMARTS</td>	<td>Jeremy Yang</td><td>UNM</td><td>SMARTS structural alerts (Molecular Property & Filtering Suite)</td><td>In development</td>
         </tr>
         <tr>
-            <td>TBE (SVM)</td>	<td>Lars Carlssong</td><td>AstraZeneca & UNM</td><td>SVM classifier</td><td>Planned</td>
+            <td>Metaprint2D</td>	<td>Lars Carlsson</td><td>AstraZeneca</td><td>Metabolic site prediction based on historic metabolic data</td><td>In development</td>
         </tr>
         <tr>
-            <td>ALOGPS</td>	<td>Igor Tetko</td><td>HZM & UNM</td><td>LogP prediction</td><td>Planned</td>
+            <td>ALOGPS</td>	<td>Iurii Sushko, Igor Tetko</td><td>HZM / VCCLAB / eADMET        </td><td>LogP & solubility prediction</td><td>Planned</td>
         </tr>
         <tr>
-            <td>TBE (QSAR)</td>	<td>Alex Tropsha</td><td>UNC & UNM</td><td>QSAR modeling</td><td>Planned</td>
+            <td>TBE (QSAR)</td>	<td>Diane Pozefsky, Alex Tropsha</td><td>UNC</td><td>QSAR modeling</td><td>Planned</td>
         </tr>
+        <tr>
+            <td>TBE (assay-based similarity)</td>	<td>Vlado Dancik</td><td>Broad</td><td>Compound similarity based on bioactivity</td><td>Planned</td>
+        </tr>
+
+        <tr>
+            <td>TBE (various predictive models)</td>	<td>Jens Meiler, Edward Lowe</td><td>Vanderbilt</td><td>Bioactivity and potency prediction using BCL-based algorithms</td><td>Planned</td>
+        </tr>
+        <tr>
+            <td>TBE (various predictive models)</td>	<td>Alexey Zakharov, Marc Nicklaus</td><td>NCI</td><td>Bioactivity, toxicity, property prediction</td><td>Planned</td>
+        </tr>
+
         </tbody>
     </table>
 
