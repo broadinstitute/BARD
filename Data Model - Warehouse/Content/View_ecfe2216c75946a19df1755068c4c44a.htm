@@ -22,7 +22,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE VIEW BBDS.COMPOUND_ASSAY_AGG_CELL AS</TT><BR><TT>SELECT RE.COMPOUND_REF, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.ASSAY_REF, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.RESULT_TYPE_REF, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.VALUE_NUM, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.VALUE_DISPLAY, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.TOOLTIP_DISPLAY, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.LOAD_DATE, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.EXPERIMENT_CNT, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.EXPERIMENT_IDS, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.OUTCOME, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.SUBSTANCE_CNT, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.SUBSTANCE_IDS</TT><BR><TT>FROM BBDS.AGGREGATE_TYPE AG, BBDS.RESULT_AGGREGATE RE</TT><BR><TT>WHERE RE.AGGREGATE_TYPE_REF = AG.AGGREGATE_TYPE_REF</TT><BR><TT>&nbsp&nbsp AND AG.AGGREGATE_COLUMNS = 'assay, compound, result_type'</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE VIEW BBDS.COMPOUND_ASSAY_AGG_CELL AS</TT><BR><TT>SELECT RE.COMPOUND_REF, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.ASSAY_REF, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.RESULT_TYPE_REF, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.VALUE_NUM, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.VALUE_DISPLAY, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.TOOLTIP_DISPLAY, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.LOAD_DATE, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.EXPERIMENT_CNT, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.EXPERIMENT_IDS, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.OUTCOME_REF, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.SUBSTANCE_CNT, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.SUBSTANCE_IDS</TT><BR><TT>FROM RESULT_AGGREGATE RE</TT><BR><TT>WHERE RE.AGGREGATE_TYPE_REF = 1</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -83,7 +83,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_f9187ce960f345568c12a3ca7a7fc480.htm">RESULT_AGGREGATE</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">OUTCOME&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">OUTCOME_REF&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_f9187ce960f345568c12a3ca7a7fc480.htm">RESULT_AGGREGATE</A>&nbsp;</FONT></TD>
 </TR>

@@ -22,7 +22,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE VIEW BBDS.COMPOUND_ASSAY_AGG_CELL</TT><BR><TT>(COMPOUND_REF, ASSAY_REF, RESULT_TYPE_REF, VALUE_NUM, VALUE_DISPLAY, TOOLTIP_DISPLAY, LOAD_DATE, EXPERIMENT_CNT, EXPERIMENT_IDS, OUTCOME, SUBSTANCE_CNT, SUBSTANCE_IDS) AS</TT><BR><TT>SELECT RE.COMPOUND_REF,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.ASSAY_REF,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.RESULT_TYPE_REF,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.VALUE_NUM,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.VALUE_DISPLAY,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.TOOLTIP_DISPLAY,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.LOAD_DATE,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.EXPERIMENT_CNT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.EXPERIMENT_IDS,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.OUTCOME,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.SUBSTANCE_CNT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.SUBSTANCE_IDS</TT><BR><TT>FROM BBDS.RESULT_AGGREGATE RE</TT><BR><TT>WHERE RE.AGGREGATE_TYPE_REF = 1</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE VIEW BBDS.COMPOUND_ASSAY_AGG_CELL</TT><BR><TT>(COMPOUND_REF, ASSAY_REF, RESULT_TYPE_REF, VALUE_NUM, VALUE_DISPLAY, TOOLTIP_DISPLAY, LOAD_DATE, EXPERIMENT_CNT, EXPERIMENT_IDS, OUTCOME_REF, SUBSTANCE_CNT, SUBSTANCE_IDS) AS</TT><BR><TT>SELECT RE.COMPOUND_REF,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.ASSAY_REF,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.RESULT_TYPE_REF,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.VALUE_NUM,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.VALUE_DISPLAY,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.TOOLTIP_DISPLAY,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.LOAD_DATE,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.EXPERIMENT_CNT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.EXPERIMENT_IDS,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp re.outcome_ref,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.SUBSTANCE_CNT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp RE.SUBSTANCE_IDS</TT><BR><TT>FROM BBDS.RESULT_AGGREGATE RE</TT><BR><TT>WHERE RE.AGGREGATE_TYPE_REF = 1</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -83,8 +83,8 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_176771a75a5a4c5ca81d6b09e537d24a.htm">RESULT_AGGREGATE</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">OUTCOME&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">OUTCOME&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">OUTCOME_REF&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">OUTCOME_REF&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_176771a75a5a4c5ca81d6b09e537d24a.htm">RESULT_AGGREGATE</A>&nbsp;</FONT></TD>
 </TR>
 <TR>

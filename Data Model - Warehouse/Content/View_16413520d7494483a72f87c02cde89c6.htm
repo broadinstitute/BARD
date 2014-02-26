@@ -22,7 +22,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE VIEW BBDS.COMPOUND_ASSAY_AGG</TT><BR><TT>(COMPOUND_REF, ASSAY_REF, RESULT_TYPE_REF, VALUE_NUM, VALUE_DISPLAY, TOOLTIP_DISPLAY, LOAD_DATE, EXPERIMENT_CNT, EXPERIMENT_IDS, OUTCOME, SUBSTANCE_CNT, SUBSTANCE_IDS, COL_EXPERIMENT_CNT, COL_EXPERIMENT_IDS, ROW_SUBSTANCE_CNT, ROW_SUBSTANCE_IDS) AS</TT><BR><TT>SELECT CO.Compound_ref,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.Assay_ref,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.result_type_ref,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.VALUE_NUM,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.VALUE_DISPLAY,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.TOOLTIP_DISPLAY,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.LOAD_DATE,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.EXPERIMENT_CNT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.EXPERIMENT_IDS,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.OUTCOME,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.SUBSTANCE_CNT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.SUBSTANCE_IDS,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CL_HDR.EXPERIMENT_CNT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CL_HDR.EXPERIMENT_IDS,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RW_HDR.SUBSTANCE_CNT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RW_HDR.SUBSTANCE_IDS</TT><BR><TT>FROM COMPOUND_ASSAY_AGG_CELL CO,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp COMPOUND_ASSAY_AGG_COL_HDR CL_HDR,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp COMPOUND_ASSAY_AGG_ROW_HDR RW_HDR</TT><BR><TT>WHERE CO.ASSAY_REF = CL_HDR.ASSAY_REF (+)</TT><BR><TT>&nbsp&nbsp AND CO.COMPOUND_REF = RW_HDR.COMPOUND_REF (+)</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE VIEW BBDS.COMPOUND_ASSAY_AGG</TT><BR><TT>(COMPOUND_REF, ASSAY_REF, RESULT_TYPE_REF, VALUE_NUM, VALUE_DISPLAY, TOOLTIP_DISPLAY, LOAD_DATE, EXPERIMENT_CNT, EXPERIMENT_IDS, OUTCOME_REF, SUBSTANCE_CNT, SUBSTANCE_IDS, COL_EXPERIMENT_CNT, COL_EXPERIMENT_IDS, ROW_SUBSTANCE_CNT, ROW_SUBSTANCE_IDS) AS</TT><BR><TT>SELECT CO.Compound_ref, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.Assay_ref, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.result_type_ref, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.VALUE_NUM, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.VALUE_DISPLAY, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.TOOLTIP_DISPLAY, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.LOAD_DATE, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.EXPERIMENT_CNT, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.EXPERIMENT_IDS, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.OUTCOME_REF, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.SUBSTANCE_CNT, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CO.SUBSTANCE_IDS, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CL_HDR.EXPERIMENT_CNT, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CL_HDR.EXPERIMENT_IDS, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RW_HDR.SUBSTANCE_CNT, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RW_HDR.SUBSTANCE_IDS</TT><BR><TT>FROM COMPOUND_ASSAY_AGG_CELL CO</TT><BR><TT>left outer join COMPOUND_ASSAY_AGG_COL_HDR CL_HDR</TT><BR><TT>&nbsp&nbsp ON(CO.ASSAY_REF = CL_HDR.ASSAY_REF</TT><BR><TT>&nbsp&nbsp AND CO.RESULT_TYPE_REF = CL_HDR.RESULT_TYPE_REF)</TT><BR><TT>left outer join COMPOUND_ASSAY_AGG_ROW_HDR RW_HDR</TT><BR><TT>&nbsp&nbsp on (CO.COMPOUND_REF = RW_HDR.Compound_ref)</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -83,8 +83,8 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "View_422d1a4f7efd482e8252acf9ffd1bec5.htm">COMPOUND_ASSAY_AGG_CELL</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">OUTCOME&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">OUTCOME&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">OUTCOME_REF&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">OUTCOME_REF&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "View_422d1a4f7efd482e8252acf9ffd1bec5.htm">COMPOUND_ASSAY_AGG_CELL</A>&nbsp;</FONT></TD>
 </TR>
 <TR>

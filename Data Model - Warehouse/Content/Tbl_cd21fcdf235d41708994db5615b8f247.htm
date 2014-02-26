@@ -43,7 +43,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE BBDS_STAGING.LOAD_DETAIL(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOAD_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp EXPERIMENT_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ANNOTATION_STATUS&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(10)&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT 'PENDING' NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp N_ANNOTATION_SET&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp N_ANNOTATION_CONTEXT&nbsp&nbsp&nbsp&nbsp NUMBER,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp T_ANNOTATION_LOAD&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RESULT_STATUS&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(10)&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT 'PENDING' NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp N_RESULT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp N_RESULT_LOADED&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp T_RESULT_LOAD&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp T_RESULT_DELETE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT 0,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT LD_ANNOTATION_STATUS_CK CHECK (annotation_status in ('PENDING', 'LOADED', 'ERROR')),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT LOAD_DETAIL_RESULT_STATUS_CK CHECK (result_status in ('PENDING', 'LOADED', 'ERROR')),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT LOAD_DETAIL_PK PRIMARY KEY (LOAD_ID, EXPERIMENT_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT LOAD_DETAIL_LOAD_ID_FK FOREIGN KEY (LOAD_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES BBDS_STAGING.LOAD_SUMMARY(LOAD_ID) ON DELETE CASCADE&nbsp&nbsp DEFERRABLE INITIALLY DEFERRED,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT LOAD_DETAIL_LOAD_ID_FK FOREIGN KEY (LOAD_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES BBDS_STAGING.LOAD_SUMMARY(LOAD_ID) ON DELETE CASCADE</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR><TT></TT><BR><TT></TT><BR><TT></TT><BR><TT>CREATE INDEX BBDS_STAGING.FK_LOAD_DETAIL_LOAD_ID ON BBDS_STAGING.LOAD_DETAIL(LOAD_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE BBDS_STAGING.LOAD_DETAIL(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOAD_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp EXPERIMENT_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ANNOTATION_STATUS&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(10)&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT 'PENDING' NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp N_ANNOTATION_SET&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp N_ANNOTATION_CONTEXT&nbsp&nbsp&nbsp&nbsp NUMBER,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp T_ANNOTATION_LOAD&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RESULT_STATUS&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(10)&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT 'PENDING' NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp N_RESULT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp N_RESULT_LOADED&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp T_RESULT_LOAD&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp T_RESULT_DELETE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT 0,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT LD_ANNOTATION_STATUS_CK CHECK (annotation_status in ('PENDING', 'LOADED', 'ERROR')),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT LOAD_DETAIL_RESULT_STATUS_CK CHECK (result_status in ('PENDING', 'LOADED', 'ERROR')),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT LOAD_DETAIL_PK PRIMARY KEY (LOAD_ID, EXPERIMENT_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING, </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT LOAD_DETAIL_LOAD_ID_FK FOREIGN KEY (LOAD_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES BBDS_STAGING.LOAD_SUMMARY(LOAD_ID) ON DELETE CASCADE,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT LOAD_DETAIL_LOAD_ID_FK FOREIGN KEY (LOAD_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES BBDS_STAGING.LOAD_SUMMARY(LOAD_ID) ON DELETE CASCADE&nbsp&nbsp DEFERRABLE INITIALLY DEFERRED</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR><TT></TT><BR><TT></TT><BR><TT></TT><BR><TT>CREATE INDEX BBDS_STAGING.FK_LOAD_DETAIL_LOAD_ID ON BBDS_STAGING.LOAD_DETAIL(LOAD_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -188,18 +188,6 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_048f6862ad054df7869cd045eff699b5.htm">LOAD_SUMMARY</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Identifying&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_67a1849c01b8494897ebc8d994c61c01_Rel.htm#Rel_a1332ccd05e64cb98cb0908e660d77ce">LOAD_DETAIL_LOAD_ID_FK</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">LOAD_ID&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_048f6862ad054df7869cd045eff699b5.htm">LOAD_SUMMARY</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Identifying&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_67a1849c01b8494897ebc8d994c61c01_Rel.htm#Rel_7669deca1b324bdea627f8ebb94fde5a">LOAD_DETAIL_LOAD_ID_FK</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
@@ -207,6 +195,18 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_048f6862ad054df7869cd045eff699b5.htm">LOAD_SUMMARY</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Identifying&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_67a1849c01b8494897ebc8d994c61c01_Rel.htm#Rel_a1332ccd05e64cb98cb0908e660d77ce">LOAD_DETAIL_LOAD_ID_FK</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">LOAD_ID&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>

@@ -722,12 +722,12 @@ Rel_6a9d919d10134b88ad9db0cd020e7846.altTxt = "Relationship"
 Rel_d1c3ef86735e4588be0d95af3f9ba600 = insDoc(RelFolder, gLnk("R", "TEST_TYPE : TEST_OUTCOME", "Content/Submodel_67a1849c01b8494897ebc8d994c61c01_Rel.htm#Rel_d1c3ef86735e4588be0d95af3f9ba600"))
 Rel_d1c3ef86735e4588be0d95af3f9ba600.iconSrc = ICONPATH + "Gif/rel.gif"
 Rel_d1c3ef86735e4588be0d95af3f9ba600.altTxt = "Relationship"
-Rel_a1332ccd05e64cb98cb0908e660d77ce = insDoc(RelFolder, gLnk("R", "LOAD_SUMMARY : LOAD_DETAIL", "Content/Submodel_67a1849c01b8494897ebc8d994c61c01_Rel.htm#Rel_a1332ccd05e64cb98cb0908e660d77ce"))
-Rel_a1332ccd05e64cb98cb0908e660d77ce.iconSrc = ICONPATH + "Gif/rel.gif"
-Rel_a1332ccd05e64cb98cb0908e660d77ce.altTxt = "Relationship"
 Rel_7669deca1b324bdea627f8ebb94fde5a = insDoc(RelFolder, gLnk("R", "LOAD_SUMMARY : LOAD_DETAIL", "Content/Submodel_67a1849c01b8494897ebc8d994c61c01_Rel.htm#Rel_7669deca1b324bdea627f8ebb94fde5a"))
 Rel_7669deca1b324bdea627f8ebb94fde5a.iconSrc = ICONPATH + "Gif/rel.gif"
 Rel_7669deca1b324bdea627f8ebb94fde5a.altTxt = "Relationship"
+Rel_a1332ccd05e64cb98cb0908e660d77ce = insDoc(RelFolder, gLnk("R", "LOAD_SUMMARY : LOAD_DETAIL", "Content/Submodel_67a1849c01b8494897ebc8d994c61c01_Rel.htm#Rel_a1332ccd05e64cb98cb0908e660d77ce"))
+Rel_a1332ccd05e64cb98cb0908e660d77ce.iconSrc = ICONPATH + "Gif/rel.gif"
+Rel_a1332ccd05e64cb98cb0908e660d77ce.altTxt = "Relationship"
 }
 }
 {
