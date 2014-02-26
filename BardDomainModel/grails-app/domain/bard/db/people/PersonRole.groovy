@@ -12,8 +12,8 @@ class PersonRole implements Serializable {
     Date dateCreated = new Date()
     Date lastUpdated
     String modifiedBy
-//    TeamRole teamRole = TeamRole.MEMBER
-    String teamRole = "Member"
+    TeamRole teamRole = TeamRole.MEMBER
+//    String teamRole = "Member"
     boolean equals(other) {
         if (!(other instanceof PersonRole)) {
             return false
