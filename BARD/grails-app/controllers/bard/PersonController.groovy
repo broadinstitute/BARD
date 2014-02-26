@@ -129,14 +129,13 @@ class PersonCommand extends BardCommand {
             throw new RuntimeException("Optimistic lock error")
         } else {
             copyFromCmdToDomain(person)
-            person = person.save(flush: true)
-
-
-            //delete all the roles,then add them again
-            PersonRole.removeAll(person)
-            person = person.save(flush: true)
-            if (roles) {
-                addPersonRoles(person)
+            if(person.save(flush: true)){
+                //delete all the roles,then add them again
+                PersonRole.removeAll(person)
+                person.save(flush: true)
+                if (roles) {
+                    addPersonRoles(person)
+                }
             }
         }
         return person

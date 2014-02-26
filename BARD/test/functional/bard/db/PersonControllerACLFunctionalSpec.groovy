@@ -53,7 +53,7 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
                 role = Role.build(authority: teamRole, displayName: teamRole).save(flush: true)
             }
             if (!person) {
-                person = Person.build(userName: teamuserName, emailAddress: teamEmail,
+                person = Person.build(userName: teamuserName, emailAddress: teamEmail, fullName: 'fullName',
                         dateCreated: new Date()).save(flush: true)
             }
             PersonRole personRole = PersonRole.findByPersonAndRole(person, role)
@@ -123,7 +123,6 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     }
 
-
     def 'test update #desc'() {
         given:
         Map m = getCurrentPersonProperties()
@@ -135,7 +134,7 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         when:
         final Response response = client.post() {
-            urlenc username: username, email: email, displayName: displayName,version: version
+            urlenc username: username, email: email, displayName: displayName, version: version
         }
         then:
         assert response.statusCode == expectedHttpResponse
@@ -255,7 +254,7 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         long id = personId.id
         Map currentDataMap = (Map) remote.exec({
             Person person = Person.findById(id)
-            return [username: person.userName, version: person.version, email: person.emailAddress]
+            return [username: person.userName, version: person.version, email: person.emailAddress, displayName: person.fullName]
         })
         return currentDataMap
     }
