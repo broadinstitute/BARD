@@ -26,8 +26,8 @@
             <g:if test="${assay?.assayStatus.equals(Status.APPROVED)}">
                 <dt><g:message code="assay.approvedBy.label" default="Approved By"/>:</dt>
                 <dd id="approvedById">
-                    <g:if test="${assay.approvedBy?.fullName}">
-                        ${assay.approvedBy?.fullName} (<g:formatDate date="${assay.approvedDate}" format="MM/dd/yyyy"/>)
+                    <g:if test="${assay.approvedBy?.displayName}">
+                        ${assay.approvedBy?.displayName} (<g:formatDate date="${assay.approvedDate}" format="MM/dd/yyyy"/>)
                     </g:if>
                 </dd>
             </g:if>

@@ -45,6 +45,32 @@ class PersonConstraintIntegrationSpec extends BardIntegrationSpec {
         'exactly at limit' | createString(NAME_MAX_SIZE)     | true  | null
     }
 
+    void "test fullName constraints #desc fullName: '#valueUnderTest'"() {
+        given:
+        domainInstance = Person.buildWithoutSave()
+        final String field = 'fullName'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify domain can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc               | valueUnderTest                  | valid | errorCode
+        'null '            | null                            | true | null
+        'blank value'      | ''                              | false | 'blank'
+        'blank value'      | '  '                            | false | 'blank'
+        'too long'         | createString(NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'exactly at limit' | createString(NAME_MAX_SIZE)     | true  | null
+    }
+
     void "test getRoles"() {
         given:
         Person person = Person.build()
