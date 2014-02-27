@@ -1,11 +1,7 @@
 package bard.validation.ext;
 
 import java.awt.Desktop;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,6 +16,7 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.params.BasicHttpParams;
@@ -29,6 +26,7 @@ import org.ccil.cowan.tagsoup.jaxp.SAXParserImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -159,9 +157,7 @@ public class ExternalOntologyATCC extends AbstractExternalOntology {
 	class BreakParsingException extends RuntimeException {
 	}
 
-	private static String ATCC_ITEM_URL_FORMAT = "http://www.atcc.org/Products/All/%s";
-
-	private static String ATCC_SEARCH_URL_FORMAT = "http://www.atcc.org/Search_Results.aspx?dsNav=Rpp:%s&searchTerms=%s";
+	private static String ATCC_ITEM_URL_FORMAT = "http://www.atcc.org/Products/All/%s.aspx";
 
 	private static boolean DEBUGGING = false;
 
@@ -230,7 +226,7 @@ public class ExternalOntologyATCC extends AbstractExternalOntology {
 		try {
 			if (limit <= 0 || limit > 100)
 				limit = 100;
-			URL url = new URL(String.format(ATCC_SEARCH_URL_FORMAT, limit, queryGenerator(term)));
+			URL url = new URL(formatMatchingUrl(term, limit));
 			ATCCMultiProductHandler handler = new ATCCMultiProductHandler();
 			handle(url, handler);
 			return handler.getItems();
@@ -239,13 +235,24 @@ public class ExternalOntologyATCC extends AbstractExternalOntology {
 		}
 	}
 
-	@Override
+    private String formatMatchingUrl(String term, int limit) {
+        StringBuilder sb = new StringBuilder("http://www.atcc.org/Search_Results.aspx?dsNav=Ntk:PrimarySearch%7ccells");
+        sb.append("%7c3%7c,Ny:True,Rpp:");
+        sb.append(limit);
+        sb.append(",N:1000552&searchTerms=");
+        sb.append(queryGenerator(term));
+        sb.append("&redir=1");
+        log.info(sb.toString());
+        return sb.toString();
+    }
+
+    @Override
 	public String getExternalURL(String id) {
 		return String.format(ATCC_ITEM_URL_FORMAT, cleanId(id));
 	}
 
 	protected DefaultHandler handle(URL url, DefaultHandler handler) throws IOException, SAXException, ParserConfigurationException {
-		BufferedInputStream is = null;
+        BufferedReader ir = null;
 		try {
 			log.debug(String.format("GET %s", url));
 			
@@ -259,23 +266,25 @@ public class ExternalOntologyATCC extends AbstractExternalOntology {
 			get.setParams(params);
 
 			HttpResponse response = HttpClientBaseSingleton.getInstance().getHttpClient().execute(get);
-			is = new BufferedInputStream(response.getEntity().getContent());
+            ir = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
 			if (DEBUGGING) {
 				File file = File.createTempFile(getClass().getName(), ".html");
 				log.debug("Copying stream to " + file);
 				FileOutputStream fos = new FileOutputStream(file);
-				IOUtils.copy(is, fos);
+				IOUtils.copy(ir, fos, "UTF-8");
 				fos.close();
-				is.close();
+				ir.close();
 				Desktop.getDesktop().open(file);
-				is = new BufferedInputStream(new FileInputStream(file));
+                ir = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 			}
-			SAXParserImpl.newInstance(null).parse(is, handler);
+            final InputSource inputSource = new InputSource();
+            inputSource.setCharacterStream(   ir);
+                    SAXParserImpl.newInstance(null).parse(inputSource, handler);
 		} catch (SAXException ex) {
 			if (!(ex.getCause() instanceof BreakParsingException))
 				throw ex;
 		} finally {
-			IOUtils.closeQuietly(is);
+			IOUtils.closeQuietly(ir);
 		}
 		return handler;
 	}

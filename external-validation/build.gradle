@@ -5,11 +5,8 @@ subprojects {
     apply plugin: 'eclipse'
 
     repositories {
-        mavenCentral()
-        if(hasProperty('mavenRepoUrl')) {
         maven {
-            url(mavenRepoUrl)
-        }
+            url('http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo')
         }
     }
 

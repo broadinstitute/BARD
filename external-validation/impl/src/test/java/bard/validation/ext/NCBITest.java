@@ -85,11 +85,11 @@ public class NCBITest {
     @Test
 	public void testFindMatchingMlpcn() throws ExternalOntologyException {
 		ExternalOntologyAPI eo = new ExternalOntologyNCBI("pcassay", "southern@scripps.edu", "BARD-CAP");
-		List<ExternalItem> items = eo.findMatching("\"NIH Molecular Libraries Program\"[SourceCategory]", 10000);
+		List<ExternalItem> items = eo.findMatching("\"NIH Molecular Libraries Program\"[SourceCategory]", 100);
 		// for (ExternalItem item : items)
 		// System.out.println(String.format("%s\t%s", item.getId(),
 		// item.getDisplay()));
-		assertEquals("'chembl' returns: " + items.size(), items.size() > 5000, true);
+		assertEquals("'chembl' returns: " + items.size(), items.size() > 50, true);
 	}
 
 	@Test
