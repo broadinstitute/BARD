@@ -2,6 +2,7 @@ package bard.validation.ext;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.PrintStream;
 import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
@@ -21,7 +22,8 @@ public class ATCCMatchingTest {
 	}
 
 	@Test
-	public void testATCCMatching() throws ExternalOntologyException {
+	public void testATCCMatching() throws Exception {
+        System.setOut(new PrintStream(System.out, true, "UTF-8"));
 		api = new ExternalOntologyATCC();
 		List<ExternalItem> items = api.findMatching("cells");
 		System.out.println(String.format("%s items returned", items.size()));

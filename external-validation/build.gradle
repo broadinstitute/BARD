@@ -5,17 +5,14 @@ subprojects {
     apply plugin: 'eclipse'
 
     repositories {
-        mavenCentral()
-        if(hasProperty('mavenRepoUrl')) {
         maven {
-            url(mavenRepoUrl)
-        }
+            url('http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo')
         }
     }
 
     group='bard'
     archivesBaseName="${getRootProject().name}-${name}"
-    version = '20140106'
+    version = '20140227'
     sourceCompatibility = 1.6
     targetCompatibility = 1.6
 

@@ -48,12 +48,13 @@ public class UniProtTest {
 	
 	@Test
 	public void testFindMatchingLimitThree() throws ExternalOntologyException {
+        System.out.println("testFindMatchingLimitThree");
 		long start = System.currentTimeMillis();
-		String query = "PPAR";
+		String query = "MED";
 		List<ExternalItem> items = eo.findMatching(query, 3);
 		TestUtils.printItemsInfo(items);
-		assertEquals(query + " in the gene database should return items", items.size() == 3, true);
-		System.out.println(String.format("%s items returned for query " + query, items.size()));
+		assertEquals(query + " in the gene database should return items", 3, items.size());
+        System.out.println(String.format("%s items returned for query " + query, items.size()));
 		System.out.println("testFindMatching took (ms): " + (System.currentTimeMillis() - start) );
 	}
 
