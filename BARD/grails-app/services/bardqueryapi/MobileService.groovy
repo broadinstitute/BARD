@@ -10,30 +10,31 @@ class MobileService {
     def grailsApplication
 
     Boolean detect(HttpServletRequest request) {
+        return false
 
-        if (request.session.getAttribute('mobileExperienceDisabled')) {
-            return false
-        }
-
-        if (SpringSecurityUtils.ifAnyGranted('ROLE_MOBILE')) {
-            return true
-        }
-
-        def device = request.getAttribute('currentDevice')
-
-        Boolean isMobile = device.isMobile()
-
-        def userAgent = request.getHeader('User-Agent')
-        Boolean isTablet = false
-
-        if (userAgent?.contains('iPad')) { // skip iPads
-            isTablet = true
-        } else if (userAgent?.contains('Android') && !userAgent?.contains('Mobile')) {
-            // and android tablets
-            isTablet = true
-        }
-
-        return isMobile || isTablet
+//        if (request.session.getAttribute('mobileExperienceDisabled')) {
+//            return false
+//        }
+//
+//        if (SpringSecurityUtils.ifAnyGranted('ROLE_MOBILE')) {
+//            return true
+//        }
+//
+//        def device = request.getAttribute('currentDevice')
+//
+//        Boolean isMobile = device.isMobile()
+//
+//        def userAgent = request.getHeader('User-Agent')
+//        Boolean isTablet = false
+//
+//        if (userAgent?.contains('iPad')) { // skip iPads
+//            isTablet = true
+//        } else if (userAgent?.contains('Android') && !userAgent?.contains('Mobile')) {
+//            // and android tablets
+//            isTablet = true
+//        }
+//
+//        return isMobile || isTablet
     }
 
 

@@ -1,5 +1,6 @@
 package bard.db.people
 
+import bard.db.PersonService
 import bard.db.project.InlineEditableCommand
 import bard.db.registration.AbstractInlineEditingControllerUnitSpec
 import bard.db.registration.EditingHelper
@@ -26,7 +27,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @TestFor(RoleController)
 @Build([Role])
-@Mock([Role])
+@Mock([Role,PersonRole])
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
 class RoleControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
@@ -37,6 +38,7 @@ class RoleControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         }
         controller.metaClass.mixin(EditingHelper)
         controller.springSecurityService = Mock(SpringSecurityService)
+        controller.personService = Mock(PersonService)
 
     }
 

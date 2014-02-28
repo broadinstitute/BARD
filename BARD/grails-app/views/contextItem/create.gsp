@@ -23,15 +23,7 @@
 
     <g:render template="form" model="${[instance: instance, action: 'Save']}"/>
 
-    <div class="row-fluid">
-        <div class="span10 offset1">
-            <h3>Current context:</h3>
-                <g:render template="edit" model="${[context: instance.context, disableHeaderEdits: true]}"/>
-        </div>
-    </div>
 </div>
-
-
 
 </body>
 </html>

@@ -7,11 +7,13 @@ import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.enums.hibernate.StatusEnumUserType
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
+import bard.db.people.Person
 import bard.db.people.Role
 import bard.db.project.ProjectSingleExperiment
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
 import bard.db.registration.MeasureCaseInsensitiveDisplayLabelComparator
+import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 import java.text.DateFormat
@@ -43,7 +45,7 @@ class Experiment extends AbstractContextOwner {
     Long ncgcWarehouseId;
     Integer confidenceLevel = 1
     PanelExperiment panel;
-    String approvedBy
+    Person approvedBy
     Date approvedDate
 
     List<ExperimentContext> experimentContexts = []
@@ -85,6 +87,7 @@ class Experiment extends AbstractContextOwner {
         readyForExtraction(type: ReadyForExtractionEnumUserType)
         panel(column: 'PANEL_EXPRMT_ID')
         experimentStatus(type: StatusEnumUserType)
+        approvedBy(column: "APPROVED_BY")
     }
 
     static constraints = {
@@ -105,7 +108,7 @@ class Experiment extends AbstractContextOwner {
 
         ncgcWarehouseId(nullable: true)
         ownerRole(nullable: false)
-        approvedBy(nullable: true, blank: false, maxSize: APPROVED_BY_MAX_SIZE)
+        approvedBy(nullable: true)
         approvedDate(nullable: true)
     }
 
@@ -133,13 +136,6 @@ class Experiment extends AbstractContextOwner {
     def afterInsert() {
         Experiment.withNewSession {
             capPermissionService?.addPermission(this)
-        }
-    }
-
-    def beforeUpdate(){
-        if(experimentStatus.equals(Status.APPROVED) && this.isDirty('experimentStatus')){
-            approvedBy = springSecurityService.authentication.name
-            approvedDate = new Date()
         }
     }
 

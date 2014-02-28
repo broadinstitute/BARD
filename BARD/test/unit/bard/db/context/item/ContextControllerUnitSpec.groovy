@@ -22,8 +22,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @TestFor(ContextController)
 @Build([ProjectContext, AssayContext, ExperimentContext])
-@TestMixin(GrailsUnitTestMixin)
-@Mock([InPlaceEditTagLib, ProjectContext, AssayContext, ExperimentContext])
+@Mock([ProjectContext, AssayContext, ExperimentContext])
 @Unroll
 class ContextControllerUnitSpec extends Specification {
 
@@ -31,195 +30,100 @@ class ContextControllerUnitSpec extends Specification {
         controller.contextService = Mock(ContextService)
     }
 
-    void 'test createCard- Bad Request'() {
+    void 'test createCard Bad Request for #contextClass.simpleName'() {
         given:
-        String contextClass = "ProjectContext"
-        String cardName = "My Card"
-        String cardSection = ContextType.BIOLOGY.id
+        final String contextClassName = contextClass.simpleName
 
         when:
-        controller.createCard(contextClass, null, cardName, cardSection)
+        controller.createCard(contextClassName, null, "My Card", ContextType.BIOLOGY.id)
+
         then:
         assert response.status == HttpServletResponse.SC_BAD_REQUEST
         assert response.text == "OwnerId is required"
         assert !model
 
+        where:
+        contextClass << [ProjectContext, AssayContext, ExperimentContext]
     }
 
-    void 'test createCard For Project -UnAuthorized'() {
+
+    void 'test unAuthorized createCard for #contextClass.simpleName'() {
         given:
-        ProjectContext projectContext = ProjectContext.build()
-        String contextClass = "ProjectContext"
-        Long ownerId = projectContext.owner.id
-        String cardName = "My Card"
-        String cardSection = ContextType.BIOLOGY.id
+        final def context = contextClass.build()
+        final String contextClassName = contextClass.simpleName
+
         when:
-        controller.createCard(contextClass, ownerId, cardName, cardSection)
+        controller.createCard(contextClassName, context.owner.id, "My Card", ContextType.BIOLOGY.id)
         then:
-        controller.contextService.createProjectContext(_, _, _,_) >> { throw new AccessDeniedException("some message") }
+        controller.contextService."create${contextClassName}"(_, _, _, _) >> {
+            throw new AccessDeniedException("some message")
+        }
+
         assert response.status == HttpServletResponse.SC_FORBIDDEN
         assert response.text == "editing.forbidden.message"
         assert !model
 
+        where:
+        contextClass << [ProjectContext, AssayContext, ExperimentContext]
+
     }
 
-    void 'test createCard For Experiment -UnAuthorized'() {
+
+    void 'test successful createCard for #contextClass.simpleName'() {
         given:
-        ExperimentContext experimentContext = ExperimentContext.build()
-        String contextClass = "ExperimentContext"
-        Long ownerId = experimentContext.owner.id
-        String cardName = "My Card"
-        String cardSection = ContextType.BIOLOGY.id
+        final def context = contextClass.build()
+        final Long ownerId = context.owner.id
+
         when:
-        controller.createCard(contextClass, ownerId, cardName, cardSection)
+        controller.createCard(contextClass.simpleName, ownerId, "My Card", ContextType.BIOLOGY.id)
+
         then:
-        controller.contextService.createExperimentContext(_, _, _,_) >> { throw new AccessDeniedException("some message") }
+        response.status == HttpServletResponse.SC_FOUND
+        response.redirectedUrl == "/${urlRoot}/show/${ownerId}"
+
+        where:
+        contextClass      | urlRoot
+        ProjectContext    | 'project'
+        AssayContext      | 'assayDefinition'
+        ExperimentContext | 'experiment'
+    }
+
+
+    void 'test unAuthorized deleteEmptyCard #contextClass.simpleName'() {
+        given:
+        final def context = contextClass.build()
+
+        when:
+        controller.deleteEmptyCard(contextClass.simpleName, context.id, 'Unclassified')
+
+        then:
+        controller.contextService."delete${contextClass.simpleName}"(_, _, _) >> {
+            throw new AccessDeniedException("some message")
+        }
         assert response.status == HttpServletResponse.SC_FORBIDDEN
         assert response.text == "editing.forbidden.message"
         assert !model
 
+        where:
+        contextClass << [ProjectContext, AssayContext, ExperimentContext]
+
     }
 
-    void 'test createCard For Assay-UnAuthorized'() {
+    void 'test successful deleteEmptyCard for #contextClass.simpleName'() {
         given:
-        AssayContext assayContext = AssayContext.build()
-        String contextClass = "AssayContext"
-        Long ownerId = assayContext.owner.id
-        String cardName = "My Card"
-        String cardSection = ContextType.BIOLOGY.id
+        final def context = contextClass.build()
+
         when:
-        controller.createCard(contextClass, ownerId, cardName, cardSection)
+        controller.deleteEmptyCard(contextClass.simpleName, context.id, 'Unclassified')
+
         then:
-        controller.contextService.createAssayContext(_,_, _, _) >> { throw new AccessDeniedException("some message") }
-        assert response.status == HttpServletResponse.SC_FORBIDDEN
-        assert response.text == "editing.forbidden.message"
-        assert !model
+        response.status == HttpServletResponse.SC_FOUND
+        response.redirectUrl == "/${urlRoot}/show/${context.owner.id}"
 
+        where:
+        contextClass      | urlRoot
+        ProjectContext    | 'project'
+        AssayContext      | 'assayDefinition'
+        ExperimentContext | 'experiment'
     }
-
-    void 'test createCard- ProjectContext Success'() {
-        given:
-        ProjectContext projectContext = ProjectContext.build()
-        InPlaceEditTagLib t = Mock(InPlaceEditTagLib)
-        String contextClass = "ProjectContext"
-        Long ownerId = projectContext.owner.id
-        String cardName = "My Card"
-        String cardSection = ContextType.BIOLOGY.id
-        views['/context/_list.gsp'] = 'mock contents'
-        when:
-        controller.createCard(contextClass, ownerId, cardName, cardSection)
-        then:
-        assert response.status == HttpServletResponse.SC_OK
-        assert response.text == "mock contents"
-    }
-
-    void 'test createCard- ExperimentContext Success'() {
-        given:
-        ExperimentContext experimentContext = ExperimentContext.build()
-        InPlaceEditTagLib t = Mock(InPlaceEditTagLib)
-        String contextClass = "ExperimentContext"
-        Long ownerId = experimentContext.owner.id
-        String cardName = "My Card"
-        String cardSection = ContextType.BIOLOGY.id
-        views['/context/_list.gsp'] = 'mock contents'
-        when:
-        controller.createCard(contextClass, ownerId, cardName, cardSection)
-        then:
-        assert response.status == HttpServletResponse.SC_OK
-        assert response.text == "mock contents"
-    }
-
-    void 'test createCard- AssayContext Success'() {
-        given:
-        AssayContext assayContext = AssayContext.build()
-        String contextClass = "AssayContext"
-        Long ownerId = assayContext.owner.id
-        String cardName = "My Card"
-        String cardSection = ContextType.BIOLOGY.id
-        views['/context/_list.gsp'] = 'mock contents'
-        when:
-        controller.createCard(contextClass, ownerId, cardName, cardSection)
-        then:
-        assert response.status == HttpServletResponse.SC_OK
-        assert response.text == "mock contents"
-    }
-
-
-
-    void 'test deleteEmptyCard For Project -UnAuthorized'() {
-        given:
-        ProjectContext projectContext = ProjectContext.build()
-        String contextClass = "ProjectContext"
-        when:
-        controller.deleteEmptyCard(contextClass, projectContext.id, 'Unclassified')
-        then:
-        controller.contextService.deleteProjectContext(_,_, _) >> { throw new AccessDeniedException("some message") }
-        assert response.status == HttpServletResponse.SC_FORBIDDEN
-        assert response.text == "editing.forbidden.message"
-        assert !model
-
-    }
-
-    void 'test deleteEmptyCard For Experiment -UnAuthorized'() {
-        given:
-        ExperimentContext experimentContext = ExperimentContext.build()
-        String contextClass = "ExperimentContext"
-        when:
-        controller.deleteEmptyCard(contextClass, experimentContext.id, 'Unclassified')
-        then:
-        controller.contextService.deleteExperimentContext(_,_, _) >> { throw new AccessDeniedException("some message") }
-        assert response.status == HttpServletResponse.SC_FORBIDDEN
-        assert response.text == "editing.forbidden.message"
-        assert !model
-
-    }
-
-    void 'test deleteEmptyCard For Assay-UnAuthorized'() {
-        given:
-        AssayContext assayContext = AssayContext.build()
-        String contextClass = "AssayContext"
-        when:
-        controller.deleteEmptyCard(contextClass, assayContext.id, 'Unclassified')
-        then:
-        controller.contextService.deleteAssayContext(_,_, _) >> { throw new AccessDeniedException("some message") }
-        assert response.status == HttpServletResponse.SC_FORBIDDEN
-        assert response.text == "editing.forbidden.message"
-        assert !model
-
-    }
-
-    void 'test deleteEmptyCard- ProjectContext Success'() {
-        given:
-        ProjectContext projectContext = ProjectContext.build()
-        String contextClass = "ProjectContext"
-        when:
-        controller.deleteEmptyCard(contextClass, projectContext.id, 'Unclassified')
-        then:
-        assert response.status == HttpServletResponse.SC_FOUND
-        assert response.redirectUrl == '/project/editContext/1?groupBySection=Unclassified'
-    }
-
-    void 'test deleteEmptyCard- ExperimentContext Success'() {
-        given:
-        ExperimentContext experimentContext = ExperimentContext.build()
-        String contextClass = "ExperimentContext"
-        when:
-        controller.deleteEmptyCard(contextClass, experimentContext.id, 'Unclassified')
-        then:
-        assert response.status == HttpServletResponse.SC_FOUND
-        assert response.redirectUrl == '/experiment/editContext/1?groupBySection=Unclassified'
-    }
-
-    void 'test deleteEmptyCard- AssayContext Success'() {
-        given:
-        AssayContext assayContext = AssayContext.build()
-        String contextClass = "AssayContext"
-        views['/context/_list.gsp'] = 'mock contents'
-        when:
-        controller.deleteEmptyCard(contextClass, assayContext.id, 'Unclassified')
-        then:
-        assert response.status == HttpServletResponse.SC_FOUND
-        assert response.redirectUrl == "/assayDefinition/editContext/1?groupBySection=Unclassified"
-    }
-
 }

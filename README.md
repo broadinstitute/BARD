@@ -86,8 +86,12 @@ grails compile -DuseBroadRepo=false
 
 The following will create all the necessary objects in the configured schema and populate reference data.
 ```
-grails -Dgrails.env=production -DuseBroaddRepo=false dbm-update --contexts=standard,insert-reference
+grails -Dgrails.env=production -DuseBroadRepo=false dbm-update --contexts=standard,insert-reference
 ```
+
+You may see errors like "exception when trying to call bard_context.set_username" but these can be ignored.  This happens when initializing an empty database because the package we 
+use for auditing hasn't been installed yet.  It will automatically be installed as part of the installation process.   If the command's output ends with "Finished dbm-update" the 
+set up process was successful and you can proceed to the next step.
 
 ### Create BARD war and deploy
 ```

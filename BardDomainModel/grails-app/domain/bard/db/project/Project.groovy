@@ -14,8 +14,11 @@ import bard.db.guidance.GuidanceUtils
 import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
+import bard.db.people.Person
 import bard.db.people.Role
 import bard.db.registration.ExternalReference
+import org.apache.commons.lang3.StringUtils
+import org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsHibernateUtil
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 class Project extends AbstractContextOwner implements GuidanceAware {
@@ -36,7 +39,7 @@ class Project extends AbstractContextOwner implements GuidanceAware {
     Date dateCreated
     Date lastUpdated = new Date()
     String modifiedBy
-    String approvedBy
+    Person approvedBy
     Date approvedDate
 
     List<ProjectContext> contexts = [] as List
@@ -56,10 +59,11 @@ class Project extends AbstractContextOwner implements GuidanceAware {
 
     Set<Experiment> findUnApprovedExperiments() {
         Set<Experiment> unApprovedExperiments = new HashSet<Experiment>()
-        projectExperiments.each { ProjectSingleExperiment projectExperiment ->
-            final Experiment experiment = projectExperiment.experiment
-            if (experiment.experimentStatus != Status.APPROVED && experiment.experimentStatus != Status.RETIRED) {
-                unApprovedExperiments.add(experiment)
+        projectExperiments.each { ProjectExperiment projectExperiment ->
+            projectExperiment.experiments.each { Experiment experiment ->
+                if (experiment.experimentStatus != Status.APPROVED && experiment.experimentStatus != Status.RETIRED) {
+                    unApprovedExperiments.add(experiment)
+                }
             }
         }
         return unApprovedExperiments
@@ -85,6 +89,7 @@ class Project extends AbstractContextOwner implements GuidanceAware {
         readyForExtraction(type: ReadyForExtractionEnumUserType)
         groupType(type: ProjectGroupTypeEnumUserType)
         contexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
+        approvedBy(column: "APPROVED_BY")
     }
 
     static constraints = {
@@ -97,7 +102,7 @@ class Project extends AbstractContextOwner implements GuidanceAware {
         dateCreated(nullable: false)
         ownerRole(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
-        approvedBy(nullable: true, blank: false, maxSize: APPROVED_BY_MAX_SIZE)
+        approvedBy(nullable: true)
         approvedDate(nullable: true)
     }
     /**
@@ -171,13 +176,6 @@ class Project extends AbstractContextOwner implements GuidanceAware {
     def afterInsert() {
         Project.withNewSession {
             capPermissionService?.addPermission(this)
-        }
-    }
-
-    def beforeUpdate(){
-        if(projectStatus.equals(Status.APPROVED) && this.isDirty('projectStatus')){
-            approvedBy = springSecurityService.authentication.name
-            approvedDate = new Date()
         }
     }
 

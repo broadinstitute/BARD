@@ -10,6 +10,10 @@
 <body>
 <div class="container-fluid">
     <div class="row-fluid">
+        <h3>My Panels</h3>
+    </div>
+
+    <div class="row-fluid">
         <g:if test="${panels}">
             <g:render template="/layouts/templates/tableSorterTip"/>
             <table>
@@ -30,7 +34,8 @@
                                     action="show">${panel.name?.trim()}</g:link>
                         </td>
                         <td style="line-height: 150%"><p>${panel.description?.trim()}</p></td>
-                        <td data-sort-value="${panel.dateCreated?.time}"><g:formatDate date="${panel.dateCreated}" format="MM/dd/yyyy"/></td>
+                        <td data-sort-value="${panel.dateCreated?.time}"><g:formatDate date="${panel.dateCreated}"
+                                                                                       format="MM/dd/yyyy"/></td>
                     </tr>
                 </g:each>
                 </tbody>

@@ -10,26 +10,30 @@
 
 <body>
 <div class="container-fluid">
+    <div class="row-fluid">
+        <h3>Add Assay(s) To Panel</h3>
+    </div>
     <g:if test="${draftAssays || retiredAssays}">
         <div class="row-fluid">
             <div class="span12">
                 <div class="ui-widget">
                     <div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
                         <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+
                         <p><strong>Only approved assay definitions can be added to a panel.</strong></p>
-                            <g:if test="${draftAssays}">
-                                The following assay definitions are still draft:
-                                <g:each in="${draftAssays}" var="draftAssay">
-                                    ${draftAssay.id}
-                                </g:each>
-                                <br/><br/>
-                            </g:if>
-                            <g:if test="${retiredAssays}">
-                                The following assay definitions are retired:
-                                <g:each in="${retiredAssays}" var="retiredAssay">
-                                    ${retiredAssay.id}
-                                </g:each>
-                            </g:if>
+                        <g:if test="${draftAssays}">
+                            The following assay definitions are still draft:
+                            <g:each in="${draftAssays}" var="draftAssay">
+                                ${draftAssay.id}
+                            </g:each>
+                            <br/><br/>
+                        </g:if>
+                        <g:if test="${retiredAssays}">
+                            The following assay definitions are retired:
+                            <g:each in="${retiredAssays}" var="retiredAssay">
+                                ${retiredAssay.id}
+                            </g:each>
+                        </g:if>
 
                     </div>
                 </div>
@@ -38,6 +42,7 @@
     </g:if>
     <br/>
     <br/>
+
     <div class="row-fluid">
         <div class="span12">
             <g:form class="form-horizontal" action="addAssays" controller="panel">

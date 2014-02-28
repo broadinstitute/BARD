@@ -4,6 +4,7 @@ import bard.db.dictionary.Element
 import bard.db.enums.ContextType
 import bard.db.enums.DocumentType
 import bard.db.enums.ReadyForExtraction
+import bard.db.experiment.PanelExperiment
 import bard.db.project.*
 import bard.db.registration.ExternalReference
 import common.tests.XmlTestAssertions
@@ -16,6 +17,7 @@ import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -30,7 +32,7 @@ import static common.tests.XmlTestSamples.*
  * To change this template use File | Settings | File Templates.
  */
 @Build([ExternalReference, Project, ProjectContext, ProjectContextItem, ProjectDocument, ProjectSingleExperiment,
- ProjectExperimentContext, ProjectExperimentContextItem, StepContext, StepContextItem])
+ ProjectExperimentContext, ProjectExperimentContextItem, StepContext, StepContextItem, ProjectPanelExperiment, PanelExperiment])
 @Mock([ExternalReference, Project, ProjectContext, ProjectContextItem, ProjectDocument, ProjectSingleExperiment,
  ProjectExperimentContext, ProjectExperimentContextItem, StepContext, StepContextItem])
 @Unroll
@@ -193,6 +195,21 @@ class ProjectExportServiceUnitSpec extends Specification {
         "Minimal"      | PROJECT_DOCUMENT_MINIMAL      | [documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION]
         "with content" | PROJECT_DOCUMENT_WITH_CONTENT | [documentContent: 'documentContent', documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION]
 
+    }
+
+    void "test generate Project with a panel"() {
+        given:
+        Project project = Project.build(readyForExtraction: READY)
+        PanelExperiment panelExperiment = PanelExperiment.build()
+        ProjectPanelExperiment pe = ProjectPanelExperiment.build(project: project, panelExperiment: panelExperiment);
+
+        when: "We attempt to generate a Project XML document"
+        this.projectExportService.generateProject(this.markupBuilder, project)
+
+        then: "A valid xml document is generated and is similar to the expected document"
+        String actualXml = this.writer.toString()
+        XmlTestAssertions.assertResultsWithOverrideAttributes(PROJECT_MINIMAL, actualXml)
+        XmlTestAssertions.validate(projectSchema, actualXml)
     }
 
     void "test generate Project #label"() {

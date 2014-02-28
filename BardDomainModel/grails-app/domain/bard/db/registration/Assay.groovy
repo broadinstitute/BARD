@@ -17,8 +17,10 @@ import bard.db.guidance.owner.MinimumOfOneBiologyGuidanceRule
 import bard.db.guidance.owner.OneItemPerNonFixedAttributeElementRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
+import bard.db.people.Person
 import bard.db.people.Role
 import bard.db.project.ProjectSingleExperiment
+import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.grails.datastore.mapping.validation.ValidationErrors
 import org.springframework.validation.Errors
@@ -55,7 +57,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     // grails auto-timestamp
     Date dateCreated
     Date lastUpdated = new Date()
-    String approvedBy
+    Person approvedBy
     Date approvedDate
 
     Set<Experiment> experiments = [] as Set<Experiment>
@@ -95,7 +97,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
         lastUpdated(nullable: false)
         ownerRole(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
-        approvedBy(nullable: true, blank: false, maxSize: APPROVED_BY_MAX_SIZE)
+        approvedBy(nullable: true)
         approvedDate(nullable: true)
     }
 
@@ -105,19 +107,13 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
         readyForExtraction(type: ReadyForExtractionEnumUserType)
         assayType(type: AssayTypeEnumUserType)
         assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true', cascade: 'all-delete-orphan')
+        approvedBy(column: "APPROVED_BY")
     }
     static transients = ['fullyValidateContextItems', 'assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions', "disableUpdateReadyForExtraction"]
 
     def afterInsert() {
         Assay.withNewSession {
             capPermissionService?.addPermission(this)
-        }
-    }
-
-    def beforeUpdate(){
-        if(assayStatus.equals(Status.APPROVED) && this.isDirty('assayStatus')){
-            approvedBy = springSecurityService.authentication.name
-            approvedDate = new Date()
         }
     }
 

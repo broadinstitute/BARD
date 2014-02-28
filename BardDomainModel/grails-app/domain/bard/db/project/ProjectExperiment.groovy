@@ -33,6 +33,10 @@ abstract class ProjectExperiment {
     static mappedBy = [precedingProjectSteps: 'nextProjectExperiment',
             followingProjectSteps: 'previousProjectExperiment']
 
+    static transients = ['experiments']
+
+    public abstract Collection<Experiment> getExperiments();
+
     static constraints = {
         project()
         stage(nullable: true)

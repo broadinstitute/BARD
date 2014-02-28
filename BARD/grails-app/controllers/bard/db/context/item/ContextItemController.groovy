@@ -91,7 +91,7 @@ class ContextItemController {
         if (request.getHeader(REFERER)?.contains('/contextItem/')) {
             redirect(action: 'create', params: params)
         } else {
-            redirect(controller: basicContextItemCommand.ownerController, action: "editContext",
+            redirect(controller: basicContextItemCommand.ownerController, action: "show", fragment: "card-${basicContextItemCommand.contextId}",
                     params: [id: basicContextItemCommand.contextOwnerId, groupBySection: basicContextItemCommand.context?.contextType.id])
         }
 

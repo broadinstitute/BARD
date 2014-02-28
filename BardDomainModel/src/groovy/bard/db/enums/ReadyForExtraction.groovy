@@ -4,7 +4,8 @@ public enum ReadyForExtraction implements IEnumUserType {
     NOT_READY("Not Ready"),
     READY("Ready"),
     STARTED("Started"),
-    COMPLETE("Complete")
+    COMPLETE("Complete"),
+    FAILED("Failed")
 
     final String id
 
@@ -28,6 +29,7 @@ public enum ReadyForExtraction implements IEnumUserType {
             case READY:
             case STARTED:
             case COMPLETE:
+            case FAILED:
                 isAllowed = true
             default:
                 // no op

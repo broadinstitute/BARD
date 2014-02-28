@@ -241,6 +241,7 @@ abstract class AbstractElementConstraintIntegrationSpec extends BardIntegrationS
         'valid value'    | ReadyForExtraction.READY     | true  | null
         'valid value'    | ReadyForExtraction.STARTED   | true  | null
         'valid value'    | ReadyForExtraction.COMPLETE  | true  | null
+        'valid value'    | ReadyForExtraction.FAILED    | true  | null
 
     }
 

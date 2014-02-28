@@ -28,6 +28,8 @@ import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
 
+import static bard.db.registration.AssayCommand.SMALL_MOLECULE_FORMAT_LABEL
+
 /**
  */
 
@@ -66,8 +68,9 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     void 'test save success'() {
         given:
+        final Element assayFormatValue = Element.build(label:SMALL_MOLECULE_FORMAT_LABEL)
         Role role = Role.build()
-        AssayCommand assayCommand = new AssayCommand(assayName: "Some Name", assayType: AssayType.TEMPLATE, springSecurityService: controller.springSecurityService, ownerRole: role.authority)
+        AssayCommand assayCommand = new AssayCommand(assayName: "Some Name", assayFormatValueId: assayFormatValue.id.longValue(), springSecurityService: controller.springSecurityService, ownerRole: role.authority)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
         }
