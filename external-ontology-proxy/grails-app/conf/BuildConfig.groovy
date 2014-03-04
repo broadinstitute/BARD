@@ -28,7 +28,7 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
-        def externalValidationVersion = 20140106
+        def externalValidationVersion = 20140227
         compile "bard:external-validation-api:${externalValidationVersion}"
         // excluding icu4j transitive dependency
         // was seeing SEVERE: Unable to process Jar entry [com/ibm/icu/impl/data/LocaleElements_zh__PINYIN.class] from Jar [jar:file:/local/bard/server/external-ontology-proxy/apache-tomcat-7.0.47/webapps/external-ontology-proxy/WEB-INF/lib/icu4j-2.6.1.jar!/] for annotations

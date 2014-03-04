@@ -1104,7 +1104,7 @@ class SearchHelper {
 
     protected boolean isHTTPBadRequest(def input, String message, String user) {
         if (!input) {//this is a bad request
-            log.error(message + getUserIpAddress(user))
+            log.warn(message + getUserIpAddress(user))
 
             response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "${message}")
