@@ -1,4 +1,4 @@
-package bard.db
+package bard.db.people
 
 import bard.db.people.Person
 import bard.db.people.PersonRole
@@ -30,11 +30,11 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     List<String> personUserNames = []
 
     def setupSpec() {
-        String reauthenticateWithUser = ADMIN_USERNAME
-        String adminRole = ADMIN_ROLE
-        createPersonInDatabase(ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_ROLE, reauthenticateWithUser)
+        String reauthenticateWithUser = BardControllerFunctionalSpec.ADMIN_USERNAME
+        String adminRole = BardControllerFunctionalSpec.ADMIN_ROLE
+        createPersonInDatabase(BardControllerFunctionalSpec.ADMIN_USERNAME, BardControllerFunctionalSpec.ADMIN_EMAIL, BardControllerFunctionalSpec.ADMIN_ROLE, reauthenticateWithUser)
 
-        personId = (Map) remote.exec({
+        personId = (Map) BardControllerFunctionalSpec.remote.exec({
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
             Person person = Person.findByUserName(reauthenticateWithUser)
             Role role = Role.findByAuthority(adminRole)
@@ -45,7 +45,7 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     static void createPersonInDatabase(String teamuserName, String teamEmail, String teamRole, String reAuthenticateWith) {
         assert teamuserName != null
 
-        remote.exec({
+        BardControllerFunctionalSpec.remote.exec({
             SpringSecurityUtils.reauthenticate(reAuthenticateWith, null)
             Person person = Person.findByUserName(teamuserName)
             Role role = Role.findByAuthority(teamRole)
@@ -66,9 +66,9 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     def cleanupSpec() {
 
-        Sql sql = Sql.newInstance(dburl, dbusername,
-                dbpassword, driverClassName)
-        sql.call("{call bard_context.set_username(?)}", [ADMIN_USERNAME])
+        Sql sql = Sql.newInstance(BardControllerFunctionalSpec.dburl, BardControllerFunctionalSpec.dbusername,
+                BardControllerFunctionalSpec.dbpassword, BardControllerFunctionalSpec.driverClassName)
+        sql.call("{call bard_context.set_username(?)}", [BardControllerFunctionalSpec.ADMIN_USERNAME])
 
         for (String username : personUserNames) {
             sql.eachRow('select PERSON_ID from PERSON WHERE USERNAME=:CURRENT_USER_NAME', [CURRENT_USER_NAME: username]) { row ->
@@ -94,8 +94,8 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert ex.response.statusCode == expectedHttpResponse
         where:
         desc           | team              | teamPassword      | expectedHttpResponse
-        "User A_1"     | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "User Curator" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+        "User A_1"     | BardControllerFunctionalSpec.TEAM_A_1_USERNAME | BardControllerFunctionalSpec.TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
+        "User Curator" | BardControllerFunctionalSpec.CURATOR_USERNAME  | BardControllerFunctionalSpec.CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
 
     }
 
@@ -118,8 +118,8 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert ex.response.statusCode == expectedHttpResponse
         where:
         desc           | team              | teamPassword      | expectedHttpResponse
-        "User A_1"     | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "User Curator" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+        "User A_1"     | BardControllerFunctionalSpec.TEAM_A_1_USERNAME | BardControllerFunctionalSpec.TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
+        "User Curator" | BardControllerFunctionalSpec.CURATOR_USERNAME  | BardControllerFunctionalSpec.CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
 
     }
 
@@ -141,7 +141,7 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert response.statusCode == expectedHttpResponse
         where:
         desc    | team           | teamPassword   | expectedHttpResponse
-        "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_FOUND
+        "ADMIN" | BardControllerFunctionalSpec.ADMIN_USERNAME | BardControllerFunctionalSpec.ADMIN_PASSWORD | HttpServletResponse.SC_FOUND
     }
 
     def 'test save #desc'() {
@@ -160,7 +160,7 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert response.statusCode == expectedHttpResponse
         where:
         desc    | team           | teamPassword   | expectedHttpResponse
-        "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_FOUND
+        "ADMIN" | BardControllerFunctionalSpec.ADMIN_USERNAME | BardControllerFunctionalSpec.ADMIN_PASSWORD | HttpServletResponse.SC_FOUND
     }
 
     def 'test edit #desc - forbidden'() {
@@ -174,8 +174,8 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert ex.response.statusCode == expectedHttpResponse
         where:
         desc           | team              | teamPassword      | expectedHttpResponse
-        "User A_1"     | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "User Curator" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+        "User A_1"     | BardControllerFunctionalSpec.TEAM_A_1_USERNAME | BardControllerFunctionalSpec.TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
+        "User Curator" | BardControllerFunctionalSpec.CURATOR_USERNAME  | BardControllerFunctionalSpec.CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
 
     }
 
@@ -190,7 +190,7 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert response.statusCode == expectedHttpResponse
         where:
         desc    | team           | teamPassword   | expectedHttpResponse
-        "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_OK
+        "ADMIN" | BardControllerFunctionalSpec.ADMIN_USERNAME | BardControllerFunctionalSpec.ADMIN_PASSWORD | HttpServletResponse.SC_OK
     }
 
     def 'test index #desc - forbidden'() {
@@ -204,8 +204,8 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert ex.response.statusCode == expectedHttpResponse
         where:
         desc           | team              | teamPassword      | expectedHttpResponse
-        "User A_1"     | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "User Curator" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+        "User A_1"     | BardControllerFunctionalSpec.TEAM_A_1_USERNAME | BardControllerFunctionalSpec.TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
+        "User Curator" | BardControllerFunctionalSpec.CURATOR_USERNAME  | BardControllerFunctionalSpec.CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
 
     }
 
@@ -219,7 +219,7 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert response.statusCode == expectedHttpResponse
         where:
         desc    | team           | teamPassword   | expectedHttpResponse
-        "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_FOUND
+        "ADMIN" | BardControllerFunctionalSpec.ADMIN_USERNAME | BardControllerFunctionalSpec.ADMIN_PASSWORD | HttpServletResponse.SC_FOUND
     }
 
     def 'test list #desc - forbidden'() {
@@ -233,8 +233,8 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert ex.response.statusCode == expectedHttpResponse
         where:
         desc           | team              | teamPassword      | expectedHttpResponse
-        "User A_1"     | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "User Curator" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+        "User A_1"     | BardControllerFunctionalSpec.TEAM_A_1_USERNAME | BardControllerFunctionalSpec.TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
+        "User Curator" | BardControllerFunctionalSpec.CURATOR_USERNAME  | BardControllerFunctionalSpec.CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
 
     }
 
@@ -248,12 +248,12 @@ class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert response.statusCode == expectedHttpResponse
         where:
         desc    | team           | teamPassword   | expectedHttpResponse
-        "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_OK
+        "ADMIN" | BardControllerFunctionalSpec.ADMIN_USERNAME | BardControllerFunctionalSpec.ADMIN_PASSWORD | HttpServletResponse.SC_OK
     }
 
     private Map getCurrentPersonProperties() {
         long id = personId.id
-        Map currentDataMap = (Map) remote.exec({
+        Map currentDataMap = (Map) BardControllerFunctionalSpec.remote.exec({
             Person person = Person.findById(id)
             return [username: person.userName, version: person.version, email: person.emailAddress]
         })

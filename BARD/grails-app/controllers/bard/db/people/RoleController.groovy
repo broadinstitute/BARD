@@ -1,22 +1,22 @@
 package bard.db.people
 
-import bard.db.PersonService
+import bard.db.enums.TeamRole
 import bard.db.project.InlineEditableCommand
 import bard.db.registration.EditingHelper
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
-import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.access.AccessDeniedException
-import groovy.util.Eval
-import bard.db.enums.TeamRole
+import org.springframework.transaction.annotation.Transactional
 
 @Mixin(EditingHelper)
 @Secured(["hasRole('ROLE_BARD_ADMINISTRATOR')"])
+@Transactional
 class RoleController {
 
     static allowedMethods = [save: "POST", update: "POST", modifyTeamRoles: "POST"]
     SpringSecurityService springSecurityService
     PersonService personService
+
 
     def index() {
         redirect(action: "list", params: params)
@@ -26,78 +26,86 @@ class RoleController {
         [roleInstanceList: Role.list()]
     }
 
-
     def create() {
         [roleInstance: new Role(params)]
     }
 
+    @Secured("isAuthenticated()")
     def show(Long id) {
-        def roleInstance = Role.get(id)
+
+        final Role roleInstance = Role.get(id)
         if (!roleInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'role.authority.label', default: 'Team'), id])
             redirect(action: "list")
             return
         }
-//        def persons = PersonRole.findAllByRole(roleInstance, [sort: "person.fullName", order: "asc"]).collect { it.person } as Set
-        def persons = PersonRole.findAllByRole(roleInstance, [sort: "person.fullName", order: "asc"])
-        boolean canManageTeam = personService.canManageTeam(id)
-        boolean isAdmin = SpringSecurityUtils.ifAnyGranted("ROLE_BARD_ADMINISTRATOR")
-        [roleInstance: roleInstance, editable: 'canedit', teamMembers: persons, canManageTeam: canManageTeam, isAdmin: isAdmin]
+        ifPersonManagerOfTeam(id) {
+            final List<PersonRole> personRoles = PersonRole.findAllByRole(roleInstance)
+            personRoles.sort(true){it.person.fullName?.toLowerCase()}
+            final boolean isTeamManager = personService.isTeamManager(id)
+            final Person person = personService.findCurrentPerson()
+            final boolean isAdmin = person.roles*.authority.contains('ROLE_BARD_ADMINISTRATOR')
+            render(view: 'show', model: [roleInstance: roleInstance, editable: 'canedit', teamMembers: personRoles, isTeamManager: isTeamManager, isAdmin: isAdmin])
+        }
     }
 
-    def addUserToTeam(String email, Long roleId){
-        def person = Person.findByEmailAddress(email)
-        if(person){
-            Role role = Role.get(roleId)
-            PersonRole personRole = new PersonRole(person: person, role: role)
-            if(!personRole.save(flush: true)){
-                flash.error = "ERROR: Unable to  save user ${person.fullName} (${person.emailAddress})"
+    @Secured("isAuthenticated()")
+    def addUserToTeam(String email, Long roleId) {
+        ifPersonManagerOfTeam(roleId) {
+            def person = Person.findByEmailAddress(email)
+            if (person) {
+                Role role = Role.get(roleId)
+                PersonRole personRole = new PersonRole(person: person, role: role)
+                if (!personRole.save(flush: true)) {
+                    flash.error = "ERROR: Unable to  save user ${person.fullName} (${person.emailAddress})"
+                }
+                flash.success = "User ${person.fullName} (${person.emailAddress}) was successfully added to team ${role.displayName}"
+                redirect(action: "show", id: roleId)
+            } else {
+                flash.error = "${email} is not a registered BARD user"
+                redirect(action: "show", id: roleId)
             }
-            flash.success = "User ${person.fullName} (${person.emailAddress}) was successfully added to team ${role.displayName}"
-            redirect(action: "show", id: roleId)
-        }
-        else{
-            flash.error = "${email} is not a registered BARD user"
-            redirect(action: "show", id: roleId)
         }
     }
 
-    def myTeams(){
-        def username = springSecurityService.principal?.username
-        Person user = Person.findByUserName(username)
-        def roles = PersonRole.findAllByTeamRoleAndPerson(TeamRole.MANAGER, user)
+    @Secured(["isAuthenticated()"])
+    def myTeams() {
+        final Person person = personService.findCurrentPerson()
+        def roles = PersonRole.findAllByTeamRoleAndPerson(TeamRole.MANAGER, person)
         [teams: roles]
     }
 
-    def modifyTeamRoles(){
-        def successfulSaves = []
-        def errorSaves = []
-        def personRoleArray = params.list("checkboxes")
-        for (int i = 0; i < personRoleArray.size(); i++){
-            PersonRole personRole = PersonRole.get(personRoleArray.get(i))
-            if(personRole){
-                def personName = personRole.person.fullName
-                personRole.teamRole = TeamRole.byId(params.teamRole)
-                if(!personRole.save(flush: true)){
-                    errorSaves.add(personName)
-                }
-                else{
-                    successfulSaves.add(personName)
+    @Secured(["isAuthenticated()"])
+    def modifyTeamRoles(Long roleId, String teamRole) {
+        ifPersonManagerOfTeam(roleId) {
+            def successfulSaves = []
+            def errorSaves = []
+            def personRoleArray = params.list("checkboxes")
+            for (int i = 0; i < personRoleArray.size(); i++) {
+                PersonRole personRole = PersonRole.findByIdAndRole(personRoleArray.get(i), Role.get(roleId))
+                if (personRole) {
+                    def personName = personRole.person.fullName
+                    personRole.teamRole = TeamRole.byId(teamRole)
+                    if (!personRole.save(flush: true)) {
+                        errorSaves.add(personName)
+                    } else {
+                        successfulSaves.add(personName)
+                    }
+                } else {
+                    errorSaves.add("No record found")
                 }
             }
-            else{
-                errorSaves.add("No record found")
+            if (successfulSaves.size() > 0) {
+                flash.success = "Team role '${teamRole}' was successfully applied to user(s) ${successfulSaves.join(", ")}."
             }
+            if (errorSaves.size() > 0) {
+                flash.error = "ERROR: Unable to set team role ${teamRole}. ${errorSaves.join(", ")}."
+            }
+            redirect(action: "show", id: params.roleId)
         }
-        if(successfulSaves.size() > 0){
-            flash.success = "Team role '${params.teamRole}' was successfully applied to user(s) ${successfulSaves.join(", ")}."
-        }
-        if(errorSaves.size() > 0){
-            flash.error = "ERROR: Unable to set team role ${params.teamRole} for user(s) ${errorSaves.join(", ")}."
-        }
-        redirect(action: "show", id: params.roleId)
     }
 
+    @Secured(["hasRole('ROLE_BARD_ADMINISTRATOR')"])
     def save() {
         String authority = params.authority
 
@@ -118,8 +126,7 @@ class RoleController {
         redirect(action: "show", id: roleInstance.id)
     }
 
-
-
+    @Secured(["hasRole('ROLE_BARD_ADMINISTRATOR')"])
     def editDisplayName(InlineEditableCommand inlineEditableCommand) {
         try {
             Role role = Role.findById(inlineEditableCommand.pk)
@@ -154,6 +161,7 @@ class RoleController {
         }
     }
 
+    @Secured(["hasRole('ROLE_BARD_ADMINISTRATOR')"])
     def editAuthority(InlineEditableCommand inlineEditableCommand) {
         try {
             Role role = Role.findById(inlineEditableCommand.pk)
@@ -194,4 +202,16 @@ class RoleController {
             editErrorMessage()
         }
     }
+
+    private def ifPersonManagerOfTeam(Long roleId, Closure closure) {
+        final Person person = personService.findCurrentPerson()
+        final boolean isManager = personService.isTeamManager(roleId)
+        final boolean isBardAdmin = person.roles*.authority.contains('ROLE_BARD_ADMINISTRATOR')
+        if (isBardAdmin || isManager) {
+            closure.call()
+        } else {
+            throw new AccessDeniedException("sorry")
+        }
+    }
+
 }
