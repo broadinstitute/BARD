@@ -19,7 +19,7 @@
     <style>
     /*https://www.pivotaltracker.com/story/show/63819008*/
     .nav-panel {
-        position: inherit;
+        position: absolute;
     }
 
     .nav-panel .navbar ul.nav {
