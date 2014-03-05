@@ -10,8 +10,10 @@ import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
+import bard.db.people.PersonService
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
+import bard.db.people.Person
 import bard.db.project.Project
 import bard.db.util.BardNews
 import grails.plugins.springsecurity.Secured
@@ -49,6 +51,7 @@ class BardWebInterfaceController {
     RingManagerService ringManagerService
     List<SearchFilter> filters = []
     ExperimentService experimentService
+    PersonService personService
 
     //An AfterInterceptor to handle mobile-view routing.
 //    def afterInterceptor = [action: this.&handleMobile]
@@ -146,7 +149,10 @@ class BardWebInterfaceController {
 
     @Secured(['isAuthenticated()'])
     def navigationPage() {
-        render(view: 'navigationPage', model: {})
+        final Person person = personService.findCurrentPerson()
+        final boolean isManager = personService.isTeamManagerOfAnyTeam(person)
+        final boolean isBardAdmin = person.roles*.authority.contains('ROLE_BARD_ADMINISTRATOR')
+        render(view: 'navigationPage', model: [isManager:isManager, isBardAdmin: isBardAdmin])
     }
 
 
