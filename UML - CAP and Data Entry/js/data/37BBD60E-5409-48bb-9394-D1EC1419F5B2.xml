@@ -1,5 +1,5 @@
-tocTab[tocTab.length] = new Array("0.5:1", "", "Data Model", "EARoot/EA5/EA993.htm", "175.png", "10", "0", "", "Logical diagram0","{A742AB4E-5575-4d02-9810-2FCF3D941719}");
-tocTab[tocTab.length] = new Array("0.5.1", "1", "Assay Short Names", "EARoot/EA5/EA1000.htm", "4.png", "", "", "{F5ED27DE-6FA2-42a1-977C-1A39C98EF9D9}", "Package");
-tocTab[tocTab.length] = new Array("0.5.2", "1", "Group BAO annotations", "EARoot/EA5/EA1001.htm", "4.png", "", "", "{90EC1E72-242F-464c-8671-2B7C3BC430CD}", "Package");
-tocTab[tocTab.length] = new Array("0.5.3", "1", "Manage_Ontology", "EARoot/EA5/EA1002.htm", "4.png", "", "", "{FE9A5C1A-30DB-430e-A63F-2858DB493313}", "Package");
-tocTab[tocTab.length] = new Array("0.5.4", "1", "Transfer result_map", "EARoot/EA5/EA1004.htm", "4.png", "", "", "{10108606-081F-4b80-8651-E385A121BA64}", "Package");
+tocTab[tocTab.length] = new Array("0.5:1", "", "Data Model", "EARoot/EA5/EA998.htm", "175.png", "10", "0", "", "Logical diagram0","{A742AB4E-5575-4d02-9810-2FCF3D941719}");
+tocTab[tocTab.length] = new Array("0.5.1", "1", "Assay Short Names", "EARoot/EA5/EA1005.htm", "4.png", "", "", "{F5ED27DE-6FA2-42a1-977C-1A39C98EF9D9}", "Package");
+tocTab[tocTab.length] = new Array("0.5.2", "1", "Group BAO annotations", "EARoot/EA5/EA1006.htm", "4.png", "", "", "{90EC1E72-242F-464c-8671-2B7C3BC430CD}", "Package");
+tocTab[tocTab.length] = new Array("0.5.3", "1", "Manage_Ontology", "EARoot/EA5/EA1007.htm", "4.png", "", "", "{FE9A5C1A-30DB-430e-A63F-2858DB493313}", "Package");
+tocTab[tocTab.length] = new Array("0.5.4", "1", "Transfer result_map", "EARoot/EA5/EA1009.htm", "4.png", "", "", "{10108606-081F-4b80-8651-E385A121BA64}", "Package");

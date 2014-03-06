@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Project Information</title>
+<title>Panels</title>
 <link href="../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -36,31 +36,21 @@ function nameClassifier(name, separator)
 <img src="EA820.png" usemap="#EA820" border="0" />
 
 <MAP NAME="EA820">
-<area shape="rect" coords="498,174,610,244" href="./EA1/EA916.htm" target="_self">
-<area shape="rect" coords="845,117,1045,188" href="EA834.htm" target="_self">
-<area shape="rect" coords="845,215,994,312" href="EA835.htm" target="_self">
-<area shape="rect" coords="508,39,598,109" href="./EA1/EA917.htm" target="_self">
-<area shape="rect" coords="424,482,557,552" href="./EA1/EA901.htm" target="_self">
-<area shape="rect" coords="845,10,1051,94" href="EA828.htm" target="_self">
-<area shape="rect" coords="629,523,771,702" href="./EA1/EA928.htm" target="_self">
-<area shape="rect" coords="392,615,512,694" href="./EA1/EA902.htm" target="_self">
-<area shape="rect" coords="346,306,475,420" href="./EA1/EA898.htm" target="_self">
-<area shape="rect" coords="678,167,805,237" href="./EA1/EA892.htm" target="_self">
-<area shape="rect" coords="15,587,105,657" href="./EA1/EA926.htm" target="_self">
-<area shape="rect" coords="160,590,268,660" href="./EA1/EA930.htm" target="_self">
-<area shape="rect" coords="166,372,274,442" href="./EA1/EA929.htm" target="_self">
-<area shape="rect" coords="777,427,888,497" href="./EA1/EA914.htm" target="_self">
-<area shape="rect" coords="10,381,130,469" href="./EA1/EA912.htm" target="_self">
-<area shape="rect" coords="87,494,177,564" href="./EA1/EA913.htm" target="_self">
-<area shape="rect" coords="632,297,745,411" href="./EA1/EA915.htm" target="_self">
-<area shape="rect" coords="103,33,226,290" href="./EA1/EA886.htm" target="_self">
+<area shape="rect" coords="791,289,959,398" href="EA837.htm" target="_self">
+<area shape="rect" coords="627,496,806,554" href="./EA1/EA920.htm" target="_self">
+<area shape="rect" coords="629,153,808,211" href="./EA1/EA919.htm" target="_self">
+<area shape="rect" coords="440,10,556,124" href="./EA1/EA918.htm" target="_self">
+<area shape="rect" coords="397,241,599,377" href="./EA1/EA899.htm" target="_self">
+<area shape="rect" coords="363,494,550,643" href="./EA1/EA914.htm" target="_self">
+<area shape="rect" coords="20,492,197,667" href="./EA1/EA913.htm" target="_self">
+<area shape="rect" coords="10,243,212,379" href="./EA1/EA887.htm" target="_self">
 </MAP>
 
-	<div class="ObjectTitle">Project Information : Class diagram</div>
+	<div class="ObjectTitle">Panels : Class diagram</div>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">2/17/2012 2:35:31 PM</td>
+			<td width="85%" class="ObjectDetailsValue">7/9/2013 11:16:39 AM</td>
 		</tr>
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Modified:</td>
@@ -72,7 +62,7 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="proj00" style="display: none;">
 			<td width="15%" class="ObjectDetailsTopic" style="padding-left: 18px;">Author:</td>
-			<td width="85%" class="ObjectDetailsValue">Owner</td>
+			<td width="85%" class="ObjectDetailsValue">Simon</td>
 		</tr>
 		<tr id="proj01" style="display: none;">
 			<td width="15%" class="ObjectDetailsTopic" style="padding-left: 18px;">Version:</td>
@@ -84,10 +74,11 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td width="15%" class="ObjectDetailsTopic" style="padding-left: 18px;">ID:</td>
-			<td width="85%" class="ObjectDetailsValue">{F12ADD70-E55F-4ef6-A2E3-108281DE84DC}</td>
+			<td width="85%" class="ObjectDetailsValue">{DB062AE6-591A-46b5-8A79-B35E397B070D}</td>
 		</tr>
 	</table>
-	
+	<div class="ObjectDetailsNotes">Panels are defined as a set of Assay definitions.&#160; This is similar to tao a Project defined as a set of Experiments.&#160; The major difference is that the Project Experiments are ordered via Project Steps whereas Assays are a simple un-ordered set within a Panel.&lt;br /&gt;&lt;/p&gt;&lt;p&gt;&lt;br /&gt;&lt;/p&gt;&lt;p&gt;Each Assay gives rise to one or more Experiments.&#160; If the Assay is of type &quot;Panel&quot; it gives rise to a Panel Experiment.&#160; A Panel Experiment is a collection of experiments derived from the collection of Assays within the Panel.&#160; Note that an Experiment can only belong to &lt;b&gt;one&lt;/b&gt; Panel Experiment whereas the Assay can belong to several Panels.&lt;br /&gt;&lt;/p&gt;&lt;p&gt;&lt;br /&gt;&lt;/p&gt;&lt;p&gt;When Results are loaded they are loaded to each individual Experiment - Panel Experiments do not have Results loaded directly.&lt;br /&gt;&lt;/p&gt;&lt;p&gt;&lt;br /&gt;&lt;/p&gt;&lt;p&gt;As each Experiment can belong to one or more Projects so each Panel Experiment can belong to one or more Projects. The association between the Project and the Experiment is sub-classed to define a Project Single-Experiment and a Project Panel-Experiment.&#160; &lt;br /&gt;&lt;/p&gt;&lt;p&gt;&lt;br /&gt;&lt;/p&gt;&lt;p&gt;When displaying the graph of Experiments in a Project the Panel Experiment should be displayed in preference to a set of single Experiments as the resulting network is considerably more comprehensible.&#160; Drill down to the set of Experiments contained in the Panel Experiment should be provided.&lt;br /&gt;&lt;/p&gt;</div>
+
 </div>
  
 </body>
