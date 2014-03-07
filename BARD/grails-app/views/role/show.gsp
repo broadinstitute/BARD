@@ -10,24 +10,24 @@
 
 <body>
 <r:script disposition='head'>
-    function submitTeamRoleForm(teamRole){
+    function submitTeamRoleForm(teamRole) {
         var teamRoleForm = document.getElementById("modifyTeamRoles");
         var checkboxes = teamRoleForm.elements["checkboxes"];
-        if(checkboxes != null){
+        if (checkboxes != null) {
             var checkedBoxes = 0;
-            for (var i = 0; i < checkboxes.length; i++){
-                if(checkboxes[i].checked)
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked)
                     checkedBoxes++;
             }
-            if(checkedBoxes > 0){
+            if (checkedBoxes > 0) {
                 teamRoleForm.elements["teamRole"].value = teamRole;
                 teamRoleForm.submit();
             }
-            else{
+            else {
                 alert('No member has been selected. Please select one or more team members to be able to set role')
             }
         }
-        else{
+        else {
             alert('Please add a team member to be able to set role')
         }
     }
@@ -36,6 +36,7 @@
     <g:hiddenField name="version" id="versionId" value="${roleInstance?.version}"/>
     <div class="row-fluid">
         <div class="span3"></div>
+
         <div class="span9">
             <dl class="dl-horizontal">
                 <dt><g:message code="role.authority.label" default="Name"/>:</dt>
@@ -82,91 +83,93 @@
     <div class="row-fluid">
         <div class="span12">
             <g:if test="${flash.success}">
-                <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>${flash.success}</strong></div>
+                <div class="alert alert-success"><button type="button" class="close"
+                                                         data-dismiss="alert">&times;</button><strong>${flash.success}</strong>
+                </div>
             </g:if>
             <g:if test="${flash.error}">
-                <div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>${flash.error}</strong></div>
+                <div class="alert alert-error"><button type="button" class="close"
+                                                       data-dismiss="alert">&times;</button><strong>${flash.error}</strong>
+                </div>
             </g:if>
         </div>
     </div>
 
     <div class="row-fluid">
         <div class="span12">
-        %{--<g:render template="/layouts/templates/tableSorterTip"/>--}%
-        <table class="table table-striped table-hover table-bordered">
-            <caption><strong>Team Members</strong></caption>
+            <g:if test="${isTeamManager || isAdmin}">
+                <div class="row-fluid">
+                    <div class="span3">
 
-            <thead>
-            <g:if test="${canManageTeam || isAdmin}">
-            <tr>
-            <th colspan="4">
-            <div class="row-fluid">
-                <div class="span3">
-                    <g:if test="${canManageTeam}">
-                    <div class="btn-group">
-                        <button class="btn">Actions</button>
-                        <button class="btn dropdown-toggle" data-toggle="dropdown">
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li class="dropdown-submenu"><a tabindex="-1" href="#">Add to role</a>
-                                <ul class="dropdown-menu">
-                                    <li><a onclick="submitTeamRoleForm('Member');">Member</a>
-                                    <li><a onclick="submitTeamRoleForm('Manager');">Manager</a>
-                                    <li></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    </g:if>
-                </div>
-                <div class="span9">
-                    <g:if test="${canManageTeam || isAdmin}">
-                    <g:form id="addUserToTeam" name="addUserToTeam" action="addUserToTeam" controller="role">
-                        <div class="input-append">
-                            <g:hiddenField class="" id="roleId" name="roleId" value="${roleInstance?.id}" />
-                            <g:textField name="email" value="" placeholder="Email address" required="required"/>
-                            <input type="submit" class="btn btn-primary" value="Add to team">
+                        <div class="btn-group">
+                            <button class="btn">Actions</button>
+                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-submenu"><a tabindex="-1" href="#">Add to role</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a onclick="submitTeamRoleForm('Member');">Member</a>
+                                        <li><a onclick="submitTeamRoleForm('Manager');">Manager</a>
+                                        <li></li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </div>
-                    </g:form>
-                    </g:if>
-                </div>
-            </div>
-            </th>
-            </tr>
-            </g:if>
+                    </div>
 
-            <tr>
-                <g:if test="${canManageTeam}"><th></th></g:if>
-                <th data-sort="string-ins">Name</th>
-                <th data-sort="string-ins">Email Address</th>
-                <th data-sort="string-ins">Role</th>
-            </tr>
-            </thead>
-            <tbody>
+                    <div class="span9">
+
+                        <g:form id="addUserToTeam" name="addUserToTeam" action="addUserToTeam"
+                                controller="role">
+                            <div class="input-append">
+                                <g:hiddenField class="" id="roleId" name="roleId"
+                                               value="${roleInstance?.id}"/>
+                                <g:textField name="email" value="" placeholder="Email address"
+                                             required="required"/>
+                                <input type="submit" class="btn btn-primary" value="Add to team">
+                            </div>
+                        </g:form>
+
+                    </div>
+                </div>
+
+            </g:if>
+            <table class="table table-striped table-hover table-bordered">
+                <caption><strong>Team Members</strong></caption>
+                <thead>
+                <tr>
+                    <g:if test="${isTeamManager || isAdmin}"><th></th></g:if>
+                    <th data-sort="string-ins">Name</th>
+                    <th data-sort="string-ins">Email Address</th>
+                    <th data-sort="string-ins">Role</th>
+                </tr>
+                </thead>
+                <tbody>
                 <g:form id="modifyTeamRoles" name="modifyTeamRoles" action="modifyTeamRoles" controller="role">
-                    <g:hiddenField id="roleId" name="roleId" value="${roleInstance?.id}" />
-                    <g:hiddenField id="teamRole" name="teamRole" value="" />
+                    <g:hiddenField id="roleId" name="roleId" value="${roleInstance?.id}"/>
+                    <g:hiddenField id="teamRole" name="teamRole" value=""/>
                     <g:each in="${teamMembers}" var="member">
-                            <tr>
-                                <g:if test="${canManageTeam}"><td><g:checkBox id="checkboxes" name="checkboxes" value="${member.id}" checked="" /></td></g:if>
-                                <td>${member.person.fullName}</td>
-                                <td>${member.person.emailAddress}</td>
-                                <g:if test="${member.teamRole.id.equals("Member")}">
-                                    <td><span class="label">${member.teamRole.id}</span></td>
-                                </g:if>
-                                <g:elseif test="${member.teamRole.id.equals("Manager")}">
-                                    <td><span class="label label-success">${member.teamRole.id}</span></td>
-                                </g:elseif>
-                                <g:else>
-                                    <td><span class="label label-info">${member.teamRole.id}</span></td>
-                                </g:else>
-                            </tr>
+                        <tr>
+                            <g:if test="${isTeamManager || isAdmin}"><td><g:checkBox id="checkboxes" name="checkboxes"
+                                                                          value="${member.id}" checked=""/></td></g:if>
+                            <td>${member.person.fullName}</td>
+                            <td>${member.person.emailAddress}</td>
+                            <g:if test="${member.teamRole.id.equals("Member")}">
+                                <td><span class="label">${member.teamRole.id}</span></td>
+                            </g:if>
+                            <g:elseif test="${member.teamRole.id.equals("Manager")}">
+                                <td><span class="label label-success">${member.teamRole.id}</span></td>
+                            </g:elseif>
+                            <g:else>
+                                <td><span class="label label-info">${member.teamRole.id}</span></td>
+                            </g:else>
+                        </tr>
                     </g:each>
                 </g:form>
-            </tbody>
-        </table>
-        <br/>
+                </tbody>
+            </table>
+            <br/>
         </div>
     </div>
 </div>

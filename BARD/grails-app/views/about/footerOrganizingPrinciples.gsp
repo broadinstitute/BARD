@@ -31,6 +31,7 @@
                         BARD is organized in a novel way that lets users easily find information about projects, protocols, and experimental results, all while keeping the data organized in a manner that facilitates broader analyses across many datasets. The organizing principle is based around three terms: <a href="#assay_definitions">Assay Definitions</a>, <a href="#experiments">Experiments</a>,  and <a href="#projects">Projects</a>. The relationship of these terms provides both the experimental details associated with any given data point while also providing context for the intended purpose of experiments that were run by data depositors.
                     </p>
 
+                    <IMG SRC="${resource(dir: 'images/bardHomepage', file: 'rdm_overview.png')}" ALIGN="top">
 
                     <h3 ID="assay_definitions">
                         Assay Definitions
@@ -84,15 +85,18 @@
                         Projects are identified by a <strong>PID</strong>.
                     </p>
 
-                    <IMG SRC="${resource(dir: 'images/bardHomepage', file: 'rdm_overview.png')}" ALIGN="top">
-
                     <h3 ID="panels">
                         Panels
                     </h3>
 
 
                     <p>
-                        Projects are groups of experiments that were executed for a larger purpose such as development of a molecular probe. Projects in BARD capture the order in which experiments were run and the purpose of those experiments in relation to each other and the larger project goal (e.g., “primary screen”, “counterscreen”, “confirmatory screen”). Projects also capture the biological purpose of the group of experiments taken as a whole. No one assay definition can identify the properties of compounds desired for probe or drug development; therefore, goals such as the relevant disease or specific biological target are defined by the project. Auxiliary information such as grant numbers can also be recorded within the project annotations.
+                        A panel is a collection of assay definitions.  The grouping can be used for any reason, but one major example is multiplexed protocols,
+                        in which multiple biological targets are measured in the same well or with a common protocol, e.g. gene expression array or kinase panel.
+                        Another reason to use a panel is because a group of assay definitions are carried out together by a vendor (e.g. a contract research
+                        organization's characterization panel).  A set of experiments that were generated for the assay definitions in a panel can be grouped
+                        together into panel experiments.  Panel experiments can be used to represent multiple experiments in a project diagram, and in the future
+                        can be used for quickly displaying the results of these experiments next to each other.
                     </p>
 
                     <p>

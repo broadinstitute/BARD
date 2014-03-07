@@ -16,38 +16,39 @@
             <div class="navbar navbar-inverse navbar-static-top">
                 <div>
                     <ul>
-
-                        <sec:ifAnyGranted roles="ROLE_BARD_ADMINISTRATOR">
+                        <g:if test="${isBardAdmin || isManager}">
                             <li>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     Admin
                                 </a>
-
-                                <ul>
-                                    <li class="controller"><g:link
-                                            controller="downTimeScheduler"
-                                            action="create">Schedule Down Time</g:link></li>
-                                    <li class="controller"><g:link
-                                            controller="downTimeScheduler" action="list">View Down Times</g:link></li>
-                                    <li class="controller"><g:link controller="person"
-                                                                   action="list">List Person Table</g:link></li>
-
-                                    <li class="controller"><g:link controller="assayDefinition"
-                                                                   action="assayComparisonReport">Compare Assays</g:link></li>
-                                    <li class="controller"><g:link controller="splitAssayDefinition"
-                                                                   action="show">Split Assays</g:link></li>
-                                    <li class="controller"><g:link controller="config"
-                                                                   action="index">Override API URL</g:link></li>
-                                    <li class="controller"><g:link controller="role"
-                                                                   action="list">List Teams</g:link></li>
-                                    <li class="controller"><g:link controller="role"
-                                                                   action="create">Create new Team</g:link></li>
-                                    <li class="controller"><g:link controller="role"
-                                                                   action="myTeams">My Teams</g:link></li>
-                                </ul>
-
+                                <g:if test="${isBardAdmin}">
+                                    <ul>
+                                        <li class=" controller"><g:link controller="downTimeScheduler"
+                                                                        action="create">Schedule Down Time</g:link></li>
+                                        <li class="controller"><g:link controller="downTimeScheduler"
+                                                                       action="list">View Down Times</g:link></li>
+                                        <li class="controller"><g:link controller="person"
+                                                                       action="list">List Person Table</g:link></li>
+                                        <li class="controller"><g:link controller="assayDefinition"
+                                                                       action="assayComparisonReport">Compare Assays</g:link></li>
+                                        <li class="controller"><g:link controller="splitAssayDefinition"
+                                                                       action="show">Split Assays</g:link></li>
+                                        <li class="controller"><g:link controller="config"
+                                                                       action="index">Override API URL</g:link></li>
+                                        <li class="controller"><g:link controller="role"
+                                                                       action="list">List Teams</g:link></li>
+                                        <li class="controller"><g:link controller="role"
+                                                                       action="create">Create new Team</g:link></li>
+                                    </ul>
+                                </g:if>
+                                <g:if test="${isManager}">
+                                    <ul>
+                                        <li class="controller"><g:link controller="role"
+                                                                       action="myTeams">My Teams</g:link></li>
+                                    </ul>
+                                </g:if>
                             </li>
-                        </sec:ifAnyGranted>
+                        </g:if>
 
                         <li>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">

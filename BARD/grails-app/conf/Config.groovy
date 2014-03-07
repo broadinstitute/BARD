@@ -425,6 +425,7 @@ log4j = {
 
     //Capture NCGC REST API roundtrip timing.
     info(additivity: false, NCGCRestApiTimingAppender: ['grails.app.services.bard.core.helper.LoggerService'])
+    fatal('org.grails.plugin.resource.ResourceMeta')
 }
 
 // Added by the JQuery Validation UI plugin:

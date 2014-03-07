@@ -29,14 +29,12 @@ subprojects {
         archives sourcesJar
     }
 
-    if(hasProperty('mavenRepoDeployerReleasesUrl')) {
     uploadArchives {
         repositories.mavenDeployer {
             repository(url: mavenRepoDeployerReleasesUrl) {
                 authentication(userName: mavenRepoUsername, password: mavenRepoPassword)
             }
         }
-    }
     }
 
     test {
