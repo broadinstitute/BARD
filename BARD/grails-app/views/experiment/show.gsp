@@ -28,7 +28,7 @@
 <g:if test="${instance?.id}">
     <g:if test="${instance?.permittedToSeeEntity()}">
         <g:render template="showExperiment"
-                  model="[instance: instance, editable: editable, contextItemSubTemplate: contextItemSubTemplate, contextIds: contextIds]"/>
+                  model="[instance: instance, editable: editable, contextItemSubTemplate: contextItemSubTemplate, contextIds: contextIds, isAdmin: isAdmin]"/>
     </g:if>
     <g:else>
         <g:render template="/layouts/templates/handleDraftEntities" model="[entity: 'Experiment']"/>

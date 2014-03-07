@@ -262,6 +262,7 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
             $(updateDivId).html(data);
             var totalHits = $(totalHitsElement).val();
             var total = prefixOfTextToAppearOnTab;
+            var state = History.getState()
             if (totalHits > 0) {
                 total += ' <span class="' + TAB_ICON_CLASS + '">' + totalHits + '</span>';
             }
