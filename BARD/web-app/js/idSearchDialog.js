@@ -29,12 +29,13 @@ $(document).ready(function () {
 
     });
     $('#idModalDiv').modal({
-        show:false
+        show: false,
+        keyboard: true //ESC closes the modal
     });
     $('#idModalDiv').css('width', 'auto'); //Disable the default width=560px from bootstrap.css
 //    $('#idModalDiv').css('left', '40%');
     $("#idModalDiv").draggable({
-        handle:".modal-header"
+        handle: ".modal-header"
     });
     $('#idModalDiv').on('show', function () {
         var currentSearch = $('#searchString').val()
@@ -42,6 +43,9 @@ $(document).ready(function () {
         if (currentSearch.length) {
             $(document).trigger("idSearchBoxEvent", currentSearch);
         }
+    });
+    $('#ids_image').on('click', function () {
+        $('#idModalDiv').modal('show'); //open the modal
     });
     $('.idSearchButton').click(function () {
         var idSearchTypeSelected = $('input:radio[name=idSearchType]:checked').val();
@@ -66,7 +70,7 @@ function findSearchString(searchString) {
     }
     var searchStringSplit = searchString.split(":");
     var stringAfterColon = $.trim(searchStringSplit[1])
-    if (stringAfterColon.match(NUMBER_MATCHING_REGEX)){
+    if (stringAfterColon.match(NUMBER_MATCHING_REGEX)) {
         return  stringAfterColon;
     }
     return ""

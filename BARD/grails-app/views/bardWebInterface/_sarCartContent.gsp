@@ -80,7 +80,7 @@
             <br/>
             <div class="leftofline">
                 <div class="btn-group" style="vertical-align: bottom;">
-                    <a class="btn dropdown-toggle" data-toggle="dropdown"  role="button" data-target="#"
+                    <a class="btn dropdown-toggle" data-toggle="dropdown"  role="button" data-target="#" tabindex="8"
                        style="background: #0093d0;  color: #ffffff">
                         <i class="icon-eye-open"></i> VISUALIZE
                         <span class="caret"></span>

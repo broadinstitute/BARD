@@ -13,9 +13,9 @@ QueryCart.prototype.toggleDetailsHandler = function () {
 
 QueryCart.prototype.refreshSummaryView = function () {
     var ajaxLocation = '#summaryView';
-    jQuery.ajax({  type:'GET',
-        url:bardAppContext + '/queryCart/refreshSummaryView',
-        success:function (data) {
+    jQuery.ajax({  type: 'GET',
+        url: bardAppContext + '/queryCart/refreshSummaryView',
+        success: function (data) {
             jQuery(ajaxLocation).html(data);
         }
     });
@@ -23,9 +23,9 @@ QueryCart.prototype.refreshSummaryView = function () {
 
 QueryCart.prototype.refreshDetailsView = function () {
     var ajaxLocation = '#detailView';
-    jQuery.ajax({  type:'GET',
-        url:bardAppContext + '/queryCart/refreshDetailsView',
-        success:function (data) {
+    jQuery.ajax({  type: 'GET',
+        url: bardAppContext + '/queryCart/refreshDetailsView',
+        success: function (data) {
             jQuery(ajaxLocation).html(data);
         }
     });
@@ -36,15 +36,15 @@ QueryCart.prototype.addItemToCartHandler = function () {
     var name = $(this).attr('data-cart-name');
     var type = $(this).attr('data-cart-type');
     var smiles = $(this).attr('data-cart-smiles');
-    jQuery.ajax({  type:'POST',
-        data:{
-            'id':id,
-            'type':type,
-            'name':name,
-            'smiles':smiles
+    jQuery.ajax({  type: 'POST',
+        data: {
+            'id': id,
+            'type': type,
+            'name': name,
+            'smiles': smiles
         },
-        url:bardAppContext + '/queryCart/addItem',
-        success:function (data) {
+        url: bardAppContext + '/queryCart/addItem',
+        success: function (data) {
             queryCart.publishCartChangeEvent('cart.itemAdded', id);
         }
     });
@@ -54,11 +54,11 @@ QueryCart.prototype.addItemToCartHandler = function () {
 QueryCart.prototype.removeItemFromCartHandler = function () {
     var id = $(this).attr('data-cart-id');
     var type = $(this).attr('data-cart-type');
-    jQuery.ajax({  type:'POST',
-        data:{'id':id,
-            'type':type},
-        url:bardAppContext + '/queryCart/removeItem',
-        success:function (data) {
+    jQuery.ajax({  type: 'POST',
+        data: {'id': id,
+            'type': type},
+        url: bardAppContext + '/queryCart/removeItem',
+        success: function (data) {
             queryCart.publishCartChangeEvent('cart.itemRemoved', id);
         }
     });
@@ -66,12 +66,12 @@ QueryCart.prototype.removeItemFromCartHandler = function () {
 };
 
 QueryCart.prototype.removeAll = function () {
-    jQuery.ajax({  type:'POST',
-        url:bardAppContext + '/queryCart/removeAll',
-        success:function (data) {
+    jQuery.ajax({  type: 'POST',
+        url: bardAppContext + '/queryCart/removeAll',
+        success: function (data) {
             queryCart.publishCartChangeEvent('cart.itemRemoved');
         },
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
             alert('problem clearing cart');
             console.log(errorThrown);
         }
@@ -92,11 +92,11 @@ QueryCart.prototype.refreshInCartCheckboxes = function (event, idToTarget) {
     }
     var type = $(this).attr('data-cart-type');
     var elementToUpdate = $(this);
-    jQuery.ajax({  type:'POST',
-        url:bardAppContext + '/queryCart/isInCart',
-        data:{'id':id,
-            'type':type},
-        success:function (data) {
+    jQuery.ajax({  type: 'POST',
+        url: bardAppContext + '/queryCart/isInCart',
+        data: {'id': id,
+            'type': type},
+        success: function (data) {
             if (data == 'false') {
                 elementToUpdate.prop('checked', false);
             }
@@ -104,7 +104,7 @@ QueryCart.prototype.refreshInCartCheckboxes = function (event, idToTarget) {
                 elementToUpdate.prop('checked', true);
             }
         },
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
             alert('problem refreshing');
             console.log(errorThrown);
         }
@@ -113,6 +113,11 @@ QueryCart.prototype.refreshInCartCheckboxes = function (event, idToTarget) {
 
 QueryCart.prototype.init = function () {
     $(document).on('click', '.trigger', this.toggleDetailsHandler);
+    $(document).on('keypress', '.trigger', function (event) {
+        if (event.keyCode == 13) {
+            $(this).click();
+        }
+    })
     $(document).on('click', '.removeItemFromCart', this.removeItemFromCartHandler);
     $(document).on('click', '.removeAllFromCart', this.removeAll);
     $(document).on('click', '.addToCartCheckbox:checked', this.addItemToCartHandler);

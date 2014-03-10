@@ -173,7 +173,7 @@
 
                         <div class="span3" style="height: 600px;">
                             <div style="vertical-align: top;">
-                                <div style="opacity: 0" id="sunburstContractor" class='contractButton'></div>
+                                <div style="opacity: 0" id="sunburstContractor" class='contractButton' tabindex="10"></div>
                             </div>
 
                             <div style="float:right;padding-top:200px;">
