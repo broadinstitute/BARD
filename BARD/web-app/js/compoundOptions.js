@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $(document).on("click", "a.analogs", function (event) {
+    $(document).on("click", "a.analogs",function (event) {
         var searchString = $(this).attr('data-structure-search-params');
         var cutoff = $(this).siblings("#cutoff").val()
         var intRegex = /^\d+(\.\d+)?$/;
@@ -12,10 +12,14 @@ $(document).ready(function () {
         searchString = searchString + " threshold:" + cutoff
         $('#searchString').attr('value', searchString);
         $('#searchForm').submit();
+    }).on('keydown', 'ul.dropdown-menu', function (event) {
+        if (event.keyCode == 27) {//ESC
+            $(this).dropdown('toggle');
+        }
     });
 
     //Use tooltip to display the SMILES string in case the it is larger than 30 character.
-    $("li[rel=tooltip]").tooltip({container:'body', placement: "auto bottom"});
+    $("li[rel=tooltip]").tooltip({container: 'body', placement: "auto bottom"});
 });
 
 //Overrides the Twitter Bootstraps' Dropdown behavior that hides the menu when a menu item was clicked
