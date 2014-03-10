@@ -39,6 +39,7 @@
                                                                        action="list">List Teams</g:link></li>
                                         <li class="controller"><g:link controller="role"
                                                                        action="create">Create new Team</g:link></li>
+                                        <li class="controller"><g:link controller="offlineValidation">Offline Validation</g:link> </li>
                                     </ul>
                                 </g:if>
                                 <g:if test="${isManager}">
