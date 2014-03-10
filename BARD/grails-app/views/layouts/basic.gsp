@@ -74,7 +74,7 @@
 
             <div class="row-fluid">
                 <div class="span2" style="min-width: 180px">
-                    <strong class="logo"><a
+                    <strong class="logo"><a tabindex="1"
                             href="${createLink(controller: 'BardWebInterface', action: 'index')}"
                             style="min-width: 207px">BARD BioAssay Research Database</a>
                     </strong>

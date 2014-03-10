@@ -17,7 +17,7 @@
 
 <div id="summaryView" class="insidequerycart" style="min-width: 250px">
     <div class="row-fluid">
-        <span class="trigger btn btn-primary" style="color:#ffffff; background: #0093d0;" id="shrinkableQcart">
+        <span class="trigger btn btn-primary" style="color:#ffffff; background: #0093d0;" id="shrinkableQcart" tabindex="7">
             QUERY CART &nbsp;
             <span id="cartContents" class="cartContents">
                 <g:if test="${!totalItemCount}">

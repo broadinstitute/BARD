@@ -597,6 +597,7 @@ var linkedVisualizationModule = (function () {
                 var x = origButton
                     .text(textForExpandingButton)
                     .attr('class', 'expandButton')
+                    .attr('tabindex', '9')
                     .transition()
                     .delay(1000)
                     .duration(500)
@@ -719,6 +720,11 @@ var linkedVisualizationModule = (function () {
                         d3.selectAll('.molstruct')
                             .style('opacity', '0');
                         callbackToExpandOrContractOnButtonClick({    index: expandedButtonNum }, expandedButtonNum);
+                    })
+                    .on('keypress', function () {
+                        if (d3.event.keyCode == 13) {
+                            $(this).trigger('click');
+                        }
                     });
                 var molecularStructure = d3.selectAll('.molstruct')
                     .transition()
@@ -845,10 +851,16 @@ var linkedVisualizationModule = (function () {
                 placeButtonsHere.append("div")
                     .text(textForExpandingButton)
                     .attr('class', 'expandButton')
+                    .attr('tabindex', '9')
                     .attr('id', function (d) {
                         return 'expbutton' + d.index;
                     })
-                    .on('click', callbackToExpandOrContractOnButtonClick);
+                    .on('click', callbackToExpandOrContractOnButtonClick)
+                    .on('keypress', function (d, i) {
+                        if (d3.event.keyCode == 13) {
+                            callbackToExpandOrContractOnButtonClick(d, i);
+                        }
+                    });
 
                 // deactivate button if we have no data
                 for (var i = 0; i < 4; i++) {

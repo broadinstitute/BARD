@@ -1,5 +1,6 @@
 <r:require modules="autocomplete"/>
-<g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form" style="border:1px solid rgba(244, 244, 244, 0.2); background:rgba(228, 228, 228, 0.2);">
+<g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form"
+        style="border:1px solid rgba(244, 244, 244, 0.2); background:rgba(228, 228, 228, 0.2);">
 %{-- .search-field is styled as "display: table" so make sure the children are styled with "display: table-row" and grandchildren with "display: table-cell" --}%
     <div class="search-box">
         <div class="search-box-row">
@@ -10,34 +11,37 @@
                              onmouseover="this.src = '${resource(dir: 'images/bardHomepage', file: 'struct_icon_bright.png')}'"
                              onmouseout="this.src = '${resource(dir: 'images/bardHomepage', file: 'struct_icon.png')}'"
                              alt="Draw or paste a structure"
-                             title="Draw or paste a structure"/>
+                             title="Draw or paste a structure" tabindex="2"/>
                     </g:link>
                 </div>
 
                 <div style="display: inline-block; width: 51px">
-                    <img id="ids_icon" src="${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}"
-                         onmouseover="this.src = '${resource(dir: 'images/bardHomepage', file: 'ids_icon_bright.png')}'"
-                         onmouseout="this.src = '${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}'"
-                         alt="List of IDs for search"
-                         title="List of IDs for search" data-toggle="modal" href="#idModalDiv"/>
+                    <a href="#idModalDiv" id="ids_image" tabindex="3">
+                        <img id="ids_icon"
+                             src="${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}"
+                             onmouseover="this.src = '${resource(dir: 'images/bardHomepage', file: 'ids_icon_bright.png')}'"
+                             onmouseout="this.src = '${resource(dir: 'images/bardHomepage', file: 'ids_icon.png')}'"
+                             alt="List of IDs for search"
+                             title="List of IDs for search" data-toggle="modal"/>
+                    </a>
                 </div>
             </div>
 
             <div class="search-box-text-field-cell" style="width: 100%">
                 <g:if test="${flash?.searchString}">
-                    <g:textField id="searchString" name="searchString" value="${flash.searchString}"/>
+                    <g:textField id="searchString" name="searchString" value="${flash.searchString}" tabindex="4"/>
                 </g:if>
                 <g:elseif test="${params?.searchString}">
-                    <g:textField id="searchString" name="searchString" value="${params?.searchString}"/>
+                    <g:textField id="searchString" name="searchString" value="${params?.searchString}" tabindex="4"/>
                 </g:elseif>
                 <g:else>
-                    <g:textField id="searchString" name="searchString" value=""/>
+                    <g:textField id="searchString" name="searchString" value="" tabindex="4"/>
                 </g:else>
             </div>
 
             <div class="search-box-button-cell">
                 <button type="submit" name="search" class="search-button"
-                        id="searchButton">SEARCH</button>
+                        id="searchButton" tabindex="5">SEARCH</button>
             </div>
         </div>
     </div>
