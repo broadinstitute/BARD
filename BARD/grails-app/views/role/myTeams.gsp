@@ -56,7 +56,7 @@
                             <td><span class="label label-info">${teamRole.teamRole.id}</span></td>
                         </g:else>
 
-                        <td>${teamRole.role.modifiedBy}</td>
+                        <td><g:renderModifiedByEnsureNoEmail entity="${teamRole}" /></td>
                         <td data-sort-value="${teamRole.role.dateCreated?.time}"><g:formatDate date="${teamRole.role.dateCreated}"
                                                                                       format="MM/dd/yyyy"/></td>
                         <td data-sort-value="${teamRole.role.lastUpdated?.time}"><g:formatDate date="${teamRole.role.lastUpdated}"

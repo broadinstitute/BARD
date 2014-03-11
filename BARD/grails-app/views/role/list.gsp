@@ -44,7 +44,7 @@
                         <td data-sort-value="${role.id}"><g:link controller="role" action="show" id="${role.id}">${role.id}</g:link> </td>
                         <td>${role.authority}</td>
                         <td>${role.displayName}</td>
-                        <td>${role.modifiedBy}</td>
+                        <td>foo<g:renderModifiedByEnsureNoEmail entity="${role}" /></td>
                         <td data-sort-value="${role.dateCreated?.time}"><g:formatDate date="${role.dateCreated}"
                                                                                       format="MM/dd/yyyy"/></td>
                         <td data-sort-value="${role.lastUpdated?.time}"><g:formatDate date="${role.lastUpdated}"

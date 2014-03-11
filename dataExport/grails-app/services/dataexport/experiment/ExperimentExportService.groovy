@@ -12,7 +12,7 @@ import dataexport.util.ExportAbstractService
 import dataexport.util.UtilityService
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 import javax.xml.datatype.DatatypeFactory
@@ -135,7 +135,7 @@ class ExperimentExportService extends ExportAbstractService {
             attributes.put('lastUpdated', lastUpdatedDate.toString())
         }
         if (StringUtils.isNotBlank(experiment.modifiedBy)) {
-            attributes.put('modifiedBy', experiment.modifiedBy)
+            attributes.put('modifiedBy', StringUtils.substringBefore(experiment.modifiedBy,'@'))
         }
 
         if (experiment.holdUntilDate) {   //convert date to XML date

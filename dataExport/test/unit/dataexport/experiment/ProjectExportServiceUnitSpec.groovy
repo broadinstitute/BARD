@@ -282,5 +282,25 @@ class ProjectExportServiceUnitSpec extends Specification {
         "With 1 experiment" | PRJECT_WITH_NO_PROJECT_EXPERIMENT | 0         | 0      | 0         | 1         | 0            | 0          | [:]
     }
 
+    void "test generated Project modifiedBy #label"() {
+        given: "An Project"
+        Project project = Project.build()
+        project.modifiedBy = modifiedBy
+
+        when: "We attempt to generate an project XML document"
+        this.projectExportService.generateProject(this.markupBuilder, project)
+
+        then:
+        String actualXml = this.writer.toString()
+        def resultXml = new XmlSlurper().parseText(actualXml)
+        resultXml.@modifiedBy == expectedModifiedBy
+
+        where:
+        label           | modifiedBy    | expectedModifiedBy
+        "without email" | 'foo'         | 'foo'
+        "with email"    | 'foo@foo.com' | 'foo'
+
+    }
+
 
 }

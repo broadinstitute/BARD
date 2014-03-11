@@ -86,7 +86,7 @@
             <dt><g:message code="default.lastUpdated.label"/>:</dt>
             <dd id="lastUpdatedId"><g:formatDate date="${project.lastUpdated}" format="MM/dd/yyyy"/></dd>
             <dt><g:message code="default.modifiedBy.label"/>:</dt>
-            <dd id="modifiedById"><g:fieldValue bean="${project}" field="modifiedBy"/></dd>
+            <dd id="modifiedById"><g:renderModifiedByEnsureNoEmail entity="${project}" /></dd>
         </dl>
     </div>
 </div>

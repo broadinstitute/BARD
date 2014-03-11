@@ -75,7 +75,7 @@
                 <dt><g:message code="default.lastUpdated.label"/>:</dt>
                 <dd id="lastUpdatedId"><g:formatDate date="${roleInstance?.lastUpdated}" format="MM/dd/yyyy"/></dd>
                 <dt><g:message code="default.modifiedBy.label"/>:</dt>
-                <dd id="modifiedById"><g:fieldValue bean="${roleInstance}" field="modifiedBy"/></dd>
+                <dd id="modifiedById"><g:renderModifiedByEnsureNoEmail entity="${roleInstance}"/></dd>
             </dl>
         </div>
     </div>
