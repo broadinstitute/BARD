@@ -57,6 +57,21 @@ class MergeAssayService {
         assayWillKeep.save(failOnError: true)
     }
 
+    List<Long> retireAssaysWithNoExperiments(List<Assay> assays, String modifiedBy) {
+        List<Long> assaysWithError = []
+        assays.each { Assay assay ->
+            if(assay.experiments.size() == 0){
+                assay.assayStatus = Status.RETIRED
+                assay.modifiedBy = modifiedBy
+                if (!assay.save(flush: true)) {
+                    assaysWithError.add(assay.id)
+                    println("Error happened when update assay status ${assay.errors}")
+                }
+            }
+        }
+        return assaysWithError
+    }
+
     def constructMeasureKey(ExperimentMeasure measure) {
         String key = "r=${measure.resultType.id} s=${measure.statsModifier?.id}"
         if (measure.parent != null) {
