@@ -104,10 +104,14 @@ class ExperimentExportServiceUnitSpec extends Specification {
         XmlTestAssertions.validate(schemaResource, actualXml)
 
         where:
-        label                             | results                                             | mapClosure                                                                                   | numAssayContextMeasureRefs
-        "minimal"                         | EXPERIMENT_MEASURE_MINIMAL                          | { [:] }                                                                                      | 0
-        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF                  | { [parent: ExperimentMeasure.build(), priorityElement: true] }                               | 0
-        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP | { [parent: ExperimentMeasure.build(), parentChildRelationship: HierarchyType.SUPPORTED_BY] } | 0
+        label                             | results                                             | mapClosure | numAssayContextMeasureRefs
+        "minimal"                         | EXPERIMENT_MEASURE_MINIMAL                          | { [:] }    | 0
+        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF                  | {
+            [parent: ExperimentMeasure.build(), priorityElement: true]
+        }                                                                                                    | 0
+        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP | {
+            [parent: ExperimentMeasure.build(), parentChildRelationship: HierarchyType.SUPPORTED_BY]
+        }                                                                                                    | 0
     }
 
     void "test generate Experiment #label"() {
@@ -140,6 +144,26 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
         "with 1 ExperimentMeasure"               | EXPERIMENT_WITH_ONE_EXPERIMENT_MEASURE             | 0         | 0         | 1         | [lastUpdated: new Date(0)]
         "with 2 ExperimentMeasures"              | EXPERIMENT_WITH_TWO_EXPERIMENT_MEASURE             | 0         | 0         | 2         | [lastUpdated: new Date(0)]
+    }
+
+    void "test generated Experiment modifiedBy #label"() {
+        given: "An Experiment"
+        Experiment experiment = Experiment.build()
+        experiment.modifiedBy = modifiedBy
+
+        when: "We attempt to generate an experiment XML document"
+        this.experimentExportService.generateExperiment(this.markupBuilder, experiment)
+
+        then:
+        String actualXml = this.writer.toString()
+        def resultXml = new XmlSlurper().parseText(actualXml)
+        resultXml.@modifiedBy == expectedModifiedBy
+
+        where:
+        label           | modifiedBy    | expectedModifiedBy
+        "without email" | 'foo'         | 'foo'
+        "with email"    | 'foo@foo.com' | 'foo'
+
     }
 
     void "test Generate Experiment Not Found Exception"() {

@@ -11,6 +11,7 @@ import bard.db.enums.ValueType
 import bard.db.model.AbstractContextOwner
 import bard.db.people.Role
 import bard.db.project.InlineEditableCommand
+import bard.taglib.ModifiedByTagLib
 import bardqueryapi.IQueryService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
@@ -401,7 +402,7 @@ class EditingHelper {
     def generateAndRenderJSONResponse(Long currentVersion, String modifiedBy, Date lastUpdated, final String newValue) {
         Map<String, String> dataMap = [:]
         dataMap.put('version', currentVersion.toString())
-        dataMap.put('modifiedBy', modifiedBy)
+        dataMap.put('modifiedBy', ModifiedByTagLib.modifiedByEnsureNoEmail(modifiedBy))
         dataMap.put('lastUpdated', formatter.format(lastUpdated))
         dataMap.put("data", newValue)
 

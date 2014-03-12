@@ -68,7 +68,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     void 'test save success'() {
         given:
-        final Element assayFormatValue = Element.build(label:SMALL_MOLECULE_FORMAT_LABEL)
+        final Element assayFormatValue = Element.build(label: SMALL_MOLECULE_FORMAT_LABEL)
         Role role = Role.build()
         AssayCommand assayCommand = new AssayCommand(assayName: "Some Name", assayFormatValueId: assayFormatValue.id.longValue(), springSecurityService: controller.springSecurityService, ownerRole: role.authority)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
@@ -190,7 +190,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         given:
         Assay newAssay = Assay.build(version: 0, assayStatus: Status.APPROVED)
         InlineEditableCommand inlineEditableCommand =
-            new InlineEditableCommand(pk: newAssay.id, version: newAssay.version, name: newAssay.assayName, value: Status.APPROVED.id)
+                new InlineEditableCommand(pk: newAssay.id, version: newAssay.version, name: newAssay.assayName, value: Status.APPROVED.id)
         controller.metaClass.message = { Map p -> return "foo" }
 
         when:
@@ -371,5 +371,19 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         label                   | id    | message
         "No Assay Id"           | null  | "A Valid Assay Definition ID is required"
         "Non Existing Assay ID" | 10000 | "default.not.found.message"
+    }
+
+    def 'test generateAndRenderJSONResponse #desc'() {
+
+        controller.metaClass.mixin(EditingHelper)
+        expect:
+        def result = controller.generateAndRenderJSONResponse(version, modifiedBy, lastUpdated, newValue)
+        response.contentAsString == expectedJson
+
+        where:
+        desc                                   | version | modifiedBy    | lastUpdated | newValue   | expectedJson
+        "pass thru"                            | 1L      | 'foo'         | new Date()  | 'newValue' | '{"version":"1","modifiedBy":"foo","lastUpdated":"03/11/2014","data":"newValue"}'
+        "ensure modifiedBy doesn't show email" | 1L      | 'foo@foo.com' | new Date()  | 'newValue' | '{"version":"1","modifiedBy":"foo","lastUpdated":"03/11/2014","data":"newValue"}'
+
     }
 }

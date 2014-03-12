@@ -85,7 +85,7 @@ class ProjectExportService extends ExportAbstractService {
 
         }
         if (StringUtils.isNotBlank(project.modifiedBy)) {
-            attributes.put('modifiedBy', project.modifiedBy)
+            attributes.put('modifiedBy', StringUtils.substringBefore(project.modifiedBy,'@'))
         }
         attributes.put('status', project.projectStatus.id)
         markupBuilder.project(attributes) {

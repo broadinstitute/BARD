@@ -120,8 +120,7 @@
                 <span id="modifiedBy-label" class="property-label"><g:message code="bardNews.modifiedBy.label"
                                                                               default="Modified By"/></span>
 
-                <span class="property-value" aria-labelledby="modifiedBy-label"><g:fieldValue bean="${bardNewsInstance}"
-                                                                                              field="modifiedBy"/></span>
+                <span class="property-value" aria-labelledby="modifiedBy-label"><g:renderModifiedByEnsureNoEmail entity="${bardNewsInstance}" /></span>
 
             </li>
         </g:if>

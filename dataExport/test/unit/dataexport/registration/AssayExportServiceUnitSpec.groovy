@@ -84,4 +84,24 @@ class AssayExportServiceUnitSpec extends Specification {
         then: "An exception should be thrown"
         thrown(NotFoundException)
     }
+
+    void "test generated Assay modifiedBy #label"() {
+        given: "An Experiment"
+        Assay assay = Assay.build()
+        assay.modifiedBy = modifiedBy
+
+        when: "We attempt to generate an experiment XML document"
+        this.assayExportService.generateAssay(this.markupBuilder, assay.id)
+
+        then:
+        String actualXml = this.writer.toString()
+        def resultXml = new XmlSlurper().parseText(actualXml)
+        resultXml.@modifiedBy == expectedModifiedBy
+
+        where:
+        label           | modifiedBy    | expectedModifiedBy
+        "without email" | 'foo'         | 'foo'
+        "with email"    | 'foo@foo.com' | 'foo'
+
+    }
 }

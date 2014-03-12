@@ -135,8 +135,7 @@
                                                                          format="MM/dd/yyyy"/></dd>
 
                                     <dt><g:message code="default.modifiedBy.label"/>:</dt>
-                                    <dd id="modifiedById"><g:fieldValue bean="${panelInstance}"
-                                                                        field="modifiedBy"/></dd>
+                                    <dd id="modifiedById"><g:renderModifiedByEnsureNoEmail entity="${panelInstance}" /></dd>
                                 </dl>
                             </div>
                         </div>

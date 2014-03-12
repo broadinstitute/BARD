@@ -204,7 +204,7 @@ class AssayExportHelperService extends ExportAbstractService {
             attributes.put('lastUpdated', lastUpdatedDate.toString())
         }
         if (StringUtils.isNotBlank(assay.modifiedBy)) {
-            attributes.put('modifiedBy', assay.modifiedBy)
+            attributes.put('modifiedBy', StringUtils.substringBefore(assay.modifiedBy,'@'))
         }
         markupBuilder.assay(attributes) {
             assayName(assay.assayName)
