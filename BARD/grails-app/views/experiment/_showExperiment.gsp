@@ -329,10 +329,16 @@
             <h4 class="subsect">Result Summary - Details</h4>
 
             <div class="row-fluid">
-                <g:if test="${(isAdmin && instance.experimentFiles)  || (instance.ncgcWarehouseId && instance.experimentFiles)}">
+                <g:if test="${isAdmin && instance.experimentFiles}">
                     <g:link controller="bardWebInterface" action="showExperiment"
                             id="${instance?.id}"><h4>View all results for this experiment</h4></g:link>
+                    <g:link controller="bardWebInterface" action="previewResults"
+                            id="${instance?.id}"><h4>Preview results</h4></g:link>
                 </g:if>
+                <g:elseif test="${instance.ncgcWarehouseId && instance.experimentFiles}">
+                    <g:link controller="bardWebInterface" action="showExperiment"
+                            id="${instance?.id}"><h4>View all results for this experiment</h4></g:link>
+                </g:elseif>
                 <g:elseif test="${!instance.experimentFiles}">
                     <h4>No results uploaded for this experiment</h4>
                 </g:elseif>
