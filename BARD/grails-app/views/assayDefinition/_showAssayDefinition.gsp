@@ -114,7 +114,6 @@
     <h3 class="sect">Assay Protocol <g:link target="dictionary" controller="element"
                                             action="showTopLevelHierarchyHelp"><i
                 class="icon-question-sign"></i></g:link></h3>
-    <g:if test="${assayInstance.groupAssayProtocol()?.value}">
         <div class="row-fluid">
 
             <div id="cardHolderAssayProtocol" class="span12">
@@ -123,14 +122,12 @@
             </div>
         </div>
         <br/>
-    </g:if>
     <section id="assay-design-header">
 
         <h4 class="subsect">Assay Design <g:link target="dictionary" controller="element"
                                                  action="showTopLevelHierarchyHelp"><i
                     class="icon-question-sign"></i></g:link></h4>
 
-        <g:if test="${assayInstance.groupAssayDesign()?.value}">
             <div class="row-fluid">
                 <div id="cardHolderAssayDesign" class="span12">
                     <g:render template="/context/currentCard"
@@ -139,7 +136,6 @@
                 </div>
             </div>
             <br/>
-        </g:if>
     </section>
     <br/>
     <section id="assay-readout-header">
@@ -148,7 +144,6 @@
                                                   action="showTopLevelHierarchyHelp"><i
                     class="icon-question-sign"></i></g:link></h4>
 
-        <g:if test="${assayInstance.groupAssayReadout()?.value}">
             <div class="row-fluid">
                 <div id="cardHolderAssayReadout" class="span12">
                     <g:render template="/context/currentCard"
@@ -157,7 +152,6 @@
                 </div>
             </div>
             <br/>
-        </g:if>
     </section>
     <br/>
     <section id="assay-components-header">
@@ -166,7 +160,6 @@
                                                      action="showTopLevelHierarchyHelp"><i
                     class="icon-question-sign"></i></g:link></h4>
 
-        <g:if test="${assayInstance.groupAssayComponents()?.value}">
             <div class="row-fluid">
                 <div id="cardHolderAssayComponents" class="span12">
                     <g:render template="/context/currentCard"
@@ -175,12 +168,10 @@
                 </div>
             </div>
             <br/>
-        </g:if>
     </section>
     <br/>
     <section id="unclassified-header">
         <h4 class="subsect">Unclassified</h4>
-        <g:if test="${assayInstance.groupUnclassified()?.value}">
             <div class="row-fluid">
                 <div id="cardHolderUnclassified" class="span12">
                     <g:render template="/context/currentCard"
@@ -189,7 +180,6 @@
                 </div>
             </div>
             <br/>
-        </g:if>
     </section>
     <br/>
 </section>
