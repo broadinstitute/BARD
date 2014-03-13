@@ -296,12 +296,10 @@ class ElementController {
             result = [list: elementAndFullPathListAndMaxPathLength.elementAndFullPathList,
                     maxPathLength: elementAndFullPathListAndMaxPathLength.maxPathLength]
         } catch (BuildElementPathsServiceLoopInPathException e) {
-            result = [errorMessageKey: """A loop was found in one of the paths based on ElementHierarchy (for the relationship ${
-                buildElementPathsService.relationshipType
-            }).<br/>
-        The path starting before the loop was detected is:  ${e.elementAndFullPath.toString()}<br/>
-        Path element hierarchies: ${e.elementAndFullPath.path}<br/>
-        The id of the element hierarchy where the loop was detected is:  ${e.nextTopElementHierarchy.id}"""]
+            result = [errorMessageKey: "A loop was found in one of the paths based on ElementHierarchy (for the relationship ${buildElementPathsService.relationshipType}).\n" +
+                    "The path starting before the loop was detected is:  ${e.elementAndFullPath.toString()}\n" +
+                    "Path element hierarchies: ${e.elementAndFullPath.path}\n" +
+                    "The id of the element hierarchy where the loop was detected is:  ${e.nextTopElementHierarchy.id}"]
         }
 
         return result
