@@ -97,8 +97,6 @@
 
     <h3 class="sect">Biology <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
             class="icon-question-sign"></i></g:link></h3>
-
-    <g:if test="${assayInstance.groupBiology()?.value}">
         <div class="row-fluid">
             <div id="cardHolderBiology" class="span12">
                 <g:render template="/context/biology"
@@ -106,8 +104,6 @@
 
             </div>
         </div>
-        <br/>
-    </g:if>
 </section>
 <br/>
 <section id="assay-protocol-header">
@@ -121,7 +117,6 @@
                           model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayProtocol(), subTemplate: contextItemSubTemplate, renderEmptyGroups: false]"/>
             </div>
         </div>
-        <br/>
     <section id="assay-design-header">
 
         <h4 class="subsect">Assay Design <g:link target="dictionary" controller="element"
@@ -135,9 +130,7 @@
 
                 </div>
             </div>
-            <br/>
     </section>
-    <br/>
     <section id="assay-readout-header">
 
         <h4 class="subsect">Assay Readout <g:link target="dictionary" controller="element"
@@ -151,9 +144,7 @@
 
                 </div>
             </div>
-            <br/>
     </section>
-    <br/>
     <section id="assay-components-header">
 
         <h4 class="subsect">Assay Components <g:link target="dictionary" controller="element"
@@ -167,9 +158,7 @@
 
                 </div>
             </div>
-            <br/>
     </section>
-    <br/>
     <section id="unclassified-header">
         <h4 class="subsect">Unclassified</h4>
             <div class="row-fluid">
@@ -181,9 +170,7 @@
             </div>
             <br/>
     </section>
-    <br/>
 </section>
-<br/>
 
 
 <section id="experiments-header">
