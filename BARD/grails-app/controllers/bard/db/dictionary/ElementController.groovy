@@ -169,10 +169,22 @@ class ElementController {
         }
 
         Map parameterMap = generatePathsForElements([element.id])
+        if (parameterMap.errorMessageKey) {
+            flash.message = parameterMap.errorMessageKey
+            redirect(action: "editHierarchy", id: element.id)
+            return
+        }
+
         List<ElementAndFullPath> elementAndFullPathList = parameterMap.list
         assert elementAndFullPathList, "Could not find an elementAndFullPathList for element ${element.id}"
+
         ElementAndFullPath elementAndFullPathToDelete = elementAndFullPathList.find { ElementAndFullPath elementAndFullPath ->
             elementAndFullPath.toString() == params.elementPathToDelete.trim()
+        }
+        if (!elementAndFullPathToDelete) {
+            flash.message = "The path ${params.elementPathToDelete.trim()} is not part of the element hieracrchy."
+            redirect(action: "editHierarchy", id: element.id)
+            return
         }
         //Remove the element's path. If this is the last path, make the element a ROOT.
         //Removing of the path is done by truncating all the parent hierarchy elements in the path.
@@ -182,7 +194,7 @@ class ElementController {
                 element: element)
 
         if (!modifyElementAndHierarchyService.updateHierarchyIfNeeded(newElementAndPath)) {
-            flash.message = "Failed to delete element-path '${elementAndFullPath.toString()}'"
+            flash.message = "Failed to delete element-path '${elementAndFullPathToDelete.toString()}'"
         }
 
         redirect(action: "editHierarchy", id: element.id)
@@ -206,13 +218,36 @@ class ElementController {
             redirect(action: "editHierarchy", id: element.id)
             return
         }
-        NewElementAndPath newElementAndPath = findElementsFromPathString(newFullPath, buildElementPathsService.pathDelimeter)
-        newElementAndPath.elementHierarchyList = []
-        newElementAndPath.newElementLabel = element.label
-        newElementAndPath.element = element
 
-        if (!modifyElementAndHierarchyService.updateHierarchyIfNeeded(newElementAndPath)) {
-            flash.message = "Failed to add a new element-path '${newFullPath}'"
+        try {
+            NewElementAndPath newElementAndPath = findElementsFromPathString(newFullPath, buildElementPathsService.pathDelimeter)
+            newElementAndPath.elementHierarchyList = []
+            newElementAndPath.newElementLabel = element.label
+            newElementAndPath.element = element
+
+            if (!modifyElementAndHierarchyService.updateHierarchyIfNeeded(newElementAndPath)) {
+                flash.message = "Failed to add a new element-path '${newFullPath}'"
+            }
+        } catch (UnrecognizedElementLabelException e) {
+            flash.message = "This internal section of the path did not contain a recognizable element:  ${e.unrecognizedText}<br/>Whole path: ${elementEditCommand.newPathString}<br/>To edit an element label, edit it when it is the at the end of the path"
+        } catch (EmptyPathSectionException e) {
+            flash.message = "The section of the path with this index (0-based) did not contain any text:  ${e.sectionIndex}<br/>Whole path:  ${elementEditCommand.newPathString}"
+        } catch (InvalidElementPathStringException e) {
+            flash.message = "The path entered is invalid:  it must beging and end with the path delimeter ${buildElementPathsService.pathDelimeter}"
+        } catch (ModifyElementAndHierarchyLoopInPathException e) {
+            StringBuilder idBuilder = new StringBuilder().append(buildElementPathsService.pathDelimeter)
+            StringBuilder labelBuilder = new StringBuilder(buildElementPathsService.pathDelimeter)
+            for (Element elm : e.pathWithLoop) {
+                idBuilder.append(elm.id).append(buildElementPathsService.pathDelimeter)
+                labelBuilder.append(elm.label).append(buildElementPathsService.pathDelimeter)
+            }
+            flash.message = "A loop was found in the proposed path:\n" +
+                    "original element id:  ${element.id}\n" +
+                    "entered text:  ${newFullPath}\n" +
+                    "detected loop labels:  ${labelBuilder.toString()}\n" +
+                    "detected loop id's:${idBuilder.toString()}"
+        } catch (RuntimeException e) {
+            flash.message = "Error adding a new element hierarchy path: ${newFullPath}"
         }
 
         redirect(action: "editHierarchy", id: element.id)
