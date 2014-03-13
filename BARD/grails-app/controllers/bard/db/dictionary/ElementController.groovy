@@ -10,6 +10,7 @@ import grails.plugins.springsecurity.Secured
 import grails.validation.Validateable
 import grails.validation.ValidationErrors
 import groovy.transform.InheritConstructors
+import org.apache.commons.lang3.StringUtils
 
 import javax.servlet.http.HttpServletResponse
 
@@ -106,7 +107,7 @@ class ElementController {
                 //we probably should also consider removing some other characters
                 termCommand.label = termCommand.label.replaceAll("\\s+", " ").trim()
                 currentElement =
-                    this.elementService.addNewTerm(termCommand)
+                        this.elementService.addNewTerm(termCommand)
                 if (currentElement.hasErrors()) {
                     termCommand.currentElement = currentElement
                     termCommand.transferErrorsFromCurrentElement()
@@ -136,6 +137,88 @@ class ElementController {
     }
 
     @Secured(["hasRole('ROLE_CURATOR')"])
+    def editHierarchy(Long id) {
+        if (!id) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Element ID is missing")
+            return
+        }
+
+        Element element = Element.findById(id)
+        if (!element) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find element ${id}")
+            return
+        }
+
+        Map parameterMap = generatePathsForElements([element.id])
+        parameterMap.put('element', element)
+
+        if (!parameterMap.containsKey(errorMessageKey)) {
+            return parameterMap
+        } else {
+            render(parameterMap.get(errorMessageKey))
+        }
+    }
+
+    @Secured(["hasRole('ROLE_CURATOR')"])
+    def deleteElementPath() {
+
+        Element element = params.elementId.trim() ? Element.findById(params.elementId) : null
+        if (!element || !params.elementPathToDelete.trim()) {
+            render "Element ${element.id} does not exist or path to delete is missing"
+            return
+        }
+
+        Map parameterMap = generatePathsForElements([element.id])
+        List<ElementAndFullPath> elementAndFullPathList = parameterMap.list
+        assert elementAndFullPathList, "Could not find an elementAndFullPathList for element ${element.id}"
+        ElementAndFullPath elementAndFullPathToDelete = elementAndFullPathList.find { ElementAndFullPath elementAndFullPath ->
+            elementAndFullPath.toString() == params.elementPathToDelete.trim()
+        }
+        //Remove the element's path. If this is the last path, make the element a ROOT.
+        //Removing of the path is done by truncating all the parent hierarchy elements in the path.
+        NewElementAndPath newElementAndPath = new NewElementAndPath(newPathElementList: [],
+                elementHierarchyList: elementAndFullPathToDelete.path,
+                newElementLabel: element.label,
+                element: element)
+
+        if (!modifyElementAndHierarchyService.updateHierarchyIfNeeded(newElementAndPath)) {
+            flash.message = "Failed to delete element-path '${elementAndFullPath.toString()}'"
+        }
+
+        redirect(action: "editHierarchy", id: element.id)
+    }
+
+    @Secured(["hasRole('ROLE_CURATOR')"])
+    def addElementPath() {
+        Element element = Element.findById(params.elementId)
+        if (!element || !params.select2FullPath?.trim() || !params.select2ElementId?.trim()) {
+            render "Missing params"
+            return
+        }
+
+        Map parameterMap = generatePathsForElements([element.id])
+        List<ElementAndFullPath> elementAndFullPathList = parameterMap.list
+
+        //Add the new path to the element's hierarchy
+        String newFullPath = params.select2FullPath.trim() + element.label + buildElementPathsService.pathDelimeter
+        if (elementAndFullPathList && elementAndFullPathList*.toString().contains(newFullPath)) {
+            flash.message = "The path '${params.select2FullPath.trim()}' is already included in the element hierarchy"
+            redirect(action: "editHierarchy", id: element.id)
+            return
+        }
+        NewElementAndPath newElementAndPath = findElementsFromPathString(newFullPath, buildElementPathsService.pathDelimeter)
+        newElementAndPath.elementHierarchyList = []
+        newElementAndPath.newElementLabel = element.label
+        newElementAndPath.element = element
+
+        if (!modifyElementAndHierarchyService.updateHierarchyIfNeeded(newElementAndPath)) {
+            flash.message = "Failed to add a new element-path '${newFullPath}'"
+        }
+
+        redirect(action: "editHierarchy", id: element.id)
+    }
+
+    @Secured(["hasRole('ROLE_CURATOR')"])
     def edit(Long id) {
         Element element = Element.findById(id)
         if (!element) {
@@ -153,7 +236,34 @@ class ElementController {
             result = [list: elementAndFullPathListAndMaxPathLength.elementAndFullPathList,
                     maxPathLength: elementAndFullPathListAndMaxPathLength.maxPathLength]
         } catch (BuildElementPathsServiceLoopInPathException e) {
-            result = [errorMessageKey: """A loop was found in one of the paths based on ElementHierarchy (for the relationship ${buildElementPathsService.relationshipType}).<br/>
+            result = [errorMessageKey: """A loop was found in one of the paths based on ElementHierarchy (for the relationship ${
+                buildElementPathsService.relationshipType
+            }).<br/>
+        The path starting before the loop was detected is:  ${e.elementAndFullPath.toString()}<br/>
+        Path element hierarchies: ${e.elementAndFullPath.path}<br/>
+        The id of the element hierarchy where the loop was detected is:  ${e.nextTopElementHierarchy.id}"""]
+        }
+
+        return result
+    }
+
+    private Map generatePathsForElements(List<Long> elementIds) {
+        Map result
+        Set<ElementAndFullPath> elementAndFullPaths = [] as Set<ElementAndFullPath>
+        try {
+            for (Long elementId in elementIds) {
+                Element element = elementId ? Element.findById(elementId) : null
+                if (element) {
+                    elementAndFullPaths.addAll(buildElementPathsService.build(element))
+                }
+            }
+            ElementAndFullPathListAndMaxPathLength elementAndFullPathListAndMaxPathLength = buildElementPathsService.createListSortedByString(elementAndFullPaths)
+            result = [list: elementAndFullPathListAndMaxPathLength.elementAndFullPathList,
+                    maxPathLength: elementAndFullPathListAndMaxPathLength.maxPathLength]
+        } catch (BuildElementPathsServiceLoopInPathException e) {
+            result = [errorMessageKey: """A loop was found in one of the paths based on ElementHierarchy (for the relationship ${
+                buildElementPathsService.relationshipType
+            }).<br/>
         The path starting before the loop was detected is:  ${e.elementAndFullPath.toString()}<br/>
         Path element hierarchies: ${e.elementAndFullPath.path}<br/>
         The id of the element hierarchy where the loop was detected is:  ${e.nextTopElementHierarchy.id}"""]
@@ -304,6 +414,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
         return result
     }
 }
+
 @InheritConstructors
 @Validateable
 class TermCommand extends BardCommand {
