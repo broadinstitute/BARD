@@ -16,6 +16,7 @@ final DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 PubChemAid.df = df
 final Date threshold = df.parse("2012-10-01")
 
+final File aidHoldUntilDateFile = new File("C:/Local/i_drive/projects/BARD/dataMigration/HTS/aid_hold_until_date.csv")
 final File aidFile = new File("C:/Local/i_drive/projects/BARD/dataMigration/HTS/primary_screen_aids.txt")
 final broadOwnerRoleId= 16
 final String outputFile = new File("${df.format(new Date())}_aid_status.txt")
@@ -24,7 +25,7 @@ List<PubChemAid> pubchemAidList = readAidsFromFile(aidFile)
 
 findExternalReferences(pubchemAidList)
 
-findHoldUntilDate(pubchemAidList, df)
+findHoldUntilDate(pubchemAidList, aidHoldUntilDateFile)
 
 findAnnotSizes(pubchemAidList)
 
@@ -192,26 +193,25 @@ void findExternalReferences(List<PubChemAid> pubChemAidList) {
 }
 
 
-Map<Integer, Date> buildAidHoldUntilDateMap(DateFormat df) {
 
-    Map<Integer, Date> result = new HashMap<>()
+void findHoldUntilDate(Collection<PubChemAid> pubchemAidColl, File aidHoldUntilDateFile) {
+    DateFormat df = new SimpleDateFormat("dd-MMM-yy")
 
-    SQLQuery query = ctx.sessionFactory.getCurrentSession().createSQLQuery("select aid, hold_until_date from aid_hold_until_date")
+    Map<Integer, Date> aidHoldUntilDateMap = new HashMap<>()
 
-    List<Object[]> rows = query.list()
+    BufferedReader reader = new BufferedReader(new FileReader(aidHoldUntilDateFile))
 
-    for (Object[] row : rows) {
+    String line;
+    while ((line = reader.readLine()) != null) {
+        String[] row = line.split(",")
+
         Integer aid = Integer.valueOf(row[0].toString())
         Date date = df.parse(row[1].toString())
 
-        result.put(aid, date)
+        aidHoldUntilDateMap.put(aid, date)
     }
 
-    return result
-}
-
-void findHoldUntilDate(Collection<PubChemAid> pubchemAidColl, DateFormat df) {
-    final Map<Integer, Date> aidHoldUntilDateMap = buildAidHoldUntilDateMap(df)
+    reader.close()
 
     for (PubChemAid pcAid : pubchemAidColl) {
         Date holdUntilDate = aidHoldUntilDateMap.get(pcAid.aid)
