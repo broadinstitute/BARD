@@ -193,6 +193,7 @@ class ElementController {
                 newElementLabel: element.label,
                 element: element)
 
+        //We should never get a ModifyElementAndHierarchyLoopInPathException since we are deleting the entire hierarchy path.
         if (!modifyElementAndHierarchyService.updateHierarchyIfNeeded(newElementAndPath)) {
             flash.message = "Failed to delete element-path '${elementAndFullPathToDelete.toString()}'"
         }
