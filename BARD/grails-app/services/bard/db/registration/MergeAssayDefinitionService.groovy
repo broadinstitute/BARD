@@ -196,6 +196,7 @@ class MergeAssayDefinitionService {
                                    List<Experiment> experiments) {
         targetAssay.fullyValidateContextItems = false
         String modifiedBy = springSecurityService.principal?.username
+        Set<Long> sourceAssayIds = experiments.collect { it.assay.id } as Set
 
         sessionFactory.currentSession.flush()
         mergeAssayService.handleMeasures(targetAssay, experiments.collect { it.assay } as Set)
@@ -205,6 +206,9 @@ class MergeAssayDefinitionService {
         println("end handleExperiments")
 
         sessionFactory.currentSession.flush()
+
+        mergeAssayService.retireAssaysWithNoExperiments(Assay.findAllByIdInList(sourceAssayIds.toList()) as List, modifiedBy)
+        println("end retireAssaysWithNoExperiments")
 
         return Assay.findById(targetAssay.id)
 

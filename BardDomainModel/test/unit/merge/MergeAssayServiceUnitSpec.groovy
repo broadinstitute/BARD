@@ -2,6 +2,7 @@ package merge
 
 import bard.db.dictionary.Element
 import bard.db.enums.ExpectedValueType
+import bard.db.enums.Status
 import bard.db.experiment.AssayContextExperimentMeasure
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
@@ -166,6 +167,27 @@ class MergeAssayServiceUnitSpec extends Specification {
         assayContextMeasure.assayContext.assay == assayB
     }
 
+    void "test retire assay(s) with no experiments"(){
+        setup:
+        String user =  "testUser"
+        Assay sourceAssay1 = Assay.build(assayStatus: Status.APPROVED)
+        Assay sourceAssay2 = Assay.build(assayStatus: Status.APPROVED)
+        Assay sourceAssay3 = Assay.build(assayStatus: Status.APPROVED)
+        Experiment experimentA = Experiment.build(assay: sourceAssay3)
+        Experiment experimentB = Experiment.build(assay: sourceAssay3)
+        List<Assay> assays = [sourceAssay1, sourceAssay2, sourceAssay3]
+
+        when:
+        mergeAssayService.retireAssaysWithNoExperiments(assays, user)
+
+        then:
+        assert sourceAssay1.assayStatus == Status.RETIRED
+        assert sourceAssay1.modifiedBy == user
+        assert sourceAssay2.assayStatus == Status.RETIRED
+        assert sourceAssay2.modifiedBy == user
+        assert sourceAssay3.assayStatus == Status.APPROVED
+        assert sourceAssay3.modifiedBy == null
+    }
 
 }
 
