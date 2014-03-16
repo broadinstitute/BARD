@@ -24,6 +24,7 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
+import spock.lang.Shared
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
@@ -43,6 +44,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     Assay assay
     Role role
+    @Shared
+            lastUpdated = new Date()
 
     @Before
     void setup() {
@@ -328,7 +331,9 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.cloneAssay(assay.id)
         then:
-        controller.assayDefinitionService.cloneAssayForEditing(_, _) >> { throw new ValidationException("message", new GrailsMockErrors(assay)) }
+        controller.assayDefinitionService.cloneAssayForEditing(_, _) >> {
+            throw new ValidationException("message", new GrailsMockErrors(assay))
+        }
         assert flash.message.contains("Please email the BARD team at bard-users@broadinstitute.org to fix this assay")
         assert controller.response.redirectedUrl.startsWith("/assayDefinition/show/")
     }
@@ -341,7 +346,9 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.cloneAssay(assay.id)
         then:
-        controller.assayDefinitionService.cloneAssayForEditing(_, _) >> { throw new ValidationException("message", new GrailsMockErrors(assay)) }
+        controller.assayDefinitionService.cloneAssayForEditing(_, _) >> {
+            throw new ValidationException("message", new GrailsMockErrors(assay))
+        }
         assert flash.message == "You need to be a member of at least one team to clone any assay"
         assert controller.response.redirectedUrl.startsWith("/assayDefinition/show/")
     }
@@ -381,9 +388,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         response.contentAsString == expectedJson
 
         where:
-        desc                                   | version | modifiedBy    | lastUpdated | newValue   | expectedJson
-        "pass thru"                            | 1L      | 'foo'         | new Date()  | 'newValue' | '{"version":"1","modifiedBy":"foo","lastUpdated":"03/11/2014","data":"newValue"}'
-        "ensure modifiedBy doesn't show email" | 1L      | 'foo@foo.com' | new Date()  | 'newValue' | '{"version":"1","modifiedBy":"foo","lastUpdated":"03/11/2014","data":"newValue"}'
-
+        desc                                   | version | modifiedBy    | lastUpdated      | newValue   | expectedJson
+        "pass thru"                            | 1L      | 'foo'         | this.lastUpdated | 'newValue' | """{"version":"1","modifiedBy":"foo","lastUpdated":"${this.lastUpdated.format('MM/dd/yyyy')}","data":"newValue"}"""
+        "ensure modifiedBy doesn't show email" | 1L      | 'foo@foo.com' | this.lastUpdated | 'newValue' | """{"version":"1","modifiedBy":"foo","lastUpdated":"${this.lastUpdated.format('MM/dd/yyyy')}","data":"newValue"}"""
     }
 }
