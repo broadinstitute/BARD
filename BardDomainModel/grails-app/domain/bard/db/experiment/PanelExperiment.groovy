@@ -1,8 +1,6 @@
 package bard.db.experiment
 
-import bard.db.registration.Assay
 import bard.db.registration.Panel
-import bard.db.registration.PanelAssay
 
 /**
  * Created with IntelliJ IDEA.
