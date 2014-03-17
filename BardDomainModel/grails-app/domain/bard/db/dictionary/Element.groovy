@@ -70,4 +70,38 @@ class Element extends AbstractElement {
     OntologyBreadcrumb getOntologyBreadcrumb() {
         return new OntologyBreadcrumb(this)
     }
+
+    @Override
+    boolean equals(Object obj) {
+        if (obj && obj instanceof Element) {
+            Element other = (Element)obj
+
+            if (other.id && this.id) {
+                return ((Element)obj).id == this.id
+            } else if (other.id || this.id) {
+                return false
+            } else {
+                if (other.label && this.label) {
+                    return other.label.equals(this.label)
+                } else if (other.label || this.label) {
+                    return false
+                } else {
+                    return super.equals(other)
+                }
+            }
+        } else {
+            return false
+        }
+    }
+
+    @Override
+    int hashCode() {
+        if (this.id) {
+            return this.id
+        } else if (this.label) {
+            return this.label.hashCode()
+        } else {
+            return super.hashCode()
+        }
+    }
 }
