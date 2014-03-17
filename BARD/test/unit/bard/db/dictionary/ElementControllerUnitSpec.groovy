@@ -18,7 +18,7 @@ import test.TestUtils
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(ElementController)
-@Build(Element)
+@Build([Element, ElementHierarchy])
 @Unroll
 class ElementControllerUnitSpec extends Specification {
     private static final String pathDelimeter = "/"
@@ -31,8 +31,9 @@ class ElementControllerUnitSpec extends Specification {
         this.controller.elementService = Mock(ElementService.class)
         this.controller.bardCacheUtilsService = Mock(BardCacheUtilsService.class)
         this.parentElement = Element.build(label: 'parent label with spaces', addChildMethod: AddChildMethod.DIRECT)
-        this.controller.buildElementPathsService = Mock(BuildElementPathsService)
+        this.controller.buildElementPathsService = Spy(BuildElementPathsService, constructorArgs: [])
         this.controller.ontologyDataAccessService = Mock(OntologyDataAccessService)
+        this.controller.modifyElementAndHierarchyService = Mock(ModifyElementAndHierarchyService)
     }
 
     void "test buildTopLevelHierarchyTree"() {
@@ -101,8 +102,8 @@ class ElementControllerUnitSpec extends Specification {
         final String field = 'label'
         given:
         TermCommand termCommand =
-            new TermCommand(parentLabel: valueUnderTest, label: "label",
-                    description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
+                new TermCommand(parentLabel: valueUnderTest, label: "label",
+                        description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
 
         when: 'a value is set for the field under test'
         termCommand[(field)] = valueUnderTest
@@ -124,8 +125,8 @@ class ElementControllerUnitSpec extends Specification {
         given:
         Element.build(label: "label")
         TermCommand termCommand =
-            new TermCommand(parentLabel: this.parentElement.label,
-                    description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
+                new TermCommand(parentLabel: this.parentElement.label,
+                        description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
         termCommand.buildElementPathsService = Mock(BuildElementPathsService.class)
         when: 'a value is set for the field under test'
         termCommand[('label')] = valueUnderTest
@@ -148,8 +149,8 @@ class ElementControllerUnitSpec extends Specification {
         final String field = 'parentDescription'
         given:
         TermCommand termCommand =
-            new TermCommand(parentLabel: this.parentElement.label, description: "description",
-                    label: "label", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
+                new TermCommand(parentLabel: this.parentElement.label, description: "description",
+                        label: "label", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
 
         when: 'a value is set for the field under test'
         termCommand[(field)] = valueUnderTest
@@ -173,7 +174,7 @@ class ElementControllerUnitSpec extends Specification {
         given:
 
         TermCommand termCommand =
-            new TermCommand(parentLabel: this.parentElement.label, label: "label", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
+                new TermCommand(parentLabel: this.parentElement.label, label: "label", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
 
         when: 'a value is set for the field under test'
         termCommand[(field)] = valueUnderTest
@@ -196,7 +197,7 @@ class ElementControllerUnitSpec extends Specification {
         final String field = 'curationNotes'
         given:
         TermCommand termCommand =
-            new TermCommand(parentLabel: this.parentElement.label, label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg")
+                new TermCommand(parentLabel: this.parentElement.label, label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg")
 
         when: 'a value is set for the field under test'
         termCommand[(field)] = valueUnderTest
@@ -219,7 +220,7 @@ class ElementControllerUnitSpec extends Specification {
 
         given:
         TermCommand termCommand =
-            new TermCommand(label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
+                new TermCommand(label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
 
         when: 'a value is set for the field under test'
         termCommand[(this.parentLabelField)] = valueUnderTest
@@ -240,7 +241,7 @@ class ElementControllerUnitSpec extends Specification {
         given:
         Element.build(label: valueUnderTest)
         TermCommand termCommand =
-            new TermCommand(label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
+                new TermCommand(label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
 
         when: 'a value is set for the field under test'
         termCommand[(this.parentLabelField)] = valueUnderTest
@@ -269,7 +270,7 @@ class ElementControllerUnitSpec extends Specification {
         final String label = "label"
         given:
         TermCommand termCommand =
-            new TermCommand(parentLabel: valueUnderTest.call(), label: label, description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
+                new TermCommand(parentLabel: valueUnderTest.call(), label: label, description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
         termCommand.buildElementPathsService = Mock(BuildElementPathsService.class)
         when:
         this.controller.saveTerm(termCommand)
@@ -280,11 +281,19 @@ class ElementControllerUnitSpec extends Specification {
         assert termCommand.success == valid
         TestUtils.assertFieldValidationExpectations(termCommand, this.parentLabelField, valid, errorCode)
         where:
-        desc                                | valueUnderTest                         | valid | errorCode                           | flashMessage
-        'null '                             | { null }                               | false | 'nullable'                          | ""
-        'Parent Label does not exist'       | { "parentlabel2" }                     | false | 'termCommand.parentLabel.mustexist' | ""
-        'Parent Label  exist'               | { "parent label with spaces" }         | true  | null                                | "Proposed term label has been saved"
-        'Parent Label with multiple spaces' | { "parent    label    with   spaces" } | true  | null                                | "Proposed term label has been saved"
+        desc                                | valueUnderTest | valid | errorCode                           | flashMessage
+        'null '                             | {
+            null
+        }                                                    | false | 'nullable'                          | ""
+        'Parent Label does not exist'       | {
+            "parentlabel2"
+        }                                                    | false | 'termCommand.parentLabel.mustexist' | ""
+        'Parent Label  exist'               | {
+            "parent label with spaces"
+        }                                                    | true  | null                                | "Proposed term label has been saved"
+        'Parent Label with multiple spaces' | {
+            "parent    label    with   spaces"
+        }                                                    | true  | null                                | "Proposed term label has been saved"
     }
 
     void "Save Term Page label #desc"() {
@@ -292,9 +301,9 @@ class ElementControllerUnitSpec extends Specification {
         given:
         Element.build(label: label)
         TermCommand termCommand =
-            new TermCommand(parentLabel: this.parentElement.label, label: valueUnderTest,
-                    description: "description", abbreviation: "abbr",
-                    synonyms: "abc,efg", curationNotes: "curationNotes")
+                new TermCommand(parentLabel: this.parentElement.label, label: valueUnderTest,
+                        description: "description", abbreviation: "abbr",
+                        synonyms: "abc,efg", curationNotes: "curationNotes")
         termCommand.buildElementPathsService = Mock(BuildElementPathsService.class)
         when:
         this.controller.saveTerm(termCommand)
@@ -424,7 +433,9 @@ class ElementControllerUnitSpec extends Specification {
 
         then:
         controller.buildElementPathsService.buildAll() >> { [] }
-        controller.buildElementPathsService.createListSortedByString(_) >> { new ElementAndFullPathListAndMaxPathLength([], 0) }
+        controller.buildElementPathsService.createListSortedByString(_) >> {
+            new ElementAndFullPathListAndMaxPathLength([], 0)
+        }
         controller.elementService.convertPathsToSelectWidgetStructures(_) >> { ["results"] }
 
         assert response.text == '{"results":["results"]}'
@@ -474,4 +485,121 @@ class ElementControllerUnitSpec extends Specification {
         'abbreviation is not empty, label>30, expectedValueType<>none' | ExpectedValueType.NUMERIC           | ''          | 'abbreviation' | 'label_size_is_grater_than_30_characters' | 'saved successfully'
         'abbreviation is empty, label>30, expectedValueType<>none'     | ExpectedValueType.NUMERIC           | ''          | ''             | 'label_size_is_grater_than_30_characters' | 'Failed to update element'
     }
+
+    void "test editHierarchy"() {
+        given:
+        Element element = Element.build()
+
+        when:
+        def response = controller.editHierarchy(element.id)
+
+        then:
+        controller.buildElementPathsService.build(_) >> { [] as Set }
+        controller.buildElementPathsService.createListSortedByString(_) >> {
+            new ElementAndFullPathListAndMaxPathLength([], 0)
+        }
+
+        assert response?.list?.size() == 0
+        assert response.element == element
+    }
+
+    void "test editHierarchy with exception"() {
+        given:
+        Element element = Element.build()
+
+        when:
+        controller.editHierarchy(element.id)
+
+        then:
+        controller.buildElementPathsService.build(_) >> {
+            throw new BuildElementPathsServiceLoopInPathException(elementAndFullPath: new ElementAndFullPath(element), nextTopElementHierarchy: ElementHierarchy.build())
+        }
+        controller.buildElementPathsService.createListSortedByString(_) >> {
+            new ElementAndFullPathListAndMaxPathLength([], 0)
+        }
+
+        assert response.text.contains("A loop was found in one of the paths")
+    }
+
+    void "test addElementPath success"() {
+        given:
+        Element element = Element.build()
+        params.elementId = element.id
+        params.select2FullPath = "/${element.label}/"
+        params.select2ElementId = element.id.toString()
+
+        when:
+        controller.addElementPath()
+
+        then:
+        controller.buildElementPathsService.build(_) >> { [] }
+        controller.buildElementPathsService.createListSortedByString(_) >> {
+            new ElementAndFullPathListAndMaxPathLength([], 0)
+        }
+        controller.modifyElementAndHierarchyService.updateHierarchyIfNeeded(_) >> { true }
+
+        assert flash.message == null
+        assert response.redirectUrl == "/element/editHierarchy/${element.id}"
+    }
+
+    void "test addElementPath error message"() {
+        given:
+        Element element = Element.build()
+        params.elementId = element.id
+        params.select2FullPath = "/${element.label}/"
+        params.select2ElementId = element.id.toString()
+
+        when:
+        controller.addElementPath()
+
+        then:
+        controller.buildElementPathsService.build(_) >> { [] }
+        controller.buildElementPathsService.createListSortedByString(_) >> {
+            new ElementAndFullPathListAndMaxPathLength([], 0)
+        }
+        controller.modifyElementAndHierarchyService.updateHierarchyIfNeeded(_) >> { false }
+
+        assert flash.message.contains('Failed to add a new element-path')
+    }
+
+    void "test addElementPath BuildElementPathsServiceLoopInPathException thrown"() {
+        given:
+        this.controller.buildElementPathsService = new BuildElementPathsService()
+        Element element = Element.build()
+        params.elementId = element.id
+        params.select2FullPath = "/${element.label}/"
+        params.select2ElementId = element.id.toString()
+
+        when:
+        controller.addElementPath()
+
+        then:
+        controller.buildElementPathsService.build(_) >> { [] }
+        controller.buildElementPathsService.createListSortedByString(_) >> {
+            new ElementAndFullPathListAndMaxPathLength([], 0)
+        }
+        controller.modifyElementAndHierarchyService.updateHierarchyIfNeeded(_) >> {
+            throw new ModifyElementAndHierarchyLoopInPathException(pathWithLoop: [])
+        }
+
+        assert flash.message.contains("A loop was found in the proposed path")
+    }
+
+    void "test deleteElementPath success"() {
+        given:
+        Element element = Element.build()
+        params.elementId = element.id.toString()
+        params.elementPathToDelete = "/${element.label}/"
+
+        when:
+        controller.deleteElementPath()
+
+        then:
+        controller.buildElementPathsService.build(_) >> { [new ElementAndFullPath(element, pathDelimeter)] as Set }
+        controller.modifyElementAndHierarchyService.updateHierarchyIfNeeded(_) >> { true }
+
+        assert flash.message == null
+        assert response.redirectUrl == "/element/editHierarchy/${element.id}"
+    }
+
 }

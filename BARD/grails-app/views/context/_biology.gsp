@@ -8,7 +8,7 @@
         </div>
     </div>
 </g:if>
-<g:if test="${biology || (subTemplate.equals("edit") && contextOwner instanceof bard.db.registration.Assay)}">
+<g:if test="${biology?.value}">
     <div id="cardHolder" class="span12">
         <div class="row-fluid">
             <g:each in="${contextOwner.splitForColumnLayout(biology.value)}" var="contextColumnList">

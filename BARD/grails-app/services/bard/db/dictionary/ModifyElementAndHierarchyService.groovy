@@ -15,7 +15,7 @@ class ModifyElementAndHierarchyService {
     BardCacheUtilsService bardCacheUtilsService
 
     /**
-     * @param relationshipType    relationshipType to be used when finding and modifying ElementHierarchy's
+     * @param relationshipType relationshipType to be used when finding and modifying ElementHierarchy's
      */
     public ModifyElementAndHierarchyService(String relationshipType = "subClassOf") {
         this.relationshipType = relationshipType
@@ -36,7 +36,7 @@ class ModifyElementAndHierarchyService {
             bardCacheUtilsService.refreshDueToNonDictionaryEntry()
         }
 
-        if(updateHierarchyIfNeeded(newElementAndPath)){  //reload the cache if this returned true
+        if (updateHierarchyIfNeeded(newElementAndPath)) {  //reload the cache if this returned true
             bardCacheUtilsService.refreshDueToNonDictionaryEntry()
         }
     }
@@ -61,7 +61,7 @@ class ModifyElementAndHierarchyService {
         List<Element> newPathAsElementList = newElementAndPath.newPathElementList
 
         if (previousPathAsElementHierarchyList.size() == 0 && newPathAsElementList.size() > 0) {
-            Element newPathLastElement = newPathAsElementList.get(newPathAsElementList.size()-1)
+            Element newPathLastElement = newPathAsElementList.get(newPathAsElementList.size() - 1)
 
             //test if the proposed path has any loops by searching recursively
             List<Element> pathWithLoop = checkPathForLoop(newPathAsElementList, childElement)
@@ -81,7 +81,7 @@ class ModifyElementAndHierarchyService {
             }
 
         } else if (previousPathAsElementHierarchyList.size() > 0 && newPathAsElementList.size() == 0) {
-            ElementHierarchy elementHierarchy = previousPathAsElementHierarchyList.get(previousPathAsElementHierarchyList.size()-1)
+            ElementHierarchy elementHierarchy = previousPathAsElementHierarchyList.get(previousPathAsElementHierarchyList.size() - 1)
             Element originalParent = elementHierarchy.parentElement
             originalParent.parentHierarchies.remove(elementHierarchy)
             childElement.childHierarchies.remove(elementHierarchy)
@@ -93,10 +93,10 @@ class ModifyElementAndHierarchyService {
         } else if (previousPathAsElementHierarchyList.size() > 0 && newPathAsElementList.size() > 0) {
             //last section of previous path represented as element hierarchy.  This represents what the parent-child
             //relationship was previously.
-            ElementHierarchy previousPathLastElementHierarchy = previousPathAsElementHierarchyList.get(previousPathAsElementHierarchyList.size()-1)
+            ElementHierarchy previousPathLastElementHierarchy = previousPathAsElementHierarchyList.get(previousPathAsElementHierarchyList.size() - 1)
             //last section of new path - parent, represented as element
             //this represents what the new parent should be in the parent-child relationship
-            Element newPathLastElement = newPathAsElementList.get(newPathAsElementList.size()-1)
+            Element newPathLastElement = newPathAsElementList.get(newPathAsElementList.size() - 1)
 
             //check if there is a change to be made - if the new parent is different from the old
             if (previousPathLastElementHierarchy.parentElement != newPathLastElement) {
@@ -156,7 +156,7 @@ class ModifyElementAndHierarchyService {
         List<Element> testPath = new LinkedList<Element>(newPath)
         testPath.add(child)
 
-        if (newPath.last() == child) {
+        if (newPath.contains(child)) {
             return testPath
         } else {
             return hasLoopInReachableDescendant(testPath)

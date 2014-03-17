@@ -1,8 +1,6 @@
 package bard.db.experiment
 
-import bard.db.registration.Assay
 import bard.db.registration.Panel
-import bard.db.registration.PanelAssay
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +15,7 @@ class PanelExperiment {
 
     static belongsTo = [panel: Panel]
 
-    Set<PanelAssay> experiments = [] as Set
+    Set<Experiment> experiments = [] as Set
     static hasMany = [experiments: Experiment]
 
     Date dateCreated = new Date()

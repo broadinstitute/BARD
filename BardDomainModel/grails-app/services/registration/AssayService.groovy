@@ -10,6 +10,7 @@ import bard.db.registration.AssayDocument
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 class AssayService {
+    public static final String clonePrefix = "Clone of "
 
     List<Assay> findByPubChemAid(Long aid) {
         def criteria = Assay.createCriteria()
@@ -58,7 +59,7 @@ class AssayService {
         if (newAssay.assayType == AssayType.TEMPLATE) { //convert templates to regular
             newAssay.assayType = AssayType.REGULAR
         }
-        newAssay.ownerRole =findRoleForCloning()
+        newAssay.ownerRole = findRoleForCloning()
         newAssay.save(flush: true, validate: false)
 
         cloneContexts(assay, newAssay, false)
@@ -87,7 +88,7 @@ class AssayService {
     Assay cloneAssayOnly(Assay assay,
                          Date dateCreated,
                          String designedBy,
-                         String assayNamePrefix = "Clone of ",
+                         String assayNamePrefix = clonePrefix,
                          Status assayStatus = Status.DRAFT,
                          ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY) {
         //find the first role that starts with Team

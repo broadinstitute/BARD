@@ -88,23 +88,7 @@
                     </td>
                 </g:if>
                 <g:else>
-                    <g:if test="${contextItem.attributeElement?.externalURL}">
-                        <td class="valuedLabel">
-                            <g:if test="${contextItem.attributeElement.externalURL=='http://www.bard.nih.gov/person#'}">
-                                ${contextItem.valueDisplay}
-                            </g:if>
-                            <g:else>
-                                <a href="${contextItem.attributeElement.externalURL + contextItem.extValueId}"
-                                   target="_blank">${contextItem.valueDisplay}</a>
-                            </g:else>
-
-
-                        </td>
-                    </g:if>
-                    <g:else>
-                        <td class="valuedLabel">${contextItem.valueDisplay}
-                        </td>
-                    </g:else>
+                    <td class="valuedLabel"><g:renderContextItemValueDisplay contextItem="${contextItem}"/></td>
                 </g:else>
             </tr>
         </g:each>
