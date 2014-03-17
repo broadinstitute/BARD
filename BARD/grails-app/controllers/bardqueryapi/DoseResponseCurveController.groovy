@@ -49,9 +49,10 @@ class DoseResponseCurveController {
         } catch (Exception exp) {
             //if we get here then it is an error
             final String errorMessage = "Could not draw a Dose Response Curve. Please try again"
-            log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username), exp)
+            String cmdParams = drcCurveCommand ? drcCurveCommand.toString() : "DrcCurveCommand is NULL"
+            log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username) + "\n$cmdParams", exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    errorMessage)
+                    errorMessage + "\n$cmdParams")
         }
 
     }
@@ -80,10 +81,11 @@ class DoseResponseCurveController {
         } catch (Exception exp) {
             //if we get here then it is an error
             final String errorMessage = "Could not draw a Dose Response Curve. Please try again"
-            log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username), exp)
+            String cmdParams = drcCurveCommand ? drcCurveCommand.toString() : "DrcCurveCommand is NULL"
+            log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username) + "\n$cmdParams", exp)
 
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    errorMessage)
+                    errorMessage + "\n$cmdParams")
         }
 
     }

@@ -23,9 +23,18 @@ class DrcCurveCommand {
     Double yNormMax
     List<Double> concentrations = ListUtils.lazyList([], new ListUtilsFactory())
     List<Double> activities = ListUtils.lazyList([], new ListUtilsFactory())
-   // List<Curve> curves = ListUtils.lazyList([], new ListCurveFactory())
+    // List<Curve> curves = ListUtils.lazyList([], new ListCurveFactory())
 
     List curves = ListUtils.lazyList([], FactoryUtils.instantiateFactory(Curve))
+
+    String toString(){
+        String cmdParams = ""
+        this.properties.each { cmdParams += "$it.key = $it.value\n" }
+        cmdParams += "concentrations size: " + concentrations?.size() + "\n"
+        cmdParams += "activities size: " + activities?.size() + "\n"
+        cmdParams += "curves size: " + concentrations?.size() + "\n"
+        return cmdParams
+    }
 }
 class ListUtilsFactory implements Factory {
     public Object create() {
