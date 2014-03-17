@@ -51,7 +51,7 @@
                     </g:if>
                 </td>
                 <td class="attributeLabel">${contextItem.attributeElement?.label} </td>
-                <td class="valuedLabel">${contextItem.valueDisplay}</td>
+                <td class="valuedLabel"><g:renderContextItemValueDisplay contextItem="${contextItem}"/></td>
 
 
                 <td class="btn-toolbar" style="text-align:right">

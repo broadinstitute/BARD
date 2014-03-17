@@ -24,3 +24,10 @@ $('#btnUpdateElement').on('click', function () {
 //    send to the edit page
     window.location.href = bardAppContext + '/element/edit/' + element.id;
 });
+
+$('#btnUpdateHierarchy').on('click', function () {
+//    get the selected element
+    var element = $("#elementList").select2("data");
+//    send to the edit page
+    window.location.href = bardAppContext + '/element/editHierarchy/' + element.id;
+});

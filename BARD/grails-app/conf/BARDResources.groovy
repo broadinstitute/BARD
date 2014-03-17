@@ -332,4 +332,7 @@ modules = {
     elementEdit {
         resource url: 'js/element/element.js'
     }
+    elementEditHierarchy {
+        resource url: 'js/element/elementEditHierarchy.js'
+    }
 }
