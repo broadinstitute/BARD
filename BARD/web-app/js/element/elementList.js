@@ -18,14 +18,14 @@ $(document).ready(function () {
         });
 });
 
-$('#btnUpdateElement').on('click', function () {
+$('#btnEditElement').on('click', function () {
 //    get the selected element
     var element = $("#elementList").select2("data");
 //    send to the edit page
     window.location.href = bardAppContext + '/element/edit/' + element.id;
 });
 
-$('#btnUpdateHierarchy').on('click', function () {
+$('#btnEditHierarchy').on('click', function () {
 //    get the selected element
     var element = $("#elementList").select2("data");
 //    send to the edit page

@@ -14,8 +14,8 @@
     <div class="row-fluid" style="margin: 5px;">
         <div class="span4 offset8">
             %{--buttons are wired via JS--}%
-            <input type="submit" class="btn btn-primary" value="Update Element" id="btnUpdateElement">
-            <input type="submit" class="btn btn-primary" value="Update Hierarchy" id="btnUpdateHierarchy">
+            <input type="submit" class="btn btn-primary" value="Edit Element" id="btnEditElement">
+            <input type="submit" class="btn btn-primary" value="Edit Hierarchy" id="btnEditHierarchy">
         </div>
     </div>
 </div>
