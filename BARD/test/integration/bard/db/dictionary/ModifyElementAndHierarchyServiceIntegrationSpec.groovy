@@ -5,6 +5,7 @@ import bard.db.enums.ExpectedValueType
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -45,6 +46,7 @@ class ModifyElementAndHierarchyServiceIntegrationSpec extends IntegrationSpec {
         return elementHierarchy
     }
 
+    @IgnoreRest
     void "test checkPathForLoop with multiple parents hierarchies"() {
         given:
         //Create a hierarchy path: 1st -> 2nd
