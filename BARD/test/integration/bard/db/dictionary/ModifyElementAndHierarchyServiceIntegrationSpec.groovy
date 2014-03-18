@@ -45,6 +45,25 @@ class ModifyElementAndHierarchyServiceIntegrationSpec extends IntegrationSpec {
         return elementHierarchy
     }
 
+    void "test checkPathForLoop with multiple parents hierarchies"() {
+        given:
+        //Create a hierarchy path: 1st -> 2nd
+        ElementHierarchy eh1stTo2nd = buildElementHierarchy(first_element, second_element, "subClassOf")
+        //Create a hierarchy path: 3rd -> 4th
+        ElementHierarchy eh3rdTo4th = buildElementHierarchy(third_element, fourth_element, "subClassOf")
+        //Create a hierarchy path: 3rd -> 5th
+        ElementHierarchy eh3rdTo5th = buildElementHierarchy(third_element, fifth_element, "subClassOf")
+        //Create a hierarchy path: 3rd -> 1st
+        ElementHierarchy eh3rdTo1st = buildElementHierarchy(third_element, first_element, "subClassOf")
+
+        when:
+        //Try to add the 3rd element at the end of the hierarchy path - a loop! (1st -> 2nd -> 3rd -> 1st)
+        List<Element> loopPath = modifyElementAndHierarchyService.checkPathForLoop([first_element, second_element], third_element)
+
+        then:
+        assert loopPath == [first_element, second_element, third_element, first_element]
+    }
+
     //The purpose of this test is to verify that multiple, sequential calls to the checkPathForLoop method all
     // return correctly. It has been observed during development that this method, intermittently, will return a null
     // although the path + child parameters do define a loop.
@@ -61,7 +80,7 @@ class ModifyElementAndHierarchyServiceIntegrationSpec extends IntegrationSpec {
         List<Element> loopPath = modifyElementAndHierarchyService.checkPathForLoop([first_element, second_element, third_element, fourth_element, fifth_element], childElement)
 
         then:
-        assert loopPath == [first_element, second_element, third_element, fourth_element, fifth_element, third_element]
+        assert loopPath == [first_element, second_element, third_element, fourth_element, fifth_element, third_element, fourth_element]
 
         where:
         description                                          | childElement
@@ -78,7 +97,7 @@ class ModifyElementAndHierarchyServiceIntegrationSpec extends IntegrationSpec {
         "add the 3rd element after the 5th element - a loop" | third_element
     }
 
-    void "test checkPathForLoop hidden loop"() {
+    void "test checkPathForLoop with a hidden loop"() {
         given:
         //Create a hierarchy path: 1st -> 2nd -> 3rd -> 4th
         ElementHierarchy eh1stTo2nd = buildElementHierarchy(first_element, second_element, "subClassOf")

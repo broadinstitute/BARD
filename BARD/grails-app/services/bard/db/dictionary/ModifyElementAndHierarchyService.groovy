@@ -156,7 +156,7 @@ class ModifyElementAndHierarchyService {
         List<Element> testPath = new LinkedList<Element>(newPath)
         testPath.add(child)
 
-        if (newPath.contains(child)) {
+        if (newPath.last() == child) {
             return testPath
         } else {
             return hasLoopInReachableDescendant(testPath)
@@ -166,7 +166,8 @@ class ModifyElementAndHierarchyService {
     private static List<Element> hasLoopInReachableDescendant(List<Element> testPath) {
         Element lastElement = testPath.last()
 
-        for (ElementHierarchy parentHierarchy : lastElement.parentHierarchies) {
+        List<ElementHierarchy> lastElementChildren = lastElement.parentHierarchies.toList()
+        for (ElementHierarchy parentHierarchy : lastElementChildren) {
             if (testPath.contains(parentHierarchy.childElement)) {
                 //add the child so that the path contains the full loop
                 testPath.add(parentHierarchy.childElement)
