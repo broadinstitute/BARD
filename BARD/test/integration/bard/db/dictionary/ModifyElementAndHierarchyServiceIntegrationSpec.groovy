@@ -4,6 +4,7 @@ import bard.db.enums.AddChildMethod
 import bard.db.enums.ExpectedValueType
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.junit.After
 import org.junit.Before
 import spock.lang.IgnoreRest
 import spock.lang.Shared
@@ -20,20 +21,33 @@ class ModifyElementAndHierarchyServiceIntegrationSpec extends IntegrationSpec {
 
     ModifyElementAndHierarchyService modifyElementAndHierarchyService
     @Shared
-    Element first_element = Element.build(label: '1st_element')
+    Element first_element
     @Shared
-    Element second_element = Element.build(label: '2nd_element')
+    Element second_element
     @Shared
-    Element third_element = Element.build(label: '3rd_element')
+    Element third_element
     @Shared
-    Element fourth_element = Element.build(label: '4th_element')
+    Element fourth_element
     @Shared
-    Element fifth_element = Element.build(label: '5th_element') //nothing to do with the movie
+    Element fifth_element
 
     @Before
     void setup() {
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
+        first_element = Element.build(label: '1st_element')
+        second_element = Element.build(label: '2nd_element')
+        third_element = Element.build(label: '3rd_element')
+        fourth_element = Element.build(label: '4th_element')
+        fifth_element = Element.build(label: '5th_element')
+        //reset the hierarchies before each run.
+//        Element.list().each { Element element ->
+//            element.parentHierarchies = [] as Set
+//            element.childHierarchies = [] as Set
+//        }
     }
+
+    @After
+    void tearDown() {}
 
     public static ElementHierarchy buildElementHierarchy(Element parent, Element child, String relationshipType) {
         ElementHierarchy elementHierarchy = new ElementHierarchy(parentElement: parent, childElement: child,
@@ -46,7 +60,6 @@ class ModifyElementAndHierarchyServiceIntegrationSpec extends IntegrationSpec {
         return elementHierarchy
     }
 
-    @IgnoreRest
     void "test checkPathForLoop with multiple parents hierarchies"() {
         given:
         //Create a hierarchy path: 1st -> 2nd
@@ -66,10 +79,26 @@ class ModifyElementAndHierarchyServiceIntegrationSpec extends IntegrationSpec {
         assert loopPath == [first_element, second_element, third_element, first_element]
     }
 
-    //The purpose of this test is to verify that multiple, sequential calls to the checkPathForLoop method all
-    // return correctly. It has been observed during development that this method, intermittently, will return a null
-    // although the path + child parameters do define a loop.
-    void "test checkPathForLoop #description"() {
+    void "test checkPathForLoop with s nested loop element"() {
+        given:
+        //Create a hierarchy path: 1st -> 2nd
+        ElementHierarchy eh1stTo2nd = buildElementHierarchy(first_element, second_element, "subClassOf")
+        //Create a hierarchy path: 3rd -> 4th
+        ElementHierarchy eh3rdTo4th = buildElementHierarchy(third_element, fourth_element, "subClassOf")
+        //Create a hierarchy path: 3rd -> 5th
+        ElementHierarchy eh3rdTo5th = buildElementHierarchy(third_element, fifth_element, "subClassOf")
+        //Create a hierarchy path: 5th -> 1st
+        ElementHierarchy eh5thTo1st = buildElementHierarchy(fifth_element, first_element, "subClassOf")
+
+        when:
+        //Try to add the 3rd element at the end of the hierarchy path - a nested loop! (1st -> 2nd -> 3rd -> 5th -> 1st)
+        List<Element> loopPath = modifyElementAndHierarchyService.checkPathForLoop([first_element, second_element], third_element)
+
+        then:
+        assert loopPath == [first_element, second_element, third_element, fifth_element, first_element]
+    }
+
+    void "test checkPathForLoop add the 3rd element after the 5th element - a loop"() {
         given:
         //Create a hierarchy path: 1st -> 2nd -> 3rd -> 4th -> 5th
         ElementHierarchy eh1stTo2nd = buildElementHierarchy(first_element, second_element, "subClassOf")
@@ -79,24 +108,10 @@ class ModifyElementAndHierarchyServiceIntegrationSpec extends IntegrationSpec {
 
         when:
         //Try to add the third element at the end of the hierarchy path - a loop!
-        List<Element> loopPath = modifyElementAndHierarchyService.checkPathForLoop([first_element, second_element, third_element, fourth_element, fifth_element], childElement)
+        List<Element> loopPath = modifyElementAndHierarchyService.checkPathForLoop([first_element, second_element, third_element, fourth_element, fifth_element], third_element)
 
         then:
-        assert loopPath == [first_element, second_element, third_element, fourth_element, fifth_element, third_element, fourth_element]
-
-        where:
-        description                                          | childElement
-        "add the 3rd element after the 5th element - a loop" | third_element
-        "add the 3rd element after the 5th element - a loop" | third_element
-        "add the 3rd element after the 5th element - a loop" | third_element
-        "add the 3rd element after the 5th element - a loop" | third_element
-        "add the 3rd element after the 5th element - a loop" | third_element
-        "add the 3rd element after the 5th element - a loop" | third_element
-        "add the 3rd element after the 5th element - a loop" | third_element
-        "add the 3rd element after the 5th element - a loop" | third_element
-        "add the 3rd element after the 5th element - a loop" | third_element
-        "add the 3rd element after the 5th element - a loop" | third_element
-        "add the 3rd element after the 5th element - a loop" | third_element
+        assert loopPath == [first_element, second_element, third_element, fourth_element, fifth_element, third_element]
     }
 
     void "test checkPathForLoop with a hidden loop"() {

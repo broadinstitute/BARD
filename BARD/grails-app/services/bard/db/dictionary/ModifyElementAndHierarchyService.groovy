@@ -157,7 +157,7 @@ class ModifyElementAndHierarchyService {
         List<Element> testPath = new LinkedList<Element>(newPath)
         testPath.add(child)
 
-        if (newPath.last() == child) {
+        if (newPath.contains(child)) {
             return testPath
         } else {
             return hasLoopInReachableDescendant(testPath)
@@ -181,7 +181,7 @@ class ModifyElementAndHierarchyService {
                 newTestPath.add(parentHierarchy.childElement)
                 printPath(newTestPath, "before else call")
                 List<Element> descendantLoop = hasLoopInReachableDescendant(newTestPath)
-                if(BooleanUtils.isFalse(descendantLoop.isEmpty())){
+                if (BooleanUtils.isFalse(descendantLoop.isEmpty())) {
                     printPath(descendantLoop, "descendantLoop")
                     loopPath.addAll(descendantLoop)
                     break
@@ -192,7 +192,7 @@ class ModifyElementAndHierarchyService {
     }
 
 
-    static void printPath(List<Element> path, String msg="") {
+    static void printPath(List<Element> path, String msg = "") {
         println("${path*.label.join(',')}  ${msg}")
     }
 }
