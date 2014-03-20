@@ -3,6 +3,7 @@ package bard.db.dictionary
 import bard.hibernate.AuthenticatedUserRequired
 import bard.util.BardCacheUtilsService
 import grails.plugins.springsecurity.SpringSecurityService
+import org.apache.commons.lang3.BooleanUtils
 
 /**
  * used to modify Element's and ElementHierarchy's
@@ -65,7 +66,7 @@ class ModifyElementAndHierarchyService {
 
             //test if the proposed path has any loops by searching recursively
             List<Element> pathWithLoop = checkPathForLoop(newPathAsElementList, childElement)
-            if (null == pathWithLoop) {
+            if (pathWithLoop.isEmpty()) {
                 ElementHierarchy elementHierarchy = new ElementHierarchy(parentElement: newPathLastElement,
                         childElement: childElement, relationshipType: relationshipType, dateCreated: new Date(),
                         modifiedBy: getUsername())
@@ -103,7 +104,7 @@ class ModifyElementAndHierarchyService {
 
                 //test if the proposed path has any loops by searching recursively
                 List<Element> pathWithLoop = checkPathForLoop(newPathAsElementList, childElement)
-                if (null == pathWithLoop) {
+                if (pathWithLoop.isEmpty()) {
                     Element oldParent = previousPathLastElementHierarchy.parentElement
                     oldParent.parentHierarchies.remove(previousPathLastElementHierarchy)
                     previousPathLastElementHierarchy.parentElement = newPathLastElement
@@ -164,21 +165,35 @@ class ModifyElementAndHierarchyService {
     }
 
     private static List<Element> hasLoopInReachableDescendant(List<Element> testPath) {
-        Element lastElement = testPath.last()
+        final List<Element> loopPath = []
+        final List<ElementHierarchy> lastElementChildren = testPath.last().parentHierarchies.toList()
 
-        for (ElementHierarchy parentHierarchy : lastElement.parentHierarchies) {
+        for (ElementHierarchy parentHierarchy : lastElementChildren) {
+            printPath(testPath, "loop")
             if (testPath.contains(parentHierarchy.childElement)) {
                 //add the child so that the path contains the full loop
                 testPath.add(parentHierarchy.childElement)
-                return testPath
+                printPath(testPath, "if testPath return")
+                loopPath.addAll(testPath)
+                break
             } else {
                 List<Element> newTestPath = new LinkedList<Element>(testPath)
                 newTestPath.add(parentHierarchy.childElement)
-                return hasLoopInReachableDescendant(newTestPath)
+                printPath(newTestPath, "before else call")
+                List<Element> descendantLoop = hasLoopInReachableDescendant(newTestPath)
+                if (BooleanUtils.isFalse(descendantLoop.isEmpty())) {
+                    printPath(descendantLoop, "descendantLoop")
+                    loopPath.addAll(descendantLoop)
+                    break
+                }
             }
         }
+        return loopPath
+    }
 
-        return null
+
+    static void printPath(List<Element> path, String msg = "") {
+        println("${path*.label.join(',')}  ${msg}")
     }
 }
 
