@@ -1,16 +1,19 @@
+import bard.db.audit.BardContextUtils
 import bard.db.dictionary.Element
 import bard.db.dictionary.ElementHierarchy
 import bard.db.enums.ValueType
 import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentMeasure
+import bard.db.experiment.ExperimentService
 import bard.db.experiment.PanelExperiment
 import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
 import bard.db.registration.Panel
-import bard.db.registration.PanelAssay
 import bard.db.registration.PanelService
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.hibernate.SessionFactory
 import registration.AssayService
 
 /**
@@ -20,12 +23,20 @@ import registration.AssayService
 
 final Integer assayId = 8265
 final Integer assayContextId = 576582
+final Integer screeningConcentrationContextId = 614759
+final Integer otherCellNameElementId = 377
+final Integer cellsPerWellElementId = 2302
+final Integer percentViabilityElementId = 992
 final File contextInfoFile = new File("C:/Local/i_drive/projects/bard/dataMigration/NCI60/NCI_CellLineName_Density.csv")
 final Role newOwnerRole = Role.findById(16) //Broad owner role
 final boolean flush = true
-Panel panel = Panel.findById(185) //panel to put new assay definitions in
+final Panel panel = Panel.findById(185) //panel to put new assay definitions in
 
 SpringSecurityUtils.reauthenticate("dlahr", null)
+
+SessionFactory sf = ctx.sessionFactory
+BardContextUtils.setBardContextUsername(sf.currentSession, "dlahr")
+println(BardContextUtils.getCurrentUsername(sf.currentSession))
 
 
 println("read context info from file ${contextInfoFile.getAbsolutePath()}")
@@ -35,13 +46,18 @@ List<ContextInfo> ciList = readContextInfoFromFile(contextInfoFile)
 //investigateExistingCellLineNamesAndParents(ciList)
 //result - some were found, all had parent that was "other cell name"
 
-Element otherCellName = Element.findById(377)
-Element cellsPerWell = Element.findById(2302)
+final Element otherCellName = Element.findById(otherCellNameElementId)
 
-Assay templateAssay = Assay.findById(assayId)
-AssayContext variableContext = AssayContext.findById(assayContextId)
+AssayCreator assayCreator = new AssayCreator()
+assayCreator.assayService = ctx.assayService
+assayCreator.templateAssay = Assay.findById(assayId)
+assayCreator.newOwnerRole = newOwnerRole
+assayCreator.variableContext = AssayContext.findById(assayContextId)
+assayCreator.otherCellName = otherCellName
+assayCreator.cellsPerWell = Element.findById(cellsPerWellElementId)
+assayCreator.flush = flush
 
-AssayService assayService = ctx.assayService
+CellLineNameFinderOrCreator cellLineNameFinderOrCreator = new CellLineNameFinderOrCreator(otherCellName, flush)
 
 PanelExperiment panelExperiment = null
 Assay.withTransaction {status ->
@@ -50,34 +66,20 @@ Assay.withTransaction {status ->
     panelExperiment.panel = panel
     panelExperiment.modifiedBy = "dlahr"
 
-    trySave(panelExperiment, flush, "panelExperiment")
+    Utilities.trySave(panelExperiment, flush, "panelExperiment")
+
+    final Element percentViability = Element.findById(percentViabilityElementId)
+    final AssayContext screenConcContext = AssayContext.findById(screeningConcentrationContextId)
+    ExperimentCreator experimentCreator = new ExperimentCreator(newOwnerRole, panelExperiment, flush,
+            (ExperimentService)(ctx.experimentService), percentViability, screenConcContext)
 
     for (ContextInfo ci : ciList) {
-        Element cellName = findOrCreateCellLineName(ci.cellLineName, otherCellName, true)
+        Element cellName = cellLineNameFinderOrCreator.findOrCreate(ci.cellLineName)
         assert cellName
 
-        Assay newAssay = assayService.cloneAssayForEditing(templateAssay, "NCI60")
-        newAssay.assayName = "${templateAssay.assayName} for cell line ${cellName.label}"
-        newAssay.ownerRole = newOwnerRole
+        ci.assay = assayCreator.createCopyOfAssay(cellName, ci.cellsPerContainer)
 
-        AssayContext ac = findMatchingAssayContext(newAssay, variableContext, false)
-        assert ac
-
-        addContextItems(ac, otherCellName, cellName, cellsPerWell, ci.cellsPerContainer, flush)
-
-        trySave(newAssay, flush, "assay for cell line ${cellName.label}")
-
-        ci.assay = newAssay
-
-        Experiment e = new Experiment()
-        e.experimentName = "Experiment from ${newAssay.assayName}".toString()
-        e.ownerRole = newOwnerRole
-        e.assay = newAssay
-        panelExperiment.addToExperiments(e)
-
-        trySave(e, flush, "experiment for cell line ${cellName.label}")
-
-        ci.experimentId = e.id
+        ci.experiment = experimentCreator.createExperiment(ci.assay)
     }
 
     println("add assays to panel")
@@ -85,9 +87,9 @@ Assay.withTransaction {status ->
     PanelService panelService = ctx.panelService
     panelService.associateAssays(panel.id, assayList)
 
-    trySave(panel, flush, "panel")
+    Utilities.trySave(panel, flush, "panel")
 
-    status.setRollbackOnly()
+//    status.setRollbackOnly()
 }
 
 
@@ -96,7 +98,7 @@ println()
 println("results:  ")
 println("panelExperiment.id:  ${panelExperiment.id}")
 for (ContextInfo ci : ciList) {
-    List<String> fields = [ci.cellSerial, ci.cellLineName, ci.cellsPerContainer, ci.assay.id, ci.experimentId] as List<String>
+    List<String> fields = [ci.cellSerial, ci.cellLineName, ci.cellsPerContainer, ci.assay.id, ci.experiment.id] as List<String>
     println(fields.join(","))
 }
 
@@ -110,11 +112,11 @@ class ContextInfo {
     String cellLineName
     Integer cellsPerContainer
     Assay assay
-    Long experimentId
+    Experiment experiment
 
     @Override
     String toString() {
-        return "$cellSerial $cellLineName $cellsPerContainer ${assay.id} $experimentId"
+        return "$cellSerial $cellLineName $cellsPerContainer ${assay.id} ${experiment.id}"
     }
 }
 
@@ -166,116 +168,195 @@ void investigateExistingCellLineNamesAndParents(List<ContextInfo> ciList) {
     }
 }
 
-/**
- * searches for an assayContext within the provided assay that matches the provided searchAc, based on name,
- * attributeType, attributeElement, and valueElement
- * @param a
- * @param searchAc
- * @return
- */
-AssayContext findMatchingAssayContext(Assay a, AssayContext searchAc, boolean verbose) {
-    for (AssayContext ac : a.assayContexts) {
+class CellLineNameFinderOrCreator {
+    Element otherCellName
+    boolean flush
 
-        if (verbose) {
-            println(ac.contextName)
+    CellLineNameFinderOrCreator(Element otherCellName, boolean flush) {
+        this.otherCellName = otherCellName
+        this.flush = flush
+    }
+
+    Element findOrCreate(String cellLineName) {
+        Element cellName = Element.findByLabelIlike(cellLineName)
+        if (! cellName) {
+            print("$cellLineName not found, creating ")
+            cellName = new Element()
+            cellName.label = cellLineName
+            cellName.dateCreated = new Date()
+            cellName.lastUpdated = new Date()
+
+            Utilities.trySave(cellName, flush, "element for cell line name ${cellName.label}")
+
+            ElementHierarchy eh = new ElementHierarchy()
+            eh.childElement = cellName
+            eh.parentElement = otherCellName
+            eh.relationshipType = "subClassOf"
+            eh.dateCreated = new Date()
+            eh.lastUpdated = new Date()
+
+            Utilities.trySave(eh, flush, "elementHierarchy for cell line name ${cellName.label}")
+
+            println(" elementId:${cellName.id} elementHierarchyId:${eh.id}")
+        } else {
+            println("${cellLineName} found elementId:${cellName.id}")
         }
 
-        if (ac.contextName.equalsIgnoreCase(searchAc.contextName)) {
+        return cellName
+    }
+}
+
+
+class Utilities {
+    static void trySave(def obj, boolean flush, String msg) {
+        if (! obj.save(flush: flush)) {
+            println("failed in attempt to save $msg")
+            println(obj.errors)
+            throw new Exception(obj.errors.toString())
+        }
+    }
+
+    /**
+     * searches for an assayContext within the provided assay that matches the provided searchAc, based on name,
+     * attributeType, attributeElement, and valueElement
+     * @param a
+     * @param searchAc
+     * @return
+     */
+    static AssayContext findMatchingAssayContext(Assay a, AssayContext searchAc, boolean verbose) {
+        for (AssayContext ac : a.assayContexts) {
 
             if (verbose) {
-                println("${ac.assayContextItems.size()} ${searchAc.assayContextItems.size()}")
+                println(ac.contextName)
             }
 
-            if (ac.assayContextItems.size() == searchAc.assayContextItems.size()) {
-                boolean contextItemsMatch = true
-                for (int i = 0; i < ac.assayContextItems.size(); i++) {
-                    AssayContextItem aci = ac.assayContextItems.get(i)
-                    AssayContextItem searchAci = searchAc.assayContextItems.get(i)
+            if (ac.contextName.equalsIgnoreCase(searchAc.contextName)) {
 
-                    if (verbose) {
-                        println("${aci.attributeElementId}:${aci.valueElementId} ${searchAci.attributeElementId}:${searchAci.valueElementId}")
-                    }
-
-                    contextItemsMatch = contextItemsMatch && (aci.attributeType.equals(searchAci.attributeType))
-                    contextItemsMatch = contextItemsMatch && (aci.attributeElementId == searchAci.attributeElementId)
-                    contextItemsMatch = contextItemsMatch && (aci.valueElementId == searchAci.valueElementId)
+                if (verbose) {
+                    println("${ac.assayContextItems.size()} ${searchAc.assayContextItems.size()}")
                 }
 
-                if (contextItemsMatch) {
-                    return ac
+                if (ac.assayContextItems.size() == searchAc.assayContextItems.size()) {
+                    boolean contextItemsMatch = true
+                    for (int i = 0; i < ac.assayContextItems.size(); i++) {
+                        AssayContextItem aci = ac.assayContextItems.get(i)
+                        AssayContextItem searchAci = searchAc.assayContextItems.get(i)
+
+                        if (verbose) {
+                            println("${aci.attributeElementId}:${aci.valueElementId} ${searchAci.attributeElementId}:${searchAci.valueElementId}")
+                        }
+
+                        contextItemsMatch = contextItemsMatch && (aci.attributeType.equals(searchAci.attributeType))
+                        contextItemsMatch = contextItemsMatch && (aci.attributeElementId == searchAci.attributeElementId)
+                        contextItemsMatch = contextItemsMatch && (aci.valueElementId == searchAci.valueElementId)
+                    }
+
+                    if (contextItemsMatch) {
+                        return ac
+                    }
                 }
             }
         }
+
+        return null
+    }
+}
+
+
+class AssayCreator {
+    AssayService assayService
+    Assay templateAssay
+    Role newOwnerRole
+    AssayContext variableContext
+    Element otherCellName
+    Element cellsPerWell
+    boolean flush
+
+    Assay createCopyOfAssay(Element cellName, Integer cellsPerContainer) {
+        Assay newAssay = assayService.cloneAssayForEditing(templateAssay, "NCI60")
+        newAssay.assayName = "${templateAssay.assayName} for cell line ${cellName.label}"
+        newAssay.ownerRole = newOwnerRole
+
+        AssayContext ac = Utilities.findMatchingAssayContext(newAssay, variableContext, false)
+        assert ac
+
+        addContextItems(ac, cellName, cellsPerContainer)
+
+        Utilities.trySave(newAssay, flush, "assay for cell line ${cellName.label}")
+
+        return newAssay
     }
 
-    return null
-}
 
+    void addContextItems(AssayContext ac, Element cellName, Integer cellsPerContainer) {
 
-Element findOrCreateCellLineName(String cellLineName, Element otherCellName, boolean flush) {
-    Element cellName = Element.findByLabelIlike(cellLineName)
-    if (! cellName) {
-        print("$cellLineName not found, creating ")
-        cellName = new Element()
-        cellName.label = cellLineName
-        cellName.dateCreated = new Date()
-        cellName.lastUpdated = new Date()
-
-        trySave(cellName, flush, "element for cell line name ${cellName.label}")
-
-        ElementHierarchy eh = new ElementHierarchy()
-        eh.childElement = cellName
-        eh.parentElement = otherCellName
-        eh.relationshipType = "subClassOf"
-        eh.dateCreated = new Date()
-        eh.lastUpdated = new Date()
-
-        trySave(eh, flush, "elementHierarchy for cell line name ${cellName.label}")
-
-        println(" elementId:${cellName.id} elementHierarchyId:${eh.id}")
-    } else {
-        println("${cellLineName} found elementId:${cellName.id}")
-    }
-
-    return cellName
-}
-
-
-void finishAssayContextItem(AssayContextItem aci) {
-    aci.valueDisplay = aci.deriveDisplayValue()
-    aci.lastUpdated = aci.dateCreated
-}
-
-
-void addContextItems(AssayContext ac, Element otherCellName, Element cellName,
-                     Element cellsPerWell, Integer cellsPerContainer, boolean flush) {
-
-    AssayContextItem aci = new AssayContextItem()
-    aci.attributeElement = otherCellName
-    aci.valueElement = cellName
-    ac.addToAssayContextItems(aci)
-    aci.valueType = ValueType.ELEMENT
-    finishAssayContextItem(aci)
-
-    trySave(aci, flush, "assayContextItem specifying cell line name")
-
-    if (cellsPerWell && cellsPerContainer) {
-        aci = new AssayContextItem()
-        aci.attributeElement = cellsPerWell
-        aci.valueNum = cellsPerContainer
-        aci.qualifier = "= "
+        AssayContextItem aci = new AssayContextItem()
+        aci.attributeElement = otherCellName
+        aci.valueElement = cellName
         ac.addToAssayContextItems(aci)
-        aci.valueType = ValueType.NUMERIC
+        aci.valueType = ValueType.ELEMENT
         finishAssayContextItem(aci)
 
-        trySave(aci, flush, "assayContextItem specifying cell line name")
+        Utilities.trySave(aci, flush, "assayContextItem specifying cell line name")
+
+        if (cellsPerWell && cellsPerContainer) {
+            aci = new AssayContextItem()
+            aci.attributeElement = cellsPerWell
+            aci.valueNum = cellsPerContainer
+            aci.qualifier = "= "
+            ac.addToAssayContextItems(aci)
+            aci.valueType = ValueType.NUMERIC
+            finishAssayContextItem(aci)
+
+            Utilities.trySave(aci, flush, "assayContextItem specifying cell line name")
+        }
+    }
+
+    static void finishAssayContextItem(AssayContextItem aci) {
+        aci.valueDisplay = aci.deriveDisplayValue()
+        aci.lastUpdated = aci.dateCreated
     }
 }
 
-void trySave(def obj, boolean flush, String msg) {
-    if (! obj.save(flush: flush)) {
-        println("failed in attempt to save $msg")
-        println(obj.errors)
-        throw new Exception(obj.errors.toString())
+
+class ExperimentCreator {
+
+    Role newOwnerRole
+    PanelExperiment panelExperiment
+    boolean flush
+    ExperimentService experimentService
+    Element percentViability
+    AssayContext screeningConcContext
+
+    ExperimentCreator(Role newOwnerRole, PanelExperiment panelExperiment, boolean flush,
+                      ExperimentService experimentService, Element percentViability,
+                      AssayContext screeningConcContext) {
+        this.newOwnerRole = newOwnerRole
+        this.panelExperiment = panelExperiment
+        this.flush = flush
+        this.experimentService = experimentService
+        this.percentViability = percentViability
+        this.screeningConcContext = screeningConcContext
+    }
+
+    Experiment createExperiment(Assay assay) {
+        Experiment e = new Experiment()
+        e.experimentName = "NCI60 experiment from ${assay.assayName}".toString()
+        e.ownerRole = newOwnerRole
+        e.assay = assay
+        panelExperiment.addToExperiments(e)
+
+        Utilities.trySave(e, flush, "${e.experimentName}")
+
+        AssayContext newScreenConcContext = Utilities.findMatchingAssayContext(assay, screeningConcContext, false)
+        List<Integer> newScreenConcContextIds = [newScreenConcContext.id] as List<Integer>
+        ExperimentMeasure em = experimentService.createNewExperimentMeasure(e.id, null, percentViability, null,
+                newScreenConcContextIds, null, true)
+
+        e.addToExperimentMeasures(em)
+
+        return e
     }
 }
+
+
