@@ -1,11 +1,15 @@
 import bard.db.audit.BardContextUtils
 import bard.db.dictionary.Element
 import bard.db.dictionary.ElementHierarchy
+import bard.db.enums.ContextType
 import bard.db.enums.ValueType
 import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentContext
+import bard.db.experiment.ExperimentContextItem
 import bard.db.experiment.ExperimentMeasure
 import bard.db.experiment.ExperimentService
 import bard.db.experiment.PanelExperiment
+import bard.db.model.AbstractContextItem
 import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
@@ -21,12 +25,15 @@ import registration.AssayService
  */
 
 
+final File outputFile = new File("c:/Local/i_drive/projects/bard/dataMigration/NCI60/cell-serial_experiment_id_mapping.csv")
 final Integer assayId = 8265
 final Integer assayContextId = 576582
 final Integer screeningConcentrationContextId = 614759
 final Integer otherCellNameElementId = 377
 final Integer cellsPerWellElementId = 2302
 final Integer percentViabilityElementId = 992
+final Integer laboratoryNameId = 559
+final Integer nciDtpId = 1414
 final File contextInfoFile = new File("C:/Local/i_drive/projects/bard/dataMigration/NCI60/NCI_CellLineName_Density.csv")
 final Role newOwnerRole = Role.findById(16) //Broad owner role
 final boolean flush = true
@@ -70,8 +77,10 @@ Assay.withTransaction {status ->
 
     final Element percentViability = Element.findById(percentViabilityElementId)
     final AssayContext screenConcContext = AssayContext.findById(screeningConcentrationContextId)
+    final Element laboratoryName = Element.findById(laboratoryNameId)
+    final Element nciDtp = Element.findById(nciDtpId)
     ExperimentCreator experimentCreator = new ExperimentCreator(newOwnerRole, panelExperiment, flush,
-            (ExperimentService)(ctx.experimentService), percentViability, screenConcContext)
+            (ExperimentService)(ctx.experimentService), percentViability, screenConcContext, nciDtp, laboratoryName)
 
     for (ContextInfo ci : ciList) {
         Element cellName = cellLineNameFinderOrCreator.findOrCreate(ci.cellLineName)
@@ -89,18 +98,31 @@ Assay.withTransaction {status ->
 
     Utilities.trySave(panel, flush, "panel")
 
-//    status.setRollbackOnly()
+    status.setRollbackOnly()
 }
 
 
 
+BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))
 println()
 println("results:  ")
+writer.write("results:  ")
+writer.newLine()
 println("panelExperiment.id:  ${panelExperiment.id}")
+writer.write("panelExperiment.id:  ${panelExperiment.id}".toString())
+writer.newLine()
+writer.write("cell-serial,cell_line_name,cells-per-container,ADID,EID")
+writer.newLine()
+
 for (ContextInfo ci : ciList) {
     List<String> fields = [ci.cellSerial, ci.cellLineName, ci.cellsPerContainer, ci.assay.id, ci.experiment.id] as List<String>
+    String line = fields.join(",")
+    writer.write(line)
+    writer.newLine()
     println(fields.join(","))
 }
+
+writer.close()
 
 
 
@@ -260,6 +282,11 @@ class Utilities {
 
         return null
     }
+
+    static void finishContextItem(AbstractContextItem aci) {
+        aci.valueDisplay = aci.deriveDisplayValue()
+        aci.lastUpdated = aci.dateCreated
+    }
 }
 
 
@@ -295,7 +322,7 @@ class AssayCreator {
         aci.valueElement = cellName
         ac.addToAssayContextItems(aci)
         aci.valueType = ValueType.ELEMENT
-        finishAssayContextItem(aci)
+        Utilities.finishContextItem(aci)
 
         Utilities.trySave(aci, flush, "assayContextItem specifying cell line name")
 
@@ -306,20 +333,16 @@ class AssayCreator {
             aci.qualifier = "= "
             ac.addToAssayContextItems(aci)
             aci.valueType = ValueType.NUMERIC
-            finishAssayContextItem(aci)
+            Utilities.finishContextItem(aci)
 
             Utilities.trySave(aci, flush, "assayContextItem specifying cell line name")
         }
-    }
-
-    static void finishAssayContextItem(AssayContextItem aci) {
-        aci.valueDisplay = aci.deriveDisplayValue()
-        aci.lastUpdated = aci.dateCreated
     }
 }
 
 
 class ExperimentCreator {
+    static final String contextName = "laboratory name"
 
     Role newOwnerRole
     PanelExperiment panelExperiment
@@ -327,16 +350,20 @@ class ExperimentCreator {
     ExperimentService experimentService
     Element percentViability
     AssayContext screeningConcContext
+    Element nciDtp
+    Element laboratoryName
 
     ExperimentCreator(Role newOwnerRole, PanelExperiment panelExperiment, boolean flush,
                       ExperimentService experimentService, Element percentViability,
-                      AssayContext screeningConcContext) {
+                      AssayContext screeningConcContext, Element nciDtp, Element laboratoryName) {
         this.newOwnerRole = newOwnerRole
         this.panelExperiment = panelExperiment
         this.flush = flush
         this.experimentService = experimentService
         this.percentViability = percentViability
         this.screeningConcContext = screeningConcContext
+        this.nciDtp = nciDtp
+        this.laboratoryName = laboratoryName
     }
 
     Experiment createExperiment(Assay assay) {
@@ -354,6 +381,25 @@ class ExperimentCreator {
                 newScreenConcContextIds, null, true)
 
         e.addToExperimentMeasures(em)
+
+        ExperimentContext ec = new ExperimentContext()
+        ec.experiment = e
+        e.addToExperimentContexts(ec)
+        ec.contextName = contextName
+        ec.contextType = ContextType.EXPERIMENT
+        ec.lastUpdated = ec.dateCreated
+
+        Utilities.trySave(ec, flush, "${e.experimentName} context")
+
+        ExperimentContextItem eci = new ExperimentContextItem()
+        eci.experimentContext = ec
+        ec.addToExperimentContextItems(eci)
+        eci.attributeElement = laboratoryName
+        eci.valueType = ValueType.ELEMENT
+        eci.valueElement = nciDtp
+        Utilities.finishContextItem(eci)
+
+        Utilities.trySave(eci, flush, "${e.experimentName} contextItem")
 
         return e
     }
