@@ -98,7 +98,7 @@ Assay.withTransaction {status ->
 
     Utilities.trySave(panel, flush, "panel")
 
-    status.setRollbackOnly()
+//    status.setRollbackOnly()
 }
 
 
