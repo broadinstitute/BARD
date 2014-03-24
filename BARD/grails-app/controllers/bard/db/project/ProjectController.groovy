@@ -4,16 +4,16 @@ import acl.CapPermissionService
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
-import bard.db.enums.ContextType
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.Status
 import bard.db.experiment.Experiment
-import bard.db.model.AbstractContextOwner
+import bard.db.experiment.PanelExperiment
 import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.EditingHelper
 import bard.db.registration.IdType
 import bard.db.registration.MergeAssayDefinitionService
+import bard.db.registration.Panel
 import bardqueryapi.IQueryService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
@@ -88,7 +88,7 @@ class ProjectController {
             }
         }
         catch (AccessDeniedException ade) {
-            log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editProjectStatus", ee)
@@ -120,7 +120,7 @@ class ProjectController {
 
         }
         catch (AccessDeniedException ade) {
-           log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editProjectOwnerRole", ee)
@@ -152,7 +152,7 @@ class ProjectController {
             generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.name)
 
         } catch (AccessDeniedException ade) {
-           log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee, ee)
@@ -185,7 +185,7 @@ class ProjectController {
             generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.description)
 
         } catch (AccessDeniedException ade) {
-           log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editDescription", ee)
@@ -258,21 +258,21 @@ class ProjectController {
         }
 
         // Don't allow caching if the page is editable
-        if(editable){
+        if (editable) {
             response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
             response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
             response.setDateHeader("Expires", 0); // Proxies
         }
 
-        return [instance: projectInstance,
-                projectOwner: owner,
-                pexperiment: projectExperimentRenderService.contructGraph(projectInstance),
-                editable: editable ? 'canedit' : 'cannotedit',
-                contextItemSubTemplate: editable ? 'edit' :'show',
-                projectAdapter: projectMap?.projectAdapter,
-                experiments: projectMap?.experiments,
-                assays: projectMap?.assays,
-                searchString: params.searchString
+        return [instance              : projectInstance,
+                projectOwner          : owner,
+                pexperiment           : projectExperimentRenderService.contructGraph(projectInstance),
+                editable              : editable ? 'canedit' : 'cannotedit',
+                contextItemSubTemplate: editable ? 'edit' : 'show',
+                projectAdapter        : projectMap?.projectAdapter,
+                experiments           : projectMap?.experiments,
+                assays                : projectMap?.assays,
+                searchString          : params.searchString
         ]
     }
 
@@ -344,7 +344,6 @@ class ProjectController {
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: e.message
         }
     }
-
 
 
     @Secured(['isAuthenticated()'])
@@ -425,13 +424,25 @@ class ProjectController {
             return [command: command]
         }
 
-        if (command.idType == IdType.ADID && !command.experimentIds) {
-            command.findAvailableExperiments()
+        if (command.idType == IdType.ADID && !command.experimentIds && !command.panelExperimentIds) {
+            command.findAvailablesByADIDs()
+            return [command: command]
+        }
+        if ([IdType.PANEL, IdType.PANEL_EXPERIMENT].contains(command.idType) && !command.experimentIds && !command.panelExperimentIds) {
+            command.findAvailablesByPanels()
             return [command: command]
         }
         try {
-            command.addExperimentsToProject()
-            redirect(action: "show", id: command.projectId, fragment: "experiment-and-step-header")
+            switch (command.entityType) {
+                case EntityType.EXPERIMENT:
+                    command.addExperimentsToProject()
+                    break
+                case EntityType.EXPERIMENT_PANEL:
+                    command.addPanelExperimentsToProject()
+                    break
+                default:
+                    break
+            }
         }
         catch (AccessDeniedException ade) {
             log.error("Access denied Experiments to Project", ade)
@@ -446,6 +457,7 @@ class ProjectController {
             return [command: command]
         }
 
+        redirect(action: "show", id: command.projectId, fragment: "experiment-and-step-header")
     }
 }
 
@@ -458,7 +470,7 @@ class AssociateExperimentsCommand extends BardCommand {
     //if this is true then it means this command objetc must be valid
     boolean fromAddPage = false
 
-    //The source entity (Could be ADID, AID or EID)
+    //The source entity (Could be ADID, AID, EID, Panel or PanelExperiment)
     String sourceEntityIds
 
     IdType idType = IdType.EID
@@ -470,6 +482,10 @@ class AssociateExperimentsCommand extends BardCommand {
     //if this is true then we should validate the experimentIds. This value is set to true in the templae
     //selectExperimentsToAddToProjects
     boolean validateExperimentIds = false
+
+    EntityType entityType
+    List<Long> panelExperimentIds = []
+    List<PanelExperiment> availablePanelExperiments = []
 
     static constraints = {
         projectId(nullable: false, validator: { value, command, err ->
@@ -560,13 +576,16 @@ class AssociateExperimentsCommand extends BardCommand {
     List<Experiment> getExperiments() {
         List<Experiment> experiments = []
 
-        if (idType != IdType.ADID) {
+        if (idType != IdType.ADID && !this.experimentIds) {
             final List<Long> entityIds = MergeAssayDefinitionService.convertStringToIdList(sourceEntityIds)
             for (Long entityId : entityIds) {
                 final def entity = mergeAssayDefinitionService.convertIdToEntity(this.idType, entityId)
-                if (entity instanceof Experiment) {
-                    final Experiment experiment = (Experiment) entity
-                    experiments.add(experiment)
+                if (entity instanceof List<Experiment>) {
+                    final List<Experiment> exprmnts = (List<Experiment>) entity
+                    experiments.addAll(exprmnts)
+                } else if (entity instanceof PanelExperiment) {
+                    final PanelExperiment panelExperiment = (PanelExperiment) entity
+                    experiments.addAll(panelExperiment.experiments)
                 }
             }
         } else {
@@ -575,6 +594,29 @@ class AssociateExperimentsCommand extends BardCommand {
             }
         }
         return experiments
+    }
+
+    List<PanelExperiment> getPanelExperiments() {
+        List<PanelExperiment> panelExperiments = []
+
+        if (idType != IdType.ADID && !panelExperimentIds) {
+            final List<Long> entityIds = MergeAssayDefinitionService.convertStringToIdList(sourceEntityIds)
+            for (Long entityId : entityIds) {
+                final def entity = mergeAssayDefinitionService.convertIdToEntity(this.idType, entityId)
+                if (entity instanceof List<Experiment>) {
+                    final List<Experiment> experiments = (List<Experiment>) entity
+                    panelExperiments.addAll(experiments*.panel.findAll { it != null }.unique())
+                } else if (entity instanceof PanelExperiment) {
+                    final PanelExperiment panelExperiment = (PanelExperiment) entity
+                    experiments.add(panelExperiment)
+                }
+            }
+        } else {
+            for (Long panelExperimentId : panelExperimentIds) {
+                panelExperiments.add(PanelExperiment.get(panelExperimentId))
+            }
+        }
+        return panelExperiments
     }
 
     Project getProject() {
@@ -594,8 +636,13 @@ class AssociateExperimentsCommand extends BardCommand {
 
     }
 
+    void addPanelExperimentsToProject() {
+        for (PanelExperiment panelExperiment : getPanelExperiments()) {
+            projectService.addPanelExperimentToProject(panelExperiment, projectId, getStage())
+        }
+    }
 
-    void findAvailableExperiments() {
+    void findAvailablesByADIDs() {
 
         if (this.idType != IdType.ADID) {
             this.errorMessages.add("This method only handles ADID's")
@@ -606,16 +653,57 @@ class AssociateExperimentsCommand extends BardCommand {
         final List<Long> entityIds = MergeAssayDefinitionService.convertStringToIdList(sourceEntityIds)
 
         for (Long entityId : entityIds) {
-            final def entity = mergeAssayDefinitionService.convertIdToEntity(this.idType, entityId)
-            Set<Experiment> experiments = [] as HashSet<Experiment>
-            if (entity instanceof Assay) {
-                final Assay assay = (Assay) entity
-                experiments = assay.experiments
+            final List entities = mergeAssayDefinitionService.convertIdToEntity(this.idType, entityId)
+            for (def entity : entities) {
+                Set<Experiment> experiments = [] as HashSet<Experiment>
+                if (entity instanceof Assay) {
+                    final Assay assay = (Assay) entity
+                    experiments = assay.experiments
+                }
+                for (Experiment experiment : experiments) {
+                    if (this.entityType == EntityType.EXPERIMENT) {
+                        if (!projectService.isExperimentAssociatedWithProject(experiment, project) &&
+                                experiment.experimentStatus != Status.RETIRED) {
+                            this.availableExperiments.add(experiment)
+                        }
+                    } else if (this.entityType == EntityType.EXPERIMENT_PANEL) {
+                        PanelExperiment panelExperiment = experiment.panel
+                        if (panelExperiment && !projectService.isPanelExperimentAssociatedWithProject(panelExperiment, project)) {
+                            this.availablePanelExperiments.add(panelExperiment)
+                        }
+                    }
+                }
             }
-            for (Experiment experiment : experiments) {
-                if (!projectService.isExperimentAssociatedWithProject(experiment, project) &&
-                        experiment.experimentStatus != Status.RETIRED) {
-                    this.availableExperiments.add(experiment)
+        }
+    }
+
+    void findAvailablesByPanels() {
+        if (!([IdType.PANEL, IdType.PANEL_EXPERIMENT].contains(this.idType))) {
+            this.errorMessages.add("This method only handles Panel and PanelExperiment")
+            return
+        }
+        availableExperiments = [] as HashSet<Experiment>
+        final Project project = getProject()
+        final List<Long> entityIds = MergeAssayDefinitionService.convertStringToIdList(sourceEntityIds)
+
+        for (Long entityId : entityIds) {
+            final def entity = mergeAssayDefinitionService.convertIdToEntity(this.idType, entityId)
+            if (!entity) {
+                break
+            }
+            assert (entity instanceof PanelExperiment), "Entity must be of type PanelExperiment: ${entity.class.simpleName}"
+            final PanelExperiment panelExperiment = (PanelExperiment) entity
+            if (this.entityType == EntityType.EXPERIMENT) {
+                Set<Experiment> experiments = panelExperiment.experiments
+                for (Experiment experiment : experiments) {
+                    if (!projectService.isExperimentAssociatedWithProject(experiment, project) &&
+                            experiment.experimentStatus != Status.RETIRED) {
+                        this.availableExperiments.add(experiment)
+                    }
+                }
+            } else if (this.entityType == EntityType.EXPERIMENT_PANEL) {
+                if (!projectService.isPanelExperimentAssociatedWithProject(panelExperiment, project)) {
+                    this.availablePanelExperiments.add(panelExperiment)
                 }
             }
         }
@@ -666,6 +754,7 @@ class ProjectCommand extends BardCommand {
         project.ownerRole = Role.findByAuthority(ownerRole)
     }
 }
+
 @InheritConstructors
 @Validateable
 class InlineEditableCommand extends BardCommand {
@@ -691,6 +780,19 @@ class InlineEditableCommand extends BardCommand {
         }
         return b.toString()
     }
-
 }
 
+enum EntityType {
+    EXPERIMENT("Experiment"),
+    EXPERIMENT_PANEL("Experiment-Panel")
+
+    final String id;
+
+    private EntityType(String id) {
+        this.id = id
+    }
+
+    String getId() {
+        return id
+    }
+}

@@ -1,4 +1,4 @@
-<%@ page import="bard.db.registration.IdType" %>
+<%@ page import="bard.db.registration.IdType; bard.db.project.EntityType" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +12,7 @@
     <div class="row-fluid">
         <div class="span2"></div>
 
-        <div class="span10"><h4>Add Experiments To Project ${command?.project?.id} - ${command?.project?.name}</h4>
+        <div class="span10"><h4>Add Experiments or Panel-Experiments To Project ${command?.project?.id} - ${command?.project?.name}</h4>
         </div>
     </div>
 
@@ -43,17 +43,21 @@
                 <input type="hidden" name="fromAddPage" value="true"/>
                 <g:hiddenField name="projectId" id="projectId" value="${command?.project?.id}"/>
 
-                <h5><div>Select Type of ID.</div></h5>
+            %{--make this field read-only if a type has already been selected--}%
+                <h5><div>Choose Experiment or Panel-Experiment</div></h5>
+                <g:select name="entityType" id="entityType" required=""
+                          from="${EntityType.values()}"
+                          value="${command.entityType}"
+                          optionValue="id"/>
+
+                <h5><div>Select Type of ID to Search By</div></h5>
                 <g:select name="idType" id="idType" required=""
                           from="${IdType.values()}"
                           value="${command.idType}"
                           optionValue="name"/>
 
-
-
                 <h5><div>Paste Ids to add to project (space delimited).<br/>
-                    If you chose the AssayDefinition ID option above, you would be prompted to select the experiments
-                    from the ADID(s) below, on the next page.
+                    If you chose the AssayDefinition ID, Panel ID, Panel-Experiment ID (or for some PubChem AIDs) above, you would be prompted to select from a list of matching experiments or panel-experiments.
                 </div></h5>
                 <g:textArea class="input-xxlarge" id="sourceEntityIds" name="sourceEntityIds"
                             value="${command.sourceEntityIds}" required=""/>
@@ -71,6 +75,11 @@
                 <div id="selectExperimentsId">
                     <g:render template="selectExperimentsToAddToProjects" model="[command: command]"/>
                 </div>
+
+                <div id="selectPanelExperimentsId">
+                    <g:render template="selectPanelExperimentsToAddToProjects" model="[command: command]"/>
+                </div>
+
                 <g:link controller="project" action="show" fragment="experiment-and-step-header"
                         id="${command.projectId}"
                         class="btn">Cancel</g:link>

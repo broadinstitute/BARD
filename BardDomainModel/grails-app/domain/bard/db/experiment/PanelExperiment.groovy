@@ -33,4 +33,8 @@ class PanelExperiment {
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
     }
+
+    String getDisplayName() {
+        return "${this.id} - ${this.panel?.name ?: ''}"
+    }
 }

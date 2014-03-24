@@ -4,6 +4,7 @@ import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.enums.Status
 import bard.db.experiment.Experiment
+import bard.db.experiment.PanelExperiment
 import bard.db.people.Person
 import bard.db.people.Role
 import org.apache.commons.lang3.StringUtils
@@ -78,7 +79,7 @@ class ProjectService {
     Project updateProjectStatus(Long id, Status newProjectStatus) {
         Project project = Project.findById(id)
         project.projectStatus = newProjectStatus
-        if(newProjectStatus.equals(Status.APPROVED) && project.isDirty('projectStatus')){
+        if (newProjectStatus.equals(Status.APPROVED) && project.isDirty('projectStatus')) {
             Person currentUser = Person.findByUserName(springSecurityService.authentication.name)
             project.approvedBy = currentUser
             project.approvedDate = new Date()
@@ -208,6 +209,18 @@ class ProjectService {
         experiment.save()
     }
 
+    @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void addPanelExperimentToProject(PanelExperiment panelExperiment, Long id, Element stage) {
+        Project project = Project.findById(id)
+        if (isPanelExperimentAssociatedWithProject(panelExperiment, project)) {
+            throw new UserFixableException("Panel-Experiment " + panelExperiment.id + " is already associated with Project " + project.id)
+        }
+        ProjectPanelExperiment projectPanelExperiment = new ProjectPanelExperiment(panelExperiment: panelExperiment, project: project, stage: stage)
+        project.addToProjectExperiments(projectPanelExperiment)
+        projectPanelExperiment.save()
+        project.save()
+    }
+
     /**
      * Add link between two experiments that are associated with the project. The candidate link can not be duplicate with any existing one.
      * The candidate link can not result any cycle of graph.
@@ -253,6 +266,23 @@ class ProjectService {
             ProjectExperiment pe ->
                 if (pe.project.id == project?.id)
                     isAssociated = true
+        }
+        return isAssociated
+    }
+
+    /**
+     * Checks if a panel-experiment is associated with a project or not
+     * @param panelExperiment
+     * @param project
+     * @return
+     */
+    boolean isPanelExperimentAssociatedWithProject(PanelExperiment panelExperiment, Project project) {
+        boolean isAssociated = false
+        List<ProjectPanelExperiment> projectPanelExperiments = ProjectPanelExperiment.findAllByProject(project)
+        projectPanelExperiments.each { ProjectPanelExperiment projectPanelExperiment ->
+            if (projectPanelExperiment.panelExperiment.id == panelExperiment.id) {
+                isAssociated = true
+            }
         }
         return isAssociated
     }
