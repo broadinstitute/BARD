@@ -26,18 +26,22 @@ import registration.AssayService
 
 
 final File outputFile = new File("c:/Local/i_drive/projects/bard/dataMigration/NCI60/cell-serial_experiment_id_mapping.csv")
+final Integer broadOwnerRoleId = 16
+final Integer panelId = 145
 final Integer assayId = 8265
 final Integer assayContextId = 576582
-final Integer screeningConcentrationContextId = 614759
+final Integer screeningConcentrationContextId = 608036
 final Integer otherCellNameElementId = 377
 final Integer cellsPerWellElementId = 2302
 final Integer percentViabilityElementId = 992
 final Integer laboratoryNameId = 559
 final Integer nciDtpId = 1414
 final File contextInfoFile = new File("C:/Local/i_drive/projects/bard/dataMigration/NCI60/NCI_CellLineName_Density.csv")
-final Role newOwnerRole = Role.findById(16) //Broad owner role
 final boolean flush = true
-final Panel panel = Panel.findById(185) //panel to put new assay definitions in
+
+
+final Role newOwnerRole = Role.findById(broadOwnerRoleId)
+final Panel panel = Panel.findById(panelId)
 
 SpringSecurityUtils.reauthenticate("dlahr", null)
 
@@ -57,9 +61,14 @@ final Element otherCellName = Element.findById(otherCellNameElementId)
 
 AssayCreator assayCreator = new AssayCreator()
 assayCreator.assayService = ctx.assayService
+
 assayCreator.templateAssay = Assay.findById(assayId)
+assert assayCreator.templateAssay
+
 assayCreator.newOwnerRole = newOwnerRole
 assayCreator.variableContext = AssayContext.findById(assayContextId)
+assert assayCreator.variableContext
+
 assayCreator.otherCellName = otherCellName
 assayCreator.cellsPerWell = Element.findById(cellsPerWellElementId)
 assayCreator.flush = flush
@@ -77,6 +86,7 @@ Assay.withTransaction {status ->
 
     final Element percentViability = Element.findById(percentViabilityElementId)
     final AssayContext screenConcContext = AssayContext.findById(screeningConcentrationContextId)
+    assert screenConcContext
     final Element laboratoryName = Element.findById(laboratoryNameId)
     final Element nciDtp = Element.findById(nciDtpId)
     ExperimentCreator experimentCreator = new ExperimentCreator(newOwnerRole, panelExperiment, flush,
