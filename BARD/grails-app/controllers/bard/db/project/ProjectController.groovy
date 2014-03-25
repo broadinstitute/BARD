@@ -653,24 +653,22 @@ class AssociateExperimentsCommand extends BardCommand {
         final List<Long> entityIds = MergeAssayDefinitionService.convertStringToIdList(sourceEntityIds)
 
         for (Long entityId : entityIds) {
-            final List entities = mergeAssayDefinitionService.convertIdToEntity(this.idType, entityId)
-            for (def entity : entities) {
-                Set<Experiment> experiments = [] as HashSet<Experiment>
-                if (entity instanceof Assay) {
-                    final Assay assay = (Assay) entity
-                    experiments = assay.experiments
-                }
-                for (Experiment experiment : experiments) {
-                    if (this.entityType == EntityType.EXPERIMENT) {
-                        if (!projectService.isExperimentAssociatedWithProject(experiment, project) &&
-                                experiment.experimentStatus != Status.RETIRED) {
-                            this.availableExperiments.add(experiment)
-                        }
-                    } else if (this.entityType == EntityType.EXPERIMENT_PANEL) {
-                        PanelExperiment panelExperiment = experiment.panel
-                        if (panelExperiment && !projectService.isPanelExperimentAssociatedWithProject(panelExperiment, project)) {
-                            this.availablePanelExperiments.add(panelExperiment)
-                        }
+            final def entity = mergeAssayDefinitionService.convertIdToEntity(this.idType, entityId)
+            Set<Experiment> experiments = [] as HashSet<Experiment>
+            if (entity instanceof Assay) {
+                final Assay assay = (Assay) entity
+                experiments = assay.experiments
+            }
+            for (Experiment experiment : experiments) {
+                if (this.entityType == EntityType.EXPERIMENT) {
+                    if (!projectService.isExperimentAssociatedWithProject(experiment, project) &&
+                            experiment.experimentStatus != Status.RETIRED) {
+                        this.availableExperiments.add(experiment)
+                    }
+                } else if (this.entityType == EntityType.EXPERIMENT_PANEL) {
+                    PanelExperiment panelExperiment = experiment.panel
+                    if (panelExperiment && !projectService.isPanelExperimentAssociatedWithProject(panelExperiment, project)) {
+                        this.availablePanelExperiments.add(panelExperiment)
                     }
                 }
             }
