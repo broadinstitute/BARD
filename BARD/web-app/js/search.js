@@ -125,6 +125,12 @@ $(document).ready(function () {
         handleFilteredQuery(searchString, 'CompoundFacetForm', 'CompoundFacetForm', 'compoundsTab', "totalCompounds", 'compounds', 'Compounds ');
         return false; //do not submit form the normal way, use Ajax instead
     });
+    $(document).on("submit", "#ExperimentFacetForm", function (event) {
+        event.preventDefault();	// prevent the default action behaviour to happen
+        var searchString = $("#searchString").val();
+        handleFilteredQuery(searchString, 'ExperimentFacetForm', 'ExperimentFacetForm', 'experimentsTab', "totalExperiments", 'experiments', 'Experiments ');
+        return false; //do not submit form the normal way, use Ajax instead
+    });
 
 
     //bind buttons to reset filters
@@ -136,6 +142,9 @@ $(document).ready(function () {
     });
     $(document).on("click", "#CompoundFacetForm_ResetButton", function () {
         resetAllFilters('CompoundFacetForm');
+    });
+    $(document).on("click", "#ExperimentFacetForm_ResetButton", function () {
+        resetAllFilters('ExperimentFacetForm');
     });
 
     //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
@@ -186,6 +195,7 @@ function handlePaging(url) {
     var assayIndex = url.indexOf("Assays");
     var compoundIndex = url.indexOf("Compounds");
     var projectIndex = url.indexOf("Projects");
+    var experimentIndex = url.indexOf("Experiments");
     var structureSearchIndex = url.indexOf("Structure");
 
     //to find the right search to perform
@@ -197,6 +207,9 @@ function handlePaging(url) {
     }
     else if (projectIndex >= 0) {
         handleSearch(url, 'ProjectFacetForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+    }
+    else if (experimentIndex >= 0) {
+        handleSearch(url, 'ExperimentFacetForm', 'experimentsTab', 'totalExperiments', 'Experiments ', 'experiments');
     }
     else if (structureSearchIndex >= 0) {
         handleStructureSearch(url, 'searchForm');
@@ -248,6 +261,7 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
     var totalHitsElement = '#' + totalHitsForResourceId;
     var updateDivId = '#' + updateDiv;
     var searchForm = "#" + currentFormId;
+    window.console.log('ControllerAction: ' + controllerAction + '  CurrentFormId: ' + currentFormId + '  UpdateDiv: ' + updateDiv)
     $.ajax({
         url:controllerAction,
         type:'POST',
@@ -331,12 +345,16 @@ function findTheAppropriateControllerActionFromFacetType(searchType, facetFormTy
                 return "searchProjects"
             }
             if (facetFormType == 'CompoundFacetForm') {
-                return "searchCompounds"
+            return "searchCompounds"
+            }
+            if (facetFormType == 'ExperimentFacetForm') {
+                return "searchExperiments"
             }
             break;
         case 'ID':
         case 'CID':
         case 'ADID':
+//        case 'EID':
         case 'PID':
             if (facetFormType == 'AssayFacetForm') {
                 return 'searchAssaysByIDs'
@@ -347,6 +365,9 @@ function findTheAppropriateControllerActionFromFacetType(searchType, facetFormTy
             if (facetFormType == 'CompoundFacetForm') {
                 return 'searchCompoundsByIDs'
             }
+//            if (facetFormType == 'ExperimentFacetForm') {
+//                return 'searchExperimentsByIDs'
+//            }
             break;
         case 'STRUCTURE':
             if (facetFormType == 'CompoundFacetForm') {
@@ -422,16 +443,25 @@ function handleAllFreeTextSearches(activeTab, pageOffset) {
                 handleSearch('/BARD/bardWebInterface/searchAssays?offset=' + pageOffset, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
                 handleSearch('/BARD/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
                 handleSearch('/BARD/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                handleSearch('/BARD/bardWebInterface/searchExperiments', 'searchForm', 'experimentsTab', 'totalExperiments', 'Experiments ', 'experiments');
                 break;
             case 'compounds':
                 handleSearch('/BARD/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
                 handleSearch('/BARD/bardWebInterface/searchCompounds?offset=' + pageOffset, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
                 handleSearch('/BARD/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                handleSearch('/BARD/bardWebInterface/searchExperiments', 'searchForm', 'experimentsTab', 'totalExperiments', 'Experiments ', 'experiments');
                 break;
             case 'projects':
                 handleSearch('/BARD/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
                 handleSearch('/BARD/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
                 handleSearch('/BARD/bardWebInterface/searchProjects?offset=' + pageOffset, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                handleSearch('/BARD/bardWebInterface/searchExperiments', 'searchForm', 'experimentsTab', 'totalExperiments', 'Experiments ', 'experiments');
+                break;
+            case 'experiments':
+                handleSearch('/BARD/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+                handleSearch('/BARD/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+                handleSearch('/BARD/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                handleSearch('/BARD/bardWebInterface/searchExperiments?offset=' + pageOffset, 'searchForm', 'experimentsTab', 'totalExperiments', 'Experiments ', 'experiments');
                 break;
         }
     }
@@ -439,6 +469,7 @@ function handleAllFreeTextSearches(activeTab, pageOffset) {
         handleSearch(rootURL + 'searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
         handleSearch(rootURL + 'searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
         handleSearch(rootURL + 'searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+        handleSearch(rootURL + 'searchExperiments', 'searchForm', 'experimentsTab', 'totalExperiments', 'Experiments ', 'experiments');
     }
 }
 
@@ -521,16 +552,25 @@ function activateCurrentTab(currentTab) {
             activateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds ");
             deActivateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions (0)');
             deActivateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects (0)');
+            deActivateTabs('experimentsTab', 'experimentsTabLi', 'experiments', 'Experiments (0)');
             break;
         case 'assaysTab':
             deActivateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds (0)");
             activateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions ');
             deActivateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects (0)');
+            deActivateTabs('experimentsTab', 'experimentsTabLi', 'experiments', 'Experiments (0)');
             break;
         case 'projectsTab':
             deActivateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds (0)");
             deActivateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions (0)');
             activateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects ');
+            deActivateTabs('experimentsTab', 'experimentsTabLi', 'experiments', 'Experiments (0)');
+            break;
+        case 'experimentsTab':
+            deActivateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds (0)");
+            deActivateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions (0)');
+            deActivateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects (0)');
+            activateTabs('experimentsTab', 'experimentsTabLi', 'experiments', 'Experiments ');
             break;
         default:
             activateCurrentTab('assaysTab');

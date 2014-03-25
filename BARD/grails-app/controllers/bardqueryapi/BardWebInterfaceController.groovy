@@ -516,6 +516,61 @@ class BardWebInterfaceController {
         }
 
     }
+/**
+ * Given a list of Experiment ids, invoke this action
+ */
+//    def searchExperimentsByIDs(SearchCommand searchCommand) {
+//        if (isHTTPBadRequest(searchCommand.searchString, 'Search String is required for experiment search by Ids', bardUtilitiesService.username)) {
+//            return
+//        }
+//        try {
+//
+//            String originalSearchString = searchCommand.searchString
+//            final String[] searchStringSplit = searchCommand.searchString.split(":")
+//
+//            if (searchStringSplit.length == 2) {  //if the search string is of the form PID:1234,3456...
+//                final String searchTypeString = searchStringSplit[0]
+//                final String ids = searchStringSplit[1]
+//                handleIdSearchInput(searchTypeString, ids, "EID", "Input String start with EID:", "Please enter Experiment Ids after the string EID:")
+//                //assign the list of ids only to the command object
+//                searchCommand.searchString = ids
+//            }
+//            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
+//            queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
+//
+//            Map<String, Integer> searchParams = handleSearchParams()
+//
+//            final List<Long> experimentIds = searchStringToIdList(searchCommand.searchString)
+//            int top = experimentIds.size()
+//            int skip = 0
+//            params.max = top
+//            params.skip = 0
+//            final List<Long> capIds = []
+//            for (def id : experimentIds) {
+//                capIds.add(new Long(id))
+//            }
+//            Map experimentAdapterMap = this.queryService.findExperimentsByCapIds(capIds, top, skip, searchFilters)
+//
+//            String template = this.isMobileDevice() ? "/mobile/bardWebInterface/projects" : "projects"
+//            render(template: template, model: [
+//                    projectAdapters:  experimentAdapterMap.projectAdapters,
+//                    facets:  experimentAdapterMap.facets,
+//                    nhits:  experimentAdapterMap.nHits,
+//                    searchString: "${originalSearchString}",
+//                    appliedFilters: getAppliedFilters(searchFilters,  experimentAdapterMap.facets)])
+//        }
+//        catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request
+//            final String message = "Search String ${searchCommand.searchString} Not found"
+//            handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
+//
+//        }
+//        catch (Exception exp) {
+//            final String errorMessage = 'Error while searching project by ids : ' + searchCommand.searchString
+//            log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username), exp)
+//            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
+//                    "${errorMessage}")
+//        }
+//    }
 
 //=================== Structure Searches (Exact, Similarity, SubStructure, Exact and SupeStructure Searches ===================
 
@@ -635,6 +690,13 @@ class BardWebInterfaceController {
  */
     def searchProjects(SearchCommand searchCommand) {
         handleProjectSearches(this.queryService, searchCommand, this.isMobileDevice(), this.bardUtilitiesService.username)
+    }
+/**
+ *
+ * Find Experiments annotated with Search String
+ */
+    def searchExperiments(SearchCommand searchCommand){
+        handleExperimentSearches(this.queryService, searchCommand, this.isMobileDevice(), this.bardUtilitiesService.username)
     }
 
 /**
@@ -1095,6 +1157,41 @@ class SearchHelper {
             log.error("Error performing project search." + getUserIpAddress(username), exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "ProjectSearchResult search has encountered an error:\n${exp.message}")
+        }
+    }
+
+    def handleExperimentSearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand,
+                              Boolean isMobile = false, String username){
+
+        if (isHTTPBadRequest(searchCommand.searchString, "Search String required for Experiment searches", username)) {
+            return
+        }
+
+        try {
+            removeDuplicatesFromSearchString(searchCommand)
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
+            queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
+            final String searchString = searchCommand.searchString.trim()
+            Map<String, Integer> searchParams = handleSearchParams()
+            int top = searchParams.top
+            int skip = searchParams.skip
+            final Map experimentsByTextSearch = queryService.findExperimentsByTextSearch(searchString, top, skip, searchFilters)
+            String template = isMobile ? "/mobile/bardWebInterface/projects" : "experimentResults"
+            render(template: template, model: [
+                    experimentAdapters: experimentsByTextSearch.experimentAdapters,
+                    facets: experimentsByTextSearch.facets,
+                    nhits: experimentsByTextSearch.nHits,
+                    searchString: "${searchString}",
+                    appliedFilters: getAppliedFilters(searchFilters, experimentsByTextSearch.facets)])
+        }
+        catch (HttpClientErrorException httpClientErrorException) {
+            final String message = "Could not find Experiment with given search String ${searchCommand.searchString}"
+            handleClientInputErrors(httpClientErrorException, message, username)
+        }
+        catch (Exception exp) {
+            log.error("Error performing Experiment search." + getUserIpAddress(username), exp)
+            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "ExperimentSearchResult search has encountered an error:\n${exp.message}")
         }
     }
 

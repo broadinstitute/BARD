@@ -3,6 +3,7 @@ package bardqueryapi
 import bard.core.SearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
+import bard.core.adapter.ExperimentAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.assays.AbstractAssay
 import bard.core.rest.spring.assays.Assay
@@ -11,14 +12,16 @@ import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.experiment.ConcentrationResponseSeries
+import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.experiment.PriorityElement
 import bard.core.rest.spring.experiment.ResultData
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.MetaData
 import bard.core.rest.spring.util.NameDescription
+import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.db.experiment.Experiment
 
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class QueryHelperService {
@@ -281,6 +284,36 @@ class QueryHelperService {
         }
         return projectAdapters
     }
+
+    public List<ExperimentAdapter> experimentsToAdapters(final ExperimentSearchResult experimentSearchResult) {
+        List<ExperimentAdapter> experimentAdapters = []
+        final MetaData metaData = experimentSearchResult.metaData
+        for(ExperimentSearch experimentSearch : experimentSearchResult.experiments){
+            Double score = null
+            NameDescription nameDescription = null
+            if (metaData) {
+                score = metaData.getScore(experimentSearch.bardExptId.toString())
+                nameDescription = metaData.getMatchingField(experimentSearch.bardExptId.toString())
+            }
+            final ExperimentAdapter experimentAdapter = new ExperimentAdapter(experimentSearch, score, nameDescription)
+            Experiment experiment = Experiment.get(experimentSearch.capExptId)
+            if(experiment){
+                experimentAdapter.ncgcWarehouseId = experiment.ncgcWarehouseId
+                experimentAdapter.experimentFiles = experiment.experimentFiles?.size() > 0 ? true : false
+                experimentAdapter.status = experiment.experimentStatus.toString()
+                List<Long> projectIdList = experiment.projectExperiments.collect {it.project.id} as List
+                if (projectIdList)
+                    experimentAdapter.projectIdList = projectIdList
+            }
+            else{
+                log.error("Error performing Experiment search. Experiment: ${experimentSearch?.capExptId} found in REST It is NOT found in CAP")
+            }
+
+            experimentAdapters.add(experimentAdapter)
+        }
+        return  experimentAdapters
+    }
+
     /**
      * Extract filters from the search string if any
      * @param searchFilters {@link SearchFilter}'s

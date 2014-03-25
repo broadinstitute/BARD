@@ -199,6 +199,13 @@ class ExperimentRestService extends AbstractRestService {
 
     }
 
+    public ExperimentSearchResult findExperimentsByFreeTextSearch(SearchParams searchParams) {
+        final String urlString = this.buildSearchURL(searchParams)
+        final URL url = new URL(urlString)
+        final ExperimentSearchResult experimentSearchResult = (ExperimentSearchResult)this.getForObject(url.toURI(), ExperimentSearchResult)
+        return experimentSearchResult
+    }
+
     /**
      *
      * @param capIds

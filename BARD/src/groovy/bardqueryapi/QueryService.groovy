@@ -5,6 +5,7 @@ import bard.core.SuggestParams
 import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
+import bard.core.adapter.ExperimentAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.*
 import bard.core.rest.spring.assays.*
@@ -180,6 +181,26 @@ class QueryService implements IQueryService {
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
 
+//    Map findExperimentsByCapIds(
+//            final List<Long> capExperimentIds,
+//            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+//        List<ExperimentAdapter> foundProjectAdapters = []
+//        Collection<Value> facets = []
+//        int nhits = 0
+//        String eTag = null
+//        if (capExperimentIds) {
+//            //TODO: Add filters
+//            final SearchParams searchParams = this.queryHelperService.constructSearchParams("", top, skip, searchFilters)
+//            final ProjectResult projectResult = projectRestService.searchProjectsByCapIds(capExperimentIds, searchParams)
+//            final List<ProjectAdapter> adapters = this.queryHelperService.projectsToAdapters(projectResult)
+//            foundProjectAdapters.addAll(adapters)
+//            facets = projectResult.getFacetsToValues()
+//            nhits = projectResult.numberOfHits
+//            eTag = projectResult.etag
+//        }
+//        return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits, eTag: eTag]
+//    }
+
     Map<Long, Pair<Long, Long>> findActiveVsTestedForExperiments(final List<Long> capExperimentIds) {
         Map<Long, Pair<Long, Long>> activeVTestedMap = [:]
         final List<SearchFilter> searchFilters = []
@@ -236,6 +257,28 @@ class QueryService implements IQueryService {
             eTag = projectResult.etag
         }
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits, eTag: eTag]
+    }
+
+    Map findExperimentsByTextSearch(
+            final String searchString,
+            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+
+        List<ExperimentAdapter> foundExperimentAdapters = []
+        Collection<Value> facets = []
+        String eTag = null
+        int nhits = 0
+        if (searchString) {
+            //query for count
+            //re-normalize the search string to strip out custom syntax (e.g gobp:SearchString now becomes SearchString)
+            String updatedSearchString = this.queryHelperService.stripCustomStringFromSearchString(searchString)
+            final SearchParams searchParams = this.queryHelperService.constructSearchParams(updatedSearchString, top, skip, searchFilters)
+            ExperimentSearchResult experimentSearchResult = experimentRestService.findExperimentsByFreeTextSearch(searchParams)
+            foundExperimentAdapters.addAll(this.queryHelperService.experimentsToAdapters(experimentSearchResult))
+            facets = experimentSearchResult.getFacetsToValues()
+            nhits = experimentSearchResult.numberOfHits
+            eTag = experimentSearchResult.etag
+        }
+        return [experimentAdapters: foundExperimentAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
 
     //====================================== Structure Searches ========================================

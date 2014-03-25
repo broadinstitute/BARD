@@ -179,6 +179,13 @@ modules = {
         resource url: "css/experimentalResultHistogram.css"
     }
 
+    histogramAddon {
+        dependsOn 'bootstrap,jquery,d3Library'
+
+        resource url: "js/histogram/histogram.js"
+        resource url: "css/experimentalResultHistogram.css"
+    }
+
     historyJsHtml5 {
         resource url: "js/historyjs/jquery.history.js"
     }
