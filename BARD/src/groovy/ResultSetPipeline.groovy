@@ -13,13 +13,22 @@ class ResultSetPipeline {
 
 //        println("${offset}${path.getPath().join(' > ')}")
 
-        ResultSetBox resultSetBox = this.resultSetBoxMap.get(path.parent ?: path)
-        resultSetBox.resultSetPipelinePath = path
-        resultSetBox.sidToJsonResultMap.get(sid).add(jr)
 
-        SidJsonResult sidJsonResult = resultSetBox.resultsPerMeasureMap.get(path)
-        sidJsonResult.sid = sid
-        sidJsonResult.jsonResultList.add(jr)
+        ResultSetPipelinePath keyPathForBox = path.parent ?: path
+        if(path.resultTypeId == 986L && path.statsModifierId == null){
+            keyPathForBox = path
+        }
+        ResultSetBox resultSetBox = this.resultSetBoxMap.get(keyPathForBox)
+        resultSetBox.resultSetPipelinePath = path
+        if(resultSetBox.sids.contains(sid) == false){
+            resultSetBox.sids.add(sid)
+        }
+
+        Map<Long,List<JsonResult>> sidToJsonResultMap = resultSetBox.resultsPerMeasureMap.get(path)
+
+        List<JsonResult> jsonResultList = sidToJsonResultMap.get(sid) ?: []
+        jsonResultList.add(jr)
+        sidToJsonResultMap.put(sid, jsonResultList)
     }
 
 }
