@@ -7,13 +7,23 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
  */
 
 
-final File uploadFileDir = new File("c:/Local/i_drive/projects/bard/dataMigration/NCI60/data/output")
+final File uploadFileDir =
+//        new File("c:/Local/i_drive/projects/bard/dataMigration/NCI60/data/output") //for development environment
+        new File("/home/unix/dlahr/projects/bard_NCI60/prodLoad/output") //for running on BigBard for loading to prod
+
+List<File> uploadFileList = uploadFileDir.listFiles().collect({File it -> it}) as List<File>
+Collections.sort(uploadFileList, new Comparator<File>() {
+    @Override
+    int compare(File o1, File o2) {
+        return o1.name.compareTo(o2.name)
+    }
+})
 
 SpringSecurityUtils.reauthenticate("dlahr", null)
 
 ResultsService resultsService = ctx.resultsService
 
-for (File uploadFile : uploadFileDir.listFiles()) {
+for (File uploadFile : uploadFileList) {
     Integer experimentId = readExperimentId(uploadFile)
 
     println("$experimentId $uploadFile")

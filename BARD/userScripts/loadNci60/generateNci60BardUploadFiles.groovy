@@ -9,15 +9,25 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 final boolean doWrite = true
 
-final File outputDir = new File("c:/Local/i_drive/projects/bard/dataMigration/NCI60/data/output")
+final File outputDir =
+//        new File("c:/Local/i_drive/projects/bard/dataMigration/NCI60/data/output") //for development environment
+        new File("/home/unix/dlahr/projects/bard_NCI60/prodLoad/output") //for running on BigBard for loading to prod
+
 final File unmappedNscOutputFile = new File(outputDir, "unmapped_nsc.csv")
 
-final File sidMapFile = new File("c:/Local/i_drive/projects/bard/dataMigration/NCI60/NSC_SID_Jan14_2013.txt")
-final File cellIdExperimentIdMapFile = new File("c:/Local/i_drive/projects/bard/dataMigration/NCI60/cell-serial_experiment_id_mapping.csv")
+final File sidMapFile =
+//        new File("c:/Local/i_drive/projects/bard/dataMigration/NCI60/NSC_SID_Jan14_2013.txt") //for development environment
+          new File("/home/unix/dlahr/projects/bard_NCI60/prodLoad/NSC_SID_Jan14_2013.txt") //for running on BigBard for loading to prod
+
+final File cellIdExperimentIdMapFile =
+//        new File("c:/Local/i_drive/projects/bard/dataMigration/NCI60/cell-serial_experiment_id_mapping.csv") //for development environment
+        new File("/home/unix/dlahr/projects/bard_NCI60/prodLoad/cell-serial_experiment_id_mapping.csv") //for running on BigBard for loading to prod
 
 final String inputFileHeader = "NSC\tCELL\tptConc\tptResp\tptPred\tptErr"
-final File inputDir = new File("c:/Local/i_drive/projects/bard/dataMigration/NCI60/data/input")
 
+final File inputDir =
+//        new File("c:/Local/i_drive/projects/bard/dataMigration/NCI60/data/input") //for development environment
+        new File("/chembio/datasets/csdev/PAC/temp/NCI/pts/") //for running on BigBard for loading to prod
 
 final String firstLinePrefix = ",Experiment ID,"
 final String firstLineSuffix = ",,,"
@@ -32,6 +42,13 @@ List<File> dataFileList =
         inputDir.listFiles().collect({return it}) as List<File>
 //        [new File("userScripts/loadNci60/testData/head_002.txt")] as List<File>
 //File dataFile = dataFileList.get(0)
+Collections.sort(dataFileList, new Comparator<File>() {
+    @Override
+    int compare(File o1, File o2) {
+        return o1.name.compareTo(o2.name)
+    }
+})
+println("dataFileList:  $dataFileList")
 
 //testDataReader()
 DataReader dataReader = new DataReader(dataFileList)
