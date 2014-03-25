@@ -13,7 +13,6 @@ import bard.db.registration.Assay
 import bard.db.registration.EditingHelper
 import bard.db.registration.IdType
 import bard.db.registration.MergeAssayDefinitionService
-import bard.db.registration.Panel
 import bardqueryapi.IQueryService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
@@ -424,8 +423,8 @@ class ProjectController {
             return [command: command]
         }
 
-        if (command.idType == IdType.ADID && !command.experimentIds && !command.panelExperimentIds) {
-            command.findAvailablesByADIDs()
+        if ([IdType.ADID, IdType.AID].contains(command.idType) && !command.experimentIds && !command.panelExperimentIds) {
+            command.findAvailablesByADIDsOrAids()
             return [command: command]
         }
         if ([IdType.PANEL, IdType.PANEL_EXPERIMENT].contains(command.idType) && !command.experimentIds && !command.panelExperimentIds) {
@@ -485,7 +484,7 @@ class AssociateExperimentsCommand extends BardCommand {
 
     EntityType entityType
     List<Long> panelExperimentIds = []
-    List<PanelExperiment> availablePanelExperiments = []
+    Set<PanelExperiment> availablePanelExperiments = [] as HashSet<PanelExperiment>
 
     static constraints = {
         projectId(nullable: false, validator: { value, command, err ->
@@ -583,6 +582,9 @@ class AssociateExperimentsCommand extends BardCommand {
                 if (entity instanceof List<Experiment>) {
                     final List<Experiment> exprmnts = (List<Experiment>) entity
                     experiments.addAll(exprmnts)
+                } else if (entity instanceof Experiment) {
+                    final Experiment exprmnt = (Experiment) entity
+                    experiments.add(exprmnt)
                 } else if (entity instanceof PanelExperiment) {
                     final PanelExperiment panelExperiment = (PanelExperiment) entity
                     experiments.addAll(panelExperiment.experiments)
@@ -642,10 +644,10 @@ class AssociateExperimentsCommand extends BardCommand {
         }
     }
 
-    void findAvailablesByADIDs() {
+    void findAvailablesByADIDsOrAids() {
 
-        if (this.idType != IdType.ADID) {
-            this.errorMessages.add("This method only handles ADID's")
+        if (!([IdType.ADID, IdType.AID].contains(this.idType))) {
+            this.errorMessages.add("This method only handles ADID's and AID's")
             return
         }
         availableExperiments = [] as HashSet<Experiment>
@@ -658,6 +660,8 @@ class AssociateExperimentsCommand extends BardCommand {
             if (entity instanceof Assay) {
                 final Assay assay = (Assay) entity
                 experiments = assay.experiments
+            } else if (entity instanceof List<Experiment>) {
+                experiments.addAll(entity)
             }
             for (Experiment experiment : experiments) {
                 if (this.entityType == EntityType.EXPERIMENT) {
