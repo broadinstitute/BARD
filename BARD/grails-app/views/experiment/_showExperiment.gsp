@@ -77,7 +77,8 @@
                 <dt><g:message code="instance.approvedBy.label" default="Approved By"/>:</dt>
                 <dd id="approvedById">
                     <g:if test="${instance.approvedBy?.displayName}">
-                        ${instance.approvedBy?.displayName} (<g:formatDate date="${instance.approvedDate}" format="MM/dd/yyyy"/>)
+                        ${instance.approvedBy?.displayName} (<g:formatDate date="${instance.approvedDate}"
+                                                                           format="MM/dd/yyyy"/>)
                     </g:if>
                 </dd>
             </g:if>
@@ -178,7 +179,7 @@
                                                  format="MM/dd/yyyy"/></dd>
 
             <dt><g:message code="default.modifiedBy.label"/>:</dt>
-            <dd id="modifiedById"><g:renderModifiedByEnsureNoEmail entity="${instance}" /></dd>
+            <dd id="modifiedById"><g:renderModifiedByEnsureNoEmail entity="${instance}"/></dd>
         </dl>
 
         <g:render template="experimentReferences"
@@ -192,6 +193,9 @@
             <a href="#uploadResultsModal" role="button" class="btn"
                data-toggle="modal">Upload results</a>
             <g:link action="reloadResults" class="btn" id="${instance?.id}">Reload Results from Pubchem</g:link>
+            <g:link controller="externalReference" action="create"
+                    params="[ownerClass: instance.class.simpleName, ownerId: instance.id]"
+                    class="btn">Add an External Reference</g:link>
         </g:if>
 
     <%-- Dialog for uploading results --%>

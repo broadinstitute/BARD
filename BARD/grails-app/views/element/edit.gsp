@@ -180,7 +180,7 @@
             <label class="control-label">Description:</label>
 
             <div class="controls">
-                <g:textArea rows="10" name="description" value="${element.description}" placeholder="none"
+                <g:textArea rows="10" cols="100" style="width: auto;" name="description" value="${element.description}" placeholder="none"
                             escapeHtml="true"></g:textArea>
             </div>
         </div>

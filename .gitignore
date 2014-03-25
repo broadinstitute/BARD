@@ -25,7 +25,7 @@ atlassian-ide-plugin.xml
 *.zip.sha1
 *.zip
 *.~sql
-.idea/
+/.idea/
 out/
 logs/
 *.log
