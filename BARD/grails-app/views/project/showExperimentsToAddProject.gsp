@@ -56,7 +56,7 @@
                           value="${command.idType}"
                           optionValue="name"/>
 
-                <h5><div>Paste Ids to add to project (space delimited).<br/>
+                <h5><div>Paste Ids to search by (space delimited).<br/>
                     If you chose the AssayDefinition ID, Panel ID, Panel-Experiment ID (or for some PubChem AIDs) above, you would be prompted to select from a list of matching experiments or panel-experiments.
                 </div></h5>
                 <g:textArea class="input-xxlarge" id="sourceEntityIds" name="sourceEntityIds"
@@ -83,7 +83,7 @@
                 <g:link controller="project" action="show" fragment="experiment-and-step-header"
                         id="${command.projectId}"
                         class="btn">Cancel</g:link>
-                <input type="submit" class="btn btn-primary" name="Add Experiments" value="Add Experiments"/>
+                <input type="submit" class="btn btn-primary" name="addExperimentsOrPanelExperimentBtn" value="Add Experiments or Panel-Experiments"/>
             </g:form>
         </div>
     </div>

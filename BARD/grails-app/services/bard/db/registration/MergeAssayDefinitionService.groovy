@@ -113,7 +113,7 @@ class MergeAssayDefinitionService {
     static List<Long> convertStringToIdList(final String idsAsString) {
         final List<Long> ids = []
 
-        final List<String> idsAsList = idsAsString?.trim()?.split("\\W+") as List<String>
+        final List<String> idsAsList = idsAsString?.trim()?.split("\\s+") as List<String>
 
         idsAsList.each {
             ids << Long.valueOf(it.trim())

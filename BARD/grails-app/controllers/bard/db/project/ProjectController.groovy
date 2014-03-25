@@ -534,42 +534,59 @@ class AssociateExperimentsCommand extends BardCommand {
                             err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.aid.not.found",
                                     ["${entityId}"] as Object[],
                                     "Experiment AID: ${entityId} cannot be found")
+                        } else if (command.idType == IdType.PANEL) {
+                            err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.panel.not.found",
+                                    ["${entityId}"] as Object[],
+                                    "Panel ID: ${entityId} cannot be found")
+                        } else if (command.idType == IdType.AID) {
+                            err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.panelExperiment.not.found",
+                                    ["${entityId}"] as Object[],
+                                    "Panel-Experiment ID: ${entityId} cannot be found")
                         } else {
                             err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.id.not.found",
                                     ["${entityId}"] as Object[],
                                     "Experiment EID: ${entityId} cannot be found")
                         }
-                    } else if (entity instanceof Experiment) {
-                        final Experiment experiment = (Experiment) entity
-                        if (command.projectService.isExperimentAssociatedWithProject(experiment, project)) {
-                            if (command.idType == IdType.AID) {
-                                err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.aid.already.part.project",
-                                        ["${entityId}", "${command.projectId}"] as Object[],
-                                        "Experiment AID: ${entityId} is already part of this Project ${command.projectId}");
-                            } else {
-                                err.rejectValue('sourceEntityIds',
-                                        "associateExperimentsCommand.experiment.eid.already.part.project",
-                                        ["${entityId}", "${command.projectId}"] as Object[],
-                                        "Experiment EID: ${entityId} is already part of this Project ${command.projectId}");
-                            }
+                    } else if (entity instanceof Experiment || entity instanceof List<Experiment>) {
+                        List<Experiment> experiments = []
+                        if (entity instanceof Experiment) {
+                            experiments.add((Experiment) entity)
+                        } else {
+                            experiments.addAll((List<Experiment>) entity)
+                        }
+                        for (Experiment experiment : experiments) {
+                            if (command.projectService.isExperimentAssociatedWithProject(experiment, project)) {
+                                if (command.idType == IdType.AID) {
+                                    err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.aid.already.part.project",
+                                            ["${entityId}", "${command.projectId}"] as Object[],
+                                            "Experiment AID: ${entityId} is already part of this Project ${command.projectId}");
+                                } else {
+                                    err.rejectValue('sourceEntityIds',
+                                            "associateExperimentsCommand.experiment.eid.already.part.project",
+                                            ["${entityId}", "${command.projectId}"] as Object[],
+                                            "Experiment EID: ${entityId} is already part of this Project ${command.projectId}");
+                                }
 
-                        } else if (experiment.experimentStatus == Status.RETIRED) {
-                            if (command.idType == IdType.AID) {
-                                err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.aid.retired",
-                                        ["${entityId}", "${command.projectId}"] as Object[],
-                                        "Experiment AID: ${entityId} is retired and cannot be added to this project");
-                            } else {
-                                err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.eid.retired",
-                                        ["${entityId}", "${command.projectId}"] as Object[],
-                                        "Experiment EID: ${experiment.id} is retired and cannot be added to this project");
-                            }
+                            } else if (experiment.experimentStatus == Status.RETIRED) {
+                                if (command.idType == IdType.AID) {
+                                    err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.aid.retired",
+                                            ["${entityId}", "${command.projectId}"] as Object[],
+                                            "Experiment AID: ${entityId} is retired and cannot be added to this project");
+                                } else {
+                                    err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.eid.retired",
+                                            ["${entityId}", "${command.projectId}"] as Object[],
+                                            "Experiment EID: ${experiment.id} is retired and cannot be added to this project");
+                                }
 
+                            }
                         }
                     }
                 }
             }
-        })
+        }
+        )
         idType(nullable: false)
+        entityType(nullable: false)
     }
 
     List<Experiment> getExperiments() {
@@ -710,6 +727,7 @@ class AssociateExperimentsCommand extends BardCommand {
             }
         }
     }
+
 }
 
 @InheritConstructors
