@@ -25,7 +25,10 @@ import registration.AssayService
  */
 
 
-final File outputFile = new File("c:/Local/i_drive/projects/bard/dataMigration/NCI60/cell-serial_experiment_id_mapping.csv")
+final File outputFile =
+//        new File("c:/Local/i_drive/projects/bard/dataMigration/NCI60/cell-serial_experiment_id_mapping.csv")  //for development environment
+        new File("/home/unix/dlahr/projects/bard_NCI60/prodLoad/cell-serial_experiment_id_mapping.csv") //for running on BigBard for loading to prod
+
 final Integer broadOwnerRoleId = 16
 final Integer panelId = 145
 final Integer assayId = 8265
@@ -36,7 +39,11 @@ final Integer cellsPerWellElementId = 2302
 final Integer percentViabilityElementId = 992
 final Integer laboratoryNameId = 559
 final Integer nciDtpId = 1414
-final File contextInfoFile = new File("C:/Local/i_drive/projects/bard/dataMigration/NCI60/NCI_CellLineName_Density.csv")
+
+final File contextInfoFile =
+//        new File("C:/Local/i_drive/projects/bard/dataMigration/NCI60/NCI_CellLineName_Density.csv")
+        new File("/home/unix/dlahr/projects/bard_NCI60/prodLoad/NCI_CellLineName_Density.csv")
+
 final boolean flush = true
 
 
