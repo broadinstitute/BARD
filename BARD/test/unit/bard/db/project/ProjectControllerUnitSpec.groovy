@@ -656,7 +656,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test link experiment with project success'() {
         given:
-        projectService.linkProjectExperiment(_, _, _) >> {}
+        projectService.linkExperiment(_, _, _) >> {}
         views['/project/_showstep.gsp'] = 'mock contents'
 
         when:
@@ -690,7 +690,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         controller.linkExperiment(params.fromExperimentId, params.toExperimentId, params.projectid)
 
         then:
-        projectService.linkProjectExperiment(_, _, _) >> { throw new AccessDeniedException("msg") }
+        projectService.linkExperiment(_, _, _) >> { throw new AccessDeniedException("msg") }
         assertAccesDeniedErrorMessage()
 
 
@@ -702,7 +702,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test link experiment with project fail {#description}'() {
         given:
-        projectService.linkProjectExperiment(_, _, _) >> { throw new UserFixableException('serviceError') }
+        projectService.linkExperiment(_, _, _) >> { throw new UserFixableException('serviceError') }
 
         when:
         params.fromExperimentId = fromExperimentId.call()

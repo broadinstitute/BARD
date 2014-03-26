@@ -33,25 +33,14 @@ function initProjectEditFunction() {
             var graphInJSON = $.parseJSON($('#stepGraph').html());
             var connectedNodes = graphInJSON.connectedNodes;
             var isolatedNodes = graphInJSON.isolatedNodes;
-            var nodeIds = new Array();
+            var eids = new Array();
             $.each(connectedNodes.concat(isolatedNodes), function (i, node) {
-                if (node.keyValues.type == "single") {
-                    nodeIds.push({"id": node.keyValues.eid, "type": "single"});
-                } else if (node.keyValues.type == "panel") {
-                    nodeIds.push({"id": node.keyValues.pnlExpId, "type": "panel"});
-                }
+                eids.push(node.keyValues.eid);
             });
             $('#fromExperimentId').html('<option value=""></option>');
             $('#toExperimentId').html('<option value=""></option>');
-            $.each(nodeIds.sort(function (a, b) {
-                return (a.id - b.id);
-            }), function (i, nodeId) {
-                var selectOptionString
-                if (nodeId.type == 'single') {
-                    selectOptionString = '<option value="' + nodeId.id + '-' + nodeId.type + '">' + nodeId.id + '</option>';
-                } else if (nodeId.type == 'panel') {
-                    selectOptionString = '<option value="' + nodeId.id + '-' + nodeId.type + '">' + nodeId.id + ' (Panel-Experiment)</option>';
-                }
+            $.each(eids.sort(), function (i, eid) {
+                var selectOptionString = '<option value="' + eid + '">' + eid + '</option>';
                 $('#fromExperimentId').append(selectOptionString);
                 $('#toExperimentId').append(selectOptionString);
             });
@@ -64,13 +53,9 @@ function initProjectEditFunction() {
         buttons: {
             "Link Experiment": function () {
                 var projectId = $("#projectIdForStep").val();
-                var fromSplit = $("#fromExperimentId").val().split('-');
-                var fromId = fromSplit[0];
-                var fromType = fromSplit[1];
-                var toSplit = $("#toExperimentId").val().split('-');
-                var toId = toSplit[0];
-                var toType = toSplit[1];
-                var inputdata = {'fromId': fromId, 'fromType': fromType, 'toId': toId, 'toType': toType, 'projectId': projectId};
+                var fromExperimentId = $("#fromExperimentId").val();
+                var toExperimentId = $("#toExperimentId").val();
+                var inputdata = {'fromExperimentId': fromExperimentId, 'toExperimentId': toExperimentId, 'projectId': projectId};
                 $.ajax
                 ({
                     url: "../linkExperiment",

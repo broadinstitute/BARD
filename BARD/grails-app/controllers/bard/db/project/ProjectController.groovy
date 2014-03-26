@@ -322,38 +322,18 @@ class ProjectController {
     }
 
     @Secured(['isAuthenticated()'])
-    def linkExperiment(Long fromId, String fromType, Long toId, String toType, Long projectId) {
-        if (fromId == null || fromType == null || toId == null || toType == null) {
+    def linkExperiment(Long fromExperimentId, Long toExperimentId, Long projectId) {
+        if (fromExperimentId == null || toExperimentId == null) {
             render status: HttpServletResponse.SC_BAD_REQUEST, text: "Both 'From Experiment ID' and 'To Experiment ID' are required"
             return
         }
 
-        def fromEntity = (fromType == "single") ? Experiment.findById(fromId) : (fromType == "panel") ? PanelExperiment.findById(fromId) : null
-        def toEntity = (toType == 'single') ? Experiment.findById(toId) : (toType == 'panel') ? PanelExperiment.findById(toId) : null
-
-        if (!fromEntity || !toEntity) {
-            throw new UserFixableException("Either or both experiment or panel-experiment you were trying to link does not exist in the system.")
-        }
-        if (fromEntity.class == toEntity.class && fromEntity.id == toEntity.id) {
-            throw new UserFixableException("Link between same experiments or panel-experiments is not allowed.")
-        }
-
-        Project project = Project.findById(projectId)
-        if (!project) {
-            throw new UserFixableException("Project ${projectId} does not exist.")
-        }
-
-        Boolean isFromAssociatedToProject = (fromEntity instanceof Experiment) ? projectService.isExperimentAssociatedWithProject((Experiment) fromEntity, project) : projectService.isPanelExperimentAssociatedWithProject((PanelExperiment) fromEntity, project)
-        Boolean isToAssociatedToProject = (toEntity instanceof Experiment) ? projectService.isExperimentAssociatedWithProject((Experiment) toEntity, project) : projectService.isPanelExperimentAssociatedWithProject((PanelExperiment) toEntity, project)
-
-        if (!isFromAssociatedToProject || !isToAssociatedToProject)
-            throw new UserFixableException("Experiment/panel-experiment " + fromEntity.id + " or experiment/panel-experiment " + toEntity.id + " is not associated with project " + project.id)
-
-        ProjectExperiment fromPE = (fromEntity instanceof Experiment) ? ProjectSingleExperiment.findByExperiment((Experiment) fromEntity) : ProjectPanelExperiment.findByPanelExperimentAndProject((PanelExperiment) fromEntity, project)
-        ProjectExperiment toPE = (toEntity instanceof Experiment) ? ProjectSingleExperiment.findByExperiment((Experiment) toEntity) : ProjectPanelExperiment.findByPanelExperimentAndProject((PanelExperiment) toEntity, project)
+        def fromExperiment = Experiment.findById(fromExperimentId)
+        def toExperiment = Experiment.findById(toExperimentId)
 
         try {
-            projectService.linkProjectExperiment(fromPE, toPE, project.id)
+            projectService.linkExperiment(fromExperiment, toExperiment, projectId)
+            Project project = Project.findById(projectId)
             render(template: "showstep", model: [experiments: project.projectExperiments, editable: 'canedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (AccessDeniedException ade) {
             log.error(ade, ade)
