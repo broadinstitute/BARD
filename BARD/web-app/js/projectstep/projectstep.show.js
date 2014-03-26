@@ -96,8 +96,8 @@ function nodeToDotDescription(node) {
         }
 
         text = node.id + "[style=\"bold,filled\",color=\""+color+"\",label=\"" +label+ "\"" + " fillcolor=\""+fillcolor+"\"];";
-    } else {
-        text = node.id + "[style=\"bold,filled\",color=\""+getColorForNode(keyValues)+"\",label=\"Panel of "+keyValues.eids.length + " experiments\\n" + keyValues.stage + "\"" + "];";
+    } else {//panel
+        text = node.id + "[style=\"bold,filled\",color=\""+getColorForNode(keyValues)+"\",label=\"" + keyValues.pnlExpId + "\\nPanel of "+keyValues.eids.length + " experiments\\n" + keyValues.stage + "\"" + "];";
     }
     return text
 }

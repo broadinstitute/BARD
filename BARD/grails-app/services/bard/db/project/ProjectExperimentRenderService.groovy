@@ -102,33 +102,34 @@ class ProjectExperimentRenderService {
     Node constructNode(ProjectExperiment pe) {
         pe = GrailsHibernateUtil.unwrapIfProxy(pe)
         def peAttributes
-        if(pe instanceof ProjectPanelExperiment) {
-            ProjectPanelExperiment ppe = (ProjectPanelExperiment)pe;
+        if (pe instanceof ProjectPanelExperiment) {
+            ProjectPanelExperiment ppe = (ProjectPanelExperiment) pe;
             peAttributes = [
-                    'type':'panel',
-                    'stage': ppe.stage?.label,
-                    'stageid':ppe.stage?.id,
-                    'incount': 0,
+                    'type'    : 'panel',
+                    'stage'   : ppe.stage?.label,
+                    'stageid' : ppe.stage?.id,
+                    'incount' : 0,
                     'outcount': 0,
-                    'peid':ppe.id,
-                    'pid': ppe.panelExperiment.panelId,
-                    'panel': ppe.panelExperiment.panel.name,
-                    'eids' : ppe.panelExperiment.experiments.collect {it.id}
+                    'peid'    : ppe.id,
+                    'pid'     : ppe.panelExperiment.panelId,
+                    'pnlExpId': ppe.panelExperiment.id,
+                    'panel'   : ppe.panelExperiment.panel.name,
+                    'eids'    : ppe.panelExperiment.experiments.collect { it.id }
             ]
-        } else if(pe instanceof ProjectSingleExperiment) {
-            ProjectSingleExperiment pse = (ProjectSingleExperiment)pe;
+        } else if (pe instanceof ProjectSingleExperiment) {
+            ProjectSingleExperiment pse = (ProjectSingleExperiment) pe;
             peAttributes = [
-                    'type':'single',
-                    'peid':pse.id,
-                    'stage': pse.stage?.label,
-                    'stageid':pse.stage?.id,
-                    'aid': getAidByExperiment(pse.experiment),
-                    'assay': pse.experiment?.assay?.id,
-                    'incount': 0,
+                    'type'    : 'single',
+                    'peid'    : pse.id,
+                    'stage'   : pse.stage?.label,
+                    'stageid' : pse.stage?.id,
+                    'aid'     : getAidByExperiment(pse.experiment),
+                    'assay'   : pse.experiment?.assay?.id,
+                    'incount' : 0,
                     'outcount': 0,
-                    'eid': pse.experiment?.id,
-                    'ename': pse.experiment?.experimentName,
-                    'cansee': pse.experiment?.permittedToSeeEntity(),
+                    'eid'     : pse.experiment?.id,
+                    'ename'   : pse.experiment?.experimentName,
+                    'cansee'  : pse.experiment?.permittedToSeeEntity(),
             ]
         } else {
             throw new RuntimeException("Unknown projectExperiment type: ${pe?.class?.getName()}")
