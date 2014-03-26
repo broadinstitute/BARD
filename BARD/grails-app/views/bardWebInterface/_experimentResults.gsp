@@ -27,18 +27,22 @@
                                     id="${experimentAdapter.capExptId}">${experimentAdapter.name} <small>(EID: ${experimentAdapter.capExptId})</small></g:link>
                         </g:else>
                     </h3>
+
                     <div class="row-fluid">
                         <div class="span6">
+                            <g:if test="${experimentAdapter.hasProbe}">
+                                <span class="badge badge-info">Probe</span>
+                            </g:if>
                             <dl class="dl-horizontal">
                                 <dt><g:message code="exp.search.match" default="Search Match"/>:</dt>
                                 <dd>${experimentAdapter.highlight}</dd>
                                 <dt><g:message code="exp.status" default="Status"/>:</dt>
                                 <dd>
-                                    <g:if test="${experimentAdapter.status == 'DRAFT'}">
+                                    <g:if test="${experimentAdapter.status == 'Draft'}">
                                         <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
                                              alt="Draft" title="Warning this experiment definition has not yet been reviewed for accuracy"/>
                                     </g:if>
-                                    <g:elseif test="${experimentAdapter.status == 'APPROVED'}">
+                                    <g:elseif test="${experimentAdapter.status == 'Approved'}">
                                         <img src="${resource(dir: 'images', file: 'witnessed.png')}"
                                              alt="Approved" title="This experiment has been reviewed for accuracy"/>
                                     </g:elseif>
@@ -50,8 +54,6 @@
                                 <dd>${experimentAdapter.compoundsTested}</dd>
                                 <dt><g:message code="exp.compounds.active" default="Compounds Active"/>:</dt>
                                 <dd>${experimentAdapter.activeCompounds}</dd>
-                                %{--<dt><g:message code="exp.probes" default="Probes"/>:</dt>--}%
-                                %{--<dd></dd>--}%
                                 <dt><g:message code="exp.assay.definition" default="Assay Definition"/>:</dt>
                                 <dd>
                                     <g:link controller="assayDefinition" action="show" id="${experimentAdapter.capAssayId}">${experimentAdapter.capAssayId}</g:link>

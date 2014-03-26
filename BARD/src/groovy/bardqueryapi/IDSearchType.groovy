@@ -19,7 +19,9 @@ enum IDSearchType {
     /**
      *
      */
-    PID('Project IDs');
+    PID('Project IDs'),
+
+    EID('Experiment IDs');
 
     private final String label;
     private IDSearchType(String label){

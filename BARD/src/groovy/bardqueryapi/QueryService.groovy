@@ -181,25 +181,25 @@ class QueryService implements IQueryService {
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
 
-//    Map findExperimentsByCapIds(
-//            final List<Long> capExperimentIds,
-//            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
-//        List<ExperimentAdapter> foundProjectAdapters = []
-//        Collection<Value> facets = []
-//        int nhits = 0
-//        String eTag = null
-//        if (capExperimentIds) {
-//            //TODO: Add filters
-//            final SearchParams searchParams = this.queryHelperService.constructSearchParams("", top, skip, searchFilters)
-//            final ProjectResult projectResult = projectRestService.searchProjectsByCapIds(capExperimentIds, searchParams)
-//            final List<ProjectAdapter> adapters = this.queryHelperService.projectsToAdapters(projectResult)
-//            foundProjectAdapters.addAll(adapters)
-//            facets = projectResult.getFacetsToValues()
-//            nhits = projectResult.numberOfHits
-//            eTag = projectResult.etag
-//        }
-//        return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits, eTag: eTag]
-//    }
+    Map findExperimentsByCapIds(
+            final List<Long> capExperimentIds,
+            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+        List<ExperimentAdapter> foundExperimentAdapters = []
+        Collection<Value> facets = []
+        int nhits = 0
+        String eTag = null
+        if (capExperimentIds) {
+            //TODO: Add filters
+            final SearchParams searchParams = this.queryHelperService.constructSearchParams("", top, skip, searchFilters)
+            final ExperimentSearchResult experimentSearchResult = experimentRestService.searchExperimentsByCapIds(capExperimentIds, searchParams)
+            final List<ExperimentAdapter> adapters = this.queryHelperService.experimentsToAdapters(experimentSearchResult)
+            foundExperimentAdapters.addAll(adapters)
+            facets = experimentSearchResult.getFacetsToValues()
+            nhits = experimentSearchResult.numberOfHits
+            eTag = experimentSearchResult.etag
+        }
+        return [experimentAdapters: foundExperimentAdapters, facets: facets, nHits: nhits, eTag: eTag]
+    }
 
     Map<Long, Pair<Long, Long>> findActiveVsTestedForExperiments(final List<Long> capExperimentIds) {
         Map<Long, Pair<Long, Long>> activeVTestedMap = [:]

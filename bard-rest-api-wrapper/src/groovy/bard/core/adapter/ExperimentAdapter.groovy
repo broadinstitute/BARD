@@ -4,6 +4,7 @@ import bard.core.interfaces.ExperimentAdapterInterface
 import bard.core.rest.spring.experiment.ExperimentAbstract
 import bard.core.rest.spring.util.NameDescription
 import bard.core.util.MatchedTermsToHumanReadableLabelsMapper
+import org.apache.commons.lang3.text.WordUtils
 
 /**
  * Created with IntelliJ IDEA.
@@ -92,5 +93,9 @@ class ExperimentAdapter implements ExperimentAdapterInterface{
 
     public String getStatus(){
         return status
+    }
+
+    public Boolean  getHasProbe(){
+        return experiment.hasProbe
     }
 }

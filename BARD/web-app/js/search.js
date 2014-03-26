@@ -354,7 +354,7 @@ function findTheAppropriateControllerActionFromFacetType(searchType, facetFormTy
         case 'ID':
         case 'CID':
         case 'ADID':
-//        case 'EID':
+        case 'EID':
         case 'PID':
             if (facetFormType == 'AssayFacetForm') {
                 return 'searchAssaysByIDs'
@@ -365,9 +365,9 @@ function findTheAppropriateControllerActionFromFacetType(searchType, facetFormTy
             if (facetFormType == 'CompoundFacetForm') {
                 return 'searchCompoundsByIDs'
             }
-//            if (facetFormType == 'ExperimentFacetForm') {
-//                return 'searchExperimentsByIDs'
-//            }
+            if (facetFormType == 'ExperimentFacetForm') {
+            return 'searchExperimentsByIDs'
+        }
             break;
         case 'STRUCTURE':
             if (facetFormType == 'CompoundFacetForm') {
@@ -410,9 +410,13 @@ function handleMainFormSubmit(searchString, activeTab, pageOffset) {
             break;
         case 'PID':
             activateCurrentTab('projectsTab');
-            // $("#projects").tab('show');
             showTab("projects");
             handleSearch(rootURL + 'searchProjectsByIDs' + offsetParam, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+            break;
+        case 'EID':
+            activateCurrentTab('experimentsTab');
+            showTab("experiments");
+            handleSearch(rootURL + 'searchExperimentsByIDs' + offsetParam, 'searchForm', 'experimentsTab', 'totalExperiments', 'Experiments ', 'experiments');
             break;
         case 'ID':
             //TODO: Right now we are treating Id searches like regular searches
@@ -483,16 +487,25 @@ function handleAllIdSearches(activeTab, pageOffset) {
                 handleSearch('/BARD/bardWebInterface/searchAssaysByIDs?offset=' + pageOffset, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
                 handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
                 handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                handleSearch('/BARD/bardWebInterface/searchExperimentsByIDs', 'searchForm', 'experimentsTab', 'totalExperiments', 'Experiments ', 'experiments');
                 break;
             case 'compounds':
                 handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
                 handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs?offset=' + pageOffset, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
                 handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                handleSearch('/BARD/bardWebInterface/searchExperimentsByIDs', 'searchForm', 'experimentsTab', 'totalExperiments', 'Experiments ', 'experiments');
                 break;
             case 'projects':
                 handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
                 handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
                 handleSearch('/BARD/bardWebInterface/searchProjectsByIDs?offset=' + pageOffset, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                handleSearch('/BARD/bardWebInterface/searchExperimentsByIDs', 'searchForm', 'experimentsTab', 'totalExperiments', 'Experiments ', 'experiments');
+                break;
+            case 'experiments':
+                handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+                handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+                handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+                handleSearch('/BARD/bardWebInterface/searchExperimentsByIDs?offset=' + pageOffset, 'searchForm', 'experimentsTab', 'totalExperiments', 'Experiments ', 'experiments');
                 break;
         }
     }
@@ -500,6 +513,7 @@ function handleAllIdSearches(activeTab, pageOffset) {
         handleSearch(rootURL + 'searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
         handleSearch(rootURL + 'searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
         handleSearch(rootURL + 'searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+        handleSearch(rootURL + 'searchExperimentsByIDs', 'searchForm', 'experimentsTab', 'totalExperiments', 'Experiments ', 'experiments');
     }
 }
 /**
@@ -622,6 +636,11 @@ function findSearchType(searchString) {
             case 'pid':  //this is an project search with ids
                 if (stringAfterColon.match(NUMBER_MATCHING_REGEX)) {//this is an id match
                     return 'PID'
+                }
+                break;
+            case 'eid':  //this is an project search with ids
+                if (stringAfterColon.match(NUMBER_MATCHING_REGEX)) {//this is an id match
+                    return 'EID'
                 }
                 break;
         }

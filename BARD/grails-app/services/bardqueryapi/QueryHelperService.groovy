@@ -21,6 +21,7 @@ import bard.core.rest.spring.util.MetaData
 import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.db.experiment.Experiment
+import org.apache.commons.lang3.text.WordUtils
 
 import java.util.regex.Pattern
 
@@ -300,7 +301,7 @@ class QueryHelperService {
             if(experiment){
                 experimentAdapter.ncgcWarehouseId = experiment.ncgcWarehouseId
                 experimentAdapter.experimentFiles = experiment.experimentFiles?.size() > 0 ? true : false
-                experimentAdapter.status = experiment.experimentStatus.toString()
+                experimentAdapter.status = WordUtils.capitalize(experiment.experimentStatus.toString().toLowerCase())
                 List<Long> projectIdList = experiment.projectExperiments.collect {it.project.id} as List
                 if (projectIdList)
                     experimentAdapter.projectIdList = projectIdList
