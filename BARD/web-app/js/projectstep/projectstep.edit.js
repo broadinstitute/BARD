@@ -33,14 +33,15 @@ function initProjectEditFunction() {
             var graphInJSON = $.parseJSON($('#stepGraph').html());
             var connectedNodes = graphInJSON.connectedNodes;
             var isolatedNodes = graphInJSON.isolatedNodes;
-            var eids = new Array();
-            $.each(connectedNodes.concat(isolatedNodes), function (i, node) {
-                eids.push(node.keyValues.eid);
-            });
             $('#fromExperimentId').html('<option value=""></option>');
             $('#toExperimentId').html('<option value=""></option>');
-            $.each(eids.sort(), function (i, eid) {
-                var selectOptionString = '<option value="' + eid + '">' + eid + '</option>';
+            var allNodes = connectedNodes.concat(isolatedNodes);
+            $.each(allNodes.sort(function (a, b) {
+                //sort by ID
+                return (a.id - b.id);
+            }), function (i, node) {
+                var nodeDisplayId = node.keyValues.type == 'single' ? node.keyValues.eid : node.keyValues.type == 'panel' ? node.keyValues.pnlExpId + ' (Panel-Experiment)' : null
+                var selectOptionString = '<option value="' + node.id + '">' + nodeDisplayId + '</option>';
                 $('#fromExperimentId').append(selectOptionString);
                 $('#toExperimentId').append(selectOptionString);
             });
@@ -53,12 +54,12 @@ function initProjectEditFunction() {
         buttons: {
             "Link Experiment": function () {
                 var projectId = $("#projectIdForStep").val();
-                var fromExperimentId = $("#fromExperimentId").val();
-                var toExperimentId = $("#toExperimentId").val();
-                var inputdata = {'fromExperimentId': fromExperimentId, 'toExperimentId': toExperimentId, 'projectId': projectId};
+                var fromProjectExperimentId = $("#fromExperimentId").val();
+                var toProjectExperimentId = $("#toExperimentId").val();
+                var inputdata = {'fromProjectExperimentId': fromProjectExperimentId, 'toProjectExperimentId': toProjectExperimentId, 'projectId': projectId};
                 $.ajax
                 ({
-                    url: "../linkExperiment",
+                    url: "../linkProjectExperiment",
                     //dataType:'jsonP',
                     data: inputdata,
                     cache: false,

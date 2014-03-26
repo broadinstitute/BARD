@@ -7,7 +7,6 @@ import bard.db.experiment.Experiment
 import bard.db.experiment.PanelExperiment
 import bard.db.people.Person
 import bard.db.people.Role
-import org.apache.commons.lang3.StringUtils
 import org.springframework.security.access.prepost.PreAuthorize
 
 class ProjectService {
@@ -224,34 +223,32 @@ class ProjectService {
     /**
      * Add link between two experiments that are associated with the project. The candidate link can not be duplicate with any existing one.
      * The candidate link can not result any cycle of graph.
-     * @param fromExperiment
-     * @param toExperiment
+     * @param fromProjectExperiment
+     * @param toProjectExperiment
      * @param project
      */
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void linkExperiment(Experiment fromExperiment, Experiment toExperiment, Long id) {
-        if (!fromExperiment || !toExperiment) {
-            throw new UserFixableException("Either or both experiment you were trying to link does not exist in the system.")
+    void linkProjectExperiment(ProjectExperiment fromProjectExperiment, ProjectExperiment toProjectExperiment, Long id) {
+        if (!fromProjectExperiment || !toProjectExperiment) {
+            throw new UserFixableException("Either or both project-experiment you were trying to link does not exist in the system.")
         }
-        if (fromExperiment.id == toExperiment.id) {
-            throw new UserFixableException("Link between same experiments is not allowed.")
+        if (fromProjectExperiment.id == toProjectExperiment.id) {
+            throw new UserFixableException("Link between same project-experiments is not allowed.")
         }
         Project project = Project.findById(id)
-        if (!isExperimentAssociatedWithProject(fromExperiment, project) ||
-                !isExperimentAssociatedWithProject(toExperiment, project))
-            throw new UserFixableException("Experiment " + fromExperiment.id + " or experiment " + toExperiment.id + " is not associated with project " + project.id)
-        ProjectSingleExperiment peFrom = ProjectSingleExperiment.findByProjectAndExperiment(project, fromExperiment)
-        ProjectSingleExperiment peTo = ProjectSingleExperiment.findByProjectAndExperiment(project, toExperiment)
-        ProjectStep ps = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(peFrom, peTo)
+        if (fromProjectExperiment.project != project ||
+                toProjectExperiment.project != project)
+            throw new UserFixableException("Project-experiment " + fromProjectExperiment.id + " or project-experiment " + toProjectExperiment.id + " is not associated with project " + project.id)
+        ProjectStep ps = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(fromProjectExperiment, toProjectExperiment)
         if (ps) // do not want to add one already exist
-            throw new UserFixableException(("Link between " + fromExperiment.id + " and " + toExperiment.id + " does exist, can not be added again."))
+            throw new UserFixableException(("Link between " + fromProjectExperiment.id + " and " + toProjectExperiment.id + " does exist, can not be added again."))
         // check if there will be a cycle by adding this link, if there is, return, otherwise, add
-        if (!isDAG(project, peFrom, peTo))
-            throw new UserFixableException("Link " + fromExperiment.id + " and " + toExperiment.id + " results a cycle in the graph.")
-        ProjectStep newPs = new ProjectStep(previousProjectExperiment: peFrom, nextProjectExperiment: peTo)
+        if (!isDAG(project, fromProjectExperiment, toProjectExperiment))
+            throw new UserFixableException("Link " + fromProjectExperiment.id + " and " + toProjectExperiment.id + " results a cycle in the graph.")
+        ProjectStep newPs = new ProjectStep(previousProjectExperiment: fromProjectExperiment, nextProjectExperiment: toProjectExperiment)
         newPs.save(flush: true)
-        peFrom.addToFollowingProjectSteps(newPs)
-        peTo.addToPrecedingProjectSteps(newPs)
+        fromProjectExperiment.addToFollowingProjectSteps(newPs)
+        toProjectExperiment.addToPrecedingProjectSteps(newPs)
     }
 
     /**

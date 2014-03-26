@@ -322,17 +322,17 @@ class ProjectController {
     }
 
     @Secured(['isAuthenticated()'])
-    def linkExperiment(Long fromExperimentId, Long toExperimentId, Long projectId) {
-        if (fromExperimentId == null || toExperimentId == null) {
+    def linkProjectExperiment(Long fromProjectExperimentId, Long toProjectExperimentId, Long projectId) {
+        if (fromProjectExperimentId == null || toProjectExperimentId == null) {
             render status: HttpServletResponse.SC_BAD_REQUEST, text: "Both 'From Experiment ID' and 'To Experiment ID' are required"
             return
         }
 
-        def fromExperiment = Experiment.findById(fromExperimentId)
-        def toExperiment = Experiment.findById(toExperimentId)
+        def fromProjectExperiment = ProjectExperiment.findById(fromProjectExperimentId)
+        def toProjectExperiment = ProjectExperiment.findById(toProjectExperimentId)
 
         try {
-            projectService.linkExperiment(fromExperiment, toExperiment, projectId)
+            projectService.linkProjectExperiment(fromProjectExperiment, toProjectExperiment, projectId)
             Project project = Project.findById(projectId)
             render(template: "showstep", model: [experiments: project.projectExperiments, editable: 'canedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (AccessDeniedException ade) {

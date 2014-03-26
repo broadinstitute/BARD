@@ -656,7 +656,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test link experiment with project success'() {
         given:
-        projectService.linkExperiment(_, _, _) >> {}
+        projectService.linkProjectExperiment(_, _, _) >> {}
         views['/project/_showstep.gsp'] = 'mock contents'
 
         when:
@@ -665,7 +665,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.projectid = project.id
         controller.projectService = projectService
 
-        controller.linkExperiment(params.fromExperimentId, params.toExperimentId, params.projectid)
+        controller.linkProjectExperiment(params.fromExperimentId, params.toExperimentId, params.projectid)
 
         then:
         assert response.text == responsetext
@@ -687,10 +687,10 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.projectid = project.id
         controller.projectService = projectService
 
-        controller.linkExperiment(params.fromExperimentId, params.toExperimentId, params.projectid)
+        controller.linkProjectExperiment(params.fromExperimentId, params.toExperimentId, params.projectid)
 
         then:
-        projectService.linkExperiment(_, _, _) >> { throw new AccessDeniedException("msg") }
+        projectService.linkProjectExperiment(_, _, _) >> { throw new AccessDeniedException("msg") }
         assertAccesDeniedErrorMessage()
 
 
@@ -702,7 +702,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test link experiment with project fail {#description}'() {
         given:
-        projectService.linkExperiment(_, _, _) >> { throw new UserFixableException('serviceError') }
+        projectService.linkProjectExperiment(_, _, _) >> { throw new UserFixableException('serviceError') }
 
         when:
         params.fromExperimentId = fromExperimentId.call()
@@ -710,7 +710,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.projectid = project.id
         controller.projectService = projectService
 
-        controller.linkExperiment(params.fromExperimentId, params.toExperimentId, params.projectid)
+        controller.linkProjectExperiment(params.fromExperimentId, params.toExperimentId, params.projectid)
 
         then:
         assert response?.text == 'serviceError'
@@ -726,7 +726,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
         when:
 
-        controller.linkExperiment(fromExperimentId.call(), toExperimentId.call(), project.id)
+        controller.linkProjectExperiment(fromExperimentId.call(), toExperimentId.call(), project.id)
 
         then:
         assert response.text == "Both 'From Experiment ID' and 'To Experiment ID' are required"

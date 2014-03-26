@@ -494,7 +494,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Long toExperimentId = m.eToId
         Long projectId = m.projectId
 
-        RESTClient client = getRestClient(controllerUrl, "linkExperiment", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "linkProjectExperiment", team, teamPassword)
         when:
         client.post() {
             urlenc fromExperimentId: fromExperimentId, toExperimentId: toExperimentId, projectId: projectId
@@ -520,7 +520,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Long toExperimentId = m.eToId
         Long projectId = m.projectId
 
-        RESTClient client = getRestClient(controllerUrl, "linkExperiment", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "linkProjectExperiment", team, teamPassword)
         when:
         def response = client.post() {
             urlenc fromExperimentId: fromExperimentId, toExperimentId: toExperimentId, projectId: projectId
