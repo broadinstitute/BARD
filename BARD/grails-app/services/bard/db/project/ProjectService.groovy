@@ -172,20 +172,19 @@ class ProjectService {
 
     /**
      * remove edge
-     * @param fromExperiment
-     * @param toExperiment
+     * @param fromProjectExperiment
+     * @param toProjectExperiment
      * @param project
      */
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void removeEdgeFromProject(Experiment fromExperiment, Experiment toExperiment, Long id) {
+    void removeEdgeFromProject(ProjectExperiment fromProjectExperiment, ProjectExperiment toProjectExperiment, Long id) {
         Project project = Project.findById(id)
-        def fromProjectExperiment = ProjectSingleExperiment.findByExperimentAndProject(fromExperiment, project)
-        def toProjectExperiment = ProjectSingleExperiment.findByExperimentAndProject(toExperiment, project)
+
         if (!fromProjectExperiment || !toProjectExperiment)
-            throw new UserFixableException("Experiment " + fromExperiment.id + " and / or Experiment " + toExperiment.id + " are / is not associated with project " + project.id)
+            throw new UserFixableException("Experiment " + fromProjectExperiment.id + " and / or Experiment " + toProjectExperiment.id + " are / is not associated with project " + project.id)
         def projectStep = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(fromProjectExperiment, toProjectExperiment)
         if (!projectStep)
-            throw new UserFixableException("Experiment " + fromExperiment.id + " and Experiment " + toExperiment.id + " are not linked")
+            throw new UserFixableException("Experiment " + fromProjectExperiment.id + " and Experiment " + toProjectExperiment.id + " are not linked")
         deleteProjectStep(projectStep, true)
     }
 

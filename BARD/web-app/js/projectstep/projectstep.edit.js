@@ -165,7 +165,7 @@ function deleteEdge(fromId, toId, projectId) {
             text: "Delete",
             class: "btn btn-danger",
             click: function () {
-                var data = {'fromExperimentId': fromId, 'toExperimentId': toId, 'projectId': projectId};
+                var data = {'fromProjectExperimentId': fromId, 'toProjectExperimentId': toId, 'projectId': projectId};
                 $.ajax({
                     type: 'POST',
                     url: '../removeEdgeFromProject',

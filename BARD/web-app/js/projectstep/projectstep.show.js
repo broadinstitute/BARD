@@ -13,21 +13,21 @@ $(document).ready(function () {
     layoutGraph();
 });
 
-function refreshProjectSteps(){
+function refreshProjectSteps() {
     var projectId = $("#projectIdForStep").val();
-    var inputdata = {'projectId':projectId};
+    var inputdata = {'projectId': projectId};
     $.ajax
-        ({
-            url:"../reloadProjectSteps",
-            data:inputdata,
-            cache:false,
-            success:function(data) {
-                handleSuccess(data)
-            }
-        });
+    ({
+        url: "../reloadProjectSteps",
+        data: inputdata,
+        cache: false,
+        success: function (data) {
+            handleSuccess(data)
+        }
+    });
 }
 
-var colors = ["#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C", "#FB9A99", "#E31A1C",  "#FDBF6F", "#FF7F00", "#CAB2D6", "#6A3D9A", "#FFFF99"];
+var colors = ["#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C", "#FB9A99", "#E31A1C", "#FDBF6F", "#FF7F00", "#CAB2D6", "#6A3D9A", "#FFFF99"];
 
 //
 //var colors = [ "#0000FF", "#FF0000", "#00FF00", "#FFFF00", "#FF00FF",
@@ -45,7 +45,7 @@ var aidToColorMap = {}
 
 function getColorForNode(node) {
     var color = aidToColorMap[node.assay]
-    if(! color) {
+    if (!color) {
         currentColorIndex = (currentColorIndex + 1)
         color = colors[currentColorIndex]
         aidToColorMap[node.assay] = color
@@ -82,22 +82,22 @@ function nodeToDotDescription(node) {
     var keyValues = node.keyValues;
     var text;
 
-    if(keyValues.type == "single"){
+    if (keyValues.type == "single") {
         // set fillcolor for box to lightgray if user is not allowed to see a draft experiment
         var color = getColorForNode(keyValues);
         var fillcolor;
         var label;
-        if(keyValues.cansee){
+        if (keyValues.cansee) {
             fillcolor = "white";
             label = keyValues.eid + ((keyValues.stage) ? ("\\n " + keyValues.stage) : "");
-        } else{
+        } else {
             fillcolor = "lightgray";
-            label =  keyValues.eid + "\\n Work in progress" ;
+            label = keyValues.eid + "\\n Work in progress";
         }
 
-        text = node.id + "[style=\"bold,filled\",color=\""+color+"\",label=\"" +label+ "\"" + " fillcolor=\""+fillcolor+"\"];";
+        text = node.id + "[style=\"bold,filled\",color=\"" + color + "\",label=\"" + label + "\"" + " fillcolor=\"" + fillcolor + "\"];";
     } else {//panel
-        text = node.id + "[style=\"bold,filled\",color=\""+getColorForNode(keyValues)+"\",label=\"" + keyValues.pnlExpId + "\\nPanel of "+keyValues.eids.length + " experiments\\n" + keyValues.stage + "\"" + "];";
+        text = node.id + "[style=\"bold,filled\",color=\"" + getColorForNode(keyValues) + "\",label=\"" + keyValues.pnlExpId + "\\nPanel of " + keyValues.eids.length + " experiments\\n" + keyValues.stage + "\"" + "];";
     }
     return text
 }
@@ -119,8 +119,8 @@ function getsrc() {
         var keyValues = isolatedNodes[i].keyValues;
         textgraph = textgraph + nodeToDotDescription(isolatedNodes[i])
 
-        if(i >= unconnectedPerRow) {
-        var prevIndex = i - unconnectedPerRow;
+        if (i >= unconnectedPerRow) {
+            var prevIndex = i - unconnectedPerRow;
             textgraph = textgraph + isolatedNodes[prevIndex].id + "->" + isolatedNodes[i].id + "[style=\"invis\"];";
         }
     }
@@ -136,7 +136,7 @@ function getsrc() {
 function generatesvg() {
     var result;
     try {
-        result = Viz(getsrc(),"svg");
+        result = Viz(getsrc(), "svg");
         return result;
     } catch (e) {
         return inspect(e.toString());
@@ -146,17 +146,17 @@ function generatesvg() {
 function assignFillColor(selectedNodeId, assignedColor) {
     if (!selectedNodeId)
         return;
-    var thisPolygon = "#"+selectedNodeId + " polygon";
+    var thisPolygon = "#" + selectedNodeId + " polygon";
     $(thisPolygon).attr("fill", assignedColor);
 }
 
 function assignEdgeColor(selectedEdgeId, assignedColor) {
     if (!selectedEdgeId)
         return;
-    var thisPolygon = "#"+selectedEdgeId + " polygon";
+    var thisPolygon = "#" + selectedEdgeId + " polygon";
     $(thisPolygon).attr("fill", assignedColor);
     $(thisPolygon).attr("stroke", assignedColor);
-    var thisPath = "#"+selectedEdgeId + " path";
+    var thisPath = "#" + selectedEdgeId + " path";
     $(thisPath).attr("fill", assignedColor);
     $(thisPath).attr("stroke", assignedColor);
 }
@@ -186,7 +186,7 @@ function layoutGraph() {
 
     var nodeMap = {};
     for (var i = 0; i < allNodes.length; i++) {
-        nodeMap[allNodes[i].id]  =  allNodes[i];
+        nodeMap[allNodes[i].id] = allNodes[i];
     }
 
     // set up click handling on nodes
@@ -194,14 +194,14 @@ function layoutGraph() {
         var clickedNodeId = $(this).find('title').text();
         var selectedNode = nodeMap[clickedNodeId];
         // only show draft experiment details if user it's allowed to see it or it is an experiment panel
-        if(selectedNode.keyValues.type == "panel" || selectedNode.keyValues.cansee){
+        if (selectedNode.keyValues.type == "panel" || selectedNode.keyValues.cansee) {
             // reset previous selections
             deselectPrevious();
 
             var clickedNode = $(this).find('title').text();
             var thisId = $(this).attr("id");
 
-            var thisPolygon = "#"+thisId + " polygon";
+            var thisPolygon = "#" + thisId + " polygon";
             $(thisPolygon).attr("fill", "#00FFFF");
 
             var projectId = $('#projectIdForStep').val();
@@ -210,13 +210,13 @@ function layoutGraph() {
                 var keyValues = allNodes[i].keyValues;
                 if (allNodes[i].id == clickedNode) {
                     assignFillColor(thisId, "#00FFFF");
-                    var params = {selected:keyValues, projectId:projectId, selectedNodeId:thisId};
+                    var params = {selected: keyValues, projectId: projectId, selectedNodeId: thisId};
                     $('#selection-details').html(nodeSelectionTemplate(params));
                 }
             }
 
             $('.projectStageId').editable({
-                mode:'inline',
+                mode: 'inline',
                 success: function (response, newValue) {
                     refreshProjectSteps();
                 }
@@ -242,17 +242,17 @@ function layoutGraph() {
                 var from;
                 var to;
                 for (var j = 0; j < connectedNodes.length; j++) {
-                    var keyValues = connectedNodes[j].keyValues;
+                    var node = connectedNodes[j];
                     if (connectedNodes[j].id == splitstr[0]) {
-                        from = keyValues.eid;
+                        from = node.id;
                     }
                     if (connectedNodes[j].id == splitstr[1]) {
-                        to = keyValues.eid;
+                        to = node.id;
                     }
                 }
                 assignEdgeColor(prevSelectedEdge, "black");
                 assignEdgeColor(thisId, "#00FFFF");
-                var params = {fromNode:from, toNode:to, selectedEdgeId:thisId};
+                var params = {fromNode: from, toNode: to, selectedEdgeId: thisId};
                 $('#selection-details').html(edgeSelectionTemplate(params));
             }
         }
@@ -272,7 +272,7 @@ function setupGraphScrolling() {
     var clientOffset = $("#canvas-container").offset();
 
     /* DOM-based rendering (Uses 3D when available, falls back on margin when transform not available) */
-    var render = (function(global) {
+    var render = (function (global) {
 
         var docStyle = document.documentElement.style;
 
@@ -303,23 +303,23 @@ function setupGraphScrolling() {
 
         if (helperElem.style[perspectiveProperty] !== undef) {
 
-            return function(left, top, zoom) {
+            return function (left, top, zoom) {
                 content.style[transformProperty] = 'translate3d(' + (-left) + 'px,' + (-top) + 'px,0) scale(' + zoom + ')';
                 content.style[transformOriginProperty] = "0% 0% 0px"
             };
 
         } else if (helperElem.style[transformProperty] !== undef) {
 
-            return function(left, top, zoom) {
+            return function (left, top, zoom) {
                 content.style[transformProperty] = 'translate(' + (-left) + 'px,' + (-top) + 'px) scale(' + zoom + ')';
                 content.style[transformOriginProperty] = "0% 0% 0px"
             };
 
         } else {
 
-            return function(left, top, zoom) {
-                content.style.marginLeft = left ? (-left/zoom) + 'px' : '';
-                content.style.marginTop = top ? (-top/zoom) + 'px' : '';
+            return function (left, top, zoom) {
+                content.style.marginLeft = left ? (-left / zoom) + 'px' : '';
+                content.style.marginTop = top ? (-top / zoom) + 'px' : '';
                 content.style.zoom = zoom || '';
             };
 
@@ -334,7 +334,7 @@ function setupGraphScrolling() {
     scroller.setPosition(rect.left + container.clientLeft, rect.top + container.clientTop);
 
     // Reflow handling
-    var reflow = function() {
+    var reflow = function () {
         clientWidth = container.clientWidth;
         clientHeight = container.clientHeight;
         scroller.setDimensions(clientWidth, clientHeight, contentWidth, contentHeight);
@@ -345,7 +345,7 @@ function setupGraphScrolling() {
     reflow();
 
     if ('ontouchstart' in window) {
-        container.addEventListener("touchstart", function(e) {
+        container.addEventListener("touchstart", function (e) {
             // Don't react if initial down happens on a form element
             if (e.touches[0] && e.touches[0].target && e.touches[0].target.tagName.match(/input|textarea|select/i)) {
                 return;
@@ -355,48 +355,52 @@ function setupGraphScrolling() {
             e.preventDefault();
         }, false);
 
-        document.addEventListener("touchmove", function(e) {
+        document.addEventListener("touchmove", function (e) {
             scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
         }, false);
 
-        document.addEventListener("touchend", function(e) {
+        document.addEventListener("touchend", function (e) {
             scroller.doTouchEnd(e.timeStamp);
         }, false);
 
-        document.addEventListener("touchcancel", function(e) {
+        document.addEventListener("touchcancel", function (e) {
             scroller.doTouchEnd(e.timeStamp);
         }, false);
 
     } else {
         var mousedown = false;
 
-        container.addEventListener("mousedown", function(e) {
+        container.addEventListener("mousedown", function (e) {
             if (e.target.tagName.match(/input|textarea|select/i)) {
                 return;
             }
 
-            scroller.doTouchStart([{
-                pageX: e.pageX,
-                pageY: e.pageY
-            }], e.timeStamp);
+            scroller.doTouchStart([
+                {
+                    pageX: e.pageX,
+                    pageY: e.pageY
+                }
+            ], e.timeStamp);
 
             mousedown = true;
         }, false);
 
-        document.addEventListener("mousemove", function(e) {
+        document.addEventListener("mousemove", function (e) {
             if (!mousedown) {
                 return;
             }
 
-            scroller.doTouchMove([{
-                pageX: e.pageX,
-                pageY: e.pageY
-            }], e.timeStamp);
+            scroller.doTouchMove([
+                {
+                    pageX: e.pageX,
+                    pageY: e.pageY
+                }
+            ], e.timeStamp);
 
             mousedown = true;
         }, false);
 
-        document.addEventListener("mouseup", function(e) {
+        document.addEventListener("mouseup", function (e) {
             if (!mousedown) {
                 return;
             }
@@ -407,11 +411,11 @@ function setupGraphScrolling() {
         }, false);
     }
 
-    $("#zoomIn").on("click", function() {
+    $("#zoomIn").on("click", function () {
         scroller.zoomBy(1.2, true);
     });
 
-    $("#zoomOut").on("click", function() {
+    $("#zoomOut").on("click", function () {
         scroller.zoomBy(0.8, true);
     });
 }
@@ -427,7 +431,7 @@ $(function () {
             // what the y position of the scroll is
             var y = $(this).scrollTop();
             // if inside of the experiment box
-            if (y >= top && y <= top + $('#showstep').height()- $('#placeholder').height()) {
+            if (y >= top && y <= top + $('#showstep').height() - $('#placeholder').height()) {
                 // if so, ad the fixed class
                 $('#placeholder').addClass('fixed');
             } else {

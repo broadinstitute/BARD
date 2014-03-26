@@ -304,12 +304,20 @@ class ProjectController {
     }
 
     @Secured(['isAuthenticated()'])
-    def removeEdgeFromProject(Long fromExperimentId, Long toExperimentId, Long projectId) {
-        def fromExperiment = Experiment.findById(fromExperimentId)
-        def toExperiment = Experiment.findById(toExperimentId)
+    def removeEdgeFromProject(Long fromProjectExperimentId, Long toProjectExperimentId, Long projectId) {
         def project = Project.findById(projectId)
+        if (!project) {
+            throw new UserFixableException("Could not find project ${projectId}")
+        }
+
+        def fromProjectExperiment = ProjectExperiment.findByIdAndProject(fromProjectExperimentId, project)
+        def toProjectExperiment = ProjectExperiment.findByIdAndProject(toProjectExperimentId, project)
+        if (!fromProjectExperiment || !toProjectExperiment) {
+            throw new UserFixableException("Project-experiment " + fromProjectExperimentId + " or project-experiment " + toProjectExperimentId + " is not defined")
+        }
+
         try {
-            projectService.removeEdgeFromProject(fromExperiment, toExperiment, project.id)
+            projectService.removeEdgeFromProject(fromProjectExperiment, toProjectExperiment, project.id)
             project = Project.findById(projectId)
             render(template: "showstep", model: [experiments: project.projectExperiments, editable: 'canedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (AccessDeniedException ade) {
