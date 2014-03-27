@@ -66,7 +66,7 @@ cp $BARD_CHECKOUT/sample_configs/BARD/BARD-production-config.groovy ~/.grails/BA
 cp $BARD_CHECKOUT/sample_configs/dataExport/dataExport-production-config.groovy ~/.grails/dataExport
 ```
 
-Edit the files in ~/.grails/BARD and ~/.grails/dataExport replacing the following text with values for:
+Edit the file in ~/.grails/BARD replacing the following text with values for:
 * DATABASE_HOST - The host the oracle database is running on
 * DATABASE_SID - The oracle SID on that host to connect to
 * USERNAME - The oracle user within the database which will hold the data for BARD
@@ -74,6 +74,14 @@ Edit the files in ~/.grails/BARD and ~/.grails/dataExport replacing the followin
 * RESULTS_PATH - The path to a directory where results can be saved for transfering to the warehouse.  The amount of space needed will depend on the volume of results loaded.
 * WEB_SERVER_HOSTNAME - The name of the server which the webserver is running on.
 * WAREHOUSE_API - The URL of the local warehouse API.  (for example "http://bard.nih.gov/api" is the value used by public BARD)
+
+Edit the file in ~/.grails/dataExport replacing the following text with values for:
+* DATABASE_HOST - The host the oracle database is running on
+* DATABASE_SID - The oracle SID on that host to connect to
+* USERNAME - The oracle user within the database which will hold the data for BARD
+* PASSWORD - The oracle user password
+* RESULTS_PATH - The path to a directory where results can be saved for transfering to the warehouse.  The amount of space needed will depend on the volume of results loaded.
+* API_HASHED - a hashcode that will be used by client code to authenticate to the dataExport API.  You can generate one with a command like "'foo' | md5sum".
  
 ### Build and deploy BARD application
 ```
