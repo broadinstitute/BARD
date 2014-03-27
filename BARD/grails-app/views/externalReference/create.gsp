@@ -65,6 +65,8 @@
 
                 <div class="controls">
                     <g:textField id="extAssayRef" name="extAssayRef" value="${externalReferenceInstance.extAssayRef}"/>
+
+                    <small>(please note: links to PubChem AID are formated as 'aid=xxxx' where xxxx is the AID number; links to Common Assay Reporting System (CARS) are formated as 'project_UID=xxxx')</small></label>
                 </div>
             </div>
 
