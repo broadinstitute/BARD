@@ -12,11 +12,9 @@ class ResultSetBox {
 
     List<Long> sids = []
 
-    Map<ResultSetPipelinePath,Map<Long,List<JsonResult>>> resultsPerMeasureMap = [:].withDefault { path -> [:]}
+    Map<ResultSetPipelinePath,Map<Long,List<ResultJsonContainer>>> resultsPerMeasureMap = [:].withDefault { path -> [:]}
 
     Integer getNumberOfRows(){
-            resultsPerMeasureMap.values().collect{SidJsonResult sidJsonResult ->
-                sidJsonResult.jsonResultList.size()
-            }.max()
+        resultsPerMeasureMap.collect { k, v -> v.values()*.size() }.flatten().max()
     }
 }

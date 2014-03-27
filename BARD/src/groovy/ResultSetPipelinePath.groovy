@@ -1,4 +1,5 @@
 import bard.db.experiment.JsonResult
+import bard.db.experiment.JsonResultContextItem
 import groovy.transform.EqualsAndHashCode
 import org.apache.commons.lang3.builder.EqualsBuilder
 import org.apache.commons.lang3.builder.HashCodeBuilder
@@ -8,11 +9,15 @@ import org.apache.commons.lang3.builder.HashCodeBuilder
  */
 
 class ResultSetPipelinePath {
-
+    // jsonResult resultType/Measure identifiers
     Long resultTypeId;
     Long statsModifierId;
     String resultType;
     String relationship;
+    // jsonResultContextItem identifiers
+    String attribute;
+    Long attributeId;
+
     ResultSetPipelinePath parent
 
     ResultSetPipelinePath(JsonResult jr, parent) {
@@ -20,6 +25,12 @@ class ResultSetPipelinePath {
         this.statsModifierId = jr.statsModifierId;
         this.resultType = jr.resultType;
         this.relationship = jr.relationship;
+        this.parent = parent
+    }
+
+    ResultSetPipelinePath(JsonResultContextItem jrci, parent) {
+        this.attribute = jrci.attribute
+        this.attributeId = jrci.attributeId;
         this.parent = parent
     }
 
@@ -38,6 +49,7 @@ class ResultSetPipelinePath {
         HashCodeBuilder builder = new HashCodeBuilder()
         builder.append(resultTypeId)
         builder.append(statsModifierId)
+        builder.append(attributeId)
         builder.append(parent)
         return builder.toHashCode()
     }
@@ -57,11 +69,13 @@ class ResultSetPipelinePath {
         EqualsBuilder builder = new EqualsBuilder()
         builder.append(this.resultTypeId, rhs.resultTypeId)
         builder.append(this.statsModifierId, rhs.statsModifierId)
+        builder.append(this.attributeId, rhs.attributeId)
         builder.append(this.parent, rhs.parent)
         builder.isEquals()
     }
 
     String toString() {
-        [resultType].findAll().join(' ')
+        // findAll stripping out any nulls
+        [resultType, attribute].findAll().join(' ')
     }
 }
