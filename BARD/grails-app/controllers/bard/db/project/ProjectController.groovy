@@ -332,7 +332,7 @@ class ProjectController {
     @Secured(['isAuthenticated()'])
     def linkProjectExperiment(Long fromProjectExperimentId, Long toProjectExperimentId, Long projectId) {
         if (fromProjectExperimentId == null || toProjectExperimentId == null) {
-            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Both 'From Experiment ID' and 'To Experiment ID' are required"
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Both 'From Project-Experiment ID' and 'To Project-Experiment ID' are required"
             return
         }
 
@@ -454,6 +454,7 @@ class ProjectController {
         catch (AccessDeniedException ade) {
             log.error("Access denied Experiments to Project", ade)
             render accessDeniedErrorMessage()
+            return
         } catch (UserFixableException e) {
             log.error(e, e)
             command.errorMessages.add(e.message)
