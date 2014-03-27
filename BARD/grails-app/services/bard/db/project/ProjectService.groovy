@@ -4,9 +4,9 @@ import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.enums.Status
 import bard.db.experiment.Experiment
+import bard.db.experiment.PanelExperiment
 import bard.db.people.Person
 import bard.db.people.Role
-import org.apache.commons.lang3.StringUtils
 import org.springframework.security.access.prepost.PreAuthorize
 
 class ProjectService {
@@ -78,7 +78,7 @@ class ProjectService {
     Project updateProjectStatus(Long id, Status newProjectStatus) {
         Project project = Project.findById(id)
         project.projectStatus = newProjectStatus
-        if(newProjectStatus.equals(Status.APPROVED) && project.isDirty('projectStatus')){
+        if (newProjectStatus.equals(Status.APPROVED) && project.isDirty('projectStatus')) {
             Person currentUser = Person.findByUserName(springSecurityService.authentication.name)
             project.approvedBy = currentUser
             project.approvedDate = new Date()
@@ -172,20 +172,19 @@ class ProjectService {
 
     /**
      * remove edge
-     * @param fromExperiment
-     * @param toExperiment
+     * @param fromProjectExperiment
+     * @param toProjectExperiment
      * @param project
      */
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void removeEdgeFromProject(Experiment fromExperiment, Experiment toExperiment, Long id) {
+    void removeEdgeFromProject(ProjectExperiment fromProjectExperiment, ProjectExperiment toProjectExperiment, Long id) {
         Project project = Project.findById(id)
-        def fromProjectExperiment = ProjectSingleExperiment.findByExperimentAndProject(fromExperiment, project)
-        def toProjectExperiment = ProjectSingleExperiment.findByExperimentAndProject(toExperiment, project)
+
         if (!fromProjectExperiment || !toProjectExperiment)
-            throw new UserFixableException("Experiment " + fromExperiment.id + " and / or Experiment " + toExperiment.id + " are / is not associated with project " + project.id)
+            throw new UserFixableException("Experiment " + fromProjectExperiment.id + " and / or Experiment " + toProjectExperiment.id + " are / is not associated with project " + project.id)
         def projectStep = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(fromProjectExperiment, toProjectExperiment)
         if (!projectStep)
-            throw new UserFixableException("Experiment " + fromExperiment.id + " and Experiment " + toExperiment.id + " are not linked")
+            throw new UserFixableException("Experiment " + fromProjectExperiment.id + " and Experiment " + toProjectExperiment.id + " are not linked")
         deleteProjectStep(projectStep, true)
     }
 
@@ -208,37 +207,47 @@ class ProjectService {
         experiment.save()
     }
 
+    @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void addPanelExperimentToProject(PanelExperiment panelExperiment, Long id, Element stage) {
+        Project project = Project.findById(id)
+        if (isPanelExperimentAssociatedWithProject(panelExperiment, project)) {
+            throw new UserFixableException("Panel-Experiment " + panelExperiment.id + " is already associated with Project " + project.id)
+        }
+        ProjectPanelExperiment projectPanelExperiment = new ProjectPanelExperiment(panelExperiment: panelExperiment, project: project, stage: stage)
+        project.addToProjectExperiments(projectPanelExperiment)
+        projectPanelExperiment.save()
+        project.save()
+    }
+
     /**
      * Add link between two experiments that are associated with the project. The candidate link can not be duplicate with any existing one.
      * The candidate link can not result any cycle of graph.
-     * @param fromExperiment
-     * @param toExperiment
+     * @param fromProjectExperiment
+     * @param toProjectExperiment
      * @param project
      */
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void linkExperiment(Experiment fromExperiment, Experiment toExperiment, Long id) {
-        if (!fromExperiment || !toExperiment) {
-            throw new UserFixableException("Either or both experiment you were trying to link does not exist in the system.")
+    void linkProjectExperiment(ProjectExperiment fromProjectExperiment, ProjectExperiment toProjectExperiment, Long id) {
+        if (!fromProjectExperiment || !toProjectExperiment) {
+            throw new UserFixableException("Either or both project-experiment you were trying to link does not exist in the system.")
         }
-        if (fromExperiment.id == toExperiment.id) {
-            throw new UserFixableException("Link between same experiments is not allowed.")
+        if (fromProjectExperiment.id == toProjectExperiment.id) {
+            throw new UserFixableException("Link between same project-experiments is not allowed.")
         }
         Project project = Project.findById(id)
-        if (!isExperimentAssociatedWithProject(fromExperiment, project) ||
-                !isExperimentAssociatedWithProject(toExperiment, project))
-            throw new UserFixableException("Experiment " + fromExperiment.id + " or experiment " + toExperiment.id + " is not associated with project " + project.id)
-        ProjectSingleExperiment peFrom = ProjectSingleExperiment.findByProjectAndExperiment(project, fromExperiment)
-        ProjectSingleExperiment peTo = ProjectSingleExperiment.findByProjectAndExperiment(project, toExperiment)
-        ProjectStep ps = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(peFrom, peTo)
+        if (fromProjectExperiment.project != project ||
+                toProjectExperiment.project != project)
+            throw new UserFixableException("Project-experiment " + fromProjectExperiment.id + " or project-experiment " + toProjectExperiment.id + " is not associated with project " + project.id)
+        ProjectStep ps = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(fromProjectExperiment, toProjectExperiment)
         if (ps) // do not want to add one already exist
-            throw new UserFixableException(("Link between " + fromExperiment.id + " and " + toExperiment.id + " does exist, can not be added again."))
+            throw new UserFixableException(("Link between " + fromProjectExperiment.id + " and " + toProjectExperiment.id + " does exist, can not be added again."))
         // check if there will be a cycle by adding this link, if there is, return, otherwise, add
-        if (!isDAG(project, peFrom, peTo))
-            throw new UserFixableException("Link " + fromExperiment.id + " and " + toExperiment.id + " results a cycle in the graph.")
-        ProjectStep newPs = new ProjectStep(previousProjectExperiment: peFrom, nextProjectExperiment: peTo)
+        if (!isDAG(project, fromProjectExperiment, toProjectExperiment))
+            throw new UserFixableException("Link " + fromProjectExperiment.id + " and " + toProjectExperiment.id + " results a cycle in the graph.")
+        ProjectStep newPs = new ProjectStep(previousProjectExperiment: fromProjectExperiment, nextProjectExperiment: toProjectExperiment)
         newPs.save(flush: true)
-        peFrom.addToFollowingProjectSteps(newPs)
-        peTo.addToPrecedingProjectSteps(newPs)
+        fromProjectExperiment.addToFollowingProjectSteps(newPs)
+        toProjectExperiment.addToPrecedingProjectSteps(newPs)
     }
 
     /**
@@ -253,6 +262,23 @@ class ProjectService {
             ProjectExperiment pe ->
                 if (pe.project.id == project?.id)
                     isAssociated = true
+        }
+        return isAssociated
+    }
+
+    /**
+     * Checks if a panel-experiment is associated with a project or not
+     * @param panelExperiment
+     * @param project
+     * @return
+     */
+    boolean isPanelExperimentAssociatedWithProject(PanelExperiment panelExperiment, Project project) {
+        boolean isAssociated = false
+        List<ProjectPanelExperiment> projectPanelExperiments = ProjectPanelExperiment.findAllByProject(project)
+        projectPanelExperiments.each { ProjectPanelExperiment projectPanelExperiment ->
+            if (projectPanelExperiment.panelExperiment.id == panelExperiment.id) {
+                isAssociated = true
+            }
         }
         return isAssociated
     }

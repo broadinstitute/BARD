@@ -36,7 +36,8 @@ import static test.TestUtils.assertFieldValidationExpectations
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
 class AssociateExperimentsCommandUnitSpec extends Specification {
-    @Shared Project project
+    @Shared
+    Project project
     ProjectService projectService
     SpringSecurityService springSecurityService
     MergeAssayDefinitionService mergeAssayDefinitionService
@@ -67,9 +68,9 @@ class AssociateExperimentsCommandUnitSpec extends Specification {
 
 
         where:
-        desc                        | field       | valueUnderTest | valid | errorCode
-        'null projectId'            | "projectId" | null           | false | 'nullable'
-        'project Id does not exist' | "projectId" | 20000          | false | 'associateExperimentsCommand.project.id.not.found'
+        desc | field | valueUnderTest | valid | errorCode
+        'null projectId'            | "projectId" | null  | false | 'nullable'
+        'project Id does not exist' | "projectId" | 20000 | false | 'associateExperimentsCommand.project.id.not.found'
     }
 
     void "test stage Id constraints #desc"() {
@@ -83,7 +84,8 @@ class AssociateExperimentsCommandUnitSpec extends Specification {
                 projectService: this.projectService,
                 fromAddPage: true,
                 projectId: Project.build(ownerRole: role).id,
-                sourceEntityIds: experimentIdAsString)
+                sourceEntityIds: experimentIdAsString,
+                entityType: EntityType.EXPERIMENT)
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
         domainInstance.validate()
@@ -97,9 +99,9 @@ class AssociateExperimentsCommandUnitSpec extends Specification {
 
 
         where:
-        desc                      | field     | valueUnderTest | valid | errorCode                                        | timeMethodisInvoked
-        'null stageId'            | "stageId" | null           | true  | null                                             | 1
-        'stage Id does not exist' | "stageId" | 200000         | false | 'associateExperimentsCommand.stage.id.not.found' | 1
+        desc | field | valueUnderTest | valid | errorCode | timeMethodisInvoked
+        'null stageId'            | "stageId" | null   | true  | null                                             | 1
+        'stage Id does not exist' | "stageId" | 200000 | false | 'associateExperimentsCommand.stage.id.not.found' | 1
     }
 
 
@@ -131,9 +133,9 @@ class AssociateExperimentsCommandUnitSpec extends Specification {
 
 
         where:
-        desc                          | valueUnderTest | valid | errorCode                                             | timeMethodisInvoked
-        'null experiment Ids'         | null           | false | 'associateExperimentsCommand.experiment.ids.min.size' | 1
-        'experimentId does not exist' | [20000]        | false | 'associateExperimentsCommand.experiment.id.not.found' | 1
+        desc | valueUnderTest | valid | errorCode | timeMethodisInvoked
+        'null experiment Ids'         | null    | false | 'associateExperimentsCommand.experiment.ids.min.size' | 1
+        'experimentId does not exist' | [20000] | false | 'associateExperimentsCommand.experiment.id.not.found' | 1
     }
 
     void "test source Entity Ids constraints #desc"() {
@@ -157,12 +159,12 @@ class AssociateExperimentsCommandUnitSpec extends Specification {
 
 
         where:
-        desc                                               | valueUnderTest | idType      | valid | errorCode
-        'null sourceEntityIds'                             | null           | IdType.ADID | false | 'associateExperimentsCommand.sourceEntityIds.nullable'
-        'blank sourceEntityIds'                            | '   '          | IdType.ADID | false | 'associateExperimentsCommand.sourceEntityIds.blank'
-        "non existing sourceEntityIds with ${IdType.ADID}" | "2000"         | IdType.ADID | false | 'associateExperimentsCommand.assayDefinition.id.not.found'
-        "non existing sourceEntityIds with ${IdType.AID}"  | "2000"         | IdType.AID  | false | 'associateExperimentsCommand.experiment.aid.not.found'
-        "non existing sourceEntityIds with ${IdType.EID}"  | "2000"         | IdType.EID  | false | 'associateExperimentsCommand.experiment.id.not.found'
+        desc | valueUnderTest | idType | valid | errorCode
+        'null sourceEntityIds'                             | null   | IdType.ADID | false | 'associateExperimentsCommand.sourceEntityIds.nullable'
+        'blank sourceEntityIds'                            | '   '  | IdType.ADID | false | 'associateExperimentsCommand.sourceEntityIds.blank'
+        "non existing sourceEntityIds with ${IdType.ADID}" | "2000" | IdType.ADID | false | 'associateExperimentsCommand.assayDefinition.id.not.found'
+        "non existing sourceEntityIds with ${IdType.AID}"  | "2000" | IdType.AID  | false | 'associateExperimentsCommand.experiment.aid.not.found'
+        "non existing sourceEntityIds with ${IdType.EID}"  | "2000" | IdType.EID  | false | 'associateExperimentsCommand.experiment.id.not.found'
     }
 
 
@@ -190,10 +192,10 @@ class AssociateExperimentsCommandUnitSpec extends Specification {
 
 
         where:
-        desc                                               | valueUnderTest | idType      | valid | errorCode
-        "non existing sourceEntityIds with ${IdType.ADID}" | "2000"         | IdType.ADID | false | 'associateExperimentsCommand.experiment.eid.retired'
-        "non existing sourceEntityIds with ${IdType.AID}"  | "2000"         | IdType.AID  | false | 'associateExperimentsCommand.experiment.aid.retired'
-        "non existing sourceEntityIds with ${IdType.EID}"  | "2000"         | IdType.EID  | false | 'associateExperimentsCommand.experiment.eid.retired'
+        desc | valueUnderTest | idType | valid | errorCode
+        "non existing sourceEntityIds with ${IdType.ADID}" | "2000" | IdType.ADID | false | 'associateExperimentsCommand.experiment.eid.retired'
+        "non existing sourceEntityIds with ${IdType.AID}"  | "2000" | IdType.AID  | false | 'associateExperimentsCommand.experiment.aid.retired'
+        "non existing sourceEntityIds with ${IdType.EID}"  | "2000" | IdType.EID  | false | 'associateExperimentsCommand.experiment.eid.retired'
     }
 
     void "test source Entity Ids experiment already associated to Project #desc"() {
@@ -220,10 +222,10 @@ class AssociateExperimentsCommandUnitSpec extends Specification {
 
 
         where:
-        desc                                               | valueUnderTest | idType      | valid | errorCode
-        "non existing sourceEntityIds with ${IdType.ADID}" | "2000"         | IdType.ADID | false | 'associateExperimentsCommand.experiment.eid.already.part.project'
-        "non existing sourceEntityIds with ${IdType.AID}"  | "2000"         | IdType.AID  | false | 'associateExperimentsCommand.experiment.aid.already.part.project'
-        "non existing sourceEntityIds with ${IdType.EID}"  | "2000"         | IdType.EID  | false | 'associateExperimentsCommand.experiment.eid.already.part.project'
+        desc | valueUnderTest | idType | valid | errorCode
+        "non existing sourceEntityIds with ${IdType.ADID}" | "2000" | IdType.ADID | false | 'associateExperimentsCommand.experiment.eid.already.part.project'
+        "non existing sourceEntityIds with ${IdType.AID}"  | "2000" | IdType.AID  | false | 'associateExperimentsCommand.experiment.aid.already.part.project'
+        "non existing sourceEntityIds with ${IdType.EID}"  | "2000" | IdType.EID  | false | 'associateExperimentsCommand.experiment.eid.already.part.project'
     }
 
     void "test getExperiments idType EID/AID #desc"() {
@@ -246,7 +248,7 @@ class AssociateExperimentsCommandUnitSpec extends Specification {
         assert experiments.size() == 1
 
         where:
-        desc       | idType
+        desc | idType
         "With EID" | IdType.EID
         "With AID" | IdType.AID
 
@@ -270,7 +272,7 @@ class AssociateExperimentsCommandUnitSpec extends Specification {
         assert experiments.size() == 1
 
         where:
-        desc        | idType
+        desc | idType
         "With ADID" | IdType.ADID
 
     }
