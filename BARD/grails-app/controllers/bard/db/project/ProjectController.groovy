@@ -442,7 +442,7 @@ class ProjectController {
         try {
             switch (command.entityType) {
                 case EntityType.EXPERIMENT:
-                    command.addExperimentsToProject()
+                   command.addExperimentsToProject()
                     break
                 case EntityType.EXPERIMENT_PANEL:
                     command.addPanelExperimentsToProject()
@@ -634,6 +634,9 @@ class AssociateExperimentsCommand extends BardCommand {
                 if (entity instanceof List<Experiment>) {
                     final List<Experiment> experiments = (List<Experiment>) entity
                     panelExperiments.addAll(experiments*.panel.findAll { it != null }.unique())
+                } else if (entity instanceof Experiment) {
+                    final Experiment exprmnt = (Experiment) entity
+                    panelExperiments.add(exprmnt.panel)
                 } else if (entity instanceof PanelExperiment) {
                     final PanelExperiment panelExperiment = (PanelExperiment) entity
                     panelExperiments.add(panelExperiment)
