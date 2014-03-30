@@ -636,7 +636,7 @@ class AssociateExperimentsCommand extends BardCommand {
                     panelExperiments.addAll(experiments*.panel.findAll { it != null }.unique())
                 } else if (entity instanceof PanelExperiment) {
                     final PanelExperiment panelExperiment = (PanelExperiment) entity
-                    experiments.add(panelExperiment)
+                    panelExperiments.add(panelExperiment)
                 }
             }
         } else {

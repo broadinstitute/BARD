@@ -6,6 +6,7 @@ import bard.db.dictionary.StageTree
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.Status
 import bard.db.experiment.Experiment
+import bard.db.experiment.PanelExperiment
 import bard.db.people.Role
 import bard.db.registration.*
 import bardqueryapi.IQueryService
@@ -35,7 +36,7 @@ import javax.servlet.http.HttpServletResponse
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(ProjectController)
-@Build([Role, Assay, Project, ProjectSingleExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
+@Build([Role, Assay, Project, ProjectSingleExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree, PanelExperiment])
 @Mock([Role, Assay, Project, ProjectSingleExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
@@ -943,4 +944,85 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.redirectedUrl == "/project/show/${project.id}#experiment-and-step-header"
     }
 
+    void "test findAvailablesByPanels #testDescription"() {
+        given:
+        Assay assay = Assay.build(ownerRole: role)
+        Project project = Project.build(ownerRole: role)
+        Experiment experiment = Experiment.build(assay: assay, experimentStatus: Status.APPROVED, ownerRole: role)
+        PanelExperiment panelExperiment = PanelExperiment.build(experiments: [experiment])
+        String sourceEntityIds = experiment.id.toString()
+
+        AssociateExperimentsCommand associateExperimentsCommand =
+                new AssociateExperimentsCommand(fromAddPage: true,
+                        projectId: project.id,
+                        idType: IdType.PANEL_EXPERIMENT,
+                        sourceEntityIds: sourceEntityIds,
+                        mergeAssayDefinitionService: Mock(MergeAssayDefinitionService),
+                        projectService: Mock(ProjectService),
+                        entityType: entityType)
+
+        when:
+        associateExperimentsCommand.findAvailablesByPanels()
+
+        then:
+        associateExperimentsCommand.mergeAssayDefinitionService.convertIdToEntity(_, _) >> { panelExperiment }
+        assert associateExperimentsCommand.availableExperiments?.size() == expectedAvailableExperimentsSize
+        assert associateExperimentsCommand.availablePanelExperiments?.size() == expectedAvailablePanelExperimentsSize
+
+        where:
+        testDescription | entityType | expectedAvailableExperimentsSize | expectedAvailablePanelExperimentsSize
+        "when entity-type=Experiment"      | EntityType.EXPERIMENT       | 1 | 0
+        "when entity-type=PanelExperiment" | EntityType.EXPERIMENT_PANEL | 0 | 1
+    }
+
+    void "test getPanelExperiments when entity-type=PanelExperiment"() {
+        given:
+        Assay assay = Assay.build(ownerRole: role)
+        Project project = Project.build(ownerRole: role)
+        Experiment experiment = Experiment.build(assay: assay, experimentStatus: Status.APPROVED, ownerRole: role)
+        PanelExperiment panelExperiment = PanelExperiment.build(experiments: [experiment])
+        String sourceEntityIds = experiment.id.toString()
+
+        AssociateExperimentsCommand associateExperimentsCommand =
+                new AssociateExperimentsCommand(fromAddPage: true,
+                        projectId: project.id,
+                        idType: IdType.EID,
+                        sourceEntityIds: sourceEntityIds,
+                        mergeAssayDefinitionService: Mock(MergeAssayDefinitionService),
+                        projectService: Mock(ProjectService),
+                        entityType: EntityType.EXPERIMENT)
+
+        when:
+        def res = associateExperimentsCommand.getPanelExperiments()
+
+        then:
+        associateExperimentsCommand.mergeAssayDefinitionService.convertIdToEntity(_, _) >> { panelExperiment }
+        assert res == [panelExperiment]
+    }
+
+    void "test getPanelExperiments when entity-type=Experiment"() {
+        given:
+        Assay assay = Assay.build(ownerRole: role)
+        Project project = Project.build(ownerRole: role)
+        Experiment experiment = Experiment.build(assay: assay, experimentStatus: Status.APPROVED, ownerRole: role)
+        PanelExperiment panelExperiment = PanelExperiment.build(experiments: [experiment])
+        experiment.panel = panelExperiment
+        String sourceEntityIds = experiment.id.toString()
+
+        AssociateExperimentsCommand associateExperimentsCommand =
+                new AssociateExperimentsCommand(fromAddPage: true,
+                        projectId: project.id,
+                        idType: IdType.EID,
+                        sourceEntityIds: sourceEntityIds,
+                        mergeAssayDefinitionService: Mock(MergeAssayDefinitionService),
+                        projectService: Mock(ProjectService),
+                        entityType: EntityType.EXPERIMENT)
+
+        when:
+        def res = associateExperimentsCommand.getPanelExperiments()
+
+        then:
+        associateExperimentsCommand.mergeAssayDefinitionService.convertIdToEntity(_, _) >> { [experiment] }
+        assert res == [panelExperiment]
+    }
 }
