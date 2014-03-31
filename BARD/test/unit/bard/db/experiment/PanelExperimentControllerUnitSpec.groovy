@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse
 @TestFor(PanelExperimentController)
 @TestMixin(DomainClassUnitTestMixin)
 @Unroll
-class ExternalReferenceControllerUnitSpec extends Specification {
+class PanelExperimentControllerUnitSpec extends Specification {
 
     @Shared
     Experiment experiment
