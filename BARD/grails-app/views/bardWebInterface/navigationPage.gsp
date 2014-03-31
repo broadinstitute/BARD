@@ -39,7 +39,8 @@
                                                                        action="list">List Teams</g:link></li>
                                         <li class="controller"><g:link controller="role"
                                                                        action="create">Create new Team</g:link></li>
-                                        <li class="controller"><g:link controller="offlineValidation">Offline Validation</g:link> </li>
+                                        <li class="controller"><g:link
+                                                controller="offlineValidation">Offline Validation</g:link></li>
                                     </ul>
                                 </g:if>
                                 <g:if test="${isManager}">
@@ -95,6 +96,8 @@
                                                                action="show">Move Experiments</g:link></li>
                                 <li class="controller"><g:link controller="jobs"
                                                                action="index">My import jobs</g:link></li>
+                                <li class="controller"><g:link controller="panelExperiment"
+                                                               action="create">Create a New Panel-Experiment</g:link></li>
                             </ul>
                         </li>
                         <li>

@@ -25,12 +25,21 @@
         <h3>Create a New Panel-Experiment</h3>
 
         <g:form class="form-horizontal" controller="panelExperiment" action="save">
+
+            <g:hiddenField name="confirmExperimentPanelOverride"
+                           value="${panelExperimentCommand.confirmExperimentPanelOverride}"/>
+            <g:hiddenField name="panelExperiment.id"
+                           value="${panelExperimentCommand.panelExperiment?.id}"/>
+
             <div class="control-group">
                 <label class="control-label" for="panel.id">Panel:</label>
 
                 <div class="controls">
-                    <g:select name="panel.id" from="${Panel.list().sort { a, b -> a.id <=> b.id }}" optionKey="id"
-                              optionValue="displayName" style="width: 900px;"/>
+                    <g:select name="panel.id"
+                              from="${panelExperimentCommand.panel ?: Panel.list().sort { a, b -> a.id <=> b.id }}"
+                              optionKey="id"
+                              optionValue="displayName" value="${panelExperimentCommand.panel}"
+                              style="width: 900px;"/>
                 </div>
             </div>
 
@@ -38,8 +47,9 @@
                 <label class="control-label" for="experimentIds">Experiments:</label>
 
                 <div class="controls">
-                    <g:select multiple="true" name="experimentIds"
-                              from="${Experiment.list().sort { a, b -> a.id <=> b.id }}" optionKey="id"
+                    <g:select multiple="multiple" name="experimentIds"
+                              from="${experimentsAlreadyLinkedToAnotherPanel ?: Experiment.list().sort { a, b -> a.id <=> b.id }}"
+                              optionKey="id"
                               optionValue="displayName" style="width: 900px; height: 300px;"/>
                 </div>
             </div>
