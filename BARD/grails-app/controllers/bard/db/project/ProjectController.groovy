@@ -304,6 +304,21 @@ class ProjectController {
     }
 
     @Secured(['isAuthenticated()'])
+    def removePanelExperimentFromProject(Long panelExperimentId, Long projectId) {
+        try {
+            projectService.removePanelExperimentFromProject(panelExperimentId, projectId)
+            Project project = Project.findById(projectId)
+            render(template: "showstep", model: [experiments: project.projectExperiments, editable: 'canedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+        } catch (AccessDeniedException ade) {
+            log.error(ade, ade)
+            render accessDeniedErrorMessage()
+        } catch (UserFixableException e) {
+            log.error(e, e)
+            render 'serviceError:' + e.message
+        }
+    }
+
+    @Secured(['isAuthenticated()'])
     def removeEdgeFromProject(Long fromProjectExperimentId, Long toProjectExperimentId, Long projectId) {
         def project = Project.findById(projectId)
         if (!project) {

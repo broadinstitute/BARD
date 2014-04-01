@@ -130,6 +130,24 @@ class ProjectService {
     }
 
     /**
+     * remove experiment from project, if experiment has context, remove them. remove all steps associated with
+     * this experiment, and step contexts
+     * @param panelExperiment
+     * @param project
+     */
+    @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void removePanelExperimentFromProject(Long panelExperimentId, Long id) {
+        PanelExperiment panelExperiment = PanelExperiment.findById(panelExperimentId)
+        Project project = Project.findById(id)
+        def projectExperiment = ProjectPanelExperiment.findByPanelExperimentAndProject(panelExperiment, project)
+        if (!projectExperiment) throw new UserFixableException("Can not find association between experiment " + panelExperiment.id + " and project " + project.id)
+
+        deleteProjectStepsByProjectExperiment(projectExperiment)
+
+        projectExperiment.delete(flush: true)
+    }
+
+    /**
      * delete projectsteps having given projectexperiment as start point or end point
      * @param projectExperiment
      */

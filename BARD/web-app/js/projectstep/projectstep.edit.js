@@ -159,6 +159,37 @@ function deleteItem(experimentId, projectId) {
     $("#dialog_confirm_delete_item").dialog("open");
 }
 
+function deletePanelExperimentItem(panelExperimentId, projectId) {
+    $("#dialog_confirm_delete_item").dialog("option", "buttons", [
+        {
+            text: "Delete",
+            class: "btn btn-danger",
+            click: function () {
+                var data = {'panelExperimentId': panelExperimentId, 'projectId': projectId};
+                $.ajax({
+                    type: 'POST',
+                    url: '../removePanelExperimentFromProject',
+                    data: data,
+                    success: function (data) {
+                        handleSuccess(data)
+                    },
+                    error: handleAjaxError()
+                });
+                $(this).dialog("close");
+            }
+        },
+        {
+            text: "Cancel",
+            class: "btn",
+            click: function () {
+                $(this).dialog("close");
+            }
+        }
+    ]);
+
+    $("#dialog_confirm_delete_item").dialog("open");
+}
+
 function deleteEdge(fromId, toId, projectId) {
     $("#dialog_confirm_delete_item").dialog("option", "buttons", [
         {
