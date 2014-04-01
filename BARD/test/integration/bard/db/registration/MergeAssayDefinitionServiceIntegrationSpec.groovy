@@ -77,10 +77,10 @@ class MergeAssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         final Experiment experiment = Experiment.build(experimentName: experimentsAlias, assay: assay, capPermissionService: null)
         ExternalReference.build(extAssayRef: "aid=${id}", experiment: experiment)
         when:
-        final Experiment updatedExperiment = mergeAssayDefinitionService.findEntityByIdType(id, IdType.AID)
+        final List<Experiment> updatedExperiment = mergeAssayDefinitionService.findEntityByIdType(id, IdType.AID)
         then:
         assert updatedExperiment
-        assert experiment.id == updatedExperiment.id
+        assert experiment.id == updatedExperiment.first().id
     }
 
 
@@ -104,7 +104,7 @@ class MergeAssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         assert assayTwo.experiments.size() == 0
     }
 
-    void "test move Experiments from Assay"(){
+    void "test move Experiments from Assay"() {
         given: "Three assays with experiments and a target assay"
         Assay sourceAssay1 = Assay.build(assayStatus: Status.APPROVED)
         Experiment experimentA = Experiment.build(assay: sourceAssay1)

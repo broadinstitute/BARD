@@ -112,6 +112,7 @@ class ProjectExperimentRenderService {
                     'outcount': 0,
                     'peid':ppe.id,
                     'pid': ppe.panelExperiment.panelId,
+                    'pnlExpId': ppe.panelExperiment.id,
                     'panel': ppe.panelExperiment.panel.name,
                     'eids' : ppe.panelExperiment.experiments.collect {it.id}
             ]

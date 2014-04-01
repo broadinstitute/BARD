@@ -490,14 +490,14 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         given:
         Map m = buildExperimentsToLink(authority)
 
-        Long fromExperimentId = m.eFromId
-        Long toExperimentId = m.eToId
+        Long fromProjectExperimentId = m.peFromId
+        Long toProjectExperimentId = m.peToId
         Long projectId = m.projectId
 
-        RESTClient client = getRestClient(controllerUrl, "linkExperiment", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "linkProjectExperiment", team, teamPassword)
         when:
         client.post() {
-            urlenc fromExperimentId: fromExperimentId, toExperimentId: toExperimentId, projectId: projectId
+            urlenc fromProjectExperimentId: fromProjectExperimentId, toProjectExperimentId: toProjectExperimentId, projectId: projectId
         }
 
         then:
@@ -516,14 +516,14 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         given:
         Map m = buildExperimentsToLink(authority)
 
-        Long fromExperimentId = m.eFromId
-        Long toExperimentId = m.eToId
+        Long fromProjectExperimentId = m.peFromId
+        Long toProjectExperimentId = m.peToId
         Long projectId = m.projectId
 
-        RESTClient client = getRestClient(controllerUrl, "linkExperiment", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "linkProjectExperiment", team, teamPassword)
         when:
         def response = client.post() {
-            urlenc fromExperimentId: fromExperimentId, toExperimentId: toExperimentId, projectId: projectId
+            urlenc fromProjectExperimentId: fromProjectExperimentId, toProjectExperimentId: toProjectExperimentId, projectId: projectId
         }
 
         then:
@@ -541,14 +541,14 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         given:
         Map m = buildProjectExperiments(authority)
 
-        Long fromExperimentId = m.eFromId
-        Long toExperimentId = m.eToId
+        Long fromProjectExperimentId = m.peFromId
+        Long toProjectExperimentId = m.peToId
         Long projectId = m.projectId
 
         RESTClient client = getRestClient(controllerUrl, "removeEdgeFromProject", team, teamPassword)
         when:
         def response = client.post() {
-            urlenc fromExperimentId: fromExperimentId, toExperimentId: toExperimentId, projectId: projectId
+            urlenc fromProjectExperimentId: fromProjectExperimentId, toProjectExperimentId: toProjectExperimentId, projectId: projectId
         }
 
         then:
@@ -566,14 +566,14 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         given:
         Map m = buildProjectExperiments(authority)
 
-        Long fromExperimentId = m.eFromId
-        Long toExperimentId = m.eToId
+        Long fromProjectExperimentId = m.peFromId
+        Long toProjectExperimentId = m.peToId
         Long projectId = m.projectId
 
         RESTClient client = getRestClient(controllerUrl, "removeEdgeFromProject", team, teamPassword)
         when:
         client.post() {
-            urlenc fromExperimentId: fromExperimentId, toExperimentId: toExperimentId, projectId: projectId
+            urlenc fromProjectExperimentId: fromProjectExperimentId, toProjectExperimentId: toProjectExperimentId, projectId: projectId
         }
         then:
         def ex = thrown(RESTClientException)

@@ -4,11 +4,10 @@ import acl.CapPermissionService
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
-import bard.db.enums.ContextType
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.Status
 import bard.db.experiment.Experiment
-import bard.db.model.AbstractContextOwner
+import bard.db.experiment.PanelExperiment
 import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.EditingHelper
@@ -88,7 +87,7 @@ class ProjectController {
             }
         }
         catch (AccessDeniedException ade) {
-            log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editProjectStatus", ee)
@@ -120,7 +119,7 @@ class ProjectController {
 
         }
         catch (AccessDeniedException ade) {
-           log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editProjectOwnerRole", ee)
@@ -152,7 +151,7 @@ class ProjectController {
             generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.name)
 
         } catch (AccessDeniedException ade) {
-           log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee, ee)
@@ -185,7 +184,7 @@ class ProjectController {
             generateAndRenderJSONResponse(project.version, project.modifiedBy, project.lastUpdated, project.description)
 
         } catch (AccessDeniedException ade) {
-           log.error(ade,ade)
+            log.error(ade, ade)
             render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editDescription", ee)
@@ -258,21 +257,21 @@ class ProjectController {
         }
 
         // Don't allow caching if the page is editable
-        if(editable){
+        if (editable) {
             response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
             response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
             response.setDateHeader("Expires", 0); // Proxies
         }
 
-        return [instance: projectInstance,
-                projectOwner: owner,
-                pexperiment: projectExperimentRenderService.contructGraph(projectInstance),
-                editable: editable ? 'canedit' : 'cannotedit',
-                contextItemSubTemplate: editable ? 'edit' :'show',
-                projectAdapter: projectMap?.projectAdapter,
-                experiments: projectMap?.experiments,
-                assays: projectMap?.assays,
-                searchString: params.searchString
+        return [instance              : projectInstance,
+                projectOwner          : owner,
+                pexperiment           : projectExperimentRenderService.contructGraph(projectInstance),
+                editable              : editable ? 'canedit' : 'cannotedit',
+                contextItemSubTemplate: editable ? 'edit' : 'show',
+                projectAdapter        : projectMap?.projectAdapter,
+                experiments           : projectMap?.experiments,
+                assays                : projectMap?.assays,
+                searchString          : params.searchString
         ]
     }
 
@@ -305,12 +304,35 @@ class ProjectController {
     }
 
     @Secured(['isAuthenticated()'])
-    def removeEdgeFromProject(Long fromExperimentId, Long toExperimentId, Long projectId) {
-        def fromExperiment = Experiment.findById(fromExperimentId)
-        def toExperiment = Experiment.findById(toExperimentId)
-        def project = Project.findById(projectId)
+    def removePanelExperimentFromProject(Long panelExperimentId, Long projectId) {
         try {
-            projectService.removeEdgeFromProject(fromExperiment, toExperiment, project.id)
+            projectService.removePanelExperimentFromProject(panelExperimentId, projectId)
+            Project project = Project.findById(projectId)
+            render(template: "showstep", model: [experiments: project.projectExperiments, editable: 'canedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+        } catch (AccessDeniedException ade) {
+            log.error(ade, ade)
+            render accessDeniedErrorMessage()
+        } catch (UserFixableException e) {
+            log.error(e, e)
+            render 'serviceError:' + e.message
+        }
+    }
+
+    @Secured(['isAuthenticated()'])
+    def removeEdgeFromProject(Long fromProjectExperimentId, Long toProjectExperimentId, Long projectId) {
+        def project = Project.findById(projectId)
+        if (!project) {
+            throw new UserFixableException("Could not find project ${projectId}")
+        }
+
+        def fromProjectExperiment = ProjectExperiment.findByIdAndProject(fromProjectExperimentId, project)
+        def toProjectExperiment = ProjectExperiment.findByIdAndProject(toProjectExperimentId, project)
+        if (!fromProjectExperiment || !toProjectExperiment) {
+            throw new UserFixableException("Project-experiment " + fromProjectExperimentId + " or project-experiment " + toProjectExperimentId + " is not defined")
+        }
+
+        try {
+            projectService.removeEdgeFromProject(fromProjectExperiment, toProjectExperiment, project.id)
             project = Project.findById(projectId)
             render(template: "showstep", model: [experiments: project.projectExperiments, editable: 'canedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (AccessDeniedException ade) {
@@ -323,17 +345,17 @@ class ProjectController {
     }
 
     @Secured(['isAuthenticated()'])
-    def linkExperiment(Long fromExperimentId, Long toExperimentId, Long projectId) {
-        if (fromExperimentId == null || toExperimentId == null) {
-            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Both 'From Experiment ID' and 'To Experiment ID' are required"
+    def linkProjectExperiment(Long fromProjectExperimentId, Long toProjectExperimentId, Long projectId) {
+        if (fromProjectExperimentId == null || toProjectExperimentId == null) {
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Both 'From Project-Experiment ID' and 'To Project-Experiment ID' are required"
             return
         }
 
-        def fromExperiment = Experiment.findById(fromExperimentId)
-        def toExperiment = Experiment.findById(toExperimentId)
+        def fromProjectExperiment = ProjectExperiment.findById(fromProjectExperimentId)
+        def toProjectExperiment = ProjectExperiment.findById(toProjectExperimentId)
 
         try {
-            projectService.linkExperiment(fromExperiment, toExperiment, projectId)
+            projectService.linkProjectExperiment(fromProjectExperiment, toProjectExperiment, projectId)
             Project project = Project.findById(projectId)
             render(template: "showstep", model: [experiments: project.projectExperiments, editable: 'canedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (AccessDeniedException ade) {
@@ -344,7 +366,6 @@ class ProjectController {
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: e.message
         }
     }
-
 
 
     @Secured(['isAuthenticated()'])
@@ -425,17 +446,32 @@ class ProjectController {
             return [command: command]
         }
 
-        if (command.idType == IdType.ADID && !command.experimentIds) {
-            command.findAvailableExperiments()
+        if ([IdType.ADID, IdType.AID].contains(command.idType) && !command.experimentIds && !command.panelExperimentIds) {
+            command.findAvailablesByADIDsOrAids()
+            updateFlashMessageIfNoResults(command)
+            return [command: command]
+        }
+        if ([IdType.PANEL, IdType.PANEL_EXPERIMENT].contains(command.idType) && !command.experimentIds && !command.panelExperimentIds) {
+            command.findAvailablesByPanels()
+            updateFlashMessageIfNoResults(command)
             return [command: command]
         }
         try {
-            command.addExperimentsToProject()
-            redirect(action: "show", id: command.projectId, fragment: "experiment-and-step-header")
+            switch (command.entityType) {
+                case EntityType.EXPERIMENT:
+                    command.addExperimentsToProject()
+                    break
+                case EntityType.EXPERIMENT_PANEL:
+                    command.addPanelExperimentsToProject()
+                    break
+                default:
+                    break
+            }
         }
         catch (AccessDeniedException ade) {
             log.error("Access denied Experiments to Project", ade)
             render accessDeniedErrorMessage()
+            return
         } catch (UserFixableException e) {
             log.error(e, e)
             command.errorMessages.add(e.message)
@@ -446,6 +482,27 @@ class ProjectController {
             return [command: command]
         }
 
+        redirect(action: "show", id: command.projectId, fragment: "experiment-and-step-header")
+    }
+
+    void updateFlashMessageIfNoResults(AssociateExperimentsCommand command) {
+        String message
+        switch (command.entityType) {
+            case EntityType.EXPERIMENT:
+                if (!command.availableExperiments) {
+                    message = "Could not find matching experiments"
+                }
+                break
+            case EntityType.EXPERIMENT_PANEL:
+                if (!command.availablePanelExperiments) {
+                    message = "Could not find matching panel-experiments or the panel-experiments found are already part of the project"
+                }
+                break
+            default:
+                break
+        }
+
+        flash.message = message
     }
 }
 
@@ -458,7 +515,7 @@ class AssociateExperimentsCommand extends BardCommand {
     //if this is true then it means this command objetc must be valid
     boolean fromAddPage = false
 
-    //The source entity (Could be ADID, AID or EID)
+    //The source entity (Could be ADID, AID, EID, Panel or PanelExperiment)
     String sourceEntityIds
 
     IdType idType = IdType.EID
@@ -470,6 +527,10 @@ class AssociateExperimentsCommand extends BardCommand {
     //if this is true then we should validate the experimentIds. This value is set to true in the templae
     //selectExperimentsToAddToProjects
     boolean validateExperimentIds = false
+
+    EntityType entityType
+    List<Long> panelExperimentIds = []
+    Set<PanelExperiment> availablePanelExperiments = [] as HashSet<PanelExperiment>
 
     static constraints = {
         projectId(nullable: false, validator: { value, command, err ->
@@ -519,54 +580,82 @@ class AssociateExperimentsCommand extends BardCommand {
                             err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.aid.not.found",
                                     ["${entityId}"] as Object[],
                                     "Experiment AID: ${entityId} cannot be found")
+                        } else if (command.idType == IdType.PANEL) {
+                            err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.panel.not.found",
+                                    ["${entityId}"] as Object[],
+                                    "Panel ID: ${entityId} cannot be found")
+                        } else if (command.idType == IdType.PANEL_EXPERIMENT) {
+                            err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.panelExperiment.not.found",
+                                    ["${entityId}"] as Object[],
+                                    "Panel-Experiment ID: ${entityId} cannot be found")
                         } else {
                             err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.id.not.found",
                                     ["${entityId}"] as Object[],
                                     "Experiment EID: ${entityId} cannot be found")
                         }
-                    } else if (entity instanceof Experiment) {
-                        final Experiment experiment = (Experiment) entity
-                        if (command.projectService.isExperimentAssociatedWithProject(experiment, project)) {
-                            if (command.idType == IdType.AID) {
-                                err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.aid.already.part.project",
-                                        ["${entityId}", "${command.projectId}"] as Object[],
-                                        "Experiment AID: ${entityId} is already part of this Project ${command.projectId}");
-                            } else {
-                                err.rejectValue('sourceEntityIds',
-                                        "associateExperimentsCommand.experiment.eid.already.part.project",
-                                        ["${entityId}", "${command.projectId}"] as Object[],
-                                        "Experiment EID: ${entityId} is already part of this Project ${command.projectId}");
-                            }
+                    } else if (entity instanceof Experiment || (entity instanceof List && entity.first() instanceof Experiment)) {
+                        List<Experiment> experiments = []
+                        if (entity instanceof Experiment) {
+                            experiments.add((Experiment) entity)
+                        } else {
+                            experiments.addAll((List<Experiment>) entity)
+                        }
+                        for (Experiment experiment : experiments) {
+                            if (command.projectService.isExperimentAssociatedWithProject(experiment, project)) {
+                                if (command.idType == IdType.AID) {
+                                    err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.aid.already.part.project",
+                                            ["${entityId}", "${command.projectId}"] as Object[],
+                                            "Experiment AID: ${entityId} is already part of this Project ${command.projectId}");
+                                } else {
+                                    err.rejectValue('sourceEntityIds',
+                                            "associateExperimentsCommand.experiment.eid.already.part.project",
+                                            ["${entityId}", "${command.projectId}"] as Object[],
+                                            "Experiment EID: ${entityId} is already part of this Project ${command.projectId}");
+                                }
 
-                        } else if (experiment.experimentStatus == Status.RETIRED) {
-                            if (command.idType == IdType.AID) {
-                                err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.aid.retired",
-                                        ["${entityId}", "${command.projectId}"] as Object[],
-                                        "Experiment AID: ${entityId} is retired and cannot be added to this project");
-                            } else {
-                                err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.eid.retired",
-                                        ["${entityId}", "${command.projectId}"] as Object[],
-                                        "Experiment EID: ${experiment.id} is retired and cannot be added to this project");
-                            }
+                            } else if (experiment.experimentStatus == Status.RETIRED) {
+                                if (command.idType == IdType.AID) {
+                                    err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.aid.retired",
+                                            ["${entityId}", "${command.projectId}"] as Object[],
+                                            "Experiment AID: ${entityId} is retired and cannot be added to this project");
+                                } else {
+                                    err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.eid.retired",
+                                            ["${entityId}", "${command.projectId}"] as Object[],
+                                            "Experiment EID: ${experiment.id} is retired and cannot be added to this project");
+                                }
 
+                            }
                         }
                     }
                 }
             }
-        })
+        }
+        )
         idType(nullable: false)
+        entityType(nullable: false)
     }
 
     List<Experiment> getExperiments() {
         List<Experiment> experiments = []
 
-        if (idType != IdType.ADID) {
+        if (idType != IdType.ADID && !this.experimentIds) {
             final List<Long> entityIds = MergeAssayDefinitionService.convertStringToIdList(sourceEntityIds)
             for (Long entityId : entityIds) {
                 final def entity = mergeAssayDefinitionService.convertIdToEntity(this.idType, entityId)
-                if (entity instanceof Experiment) {
-                    final Experiment experiment = (Experiment) entity
-                    experiments.add(experiment)
+                if (entity instanceof List && entity.first() instanceof Experiment) {
+                    final List<Experiment> exprmnts = (List<Experiment>) entity
+                    experiments.addAll(exprmnts)
+                } else if (entity instanceof Experiment) {
+                    final Experiment exprmnt = (Experiment) entity
+                    experiments.add(exprmnt)
+                } else if (entity instanceof PanelExperiment) {
+                    final PanelExperiment panelExperiment = (PanelExperiment) entity
+                    experiments.addAll(panelExperiment.experiments)
+                } else if (entity instanceof List && entity.first() instanceof PanelExperiment) {
+                    final List<PanelExperiment> panelExperiments = (List<PanelExperiment>) entity
+                    panelExperiments.each { PanelExperiment panelExperiment ->
+                        experiments.addAll(panelExperiment.experiments)
+                    }
                 }
             }
         } else {
@@ -575,6 +664,35 @@ class AssociateExperimentsCommand extends BardCommand {
             }
         }
         return experiments
+    }
+
+    List<PanelExperiment> getPanelExperiments() {
+        List<PanelExperiment> panelExperiments = []
+
+        if (idType != IdType.ADID && !panelExperimentIds) {
+            final List<Long> entityIds = MergeAssayDefinitionService.convertStringToIdList(sourceEntityIds)
+            for (Long entityId : entityIds) {
+                final def entity = mergeAssayDefinitionService.convertIdToEntity(this.idType, entityId)
+                if (entity instanceof List && entity.first() instanceof Experiment) {
+                    final List<Experiment> experiments = (List<Experiment>) entity
+                    panelExperiments.addAll(experiments*.panel.findAll { it != null }.unique())
+                } else if (entity instanceof Experiment) {
+                    final Experiment exprmnt = (Experiment) entity
+                    panelExperiments.add(exprmnt.panel)
+                } else if (entity instanceof PanelExperiment) {
+                    final PanelExperiment panelExperiment = (PanelExperiment) entity
+                    panelExperiments.add(panelExperiment)
+                } else if (entity instanceof List && entity.first() instanceof PanelExperiment) {
+                    final List<PanelExperiment> pnlExprmnts = (List<PanelExperiment>) entity
+                    panelExperiments.addAll(pnlExprmnts)
+                }
+            }
+        } else {
+            for (Long panelExperimentId : panelExperimentIds) {
+                panelExperiments.add(PanelExperiment.get(panelExperimentId))
+            }
+        }
+        return panelExperiments
     }
 
     Project getProject() {
@@ -594,11 +712,16 @@ class AssociateExperimentsCommand extends BardCommand {
 
     }
 
+    void addPanelExperimentsToProject() {
+        for (PanelExperiment panelExperiment : getPanelExperiments()) {
+            projectService.addPanelExperimentToProject(panelExperiment, projectId, getStage())
+        }
+    }
 
-    void findAvailableExperiments() {
+    void findAvailablesByADIDsOrAids() {
 
-        if (this.idType != IdType.ADID) {
-            this.errorMessages.add("This method only handles ADID's")
+        if (!([IdType.ADID, IdType.AID].contains(this.idType))) {
+            this.errorMessages.add("This method only handles ADID's and AID's")
             return
         }
         availableExperiments = [] as HashSet<Experiment>
@@ -611,15 +734,59 @@ class AssociateExperimentsCommand extends BardCommand {
             if (entity instanceof Assay) {
                 final Assay assay = (Assay) entity
                 experiments = assay.experiments
+            } else if (entity instanceof List && entity.first() instanceof Experiment) {
+                experiments.addAll(entity)
             }
             for (Experiment experiment : experiments) {
-                if (!projectService.isExperimentAssociatedWithProject(experiment, project) &&
-                        experiment.experimentStatus != Status.RETIRED) {
-                    this.availableExperiments.add(experiment)
+                if (this.entityType == EntityType.EXPERIMENT) {
+                    if (!projectService.isExperimentAssociatedWithProject(experiment, project) &&
+                            experiment.experimentStatus != Status.RETIRED) {
+                        this.availableExperiments.add(experiment)
+                    }
+                } else if (this.entityType == EntityType.EXPERIMENT_PANEL) {
+                    PanelExperiment panelExperiment = experiment.panel
+                    if (panelExperiment && !projectService.isPanelExperimentAssociatedWithProject(panelExperiment, project)) {
+                        this.availablePanelExperiments.add(panelExperiment)
+                    }
                 }
             }
         }
     }
+
+    void findAvailablesByPanels() {
+        if (!([IdType.PANEL, IdType.PANEL_EXPERIMENT].contains(this.idType))) {
+            this.errorMessages.add("This method only handles Panel and PanelExperiment")
+            return
+        }
+        availableExperiments = [] as HashSet<Experiment>
+        final Project project = getProject()
+        final List<Long> entityIds = MergeAssayDefinitionService.convertStringToIdList(sourceEntityIds)
+
+        for (Long entityId : entityIds) {
+            final def entity = mergeAssayDefinitionService.convertIdToEntity(this.idType, entityId)
+            if (!entity) {
+                break
+            }
+            assert ((entity instanceof PanelExperiment) || (entity instanceof List && entity.first() instanceof PanelExperiment)), "Entity must be of type PanelExperiment or List<PanelExperiment>: ${entity.class.simpleName}"
+            List<PanelExperiment> panelExperiments = entity instanceof PanelExperiment ? [(PanelExperiment) entity] : (List<PanelExperiment>) entity
+            panelExperiments.each { PanelExperiment panelExperiment ->
+                if (this.entityType == EntityType.EXPERIMENT) {
+                    Set<Experiment> experiments = panelExperiment.experiments
+                    for (Experiment experiment : experiments) {
+                        if (!projectService.isExperimentAssociatedWithProject(experiment, project) &&
+                                experiment.experimentStatus != Status.RETIRED) {
+                            this.availableExperiments.add(experiment)
+                        }
+                    }
+                } else if (this.entityType == EntityType.EXPERIMENT_PANEL) {
+                    if (!projectService.isPanelExperimentAssociatedWithProject(panelExperiment, project)) {
+                        this.availablePanelExperiments.add(panelExperiment)
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 @InheritConstructors
@@ -666,6 +833,7 @@ class ProjectCommand extends BardCommand {
         project.ownerRole = Role.findByAuthority(ownerRole)
     }
 }
+
 @InheritConstructors
 @Validateable
 class InlineEditableCommand extends BardCommand {
@@ -691,6 +859,19 @@ class InlineEditableCommand extends BardCommand {
         }
         return b.toString()
     }
-
 }
 
+enum EntityType {
+    EXPERIMENT_PANEL("Experiment-Panel"),
+    EXPERIMENT("Experiment")
+
+    final String id;
+
+    private EntityType(String id) {
+        this.id = id
+    }
+
+    String getId() {
+        return id
+    }
+}

@@ -11,6 +11,8 @@ import bard.db.registration.Panel
  */
 class PanelExperiment {
 
+    private static final int MODIFIED_BY_MAX_SIZE = 40
+
     Panel panel
 
     static belongsTo = [panel: Panel]
@@ -32,5 +34,10 @@ class PanelExperiment {
         panel(nullable: false)
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
+        modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+    }
+
+    String getDisplayName() {
+        return "${this.id} - ${this.panel?.name ?: ''}"
     }
 }
