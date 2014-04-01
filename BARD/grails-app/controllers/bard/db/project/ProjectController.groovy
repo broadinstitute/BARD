@@ -433,16 +433,18 @@ class ProjectController {
 
         if ([IdType.ADID, IdType.AID].contains(command.idType) && !command.experimentIds && !command.panelExperimentIds) {
             command.findAvailablesByADIDsOrAids()
+            updateFlashMessageIfNoResults(command)
             return [command: command]
         }
         if ([IdType.PANEL, IdType.PANEL_EXPERIMENT].contains(command.idType) && !command.experimentIds && !command.panelExperimentIds) {
             command.findAvailablesByPanels()
+            updateFlashMessageIfNoResults(command)
             return [command: command]
         }
         try {
             switch (command.entityType) {
                 case EntityType.EXPERIMENT:
-                   command.addExperimentsToProject()
+                    command.addExperimentsToProject()
                     break
                 case EntityType.EXPERIMENT_PANEL:
                     command.addPanelExperimentsToProject()
@@ -466,6 +468,26 @@ class ProjectController {
         }
 
         redirect(action: "show", id: command.projectId, fragment: "experiment-and-step-header")
+    }
+
+    void updateFlashMessageIfNoResults(AssociateExperimentsCommand command) {
+        String message
+        switch (command.entityType) {
+            case EntityType.EXPERIMENT:
+                if (!command.availableExperiments) {
+                    message = "Could not find matching experiments"
+                }
+                break
+            case EntityType.EXPERIMENT_PANEL:
+                if (!command.availablePanelExperiments) {
+                    message = "Could not find matching panel-experiments or the panel-experiments found are already part of the project"
+                }
+                break
+            default:
+                break
+        }
+
+        flash.message = message
     }
 }
 
@@ -547,7 +569,7 @@ class AssociateExperimentsCommand extends BardCommand {
                             err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.panel.not.found",
                                     ["${entityId}"] as Object[],
                                     "Panel ID: ${entityId} cannot be found")
-                        } else if (command.idType == IdType.AID) {
+                        } else if (command.idType == IdType.PANEL_EXPERIMENT) {
                             err.rejectValue('sourceEntityIds', "associateExperimentsCommand.experiment.panelExperiment.not.found",
                                     ["${entityId}"] as Object[],
                                     "Panel-Experiment ID: ${entityId} cannot be found")
@@ -556,7 +578,7 @@ class AssociateExperimentsCommand extends BardCommand {
                                     ["${entityId}"] as Object[],
                                     "Experiment EID: ${entityId} cannot be found")
                         }
-                    } else if (entity instanceof Experiment || entity instanceof List<Experiment>) {
+                    } else if (entity instanceof Experiment || (entity instanceof List && entity.first() instanceof Experiment)) {
                         List<Experiment> experiments = []
                         if (entity instanceof Experiment) {
                             experiments.add((Experiment) entity)
@@ -605,7 +627,7 @@ class AssociateExperimentsCommand extends BardCommand {
             final List<Long> entityIds = MergeAssayDefinitionService.convertStringToIdList(sourceEntityIds)
             for (Long entityId : entityIds) {
                 final def entity = mergeAssayDefinitionService.convertIdToEntity(this.idType, entityId)
-                if (entity instanceof List<Experiment>) {
+                if (entity instanceof List && entity.first() instanceof Experiment) {
                     final List<Experiment> exprmnts = (List<Experiment>) entity
                     experiments.addAll(exprmnts)
                 } else if (entity instanceof Experiment) {
@@ -614,6 +636,11 @@ class AssociateExperimentsCommand extends BardCommand {
                 } else if (entity instanceof PanelExperiment) {
                     final PanelExperiment panelExperiment = (PanelExperiment) entity
                     experiments.addAll(panelExperiment.experiments)
+                } else if (entity instanceof List && entity.first() instanceof PanelExperiment) {
+                    final List<PanelExperiment> panelExperiments = (List<PanelExperiment>) entity
+                    panelExperiments.each { PanelExperiment panelExperiment ->
+                        experiments.addAll(panelExperiment.experiments)
+                    }
                 }
             }
         } else {
@@ -631,7 +658,7 @@ class AssociateExperimentsCommand extends BardCommand {
             final List<Long> entityIds = MergeAssayDefinitionService.convertStringToIdList(sourceEntityIds)
             for (Long entityId : entityIds) {
                 final def entity = mergeAssayDefinitionService.convertIdToEntity(this.idType, entityId)
-                if (entity instanceof List<Experiment>) {
+                if (entity instanceof List && entity.first() instanceof Experiment) {
                     final List<Experiment> experiments = (List<Experiment>) entity
                     panelExperiments.addAll(experiments*.panel.findAll { it != null }.unique())
                 } else if (entity instanceof Experiment) {
@@ -640,6 +667,9 @@ class AssociateExperimentsCommand extends BardCommand {
                 } else if (entity instanceof PanelExperiment) {
                     final PanelExperiment panelExperiment = (PanelExperiment) entity
                     panelExperiments.add(panelExperiment)
+                } else if (entity instanceof List && entity.first() instanceof PanelExperiment) {
+                    final List<PanelExperiment> pnlExprmnts = (List<PanelExperiment>) entity
+                    panelExperiments.addAll(pnlExprmnts)
                 }
             }
         } else {
@@ -689,7 +719,7 @@ class AssociateExperimentsCommand extends BardCommand {
             if (entity instanceof Assay) {
                 final Assay assay = (Assay) entity
                 experiments = assay.experiments
-            } else if (entity instanceof List<Experiment>) {
+            } else if (entity instanceof List && entity.first() instanceof Experiment) {
                 experiments.addAll(entity)
             }
             for (Experiment experiment : experiments) {
@@ -722,19 +752,21 @@ class AssociateExperimentsCommand extends BardCommand {
             if (!entity) {
                 break
             }
-            assert (entity instanceof PanelExperiment), "Entity must be of type PanelExperiment: ${entity.class.simpleName}"
-            final PanelExperiment panelExperiment = (PanelExperiment) entity
-            if (this.entityType == EntityType.EXPERIMENT) {
-                Set<Experiment> experiments = panelExperiment.experiments
-                for (Experiment experiment : experiments) {
-                    if (!projectService.isExperimentAssociatedWithProject(experiment, project) &&
-                            experiment.experimentStatus != Status.RETIRED) {
-                        this.availableExperiments.add(experiment)
+            assert ((entity instanceof PanelExperiment) || (entity instanceof List && entity.first() instanceof PanelExperiment)), "Entity must be of type PanelExperiment or List<PanelExperiment>: ${entity.class.simpleName}"
+            List<PanelExperiment> panelExperiments = entity instanceof PanelExperiment ? [(PanelExperiment) entity] : (List<PanelExperiment>) entity
+            panelExperiments.each { PanelExperiment panelExperiment ->
+                if (this.entityType == EntityType.EXPERIMENT) {
+                    Set<Experiment> experiments = panelExperiment.experiments
+                    for (Experiment experiment : experiments) {
+                        if (!projectService.isExperimentAssociatedWithProject(experiment, project) &&
+                                experiment.experimentStatus != Status.RETIRED) {
+                            this.availableExperiments.add(experiment)
+                        }
                     }
-                }
-            } else if (this.entityType == EntityType.EXPERIMENT_PANEL) {
-                if (!projectService.isPanelExperimentAssociatedWithProject(panelExperiment, project)) {
-                    this.availablePanelExperiments.add(panelExperiment)
+                } else if (this.entityType == EntityType.EXPERIMENT_PANEL) {
+                    if (!projectService.isPanelExperimentAssociatedWithProject(panelExperiment, project)) {
+                        this.availablePanelExperiments.add(panelExperiment)
+                    }
                 }
             }
         }
@@ -815,8 +847,8 @@ class InlineEditableCommand extends BardCommand {
 }
 
 enum EntityType {
-    EXPERIMENT("Experiment"),
-    EXPERIMENT_PANEL("Experiment-Panel")
+    EXPERIMENT_PANEL("Experiment-Panel"),
+    EXPERIMENT("Experiment")
 
     final String id;
 

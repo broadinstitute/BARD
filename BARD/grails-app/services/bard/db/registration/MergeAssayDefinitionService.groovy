@@ -162,7 +162,7 @@ class MergeAssayDefinitionService {
                 List<ExternalReference> externalReferences = bard.db.registration.ExternalReference.findAllByExtAssayRef("aid=${entityId}")
                 return externalReferences*.experiment.findAll { it != null }.unique()
             case IdType.PANEL:
-                return PanelExperiment.find { panel.id == entityId }
+                return PanelExperiment.findAll { panel.id == entityId }
             case IdType.PANEL_EXPERIMENT:
                 return PanelExperiment.findById(entityId)
         }
