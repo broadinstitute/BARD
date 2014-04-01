@@ -90,6 +90,10 @@ $(document).ready(function () {
     //set up main form submission
     $('#searchForm').submit(function (event) {
         event.preventDefault();	// prevent the default action behaviour to happen
+
+        // Creates the searchTabs object to store and keep track of # of results returned by the searches for each tab
+        window.searchTabs = new Object;
+
         var searchString = $("#searchString").val();
         var state = History.getState();
         if(searchString == state.data.search){
@@ -248,6 +252,31 @@ function handleStructureSearch(url, currentFormId) {
     });
 }
 
+function setResultsForSearchTabsObject(tabId, totalHits){
+    switch (tabId) {
+        case 'assaysTab':
+            window.searchTabs.assays = totalHits;
+            if(window.searchTabs.active == undefined && totalHits > 0)
+                window.searchTabs.result = 'assays';
+            break;
+        case 'compoundsTab':
+            window.searchTabs.compounds = totalHits;
+            if(window.searchTabs.active == undefined && totalHits > 0)
+                window.searchTabs.result = 'compounds';
+            break;
+        case 'projectsTab':
+            window.searchTabs.projects = totalHits;
+            if(window.searchTabs.active == undefined && totalHits > 0)
+                window.searchTabs.result = 'projects';
+            break;
+        case 'experimentsTab':
+            window.searchTabs.experiments = totalHits;
+            if(window.searchTabs.active == undefined && totalHits > 0)
+                window.searchTabs.result = 'experiments';
+            break;
+    }
+}
+
 /**
  *
  * @param controllerAction - The name of the controller action that would handle this request e.g 'searchAssays'
@@ -261,7 +290,7 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
     var totalHitsElement = '#' + totalHitsForResourceId;
     var updateDivId = '#' + updateDiv;
     var searchForm = "#" + currentFormId;
-    window.console.log('ControllerAction: ' + controllerAction + '  CurrentFormId: ' + currentFormId + '  UpdateDiv: ' + updateDiv)
+//    window.console.log('TabId: ' + tabId + '  ControllerAction: ' + controllerAction + '  CurrentFormId: ' + currentFormId + '  UpdateDiv: ' + updateDiv)
     $.ajax({
         url:controllerAction,
         type:'POST',
@@ -275,6 +304,7 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
         success:function (data) {
             $(updateDivId).html(data);
             var totalHits = $(totalHitsElement).val();
+            setResultsForSearchTabsObject(tabId, totalHits)
             var total = prefixOfTextToAppearOnTab;
             var state = History.getState()
             if (totalHits > 0) {
@@ -291,7 +321,12 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
             $(updateDivId).html(error);
         }, true),
         complete:function () {
+//            window.console.log("window.searchTabs: assays=" + window.searchTabs.assays + " compounds=" + window.searchTabs.compounds + " projects=" + window.searchTabs.projects + " experiments=" + window.searchTabs.experiments);
             $(updateDivId).trigger('search.complete');
+            if(window.searchTabs.active == undefined && window.searchTabs.result != undefined){
+                window.searchTabs.active = updateDiv;
+                $('#resultTabUL').find('a[href="#' + updateDiv + '"]').tab('show');
+            }
         }
     });
 }

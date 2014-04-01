@@ -19,7 +19,6 @@ function getSmallHistogram(experimentId, elementId){
             }
         });
     }
-    window.console.log("Executed getSmallHistogram function - ExptId: " + experimentId + " ElemId: " + elementId)
 }
 
 function  drawSmallSizeHistogram(containerId, domMarker, oneHistogramsData){
