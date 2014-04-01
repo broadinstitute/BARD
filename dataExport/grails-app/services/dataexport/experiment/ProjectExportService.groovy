@@ -104,6 +104,7 @@ class ProjectExportService extends ExportAbstractService {
                 for(experiment in projectExperiment.experiments) {
                     if (experiment.readyForExtraction == ReadyForExtraction.READY ||
                             experiment.experimentStatus == Status.APPROVED ||
+                            experiment.experimentStatus == Status.PROVISIONAL ||
                             experiment.experimentStatus == Status.RETIRED) {
                         projectExperimentsReadyForExraction.add(projectExperiment)
                     }

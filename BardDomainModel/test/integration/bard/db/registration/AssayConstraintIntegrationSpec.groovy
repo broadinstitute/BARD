@@ -24,8 +24,8 @@ class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
     @Before
     void doSetup() {
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
-        Role role = Role.build(authority:"authority")
-        domainInstance = Assay.buildWithoutSave(ownerRole:role)
+        Role role = Role.build(authority: "authority")
+        domainInstance = Assay.buildWithoutSave(ownerRole: role)
     }
 
     void "test assayStatus constraints #desc assayStatus: '#valueUnderTest'"() {
@@ -44,11 +44,12 @@ class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
         }
 
         where:
-        desc             | valueUnderTest       | valid | errorCode
-        'null not valid' | null                 | false | 'nullable'
-        'valid value'    | Status.DRAFT    | true  | null
-        'valid value'    | Status.APPROVED | true  | null
-        'valid value'    | Status.RETIRED  | true  | null
+        desc             | valueUnderTest     | valid | errorCode
+        'null not valid' | null               | false | 'nullable'
+        'valid value'    | Status.DRAFT       | true  | null
+        'valid value'    | Status.PROVISIONAL | true  | null
+        'valid value'    | Status.APPROVED    | true  | null
+        'valid value'    | Status.RETIRED     | true  | null
     }
 
     void "test assayName constraints #desc assayName: "() {
@@ -252,6 +253,7 @@ class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
         'null not valid' | null           | false | 'nullable'
         'date valid'     | new Date()     | true  | null
     }
+
     void "test ownerRole constraints #desc ownerRole: '#valueUnderTest'"() {
         final String field = 'ownerRole'
 

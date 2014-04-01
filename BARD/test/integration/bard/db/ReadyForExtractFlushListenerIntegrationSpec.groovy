@@ -29,13 +29,13 @@ import static bard.db.enums.ReadyForExtraction.*
 class ReadyForExtractFlushListenerIntegrationSpec extends IntegrationSpec {
     SessionFactory sessionFactory
 
-    void "test ready flag gets set"() {
+    void "test ready flag gets set #desc"() {
         // all of the various paths to find owners are tested in unit tests.  This is just to test that the spring config
         // and database update is working by doing a single example.
         setup:
         BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'integrationTestUser')
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
-        Experiment experiment = Experiment.build(readyForExtraction: NOT_READY, experimentStatus: ST.APPROVED)
+        Experiment experiment = Experiment.build(readyForExtraction: NOT_READY, experimentStatus: status)
         ExperimentContext context = ExperimentContext.build(experiment: experiment)
         experiment.disableUpdateReadyForExtraction = true
 
@@ -52,6 +52,11 @@ class ReadyForExtractFlushListenerIntegrationSpec extends IntegrationSpec {
 
         then:
         experiment.readyForExtraction == READY
+
+        where:
+        desc                    | status
+        "Status is Approved"    | Status.APPROVED
+        "Status is Provisional" | Status.PROVISIONAL
     }
 
     void "test ready flag gets set #desc #statusToTest.id"() {
@@ -91,13 +96,34 @@ class ReadyForExtractFlushListenerIntegrationSpec extends IntegrationSpec {
         ownerEntity.readyForExtraction == NOT_READY
 
         where:
-        desc                      | ownerClosure           | initialRFE | statusField        | statusToTest | fieldToModify
-        'Assay with status '      | { Assay.build() }      | NOT_READY  | 'assayStatus'      | ST.APPROVED  | 'assayName'
-        'Assay with status '      | { Assay.build() }      | NOT_READY  | 'assayStatus'      | ST.RETIRED   | 'assayName'
-        'Experiment with status ' | { Experiment.build() } | NOT_READY  | 'experimentStatus' | ST.APPROVED | 'description'
-        'Experiment with status ' | { Experiment.build() } | NOT_READY  | 'experimentStatus' | ST.RETIRED  | 'description'
-        'Project with status '    | { Project.build() }    | NOT_READY  | 'projectStatus'    | ST.APPROVED  | 'description'
-        'Project with status '    | { Project.build() }    | NOT_READY  | 'projectStatus'    | ST.RETIRED   | 'description'
+        desc                      | ownerClosure | initialRFE | statusField        | statusToTest   | fieldToModify
+        'Assay with status '      | {
+            Assay.build()
+        }                                        | NOT_READY  | 'assayStatus'      | ST.APPROVED    | 'assayName'
+        'Assay with status '      | {
+            Assay.build()
+        }                                        | NOT_READY  | 'assayStatus'      | ST.PROVISIONAL | 'assayName'
+        'Assay with status '      | {
+            Assay.build()
+        }                                        | NOT_READY  | 'assayStatus'      | ST.RETIRED     | 'assayName'
+        'Experiment with status ' | {
+            Experiment.build()
+        }                                        | NOT_READY  | 'experimentStatus' | ST.APPROVED    | 'description'
+        'Experiment with status ' | {
+            Experiment.build()
+        }                                        | NOT_READY  | 'experimentStatus' | ST.PROVISIONAL | 'description'
+        'Experiment with status ' | {
+            Experiment.build()
+        }                                        | NOT_READY  | 'experimentStatus' | ST.RETIRED     | 'description'
+        'Project with status '    | {
+            Project.build()
+        }                                        | NOT_READY  | 'projectStatus'    | ST.APPROVED    | 'description'
+        'Project with status '    | {
+            Project.build()
+        }                                        | NOT_READY  | 'projectStatus'    | ST.PROVISIONAL | 'description'
+        'Project with status '    | {
+            Project.build()
+        }                                        | NOT_READY  | 'projectStatus'    | ST.RETIRED     | 'description'
     }
 
     void "test ready flag for project experiments gets set #desc #statusToTest.id"() {
@@ -134,9 +160,10 @@ class ReadyForExtractFlushListenerIntegrationSpec extends IntegrationSpec {
 
 
         where:
-        desc                      | initialRFE | statusField        | statusToTest | fieldToModify
-        'Experiment with status ' | NOT_READY  | 'experimentStatus' | ST.APPROVED | 'description'
-        'Experiment with status ' | NOT_READY  | 'experimentStatus' | ST.RETIRED  | 'description'
+        desc                      | initialRFE | statusField        | statusToTest   | fieldToModify
+        'Experiment with status ' | NOT_READY  | 'experimentStatus' | ST.APPROVED    | 'description'
+        'Experiment with status ' | NOT_READY  | 'experimentStatus' | ST.PROVISIONAL | 'description'
+        'Experiment with status ' | NOT_READY  | 'experimentStatus' | ST.RETIRED     | 'description'
     }
 
     void "test Element ready flag #desc"() {

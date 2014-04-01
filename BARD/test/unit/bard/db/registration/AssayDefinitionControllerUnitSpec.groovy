@@ -146,10 +146,10 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assertEditingErrorMessage()
     }
 
-    void 'test edit Assay Status success'() {
+    void 'test edit Assay Status success #desc'() {
         given:
-        Assay newAssay = Assay.build(version: 0, assayStatus: Status.DRAFT)  //no designer
-        Assay updatedAssay = Assay.build(assayName: "My New Name", version: 1, lastUpdated: new Date(), designedBy: "Designer", assayStatus: Status.APPROVED)
+        Assay newAssay = Assay.build(version: 0, assayStatus: oldStatus)  //no designer
+        Assay updatedAssay = Assay.build(assayName: "My New Name", version: 1, lastUpdated: new Date(), designedBy: "Designer", assayStatus: newStatus)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id,
                 version: newAssay.version, name: newAssay.assayName, value: updatedAssay.assayStatus.id)
         when:
@@ -164,6 +164,13 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assert responseJSON.get("data").asText() == updatedAssay.assayStatus.id
         assert responseJSON.get("lastUpdated").asText()
         assert response.contentType == "text/json;charset=utf-8"
+
+        where:
+        desc                               | oldStatus          | newStatus
+        "Change from draft to Approved"    | Status.DRAFT       | Status.APPROVED
+        "Change from draft to Provisional" | Status.DRAFT       | Status.PROVISIONAL
+        "Change from draft to Provisional" | Status.PROVISIONAL | Status.APPROVED
+
     }
 
     void 'test assayStatus only has Approved and Retired '() {
@@ -172,7 +179,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
         then:
         final String responseAsString = response.contentAsString
-        responseAsString == '["Approved","Retired"]'
+        responseAsString == '["Approved","Provisional","Retired"]'
     }
 
     void 'test edit Assay Status access denied'() {
@@ -389,7 +396,11 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
         where:
         desc                                   | version | modifiedBy    | lastUpdated      | newValue   | expectedJson
-        "pass thru"                            | 1L      | 'foo'         | this.lastUpdated | 'newValue' | """{"version":"1","modifiedBy":"foo","lastUpdated":"${this.lastUpdated.format('MM/dd/yyyy')}","data":"newValue"}"""
-        "ensure modifiedBy doesn't show email" | 1L      | 'foo@foo.com' | this.lastUpdated | 'newValue' | """{"version":"1","modifiedBy":"foo","lastUpdated":"${this.lastUpdated.format('MM/dd/yyyy')}","data":"newValue"}"""
+        "pass thru"                            | 1L      | 'foo'         | this.lastUpdated | 'newValue' | """{"version":"1","modifiedBy":"foo","lastUpdated":"${
+            this.lastUpdated.format('MM/dd/yyyy')
+        }","data":"newValue"}"""
+        "ensure modifiedBy doesn't show email" | 1L      | 'foo@foo.com' | this.lastUpdated | 'newValue' | """{"version":"1","modifiedBy":"foo","lastUpdated":"${
+            this.lastUpdated.format('MM/dd/yyyy')
+        }","data":"newValue"}"""
     }
 }

@@ -10,7 +10,8 @@ package bard.db.enums
 enum Status implements IEnumUserType, ICommonStatusIds{
     DRAFT(DRAFT_ID),
     APPROVED(APPROVED_ID),
-    RETIRED(RETIRED_ID)
+    RETIRED(RETIRED_ID),
+    PROVISIONAL(PROVISIONAL_ID)
 
     final String id;
 

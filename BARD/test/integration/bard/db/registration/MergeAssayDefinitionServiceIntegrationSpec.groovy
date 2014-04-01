@@ -107,7 +107,9 @@ class MergeAssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
     void "test move Experiments from Assay"() {
         given: "Three assays with experiments and a target assay"
         Assay sourceAssay1 = Assay.build(assayStatus: Status.APPROVED)
+        Assay sourceAssay4 = Assay.build(assayStatus: Status.PROVISIONAL)
         Experiment experimentA = Experiment.build(assay: sourceAssay1)
+        Experiment experimentE = Experiment.build(assay: sourceAssay4)
         Assay sourceAssay2 = Assay.build(assayStatus: Status.APPROVED)
         Experiment experimentB = Experiment.build(assay: sourceAssay2)
         Assay sourceAssay3 = Assay.build(assayStatus: Status.APPROVED)
@@ -122,6 +124,9 @@ class MergeAssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         then: "We expect source assay 1 to have status RETIRED and 0 experiments after experiment A was moved to target assay"
         assert sourceAssay1.assayStatus == Status.RETIRED
         assert sourceAssay1.experiments.size() == 0
+        and: "We expect source assay 4 to have status RETIRED and 0 experiments after experiment A was moved to target assay"
+        assert sourceAssay4.assayStatus == Status.RETIRED
+        assert sourceAssay4.experiments.size() == 0
         and: "We expect source assay 2 to have status RETIRED and 0 experiments after experiment B was moved to target assay"
         assert sourceAssay2.assayStatus == Status.RETIRED
         assert sourceAssay2.experiments.size() == 0

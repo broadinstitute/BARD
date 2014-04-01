@@ -60,7 +60,7 @@ class MergeAssayService {
     List<Long> retireAssaysWithNoExperiments(List<Assay> assays, String modifiedBy) {
         List<Long> assaysWithError = []
         assays.each { Assay assay ->
-            if(assay.experiments.size() == 0){
+            if(!assay.experiments){
                 assay.assayStatus = Status.RETIRED
                 assay.modifiedBy = modifiedBy
                 if (!assay.save(flush: true)) {

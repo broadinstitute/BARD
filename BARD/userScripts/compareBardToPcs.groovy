@@ -30,6 +30,7 @@ Map<Status, Set<PcsProject>> broadAndInBardStatusMap = new HashMap<>()
 broadAndInBardStatusMap.put(Status.DRAFT, new HashSet<PcsProject>())
 broadAndInBardStatusMap.put(Status.APPROVED, new HashSet<PcsProject>())
 broadAndInBardStatusMap.put(Status.RETIRED, new HashSet<PcsProject>())
+broadAndInBardStatusMap.put(Status.PROVISIONAL, new HashSet<PcsProject>())
 
 for (PcsProject pcsProject : pcsProjectList) {
     boolean hasBardProject = false
@@ -46,14 +47,14 @@ for (PcsProject pcsProject : pcsProjectList) {
         }
     }
 
-    if (! hasBardProject) {
+    if (!hasBardProject) {
         noProjectInBard.add(pcsProject)
     }
 }
 
 println("Not owned by the Broad in BARD ${notOwnedByBroad.size()}")
 for (PcsProject pcsProject : notOwnedByBroad) {
-    List<String> ownerList = pcsProject.summaryAidProjectMap.values().collect({Project p ->
+    List<String> ownerList = pcsProject.summaryAidProjectMap.values().collect({ Project p ->
         return p.owner
     })
     String owners = ownerList.join(",")
@@ -80,7 +81,7 @@ println(noProjectInBardAidList.join("','aid="))
 
 println()
 println()
-for (Status status : [Status.RETIRED, Status.APPROVED, Status.DRAFT]) {
+for (Status status : [Status.RETIRED, Status.APPROVED, Status.DRAFT, Status.PROVISIONAL]) {
     Set<PcsProject> broadAndInBard = broadAndInBardStatusMap.get(status)
 
     println("broad and in BARD $status ${broadAndInBard.size()}")
@@ -126,7 +127,7 @@ for (PcsProject pcsProject : draft) {
 
         Map<Long, PubChemSubmissionInfo> aidPcsInfoMap = new HashMap<>()
         for (PubChemSubmissionInfo pcsInfo : pcsProject.pcsEntries) {
-            if (! pcsInfo.objective.equalsIgnoreCase(PubChemSubmissionInfo.summaryProjectPhase)) {
+            if (!pcsInfo.objective.equalsIgnoreCase(PubChemSubmissionInfo.summaryProjectPhase)) {
                 aidPcsInfoMap.put(pcsInfo.aid, pcsInfo)
             }
         }
@@ -141,7 +142,7 @@ for (PcsProject pcsProject : draft) {
                 PubChemSubmissionInfo pcsInfo = aidPcsInfoMap.get(justInPcsAid)
 
                 print("\t\tAID: $justInPcsAid ")
-                if (! pcsInfo.holdUntilDate || pcsInfo.holdUntilDate > now) {
+                if (!pcsInfo.holdUntilDate || pcsInfo.holdUntilDate > now) {
                     print("still on hold ")
                 } else if (pcsInfo.holdUntilDate?.time < mandatoryDate.time) {
                     print("MANDATORY to migrate ")
@@ -280,7 +281,7 @@ List<PcsProject> aggregatePcsProjects(List<PubChemSubmissionInfo> pcsInfoList) {
     for (PubChemSubmissionInfo pcsInfo : pcsInfoList) {
         PcsProject pcsProject = pcsProjectMap.get(pcsInfo.project)
 
-        if (! pcsProject) {
+        if (!pcsProject) {
             pcsProject = new PcsProject(pcsInfo.project)
             pcsProjectMap.put(pcsProject.elnProject, pcsProject)
         }
@@ -308,7 +309,7 @@ void findBardProjects(List<PcsProject> pcsProjectList) {
                 if (er.project) {
                     Project previousProject = pcsProject.summaryAidProjectMap.get(summaryAid)
 
-                    if (! previousProject) {
+                    if (!previousProject) {
                         pcsProject.summaryAidProjectMap.put(summaryAid, er.project)
                     } else {
                         println("WARNING:  multiple projects found for summary AID: $pcsProject ${er.project.id}")

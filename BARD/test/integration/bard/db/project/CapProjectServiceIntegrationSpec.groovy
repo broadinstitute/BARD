@@ -55,10 +55,14 @@ class CapProjectServiceIntegrationSpec extends IntegrationSpec {
         assert projects.size() == expectedNumberOfProbes
 
         where:
-        desc                     | projectStatus          | ncgcWarehouseId | bardURI                       | expectedNumberOfProbes
-        "Valid Probe Element"    | Status.APPROVED | 1               | ProjectService.BARD_PROBE_URI | 1
-        "Status is not Approved" | Status.DRAFT    | 1               | ProjectService.BARD_PROBE_URI | 0
-        "No NCGC Ware House Id"  | Status.APPROVED | null            | ProjectService.BARD_PROBE_URI | 0
-        "Invalid PROBE URI"      | Status.APPROVED | 1               | "Some uri"                    | 0
+        desc                                  | projectStatus      | ncgcWarehouseId | bardURI                       | expectedNumberOfProbes
+        "Valid Probe Element"                 | Status.APPROVED    | 1               | ProjectService.BARD_PROBE_URI | 1
+        "Valid Probe Element-Prov"            | Status.PROVISIONAL | 1               | ProjectService.BARD_PROBE_URI | 1
+        "Status is not Approved"              | Status.DRAFT       | 1               | ProjectService.BARD_PROBE_URI | 0
+        "No NCGC Ware House Id"               | Status.APPROVED    | null            | ProjectService.BARD_PROBE_URI | 0
+        "Invalid PROBE URI"                   | Status.APPROVED    | 1               | "Some uri"                    | 0
+        "No NCGC Ware House Id - Prov status" | Status.PROVISIONAL | null            | ProjectService.BARD_PROBE_URI | 0
+        "Invalid PROBE URI Prov status"       | Status.PROVISIONAL | 1               | "Some uri"                    | 0
+
     }
 }

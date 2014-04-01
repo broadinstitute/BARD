@@ -74,7 +74,7 @@
             </dd>
 
             <g:if test="${instance?.experimentStatus?.equals(Status.APPROVED)}">
-                <dt><g:message code="instance.approvedBy.label" default="Approved By"/>:</dt>
+                <dt><g:message code="entity.approvedBy.label" default="Approved By"/>:</dt>
                 <dd id="approvedById">
                     <g:if test="${instance.approvedBy?.displayName}">
                         ${instance.approvedBy?.displayName} (<g:formatDate date="${instance.approvedDate}"
@@ -82,7 +82,15 @@
                     </g:if>
                 </dd>
             </g:if>
-
+            <g:if test="${instance?.experimentStatus.equals(Status.PROVISIONAL)}">
+                <dt><g:message code="entity.provisionalApprovedBy.label" default="Provisionally Approved By"/>:</dt>
+                <dd id="approvedById">
+                    <g:if test="${instance.approvedBy?.displayName}">
+                        ${instance.approvedBy?.displayName} (<g:formatDate date="${instance.approvedDate}"
+                                                                           format="MM/dd/yyyy"/>)
+                    </g:if>
+                </dd>
+            </g:if>
             <dt><g:message code="experiment.experimentName.label" default="Name"/>:</dt>
             <dd>
                 <span

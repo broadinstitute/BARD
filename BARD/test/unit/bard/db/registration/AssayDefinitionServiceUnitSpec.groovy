@@ -133,6 +133,10 @@ public class AssayDefinitionServiceUnitSpec extends Specification {
         'invalid APPROVED with null item values'     | APPROVED      | 'foo'    | [attributeType: Fixed, valueType: NONE, valueDisplay: null]      | APPROVED       |{null}                        | true                       |false | 'assay.assayStatus.requires.items.with.values'
         'valid APPROVED with non null item values'   | APPROVED      | 'foo'    | [attributeType: Fixed, valueType: NONE, valueDisplay: 'someVal'] | APPROVED       |{Person.findByUserName('foo')}| false                      |true | null
         'valid APPROVED with no items'               | APPROVED      | 'foo'    | [:]                                                              | APPROVED       |{Person.findByUserName('foo')}| false                      |true | null
+        'invalid PROVISIONAL with null item values'     | PROVISIONAL      | 'foo'    | [attributeType: Fixed, valueType: NONE, valueDisplay: null]      | PROVISIONAL       |{null}                        | true                       |false | 'assay.assayStatus.requires.items.with.values'
+        'valid PROVISIONAL with non null item values'   | PROVISIONAL     | 'foo'    | [attributeType: Fixed, valueType: NONE, valueDisplay: 'someVal'] | PROVISIONAL       |{Person.findByUserName('foo')}| false                      |true | null
+        'valid PROVISIONAL with no items'               | PROVISIONAL      | 'foo'    | [:]                                                              | PROVISIONAL       |{Person.findByUserName('foo')}| false                      |true | null
+
     }
 
     void "test update assay type"() {
