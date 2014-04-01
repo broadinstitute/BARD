@@ -342,4 +342,7 @@ modules = {
     elementEditHierarchy {
         resource url: 'js/element/elementEditHierarchy.js'
     }
+    panelExperiment {
+        resource url: '/js/panelExperiment.js'
+    }
 }

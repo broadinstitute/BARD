@@ -1,12 +1,15 @@
 package bard.db.experiment
 
 import bard.db.registration.Panel
+import grails.converters.JSON
 import grails.validation.ValidationException
-import org.springframework.dao.DataIntegrityViolationException
+
+import javax.servlet.http.HttpServletResponse
 
 class PanelExperimentController {
 
     static allowedMethods = [save: "POST", update: "POST"]
+    ExperimentService experimentService
 
     def create() {
         [panelExperimentCommand: new PanelExperimentCommand()]
@@ -58,6 +61,18 @@ class PanelExperimentController {
         }
 
         redirect(controller: "bardWebInterface", action: "navigationPage")
+    }
+
+    def findExperimentsForPanelAjax(Long id) {
+        Panel panel = Panel.findById(id)
+        if (!panel) {
+            render(status: HttpServletResponse.SC_BAD_REQUEST, text: "Could not find a panel with panel-id=${id}.", contentType: 'text/plain', template: null)
+            return
+        }
+
+        Set<Experiment> experiments = experimentService.findExperimentsForPanel(panel)
+
+        render experiments.sort { a, b -> a.id <=> b.id } as JSON
     }
 }
 
