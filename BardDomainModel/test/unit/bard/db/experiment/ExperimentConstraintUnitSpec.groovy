@@ -30,7 +30,8 @@ class ExperimentConstraintUnitSpec extends Specification {
 
     Experiment domainInstance
 
-    @Shared Assay validAssay
+    @Shared
+    Assay validAssay
 
     @Before
     void doSetup() {
@@ -92,12 +93,13 @@ class ExperimentConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc          | valueUnderTest            | valid | errorCode
-        'null'        | null                      | false | 'nullable'
+        desc          | valueUnderTest     | valid | errorCode
+        'null'        | null               | false | 'nullable'
 
-        'valid value' | Status.DRAFT    | true  | null
-        'valid value' | Status.APPROVED | true  | null
-        'valid value' | Status.RETIRED  | true  | null
+        'valid value' | Status.DRAFT       | true  | null
+        'valid value' | Status.APPROVED    | true  | null
+        'valid value' | Status.PROVISIONAL | true  | null
+        'valid value' | Status.RETIRED     | true  | null
     }
 
     void "test readyForExtraction constraints #desc readyForExtraction: '#valueUnderTest'"() {

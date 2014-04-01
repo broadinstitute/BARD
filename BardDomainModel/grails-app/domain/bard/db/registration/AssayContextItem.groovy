@@ -85,7 +85,7 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
             // special condition to allow for creating assays with required contexts and context items
             // as long as all the value columns are null we'll skip any of the standard validation rules
             // if any of the value columns are non null than all the standard validation rules apply
-            if (assayContext.assay.assayStatus != Status.APPROVED && valueType == valueType.NONE && allValueColumnsAreNull()) {
+            if ((assayContext.assay.assayStatus != Status.APPROVED || assayContext.assay.assayStatus != Status.PROVISIONAL) && valueType == valueType.NONE && allValueColumnsAreNull()) {
                 return
             }
             switch (attributeType) {
@@ -111,7 +111,7 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
     }
 
     public boolean allValueColumnsAreNull() {
-        [valueElement, extValueId, qualifier, valueNum, valueMin, valueMax, valueDisplay].every{ it == null}
+        [valueElement, extValueId, qualifier, valueNum, valueMin, valueMax, valueDisplay].every { it == null }
     }
 
     protected freeTypeConstraints(Errors errors) {

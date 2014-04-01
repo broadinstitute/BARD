@@ -24,14 +24,21 @@
              </dd>
 
             <g:if test="${project?.projectStatus.equals(Status.APPROVED)}">
-                <dt><g:message code="project.approvedBy.label" default="Approved By"/>:</dt>
+                <dt><g:message code="entity.approvedBy.label" default="Approved By"/>:</dt>
                 <dd id="approvedById">
                     <g:if test="${project.approvedBy?.displayName}">
                         ${project.approvedBy?.displayName} (<g:formatDate date="${project.approvedDate}" format="MM/dd/yyyy"/>)
                     </g:if>
                 </dd>
             </g:if>
-
+            <g:if test="${project?.projectStatus.equals(Status.PROVISIONAL)}">
+                <dt><g:message code="entity.provisionalApprovedBy.label" default="Provisionally Approved By"/>:</dt>
+                <dd id="approvedById">
+                    <g:if test="${project.approvedBy?.displayName}">
+                        ${project.approvedBy?.displayName} (<g:formatDate date="${project.approvedDate}" format="MM/dd/yyyy"/>)
+                    </g:if>
+                </dd>
+            </g:if>
             <dt><g:message code="project.name.label" default="Fix i18n"/>:</dt>
             <dd>
                 <span

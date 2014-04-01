@@ -193,12 +193,12 @@ class ExperimentService {
     Experiment updateExperimentStatus(final Long id, final Status experimentStatus) {
         Experiment experiment = Experiment.findById(id)
         experiment.experimentStatus = experimentStatus
-        if (experimentStatus.equals(Status.APPROVED) && experiment.isDirty('experimentStatus')) {
+        if ((experimentStatus.equals(Status.APPROVED) || experimentStatus.equals(Status.PROVISIONAL)) && experiment.isDirty('experimentStatus')) {
             Person currentUser = Person.findByUserName(springSecurityService.authentication.name)
             experiment.approvedBy = currentUser
             experiment.approvedDate = new Date()
         }
-        experiment.save(flush: true)
+            experiment.save(flush: true)
         return Experiment.findById(id)
     }
 

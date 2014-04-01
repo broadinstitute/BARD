@@ -194,11 +194,11 @@ class CapPermissionService implements CapPermissionInterface {
 
         switch (domainClass) {
             case Experiment:
-                return Experiment.findAllByOwnerRoleInListAndExperimentStatusInList(userRoles, [Status.APPROVED, Status.DRAFT])
+                return Experiment.findAllByOwnerRoleInListAndExperimentStatusInList(userRoles, [Status.APPROVED, Status.PROVISIONAL,Status.DRAFT])
             case Assay:
-                return Assay.findAllByOwnerRoleInListAndAssayStatusInList(userRoles, [Status.APPROVED, Status.DRAFT]);
+                return Assay.findAllByOwnerRoleInListAndAssayStatusInList(userRoles, [Status.APPROVED, Status.PROVISIONAL,Status.DRAFT]);
             case Project:
-                return Project.findAllByOwnerRoleInListAndProjectStatusInList(userRoles, [Status.APPROVED, Status.DRAFT])
+                return Project.findAllByOwnerRoleInListAndProjectStatusInList(userRoles, [Status.APPROVED, Status.PROVISIONAL,Status.DRAFT])
             case Panel:
                 return Panel.findAllByOwnerRoleInList(userRoles)
         }

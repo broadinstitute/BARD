@@ -62,6 +62,7 @@ class AssayDefinitionService {
                 assayTwoADID: assayTwo.id
         ]
     }
+
     Assay recomputeAssayShortName(Assay assay) {
         return assayService.recomputeAssayShortName(assay)
     }
@@ -81,8 +82,8 @@ class AssayDefinitionService {
 
         assay.assayStatus = assayStatus
         assay.validateItems()
-        if(!assay.hasErrors())    {
-            if(Status.APPROVED.equals(assay.assayStatus) && originalStatus != assay.assayStatus){
+        if (!assay.hasErrors()) {
+            if ((Status.APPROVED == assay.assayStatus || Status.PROVISIONAL == assay.assayStatus) && originalStatus != assay.assayStatus) {
                 Person currentUser = Person.findByUserName(springSecurityService.authentication.name)
                 assay.approvedBy = currentUser
                 assay.approvedDate = new Date()

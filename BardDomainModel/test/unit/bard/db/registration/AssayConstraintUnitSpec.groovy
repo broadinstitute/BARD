@@ -45,11 +45,12 @@ class AssayConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                                         | valueUnderTest | valid | errorCode
-        'null not valid'                             | null           | false | 'nullable'
-        'valid value'                                | DRAFT          | true  | null
-        'valid value'                                | APPROVED       | true  | null
-        'valid value'                                | RETIRED        | true  | null
+        desc             | valueUnderTest | valid | errorCode
+        'null not valid' | null           | false | 'nullable'
+        'valid value'    | DRAFT          | true  | null
+        'valid value'    | PROVISIONAL    | true  | null
+        'valid value'    | APPROVED       | true  | null
+        'valid value'    | RETIRED        | true  | null
 
 
     }

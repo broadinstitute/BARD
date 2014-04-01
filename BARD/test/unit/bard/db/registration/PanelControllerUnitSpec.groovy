@@ -255,7 +255,32 @@ class PanelControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
         "With ID=0"      | "default.not.found.message"        | "0"
         "With ID=STRING" | "Supplied ID not a valid Panel ID" | "STRING"
     }
+    void 'test add assays - provisional'() {
+        given:
+        request.method = "POST"
+        panel = Panel.build(name: 'Test')
+        Assay assay = Assay.build(assayName: "assay", assayStatus: Status.PROVISIONAL)
+        params.id = panel.id
+        params.assayIds = assay.id
 
+        when:
+        def panelService = mockFor(PanelService)
+        panelService.demand.associateAssays(1) { Long id, List<Assay> assays ->
+            assert [assay] == assays
+            assert panel.id == id
+        }
+        controller.setPanelService(panelService.createMock())
+        controller.addAssays()
+
+        then:
+        assert "/panel/show/${panel.id}" == response.redirectedUrl
+
+        when:
+        panelService.verify()
+
+        then:
+        notThrown(Exception.class)
+    }
 
     void 'test add assays'() {
         given:
