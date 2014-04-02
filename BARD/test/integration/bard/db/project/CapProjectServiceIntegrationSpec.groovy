@@ -12,6 +12,7 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.SessionFactory
 import org.junit.Before
 import spock.lang.IgnoreRest
+import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,6 +21,7 @@ import spock.lang.IgnoreRest
  * Time: 11:29 AM
  * To change this template use File | Settings | File Templates.
  */
+@Unroll
 class CapProjectServiceIntegrationSpec extends IntegrationSpec {
     ProjectService projectService
     SessionFactory sessionFactory
@@ -35,8 +37,7 @@ class CapProjectServiceIntegrationSpec extends IntegrationSpec {
         }
     }
 
-    @IgnoreRest
-    void "test find Approved warehouse Probe Projects"() {
+    void "test find Approved warehouse Probe Projects #desc"() {
         given:
         Element probeElement = Element.findByBardURI(bardURI)
         if (!probeElement) {

@@ -21,7 +21,7 @@ class ProjectService {
                 SELECT DISTINCT project.id FROM Project project inner join project.contexts context
                 inner join context.contextItems contextItem
                 inner join contextItem.attributeElement element WHERE element.bardURI=? and
-                project.ncgcWarehouseId is not null and  ( project.projectStatus=? or project.projectStatus=?)
+                project.ncgcWarehouseId is not null and ( project.projectStatus=? or project.projectStatus=?)
                 '''
 
         final List<Long> projectIds = Project.executeQuery(PROBES_QUERY,
@@ -78,7 +78,7 @@ class ProjectService {
     Project updateProjectStatus(Long id, Status newProjectStatus) {
         Project project = Project.findById(id)
         project.projectStatus = newProjectStatus
-        if ([Status.APPROVED,Status.PROVISIONAL].contains(newProjectStatus)  && project.isDirty('projectStatus')) {
+        if ((newProjectStatus.equals(Status.APPROVED) || newProjectStatus.equals(Status.PROVISIONAL))  && project.isDirty('projectStatus')) {
             Person currentUser = Person.findByUserName(springSecurityService.authentication.name)
             project.approvedBy = currentUser
             project.approvedDate = new Date()

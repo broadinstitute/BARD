@@ -133,7 +133,7 @@ class MergeAssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         and: "We expect source assay 3 to still have its original status of APPROVED since it has 1 experiment after experiment C was moved to target assay"
         assert sourceAssay3.assayStatus == Status.APPROVED
         assert sourceAssay3.experiments.size() == 1
-        and: "We expect teh target assay to have 3 new experiments"
-        newTargetAssay.experiments.size() == 3
+        and: "We expect the target assay to have 3 new experiments"
+        newTargetAssay.experiments.size() == 4
     }
 }
