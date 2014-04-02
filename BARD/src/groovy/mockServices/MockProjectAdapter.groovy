@@ -15,6 +15,7 @@ class MockProjectAdapter implements ProjectAdapterInterface {
     String description
     Integer numExperiments
     BardAnnotation annotations = null
+    String projectStatus="Approved"
 
     @Override
     String getHighlight() {
@@ -68,4 +69,8 @@ class MockProjectAdapter implements ProjectAdapterInterface {
         return null  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
+    String getProjectStatus() {
+        return this.projectStatus
+    }
 }

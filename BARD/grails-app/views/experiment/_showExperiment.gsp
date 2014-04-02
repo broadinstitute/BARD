@@ -71,6 +71,21 @@
                         data-original-title="Select Experiment Status">${instance?.experimentStatus?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status"
                    data-id="${instance?.experimentStatus?.id}"></a>
+
+                <g:if test="${instance?.experimentStatus?.id == 'Draft'}">
+                    <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
+                         alt="Draft" title="Warning this Experiment has not yet been reviewed for accuracy"/>
+                </g:if>
+                <g:elseif
+                        test="${instance?.experimentStatus?.id == 'Provisional'}">
+                    <img src="${resource(dir: 'images', file: 'provisional_16.png')}"
+                         alt="Provisional" title="This Experiment has been reviewed for accuracy by curators"/>
+                </g:elseif>
+                <g:elseif
+                        test="${instance?.experimentStatus?.id == 'Approved'}">
+                    <img src="${resource(dir: 'images', file: 'witnessed.png')}"
+                         alt="Approved" title="This Experiment has been reviewed for accuracy"/>
+                </g:elseif>
             </dd>
 
             <g:if test="${instance?.experimentStatus?.equals(Status.APPROVED)}">

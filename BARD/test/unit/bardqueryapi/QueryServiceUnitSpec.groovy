@@ -18,7 +18,6 @@ import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
 import grails.test.mixin.TestFor
 import org.apache.commons.lang.time.StopWatch
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll

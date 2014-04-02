@@ -42,6 +42,11 @@
                                         <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
                                              alt="Draft" title="Warning this experiment definition has not yet been reviewed for accuracy"/>
                                     </g:if>
+                                    <g:elseif
+                                            test="${experimentAdapter.status == 'Provisional'}">
+                                        <img src="${resource(dir: 'images', file: 'provisional_16.png')}"
+                                             alt="Provisional" title="This experiment has been reviewed for accuracy by curators"/>
+                                    </g:elseif>
                                     <g:elseif test="${experimentAdapter.status == 'Approved'}">
                                         <img src="${resource(dir: 'images', file: 'witnessed.png')}"
                                              alt="Approved" title="This experiment has been reviewed for accuracy"/>

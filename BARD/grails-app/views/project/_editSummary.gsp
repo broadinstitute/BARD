@@ -21,6 +21,21 @@
                    data-url="${request.contextPath}/project/editProjectStatus"
                    data-original-title="Select Project Status">${project?.projectStatus?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status" data-id="${project?.projectStatus?.id}"></a>
+                <g:if test="${project?.projectStatus?.id == 'Draft'}">
+                    <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
+                         alt="Draft" title="Warning this Project has not yet been reviewed for accuracy"/>
+                </g:if>
+                <g:elseif
+                        test="${project?.projectStatus?.id == 'Provisional'}">
+                    <img src="${resource(dir: 'images', file: 'provisional_16.png')}"
+                         alt="Provisional" title="This Project has been reviewed for accuracy by curators"/>
+                </g:elseif>
+                <g:elseif
+                        test="${project?.projectStatus?.id == 'Approved'}">
+                    <img src="${resource(dir: 'images', file: 'witnessed.png')}"
+                         alt="Approved" title="This Project has been reviewed for accuracy"/>
+                </g:elseif>
+
              </dd>
 
             <g:if test="${project?.projectStatus.equals(Status.APPROVED)}">
