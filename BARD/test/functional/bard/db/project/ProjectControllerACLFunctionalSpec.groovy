@@ -179,12 +179,32 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK | Status.APPROVED
         "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK | Status.APPROVED
         "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK | Status.APPROVED
+    }
+    def 'test edit Project Status #desc provisional'() {
+        given:
+        Long pk = projectData.id
+        String newStatus = status.id
+        Long version = getCurrentProjectProperties().version
+        RESTClient client = getRestClient(controllerUrl, "editProjectStatus", team, teamPassword)
+        when:
+        Response response = client.post() {
+            urlenc pk: pk, version: version, value: newStatus
+        }
+        then:
+        assert response.statusCode == expectedHttpResponse
+        JSONObject jsonObject = response.json
+        assert jsonObject.get("modifiedBy")
+        assert jsonObject.get("data") == newStatus
+        assert jsonObject.get("lastUpdated")
+        assert jsonObject.get("version") != null
+
+        where:
+        desc       | team              | teamPassword      | expectedHttpResponse      | status
         "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK | Status.PROVISIONAL
         "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK | Status.PROVISIONAL
         "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK | Status.PROVISIONAL
 
     }
-
     def 'test edit Project Status #desc #status - Forbidden'() {
         given:
         Long pk = projectData.id

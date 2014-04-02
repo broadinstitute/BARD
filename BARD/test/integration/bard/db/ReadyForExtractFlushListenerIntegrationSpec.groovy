@@ -96,34 +96,16 @@ class ReadyForExtractFlushListenerIntegrationSpec extends IntegrationSpec {
         ownerEntity.readyForExtraction == NOT_READY
 
         where:
-        desc                      | ownerClosure | initialRFE | statusField        | statusToTest   | fieldToModify
-        'Assay with status '      | {
-            Assay.build()
-        }                                        | NOT_READY  | 'assayStatus'      | ST.APPROVED    | 'assayName'
-        'Assay with status '      | {
-            Assay.build()
-        }                                        | NOT_READY  | 'assayStatus'      | ST.PROVISIONAL | 'assayName'
-        'Assay with status '      | {
-            Assay.build()
-        }                                        | NOT_READY  | 'assayStatus'      | ST.RETIRED     | 'assayName'
-        'Experiment with status ' | {
-            Experiment.build()
-        }                                        | NOT_READY  | 'experimentStatus' | ST.APPROVED    | 'description'
-        'Experiment with status ' | {
-            Experiment.build()
-        }                                        | NOT_READY  | 'experimentStatus' | ST.PROVISIONAL | 'description'
-        'Experiment with status ' | {
-            Experiment.build()
-        }                                        | NOT_READY  | 'experimentStatus' | ST.RETIRED     | 'description'
-        'Project with status '    | {
-            Project.build()
-        }                                        | NOT_READY  | 'projectStatus'    | ST.APPROVED    | 'description'
-        'Project with status '    | {
-            Project.build()
-        }                                        | NOT_READY  | 'projectStatus'    | ST.PROVISIONAL | 'description'
-        'Project with status '    | {
-            Project.build()
-        }                                        | NOT_READY  | 'projectStatus'    | ST.RETIRED     | 'description'
+        desc                      | ownerClosure      | initialRFE | statusField        | statusToTest   | fieldToModify
+        'Assay with status '      | { Assay.build() } | NOT_READY  | 'assayStatus'      | ST.APPROVED    | 'assayName'
+        'Assay with status '      | { Assay.build() } | NOT_READY  | 'assayStatus'      | ST.PROVISIONAL | 'assayName'
+        'Assay with status '      | { Assay.build() } | NOT_READY  | 'assayStatus'      | ST.RETIRED     | 'assayName'
+        'Experiment with status ' | {Experiment.build()} | NOT_READY  | 'experimentStatus' | ST.APPROVED    | 'description'
+        'Experiment with status ' | {Experiment.build()} | NOT_READY  | 'experimentStatus' | ST.PROVISIONAL | 'description'
+        'Experiment with status ' | {Experiment.build()} | NOT_READY  | 'experimentStatus' | ST.RETIRED     | 'description'
+        'Project with status '    | {Project.build()} | NOT_READY  | 'projectStatus'    | ST.APPROVED    | 'description'
+        'Project with status '    | {Project.build()} | NOT_READY  | 'projectStatus'    | ST.PROVISIONAL | 'description'
+        'Project with status '    | {Project.build()} | NOT_READY  | 'projectStatus'    | ST.RETIRED     | 'description'
     }
 
     void "test ready flag for project experiments gets set #desc #statusToTest.id"() {

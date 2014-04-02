@@ -78,7 +78,7 @@ class ProjectService {
     Project updateProjectStatus(Long id, Status newProjectStatus) {
         Project project = Project.findById(id)
         project.projectStatus = newProjectStatus
-        if ((newProjectStatus.equals(Status.APPROVED) || newProjectStatus.equals(Status.PROVISIONAL))  && project.isDirty('projectStatus')) {
+        if ([Status.APPROVED,Status.PROVISIONAL].contains(newProjectStatus)  && project.isDirty('projectStatus')) {
             Person currentUser = Person.findByUserName(springSecurityService.authentication.name)
             project.approvedBy = currentUser
             project.approvedDate = new Date()

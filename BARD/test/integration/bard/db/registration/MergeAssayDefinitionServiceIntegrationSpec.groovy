@@ -115,7 +115,7 @@ class MergeAssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         Assay sourceAssay3 = Assay.build(assayStatus: Status.APPROVED)
         Experiment experimentC = Experiment.build(assay: sourceAssay3)
         Experiment experimentD = Experiment.build(assay: sourceAssay3)
-        List<Experiment> experiments = [experimentA, experimentB, experimentC]
+        List<Experiment> experiments = [experimentA, experimentB, experimentC, experimentE]
         Assay targetAssay = Assay.build(assayStatus: Status.APPROVED)
 
         when: "We move 3 experiments from 3 assays to the target assay"
