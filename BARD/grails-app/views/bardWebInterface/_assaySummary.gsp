@@ -5,19 +5,7 @@
     <dd>${assayAdapter?.capAssayId}</dd>
     <dt>Status:</dt>
     <dd>${assayAdapter?.assayStatus}
-        <g:if test="${assayAdapter.assayStatus == 'Draft'}">
-            <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
-                 alt="Draft" title="Warning this assay definition has not yet been reviewed for accuracy"/>
-        </g:if>
-        <g:elseif
-                test="${assayAdapter.assayStatus == 'Provisional'}">
-            <img src="${resource(dir: 'images', file: 'provisional_16.png')}"
-                 alt="Provisional" title="This assay has been reviewed for accuracy by curators"/>
-        </g:elseif>
-        <g:elseif test="${assayAdapter.assayStatus == 'Approved' || assayAdapter.assayStatus == 'Witnessed'}">
-            <img src="${resource(dir: 'images', file: 'witnessed.png')}"
-                 alt="Approved" title="This assay has been reviewed for accuracy"/>
-        </g:elseif>
+        <g:render template="/common/statusIcons" model="[status:assayAdapter.assayStatus, entity: 'Assay']"/>
     </dd>
     <dt>Short Name:</dt>
     <dd>${assayAdapter?.title}</dd>

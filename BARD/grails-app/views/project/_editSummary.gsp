@@ -21,40 +21,12 @@
                    data-url="${request.contextPath}/project/editProjectStatus"
                    data-original-title="Select Project Status">${project?.projectStatus?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status" data-id="${project?.projectStatus?.id}"></a>
-                <g:if test="${project?.projectStatus?.id == 'Draft'}">
-                    <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
-                         alt="Draft" title="Warning this Project has not yet been reviewed for accuracy"/>
-                </g:if>
-                <g:elseif
-                        test="${project?.projectStatus?.id == 'Provisional'}">
-                    <img src="${resource(dir: 'images', file: 'provisional_16.png')}"
-                         alt="Provisional" title="This Project has been reviewed for accuracy by curators"/>
-                </g:elseif>
-                <g:elseif
-                        test="${project?.projectStatus?.id == 'Approved'}">
-                    <img src="${resource(dir: 'images', file: 'witnessed.png')}"
-                         alt="Approved" title="This Project has been reviewed for accuracy"/>
-                </g:elseif>
-
+                <g:render template="/common/statusIcons" model='[status:project?.projectStatus?.id, entity: "Project"]'/>
              </dd>
-
-            <g:if test="${project?.projectStatus.equals(Status.APPROVED)}">
-                <dt><g:message code="entity.approvedBy.label" default="Approved By"/>:</dt>
-                <dd id="approvedById">
-                    <g:if test="${project.approvedBy?.displayName}">
-                        ${project.approvedBy?.displayName} (<g:formatDate date="${project.approvedDate}" format="MM/dd/yyyy"/>)
-                    </g:if>
-                </dd>
-            </g:if>
-            <g:if test="${project?.projectStatus.equals(Status.PROVISIONAL)}">
-                <dt><g:message code="entity.provisionalApprovedBy.label" default="Provisionally Approved By"/>:</dt>
-                <dd id="approvedById">
-                    <g:if test="${project.approvedBy?.displayName}">
-                        ${project.approvedBy?.displayName} (<g:formatDate date="${project.approvedDate}" format="MM/dd/yyyy"/>)
-                    </g:if>
-                </dd>
-            </g:if>
-            <dt><g:message code="project.name.label" default="Fix i18n"/>:</dt>
+            <g:render template="/common/statusMessage" model="[status:project?.projectStatus,
+                    displayName:project.approvedBy?.displayName,
+                    approvedDate:project.approvedDate]"/>
+           <dt><g:message code="project.name.label" default="Fix i18n"/>:</dt>
             <dd>
                 <span
                    class="projectName"

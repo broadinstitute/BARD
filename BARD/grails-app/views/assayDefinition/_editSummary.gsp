@@ -21,39 +21,11 @@
                    data-url="${request.contextPath}/assayDefinition/editAssayStatus"
                    data-original-title="Select Assay Status">${assay?.assayStatus?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status" data-id="${assay?.assayStatus?.id}"></a>
+                <g:render template="/common/statusIcons" model="[status:assay?.assayStatus?.id, entity: 'Assay']"/>
 
-                <g:if test="${assay?.assayStatus?.id == 'Draft'}">
-                    <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
-                         alt="Draft" title="Warning this Assay has not yet been reviewed for accuracy"/>
-                </g:if>
-                <g:elseif
-                        test="${assay?.assayStatus?.id == 'Provisional'}">
-                    <img src="${resource(dir: 'images', file: 'provisional_16.png')}"
-                         alt="Provisional" title="This Assay has been reviewed for accuracy by curators"/>
-                </g:elseif>
-                <g:elseif
-                        test="${assay?.assayStatus?.id == 'Approved'}">
-                    <img src="${resource(dir: 'images', file: 'witnessed.png')}"
-                         alt="Approved" title="This Assay has been reviewed for accuracy"/>
-                </g:elseif>
             </dd>
+             <g:render template="/common/statusMessage" model="[status:assay?.assayStatus,displayName:assay.approvedBy?.displayName,approvedDate:assay.approvedDate]"/>
 
-            <g:if test="${assay?.assayStatus.equals(Status.APPROVED)}">
-                <dt><g:message code="entity.approvedBy.label" default="Approved By"/>:</dt>
-                <dd id="approvedById">
-                    <g:if test="${assay.approvedBy?.displayName}">
-                        ${assay.approvedBy?.displayName} (<g:formatDate date="${assay.approvedDate}" format="MM/dd/yyyy"/>)
-                    </g:if>
-                </dd>
-            </g:if>
-            <g:if test="${assay?.assayStatus.equals(Status.PROVISIONAL)}">
-                <dt><g:message code="entity.provisionalApprovedBy.label" default="Provisionally Approved By"/>:</dt>
-                <dd id="approvedById">
-                    <g:if test="${assay.approvedBy?.displayName}">
-                        ${assay.approvedBy?.displayName} (<g:formatDate date="${assay.approvedDate}" format="MM/dd/yyyy"/>)
-                    </g:if>
-                </dd>
-            </g:if>
             <dt><g:message code="assay.assayName.label" default="Fix i18n"/>:</dt>
             <dd>
                 <span

@@ -52,21 +52,10 @@
                 <td><g:link controller="assayDefinition" action="show" id="${assayAdapter.capAssayId}">
                     ${assayAdapter.name}</g:link><br/>
                     <small class="muted">${assayAdapter.highlight}</small></td>
-                <td class="align-center"><g:if test="${assayAdapter.assayStatus == 'Draft'}">
-                    <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
-                         alt="Draft" title="Warning this assay definition has not yet been reviewed for accuracy"/>
-                </g:if>
-                    <g:elseif
-                            test="${assayAdapter.assayStatus == 'Provisional'}">
-                        <img src="${resource(dir: 'images', file: 'provisional_16.png')}"
-                             alt="Provisional" title="This assay has been reviewed for accuracy by curators"/>
-                    </g:elseif>
-                    <g:elseif
-                            test="${assayAdapter.assayStatus == 'Approved' || assayAdapter.assayStatus == 'Witnessed'}">
-                        <img src="${resource(dir: 'images', file: 'witnessed.png')}"
-                             alt="Approved" title="This assay has been reviewed for accuracy"/>
-                    </g:elseif>
-                    <small class="muted">${assayAdapter.assayStatus}</small></td>
+                <td class="align-center">
+                    <g:render template="/common/statusIcons" model="[status:assayAdapter.assayStatus, entity: 'Assay']"/>
+                      <small class="muted">${assayAdapter.assayStatus}</small>
+                </td>
             </tr>
         </g:each>
         </tbody>

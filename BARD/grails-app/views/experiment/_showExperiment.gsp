@@ -72,40 +72,14 @@
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status"
                    data-id="${instance?.experimentStatus?.id}"></a>
 
-                <g:if test="${instance?.experimentStatus?.id == 'Draft'}">
-                    <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
-                         alt="Draft" title="Warning this Experiment has not yet been reviewed for accuracy"/>
-                </g:if>
-                <g:elseif
-                        test="${instance?.experimentStatus?.id == 'Provisional'}">
-                    <img src="${resource(dir: 'images', file: 'provisional_16.png')}"
-                         alt="Provisional" title="This Experiment has been reviewed for accuracy by curators"/>
-                </g:elseif>
-                <g:elseif
-                        test="${instance?.experimentStatus?.id == 'Approved'}">
-                    <img src="${resource(dir: 'images', file: 'witnessed.png')}"
-                         alt="Approved" title="This Experiment has been reviewed for accuracy"/>
-                </g:elseif>
-            </dd>
+                <g:render template="/common/statusIcons" model="[status:instance?.experimentStatus.id, entity: 'Experiment']"/>
 
-            <g:if test="${instance?.experimentStatus?.equals(Status.APPROVED)}">
-                <dt><g:message code="entity.approvedBy.label" default="Approved By"/>:</dt>
-                <dd id="approvedById">
-                    <g:if test="${instance.approvedBy?.displayName}">
-                        ${instance.approvedBy?.displayName} (<g:formatDate date="${instance.approvedDate}"
-                                                                           format="MM/dd/yyyy"/>)
-                    </g:if>
-                </dd>
-            </g:if>
-            <g:if test="${instance?.experimentStatus.equals(Status.PROVISIONAL)}">
-                <dt><g:message code="entity.provisionalApprovedBy.label" default="Provisionally Approved By"/>:</dt>
-                <dd id="approvedById">
-                    <g:if test="${instance.approvedBy?.displayName}">
-                        ${instance.approvedBy?.displayName} (<g:formatDate date="${instance.approvedDate}"
-                                                                           format="MM/dd/yyyy"/>)
-                    </g:if>
-                </dd>
-            </g:if>
+            </dd>
+            <g:render template="/common/statusMessage" model="[status:instance?.experimentStatus,
+                    displayName:instance.approvedBy?.displayName,
+                    approvedDate:instance.approvedDate]"/>
+
+
             <dt><g:message code="experiment.experimentName.label" default="Name"/>:</dt>
             <dd>
                 <span
@@ -370,7 +344,7 @@
                     <h4>No results uploaded for this experiment</h4>
                 </g:elseif>
                 <g:else>
-                    <g:if test="${instance.experimentStatus == Status.APPROVED}">
+                    <g:if test="${instance.experimentStatus == Status.APPROVED || instance.experimentStatus == Status.PROVISIONAL}">
                         <h4>Results for this experiment aren't available for querying because this experiment is waiting to be loaded to the warehouse.</h4>
                     </g:if>
                     <g:elseif test="${instance.experimentStatus == Status.RETIRED}">

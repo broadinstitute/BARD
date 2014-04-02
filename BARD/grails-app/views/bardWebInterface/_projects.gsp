@@ -47,20 +47,8 @@
                 <dt><g:message code="project.projectStatus.label" default="Status"/>:</dt>
                 <dd>
                     <span class="status">${projectAdapter?.projectStatus}</span>
-                    <g:if test="${projectAdapter?.projectStatus == 'Draft'}">
-                        <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
-                             alt="Draft" title="Warning this Project has not yet been reviewed for accuracy"/>
-                    </g:if>
-                    <g:elseif
-                            test="${projectAdapter?.projectStatus == 'Provisional'}">
-                        <img src="${resource(dir: 'images', file: 'provisional_16.png')}"
-                             alt="Provisional" title="This Project has been reviewed for accuracy by curators"/>
-                    </g:elseif>
-                    <g:elseif
-                            test="${projectAdapter?.projectStatus == 'Approved'}">
-                        <img src="${resource(dir: 'images', file: 'witnessed.png')}"
-                             alt="Approved" title="This Project has been reviewed for accuracy"/>
-                    </g:elseif>
+                    <g:render template="/common/statusIcons" model="[status:projectAdapter?.projectStatus, entity: 'Project']"/>
+
 
                 </dd>
                 <g:if test="${projectAdapter?.getNumberOfExperiments()}">

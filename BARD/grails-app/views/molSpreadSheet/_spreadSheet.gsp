@@ -160,22 +160,8 @@
                                %>
                             <g:link controller="assayDefinition" action="show" id="${bardAssayId}">
                                 ADID=${bardAssayId}
+                                <g:render template="/common/statusIcons" model='[status:assayColumn."status", entity: "Assay"]'/>
                             </g:link>
-                            <g:if test="${assayColumn."status" == 'Draft'}">
-                                <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
-                                     alt="Draft" title="Warning this Project has not yet been reviewed for accuracy"/>
-                            </g:if>
-                            <g:elseif
-                                    test="${assayColumn."status" == 'Provisional'}">
-                                <img src="${resource(dir: 'images', file: 'provisional_16.png')}"
-                                     alt="Provisional" title="This Project has been reviewed for accuracy by curators"/>
-                            </g:elseif>
-                            <g:elseif
-                                    test="${assayColumn."status" ==  'Approved'}">
-                                <img src="${resource(dir: 'images', file: 'witnessed.png')}"
-                                     alt="Approved" title="This Project has been reviewed for accuracy"/>
-                            </g:elseif>
-
                             <br/>
 
                             <div>
@@ -200,21 +186,9 @@
                         colspan="<%=experimentColumn."colspan"%>">
                     <g:link controller="experiment" action="show" id="${experimentColumn.eid}">
                         EID=<%=experimentColumn."eid"%>
+                        <g:render template="/common/statusIcons" model='[status:experimentColumn."status", entity: "Experiment"]'/>
                     </g:link>
-                       <g:if test="${experimentColumn."status" == 'Draft'}">
-                           <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
-                                alt="Draft" title="Warning this Project has not yet been reviewed for accuracy"/>
-                       </g:if>
-                       <g:elseif
-                               test="${experimentColumn."status" == 'Provisional'}">
-                           <img src="${resource(dir: 'images', file: 'provisional_16.png')}"
-                                alt="Provisional" title="This Project has been reviewed for accuracy by curators"/>
-                       </g:elseif>
-                       <g:elseif
-                               test="${experimentColumn."status" ==  'Approved'}">
-                           <img src="${resource(dir: 'images', file: 'witnessed.png')}"
-                                alt="Approved" title="This Project has been reviewed for accuracy"/>
-                       </g:elseif>
+
                    </th>
                 </g:each>
                 </tr>
