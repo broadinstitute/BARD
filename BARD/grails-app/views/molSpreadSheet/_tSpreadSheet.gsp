@@ -134,6 +134,20 @@
                                         <g:link controller="assayDefinition" action="show" id="${bardAssayId}">
                                             <%=currentAssayIdHeader."fullAssayName"%>
                                         </g:link>
+                                        <g:if test="${currentAssayIdHeader."status" == 'Draft'}">
+                                            <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
+                                                 alt="Draft" title="Warning this Project has not yet been reviewed for accuracy"/>
+                                        </g:if>
+                                        <g:elseif
+                                                test="${currentAssayIdHeader."status" == 'Provisional'}">
+                                            <img src="${resource(dir: 'images', file: 'provisional_16.png')}"
+                                                 alt="Provisional" title="This Project has been reviewed for accuracy by curators"/>
+                                        </g:elseif>
+                                        <g:elseif
+                                                test="${currentAssayIdHeader."status" ==  'Approved'}">
+                                            <img src="${resource(dir: 'images', file: 'witnessed.png')}"
+                                                 alt="Approved" title="This Project has been reviewed for accuracy"/>
+                                        </g:elseif>
                                     </th>
                                 </g:if>
                                 <g:if test="${(rowsToSkipBeforeNextExperimentId == 0)}">
@@ -145,6 +159,20 @@
                                         <g:link controller="experiment" action="show" id="${currentExperimentIdHeader.eid}">
                                             EID=<%=currentExperimentIdHeader.eid%>
                                         </g:link>
+                                        <g:if test="${currentExperimentIdHeader."status" == 'Draft'}">
+                                            <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
+                                                 alt="Draft" title="Warning this Project has not yet been reviewed for accuracy"/>
+                                        </g:if>
+                                        <g:elseif
+                                                test="${currentExperimentIdHeader."status" == 'Provisional'}">
+                                            <img src="${resource(dir: 'images', file: 'provisional_16.png')}"
+                                                 alt="Provisional" title="This Project has been reviewed for accuracy by curators"/>
+                                        </g:elseif>
+                                        <g:elseif
+                                                test="${currentExperimentIdHeader."status" ==  'Approved'}">
+                                            <img src="${resource(dir: 'images', file: 'witnessed.png')}"
+                                                 alt="Approved" title="This Project has been reviewed for accuracy"/>
+                                        </g:elseif>
                                     </th>
                                 </g:if>
                                 <% rowsToSkipBeforeNextAssayid-- %>
