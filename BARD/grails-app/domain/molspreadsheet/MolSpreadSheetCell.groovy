@@ -10,7 +10,7 @@ class MolSpreadSheetCell {
 
     static belongsTo = [molSpreadSheetData: MolSpreadSheetData]
 
-    MolSpreadSheetCellActivityOutcome activity =  MolSpreadSheetCellActivityOutcome.Unknown
+    MolSpreadSheetCellActivityOutcome activity = MolSpreadSheetCellActivityOutcome.Unknown
     MolSpreadSheetCellType molSpreadSheetCellType = MolSpreadSheetCellType.unknown
     String strInternalValue = "null"
     Integer intInternalValue = 0
@@ -87,27 +87,25 @@ class MolSpreadSheetCell {
         this.molSpreadSheetCellType = molSpreadSheetCellType
     }
 
-
-
-
     /**
      *  This constructor converts a SpreadSheetActivity into a series of MolSpreadSheetCells, one for
      *  each priority element
      * @param spreadSheetActivity
      */
-    static List <MolSpreadSheetCell> molSpreadSheetCellListFactory(SpreadSheetActivity spreadSheetActivity) {
-        List <MolSpreadSheetCell> molSpreadSheetCellList  = []
-        if (spreadSheetActivity.priorityElementList?.size()>0) {
+    static List<MolSpreadSheetCell> molSpreadSheetCellListFactory(SpreadSheetActivity spreadSheetActivity) {
+        List<MolSpreadSheetCell> molSpreadSheetCellList = []
+        if (spreadSheetActivity.priorityElementList?.size() > 0) {
             for (PriorityElement priorityElement in spreadSheetActivity.priorityElementList) {
                 MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell()
                 molSpreadSheetCell.molSpreadSheetCellType = MolSpreadSheetCellType.numeric
-                molSpreadSheetCell.spreadSheetActivityStorage = new SpreadSheetActivityStorage( eid: spreadSheetActivity.eid,
+                molSpreadSheetCell.spreadSheetActivityStorage = new SpreadSheetActivityStorage(eid: spreadSheetActivity.eid,
                         cid: spreadSheetActivity.cid,
                         sid: spreadSheetActivity.sid,
-                        activityOutcome: spreadSheetActivity.activityOutcome )
+                        activityOutcome: spreadSheetActivity.activityOutcome)
                 int counter = 0
                 molSpreadSheetCell.spreadSheetActivityStorage.responseUnit = priorityElement.responseUnit
-                if (priorityElement.value == "") {       // Not sure this never happens, but let's be prepared in case it does
+                if (priorityElement.value == "") {
+                    // Not sure this never happens, but let's be prepared in case it does
                     molSpreadSheetCell.activity = MolSpreadSheetCellActivityOutcome.Unspecified
                     molSpreadSheetCell.intInternalValue = 0
                 } else {
@@ -135,21 +133,25 @@ class MolSpreadSheetCell {
                         activityUnit = priorityElement.concentrationResponseSeries.testConcentrationUnit
                     }
 
+                    if (!priorityElement.concentrationResponseSeries && priorityElement.testConcentration && priorityElement.testConcentrationUnit && priorityElement.value) {
+                        priorityElement.value = "${priorityElement.value}@${priorityElement.testConcentration}"
+                    }
                     // Gather up the curve values if they exist
                     HillCurveValueHolder hillCurveValueHolder
                     if (priorityElement.value == null) {
                         hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: Double.NaN)
                     } else if (!MolSpreadSheetCellHelper.isNumeric(priorityElement.value)) {
                         String stringRepresentationOfValue = priorityElement.value as String
- //                       hillCurveValueHolder = new HillCurveValueHolder(identifier: "${identifierString} ${stringRepresentationOfValue}", slope: Double.NaN)
+                        //                       hillCurveValueHolder = new HillCurveValueHolder(identifier: "${identifierString} ${stringRepresentationOfValue}", slope: Double.NaN)
                         molSpreadSheetCell.molSpreadSheetCellType = MolSpreadSheetCellType.string
                         molSpreadSheetCell.spreadSheetActivityStorage.dictionaryDescription = priorityElement.getDictionaryDescription() ?: ''
                         molSpreadSheetCell.spreadSheetActivityStorage.dictionaryLabel = priorityElement.getDictionaryLabel() ?: ''
                         molSpreadSheetCell.spreadSheetActivityStorage.dictionaryId = priorityElement.getDictElemId() ?: 0
-                        molSpreadSheetCell.strInternalValue =  stringRepresentationOfValue;
+                        molSpreadSheetCell.strInternalValue = stringRepresentationOfValue;
                         hillCurveValueHolder = new HillCurveValueHolder(identifier: "${identifierString}", slope: Double.NaN, stringValue: stringRepresentationOfValue)
                     } else {
-                        Double value = Double.parseDouble(priorityElement.value) // note from .isNumeric() above that this parse will be successful
+                        Double value = Double.parseDouble(priorityElement.value)
+                        // note from .isNumeric() above that this parse will be successful
                         molSpreadSheetCell.spreadSheetActivityStorage.dictionaryDescription = priorityElement.getDictionaryDescription() ?: ''
                         molSpreadSheetCell.spreadSheetActivityStorage.dictionaryLabel = priorityElement.getDictionaryLabel() ?: ''
                         molSpreadSheetCell.spreadSheetActivityStorage.dictionaryId = priorityElement.getDictElemId() ?: 0
@@ -164,14 +166,15 @@ class MolSpreadSheetCell {
                                     coef: curveFitParameters.hillCoef,
                                     conc: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.testConcentration,
                                     response: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.value,
-                                    xAxisLabel: "Log(Concentration) ${priorityElement.concentrationResponseSeries.testConcentrationUnit?:priorityElement.testConcentrationUnit}",
+                                    xAxisLabel: "Log(Concentration) ${priorityElement.concentrationResponseSeries.testConcentrationUnit ?: priorityElement.testConcentrationUnit}",
                                     yAxisLabel: priorityElement.concentrationResponseSeries?.getYAxisLabel())
                         } else {
                             hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: value)
                         }
                     }
                     hillCurveValueHolder.setQualifier(molSpreadSheetCell.molSpreadSheetCellType as MolSpreadSheetCellType)
-                    hillCurveValueHolder.subColumnIndex = 0 //this.spreadSheetActivityStorage.columnNames.indexOf(identifierString) //this field can be removed
+                    hillCurveValueHolder.subColumnIndex = 0
+                    //this.spreadSheetActivityStorage.columnNames.indexOf(identifierString) //this field can be removed
                     molSpreadSheetCell.spreadSheetActivityStorage.setResponseUnit(activityUnit)
                     molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
                     molSpreadSheetCell.spreadSheetActivityStorage.qualifier = molSpreadSheetCell.molSpreadSheetCellType
@@ -183,32 +186,26 @@ class MolSpreadSheetCell {
         } else {
             MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell()
             molSpreadSheetCell.molSpreadSheetCellType = MolSpreadSheetCellType.numeric
-            molSpreadSheetCell.spreadSheetActivityStorage = new SpreadSheetActivityStorage( eid: spreadSheetActivity.eid,
+            molSpreadSheetCell.spreadSheetActivityStorage = new SpreadSheetActivityStorage(eid: spreadSheetActivity.eid,
                     cid: spreadSheetActivity.cid,
                     sid: spreadSheetActivity.sid,
-                    activityOutcome: spreadSheetActivity.activityOutcome )
-            if (spreadSheetActivity.potency==null){
+                    activityOutcome: spreadSheetActivity.activityOutcome)
+            if (spreadSheetActivity.potency == null) {
                 molSpreadSheetCell.spreadSheetActivityStorage.potency = Double.NaN
-            }  else {
+            } else {
                 molSpreadSheetCell.spreadSheetActivityStorage.potency = spreadSheetActivity.potency
             }
             molSpreadSheetCell.spreadSheetActivityStorage.responseUnit = 'uM'
             molSpreadSheetCell.spreadSheetActivityStorage.dictionaryDescription = 'The effective concentration of an inhibitor, which produces 50% of the maximum possible response for that inhibitor.'
             molSpreadSheetCell.spreadSheetActivityStorage.dictionaryLabel = 'AC50'
             molSpreadSheetCell.spreadSheetActivityStorage.dictionaryId = 959
-            HillCurveValueHolder hillCurveValueHolder = new HillCurveValueHolder( slope: molSpreadSheetCell.spreadSheetActivityStorage.potency, identifier: "=" )
+            HillCurveValueHolder hillCurveValueHolder = new HillCurveValueHolder(slope: molSpreadSheetCell.spreadSheetActivityStorage.potency, identifier: "=")
             molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList = []
-            molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.add (hillCurveValueHolder)
+            molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.add(hillCurveValueHolder)
             molSpreadSheetCellList << molSpreadSheetCell
         }
         return molSpreadSheetCellList
     }
-
-
-
-
-
-
 
     /**
      *  This constructor is one of the central means by which backend data is interpreted into a form the molecular spreadsheet can understand
@@ -256,7 +253,8 @@ class MolSpreadSheetCell {
                     String stringRepresentationOfValue = priorityElement.value as String
                     hillCurveValueHolder = new HillCurveValueHolder(identifier: "${identifierString} ${stringRepresentationOfValue}", slope: Double.NaN)
                 } else {
-                    Double value = Double.parseDouble(priorityElement.value) // note from .isNumeric() above that this parse will be successful
+                    Double value = Double.parseDouble(priorityElement.value)
+                    // note from .isNumeric() above that this parse will be successful
                     this.spreadSheetActivityStorage.dictionaryDescription = priorityElement.getDictionaryDescription() ?: ''
                     this.spreadSheetActivityStorage.dictionaryLabel = priorityElement.getDictionaryLabel() ?: ''
                     this.spreadSheetActivityStorage.dictionaryId = priorityElement.getDictElemId() ?: 0
@@ -323,7 +321,6 @@ class MolSpreadSheetCell {
     Map<String, String> retrieveValues() {
         return ["name": strInternalValue, "smiles": supplementalInternalValue]
     }
-
 
 
     @Override
