@@ -21,16 +21,10 @@
                    data-url="${request.contextPath}/assayDefinition/editAssayStatus"
                    data-original-title="Select Assay Status">${assay?.assayStatus?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status" data-id="${assay?.assayStatus?.id}"></a>
-            </dd>
+                <g:render template="/common/statusIcons" model="[status:assay?.assayStatus?.id, entity: 'Assay']"/>
 
-            <g:if test="${assay?.assayStatus.equals(Status.APPROVED)}">
-                <dt><g:message code="assay.approvedBy.label" default="Approved By"/>:</dt>
-                <dd id="approvedById">
-                    <g:if test="${assay.approvedBy?.displayName}">
-                        ${assay.approvedBy?.displayName} (<g:formatDate date="${assay.approvedDate}" format="MM/dd/yyyy"/>)
-                    </g:if>
-                </dd>
-            </g:if>
+            </dd>
+             <g:render template="/common/statusMessage" model="[status:assay?.assayStatus,displayName:assay.approvedBy?.displayName,approvedDate:assay.approvedDate]"/>
 
             <dt><g:message code="assay.assayName.label" default="Fix i18n"/>:</dt>
             <dd>

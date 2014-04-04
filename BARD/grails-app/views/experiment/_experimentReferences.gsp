@@ -4,8 +4,13 @@
     <dt><g:message code="assay.label" default="Assay Definition"/>:</dt>
     <dd>
         <ul>
-            <li><g:link controller="assayDefinition" action="show"
-                        id="${experiment?.assay?.id}">${experiment?.assay?.name}</g:link></li>
+            <li>
+                <g:link controller="assayDefinition" action="show"
+                        id="${experiment?.assay?.id}">${experiment?.assay?.name}
+                    <g:render template="/common/statusIcons" model="[status:experiment?.assay?.assayStatus?.id, entity: 'Assay']"/>
+            </g:link>
+
+            </li>
         </ul>
     </dd>
     <g:if test="${excludedLinks?.contains('experiment.show') == false}">
@@ -15,7 +20,9 @@
             <ul>
                 <li>
                     <g:link controller="experiment" action="show"
-                            id="${experiment?.id}">View Experiment Details</g:link>
+                            id="${experiment?.id}">View Experiment Details
+                        <g:render template="/common/statusIcons" model="[status:experiment?.experimentStatus?.id, entity: 'Experiment']"/>
+                    </g:link>
                 </li>
 
             </ul>
@@ -27,7 +34,9 @@
             <g:each in="${experiment?.projectExperiments}" var="projectExperiment">
                 <g:if test="${projectExperiment.project.projectStatus != Status.RETIRED}">
                     <li><g:link controller="project" action="show"
-                                id="${projectExperiment.project.id}">${projectExperiment.project.name}</g:link></li>
+                                id="${projectExperiment.project.id}">${projectExperiment.project.name}
+                        <g:render template="/common/statusIcons" model="[status:projectExperiment?.project?.projectStatus?.id, entity: 'Project']"/>
+                    </g:link></li>
                 </g:if>
             </g:each>
         </ul>

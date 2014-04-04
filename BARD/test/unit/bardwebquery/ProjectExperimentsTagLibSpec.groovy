@@ -1,6 +1,7 @@
 package bardwebquery
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.db.experiment.Experiment
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 /**
@@ -23,12 +24,18 @@ class ProjectExperimentsTagLibSpec extends Specification {
         Map<Long,String> experimentTypes = [:]
         experimentTypes[1] = "Confirmatory"
         experimentTypes[2] = "Primary"
-
+        Experiment.metaClass.'static'.findById = { Long id ->
+            return new Experiment()
+        }
         when:
         String actualResults = applyTemplate(template, [assays: assays, experiments: experiments, experimentTypes: experimentTypes])
         String trimmedResults = actualResults.stripMargin().replaceAll("\\n","").replaceAll(">\\s+",">").replaceAll("\\s+<","<")
 
         then:
+
+
+
+        println trimmedResults
         assert trimmedResults.contains("<table class=\"table\"><thead><tr><th rowspan=\"2\">EID</th><th rowspan=\"2\">Experiment Name</th><th rowspan=\"2\">Role</th><th colspan=\"2\"># Compounds</th><th rowspan=\"2\">ADID</th>")
 
     }

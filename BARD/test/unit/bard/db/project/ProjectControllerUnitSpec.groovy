@@ -120,16 +120,18 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         then:
         response.status == expectedStatus
         where:
-        desc | projectCommand | expectedStatus
-        "Full Project"             | new ProjectCommand(name: "name", description: "description", projectStatus: Status.APPROVED, projectGroupType: ProjectGroupType.PANEL) | HttpServletResponse.SC_FOUND
-        "Invalid Project- No name" | new ProjectCommand(description: "description", projectStatus: Status.APPROVED, projectGroupType: ProjectGroupType.PANEL)               | HttpServletResponse.SC_OK
+        desc                                          | projectCommand                                                                                                                            | expectedStatus
+        "Full Project"                                | new ProjectCommand(name: "name", description: "description", projectStatus: Status.APPROVED, projectGroupType: ProjectGroupType.PANEL)    | HttpServletResponse.SC_FOUND
+        "Invalid Project- No name"                    | new ProjectCommand(description: "description", projectStatus: Status.APPROVED, projectGroupType: ProjectGroupType.PANEL)                  | HttpServletResponse.SC_OK
+        "Full Project With Provisional status"        | new ProjectCommand(name: "name", description: "description", projectStatus: Status.PROVISIONAL, projectGroupType: ProjectGroupType.PANEL) | HttpServletResponse.SC_FOUND
+        "Invalid Project- No name Provisional status" | new ProjectCommand(description: "description", projectStatus: Status.PROVISIONAL, projectGroupType: ProjectGroupType.PANEL)               | HttpServletResponse.SC_OK
 
     }
 
-    void 'test edit Project Status success'() {
+    void 'test edit Project Status success #desc'() {
         given:
-        Project newProject = Project.build(version: 0, projectStatus: Status.DRAFT)
-        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: Status.APPROVED)
+        Project newProject = Project.build(version: 0, projectStatus: oldStatus)
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: newStatus)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
                 version: newProject.version, name: newProject.name, value: updatedProject.projectStatus.id)
         when:
@@ -144,37 +146,49 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert responseJSON.get("data").asText() == updatedProject.projectStatus.id
         assert responseJSON.get("lastUpdated").asText()
         assert response.contentType == "text/json;charset=utf-8"
+        where:
+        desc                                  | oldStatus          | newStatus
+        "Change from draft to Approved"       | Status.DRAFT       | Status.APPROVED
+        "Change from draft to Provisional"    | Status.DRAFT       | Status.PROVISIONAL
+        "Change from Provisional to Approved" | Status.PROVISIONAL | Status.APPROVED
+
     }
 
 
-    void 'test edit Project Status has unapproved experiments'() {
+    void 'test edit Project Status has unapproved experiments #desc'() {
         given:
-        Project newProject = Project.build(version: 0, projectStatus: Status.DRAFT)
-        Experiment experimentFrom = Experiment.build(experimentStatus: Status.APPROVED)
-        Experiment experimentTo = Experiment.build(experimentStatus: Status.DRAFT)
+        Project newProject = Project.build(version: 0, projectStatus: oldProjectStatus)
+        Experiment experimentFrom = Experiment.build(experimentStatus: fromExperimentStatus)
+        Experiment experimentTo = Experiment.build(experimentStatus: toExperimentStatus)
         ProjectSingleExperiment.build(project: newProject, experiment: experimentFrom)
         ProjectSingleExperiment.build(project: newProject, experiment: experimentTo)
 
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
-                version: newProject.version, name: newProject.name, value: Status.APPROVED.id)
+                version: newProject.version, name: newProject.name, value: newProjectStatus.id)
         when:
         controller.editProjectStatus(inlineEditableCommand)
         then:
         assert response.status == HttpServletResponse.SC_BAD_REQUEST
         assert "Before you can approve this project, you must approve the following experiments: ${experimentTo.id}" == response.text
+        where:
+        desc                                  | oldProjectStatus   | newProjectStatus   | fromExperimentStatus | toExperimentStatus
+        "Change from draft to Approved"       | Status.DRAFT       | Status.APPROVED    | Status.APPROVED      | Status.DRAFT
+        "Change from draft to Provisional"    | Status.DRAFT       | Status.PROVISIONAL | Status.PROVISIONAL   | Status.DRAFT
+        "Change from Provisional to Approved" | Status.PROVISIONAL | Status.APPROVED    | Status.PROVISIONAL   | Status.DRAFT
+
     }
 
-    void 'test edit Project Status has retired experiments'() {
+    void 'test edit Project Status has retired experiments #desc'() {
         given:
-        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: Status.APPROVED)
-        Project newProject = Project.build(version: 0, projectStatus: Status.DRAFT)
-        Experiment experimentFrom = Experiment.build(experimentStatus: Status.APPROVED)
-        Experiment experimentTo = Experiment.build(experimentStatus: Status.RETIRED)
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: newProjectStatus)
+        Project newProject = Project.build(version: 0, projectStatus: oldProjectStatus)
+        Experiment experimentFrom = Experiment.build(experimentStatus: fromExperimentStatus)
+        Experiment experimentTo = Experiment.build(experimentStatus: toExperimentStatus)
         ProjectSingleExperiment.build(project: newProject, experiment: experimentFrom)
         ProjectSingleExperiment.build(project: newProject, experiment: experimentTo)
 
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
-                version: newProject.version, name: newProject.name, value: Status.APPROVED.id)
+                version: newProject.version, name: newProject.name, value: newProjectStatus.id)
         when:
         controller.editProjectStatus(inlineEditableCommand)
         then:
@@ -187,6 +201,11 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert responseJSON.get("data").asText() == updatedProject.projectStatus.id
         assert responseJSON.get("lastUpdated").asText()
         assert response.contentType == "text/json;charset=utf-8"
+        where:
+        desc                                  | oldProjectStatus   | newProjectStatus   | fromExperimentStatus | toExperimentStatus
+        "Change from draft to Approved"       | Status.DRAFT       | Status.APPROVED    | Status.APPROVED      | Status.RETIRED
+        "Change from draft to Provisional"    | Status.DRAFT       | Status.PROVISIONAL | Status.PROVISIONAL   | Status.RETIRED
+        "Change from Provisional to Approved" | Status.PROVISIONAL | Status.APPROVED    | Status.PROVISIONAL   | Status.RETIRED
     }
 
     void 'test edit Project Status - access denied'() {
@@ -389,7 +408,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
         then:
         final String responseAsString = response.contentAsString
-        responseAsString == '["Approved","Retired"]'
+        responseAsString == '["Approved","Provisional","Retired"]'
     }
 
     void 'test reloadProjectSteps'() {
@@ -417,7 +436,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.status == 200
 
         where:
-        desc | stage | expectedStage
+        desc                                                        | stage  | expectedStage
         "ProjectSingleExperiment has null stage element ID"         | null   | "secondary assay"
         "ProjectSingleExperiment has stage ID that is not a number" | "name" | "secondary assay"
     }
@@ -435,7 +454,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         projectService.updateProjectStage(_, _, _) >> { throw new AccessDeniedException("msg") }
         assertAccesDeniedErrorMessage()
         where:
-        desc | stage | expectedStage
+        desc                                                        | stage  | expectedStage
         "ProjectSingleExperiment has null stage element ID"         | null   | "secondary assay"
         "ProjectSingleExperiment has stage ID that is not a number" | "name" | "secondary assay"
     }
@@ -501,7 +520,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.text.startsWith(responsetext)
 
         where:
-        description | responsetext
+        description                          | responsetext
         "failed due to experiment not found" | "serviceError"
     }
 
@@ -534,7 +553,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         model?.instance == expectedProject.call()
 
         where:
-        desc | idClosure | expectedFlashMessage | expectedProject
+        desc                  | idClosure      | expectedFlashMessage        | expectedProject
         'with bad id'         | { -100L }      | 'default.not.found.message' | { null }
         'with non numeric id' | { 'foo' }      | 'default.not.found.message' | { null }
         'with null id'        | { null }       | 'default.not.found.message' | { null }
@@ -558,8 +577,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.text == responsetext
 
         where:
-        description | experimentId | responsetext
-        "success" | { projectExperimentFrom.id } | 'mock contents'
+        description | experimentId                 | responsetext
+        "success"   | { projectExperimentFrom.id } | 'mock contents'
     }
 
     void 'test remove experiment from project -access denied'() {
@@ -579,8 +598,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assertAccesDeniedErrorMessage()
 
         where:
-        description | experimentId | responsetext
-        "success" | { projectExperimentFrom.id } | 'mock contents'
+        description | experimentId                 | responsetext
+        "success"   | { projectExperimentFrom.id } | 'mock contents'
     }
 
     void 'test remove experiment from project fail {#description}'() {
@@ -598,8 +617,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.text.startsWith(responsetext)
 
         where:
-        description | experimentId | responsetext
-        "failed due to experiment not found" | -999 | "serviceError"
+        description                          | experimentId | responsetext
+        "failed due to experiment not found" | -999         | "serviceError"
     }
 
     void 'test remove edge from project success'() {
@@ -621,8 +640,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.text == responsetext
 
         where:
-        description | fromProjectExperimentId | toProjectExperimentId | responsetext
-        "success" | { projectExperimentFrom.id } | { projectExperimentTo.id } | 'mock contents'
+        description | fromProjectExperimentId      | toProjectExperimentId      | responsetext
+        "success"   | { projectExperimentFrom.id } | { projectExperimentTo.id } | 'mock contents'
     }
 
     void 'test remove edge from project - access denied'() {
@@ -644,8 +663,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assertAccesDeniedErrorMessage()
 
         where:
-        description | fromProjectExperimentId | toProjectExperimentId | responsetext
-        "success" | { projectExperimentFrom.id } | { projectExperimentTo.id } | 'mock contents'
+        description | fromProjectExperimentId      | toProjectExperimentId      | responsetext
+        "success"   | { projectExperimentFrom.id } | { projectExperimentTo.id } | 'mock contents'
     }
 
     void 'test remove edge from project fail {#description}'() {
@@ -665,13 +684,13 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         e.message == responsetext
 
         where:
-        description | fromProjectExperimentId | toProjectExperimentId | responsetext
+        description                                     | fromProjectExperimentId      | toProjectExperimentId | responsetext
         "failed due to fromProjectExperiment not found" | { -999 }                     | {
             projectExperimentTo.id
-        } | 'Project-experiment -999 or project-experiment 2 is not defined'
+        }                                                                                                      | 'Project-experiment -999 or project-experiment 2 is not defined'
         "failed due to toProjectExperiment not found"   | { projectExperimentFrom.id } | {
             -999
-        } | 'Project-experiment 1 or project-experiment -999 is not defined'
+        }                                                                                                      | 'Project-experiment 1 or project-experiment -999 is not defined'
     }
 
     void 'test link project-experiment with project success'() {
@@ -691,8 +710,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.text == responsetext
 
         where:
-        description | fromProjectExperimentId | toProjectExperimentId | responsetext
-        "success" | { projectExperimentFrom.id } | { projectExperimentTo.id } | 'mock contents'
+        description | fromProjectExperimentId      | toProjectExperimentId      | responsetext
+        "success"   | { projectExperimentFrom.id } | { projectExperimentTo.id } | 'mock contents'
     }
 
     void 'test link experiment with project - access denied'() {
@@ -715,8 +734,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
 
         where:
-        description | fromProjectExperimentId | toProjectExperimentId | responsetext
-        "success" | { projectExperimentFrom.id } | { projectExperimentTo.id } | 'mock contents'
+        description | fromProjectExperimentId      | toProjectExperimentId      | responsetext
+        "success"   | { projectExperimentFrom.id } | { projectExperimentTo.id } | 'mock contents'
     }
 
 
@@ -736,7 +755,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response?.text == 'serviceError'
 
         where:
-        description | fromProjectExperimentId | toProjectExperimentId
+        description                                     | fromProjectExperimentId      | toProjectExperimentId
         "failed due to fromProjectExperiment not found" | { -999L }                    | { projectExperimentTo.id }
         "failed due to toProjectExperiment not found"   | { projectExperimentFrom.id } | { -999L }
     }
@@ -753,7 +772,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.text == "Both 'From Project-Experiment ID' and 'To Project-Experiment ID' are required"
         assert response.status == HttpServletResponse.SC_BAD_REQUEST
         where:
-        description | fromProjectExperimentId | toProjectExperimentId
+        description                                     | fromProjectExperimentId      | toProjectExperimentId
         "failed due to fromProjectExperiment not found" | { null }                     | { projectExperimentTo.id }
         "failed due to toProjectExperiment not found"   | { projectExperimentFrom.id } | { null }
     }
@@ -779,9 +798,9 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         then:
         assert associateExperimentsCommand.hasErrors() == hasErrors
         where:
-        desc | idType | hasErrors | fromPage
-        "No Errors From Show Project Page" | IdType.ADID | true  | true
-        "Errors From Add Experiment Page"  | IdType.EID  | false | false
+        desc                               | idType      | hasErrors | fromPage
+        "No Errors From Show Project Page" | IdType.ADID | true      | true
+        "Errors From Add Experiment Page"  | IdType.EID  | false     | false
     }
 
 
@@ -815,10 +834,10 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert command.errorMessages == errorMessages
 
         where:
-        desc | idType | experimentStatus | errorMessages | expectedNumExperiments | isAlreadyAssociatedToProject
-        "ADID with approved experiment"                                | IdType.ADID | Status.APPROVED | [] | 1 | false
-        "ADID with approved experiment, already associated to Project" | IdType.ADID | Status.APPROVED | [] | 0 | true
-        "ADID with retired experiment"                                 | IdType.ADID | Status.RETIRED  | [] | 0 | false
+        desc                                                           | idType      | experimentStatus | errorMessages | expectedNumExperiments | isAlreadyAssociatedToProject
+        "ADID with approved experiment"                                | IdType.ADID | Status.APPROVED  | []            | 1                      | false
+        "ADID with approved experiment, already associated to Project" | IdType.ADID | Status.APPROVED  | []            | 0                      | true
+        "ADID with retired experiment"                                 | IdType.ADID | Status.RETIRED   | []            | 0                      | false
     }
 
     void "test show Experiments To Add Project #desc"() {
@@ -834,9 +853,9 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert command.hasErrors() == hasErrors
 
         where:
-        desc | idType | hasErrors | fromPage
-        "No Errors From Show Project Page" | IdType.EID | false | false
-        "Errors From Add Experiment Page"  | IdType.EID | true  | true
+        desc                               | idType     | hasErrors | fromPage
+        "No Errors From Show Project Page" | IdType.EID | false     | false
+        "Errors From Add Experiment Page"  | IdType.EID | true      | true
     }
 
 
@@ -970,9 +989,9 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert associateExperimentsCommand.availablePanelExperiments?.size() == expectedAvailablePanelExperimentsSize
 
         where:
-        testDescription | entityType | expectedAvailableExperimentsSize | expectedAvailablePanelExperimentsSize
-        "when entity-type=Experiment"      | EntityType.EXPERIMENT       | 1 | 0
-        "when entity-type=PanelExperiment" | EntityType.EXPERIMENT_PANEL | 0 | 1
+        testDescription                    | entityType                  | expectedAvailableExperimentsSize | expectedAvailablePanelExperimentsSize
+        "when entity-type=Experiment"      | EntityType.EXPERIMENT       | 1                                | 0
+        "when entity-type=PanelExperiment" | EntityType.EXPERIMENT_PANEL | 0                                | 1
     }
 
     void "test getPanelExperiments when entity-type=PanelExperiment"() {

@@ -51,7 +51,8 @@ class AssayExportHelperService extends ExportAbstractService {
     }
 
 
-    public static void createElementRef(MarkupBuilder markupBuilder, Element element, String refName, String mediaType, LinkGenerator grailsLinkGenerator) {
+    public
+    static void createElementRef(MarkupBuilder markupBuilder, Element element, String refName, String mediaType, LinkGenerator grailsLinkGenerator) {
         markupBuilder."${refName}"(label: element.label) {
             final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: element.id]).toString()
             link(rel: 'related', href: href, type: mediaType)
@@ -59,7 +60,8 @@ class AssayExportHelperService extends ExportAbstractService {
     }
 
 
-    protected void generateAssayContextItem(final MarkupBuilder markupBuilder, final AssayContextItem assayContextItem) {
+    protected void generateAssayContextItem(
+            final MarkupBuilder markupBuilder, final AssayContextItem assayContextItem) {
         generateContextItem(markupBuilder,
                 assayContextItem,
                 assayContextItem.attributeType.toString(),
@@ -89,7 +91,8 @@ class AssayExportHelperService extends ExportAbstractService {
  * @param markupBuilder
  * @param assayContextItems
  */
-    public void generateAssayContextItems(final MarkupBuilder markupBuilder, final List<AssayContextItem> allAssayContextItems) {
+    public void generateAssayContextItems(
+            final MarkupBuilder markupBuilder, final List<AssayContextItem> allAssayContextItems) {
         if (allAssayContextItems) {
             markupBuilder.assayContextItems() {
                 for (AssayContextItem assayContextItem : allAssayContextItems) {
@@ -135,8 +138,10 @@ class AssayExportHelperService extends ExportAbstractService {
 
         for (Experiment experiment : assay.experiments) {
             if (experiment.readyForExtraction == ReadyForExtraction.READY ||
-                    experiment.experimentStatus==Status.APPROVED ||
-                    experiment.experimentStatus == Status.RETIRED) {  //only link experiments that are set to ready for extraction
+                    experiment.experimentStatus == Status.APPROVED ||
+                    experiment.experimentStatus == Status.PROVISIONAL ||
+                    experiment.experimentStatus == Status.RETIRED) {
+                //only link experiments that are set to ready for extraction
                 final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experiment.id]).toString()
                 markupBuilder.link(rel: 'related', type: "${this.mediaTypesDTO.experimentMediaType}", href: "${experimentHref}")
             }
@@ -155,15 +160,16 @@ class AssayExportHelperService extends ExportAbstractService {
             markupBuilder.panels() {
                 for (PanelAssay panelAssay : panelAssays) {
                     if (panelAssay.assay?.readyForExtraction == ReadyForExtraction.READY ||
-                            panelAssay.assay.assayStatus== Status.APPROVED ||
-                            panelAssay.assay.assayStatus == Status.RETIRED) {  //only show assays that are ready to be extracted
+                            panelAssay.assay.assayStatus == Status.APPROVED ||
+                            panelAssay.assay.assayStatus == Status.PROVISIONAL ||
+                            panelAssay.assay.assayStatus == Status.RETIRED) {
+                        //only show assays that are ready to be extracted
                         generatePanel(markupBuilder, panelAssay)
                     }
                 }
             }
         }
     }
-
 
 
     public void generateDocument(final MarkupBuilder markupBuilder, AssayDocument assayDocument) {
@@ -204,7 +210,7 @@ class AssayExportHelperService extends ExportAbstractService {
             attributes.put('lastUpdated', lastUpdatedDate.toString())
         }
         if (StringUtils.isNotBlank(assay.modifiedBy)) {
-            attributes.put('modifiedBy', StringUtils.substringBefore(assay.modifiedBy,'@'))
+            attributes.put('modifiedBy', StringUtils.substringBefore(assay.modifiedBy, '@'))
         }
         markupBuilder.assay(attributes) {
             assayName(assay.assayName)

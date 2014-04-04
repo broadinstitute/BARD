@@ -11,4 +11,5 @@ public interface ICommonStatusIds {
     public static final String DRAFT_ID = "Draft"
     public static final String APPROVED_ID = "Approved"
     public static final String RETIRED_ID = "Retired"
+    public static final String PROVISIONAL_ID="Provisional"
 }

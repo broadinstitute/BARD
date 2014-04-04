@@ -71,17 +71,14 @@
                         data-original-title="Select Experiment Status">${instance?.experimentStatus?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status"
                    data-id="${instance?.experimentStatus?.id}"></a>
-            </dd>
 
-            <g:if test="${instance?.experimentStatus?.equals(Status.APPROVED)}">
-                <dt><g:message code="instance.approvedBy.label" default="Approved By"/>:</dt>
-                <dd id="approvedById">
-                    <g:if test="${instance.approvedBy?.displayName}">
-                        ${instance.approvedBy?.displayName} (<g:formatDate date="${instance.approvedDate}"
-                                                                           format="MM/dd/yyyy"/>)
-                    </g:if>
-                </dd>
-            </g:if>
+                <g:render template="/common/statusIcons" model="[status:instance?.experimentStatus.id, entity: 'Experiment']"/>
+
+            </dd>
+            <g:render template="/common/statusMessage" model="[status:instance?.experimentStatus,
+                    displayName:instance.approvedBy?.displayName,
+                    approvedDate:instance.approvedDate]"/>
+
 
             <dt><g:message code="experiment.experimentName.label" default="Name"/>:</dt>
             <dd>
@@ -347,7 +344,7 @@
                     <h4>No results uploaded for this experiment</h4>
                 </g:elseif>
                 <g:else>
-                    <g:if test="${instance.experimentStatus == Status.APPROVED}">
+                    <g:if test="${instance.experimentStatus == Status.APPROVED || instance.experimentStatus == Status.PROVISIONAL}">
                         <h4>Results for this experiment aren't available for querying because this experiment is waiting to be loaded to the warehouse.</h4>
                     </g:if>
                     <g:elseif test="${instance.experimentStatus == Status.RETIRED}">

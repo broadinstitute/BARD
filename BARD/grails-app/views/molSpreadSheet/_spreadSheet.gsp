@@ -105,15 +105,15 @@
 
             <g:if test="${params?.cid?.getClass()?.isArray()}">
                 <a href="../molSpreadSheet/index?transpose=true&norefresh=true&cid=${params.cid.join('&cid=')}&pid=${params.pid}" class="pull-right tranposeSymbol"
-                   title="Transpose columns and rows">
+                   title="Transpose columns and rows"> </a>
             </g:if>
             <g:elseif test="${params?.cid?.size()>0}">
                 <a href="../molSpreadSheet/index?transpose=true&norefresh=true&cid=${params.cid}" class="pull-right tranposeSymbol"
-                   title="Transpose columns and rows">
+                   title="Transpose columns and rows"> </a>
             </g:elseif>
             <g:else>
                 <a href="../molSpreadSheet/index?transpose=true&norefresh=true" class="pull-right tranposeSymbol"
-                   title="Transpose columns and rows">
+                   title="Transpose columns and rows"> </a>
             </g:else>
 
 
@@ -159,8 +159,10 @@
                                def bardAssayId =assayColumn."bardAssayId"
                                %>
                             <g:link controller="assayDefinition" action="show" id="${bardAssayId}">
-                                ADID=${bardAssayId}</a><br />
+                                ADID=${bardAssayId}
+                                <g:render template="/common/statusIcons" model='[status:assayColumn."status", entity: "Assay"]'/>
                             </g:link>
+                            <br/>
 
                             <div>
                                 <g:if test="${assayColumn."normalized"}">
@@ -184,7 +186,9 @@
                         colspan="<%=experimentColumn."colspan"%>">
                     <g:link controller="experiment" action="show" id="${experimentColumn.eid}">
                         EID=<%=experimentColumn."eid"%>
+                        <g:render template="/common/statusIcons" model='[status:experimentColumn."status", entity: "Experiment"]'/>
                     </g:link>
+
                    </th>
                 </g:each>
                 </tr>

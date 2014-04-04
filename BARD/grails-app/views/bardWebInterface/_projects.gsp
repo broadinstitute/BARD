@@ -44,6 +44,13 @@
                         <dd>${projectAdapter.highlight}</dd>
                     </dl>
                 </g:if>
+                <dt><g:message code="project.projectStatus.label" default="Status"/>:</dt>
+                <dd>
+                    <span class="status">${projectAdapter?.projectStatus}</span>
+                    <g:render template="/common/statusIcons" model="[status:projectAdapter?.projectStatus, entity: 'Project']"/>
+
+
+                </dd>
                 <g:if test="${projectAdapter?.getNumberOfExperiments()}">
                     <dl>
                         <dt>Number Of Experiments:</dt>
@@ -56,6 +63,7 @@
                         </dd>
                     </dl>
                 </g:if>
+
             </li>
         </g:each>
     </ul>

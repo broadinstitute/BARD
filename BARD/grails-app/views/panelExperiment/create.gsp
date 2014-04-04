@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,twitterBootstrapAffix,card"/>
+    <r:require modules="core,bootstrap,twitterBootstrapAffix,card, panelExperiment"/>
     <meta name="layout" content="basic"/>
     <title>Create a New Panel-Experiment</title>
 </head>
@@ -44,13 +44,14 @@
             </div>
 
             <div class="control-group">
+                <div class="controls" id="bigSpinnerImage"></div>
+            </div>
+
+            <div class="control-group">
                 <label class="control-label" for="experimentIds">Experiments:</label>
 
                 <div class="controls">
-                    <g:select multiple="multiple" name="experimentIds"
-                              from="${experimentsAlreadyLinkedToAnotherPanel ?: Experiment.list().sort { a, b -> a.id <=> b.id }}"
-                              optionKey="id"
-                              optionValue="displayName" style="width: 900px; height: 300px;"/>
+                    <select multiple id="experimentIds" style="width: 900px;"></select>
                 </div>
             </div>
 

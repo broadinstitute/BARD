@@ -107,13 +107,15 @@ class MergeAssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
     void "test move Experiments from Assay"() {
         given: "Three assays with experiments and a target assay"
         Assay sourceAssay1 = Assay.build(assayStatus: Status.APPROVED)
+        Assay sourceAssay4 = Assay.build(assayStatus: Status.PROVISIONAL)
         Experiment experimentA = Experiment.build(assay: sourceAssay1)
+        Experiment experimentE = Experiment.build(assay: sourceAssay4)
         Assay sourceAssay2 = Assay.build(assayStatus: Status.APPROVED)
         Experiment experimentB = Experiment.build(assay: sourceAssay2)
         Assay sourceAssay3 = Assay.build(assayStatus: Status.APPROVED)
         Experiment experimentC = Experiment.build(assay: sourceAssay3)
         Experiment experimentD = Experiment.build(assay: sourceAssay3)
-        List<Experiment> experiments = [experimentA, experimentB, experimentC]
+        List<Experiment> experiments = [experimentA, experimentB, experimentC, experimentE]
         Assay targetAssay = Assay.build(assayStatus: Status.APPROVED)
 
         when: "We move 3 experiments from 3 assays to the target assay"
@@ -122,13 +124,16 @@ class MergeAssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         then: "We expect source assay 1 to have status RETIRED and 0 experiments after experiment A was moved to target assay"
         assert sourceAssay1.assayStatus == Status.RETIRED
         assert sourceAssay1.experiments.size() == 0
+        and: "We expect source assay 4 to have status RETIRED and 0 experiments after experiment A was moved to target assay"
+        assert sourceAssay4.assayStatus == Status.RETIRED
+        assert sourceAssay4.experiments.size() == 0
         and: "We expect source assay 2 to have status RETIRED and 0 experiments after experiment B was moved to target assay"
         assert sourceAssay2.assayStatus == Status.RETIRED
         assert sourceAssay2.experiments.size() == 0
         and: "We expect source assay 3 to still have its original status of APPROVED since it has 1 experiment after experiment C was moved to target assay"
         assert sourceAssay3.assayStatus == Status.APPROVED
         assert sourceAssay3.experiments.size() == 1
-        and: "We expect teh target assay to have 3 new experiments"
-        newTargetAssay.experiments.size() == 3
+        and: "We expect the target assay to have 3 new experiments"
+        newTargetAssay.experiments.size() == 4
     }
 }

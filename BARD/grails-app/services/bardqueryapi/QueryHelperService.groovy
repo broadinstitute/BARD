@@ -20,6 +20,7 @@ import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.MetaData
 import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.db.enums.Status
 import bard.db.experiment.Experiment
 import org.apache.commons.lang3.text.WordUtils
 
@@ -280,7 +281,12 @@ class QueryHelperService {
                 score = metaData.getScore(project.id.toString())
                 nameDescription = metaData.getMatchingField(project.id.toString())
             }
-            final ProjectAdapter projectAdapter = new ProjectAdapter(project, score, nameDescription)
+            String projectStatus = null
+            if(project.capProjectId){
+            bard.db.project.Project capProject = bard.db.project.Project.findById(project.capProjectId)
+                projectStatus = capProject?.projectStatus?.id
+            }
+            final ProjectAdapter projectAdapter = new ProjectAdapter(project, score, nameDescription,null,projectStatus)
             projectAdapters.add(projectAdapter)
         }
         return projectAdapters

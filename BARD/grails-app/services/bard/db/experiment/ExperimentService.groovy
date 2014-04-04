@@ -8,6 +8,8 @@ import bard.db.people.Person
 import bard.db.people.Role
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
+import bard.db.registration.Panel
+import bard.db.registration.PanelAssay
 import bardqueryapi.TableModel
 import bardqueryapi.experiment.ExperimentBuilder
 import grails.plugins.springsecurity.SpringSecurityService
@@ -42,7 +44,8 @@ class ExperimentService {
             for (AssayContextExperimentMeasure assayContextExperimentMeasure : assayContextExperimentMeasures) {
                 final AssayContext assayContext = assayContextExperimentMeasure.assayContext
                 final long assayContextId = assayContext.id
-                if (assayContextIds?.contains(assayContextId)) {//means this context already exist, so no need to add it again
+                if (assayContextIds?.contains(assayContextId)) {
+//means this context already exist, so no need to add it again
                     assayContextIds.remove(assayContextId)
 
                 } else { //mark for removal, means that user wants to remove this measure
@@ -50,8 +53,8 @@ class ExperimentService {
                 }
 
             }
-            assayContextExperimentMeasuresToRemove.each{ AssayContextExperimentMeasure assayContextExperimentMeasure ->
-                disassociateMeasureFromContext(assayContextExperimentMeasure,refreshedMeasure,assayContextExperimentMeasure.assayContext)
+            assayContextExperimentMeasuresToRemove.each { AssayContextExperimentMeasure assayContextExperimentMeasure ->
+                disassociateMeasureFromContext(assayContextExperimentMeasure, refreshedMeasure, assayContextExperimentMeasure.assayContext)
             }
             refreshedMeasure = refreshedMeasure.save(flush: true)
             if (!assayContextIds) {
@@ -67,7 +70,7 @@ class ExperimentService {
 
     }
 
-    void disassociateMeasureFromContext(AssayContextExperimentMeasure assayContextExperimentMeasure,ExperimentMeasure measure, AssayContext assayContext) {
+    void disassociateMeasureFromContext(AssayContextExperimentMeasure assayContextExperimentMeasure, ExperimentMeasure measure, AssayContext assayContext) {
         assayContext.removeFromAssayContextExperimentMeasures(assayContextExperimentMeasure)
         measure.removeFromAssayContextExperimentMeasures(assayContextExperimentMeasure)
         assayContextExperimentMeasure.delete(flush: true)
@@ -109,9 +112,9 @@ class ExperimentService {
 
 
         ExperimentMeasure experimentMeasure =
-            new ExperimentMeasure(experiment: experiment, resultType: resultType,
-                    priorityElement: isPriorityElement, modifiedBy: springSecurityService.principal?.username, parent: parentExperimentMeasure,
-                    parentChildRelationship: hierarchyType, statsModifier: statsModifier)
+                new ExperimentMeasure(experiment: experiment, resultType: resultType,
+                        priorityElement: isPriorityElement, modifiedBy: springSecurityService.principal?.username, parent: parentExperimentMeasure,
+                        parentChildRelationship: hierarchyType, statsModifier: statsModifier)
         experimentMeasure = experimentMeasure.save(flush: true)
 
 
@@ -127,9 +130,9 @@ class ExperimentService {
     }
 
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    TableModel previewResults(final Long id, final int numberOfRecords=10) {
+    TableModel previewResults(final Long id, final int numberOfRecords = 10) {
         Experiment experiment = Experiment.findById(id)
-        List<JsonSubstanceResults> results = resultsExportService.readResultsForSubstances(experiment,numberOfRecords)
+        List<JsonSubstanceResults> results = resultsExportService.readResultsForSubstances(experiment, numberOfRecords)
         return experimentBuilder.buildModelForPreview(experiment, results)
     }
 
@@ -190,12 +193,12 @@ class ExperimentService {
     Experiment updateExperimentStatus(final Long id, final Status experimentStatus) {
         Experiment experiment = Experiment.findById(id)
         experiment.experimentStatus = experimentStatus
-        if(experimentStatus.equals(Status.APPROVED) && experiment.isDirty('experimentStatus')){
+        if ((experimentStatus.equals(Status.APPROVED) || experimentStatus.equals(Status.PROVISIONAL)) && experiment.isDirty('experimentStatus')) {
             Person currentUser = Person.findByUserName(springSecurityService.authentication.name)
             experiment.approvedBy = currentUser
             experiment.approvedDate = new Date()
         }
-        experiment.save(flush: true)
+            experiment.save(flush: true)
         return Experiment.findById(id)
     }
 
@@ -250,4 +253,12 @@ class ExperimentService {
         return getTotalLengthRecHelper(lst, from, middle) + getTotalLengthRecHelper(lst, middle, to);
     }
 
+    Set<Experiment> findExperimentsForPanel(Panel panel) {
+
+        Set<PanelAssay> panelAssays = panel.panelAssays
+
+        Set<Experiment> experiments = panelAssays*.assay*.experiments.flatten().findAll { Experiment experiment -> experiment.experimentStatus != Status.RETIRED }.unique() as Set
+
+        return experiments
+    }
 }

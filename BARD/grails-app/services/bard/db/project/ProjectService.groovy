@@ -21,11 +21,11 @@ class ProjectService {
                 SELECT DISTINCT project.id FROM Project project inner join project.contexts context
                 inner join context.contextItems contextItem
                 inner join contextItem.attributeElement element WHERE element.bardURI=? and
-                project.ncgcWarehouseId is not null and project.projectStatus=?
+                project.ncgcWarehouseId is not null and ( project.projectStatus=? or project.projectStatus=?)
                 '''
 
         final List<Long> projectIds = Project.executeQuery(PROBES_QUERY,
-                [BARD_PROBE_URI, Status.APPROVED])
+                [BARD_PROBE_URI, Status.APPROVED, Status.PROVISIONAL])
 
         return projectIds
     }
@@ -36,11 +36,11 @@ class ProjectService {
                 SELECT DISTINCT contextItem.extValueId FROM Project project inner join project.contexts context
                 inner join context.contextItems contextItem
                 inner join contextItem.attributeElement element WHERE element.bardURI=? and
-                project.ncgcWarehouseId is not null and project.projectStatus=?
+                project.ncgcWarehouseId is not null and ( project.projectStatus=? or project.projectStatus=?)
                 '''
 
         final List cids = Project.executeQuery(PROBES_QUERY,
-                [PUBCHEM_CID_URI, Status.APPROVED]) as List<Long>
+                [PUBCHEM_CID_URI, Status.APPROVED, Status.PROVISIONAL]) as List<Long>
 
         return cids.collect { it as Long }
     }
@@ -54,11 +54,11 @@ class ProjectService {
                 SELECT count(*) as total FROM Project project inner join project.contexts context
                 inner join context.contextItems contextItem
                 inner join contextItem.attributeElement element WHERE element.bardURI=? and
-                project.ncgcWarehouseId is not null and project.projectStatus=?
+                project.ncgcWarehouseId is not null and  ( project.projectStatus=? or project.projectStatus=?)
                 '''
 
         final Long total = Project.executeQuery(TOTAL_PROBES_QUERY,
-                [BARD_PROBE_URI, Status.APPROVED]).first()
+                [BARD_PROBE_URI, Status.APPROVED, Status.PROVISIONAL]).first()
 
         return total
     }
@@ -78,7 +78,7 @@ class ProjectService {
     Project updateProjectStatus(Long id, Status newProjectStatus) {
         Project project = Project.findById(id)
         project.projectStatus = newProjectStatus
-        if (newProjectStatus.equals(Status.APPROVED) && project.isDirty('projectStatus')) {
+        if ((newProjectStatus.equals(Status.APPROVED) || newProjectStatus.equals(Status.PROVISIONAL))  && project.isDirty('projectStatus')) {
             Person currentUser = Person.findByUserName(springSecurityService.authentication.name)
             project.approvedBy = currentUser
             project.approvedDate = new Date()

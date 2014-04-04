@@ -38,15 +38,10 @@
                                 <dd>${experimentAdapter.highlight}</dd>
                                 <dt><g:message code="exp.status" default="Status"/>:</dt>
                                 <dd>
-                                    <g:if test="${experimentAdapter.status == 'Draft'}">
-                                        <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
-                                             alt="Draft" title="Warning this experiment definition has not yet been reviewed for accuracy"/>
-                                    </g:if>
-                                    <g:elseif test="${experimentAdapter.status == 'Approved'}">
-                                        <img src="${resource(dir: 'images', file: 'witnessed.png')}"
-                                             alt="Approved" title="This experiment has been reviewed for accuracy"/>
-                                    </g:elseif>
+
                                     ${experimentAdapter.status}
+                                    <g:render template="/common/statusIcons" model="[status:experimentAdapter.status, entity: 'Experiment']"/>
+
                                 </dd>
                                 <dt><g:message code="exp.samples.tested" default="Substances Tested"/>:</dt>
                                 <dd>${experimentAdapter.substancesTested}</dd>

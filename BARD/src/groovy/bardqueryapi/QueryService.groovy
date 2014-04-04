@@ -18,6 +18,7 @@ import bard.core.rest.spring.substances.Substance
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
 import bard.db.dictionary.BardDescriptor
+import bard.db.enums.Status
 import bard.db.project.ProjectService
 import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
 import bardqueryapi.experiment.ExperimentBuilder
@@ -668,8 +669,13 @@ class QueryService implements IQueryService {
                         it.role
                     }
                 }
+                String projectStatus = null
                 final List<Assay> assays = project.assays
-                final ProjectAdapter projectAdapter = new ProjectAdapter(project, 0, null, annotations)
+                if (project.capProjectId) {
+                    bard.db.project.Project capProject = bard.db.project.Project.findById(project.capProjectId)
+                    projectStatus = capProject?.projectStatus?.id
+                }
+                final ProjectAdapter projectAdapter = new ProjectAdapter(project, 0, null, annotations, projectStatus)
                 return [projectAdapter: projectAdapter, experiments: experiments, assays: assays]
             }
         }

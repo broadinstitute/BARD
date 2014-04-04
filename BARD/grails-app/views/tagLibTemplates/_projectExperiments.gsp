@@ -1,4 +1,4 @@
-<%@ page import="bard.core.interfaces.ExperimentValues;" %>
+<%@ page import="bard.db.enums.Status; bard.core.interfaces.ExperimentValues;" %>
 <table class="table">
     <thead>
     <tr>
@@ -20,13 +20,25 @@
         <g:each in="${experiments}" var="experiment" status="i">
             <tr>
                 <td>
+                    <% String experimentStatus =
+                            bard.db.experiment.Experiment.findById(experiment.capExptId)?.experimentStatus?.id
+                    %>
                     <g:link controller="experiment" action="show" id="${experiment.capExptId}"
-                            params='${ searchString ? '[searchString: ${searchString}]' : ""}'>
-                        ${experiment.capExptId}</g:link>
+                            params='${searchString ? '[searchString: ${searchString}]' : ""}'>
+
+                        <g:if test="${experimentStatus}">
+                            ${experiment.capExptId} ${experimentStatus}
+                            <g:render template="/common/statusIcons"
+                                      model='[status: experimentStatus, entity: "Experiment"]'/>
+                        </g:if>
+                        <g:else>
+                            ${experiment.capExptId}
+                        </g:else>
+                    </g:link>
                 </td>
                 <td>
                     <g:link controller="experiment" action="show" id="${experiment.capExptId}"
-                            params='${ searchString ? '[searchString: ${searchString}]' : ""}'>
+                            params='${searchString ? '[searchString: ${searchString}]' : ""}'>
                         ${experiment.name}</g:link>
                 </td>
                 <td>
@@ -40,24 +52,20 @@
                 </td>
                 <td>${experiment.compounds}</td>
                 <td>${experiment.activeCompounds ?: 0}</td>
-                <g:if test="${i==0}">
+                <g:if test="${i == 0}">
                     <td rowspan="${experiments.size()}">
                         <g:link controller="assayDefinition" action="show" id="${assay.capAssayId}"
-                                params='${ searchString ? '[searchString: ${searchString}]' : ""}'>
-                            ${assay.capAssayId}</g:link>
+                                params='${searchString ? '[searchString: ${searchString}]' : ""}'>
+                            ${assay.capAssayId} ${assay.assayStatus}
+                            <g:render template="/common/statusIcons"
+                                      model='[status: assay.assayStatus, entity: "Assay"]'/>
+
+                        </g:link>
                     </td>
                     <td rowspan="${experiments.size()}">
                         <g:link controller="assayDefinition" action="show" id="${assay.capAssayId}"
-                                params='${ searchString ? '[searchString: ${searchString}]' : ""}'>
+                                params='${searchString ? '[searchString: ${searchString}]' : ""}'>
                             ${assay.name}</g:link>
-                        %{--<dl class="dl-horizontal muted">--}%
-                            %{--<dt>Assay Format:</dt>--}%
-                            %{--<dd>${assay.minimumAnnotation.assayFormat}</dd>--}%
-                            %{--<dt>Assay Type:</dt>--}%
-                            %{--<dd>${assay.minimumAnnotation.assayType}</dd>--}%
-                            %{--<dt>Detection Method Type:</dt>--}%
-                            %{--<dd>${assay.minimumAnnotation.detectionMethodType}</dd>--}%
-                        %{--</dl>--}%
                     </td>
                 </g:if>
             </tr>

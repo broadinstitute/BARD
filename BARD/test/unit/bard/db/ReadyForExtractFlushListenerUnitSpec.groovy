@@ -115,16 +115,17 @@ class ReadyForExtractFlushListenerUnitSpec extends Specification {
         "ProjectStep prev"             | { project -> buildStep(ProjectSingleExperiment.build(project: project), ProjectSingleExperiment.build(project: project)) }
     }
 
+
     def 'test experiment with projects setting ready for extract for #description'() {
         setup:
-        Project projectx = Project.build(projectStatus: Status.APPROVED)
+        Project projectx = Project.build(projectStatus: status)
         Experiment experiment1 = Experiment.build()
         Experiment experiment2 = Experiment.build()
 
         buildStep(ProjectSingleExperiment.build(project: projectx, experiment: experiment1), ProjectSingleExperiment.build(project: projectx, experiment: experiment2))
 
         when:
-        experiment1.experimentStatus = Status.APPROVED
+        experiment1.experimentStatus = status
         def impacted = new HashSet(ReadyForExtractFlushListener.getObjectsImpactedByChange(experiment1))
 
         then:
@@ -141,6 +142,11 @@ class ReadyForExtractFlushListenerUnitSpec extends Specification {
         }
         assert isExperiment
         assert isProject
+
+        where:
+        desc                      | status
+        "With Approved status"    | Status.APPROVED
+        "With Provisional status" | Status.PROVISIONAL
     }
 
     ProjectStep buildStep(ProjectSingleExperiment next, ProjectSingleExperiment prev) {

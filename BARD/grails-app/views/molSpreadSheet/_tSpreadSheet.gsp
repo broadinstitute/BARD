@@ -133,7 +133,9 @@
                                         rowspan="<%=rowsToSkipBeforeNextAssayid%>">
                                         <g:link controller="assayDefinition" action="show" id="${bardAssayId}">
                                             <%=currentAssayIdHeader."fullAssayName"%>
+                                            <g:render template="/common/statusIcons" model='[status:currentAssayIdHeader."status", entity: "Assay"]'/>
                                         </g:link>
+
                                     </th>
                                 </g:if>
                                 <g:if test="${(rowsToSkipBeforeNextExperimentId == 0)}">
@@ -144,7 +146,10 @@
                                     <th class="molSpreadSheetHeadData" rowspan="<%=rowsToSkipBeforeNextExperimentId%>">
                                         <g:link controller="experiment" action="show" id="${currentExperimentIdHeader.eid}">
                                             EID=<%=currentExperimentIdHeader.eid%>
+                                            <g:render template="/common/statusIcons" model='[status:currentExperimentIdHeader."status", entity: "Experiment"]'/>
+
                                         </g:link>
+
                                     </th>
                                 </g:if>
                                 <% rowsToSkipBeforeNextAssayid-- %>

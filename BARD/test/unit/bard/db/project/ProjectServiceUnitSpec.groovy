@@ -12,6 +12,7 @@ import grails.test.mixin.services.ServiceUnitTestMixin
 import org.junit.Before
 import spock.lang.IgnoreRest
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,6 +25,7 @@ import spock.lang.Specification
 @Mock([Project, Role])
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(ProjectService)
+@Unroll
 public class ProjectServiceUnitSpec extends Specification {
 
     CapPermissionService capPermissionService
@@ -64,14 +66,21 @@ public class ProjectServiceUnitSpec extends Specification {
         assert newDescription == updatedProject.description
     }
 
-    void "test update project status"() {
+    void "test update project status #desc"() {
         given:
-        final Project project = Project.build(name: 'projectName10', projectStatus: Status.DRAFT)
+        final Project project = Project.build(name: 'projectName10', projectStatus: oldStatus)
         Project.metaClass.isDirty = { String field -> false }
         when:
-        final Project updatedProject = service.updateProjectStatus(project.id, Status.APPROVED)
+        final Project updatedProject = service.updateProjectStatus(project.id, newStatus)
         then:
-        assert Status.APPROVED == updatedProject.projectStatus
+        assert newStatus == updatedProject.projectStatus
+
+        where:
+        desc                               | oldStatus          | newStatus
+        "Change from draft to Approved"    | Status.DRAFT       | Status.APPROVED
+        "Change from draft to Provisional" | Status.DRAFT       | Status.PROVISIONAL
+        "Change from draft to Provisional" | Status.PROVISIONAL | Status.APPROVED
+
     }
 
     void "test isPanelExperimentAssociatedWithProject true"() {
