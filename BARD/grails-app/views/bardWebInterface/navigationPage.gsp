@@ -92,24 +92,30 @@
                             <ul>
                                 <li class="controller"><g:link controller="experiment"
                                                                action="myExperiments">My Experiments</g:link></li>
-                                <li class="controller"><g:link controller="moveExperiments"
-                                                               action="show">Move Experiments</g:link></li>
+                                <g:if test="${ownsExperiments}">
+                                    <li class="controller"><g:link controller="moveExperiments"
+                                                                   action="show">Move Experiments</g:link></li>
+                                </g:if>
+
                                 <li class="controller"><g:link controller="jobs"
                                                                action="index">My import jobs</g:link></li>
                                 <li class="controller"><g:link controller="panelExperiment"
                                                                action="create">Create a New Panel-Experiment</g:link></li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                Elements
+                        <sec:ifAnyGranted roles="ROLE_BARD_ADMINISTRATOR,ROLE_CURATOR">
+                            <li>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    Elements
 
-                            </a>
-                            <ul>
-                                <li class="controller"><g:link controller="element"
-                                                               action="select">Edit</g:link></li>
-                            </ul>
-                        </li>
+                                </a>
+                                <ul>
+                                    <li class="controller"><g:link controller="element"
+                                                                   action="select">Edit</g:link></li>
+                                </ul>
+
+                            </li>
+                        </sec:ifAnyGranted>
                         <li>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 Panels

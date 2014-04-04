@@ -1,4 +1,6 @@
 package bardqueryapi
+
+import acl.CapPermissionService
 import bard.core.IntValue
 import bard.core.SearchParams
 import bard.core.Value
@@ -52,6 +54,7 @@ class BardWebInterfaceController {
     List<SearchFilter> filters = []
     ExperimentService experimentService
     PersonService personService
+    CapPermissionService capPermissionService
 
     //An AfterInterceptor to handle mobile-view routing.
 //    def afterInterceptor = [action: this.&handleMobile]
@@ -152,7 +155,9 @@ class BardWebInterfaceController {
         final Person person = personService.findCurrentPerson()
         final boolean isManager = personService.isTeamManagerOfAnyTeam(person)
         final boolean isBardAdmin = person.roles*.authority.contains('ROLE_BARD_ADMINISTRATOR')
-        render(view: 'navigationPage', model: [isManager:isManager, isBardAdmin: isBardAdmin])
+        List<Experiment> experiments = capPermissionService.findAllByOwnerRolesAndClass(Experiment)
+        final boolean ownsExperiments = experiments.size() > 0 ? true : false
+        render(view: 'navigationPage', model: [isManager:isManager, isBardAdmin: isBardAdmin, ownsExperiments: ownsExperiments])
     }
 
 
