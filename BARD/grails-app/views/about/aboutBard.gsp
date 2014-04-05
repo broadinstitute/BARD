@@ -21,37 +21,53 @@
             <div class="row-fluid">
                 <aside class="span2"></aside>
                 <article class="span8">
-
-
-
                     <h2>
                         Discover a New Tool for Discovery.
                     </h2>
 
                     <p>
-                        Introducing BARD, the powerful new bioassay database from the NIH Molecular Libraries Program. BARD empowers researchers with the well-organized and fully annotated data, innovative tools and (in the coming months) secure privacy required to accelerate drug discovery. Now with unprecedented efficiency, scientists can develop and test hypotheses on the influence of different chemical probes on biological functions.
+                        Introducing BARD, the powerful new bioassay database from the NIH Molecular Libraries Program.
+                        BARD empowers researchers with the well-organized and fully annotated data, innovative tools and
+                        (in the coming months) secure privacy required to accelerate drug discovery. Now with unprecedented
+                        efficiency, scientists can develop and test hypotheses on the influence of different chemical probes
+                        on biological functions.
                     </p>
 
                     <p>
-                        Starting with public data sets, BARD applies a standardized language and consistent assay/project/experiment organization, as well as detailed annotations. This intensive hands-on work is performed by a highly skilled team, who whenever possible involve the researchers who generated the data.
+                        Starting with public data sets, BARD applies a standardized language and consistent assay/project/experiment
+                        organization, as well as detailed annotations. This intensive hands-on work is performed by a highly
+                        skilled team, who whenever possible involve the researchers who generated the data.
                     </p>
 
                     <p>
-                        Accessed through this website or deployed as a complete closed system behind an organization’s firewall (available soon), the goal is to build BARD into a single resource that biologists and chemists can trust for reliably comprehensive query results.
+                        Accessed through this website or deployed as a complete closed system behind an organization’s
+                        firewall (available soon), the goal is to build BARD into a single resource that biologists and
+                        chemists can trust for reliably comprehensive query results.
                     </p>
 
                     <p>
-                        BARD’s constantly growing database includes 35M+ compounds, 4K+ assays and 300+ projects. Researchers can perform multiple types of sophisticated queries, filter and save the results, analyze and visualize the data, then easily export findings to common office software for the generation of reports. BARD also enables the secure and structured capture of your organization’s valuable proprietary scientific data, and simplifies the sharing of that data between collaborators or with the entire research community.
+                        BARD’s constantly growing database includes 35M+ compounds and thousands of assays and
+                        experiments<a href="#footnote1">*</a>. Researchers can perform multiple types of sophisticated
+                        queries, filter and save the results, analyze and visualize the data, then easily export findings
+                        to common office software for the generation of reports. BARD also enables the secure and structured
+                        capture of your organization’s valuable proprietary scientific data, and simplifies the sharing
+                        of that data between collaborators or with the entire research community.
                     </p>
 
-
+                    <div id="footnote1">
+                    <p>
+                        * To view the latest numbers of projects, experiments and assay definitions in bard,
+                        <a href="${createLink(controller: "bardWebInterface", action: "index", fragment: "bardIsGrowing")}">
+                        check out the "BARD is growing" section of the home page</a>
+                    </p>
+                    </div>
                 </article>
+
                 <aside class="span2"></aside>
             </div>
         </div>
     </div>
 </article>
-
 
 
 </body>
