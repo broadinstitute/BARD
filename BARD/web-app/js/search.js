@@ -101,7 +101,7 @@ $(document).ready(function () {
         }
         else{
             handleMainFormSubmit(searchString, state.data.tab, null);
-            History.pushState({search: searchString, tab: state.data.tab, submitfrom: "form"}, "Search Results - " + state.data.tab, "?tab=" + state.data.tab);
+           // History.pushState({search: searchString, tab: state.data.tab, submitfrom: "form"}, "Search Results - " + state.data.tab, "?tab=" + state.data.tab);
         }
         return false; //do not submit form the normal way, use Ajax instead
 
