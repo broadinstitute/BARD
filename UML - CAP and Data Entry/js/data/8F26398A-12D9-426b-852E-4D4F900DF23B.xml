@@ -27,4 +27,4 @@ tocTab[tocTab.length] = new Array("0.4:26", "", "Result OLAP life-cycle", "EARoo
 tocTab[tocTab.length] = new Array("0.4:27", "", "Use Cases and Actors", "EARoot/EA4/EA864.htm", "99.png", "891", "0", "", "UMLDiagram0","{967FD8E5-5B71-437f-8C3C-85B8CCD557D9}");
 tocTab[tocTab.length] = new Array("0.4:28", "", "User Interfaces", "EARoot/EA4/EA865.htm", "99.png", "511", "0", "", "UMLDiagram0","{38F5D142-9DD8-4f4d-988A-DC8C250AEAA9}");
 tocTab[tocTab.length] = new Array("0.4:29", "", "User Workflows", "EARoot/EA4/EA867.htm", "99.png", "354", "0", "", "UMLDiagram0","{D9D1C794-880A-4461-B7D7-654BB37D666A}");
-tocTab[tocTab.length] = new Array("0.4.1", "1", "Domain Objects", "EARoot/EA4/EA847.htm", "4.png", "", "", "{DD9F9FEC-8233-42e2-8D1B-032EE6EB43EF}", "Package");
+tocTab[tocTab.length] = new Array("0.4.1", "1", "Domain Objects", "EARoot/EA4/EA848.htm", "4.png", "", "", "{DD9F9FEC-8233-42e2-8D1B-032EE6EB43EF}", "Package");
