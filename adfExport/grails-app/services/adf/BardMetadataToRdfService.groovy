@@ -23,9 +23,10 @@ import org.openrdf.rio.RDFWriter
 import org.openrdf.model.Statement
 import org.openrdf.model.URI
 import org.openrdf.rio.RDFHandlerException
+import bard.db.registration.AssayContextItem
 
 
-class BardMetadataToRdfService{
+class BardMetadataToRdfService extends AbstractService{
     static final String adfOntology = "http://bard.broadinstitute.org/adf#";
     static final String internalBardOntology = "http://bard.broadinstitute.org/bard#";
     static final String publicBardOntology = "http://www.bard.nih.gov/ontology/bard#"
@@ -275,12 +276,36 @@ class BardMetadataToRdfService{
                 getElementURI(item.attributeElement)
         )
 
+        model.add(
+                itemRes,
+                hasValueType,
+                factory.createLiteral(item.valueType.id)
+        )
+
+        if (item instanceof AssayContextItem) {
+            model.add(
+                itemRes,
+                hasAttributeType,
+                factory.createLiteral(((AssayContextItem) item).attributeType.name())
+            )
+        }
+
+        if (item.valueDisplay) {
+            model.add(
+                    itemRes,
+                    hasValueDisplay,
+                    factory.createLiteral(item.valueDisplay)
+            )
+        }
+
         switch(item.valueType) {
             case ValueType.ELEMENT:
                 model.add(itemRes, hasValue, getElementURI(item.valueElement))
                 break;
             case ValueType.EXTERNAL_ONTOLOGY:
-                model.add(itemRes, hasValue, getExternalURI(item.attributeElement, item.extValueId))
+               // model.add(itemRes, hasValue, getExternalURI(item.attributeElement, item.extValueId))
+                model.add(itemRes, hasExternalOnto, getExternalOnto(item.attributeElement))
+                model.add(itemRes, hasExternalOntoId, factory.createLiteral(item.extValueId))
                 break;
             case ValueType.FREE_TEXT:
                 model.add(itemRes, hasValue, factory.createLiteral(item.valueDisplay))
@@ -289,7 +314,7 @@ class BardMetadataToRdfService{
                 break;
             case ValueType.NUMERIC:
                 if(item.qualifier) {
-                    model.add(itemRes, hasQualifier, factory.createLiteral(item.qualifier.trim()))
+                    model.add(itemRes, hasQualifier, factory.createLiteral(item.qualifier))
                 }
                 model.add(itemRes, hasNumericValue, factory.createLiteral(item.valueNum))
                 break;
@@ -306,6 +331,10 @@ class BardMetadataToRdfService{
 
     Resource getExternalURI(Element element, String id) {
         return factory.createURI(element.externalURL+id);
+    }
+
+    Resource getExternalOnto(Element element) {
+        return factory.createURI(element.externalURL)
     }
 
     Resource getElementURI(Element element) {
