@@ -1,4 +1,4 @@
-tocTab[tocTab.length] = new Array("0.4.1:1", "", "Domain Objects", "EARoot/EA4/EA1/EA237.htm", "175.png", "7", "0", "", "Logical diagram0","{E3EDC7AB-1E89-4d44-91C6-C453DFCA48DB}");
-tocTab[tocTab.length] = new Array("0.4.1:2", "", "Class1", "EARoot/EA4/EA1/EA239.htm", "5.png", "29", "0", "", "Class0","{2C708D94-3092-47cd-8CDE-8713C8A36842}");
-tocTab[tocTab.length] = new Array("0.4.1:3", "", "Class2", "EARoot/EA4/EA1/EA240.htm", "5.png", "27", "0", "", "Class0","{B1D6E91D-5C1A-458d-98E8-1EA0B0819438}");
-tocTab[tocTab.length] = new Array("0.4.1:4", "", "Class3", "EARoot/EA4/EA1/EA241.htm", "5.png", "28", "0", "", "Class0","{38EBCE3E-D9EC-4b70-9D3D-12AFDF37115B}");
+tocTab[tocTab.length] = new Array("0.4.1:1", "", "Domain Objects", "EARoot/EA4/EA1/EA244.htm", "175.png", "7", "0", "", "Logical diagram0","{E3EDC7AB-1E89-4d44-91C6-C453DFCA48DB}");
+tocTab[tocTab.length] = new Array("0.4.1:2", "", "Class1", "EARoot/EA4/EA1/EA246.htm", "5.png", "29", "0", "", "Class0","{2C708D94-3092-47cd-8CDE-8713C8A36842}");
+tocTab[tocTab.length] = new Array("0.4.1:3", "", "Class2", "EARoot/EA4/EA1/EA247.htm", "5.png", "27", "0", "", "Class0","{B1D6E91D-5C1A-458d-98E8-1EA0B0819438}");
+tocTab[tocTab.length] = new Array("0.4.1:4", "", "Class3", "EARoot/EA4/EA1/EA248.htm", "5.png", "28", "0", "", "Class0","{38EBCE3E-D9EC-4b70-9D3D-12AFDF37115B}");
