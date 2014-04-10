@@ -1,3 +1,5 @@
+import adf.JsonTransform
+import au.com.bytecode.opencsv.CSVWriter
 import spock.lang.Specification
 
 /**
@@ -7,9 +9,8 @@ class JsonWipImplUnitSpec extends Specification {
 
 
     void test(){
-        JsonWipImpl jsonWip = new JsonWipImpl()
-        def result =  jsonWip.run()
-        result.printlnResultSetPipeline()
+        JsonTransform jsonWip = new JsonTransform()
+        jsonWip.run()
         expect:
         1==1
 
