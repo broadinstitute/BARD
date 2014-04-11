@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="row-fluid">
-                    <g:render template="projectReferences" model="[project: instance]"/>
+                    <g:render template="projectReferences" model="[project: instance, editable: editable]"/>
                 </div>
 
             </section>

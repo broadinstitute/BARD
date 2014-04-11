@@ -180,7 +180,7 @@
         </dl>
 
         <g:render template="experimentReferences"
-                  model="[experiment: instance, excludedLinks: ['experiment.show']]"/>
+                  model="[experiment: instance, excludedLinks: ['experiment.show'], editable: editable]"/>
         <sec:ifLoggedIn>
             <g:link controller="results" action="configureTemplate"
                     params="${[experimentId: instance?.id]}"

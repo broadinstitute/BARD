@@ -4,7 +4,12 @@
 <head>
     <r:require modules="core,bootstrap,twitterBootstrapAffix,card,histogram"/>
     <meta name="layout" content="basic"/>
-    <title>Create an External Reference</title>
+    <g:if test="${isEdit}">
+        <title>Update an External Reference</title>
+    </g:if>
+    <g:else>
+        <title>Create an External Reference</title>
+    </g:else>
 </head>
 
 <body>
@@ -20,11 +25,18 @@
     </div>
 </g:hasErrors>
 
+<g:if test="${externalReferenceInstance}">
 <div class="row-fluid">
     <div class="span12">
-        <h3>Create a New External Reference</h3>
+        <g:if test="${isEdit}">
+            <h3>Update External Reference</h3>
+        </g:if>
+        <g:else>
+            <h3>Create a New External Reference</h3>
+        </g:else>
 
-        <g:form class="form-horizontal" controller="externalReference" action="save">
+        <g:form class="form-horizontal" controller="externalReference" action="${isEdit ? "edit" : "save"}">
+            <g:hiddenField name="id" value="${externalReferenceInstance.id ?: ''}"/>
             <g:hiddenField name="project.id" value="${externalReferenceInstance.project?.id ?: ''}"/>
             <g:hiddenField name="experiment.id" value="${externalReferenceInstance.experiment?.id ?: ''}"/>
 
@@ -75,12 +87,18 @@
                     <g:link controller="${externalReferenceInstance.project ? 'project' : 'experiment'}" action="show"
                             id="${externalReferenceInstance.project?.id ?: externalReferenceInstance.experiment.id}"
                             class="btn">Cancel</g:link>
-                    <input type="submit" class="btn btn-primary" value="Create">
+                    <g:if test="${isEdit}">
+                        <input type="submit" class="btn btn-primary" value="Update">
+                    </g:if>
+                    <g:else>
+                        <input type="submit" class="btn btn-primary" value="Create">
+                    </g:else>
                 </div>
             </div>
         </g:form>
     </div>
 </div>
+</g:if>
 
 </body>
 </html>
