@@ -23,6 +23,17 @@ import org.openrdf.model.impl.TreeModel
 import bard.db.registration.Assay
 import bard.db.registration.AttributeType
 import bard.db.people.Role
+import bard.db.model.AbstractDocument
+import bard.db.registration.AssayDocument
+import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentContext
+import bard.db.project.ProjectContext
+import bard.db.experiment.ExperimentContextItem
+import bard.db.project.ProjectContextItem
+import bard.db.experiment.ExperimentDocument
+import bard.db.project.ProjectDocument
+import bard.db.project.Project
+import bard.db.enums.DocumentType
 
 class RdfToBardMetadataService extends AbstractService{
     Model createModel(String fileName) throws Exception {
@@ -42,17 +53,78 @@ class RdfToBardMetadataService extends AbstractService{
             String assayName = m.filter(r, RDFS.LABEL, null).objectString()
             Assay assay = new Assay(assayName: assayName)
             List<AbstractContext> contexts = handleContext(m, r, assayClass)
-            contexts.each{AbstractContext context ->
-                assay.addToAssayContexts(context)
-                ((AssayContext) context).assay = assay
+            contexts.each{
+                assay.addToAssayContexts(it)
             }
             assay.assayVersion = '1'
             assay.ownerRole = Role.findAll().get(0)
             assay.dateCreated = new Date()
+            List<AbstractDocument> documents = handleDocument(m, r, assayClass)
+            documents.each{
+                assay.addToAssayDocuments(it)
+            }
             assay.save(failOnError: true)
             assays.add(assay)
         }
         return assays
+    }
+
+    List<Experiment> handleExperiment(Model m) {
+        List<Experiment> experiments = []
+        for (Resource r : m.filter(null, RDFS.CLASS, experimentClass).subjects()){
+            String experimentDescription = m.filter(r, RDFS.COMMENT, null).objectString()
+            String experimentName = m.filter(r, RDFS.LABEL, null).objectString()
+            Experiment experiment = new Experiment(description: experimentDescription, experimentName: experimentName)
+            List<AbstractContext> contexts = handleContext(m, r, experimentClass)
+            contexts.each{
+                experiment.addToExperimentContexts(it)
+            }
+            List<AbstractDocument> documents = handleDocument(m, r, experimentClass)
+            documents.each{
+                experiment.addToExperimentDocuments(it)
+            }
+            experiment.ownerRole = Role.findAll().get(0)
+            experiment.save(failOnError: true)
+            experiments.add(experiment)
+        }
+        return experiments
+    }
+
+    List<Project> handleProject(Model m) {
+        List<Project> projects = []
+        for (Resource r : m.filter(null, RDFS.CLASS, projectClass).subjects()){
+            String description = m.filter(r, RDFS.COMMENT, null).objectString()
+            String name = m.filter(r, RDFS.LABEL, null).objectString()
+            Project project = new Project(description: description, name: name)
+            List<AbstractContext> contexts = handleContext(m, r, projectClass)
+            contexts.each{
+                project.addToContexts(it)
+            }
+            List<AbstractDocument> documents = handleDocument(m, r, projectClass)
+            documents.each{
+                project.addToDocuments(it)
+            }
+            project.ownerRole = Role.findAll().get(0)
+            project.dateCreated = new Date()
+            project.save(failOnError: true)
+            projects.add(project)
+        }
+        return projects
+    }
+
+    List<AbstractDocument> handleDocument(Model m, Resource resource, URI classType) {
+        List<AbstractDocument> documents = []
+        for (Resource r : m.filter(resource, hasDocument, null).objects()){
+            String documentLabel = m.filter(r, RDFS.LABEL, null).objectString()
+            AbstractDocument document = createDocument(classType)
+            document.documentName = documentLabel
+            String documentContent = m.filter(r, hasContent, null).objectString()
+            document.documentContent = documentContent
+            String documentType = m.filter(r, hasDocumentType, null).objectString()
+            document.documentType = DocumentType.byId(documentType)
+            documents.add(document)
+        }
+        return documents
     }
 
     List<AbstractContext> handleContext(Model m, Resource resource, URI classType) {
@@ -152,13 +224,30 @@ class RdfToBardMetadataService extends AbstractService{
     AbstractContext createContext(URI classType) {
         if (classType == assayClass)
             return new AssayContext()
+        else if (classType == experimentClass)
+            return new ExperimentContext()
+        else if (classType == projectClass)
+            return new ProjectContext()
         return null
     }
 
     AbstractContextItem createContextItem(URI classType){
-        if (classType == assayClass) {
+        if (classType == assayClass)
             return new AssayContextItem()
-        }
+        else if (classType == experimentClass)
+            return new ExperimentContextItem()
+        else if (classType == projectClass)
+            return new ProjectContextItem()
+        return null
+    }
+
+    AbstractDocument createDocument(URI classType) {
+        if (classType == assayClass)
+            return new AssayDocument()
+        else if (classType == experimentClass)
+            return new ExperimentDocument()
+        else if (classType == projectClass)
+            return new ProjectDocument()
         return null
     }
 

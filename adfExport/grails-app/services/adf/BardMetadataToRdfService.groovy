@@ -105,7 +105,11 @@ class BardMetadataToRdfService extends AbstractService{
 
         model.add(projectRes,
                 RDFS.LABEL,
-                project.name)
+                factory.createLiteral(project.name))
+
+        model.add(projectRes,
+                RDFS.COMMENT,
+                factory.createLiteral(project.description))
 
         addExternalReferences(projectRes, project.externalReferences, model)
 
@@ -197,6 +201,11 @@ class BardMetadataToRdfService extends AbstractService{
         model.add(
                 expRes,
                 RDFS.LABEL,
+                factory.createLiteral(experiment.experimentName))
+
+        model.add(
+                expRes,
+                RDFS.COMMENT,
                 factory.createLiteral(experiment.description))
 
         model.add(
@@ -241,12 +250,12 @@ class BardMetadataToRdfService extends AbstractService{
             RDFS.LABEL,
             factory.createLiteral(context.contextName))
 
-        if(context.contextType != ContextType.UNCLASSIFIED) {
+        //if(context.contextType != ContextType.UNCLASSIFIED) {
             model.add(contextRes,
                     hasContextType,
                     factory.createURI(adfOntology, context.contextType.id)
             )
-        }
+        //}
 
         context.contextItems.each {
             Resource itemRes = addContextItem(it, model);
@@ -364,6 +373,12 @@ class BardMetadataToRdfService extends AbstractService{
                 docRes,
                 hasContent,
                 factory.createLiteral(document.documentContent)
+        )
+
+        model.add(
+                docRes,
+                hasDocumentType,
+                factory.createLiteral(document.documentType.id)
         )
 
         return docRes;

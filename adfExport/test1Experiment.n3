@@ -1,0 +1,152 @@
+@prefix adf: <http://bard.broadinstitute.org/adf#> .
+@prefix bard: <http://www.bard.nih.gov/ontology/bard#> .
+@prefix local: <http://bard.broadinstitute.org/bard#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xmls: <http://www.w3.org/2001/XMLSchema#> .
+
+
+_:ctx3401 adf:hasContextType adf:Unclassified ;
+	adf:hasItem _:item7243 , _:item7244 , _:item7245 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "activity threshold" .
+
+_:ctx3402 adf:hasContextType adf:Unclassified ;
+	adf:hasItem _:item7246 , _:item7247 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "concentration-point number" .
+
+_:ctx3403 adf:hasContextType adf:Unclassified ;
+	adf:hasItem _:item7248 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "project lead name" .
+
+_:doc3001 adf:hasContent """Day 0:
+Plate 4,000 cells ldlA[mSR-BI] 30microl/ well in Ham's F12/10% FCS/PSG
+
+Day 1:
+1)Pin transfer 100 nl compounds and positive control (sentinel plate).
+2)Incubate 3 hours @ 37 degrees C
+3)Add 20 uL Promega Cell titer glo per well
+4)Shake plate for 15 seconds
+5)Incubate 10 minutes
+6)Read luminescence with Perkin-Elmer Envision plate reader""" ;
+	adf:hasDocumentType "Protocol" ;
+	rdfs:Class adf:Protocol ;
+	rdfs:label "Protocol" .
+
+_:doc3002 adf:hasContent """Keywords: cytoxicity, Cell Titer Glo, ldl[mSR-BI] cells
+
+
+Assay Overview:
+
+The HDL uptake primary assay is looking for a decrease in fluorescence.  It is possible that a compound will cause cells to decrease HDL uptake due to non-specific consequences of cellular toxicity. Therefore, we would like to make sure that lead compounds are not toxic in the 3 hour time period used in the primary assay.  Cells are treated with compounds for 3 hours and then cell viability is measured using the Cell Titer Glo Assay which is a luciferase-based reagent that measures cellular ATP levels. Compounds will be tested at 8 different doses to determine IC50 values.
+
+Expected Outcome:
+
+Cells that are cytotoxic will decrease cellular ATP levels resulting in a decrease in luminescence.  Compounds that are cytotoxic after 3 hours will be eliminated from consideration.""" ;
+	adf:hasDocumentType "Description" ;
+	rdfs:Class adf:Description ;
+	rdfs:label "Description" .
+
+_:doc3003 adf:hasContent """PRESENCE OF CONTROLS: Neutral control wells (NC; n=32) and positive control wells (PC; n=32) were included on every plate.
+
+EXPECTED OUTCOME: Active compounds result in  decreasing readout signal.
+
+ACTIVE CONCENTRATION LIMIT:
+For each sample, the highest valid tested concentration (Max_Concentration) was determined and the active concentration limit (AC_limit) was set to equal  (10)(Max_Concentration).
+
+NORMALIZATION:
+The raw signals of the plate wells were normalized using the 'Neutral Controls' method in Genedata Assay Analyzer (v7.0.3):
+The median raw signal of the intraplate  neutral controls (NC) is set to a normalized activity value of 0.
+A normalized activity value of 100 is defined as (2)(NC).
+A normalized activity value of -50 is defined as (0.5)(NC).
+Experimental wells values were scaled to this range.
+
+PATTERN CORRECTION:  The plate pattern correction algorithm 'Runwise Pattern (Multiplicative)' in Genedata (v7.0.3) was applied to the normalized plate data.
+
+MEASUREMENT USED TO DETERMINE ACTIVE CONCENTRATION (AC): AC50
+AC values were calculated using the curve fitting strategies in Genedata Screener Condoseo (7.0.3).
+AC values were calculated up to the active concentration limit described for each sample.
+pAC was set to equal -1*log10(AC)
+
+PUBCHEM_ACTIVITY_OUTCOME:
+Activity_Outcome = 1 (inactive) when:
+a) compound shows activity but in a direction opposite to the expected outcome
+in these cases, values describing curve fitting parameters (Sinf, S0, Hill Slope, log_AC50, log_AC50_SE) are set to null
+b) curve fit is constant where activity is > -30% and < 30% at all tested concentrations, or
+c) AC > AC_limit
+Activity_Outcome = 2 (active) when:
+AC <= AC_limit
+Activity_Outcome = 3 (inconclusive) when:
+a) Curve fitting strategy resulted in a constant fit with activity >= -70% but <= -30%, or
+b) The fit was deemed not valid due to poor fit quality.
+
+PUBCHEM_ACTIVITY_SCORE:
+If PUBCHEM_ACTIVITY_OUTCOME = 1 (inactive) or 3 (inconclusive),
+then PUBCHEM_ACTIVITY_SCORE = 0
+If PUBCHEM_ACTIVITY_OUTCOME = 2 (active)
+then PUBCHEM_ACTIVITY_SCORE = (10)(pAC)
+Scores relate to AC in this manner:
+120 = 1 pM
+90 = 1 nM
+60 = 1 uM
+30 = 1 mM
+0 = 1 M
+When the active concentration (AC) is calculated to be greater than the highest valid tested concentration (Max_Concentration), the PUBCHEM_ACTIVITY_SCORE is calculated using Max_Concentration as the basis.
+When the active concentration (AC) is calculated to be less than the lowest tested concentration, the PUBCHEM_ACTIVITY_SCORE is calculated using the lowest tested concentration as the basis.
+
+Note:
+The individual dose data point columns ('Activity_at_xxuM') reported here represent the median of valid (unmasked) replicate observations at each concentration. These values are the inputs to a curve fitting algorithm.
+All other data columns represent values which are derived during the curve fitting algorithm; this may sometimes include automatic further masking of some replicate data points.
+Occasionally this results in perceived inconsistencies: for example, between the derived 'Maximal_Activity' and the apparent most active data point.""" ;
+	adf:hasDocumentType "Comments" ;
+	rdfs:Class adf:Comments ;
+	rdfs:label "Comments" .
+
+_:exp5631 adf:definedBy _:assay8111 ;
+	adf:hasContext _:ctx3401 , _:ctx3402 , _:ctx3403 ;
+	adf:hasDocument _:doc3001 , _:doc3002 , _:doc3003 ;
+	adf:identifiedBy <http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=588830> ;
+	rdfs:Class adf:Experiment ;
+	rdfs:comment "CellTiter Glo cytotoxicity assay in primary screen cell line, 3 hour compound treatment" ;
+	rdfs:label "Counterscreen for compounds toxic to primary screen cell line, 3 hour treatment, dry powder cherry pick" .
+
+_:item7243 adf:hasAttribute bard:BARD_0000873 ;
+	adf:hasValue "IC50" ;
+	adf:hasValueDisplay "IC50" ;
+	adf:hasValueType "free text" ;
+	rdfs:Class adf:Item .
+
+_:item7244 adf:hasAttribute bard:BARD_0000592 ;
+	adf:hasNumericValue "30.0"^^xmls:float ;
+	adf:hasQualifier "= " ;
+	adf:hasValueDisplay "30.0" ;
+	adf:hasValueType "numeric" ;
+	rdfs:Class adf:Item .
+
+_:item7245 adf:hasAttribute bard:BARD_0000600 ;
+	adf:hasValue "micromolar" ;
+	adf:hasValueDisplay "micromolar" ;
+	adf:hasValueType "free text" ;
+	rdfs:Class adf:Item .
+
+_:item7246 adf:hasAttribute bard:BARD_0000655 ;
+	adf:hasNumericValue "22.0"^^xmls:float ;
+	adf:hasQualifier "= " ;
+	adf:hasValueDisplay "22.0" ;
+	adf:hasValueType "numeric" ;
+	rdfs:Class adf:Item .
+
+_:item7247 adf:hasAttribute bard:BARD_0000977 ;
+	adf:hasNumericValue "2.0"^^xmls:float ;
+	adf:hasQualifier "= " ;
+	adf:hasValueDisplay "2.0" ;
+	adf:hasValueType "numeric" ;
+	rdfs:Class adf:Item .
+
+_:item7248 adf:hasAttribute bard:BARD_0000570 ;
+	adf:hasExternalOnto <http://www.bard.nih.gov/person#> ;
+	adf:hasExternalOntoId "100" ;
+	adf:hasValueDisplay "Patrick Faloon" ;
+	adf:hasValueType "external ontology" ;
+	rdfs:Class adf:Item .

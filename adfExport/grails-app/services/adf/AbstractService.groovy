@@ -5,6 +5,7 @@ import org.openrdf.model.URI
 import org.openrdf.model.impl.ValueFactoryImpl
 import org.openrdf.model.Model
 import org.openrdf.model.impl.TreeModel
+import org.openrdf.model.vocabulary.RDFS
 
 class AbstractService {
 
@@ -41,6 +42,7 @@ class AbstractService {
     URI hasValueType
     URI hasAttributeType
     URI hasValueDisplay
+    URI hasDocumentType
 
     AbstractService() {
         factory = ValueFactoryImpl.getInstance()
@@ -73,5 +75,6 @@ class AbstractService {
         hasValueType = factory.createURI(adfOntology, "hasValueType")
         hasAttributeType = factory.createURI(adfOntology, "hasAttributeType")
         hasValueDisplay =  factory.createURI(adfOntology, "hasValueDisplay")
+        hasDocumentType = factory.createURI(adfOntology, 'hasDocumentType')
     }
 }

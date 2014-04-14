@@ -10,5 +10,21 @@ Assay.withTransaction { TransactionStatus status ->
     Assay.withSession { Session session ->
         BardContextUtils.setBardContextUsername(session, 'integrationTestUser')
         assays = ctx.rdfToBardMetadataService.handleAssay(model)
+        experiments = ctx.rdfToBardMetadataService.handleExperiment(model)
+    }
+}
+//model = ctx.rdfToBardMetadataService.createModel("test1Experiment.n3")
+//Assay.withTransaction { TransactionStatus status ->
+//    Assay.withSession { Session session ->
+//        BardContextUtils.setBardContextUsername(session, 'integrationTestUser')
+//        experiments = ctx.rdfToBardMetadataService.handleExperiment(model)
+//    }
+//}
+
+model = ctx.rdfToBardMetadataService.createModel("test1Project.n3")
+Assay.withTransaction { TransactionStatus status ->
+    Assay.withSession { Session session ->
+        BardContextUtils.setBardContextUsername(session, 'integrationTestUser')
+        experiments = ctx.rdfToBardMetadataService.handleProject(model)
     }
 }

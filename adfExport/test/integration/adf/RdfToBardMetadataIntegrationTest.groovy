@@ -15,8 +15,17 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
  */
 class RdfToBardMetadataIntegrationTest extends GroovyTestCase {
     def rdfToBardMetadataService
-    void testSomething() {
+    void testAssay() {
         def m = rdfToBardMetadataService.createModel("test1.n3")
         rdfToBardMetadataService.handleAssay(m)
+    }
+    void testExperiment() {
+        def m = rdfToBardMetadataService.createModel("test1Experiment.n3")
+        rdfToBardMetadataService.handleExperiment(m)
+    }
+
+    void testProject() {
+        def m = rdfToBardMetadataService.createModel("test1Project.n3")
+        rdfToBardMetadataService.handleProject(m)
     }
 }
