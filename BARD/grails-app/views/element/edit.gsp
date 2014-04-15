@@ -194,7 +194,7 @@
             </div>
         </div>
 
-        <button type="button" title="Cancel" class="btn btn-primary">Cancel</button>
+        <g:link class="btn btn-primary" controller="element" action="select">Cancel</g:link>
         <button type="submit" title="Save" class="btn btn-primary">Save</button>
     </g:form>
 </g:if>
