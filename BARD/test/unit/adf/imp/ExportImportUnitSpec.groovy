@@ -36,7 +36,7 @@ class ExportImportUnitSpec extends Specification {
 
         when:
         JsonTransform jsonWip = new JsonTransform()
-        jsonWip.transform(new File('exp-1462-20131027-144131.json.gz'), "dataset_")
+        jsonWip.transform(new File('test/resources/exp-1462-head.json.gz'), "dataset_")
         DatasetParser imp = new DatasetParser(["dataset_1.txt", "dataset_2.txt"])
         while (imp.hasNext()) {
             // for each sample
