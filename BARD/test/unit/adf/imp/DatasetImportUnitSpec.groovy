@@ -1,7 +1,9 @@
-import au.com.bytecode.opencsv.CSVWriter
-import spock.lang.Specification;
+package adf.imp
 
-import java.util.List;
+import adf.imp.Batch
+import adf.imp.DatasetParser
+import au.com.bytecode.opencsv.CSVWriter
+import spock.lang.Specification
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,7 +33,36 @@ public class DatasetImportUnitSpec extends Specification {
         Batch batch
 
         when:
-        DatasetImport input = new DatasetImport([file1, file2])
+        DatasetParser input = new DatasetParser([file1, file2])
+
+        then:
+        input.hasNext();
+
+        when:
+        batch = input.readNext() ;
+
+        then:
+        batch.datasets.size() == 2
+        batch.sid == 1
+        input.hasNext() ;
+
+        when:
+        batch = input.readNext() ;
+
+        then:
+        batch.datasets.size() == 2
+        batch.sid == 2
+        !input.hasNext()
+    }
+
+    void testOutOfOrderSids() {
+        setup:
+        String file1 = createFile([[2,3],[1,2]]);
+        String file2 = createFile([[1,2],[2,3]]);
+        Batch batch
+
+        when:
+        DatasetParser input = new DatasetParser([file1, file2])
 
         then:
         input.hasNext();
@@ -59,7 +90,7 @@ public class DatasetImportUnitSpec extends Specification {
         Batch batch
 
         when:
-        DatasetImport input = new DatasetImport([file1, file2])
+        DatasetParser input = new DatasetParser([file1, file2])
 
         then:
         input.hasNext() ;

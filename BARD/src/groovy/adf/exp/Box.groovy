@@ -1,8 +1,4 @@
-package adf
-
-import bard.db.experiment.JsonResult
-import bard.db.experiment.JsonResultContextItem
-
+package adf.exp
 /**
  * Created by ddurkin on 3/20/14.
  */

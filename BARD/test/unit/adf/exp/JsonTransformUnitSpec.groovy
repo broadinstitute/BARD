@@ -1,8 +1,10 @@
-import adf.AbstractResultTree
-import adf.Box
-import adf.JsonTransform
-import adf.Path
-import adf.ResultKey
+package adf.exp
+
+import adf.exp.AbstractResultTree
+import adf.exp.Box
+import adf.exp.JsonTransform
+import adf.exp.Path
+import adf.exp.ResultKey
 import au.com.bytecode.opencsv.CSVReader
 import bard.db.experiment.JsonResult
 import bard.db.experiment.JsonSubstanceResults
@@ -29,8 +31,50 @@ class JsonTransformUnitSpec extends Specification {
         return new JsonSubstanceResults(sid: 0, rootElem: roots.collect { transformToJson(it) })
     }
 
+    def testWriteTwoBoxes() {
+        setup:
+        def results = makeJsonResults([[1, [[2, []]]]])
+        Map<Path, Box> boxByPath = [:]
 
-    def testBoxWriter() {
+        JsonResult jr1 = new JsonResult(resultType: "1", resultTypeId: 1)
+        JsonResult jr2 = new JsonResult(resultType: "2", resultTypeId: 2)
+
+        Path path1 = new Path(jr1, null)
+        Path path2 = new Path(jr2, path1)
+        boxByPath[null] = new Box([new ResultKey(jr1)], [])
+        boxByPath[path2] = new Box([new ResultKey(jr2)], [])
+
+        when:
+        JsonTransform.BoxesWriter writer = new JsonTransform.BoxesWriter("out/dataset_",boxByPath)
+        writer.write(results)
+        writer.close()
+
+        CSVReader reader = new CSVReader(new FileReader("out/dataset_1.txt"))
+        String[] header = reader.readNext()
+        String [] data = reader.readNext()
+
+        then:
+        reader.readNext() == null
+
+        header as List == ["sid", "resultId", "parentResultId", "1"]
+        data as List == ["0", "1", "", "10"]
+
+        when:
+        reader.close();
+        reader = new CSVReader(new FileReader("out/dataset_2.txt"))
+        header = reader.readNext()
+        data = reader.readNext()
+
+        then:
+        reader.readNext() == null
+
+        header as List == ["sid", "resultId", "parentResultId", "2"]
+        data as List == ["0", "2", "1", "20"]
+
+
+    }
+
+    def testWriteSingleBox() {
         setup:
         def results = makeJsonResults([[1, [[2, []]]]])
         Map<Path, Box> boxByPath = [:]
@@ -97,6 +141,7 @@ class JsonTransformUnitSpec extends Specification {
         Box secondBox = boxByPath[path2]
         secondBox.columns.size() == 1
     }
+
 
     def testSingleChild() {
         setup:

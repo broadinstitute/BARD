@@ -82,6 +82,9 @@ grails.project.dependency.resolution = {
 
         compile "com.oracle:ojdbc6:11.2.0.2.0"
 
+        compile 'org.mapdb:mapdb:0.9.11'
+
+
         // needed for SMTPAppender (included as a compile dependency because the right one is being picked up for runtime, but not for build time)
         compile "log4j:log4j:1.2.16"
         build "log4j:log4j:1.2.16"

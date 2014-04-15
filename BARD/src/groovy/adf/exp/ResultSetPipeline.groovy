@@ -1,10 +1,8 @@
-package adf
+package adf.exp
 
-import au.com.bytecode.opencsv.CSVWriter
 import bard.db.experiment.JsonResult
 import bard.db.experiment.JsonResultContextItem
 import bard.db.experiment.JsonSubstanceResults
-import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by ddurkin on 3/20/14.

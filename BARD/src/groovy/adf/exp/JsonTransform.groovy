@@ -1,4 +1,4 @@
-package adf
+package adf.exp
 
 import au.com.bytecode.opencsv.CSVWriter
 import bard.db.experiment.JsonResult
@@ -20,10 +20,6 @@ class JsonTransform {
     // step 1: construct abstract tree from results
     // step 2: construct boxes from abstract tree
     // step 3: walk through results a 2nd time.  For each node, look up boxes and if the box exists, row to map for box
-
-    def run() {
-        transform(new File('exp-1462-20131027-144131.json.gz'))
-    }
 
     public write(List<JsonSubstanceResults> results) {
         AbstractResultTree tree = constructTree(results);
@@ -126,7 +122,15 @@ class JsonTransform {
                     addRowsToBox(path, differentBox, [result], boxByPath, perBoxData, nextRow);
                 } else {
                     // otherwise add this result to the current row
-                    row.put(new ResultKey(result), result.valueDisplay)
+                    String valueString;
+                    if(result.valueNum != null) {
+                        valueString = result.valueNum.toString()
+                    } else if(result.valueMin != null) {
+                        valueString = "${result.valueMin}-${result.valueMax}"
+                    } else {
+                        valueString = result.valueDisplay
+                    }
+                    row.put(new ResultKey(result), valueString)
                     result.contextItems.each {
                         row.put(new ResultKey(it), it.valueDisplay)
                     }
@@ -160,7 +164,7 @@ class JsonTransform {
         }
     }
 
-    def transform(File jsonFile) {
+    def transform(File jsonFile, String prefix) {
         List<JsonSubstanceResults> jsonSubstanceResultsList = []
         callPerSid(jsonFile) { results ->
             jsonSubstanceResultsList << results
@@ -173,7 +177,7 @@ class JsonTransform {
         Map<Path, Box> boxByPath = tree.constructBoxes()
 
         // open all the files
-        BoxesWriter writer = new BoxesWriter(boxByPath)
+        BoxesWriter writer = new BoxesWriter(prefix,boxByPath)
         callPerSid(jsonFile, { results ->
             writer.write(results)
         })

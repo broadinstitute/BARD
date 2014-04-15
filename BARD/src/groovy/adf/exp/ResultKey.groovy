@@ -1,4 +1,4 @@
-package adf
+package adf.exp
 
 import bard.db.experiment.JsonResult
 import bard.db.experiment.JsonResultContextItem
@@ -45,7 +45,8 @@ class ResultKey {
     }
 
     public String toString() {
+        return resultType
         // findAll stripping out any nulls
-        return [resultType, statsModifierId].findAll().join(' ')
+        //return [resultType, statsModifierId].findAll().join(' ')
     }
 }

@@ -1,9 +1,5 @@
-package adf
+package adf.exp
 
-import adf.ResultKey
-import adf.Box
-import adf.ResultSetPipeline
-import adf.Path
 import bard.db.experiment.JsonResult
 import bard.db.experiment.JsonSubstanceResults
 
