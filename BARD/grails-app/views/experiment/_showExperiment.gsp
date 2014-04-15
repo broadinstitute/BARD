@@ -71,16 +71,14 @@
                         data-original-title="Select Experiment Status">${instance?.experimentStatus?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status"
                    data-id="${instance?.experimentStatus?.id}"></a>
-            </dd>
 
-            <g:if test="${instance?.experimentStatus?.equals(Status.APPROVED)}">
-                <dt><g:message code="instance.approvedBy.label" default="Approved By"/>:</dt>
-                <dd id="approvedById">
-                    <g:if test="${instance.approvedBy?.displayName}">
-                        ${instance.approvedBy?.displayName} (<g:formatDate date="${instance.approvedDate}" format="MM/dd/yyyy"/>)
-                    </g:if>
-                </dd>
-            </g:if>
+                <g:render template="/common/statusIcons" model="[status:instance?.experimentStatus.id, entity: 'Experiment']"/>
+
+            </dd>
+            <g:render template="/common/statusMessage" model="[status:instance?.experimentStatus,
+                    displayName:instance.approvedBy?.displayName,
+                    approvedDate:instance.approvedDate]"/>
+
 
             <dt><g:message code="experiment.experimentName.label" default="Name"/>:</dt>
             <dd>
@@ -178,11 +176,11 @@
                                                  format="MM/dd/yyyy"/></dd>
 
             <dt><g:message code="default.modifiedBy.label"/>:</dt>
-            <dd id="modifiedById"><g:renderModifiedByEnsureNoEmail entity="${instance}" /></dd>
+            <dd id="modifiedById"><g:renderModifiedByEnsureNoEmail entity="${instance}"/></dd>
         </dl>
 
         <g:render template="experimentReferences"
-                  model="[experiment: instance, excludedLinks: ['experiment.show']]"/>
+                  model="[experiment: instance, excludedLinks: ['experiment.show'], editable: editable]"/>
         <sec:ifLoggedIn>
             <g:link controller="results" action="configureTemplate"
                     params="${[experimentId: instance?.id]}"
@@ -192,6 +190,9 @@
             <a href="#uploadResultsModal" role="button" class="btn"
                data-toggle="modal">Upload results</a>
             <g:link action="reloadResults" class="btn" id="${instance?.id}">Reload Results from Pubchem</g:link>
+            <g:link controller="externalReference" action="create"
+                    params="[ownerClass: instance.class.simpleName, ownerId: instance.id]"
+                    class="btn">Add an External Reference</g:link>
         </g:if>
 
     <%-- Dialog for uploading results --%>
@@ -343,7 +344,7 @@
                     <h4>No results uploaded for this experiment</h4>
                 </g:elseif>
                 <g:else>
-                    <g:if test="${instance.experimentStatus == Status.APPROVED}">
+                    <g:if test="${instance.experimentStatus == Status.APPROVED || instance.experimentStatus == Status.PROVISIONAL}">
                         <h4>Results for this experiment aren't available for querying because this experiment is waiting to be loaded to the warehouse.</h4>
                     </g:if>
                     <g:elseif test="${instance.experimentStatus == Status.RETIRED}">

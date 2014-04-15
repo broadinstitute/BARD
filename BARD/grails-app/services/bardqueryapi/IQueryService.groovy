@@ -119,6 +119,17 @@ public interface IQueryService {
             final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
 
     /**
+     * @param capExperimentIds
+     * @param top
+     * @param skip
+     * @param searchFilters
+     * @return Map of results
+     */
+//    Map findExperimentsByCapIds(
+//            final List<Long> capExperimentIds,
+//            final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
+
+    /**
      * @param searchString
      * @param top
      * @param skip
@@ -136,6 +147,16 @@ public interface IQueryService {
      * @return Map
      */
     Map findProjectsByTextSearch(
+            final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
+
+    /**
+     * @param searchString
+     * @param top
+     * @param skip
+     * @param searchFilters {@link SearchFilter}'s
+     * @return Map
+     */
+    Map findExperimentsByTextSearch(
             final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
 
     //====================================== Structure Searches ========================================
@@ -192,6 +213,7 @@ public interface IQueryService {
      * @return Map
      */
     Map findProjectsByPIDs(final List<Long> projectIds, List<SearchFilter> filters);
+
     //=============== Show Resources Given a Single ID ================
 
     /**

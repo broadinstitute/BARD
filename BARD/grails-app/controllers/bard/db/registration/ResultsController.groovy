@@ -7,6 +7,7 @@ import grails.plugins.springsecurity.Secured
 import grails.util.GrailsWebUtil
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 import org.springframework.web.multipart.MultipartFile
+import au.com.bytecode.opencsv.CSVWriter
 
 class FieldListCommand {
     def itemService
@@ -58,15 +59,17 @@ class ResultsController {
 
         def schema = resultsService.generateSchema(experiment, experimentContextItemsSet as List, measures, measureItemsSet as List)
 
-        StringBuilder csv = new StringBuilder()
-        for (row in schema.asTable()) {
-            csv.append(row.join(","))
-            csv.append("\n")
+        StringWriter stringWriter = new StringWriter()
+        CSVWriter csvWriter = new CSVWriter(stringWriter)
+        for (List row in schema.asTable()) {
+            String[] values = row.toArray()
+            csvWriter.writeNext(values)
         }
+        stringWriter.close()
 
         response.setContentType(GrailsWebUtil.getContentType("text/csv","UTF-8"));
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"exp-${experimentId}.csv\"")
-        response.getOutputStream().write(csv.toString().getBytes())
+        response.getOutputStream().write(stringWriter.toString().getBytes())
         response.getOutputStream().flush()
 
         return null

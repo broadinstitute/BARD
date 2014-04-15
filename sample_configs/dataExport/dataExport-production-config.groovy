@@ -8,5 +8,5 @@ dataSource {
     password = "PASSWORD"
     dbCreate='no-val'
 }
-
 bard.services.resultService.archivePath = "RESULTS_PATH"
+dataexport.externalapplication.apiKey.hashed = 'API_HASHED'

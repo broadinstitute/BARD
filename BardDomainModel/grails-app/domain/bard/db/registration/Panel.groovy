@@ -35,7 +35,7 @@ class Panel {
         readyForExtraction(nullable: false)
         dateCreated(nullable: false)
         lastUpdated(nullable: false)
-        ownerRole(nullable:false)
+        ownerRole(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
@@ -63,4 +63,7 @@ class Panel {
         return objectOwner
     }
 
+    String getDisplayName() {
+        return "${this.id} - ${name}"
+    }
 }

@@ -47,7 +47,18 @@
                     <g:render template='editSummary'
                               model="['project': instance, canedit: editable, projectOwner: projectOwner]"/>
                 </div>
+
+                <div class="row-fluid">
+                    <g:render template="projectReferences" model="[project: instance, editable: editable]"/>
+                </div>
+
             </section>
+
+            <g:if test="${editable == 'canedit'}">
+                <g:link controller="externalReference" action="create"
+                        params="[ownerClass: instance.class.simpleName, ownerId: instance.id]"
+                        class="btn">Add an External Reference</g:link>
+            </g:if>
 
             <g:if test="${projectAdapter?.hasProbes()}">
                 <section id="probe-info">
@@ -77,7 +88,8 @@
                                             <li><g:form class="form-inline" controller="molSpreadSheet"
                                                         action="probeSarTable"
                                                         params="[cid: probe.cid, pid: projectAdapter.id, transpose: false]">
-                                                <g:submitButton name="Show results" class="btn btn-link" value="Show results"/>
+                                                <g:submitButton name="Show results" class="btn btn-link"
+                                                                value="Show results"/>
                                                 for similar compounds tested in this project using
                                                 <div class="input-append">
                                                     <g:field class="input-mini" name="threshold" value="90"
@@ -107,7 +119,7 @@
                     <div id="cardHolderAssayComponents" class="span12">
                         <g:render template="/context/currentCard"
                                   model="[contextOwner: instance, currentCard: instance.groupUnclassified(),
-                                          subTemplate: contextItemSubTemplate, renderEmptyGroups: false]"/>
+                                          subTemplate : contextItemSubTemplate, renderEmptyGroups: false]"/>
                     </div>
                 </div>
 
@@ -132,7 +144,7 @@
                               model="['instanceId': instance.id, canedit: editable]"/>
                     <g:render template="showstep"
                               model="['experiments': instance.projectExperiments,
-                                      'pegraph': pexperiment, 'instanceId': instance.id, canedit: editable]"/>
+                                      'pegraph'    : pexperiment, 'instanceId': instance.id, canedit: editable]"/>
                 </div>
             </section>
 

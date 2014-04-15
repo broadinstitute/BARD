@@ -187,15 +187,14 @@
         <h4 class="subsect">Experimental Variables <g:link target="dictionary" controller="element"
                                                            action="showTopLevelHierarchyHelp"><i
                     class="icon-question-sign"></i></g:link></h4>
-        <g:if test="${assayInstance.groupExperimentalVariables()?.value}">
-            <div class="row-fluid">
-                <div id="cardHolderExperimentalVariables" class="span12">
-                    <g:render template="/context/currentCard"
-                              model="[contextOwner: assayInstance, currentCard: assayInstance.groupExperimentalVariables(), subTemplate: contextItemSubTemplate, renderEmptyGroups: false]"/>
 
-                </div>
+        <div class="row-fluid">
+            <div id="cardHolderExperimentalVariables" class="span12">
+                <g:render template="/context/currentCard"
+                          model="[contextOwner: assayInstance, currentCard: assayInstance.groupExperimentalVariables(), subTemplate: contextItemSubTemplate, renderEmptyGroups: false]"/>
+
             </div>
-        </g:if>
+        </div>
     </section>
 </section>
 <g:if test="${assayInstance.panelAssays}">

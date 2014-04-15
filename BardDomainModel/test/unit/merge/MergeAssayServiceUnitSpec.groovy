@@ -40,7 +40,8 @@ class MergeAssayServiceUnitSpec extends Specification {
         String modifiedBy = 'xx'
         def removingAssays = [srcAssay]
 
-        mergeAssayService.handleExperiments(removingAssays, targetAssay, modifiedBy)     // associate experiments with kept
+        mergeAssayService.handleExperiments(removingAssays, targetAssay, modifiedBy)
+        // associate experiments with kept
 
         mergeAssayService.handleMeasures(targetAssay, removingAssays)         // associate measure
     }
@@ -125,7 +126,7 @@ class MergeAssayServiceUnitSpec extends Specification {
         Experiment experimentB = Experiment.build(assay: assayB)
         ExperimentMeasure measureBA = ExperimentMeasure.build(experiment: experimentB, resultType: rtB)
         Assay.metaClass.isDirty =
-            { return false }
+                { return false }
         when:
         merge(assayA, assayB)
 
@@ -155,7 +156,7 @@ class MergeAssayServiceUnitSpec extends Specification {
         AssayContextItem.build(assayContext: contextB, attributeElement: attributeElement, valueDisplay: "value display")
         AssayContextExperimentMeasure link = AssayContextExperimentMeasure.build(assayContext: contextB, experimentMeasure: experimentMeasureBA)
         Assay.metaClass.isDirty =
-            { return false }
+                { return false }
         when:
         merge(assayA, assayB)
 
@@ -167,15 +168,16 @@ class MergeAssayServiceUnitSpec extends Specification {
         assayContextMeasure.assayContext.assay == assayB
     }
 
-    void "test retire assay(s) with no experiments"(){
+    void "test retire assay(s) with no experiments"() {
         setup:
-        String user =  "testUser"
+        String user = "testUser"
         Assay sourceAssay1 = Assay.build(assayStatus: Status.APPROVED)
+        Assay sourceAssay4 = Assay.build(assayStatus: Status.PROVISIONAL)
         Assay sourceAssay2 = Assay.build(assayStatus: Status.APPROVED)
         Assay sourceAssay3 = Assay.build(assayStatus: Status.APPROVED)
         Experiment experimentA = Experiment.build(assay: sourceAssay3)
         Experiment experimentB = Experiment.build(assay: sourceAssay3)
-        List<Assay> assays = [sourceAssay1, sourceAssay2, sourceAssay3]
+        List<Assay> assays = [sourceAssay1, sourceAssay2, sourceAssay3, sourceAssay4]
 
         when:
         mergeAssayService.retireAssaysWithNoExperiments(assays, user)
@@ -183,6 +185,8 @@ class MergeAssayServiceUnitSpec extends Specification {
         then:
         assert sourceAssay1.assayStatus == Status.RETIRED
         assert sourceAssay1.modifiedBy == user
+        assert sourceAssay4.assayStatus == Status.RETIRED
+        assert sourceAssay4.modifiedBy == user
         assert sourceAssay2.assayStatus == Status.RETIRED
         assert sourceAssay2.modifiedBy == user
         assert sourceAssay3.assayStatus == Status.APPROVED

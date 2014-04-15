@@ -45,7 +45,8 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     List<Long> assayIdList = []  //we keep ids of all assays here so we can delete after all the tests have finished
 
     @Shared
-    List<Long> projectIdList = []   //we keep ids of all projects here so we can delete after all the tests have finished
+    List<Long> projectIdList = []
+    //we keep ids of all projects here so we can delete after all the tests have finished
 
 
     def setupSpec() {
@@ -105,7 +106,6 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     }
 
 
-
     def 'test save #desc'() {
         given:
 
@@ -155,10 +155,11 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
     }
 
-    def 'test edit Project Status #desc'() {
+
+    def 'test edit Project Status #desc #status'() {
         given:
         Long pk = projectData.id
-        String newStatus = Status.APPROVED.id
+        String newStatus = status.id
         Long version = getCurrentProjectProperties().version
         RESTClient client = getRestClient(controllerUrl, "editProjectStatus", team, teamPassword)
         when:
@@ -174,16 +175,40 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         assert jsonObject.get("version") != null
 
         where:
-        desc       | team              | teamPassword      | expectedHttpResponse
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
+        desc       | team              | teamPassword      | expectedHttpResponse      | status
+        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK | Status.APPROVED
+        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK | Status.APPROVED
+        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK | Status.APPROVED
     }
-
-    def 'test edit Project Status #desc - Forbidden'() {
+    def 'test edit Project Status #desc provisional'() {
         given:
         Long pk = projectData.id
-        String value = Status.APPROVED.id
+        String newStatus = status.id
+        Long version = getCurrentProjectProperties().version
+        RESTClient client = getRestClient(controllerUrl, "editProjectStatus", team, teamPassword)
+        when:
+        Response response = client.post() {
+            urlenc pk: pk, version: version, value: newStatus
+        }
+        then:
+        assert response.statusCode == expectedHttpResponse
+        JSONObject jsonObject = response.json
+        assert jsonObject.get("modifiedBy")
+        assert jsonObject.get("data") == newStatus
+        assert jsonObject.get("lastUpdated")
+        assert jsonObject.get("version") != null
+
+        where:
+        desc       | team              | teamPassword      | expectedHttpResponse      | status
+        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK | Status.PROVISIONAL
+        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK | Status.PROVISIONAL
+        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK | Status.PROVISIONAL
+
+    }
+    def 'test edit Project Status #desc #status - Forbidden'() {
+        given:
+        Long pk = projectData.id
+        String value = status.id
         Long version = getCurrentProjectProperties().version
         RESTClient client = getRestClient(controllerUrl, "editProjectStatus", team, teamPassword)
         when:
@@ -194,9 +219,12 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         def ex = thrown(RESTClientException)
         assert ex.response.statusCode == expectedHttpResponse
         where:
-        desc      | team              | teamPassword      | expectedHttpResponse
-        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+        desc      | team              | teamPassword      | expectedHttpResponse             | status
+        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN | Status.APPROVED
+        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN | Status.APPROVED
+        "User B"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN | Status.PROVISIONAL
+        "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN | Status.PROVISIONAL
+
     }
 
     def 'test edit Project Name #desc'() {
@@ -490,14 +518,14 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         given:
         Map m = buildExperimentsToLink(authority)
 
-        Long fromExperimentId = m.eFromId
-        Long toExperimentId = m.eToId
+        Long fromProjectExperimentId = m.peFromId
+        Long toProjectExperimentId = m.peToId
         Long projectId = m.projectId
 
-        RESTClient client = getRestClient(controllerUrl, "linkExperiment", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "linkProjectExperiment", team, teamPassword)
         when:
         client.post() {
-            urlenc fromExperimentId: fromExperimentId, toExperimentId: toExperimentId, projectId: projectId
+            urlenc fromProjectExperimentId: fromProjectExperimentId, toProjectExperimentId: toProjectExperimentId, projectId: projectId
         }
 
         then:
@@ -516,14 +544,14 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         given:
         Map m = buildExperimentsToLink(authority)
 
-        Long fromExperimentId = m.eFromId
-        Long toExperimentId = m.eToId
+        Long fromProjectExperimentId = m.peFromId
+        Long toProjectExperimentId = m.peToId
         Long projectId = m.projectId
 
-        RESTClient client = getRestClient(controllerUrl, "linkExperiment", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "linkProjectExperiment", team, teamPassword)
         when:
         def response = client.post() {
-            urlenc fromExperimentId: fromExperimentId, toExperimentId: toExperimentId, projectId: projectId
+            urlenc fromProjectExperimentId: fromProjectExperimentId, toProjectExperimentId: toProjectExperimentId, projectId: projectId
         }
 
         then:
@@ -541,14 +569,14 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         given:
         Map m = buildProjectExperiments(authority)
 
-        Long fromExperimentId = m.eFromId
-        Long toExperimentId = m.eToId
+        Long fromProjectExperimentId = m.peFromId
+        Long toProjectExperimentId = m.peToId
         Long projectId = m.projectId
 
         RESTClient client = getRestClient(controllerUrl, "removeEdgeFromProject", team, teamPassword)
         when:
         def response = client.post() {
-            urlenc fromExperimentId: fromExperimentId, toExperimentId: toExperimentId, projectId: projectId
+            urlenc fromProjectExperimentId: fromProjectExperimentId, toProjectExperimentId: toProjectExperimentId, projectId: projectId
         }
 
         then:
@@ -566,14 +594,14 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         given:
         Map m = buildProjectExperiments(authority)
 
-        Long fromExperimentId = m.eFromId
-        Long toExperimentId = m.eToId
+        Long fromProjectExperimentId = m.peFromId
+        Long toProjectExperimentId = m.peToId
         Long projectId = m.projectId
 
         RESTClient client = getRestClient(controllerUrl, "removeEdgeFromProject", team, teamPassword)
         when:
         client.post() {
-            urlenc fromExperimentId: fromExperimentId, toExperimentId: toExperimentId, projectId: projectId
+            urlenc fromProjectExperimentId: fromProjectExperimentId, toProjectExperimentId: toProjectExperimentId, projectId: projectId
         }
         then:
         def ex = thrown(RESTClientException)
@@ -608,7 +636,6 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "CURATOR" | CURATOR_USERNAME  | CURATOR_PASSWORD  | "ROLE_TEAM_A" | HttpServletResponse.SC_FORBIDDEN
 
     }
-
 
 
     def 'test show edit summary #desc'() {
@@ -694,7 +721,6 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     }
 
 
-
     def 'test edit owner role, selected role not in users role list #desc'() {
         given:
         Long pk = projectData.id
@@ -750,10 +776,10 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             Experiment experimentTo = Experiment.build(ownerRole: role).save(flush: true)
 
             final ProjectSingleExperiment projectExperimentFrom = ProjectSingleExperiment.findByProjectAndExperiment(project, experimentFrom) ?:
-                ProjectSingleExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
+                    ProjectSingleExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
 
             final ProjectSingleExperiment projectExperimentTo = ProjectSingleExperiment.findByProjectAndExperiment(project, experimentTo) ?:
-                ProjectSingleExperiment.build(project: project, experiment: experimentTo, stage: toElement).save(flush: true)
+                    ProjectSingleExperiment.build(project: project, experiment: experimentTo, stage: toElement).save(flush: true)
 
             return [peFromId: projectExperimentFrom.id, peToId: projectExperimentTo.id, eFromId: experimentFrom.id, eToId: experimentTo.id, projectId: project.id]
         })
@@ -782,13 +808,13 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             Experiment experimentTo = Experiment.build(ownerRole: role).save(flush: true)
 
             final ProjectSingleExperiment projectExperimentFrom = ProjectSingleExperiment.findByProjectAndExperiment(project, experimentFrom) ?:
-                ProjectSingleExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
+                    ProjectSingleExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
 
             final ProjectSingleExperiment projectExperimentTo = ProjectSingleExperiment.findByProjectAndExperiment(project, experimentTo) ?:
-                ProjectSingleExperiment.build(project: project, experiment: experimentTo, stage: toElement).save(flush: true)
+                    ProjectSingleExperiment.build(project: project, experiment: experimentTo, stage: toElement).save(flush: true)
 
             final ProjectStep projectStep = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(projectExperimentFrom, projectExperimentTo) ?:
-                ProjectStep.build(previousProjectExperiment: projectExperimentFrom, nextProjectExperiment: projectExperimentTo).save(flush: true)
+                    ProjectStep.build(previousProjectExperiment: projectExperimentFrom, nextProjectExperiment: projectExperimentTo).save(flush: true)
 
             projectExperimentFrom.save(flush: true)
             projectExperimentTo.save(flush: true)

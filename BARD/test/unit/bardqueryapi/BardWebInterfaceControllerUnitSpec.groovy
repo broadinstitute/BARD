@@ -1,5 +1,6 @@
 package bardqueryapi
 
+import acl.CapPermissionService
 import bard.core.DataSource
 import bard.core.IntValue
 import bard.core.Value
@@ -11,9 +12,14 @@ import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.compounds.PromiscuityScaffold
 import bard.core.rest.spring.project.Project
+import bard.db.enums.TeamRole
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentFile
 import bard.db.experiment.ExperimentService
+import bard.db.people.Person
+import bard.db.people.PersonRole
+import bard.db.people.PersonService
+import bard.db.people.Role
 import bard.db.util.BardNews
 import bardwebquery.CompoundOptionsTagLib
 import com.metasieve.shoppingcart.ShoppingCartService
@@ -31,6 +37,7 @@ import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.servlet.ModelAndView
 import querycart.CartAssay
 import spock.lang.Ignore
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -42,8 +49,8 @@ import javax.servlet.http.HttpServletResponse
  */
 @TestMixin([GrailsUnitTestMixin, DomainClassUnitTestMixin])
 @TestFor(BardWebInterfaceController)
-@Build([bard.db.project.Project, Experiment, ExperimentFile])
-@Mock([bard.db.project.Project, CompoundOptionsTagLib, Experiment, ExperimentFile, BardNews])
+@Build([bard.db.project.Project, Experiment, ExperimentFile, Role, PersonRole, Person])
+@Mock([bard.db.project.Project, CompoundOptionsTagLib, Experiment, ExperimentFile, BardNews, Role, PersonRole, Person])
 @Unroll
 class BardWebInterfaceControllerUnitSpec extends Specification {
     MolecularSpreadSheetService molecularSpreadSheetService
@@ -54,6 +61,9 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     BardUtilitiesService bardUtilitiesService
     QueryProjectExperimentRenderService queryProjectExperimentRenderService
     ExperimentService experimentService
+    CapPermissionService capPermissionService
+    PersonService personService
+
     @Shared
     List<SearchFilter> searchFilters = [new SearchFilter(filterName: 'group1', filterValue: 'facet1'), new SearchFilter(filterName: 'group2', filterValue: 'facet2')]
     @Shared
@@ -73,6 +83,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
         experimentService = Mock(ExperimentService)
         controller.experimentService = experimentService
+
+        personService = Mock(PersonService)
+        controller.personService = personService
+
+        capPermissionService = Mock(CapPermissionService)
+        controller.capPermissionService = capPermissionService
+
         controller.metaClass.mixin(SearchHelper)
         controller.bardUtilitiesService = bardUtilitiesService
         controller.queryProjectExperimentRenderService = queryProjectExperimentRenderService
@@ -189,6 +206,33 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "No Experiment Id"           | null  | HttpServletResponse.SC_OK | null
         "Non Existing Experiment ID" | 10000 | HttpServletResponse.SC_OK | null
 
+    }
+
+//    @IgnoreRest
+    void "test navigation page #label"(){
+
+        given:
+        PersonRole personRole = personRoleInstance.call()
+
+        when:
+        controller.navigationPage()
+
+        then:
+        1 * personService.findCurrentPerson() >> personRole.person
+        1 * capPermissionService.findAllByOwnerRolesAndClass(Experiment) >> []
+        assert view == "/bardWebInterface/navigationPage"
+        assert model.isManager == isManager
+        assert model.isBardAdmin == isBardAdmin
+        assert model.ownsExperiments == ownsExperiments
+
+        where:
+        label          | personRoleInstance |  isManager | isBardAdmin | ownsExperiments
+        "All false"    |
+        {PersonRole.build(person: Person.build(userName: "test_user1"), role: Role.build(authority: "ROLE_TEAM_C"), teamRole: TeamRole.MEMBER)}   |
+        false     |  false      |  false
+        "Role Admin"    |
+        {PersonRole.build(person: Person.build(userName: "test_user2"), role: Role.build(authority: "ROLE_BARD_ADMINISTRATOR"), teamRole: TeamRole.MEMBER)}   |
+        false     |  true      |  false
     }
 
     void "test find substance Ids #label"() {

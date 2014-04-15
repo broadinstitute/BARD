@@ -260,7 +260,7 @@ class Assay extends AbstractContextOwner implements GuidanceAware {
     void validateItems() {
         validate()
         final List<String> itemLabels = []
-        if (this.assayStatus == Status.APPROVED) {
+        if (this.assayStatus == Status.APPROVED || this.assayStatus==Status.PROVISIONAL) {
 
             for (AssayContextItem assayContextItem in AssayContext.findByAssay(this).assayContextItems.flatten()) {
                 if (ContextItemShouldHaveValueRule.isFixedAndAllValuesNull(assayContextItem)) {

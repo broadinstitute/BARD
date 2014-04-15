@@ -12,14 +12,22 @@
 
 <body>
 
-<g:if test="${flash.message}">
+<g:if test="${flash.error}">
     <div class="row-fluid">
         <div class="span12">
-            <div class="ui-widget">
-                <div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
-                    <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-                        <strong>${flash.message}</strong>
-                </div>
+            <div class="alert alert-error">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>${flash.error}</strong>
+            </div>
+        </div>
+    </div>
+</g:if>
+<g:if test="${flash.success}">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>${flash.success}</strong>
             </div>
         </div>
     </div>

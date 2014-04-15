@@ -41,7 +41,7 @@ class ElementController {
         }
     }
 
-    @Secured(['isAuthenticated()'])
+    @Secured(['ROLE_BARD_ADMINISTRATOR', 'ROLE_CURATOR'])
     def select() {}
 
     @Secured(['isAuthenticated()'])

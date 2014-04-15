@@ -26,6 +26,7 @@ class ExperimentConstraintIntegrationSpec extends BardIntegrationSpec {
     void doSetup() {
         domainInstance = Experiment.buildWithoutSave()
     }
+
     void "test measuresHaveAtLeastOnePriorityElement #desc"() {
         given:
         ExperimentMeasure experimentMeasure = ExperimentMeasure.build(priorityElement: priorityElement)
@@ -39,6 +40,7 @@ class ExperimentConstraintIntegrationSpec extends BardIntegrationSpec {
         "Has no Priority Element" | false           | false
         "Has Priority Element"    | true            | true
     }
+
     void "test experimentName constraints #desc experimentName: '#valueUnderTest'"() {
         final String field = 'experimentName'
 
@@ -79,12 +81,13 @@ class ExperimentConstraintIntegrationSpec extends BardIntegrationSpec {
         }
 
         where:
-        desc          | valueUnderTest            | valid | errorCode
-        'null'        | null                      | false | 'nullable'
+        desc          | valueUnderTest     | valid | errorCode
+        'null'        | null               | false | 'nullable'
 
-        'valid value' | Status.DRAFT    | true  | null
-        'valid value' | Status.APPROVED | true  | null
-        'valid value' | Status.RETIRED  | true  | null
+        'valid value' | Status.DRAFT       | true  | null
+        'valid value' | Status.APPROVED    | true  | null
+        'valid value' | Status.RETIRED     | true  | null
+        'valid value' | Status.PROVISIONAL | true  | null
     }
 
     void "test readyForExtraction constraints #desc readyForExtraction: '#valueUnderTest'"() {
@@ -267,6 +270,7 @@ class ExperimentConstraintIntegrationSpec extends BardIntegrationSpec {
         'null not valid' | null           | false | 'nullable'
         'date valid'     | new Date()     | true  | null
     }
+
     void "test ownerRole constraints #desc ownerRole: '#valueUnderTest'"() {
         final String field = 'ownerRole'
 

@@ -5,6 +5,7 @@ import bard.core.SuggestParams
 import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
+import bard.core.adapter.ExperimentAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.*
 import bard.core.rest.spring.assays.*
@@ -17,6 +18,7 @@ import bard.core.rest.spring.substances.Substance
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
 import bard.db.dictionary.BardDescriptor
+import bard.db.enums.Status
 import bard.db.project.ProjectService
 import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
 import bardqueryapi.experiment.ExperimentBuilder
@@ -180,6 +182,26 @@ class QueryService implements IQueryService {
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
 
+    Map findExperimentsByCapIds(
+            final List<Long> capExperimentIds,
+            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+        List<ExperimentAdapter> foundExperimentAdapters = []
+        Collection<Value> facets = []
+        int nhits = 0
+        String eTag = null
+        if (capExperimentIds) {
+            //TODO: Add filters
+            final SearchParams searchParams = this.queryHelperService.constructSearchParams("", top, skip, searchFilters)
+            final ExperimentSearchResult experimentSearchResult = experimentRestService.searchExperimentsByCapIds(capExperimentIds, searchParams)
+            final List<ExperimentAdapter> adapters = this.queryHelperService.experimentsToAdapters(experimentSearchResult)
+            foundExperimentAdapters.addAll(adapters)
+            facets = experimentSearchResult.getFacetsToValues()
+            nhits = experimentSearchResult.numberOfHits
+            eTag = experimentSearchResult.etag
+        }
+        return [experimentAdapters: foundExperimentAdapters, facets: facets, nHits: nhits, eTag: eTag]
+    }
+
     Map<Long, Pair<Long, Long>> findActiveVsTestedForExperiments(final List<Long> capExperimentIds) {
         Map<Long, Pair<Long, Long>> activeVTestedMap = [:]
         final List<SearchFilter> searchFilters = []
@@ -236,6 +258,28 @@ class QueryService implements IQueryService {
             eTag = projectResult.etag
         }
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits, eTag: eTag]
+    }
+
+    Map findExperimentsByTextSearch(
+            final String searchString,
+            final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+
+        List<ExperimentAdapter> foundExperimentAdapters = []
+        Collection<Value> facets = []
+        String eTag = null
+        int nhits = 0
+        if (searchString) {
+            //query for count
+            //re-normalize the search string to strip out custom syntax (e.g gobp:SearchString now becomes SearchString)
+            String updatedSearchString = this.queryHelperService.stripCustomStringFromSearchString(searchString)
+            final SearchParams searchParams = this.queryHelperService.constructSearchParams(updatedSearchString, top, skip, searchFilters)
+            ExperimentSearchResult experimentSearchResult = experimentRestService.findExperimentsByFreeTextSearch(searchParams)
+            foundExperimentAdapters.addAll(this.queryHelperService.experimentsToAdapters(experimentSearchResult))
+            facets = experimentSearchResult.getFacetsToValues()
+            nhits = experimentSearchResult.numberOfHits
+            eTag = experimentSearchResult.etag
+        }
+        return [experimentAdapters: foundExperimentAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
 
     //====================================== Structure Searches ========================================
@@ -625,8 +669,13 @@ class QueryService implements IQueryService {
                         it.role
                     }
                 }
+                String projectStatus = null
                 final List<Assay> assays = project.assays
-                final ProjectAdapter projectAdapter = new ProjectAdapter(project, 0, null, annotations)
+                if (project.capProjectId) {
+                    bard.db.project.Project capProject = bard.db.project.Project.findById(project.capProjectId)
+                    projectStatus = capProject?.projectStatus?.id
+                }
+                final ProjectAdapter projectAdapter = new ProjectAdapter(project, 0, null, annotations, projectStatus)
                 return [projectAdapter: projectAdapter, experiments: experiments, assays: assays]
             }
         }

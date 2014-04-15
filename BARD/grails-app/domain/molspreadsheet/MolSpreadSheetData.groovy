@@ -1,5 +1,8 @@
 package molspreadsheet
 
+import bard.db.experiment.Experiment
+import bard.db.registration.Assay
+
 class MolSpreadSheetData {
 
     static hasMany = [molSpreadSheetCell: MolSpreadSheetCell]
@@ -128,7 +131,6 @@ class MolSpreadSheetData {
     }
 
 
-
     List<String> getColumns() {
         if (mssHeaders) {
             return mssHeaders*.molSpreadSheetColSubHeaderList*.columnTitle.flatten()
@@ -147,25 +149,33 @@ class MolSpreadSheetData {
     }
 
 
+    List<LinkedHashMap<String, String>> determineExperimentPerAssay() {
 
-     List <LinkedHashMap<String, String>> determineExperimentPerAssay() {
+        List<LinkedHashMap<String, Integer>> returnValue = []
+        LinkedHashMap<String, Integer> accumulator = [:]
+        for (element in mapColumnsToExperimentId) {
+            if (!accumulator.containsKey("${element.value}".toString())) {
+                accumulator["${element.value}"] = 1
+            } else {
+                accumulator["${element.value}"] = (1 + accumulator["${element.value}"])
+            }
+        }
 
-         List <LinkedHashMap<String, Integer>> returnValue = []
-         LinkedHashMap<String, Integer> accumulator = [:]
-         for (element in mapColumnsToExperimentId) {
-             if  (!accumulator.containsKey("${element.value}".toString())) {
-                 accumulator["${element.value}"]  = 1
-             }  else {
-                 accumulator["${element.value}"] = (1+accumulator["${element.value}"])
-             }
-         }
+        for (element in accumulator) {
+            final String eid = element.key
+            final Long experimentId = new Long(eid)
+            String experimentStatus = null
+            if (experimentId) {
+                final Experiment experiment = Experiment.findById(experimentId)
+                if (experiment) {
+                    experimentStatus = experiment.experimentStatus.id
+                }
+            }
+            returnValue << [eid: "${eid}", colspan: element.value, status: experimentStatus ?: ""]
+        }
 
-         for (element in accumulator) {
-            returnValue << [eid:"${element.key}",colspan:element.value]
-         }
-
-         returnValue
-     }
+        returnValue
+    }
 
 
     List<LinkedHashMap<String, String>> determineResponseTypesPerAssay() {
@@ -185,17 +195,18 @@ class MolSpreadSheetData {
 
         if (assayNames) {
             for (int i in 0..(assayNames.size() - 1)) {
-                String fullAssayName = 'Data error: please contact your system administrator'   // This message should never be displayed
+                String fullAssayName = 'Data error: please contact your system administrator'
+                // This message should never be displayed
                 if (assayNames[i] != null) {    // Assay name should never be null -- this is a safety measure
                     Long bardAssayId = Long.parseLong(assayNames[i])
-                    if (this.mapCapAssayIdsToAssayNames.containsKey(bardAssayId))  {
+                    if (this.mapCapAssayIdsToAssayNames.containsKey(bardAssayId)) {
                         fullAssayName = mapCapAssayIdsToAssayNames[bardAssayId]
-                    }  else {
+                    } else {
                         fullAssayName = "Assay name unknown"
                     }
                 }
                 //convert assay id to cap id
-                String capId = "U"
+                String capId = null
                 if (assayNames[i]) {
                     Long assayId = assayNames[i].toLong()
                     if (mapExperimentIdsToCapAssayIds.containsKey(assayId)) {
@@ -203,9 +214,18 @@ class MolSpreadSheetData {
                     }
                 }
                 Boolean normalized = true
-                if (mapColumnsNormalization.containsKey(assayNames[i]))
+                String status = null
+                if (capId) {
+                    Assay assay = Assay.findById(new Long(capId))
+                    if (assay) {
+                        status = assay.assayStatus.id
+                    }
+                }
+                if (mapColumnsNormalization.containsKey(assayNames[i])) {
                     normalized = mapColumnsNormalization[assayNames[i]]
-                returnValue << ["assayName": assayNames[i], "bardAssayId": capId, "numberOfResultTypes": (accumulator[assayNames[i]] + 1), "fullAssayName": fullAssayName, "normalized": normalized]
+                }
+
+                returnValue << ["assayName": assayNames[i], "bardAssayId": capId ?: "U", "numberOfResultTypes": (accumulator[assayNames[i]] + 1), "fullAssayName": fullAssayName, "normalized": normalized, "status": status ?: ""]
             }
         }
         returnValue
@@ -217,7 +237,8 @@ class MolSpreadSheetData {
         Long bardAssayId = mapExperimentIdsToCapAssayIds.find { it.value == assayIdAsALong }?.key ?: 0L
         if (bardAssayId != 0) {
             String assayIdAsAString = bardAssayId as String
-            if (mapColumnsNormalization.containsKey(assayIdAsAString)) {  // if we don't recognize the Aid then ignore the request
+            if (mapColumnsNormalization.containsKey(assayIdAsAString)) {
+                // if we don't recognize the Aid then ignore the request
                 mapColumnsNormalization[assayIdAsAString] = !(mapColumnsNormalization[assayIdAsAString])
             }
         }
@@ -238,13 +259,6 @@ class MolSpreadSheetData {
 
 
 }
-
-
-
-
-
-
-
 
 
 enum MolSpreadsheetDerivedMethod {

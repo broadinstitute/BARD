@@ -23,4 +23,6 @@ public interface ProjectAdapterInterface {
 
     public String getExperimentType(Long experimentId);
     public Map<Long, String> getExperimentTypes();
+
+    public String getProjectStatus();
 }

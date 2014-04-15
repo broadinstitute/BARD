@@ -15,12 +15,14 @@ public class ProjectAdapter implements ProjectAdapterInterface {
     final Double score
     final NameDescription matchingField
     final BardAnnotation annotations
+    final String projectStatus
 
-    public ProjectAdapter(ProjectAbstract project, Double score = 0, NameDescription nameDescription = null, BardAnnotation annotations = null) {
+    public ProjectAdapter(ProjectAbstract project, Double score = 0, NameDescription nameDescription = null, BardAnnotation annotations = null,String projectStatus = null) {
         this.project = project
         this.score = score
         this.matchingField = nameDescription
         this.annotations = annotations
+        this.projectStatus = projectStatus
     }
     @Override
     public String getExperimentType(Long experimentId){
@@ -30,6 +32,12 @@ public class ProjectAdapter implements ProjectAdapterInterface {
     public Map<Long, String> getExperimentTypes() {
         return this.project?.getExperimentTypes();
     }
+
+    @Override
+    String getProjectStatus() {
+        return this.projectStatus
+    }
+
     @Override
     String getHighlight() {
         String matchFieldName = getMatchingField()?.getName()

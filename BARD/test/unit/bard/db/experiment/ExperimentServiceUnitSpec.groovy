@@ -144,15 +144,21 @@ public class ExperimentServiceUnitSpec extends Specification {
 
     }
 
-    void "test update Experiment Status"() {
+    void "test update Experiment Status #desc"() {
         given:
-        final Experiment experiment = Experiment.build(experimentName: 'experimentName20', experimentStatus: Status.DRAFT)
-        final Status newExperimentStatus = Status.APPROVED
-        Experiment.metaClass.isDirty = {String field -> false}
+        final Experiment experiment = Experiment.build(experimentName: 'experimentName20', experimentStatus: oldStatus)
+        final Status newExperimentStatus = newStatus
+        Experiment.metaClass.isDirty = { String field -> false }
         when:
         final Experiment updatedExperiment = service.updateExperimentStatus(experiment.id, newExperimentStatus)
         then:
         assert newExperimentStatus == updatedExperiment.experimentStatus
+        where:
+        desc                                  | oldStatus          | newStatus
+        "Change from draft to Approved"       | Status.DRAFT       | Status.APPROVED
+        "Change from draft to Provisional"    | Status.DRAFT       | Status.PROVISIONAL
+        "Change from Provisional to Approved" | Status.PROVISIONAL | Status.APPROVED
+
     }
 
     void "test update Run From Date"() {

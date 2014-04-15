@@ -664,6 +664,11 @@ class MockQueryService implements IQueryService {
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
     }
 
+    @Override
+    Map findExperimentsByTextSearch(String searchString, Integer top, Integer skip, List<SearchFilter> searchFilters) {
+        return []
+    }
+
     //====================================== Structure Searches ========================================
     /**
      * @param smiles
@@ -1019,6 +1024,7 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
     Long totalNumberOfProbes() {
         return 0
     }
+
 }
 
 

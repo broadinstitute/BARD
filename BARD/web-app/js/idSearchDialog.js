@@ -17,8 +17,11 @@ $(document).ready(function () {
             case 'CID':  //this is a compound search with ids
                 $("input[name='idSearchType'][value='CID']").attr("checked", "checked");
                 break;
-            case 'PID':  //this is an project search with ids
+            case 'PID':  //this is a project search with ids
                 $("input[name='idSearchType'][value='PID']").attr("checked", "checked");
+                break;
+            case 'EID':  //this is an experiment search with ids
+                $("input[name='idSearchType'][value='EID']").attr("checked", "checked");
                 break;
             case 'ID':
                 $("input[name='idSearchType'][value='ALL']").attr("checked", "checked");
@@ -101,7 +104,10 @@ function findSearchType(searchString) {
                 if (stringAfterColon.match(NUMBER_MATCHING_REGEX)) {//this is an id match
                     return 'PID'
                 }
-
+            case 'eid':  //this is an project search with ids
+                if (stringAfterColon.match(NUMBER_MATCHING_REGEX)) {//this is an id match
+                    return 'EID'
+                }
         }
     }
     return "NOT_ID"

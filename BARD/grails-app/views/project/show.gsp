@@ -17,6 +17,26 @@
 </head>
 
 <body>
+<g:if test="${flash.error}">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="alert alert-error">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>${flash.error}</strong>
+            </div>
+        </div>
+    </div>
+</g:if>
+<g:if test="${flash.success}">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>${flash.success}</strong>
+            </div>
+        </div>
+    </div>
+</g:if>
 <g:if test="${instance?.id}">
     <g:if test="${!instance?.permittedToSeeEntity()}">
         <g:render template="/layouts/templates/handleDraftEntities" model="[entity: 'Project']"/>

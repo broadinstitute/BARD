@@ -4,6 +4,8 @@ import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContextItem
+import bard.db.experiment.PanelExperiment
+import bard.db.project.ProjectPanelExperiment
 import grails.plugins.springsecurity.SpringSecurityService
 import merge.MergeAssayService
 import org.apache.commons.lang3.StringUtils
@@ -45,7 +47,8 @@ class MergeAssayDefinitionService {
 
     }
 
-    List<Long> normalizeEntitiesToMoveToExperimentIds(final List<Long> entityIdsToMove, final IdType idType, final Assay targetAssay) {
+    List<Long> normalizeEntitiesToMoveToExperimentIds(
+            final List<Long> entityIdsToMove, final IdType idType, final Assay targetAssay) {
         final List<Long> notFoundEntities = []
         final List<Long> entitiesToMove = []
         for (Long id : entityIdsToMove) {
@@ -145,9 +148,9 @@ class MergeAssayDefinitionService {
     }
     /**
      *
-     * @param entityId -  Could be an AID, ADID or EID
+     * @param entityId -  Could be an AID, ADID, EID, Panel or PanelExperiment
      *  * @param idType
-     * @return the entity (one of Experiment or Assay)
+     * @return the entity (one of Experiment, Assay or PanelExperiment)
      */
     def findEntityByIdType(final Long entityId, final IdType idType) {
         switch (idType) {
@@ -156,11 +159,12 @@ class MergeAssayDefinitionService {
             case IdType.EID:
                 return Experiment.findById(entityId)
             case IdType.AID:
-                ExternalReference externalReference = bard.db.registration.ExternalReference.findByExtAssayRef("aid=${entityId}")
-                if (externalReference) {
-                    return externalReference.experiment
-                }
-
+                List<ExternalReference> externalReferences = bard.db.registration.ExternalReference.findAllByExtAssayRef("aid=${entityId}")
+                return externalReferences*.experiment.findAll { it != null }.unique()
+            case IdType.PANEL:
+                return PanelExperiment.findAll { panel.id == entityId }
+            case IdType.PANEL_EXPERIMENT:
+                return PanelExperiment.findById(entityId)
         }
         return null
     }
@@ -219,7 +223,8 @@ class MergeAssayDefinitionService {
         //Turn full validation off for this assay so that u can validate the context items
         targetAssay.fullyValidateContextItems = false
         String modifiedBy = springSecurityService.principal?.username
-        mergeAssayService.handleExperiments(assaysToMerge, targetAssay, modifiedBy)     // associate experiments with kept
+        mergeAssayService.handleExperiments(assaysToMerge, targetAssay, modifiedBy)
+        // associate experiments with kept
         println("end handleExperiments")
         sessionFactory.currentSession.flush()
 
@@ -236,7 +241,9 @@ class MergeAssayDefinitionService {
 enum IdType {
     ADID('Assay Definition ID'),
     AID('PubChem AID'),
-    EID("Experiment ID")
+    EID("Experiment ID"),
+    PANEL("Panel ID"),
+    PANEL_EXPERIMENT("Panel Experiment ID")
 
     String name
 

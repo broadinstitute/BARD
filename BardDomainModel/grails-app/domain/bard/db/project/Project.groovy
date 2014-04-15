@@ -61,7 +61,9 @@ class Project extends AbstractContextOwner implements GuidanceAware {
         Set<Experiment> unApprovedExperiments = new HashSet<Experiment>()
         projectExperiments.each { ProjectExperiment projectExperiment ->
             projectExperiment.experiments.each { Experiment experiment ->
-                if (experiment.experimentStatus != Status.APPROVED && experiment.experimentStatus != Status.RETIRED) {
+                if (experiment.experimentStatus != Status.APPROVED &&
+                        experiment.experimentStatus != Status.PROVISIONAL &&
+                        experiment.experimentStatus != Status.RETIRED) {
                     unApprovedExperiments.add(experiment)
                 }
             }
