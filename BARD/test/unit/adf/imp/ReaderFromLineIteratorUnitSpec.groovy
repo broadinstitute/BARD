@@ -66,7 +66,7 @@ class ReaderFromLineIteratorUnitSpec extends Specification {
         c = r.read(buf, 0, 1)
 
         then:
-        c == 0
+        c == -1
     }
 
     def testBoundaryAlignedReads() {
@@ -100,6 +100,6 @@ class ReaderFromLineIteratorUnitSpec extends Specification {
         c = r.read(buf, 0, 1)
 
         then:
-        c == 0
+        c == -1
     }
 }
