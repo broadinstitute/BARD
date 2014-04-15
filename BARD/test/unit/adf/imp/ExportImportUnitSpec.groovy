@@ -44,7 +44,7 @@ class ExportImportUnitSpec extends Specification {
             Map<Long, DatasetImporter.DatasetRow> byResultId = importer.indexByResultId(b.datasets)
             List<DatasetImporter.DatasetRow> rootRows = importer.constructTree(byResultId);
             JsonSubstanceResults result = importer.translateRowsToResults(b.sid, rootRows)
-            println(result);
+//            println(result);
         }
 
         then:
