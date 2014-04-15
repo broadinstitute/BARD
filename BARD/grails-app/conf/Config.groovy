@@ -144,6 +144,7 @@ grails {
             authority.nameField = 'authority'
 
             controllerAnnotations.staticRules = [
+                    '/console/**': ['ROLE_CONSOLE_USER'],
                     '/jesqueOverview/**': ['ROLE_BARD_ADMINISTRATOR'],
                     '/jesqueQueues/**': ['ROLE_BARD_ADMINISTRATOR'],
                     '/jesqueFailed/**': ['ROLE_BARD_ADMINISTRATOR'],
