@@ -15,7 +15,7 @@ import org.mapdb.Serializer
  * Date: 4/10/14
  * Time: 12:07 PM
  */
-class DatasetImportTransform {
+class DatasetSoryBySid {
     static final int SORT_BATCH_SIZE = 100000;
 
     static final Comparator<Comparable> comparableComparator = new Comparator<Comparable>() {

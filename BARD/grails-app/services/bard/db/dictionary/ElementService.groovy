@@ -119,4 +119,31 @@ class ElementService {
 
         return select2Elements
     }
+
+    public static boolean isChildOf(Element element, Element parent) {
+        assert parent != null
+
+        Set<Element> seen = [] as Set
+        Set<Element> toCheck = [element]
+
+        while(toCheck.size() > 0) {
+            Element e = toCheck.first()
+            toCheck.remove(e)
+
+            if(seen.contains(e)) {
+                continue;
+            }
+
+            seen.add(e)
+            if(e == parent)
+                return true;
+
+            e.childHierarchies.each {
+                toCheck.add(it.parentElement)
+            }
+        }
+
+        return false;
+    }
+
 }

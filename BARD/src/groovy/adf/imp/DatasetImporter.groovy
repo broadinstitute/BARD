@@ -107,11 +107,10 @@ class DatasetImporter {
         result.valueDisplay = cell.valueDisplay
         result.qualifier = cell.qualifier;
 
-        result.relationship;
+        // TODO: We don't have enough information to get the relationship
+        result.relationship = "supported by";
         result.related = row.children.collect { translateRowToResult(it) }
-        if(column == 0) {
-            result.contextItems = row.dataset.contextItems.collect { translateContextItem(row, it) };
-        }
+        result.contextItems = row.dataset.contextItems.collect { translateContextItem(row, it) };
 
         return result
     }
@@ -130,8 +129,6 @@ class DatasetImporter {
         item.valueMin = cell.minValue;
         item.valueMax = cell.maxValue;
         item.valueDisplay = cell.valueDisplay;
-        // item.valueElementId
-        // item.extValueId;
 
         return item;
     }

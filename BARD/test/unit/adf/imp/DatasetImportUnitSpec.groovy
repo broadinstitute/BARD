@@ -44,7 +44,7 @@ public class DatasetImportUnitSpec extends Specification {
         Batch batch
 
         when:
-        DatasetParser input = new DatasetParser([file1, file2])
+        DatasetParser input = new DatasetParser([file1, file2], {e -> true})
 
         then:
         input.hasNext();
@@ -75,7 +75,7 @@ public class DatasetImportUnitSpec extends Specification {
         Batch batch
 
         when:
-        DatasetParser input = new DatasetParser([file1, file2])
+        DatasetParser input = new DatasetParser([file1, file2], {e -> true})
 
         then:
         input.hasNext();
@@ -105,7 +105,7 @@ public class DatasetImportUnitSpec extends Specification {
         Batch batch
 
         when:
-        DatasetParser input = new DatasetParser([file1, file2])
+        DatasetParser input = new DatasetParser([file1, file2], {e -> true})
 
         then:
         input.hasNext() ;

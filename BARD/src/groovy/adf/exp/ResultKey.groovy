@@ -46,7 +46,5 @@ class ResultKey {
 
     public String toString() {
         return resultType
-        // findAll stripping out any nulls
-        //return [resultType, statsModifierId].findAll().join(' ')
     }
 }

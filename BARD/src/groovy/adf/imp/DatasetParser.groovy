@@ -16,9 +16,9 @@ import java.util.regex.Pattern
 public class DatasetParser {
     List<FileState> openFiles;
 
-    public DatasetParser(List<String> filenames) {
+    public DatasetParser(List<String> filenames, Closure isResultType) {
         openFiles = filenames.collect {
-            new FileState(DatasetImportTransform.sortCsvFile(it))
+            new FileState(DatasetSoryBySid.sortCsvFile(it), isResultType)
         }
     }
 
@@ -53,6 +53,7 @@ class FileState {
     Long nextSid;
     boolean reachedEnd = false;
 
+    Integer sidIndex = -1;
     Integer parentResultIdIndex = -1;
     Integer resultIdIndex = -1;
     Integer replicateIndex = -1;
@@ -60,19 +61,22 @@ class FileState {
     List<DatasetColumn> resultTypes = [];
     List<DatasetColumn> contextItems = [];
     Map<String, Integer> columnByName = [:]
+    Closure isResultType;
 
-    public FileState(CSVReader reader) {
+    public FileState(CSVReader reader, Closure isResultType) {
+        this.isResultType = isResultType
         this.reader = reader
         columns = reader.readNext() as List
         columns.eachWithIndex { String entry, int i -> columnByName[entry] = i }
 
+        sidIndex = columnByName["sid"]
         parentResultIdIndex = columnByName["parentResultId"]
         resultIdIndex = columnByName["resultId"]
         replicateIndex = columnByName["replicateIndex"]
 
         for(int i=0;i<columns.size();i++) {
             // skip the special columns.  All others should be result type or context items
-            if(i == parentResultIdIndex || i == resultIdIndex || i == replicateIndex || columns[i] == "sid") {
+            if(i == parentResultIdIndex || i == resultIdIndex || i == replicateIndex || i == sidIndex) {
                 continue;
             }
 
@@ -111,11 +115,6 @@ class FileState {
         Element element = Element.findByLabel(name);
 
         return [element, null];
-    }
-
-    boolean isResultType(Element element) {
-        // todo: fix this
-        return true;
     }
 
     void populateNext() {

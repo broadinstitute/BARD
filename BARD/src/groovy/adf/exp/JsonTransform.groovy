@@ -132,7 +132,15 @@ class JsonTransform {
                     }
                     row.put(new ResultKey(result), valueString)
                     result.contextItems.each {
-                        row.put(new ResultKey(it), it.valueDisplay)
+                        String ctxValueStr;
+                        if(it.valueNum != null) {
+                            ctxValueStr = it.valueNum.toString()
+                        } else if(it.valueMin != null) {
+                            ctxValueStr = "${it.valueMin}-${it.valueMax}"
+                        } else {
+                            ctxValueStr = it.valueDisplay
+                        }
+                        row.put(new ResultKey(it), ctxValueStr)
                     }
                 }
                 addRowsToBox(path, box, result.related, boxByPath, perBoxData, row);
