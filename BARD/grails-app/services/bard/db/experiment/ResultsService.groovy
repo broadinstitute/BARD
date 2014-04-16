@@ -1,7 +1,11 @@
 package bard.db.experiment
 
+import adf.exp.AbstractResultTree
+import adf.imp.DatasetImporter
+import adf.imp.DatasetParser
 import au.com.bytecode.opencsv.CSVReader
 import bard.db.dictionary.Element
+import bard.db.dictionary.ElementService
 import bard.db.enums.HierarchyType
 import bard.db.experiment.results.*
 import bard.db.registration.*
@@ -882,6 +886,34 @@ class ResultsService {
         public void abort() {
             writer.close()
         }
+    }
+
+    // TODO:
+    static final Long RESULT_TYPE_ID = 1328;
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    public void importTabular(Long id, List<String> filenames) {
+        Experiment experiment = Experiment.get(id)
+        String exportFilename = archivePathService.constructExportResultPath(experiment)
+        Writer writer = resultsExportService.createWriter(exportFilename)
+
+        Element resultType = Element.get(RESULT_TYPE_ID);
+        DatasetParser parser = new DatasetParser(filenames, { e -> ElementService.isChildOf(e, resultType)})
+        long substanceCount = 0;
+
+        DatasetImporter importer = new DatasetImporter();
+        AbstractResultTree tree = new AbstractResultTree();
+        importer.eachJsonSubstanceResult(parser) { JsonSubstanceResults result ->
+            substanceCount += 1
+            tree.update(result);
+            resultsExportService.writeJsonResults(writer, result)
+        }
+        writer.close();
+
+        importer.recreateMeasures(experiment, tree.pathNodeMap.get(null).children);
+
+        // TODO: Hardcoded ADF as the original file, because I think there's a DB constraint that requires something for original path
+        addExperimentFileToDb(experiment, "ADF", exportFilename, substanceCount)
     }
 
     private addExperimentFileToDb(Experiment experiment, String originalFilename, String exportFilename, long substanceCount) {

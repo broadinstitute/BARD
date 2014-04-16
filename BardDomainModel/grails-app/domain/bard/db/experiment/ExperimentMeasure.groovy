@@ -15,7 +15,6 @@ class ExperimentMeasure {
 
     private static final int MODIFIED_BY_MAX_SIZE = 40
 
-
     Element resultType
     Element statsModifier
 

@@ -2,6 +2,7 @@ package adf.imp
 
 import au.com.bytecode.opencsv.CSVReader
 import bard.db.dictionary.Element
+import bard.db.experiment.JsonSubstanceResults
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -42,6 +43,7 @@ public class DatasetParser {
         }
         return !reachedEnd
     }
+
 }
 
 class FileState {

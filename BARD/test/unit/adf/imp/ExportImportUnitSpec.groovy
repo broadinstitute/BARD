@@ -64,19 +64,15 @@ class ExportImportUnitSpec extends Specification {
             linkElements(resultType, it)
         }
 
-        DatasetImporter importer = new DatasetImporter();
-
         when:
+        // export (JSON -> tabular)
         JsonTransform jsonWip = new JsonTransform()
         jsonWip.transform(new File('test/resources/exp-1462-head.json.gz'), "out/dataset_")
+
+        // import (tabular -> JSON)
         DatasetParser imp = new DatasetParser(["out/dataset_1.txt", "out/dataset_2.txt"], { e -> ElementService.isChildOf(e, resultType)})
         Map resultsBySid = [:]
-        while (imp.hasNext()) {
-            // for each sample
-            Batch b = imp.readNext()
-            Map<Long, DatasetImporter.DatasetRow> byResultId = importer.indexByResultId(b.datasets)
-            List<DatasetImporter.DatasetRow> rootRows = importer.constructTree(byResultId);
-            JsonSubstanceResults result = importer.translateRowsToResults(b.sid, rootRows)
+        imp.eachJsonSubstanceResult { result ->
             resultsBySid[result.sid] = result
         }
 

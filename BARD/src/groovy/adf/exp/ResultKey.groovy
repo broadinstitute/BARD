@@ -22,6 +22,7 @@ class ResultKey {
     }
 
     public ResultKey(JsonResultContextItem ci) {
+        this.resultTypeId = ci.attributeId
         this.resultType = ci.attribute
     }
 

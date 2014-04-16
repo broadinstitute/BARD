@@ -98,10 +98,14 @@ class ResultsExportService {
 
     void writeResultsForSubstance(Writer writer, Long sid, List<Result> results) {
         JsonSubstanceResults substanceResults = transformToJson(sid, results)
+        writeJsonResults(writer, substanceResults)
+    }
 
+    void writeJsonResults(Writer writer, JsonSubstanceResults substanceResults) {
         writer.write(mapper.writeValueAsString(substanceResults));
 
         writer.write("\n\n");
+
     }
 
     String resultsToPrettyPrintString(Long sid, List<Result> results) {

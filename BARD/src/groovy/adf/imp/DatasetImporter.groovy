@@ -1,10 +1,18 @@
 package adf.imp
 
+import adf.exp.AbstractResultTree
+import bard.db.dictionary.Element
+import bard.db.enums.HierarchyType
+import bard.db.experiment.AssayContextExperimentMeasure
+import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentMeasure
 import bard.db.experiment.JsonResult
 import bard.db.experiment.JsonResultContextItem
 import bard.db.experiment.JsonSubstanceResults
 import bard.db.experiment.ResultsService
 import bard.db.experiment.results.Cell
+import bard.db.registration.AssayContext
+import bard.db.registration.AttributeType
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -137,4 +145,91 @@ class DatasetImporter {
         List<JsonResult> results = rootRows.collect { translateRowToResult(it) };
         new JsonSubstanceResults(sid: sid, rootElem: results)
     }
+
+    public void recreateMeasures(Experiment experiment, Collection<AbstractResultTree.Node> nodes) {
+        ExperimentMeasure.withSession { s -> s.flush() }
+
+        // delete all existing experiment measures
+        for (ExperimentMeasure experimentMeasure in new ArrayList(experiment.experimentMeasures)) {
+            experiment.removeFromExperimentMeasures(experimentMeasure)
+            experimentMeasure.delete()
+        }
+
+        ExperimentMeasure.withSession { s -> s.flush() }
+
+        createMeasure(experiment, nodes, null)
+    }
+
+    public void createMeasure(Experiment experiment, Collection<AbstractResultTree.Node> nodes, ExperimentMeasure parent) {
+        nodes.each {
+            HierarchyType parentChildRelationship = null;
+
+            // TODO: Do not have the information needed for setting this correctly
+            if(parent != null)
+                parentChildRelationship = HierarchyType.SUPPORTED_BY;
+
+            Element resultType = Element.get(it.path.result.resultTypeId)
+            Element statsModifier = null;
+            if(it.path.result.statsModifierId != null)
+                statsModifier = Element.get(it.path.result.statsModifierId)
+
+            ExperimentMeasure measure = new ExperimentMeasure(experiment: experiment,
+                    resultType: resultType,
+                    statsModifier: statsModifier,
+                    parentChildRelationship: parentChildRelationship)
+
+            if(parent != null) {
+                parent.addToChildMeasures(measure)
+            }
+
+            measure.save()
+
+            // TODO: This is a best effort attempt, but could pick wrong context
+            it.contextItems.each { ctxItem ->
+                // Check to see if measure is already linked to a context with the context item
+                def existingLink = measure.assayContextExperimentMeasures.find { ctxem ->
+                    contextContainsNonFixedContextItem(ctxItem.resultTypeId, ctxem.assayContext)
+                }
+
+                if(existingLink == null) {
+                    // if it's not already linked, we need to find such a context
+                    AssayContext targetContext = experiment.assay.contexts.find { ctx ->
+                        contextContainsNonFixedContextItem(ctxItem.resultTypeId, ctx)
+                    }
+
+                    if(targetContext == null) {
+                        log.warn("Could not find assay context in ADID ${experiment.assay.id} for attribute ${ctxItem.resultTypeId}")
+                        return
+                    }
+
+                    // create a new link
+                    AssayContextExperimentMeasure link = new AssayContextExperimentMeasure()
+                    targetContext.addToAssayContextExperimentMeasures(link)
+                    measure.addToAssayContextExperimentMeasures(link)
+                    link.save()
+                }
+            }
+
+            // recurse to create child measures
+            createMeasure(experiment, it.children, measure)
+        }
+    }
+
+    boolean contextContainsNonFixedContextItem(Long attributeId, AssayContext context) {
+        return (context.assayContextItems.find {
+            it.attributeType != AttributeType.Free && it.attributeElement.id == attributeId
+        }) != null
+    }
+
+    void eachJsonSubstanceResult(DatasetParser parser, Closure callback) {
+        while (parser.hasNext()) {
+            // for each sample
+            Batch b = parser.readNext()
+            Map<Long, DatasetImporter.DatasetRow> byResultId = indexByResultId(b.datasets)
+            List<DatasetImporter.DatasetRow> rootRows = constructTree(byResultId);
+            JsonSubstanceResults result = translateRowsToResults(b.sid, rootRows)
+            callback.call(result)
+        }
+    }
+
 }

@@ -36,13 +36,19 @@ class ArchivePathService {
      * @return an InputStream for the etl results for the given experiment, or null if this experiment has no results stored.
      */
     InputStream getEtlExport(Experiment experiment) {
+        File fullPath = getEtlExportFile(experiment)
+        if(fullPath == null)
+            return null;
+        return new FileInputStream(fullPath)
+    }
+
+    File getEtlExportFile(Experiment experiment) {
         List<ExperimentFile> files = new ArrayList(experiment.experimentFiles)
         if (files.size() > 0) {
             files.sort {it.submissionVersion}
             ExperimentFile lastVersion = files.last()
             File fullPath = new File(prefix + File.separator + lastVersion.exportFile)
-
-            return new FileInputStream(fullPath)
+            return fullPath
         } else {
             return null;
         }
