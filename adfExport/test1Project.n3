@@ -55,6 +55,12 @@ _:doc43 adf:hasContent "<p><span style=\"color: rgb(85, 85, 85); font-family: ar
 	rdfs:Class adf:Description ;
 	rdfs:label "Summary AID description" .
 
+_:externalref6463 adf:hasExternalRef "project_UID=603" ;
+	adf:hasExternalSystem <http://mli.nih.gov/cars> .
+
+_:externalref6464 adf:hasExternalRef "aid=488952" ;
+	adf:hasExternalSystem <http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?> .
+
 _:item10 adf:hasAttribute bard:BARD_0000560 ;
 	adf:hasValue bard:BARD_0000801 ;
 	adf:hasValueDisplay "Broad Institute" ;
@@ -159,7 +165,7 @@ _:item9 adf:hasAttribute bard:BARD_0000568 ;
 _:proj3 adf:hasContext _:ctx1520 , _:ctx1521 , _:ctx1522 , _:ctx5 , _:ctx6 , _:ctx7 ;
 	adf:hasDocument _:doc40 , _:doc41 , _:doc42 , _:doc43 ;
 	adf:hasExperiment _:exp1462 , _:exp1942 , _:exp2045 , _:exp5157 , _:exp5162 , _:exp5215 , _:exp5217 , _:exp5409 , _:exp5494 , _:exp5504 , _:exp5511 , _:exp5514 , _:exp5627 , _:exp5628 , _:exp5629 , _:exp5630 , _:exp5631 , _:exp5632 , _:exp5633 , _:exp5634 , _:exp5635 , _:exp5637 , _:exp5638 , _:exp5639 , _:exp5640 , _:exp5641 , _:exp5929 , _:exp5957 , _:exp5973 , _:exp5976 , _:exp5977 , _:exp5979 , _:exp5981 , _:exp5982 , _:exp5984 , _:exp5993 , _:exp6018 , _:exp6019 , _:exp6024 , _:exp6025 , _:exp967 ;
-	adf:identifiedBy <http://mli.nih.gov/carsproject_UID=603> , <http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=488952> ;
+	adf:identifiedBy _:externalref6463 , _:externalref6464 ;
 	rdfs:Class adf:Project ;
 	rdfs:comment "Identification and use of small molecules to analyze the mechanism of the HDL receptor Scavenger Receptor, class B, type I (SR-BI). The specific goal for this aspect of the project is to identify compounds that decrease HDL uptake." ;
 	rdfs:label "Scavenger Receptors-Ligand Binding and Pathophysiology" .

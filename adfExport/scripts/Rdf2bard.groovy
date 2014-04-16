@@ -10,7 +10,6 @@ Assay.withTransaction { TransactionStatus status ->
     Assay.withSession { Session session ->
         BardContextUtils.setBardContextUsername(session, 'integrationTestUser')
         assays = ctx.rdfToBardMetadataService.handleAssay(model)
-        experiments = ctx.rdfToBardMetadataService.handleExperiment(model)
     }
 }
 //model = ctx.rdfToBardMetadataService.createModel("test1Experiment.n3")

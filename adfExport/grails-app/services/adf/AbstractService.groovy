@@ -44,6 +44,9 @@ class AbstractService {
     URI hasValueDisplay
     URI hasDocumentType
 
+    URI hasExternalSystem
+    URI hasExternalRef
+
     AbstractService() {
         factory = ValueFactoryImpl.getInstance()
 
@@ -76,5 +79,7 @@ class AbstractService {
         hasAttributeType = factory.createURI(adfOntology, "hasAttributeType")
         hasValueDisplay =  factory.createURI(adfOntology, "hasValueDisplay")
         hasDocumentType = factory.createURI(adfOntology, 'hasDocumentType')
+        hasExternalSystem = factory.createURI(adfOntology, 'hasExternalSystem')
+        hasExternalRef = factory.createURI(adfOntology, 'hasExternalRef')
     }
 }

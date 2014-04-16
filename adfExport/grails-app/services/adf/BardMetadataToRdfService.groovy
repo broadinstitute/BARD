@@ -179,8 +179,10 @@ class BardMetadataToRdfService extends AbstractService{
 
     void addExternalReferences(Resource subject, Collection<ExternalReference> refs, Model model) {
         refs.each {
-            String url = it.externalSystem.systemUrl+it.extAssayRef
-            model.add(subject, identifiedBy, factory.createURI(url))
+            Resource resource = factory.createBNode("externalref${it.id}");
+            model.add(subject, identifiedBy, resource)
+            model.add(resource, hasExternalSystem, factory.createURI(it.externalSystem.systemUrl))
+            model.add(resource, hasExternalRef, factory.createLiteral(it.extAssayRef))
         }
     }
 

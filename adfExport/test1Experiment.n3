@@ -106,10 +106,13 @@ Occasionally this results in perceived inconsistencies: for example, between the
 _:exp5631 adf:definedBy _:assay8111 ;
 	adf:hasContext _:ctx3401 , _:ctx3402 , _:ctx3403 ;
 	adf:hasDocument _:doc3001 , _:doc3002 , _:doc3003 ;
-	adf:identifiedBy <http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=588830> ;
+	adf:identifiedBy _:externalref5931 ;
 	rdfs:Class adf:Experiment ;
 	rdfs:comment "CellTiter Glo cytotoxicity assay in primary screen cell line, 3 hour compound treatment" ;
 	rdfs:label "Counterscreen for compounds toxic to primary screen cell line, 3 hour treatment, dry powder cherry pick" .
+
+_:externalref5931 adf:hasExternalRef "aid=588830" ;
+	adf:hasExternalSystem <http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?> .
 
 _:item7243 adf:hasAttribute bard:BARD_0000873 ;
 	adf:hasValue "IC50" ;

@@ -34,6 +34,8 @@ import bard.db.experiment.ExperimentDocument
 import bard.db.project.ProjectDocument
 import bard.db.project.Project
 import bard.db.enums.DocumentType
+import bard.db.registration.ExternalReference
+import bard.db.registration.ExternalSystem
 
 class RdfToBardMetadataService extends AbstractService{
     Model createModel(String fileName) throws Exception {
@@ -75,6 +77,10 @@ class RdfToBardMetadataService extends AbstractService{
             String experimentDescription = m.filter(r, RDFS.COMMENT, null).objectString()
             String experimentName = m.filter(r, RDFS.LABEL, null).objectString()
             Experiment experiment = new Experiment(description: experimentDescription, experimentName: experimentName)
+            List<ExternalReference> references = handleReference(m, r, experimentClass)
+            references.each{
+                experiment.addToExternalReferences(it)
+            }
             List<AbstractContext> contexts = handleContext(m, r, experimentClass)
             contexts.each{
                 experiment.addToExperimentContexts(it)
@@ -83,6 +89,7 @@ class RdfToBardMetadataService extends AbstractService{
             documents.each{
                 experiment.addToExperimentDocuments(it)
             }
+
             experiment.ownerRole = Role.findAll().get(0)
             experiment.save(failOnError: true)
             experiments.add(experiment)
@@ -96,6 +103,10 @@ class RdfToBardMetadataService extends AbstractService{
             String description = m.filter(r, RDFS.COMMENT, null).objectString()
             String name = m.filter(r, RDFS.LABEL, null).objectString()
             Project project = new Project(description: description, name: name)
+            List<ExternalReference> references = handleReference(m, r, projectClass)
+            references.each{
+                project.addToExternalReferences(it)
+            }
             List<AbstractContext> contexts = handleContext(m, r, projectClass)
             contexts.each{
                 project.addToContexts(it)
@@ -104,6 +115,7 @@ class RdfToBardMetadataService extends AbstractService{
             documents.each{
                 project.addToDocuments(it)
             }
+
             project.ownerRole = Role.findAll().get(0)
             project.dateCreated = new Date()
             project.save(failOnError: true)
@@ -125,6 +137,19 @@ class RdfToBardMetadataService extends AbstractService{
             documents.add(document)
         }
         return documents
+    }
+
+    List<ExternalReference> handleReference(Model m, Resource resource, URI classType) {
+        List<ExternalReference> references = []
+        for (Resource r : m.filter(resource, identifiedBy, null).objects()){
+            URI externalSystemURI = m.filter(r, hasExternalSystem, null).objectURI()
+            String externalRef = m.filter(r, hasExternalRef, null).objectString()
+            ExternalSystem es = ExternalSystem.findBySystemUrl(externalSystemURI.toString())
+            assert es : "There is no external system found for URL ${externalSystemURI}"
+            ExternalReference er = new ExternalReference(externalSystem: es, extAssayRef: externalRef)
+            references.add(er)
+        }
+        return references
     }
 
     List<AbstractContext> handleContext(Model m, Resource resource, URI classType) {
