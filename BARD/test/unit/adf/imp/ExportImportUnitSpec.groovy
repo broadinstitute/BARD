@@ -70,9 +70,10 @@ class ExportImportUnitSpec extends Specification {
         jsonWip.transform(new File('test/resources/exp-1462-head.json.gz'), "out/dataset_")
 
         // import (tabular -> JSON)
+        DatasetImporter importer = new DatasetImporter()
         DatasetParser imp = new DatasetParser(["out/dataset_1.txt", "out/dataset_2.txt"], { e -> ElementService.isChildOf(e, resultType)})
         Map resultsBySid = [:]
-        imp.eachJsonSubstanceResult { result ->
+        importer.eachJsonSubstanceResult(imp) { result ->
             resultsBySid[result.sid] = result
         }
 
