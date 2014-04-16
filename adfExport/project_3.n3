@@ -1,0 +1,170 @@
+@prefix adf: <http://bard.broadinstitute.org/adf#> .
+@prefix bard: <http://www.bard.nih.gov/ontology/bard#> .
+@prefix local: <http://bard.broadinstitute.org/bard#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xmls: <http://www.w3.org/2001/XMLSchema#> .
+
+
+_:ctx1520 adf:hasContextType adf:Unclassified ;
+	adf:hasItem _:item3167 , _:item3168 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "probe" .
+
+_:ctx1521 adf:hasContextType adf:Unclassified ;
+	adf:hasItem _:item3169 , _:item3170 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "probe" .
+
+_:ctx1522 adf:hasContextType adf:Unclassified ;
+	adf:hasItem _:item3171 , _:item3180 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "probe" .
+
+_:ctx5 adf:hasContextType adf:Unclassified ;
+	adf:hasItem _:item10 , _:item13 , _:item14 , _:item9 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "project management" .
+
+_:ctx6 adf:hasContextType adf:Unclassified ;
+	adf:hasItem _:item11 , _:item15 , _:item18 , _:item2880 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "biology" .
+
+_:ctx7 adf:hasContextType adf:Unclassified ;
+	adf:hasItem _:item3181 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "intended mode-of-action" .
+
+_:doc40 adf:hasContent "https://www.ncbi.nlm.nih.gov/books/NBK133420/" ;
+	adf:hasDocumentType "Publication" ;
+	rdfs:Class adf:Publication ;
+	rdfs:label "Probe report" .
+
+_:doc41 adf:hasContent "https://www.ncbi.nlm.nih.gov/books/NBK133438/" ;
+	adf:hasDocumentType "Publication" ;
+	rdfs:Class adf:Publication ;
+	rdfs:label "Probe report" .
+
+_:doc42 adf:hasContent "https://www.ncbi.nlm.nih.gov/books/NBK143554/" ;
+	adf:hasDocumentType "Publication" ;
+	rdfs:Class adf:Publication ;
+	rdfs:label "Probe report" .
+
+_:doc43 adf:hasContent "<p><span style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\">Primary Collaborators:</span><br style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\"><span style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\">Monty Krieger,MIT,krieger@mit.edu</span><br style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\"><span style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\">Miao Yu,MIT,miaoyu@mit.edu</span><br style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\"><br style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\"><span style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\">Project Goal:</span><br style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\"><span style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\">The overall goal of this project is to identify inhibitors and use small molecules to analyze the mechanism of the HDL receptor called Scavenger Receptor, class B, type I (SR-BI). SR-BI was the first high density lipoprotein (HDL, \"good\" cholesterol) receptor identified. It controls the structure and composition of plasma HDL, and levels and fates of HDL cholesterol, including delivery to the liver and steroidogenic tissues. SR-BI binds HDL and functions i) as a cell surface transporter to move cholesterol or its esters into or out of cells and ii) as a signaling receptor to control cell function. It also can interact with and/or transport a plethora of other ligands.</span><br style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\"><br style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\"><span style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\">Keywords: HDL, cholesterol metabolism, SR-BI, Scavenger receptor</span><br style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\"><br style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\"><span style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\">Biological Relevance: Developing tools to permit the analysis of SR-BI function and mechanism of action (see below), as well as the manipulation of SR-BI's activity in vitro and in vivo, will have significant impact on our understanding of diverse areas of physiology and pathophysiology of considerable medical importance. Indeed, recent disappointments in attempts to develop HDL-focused pharmaceutical agents with other molecular targets highlight the importance of developing a deeper and broader understanding of all aspects of HDL metabolism, including those mediated by SR-BI. Pharmacologic agents that modulate SR-BI activity have potential clinical applicability (inhibitors that block cellular uptake of pathogens (e.g., HCV) and activators that stimulate atheroprotective lipoprotein metabolism), as well as their use as probes to understand the molecular mechanisms underlying SR-BI's multiple activities. Given the central role of SR-BI in lipid transfer and metabolism, both activators and inhibitors of SR-BI function will be useful tools to further probe the mechanism of SR-BI.</span><br></p><p><span style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\"><br></span></p><p><span style=\"border: 0px; outline: 0px; font-family: arial, helvetica, clean, sans-serif; font-size: 14px; font-weight: 700; line-height: 19px; vertical-align: baseline; margin: 0px; padding: 0px; color: rgb(85, 85, 85);\">Grant Number:&nbsp;</span><span style=\"color: rgb(85, 85, 85); font-family: arial, helvetica, clean, sans-serif; font-size: 14px; line-height: 19px;\">2 R01 HL052212-11</span></p>" ;
+	adf:hasDocumentType "Description" ;
+	rdfs:Class adf:Description ;
+	rdfs:label "Summary AID description" .
+
+_:externalref6463 adf:hasExternalRef "project_UID=603" ;
+	adf:hasExternalSystem <http://mli.nih.gov/cars> .
+
+_:externalref6464 adf:hasExternalRef "aid=488952" ;
+	adf:hasExternalSystem <http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?> .
+
+_:item10 adf:hasAttribute bard:BARD_0000560 ;
+	adf:hasValue bard:BARD_0000801 ;
+	adf:hasValueDisplay "Broad Institute" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item11 adf:hasAttribute bard:BARD_0001679 ;
+	adf:hasExternalOnto <http://www.uniprot.org/uniprot/> ;
+	adf:hasExternalOntoId "D3Z2V4" ;
+	adf:hasValueDisplay "Scavenger receptor class B member 1" ;
+	adf:hasValueType "external ontology" ;
+	rdfs:Class adf:Item .
+
+_:item13 adf:hasAttribute bard:BARD_0000566 ;
+	adf:hasExternalOnto <http://www.bard.nih.gov/person#> ;
+	adf:hasExternalOntoId "104" ;
+	adf:hasValueDisplay "Monty Krieger" ;
+	adf:hasValueType "external ontology" ;
+	rdfs:Class adf:Item .
+
+_:item14 adf:hasAttribute bard:BARD_0001722 ;
+	adf:hasExternalOnto <http://www.bard.nih.gov/person#> ;
+	adf:hasExternalOntoId "105" ;
+	adf:hasValueDisplay "Lijuan Liu" ;
+	adf:hasValueType "external ontology" ;
+	rdfs:Class adf:Item .
+
+_:item15 adf:hasAttribute bard:BARD_0000541 ;
+	adf:hasValue bard:BARD_0000542 ;
+	adf:hasValueDisplay "biological process" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item18 adf:hasAttribute bard:BARD_0001431 ;
+	adf:hasExternalOnto <http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=> ;
+	adf:hasExternalOntoId "0070506" ;
+	adf:hasValueDisplay "high-density lipoprotein particle receptor activity" ;
+	adf:hasValueType "external ontology" ;
+	rdfs:Class adf:Item .
+
+_:item2880 adf:hasAttribute bard:BARD_0001412 ;
+	adf:hasExternalOnto <http://www.ncbi.nlm.nih.gov/mesh/> ;
+	adf:hasExternalOntoId "68002318" ;
+	adf:hasValueDisplay "(68002318) Cardiovascular Diseases" ;
+	adf:hasValueType "external ontology" ;
+	rdfs:Class adf:Item .
+
+_:item3167 adf:hasAttribute bard:BARD_0001682 ;
+	adf:hasExternalOnto <https://> ;
+	adf:hasExternalOntoId "www.ncbi.nlm.nih.gov/books/NBK133420/" ;
+	adf:hasValueDisplay "ML278" ;
+	adf:hasValueType "external ontology" ;
+	rdfs:Class adf:Item .
+
+_:item3168 adf:hasAttribute bard:BARD_0001205 ;
+	adf:hasExternalOnto <http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=> ;
+	adf:hasExternalOntoId "53377439" ;
+	adf:hasValueDisplay "CID 53377439" ;
+	adf:hasValueType "external ontology" ;
+	rdfs:Class adf:Item .
+
+_:item3169 adf:hasAttribute bard:BARD_0001682 ;
+	adf:hasExternalOnto <https://> ;
+	adf:hasExternalOntoId "www.ncbi.nlm.nih.gov/books/NBK133438/" ;
+	adf:hasValueDisplay "ML279" ;
+	adf:hasValueType "external ontology" ;
+	rdfs:Class adf:Item .
+
+_:item3170 adf:hasAttribute bard:BARD_0001205 ;
+	adf:hasExternalOnto <http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=> ;
+	adf:hasExternalOntoId "53393835" ;
+	adf:hasValueDisplay "CID 53393835" ;
+	adf:hasValueType "external ontology" ;
+	rdfs:Class adf:Item .
+
+_:item3171 adf:hasAttribute bard:BARD_0001682 ;
+	adf:hasExternalOnto <https://> ;
+	adf:hasExternalOntoId "www.ncbi.nlm.nih.gov/books/NBK143554/" ;
+	adf:hasValueDisplay "ML312" ;
+	adf:hasValueType "external ontology" ;
+	rdfs:Class adf:Item .
+
+_:item3180 adf:hasAttribute bard:BARD_0001205 ;
+	adf:hasExternalOnto <http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=> ;
+	adf:hasExternalOntoId "44487061" ;
+	adf:hasValueDisplay "44487061" ;
+	adf:hasValueType "external ontology" ;
+	rdfs:Class adf:Item .
+
+_:item3181 adf:hasAttribute bard:BARD_0000581 ;
+	adf:hasValue bard:BARD_0000624 ;
+	adf:hasValueDisplay "intended inhibitor" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item9 adf:hasAttribute bard:BARD_0000568 ;
+	adf:hasValueDisplay "HL052212-11" ;
+	adf:hasValueType "free text" ;
+	rdfs:Class adf:Item .
+
+_:proj3 adf:hasContext _:ctx1520 , _:ctx1521 , _:ctx1522 , _:ctx5 , _:ctx6 , _:ctx7 ;
+	adf:hasDocument _:doc40 , _:doc41 , _:doc42 , _:doc43 ;
+	adf:hasExperiment _:exp1462 , _:exp1942 , _:exp2045 , _:exp5157 , _:exp5162 , _:exp5215 , _:exp5217 , _:exp5409 , _:exp5494 , _:exp5504 , _:exp5511 , _:exp5514 , _:exp5627 , _:exp5628 , _:exp5629 , _:exp5630 , _:exp5631 , _:exp5632 , _:exp5633 , _:exp5634 , _:exp5635 , _:exp5637 , _:exp5638 , _:exp5639 , _:exp5640 , _:exp5641 , _:exp5929 , _:exp5957 , _:exp5973 , _:exp5976 , _:exp5977 , _:exp5979 , _:exp5981 , _:exp5982 , _:exp5984 , _:exp5993 , _:exp6018 , _:exp6019 , _:exp6024 , _:exp6025 , _:exp967 ;
+	adf:identifiedBy _:externalref6463 , _:externalref6464 ;
+	rdfs:Class adf:Project ;
+	rdfs:comment "Identification and use of small molecules to analyze the mechanism of the HDL receptor Scavenger Receptor, class B, type I (SR-BI). The specific goal for this aspect of the project is to identify compounds that decrease HDL uptake." ;
+	rdfs:label "Scavenger Receptors-Ligand Binding and Pathophysiology" .

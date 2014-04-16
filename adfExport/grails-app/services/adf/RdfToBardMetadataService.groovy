@@ -71,7 +71,7 @@ class RdfToBardMetadataService extends AbstractService{
         return assays
     }
 
-    List<Experiment> handleExperiment(Model m) {
+    List<Experiment> handleExperiment(Model m, Assay assay) {
         List<Experiment> experiments = []
         for (Resource r : m.filter(null, RDFS.CLASS, experimentClass).subjects()){
             String experimentDescription = m.filter(r, RDFS.COMMENT, null).objectString()
@@ -90,6 +90,7 @@ class RdfToBardMetadataService extends AbstractService{
                 experiment.addToExperimentDocuments(it)
             }
 
+            experiment.assay = assay
             experiment.ownerRole = Role.findAll().get(0)
             experiment.save(failOnError: true)
             experiments.add(experiment)
@@ -188,57 +189,38 @@ class RdfToBardMetadataService extends AbstractService{
                 ((AssayContextItem) item).attributeType = Enum.valueOf(AttributeType.class, attributeType)
             }
 
-
             String valueType = m.filter(contextItem, hasValueType, null).objectString()
-            if (ValueType.byId(valueType) == ValueType.ELEMENT) {
-                value = m.filter(contextItem, hasValue, null).objectURI()
+            item.valueType = ValueType.byId(valueType)
+
+            String valueDisplay =  m.filter(contextItem, hasValueDisplay, null).objectString()
+            item.valueDisplay = valueDisplay
+
+            Resource objectResource = m.filter(contextItem, hasValue, null).objectResource()
+            if (objectResource instanceof  URI) {
                 Element valueElement = findElementForValue(value)
                 item.valueType = ValueType.ELEMENT
                 item.valueElement = valueElement
             }
-            else if (ValueType.byId(valueType) == ValueType.FREE_TEXT) {
-                value = m.filter(contextItem, hasValue, null).objectLiteral()
-                item.valueDisplay = value.toString()
-                item.valueType = ValueType.FREE_TEXT
-            }
-            else if (ValueType.byId(valueType) == ValueType.EXTERNAL_ONTOLOGY) {
-                //value = m.filter(contextItem, hasExternalOnto, null).objectURI()
-                //Element valueElement = Element.findByExternalURL(value.toString())
-                String external_value_Id = m.filter(contextItem, hasExternalOntoId, null).objectString()
-                //item.valueElement = valueElement
-                if (external_value_Id)
-                    item.extValueId = external_value_Id
-                item.valueType = ValueType.EXTERNAL_ONTOLOGY
-            }
-            else if (ValueType.byId(valueType) == ValueType.NUMERIC) {
-                String qualifier = m.filter(contextItem, hasQualifier, null).objectString()
-                String numericValue = m.filter(contextItem, hasNumericValue, null).objectString()
 
-                if (qualifier) {
-                    assert numericValue
-                    item.qualifier = qualifier
-                    item.valueNum = Float.valueOf(numericValue)
-                    item.valueType = ValueType.NUMERIC
-                }
-            }
-            else if (ValueType.byId(valueType) == ValueType.RANGE) {
-                String max = m.filter(contextItem, hasMaxValue, null).objectString()
-                String min = m.filter(contextItem, hasMinValue, null).objectString()
+            String external_value_Id = m.filter(contextItem, hasExternalOntoId, null).objectString()
+            if (external_value_Id)
+                item.extValueId = external_value_Id
 
-                if (max && min) {
-                    item.valueMax = Float.valueOf(max)
-                    item.valueMin = Float.valueOf(min)
-                    item.valueType = ValueType.RANGE
-                }
-            }
-            else{
-                item.valueType = ValueType.NONE
+            String qualifier = m.filter(contextItem, hasQualifier, null).objectString()
+            String numericValue = m.filter(contextItem, hasNumericValue, null).objectString()
+
+            if (qualifier) {
+                assert numericValue
+                item.qualifier = qualifier
+                item.valueNum = Float.valueOf(numericValue)
             }
 
-            Model filteredModel =  m.filter(contextItem, hasValueDisplay, null)
-            if (filteredModel) {
-                String valueDisplay = filteredModel.objectString()
-                item.valueDisplay = valueDisplay
+            String max = m.filter(contextItem, hasMaxValue, null).objectString()
+            String min = m.filter(contextItem, hasMinValue, null).objectString()
+
+            if (max && min) {
+                item.valueMax = Float.valueOf(max)
+                item.valueMin = Float.valueOf(min)
             }
 
             items.add(item)

@@ -1,0 +1,429 @@
+@prefix adf: <http://bard.broadinstitute.org/adf#> .
+@prefix bard: <http://www.bard.nih.gov/ontology/bard#> .
+@prefix local: <http://bard.broadinstitute.org/bard#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xmls: <http://www.w3.org/2001/XMLSchema#> .
+
+
+_:assay8111 adf:hasContext _:ctx572072 , _:ctx572073 , _:ctx572074 , _:ctx572075 , _:ctx572076 , _:ctx572077 , _:ctx572078 , _:ctx572079 , _:ctx572080 , _:ctx572081 , _:ctx572082 , _:ctx572083 , _:ctx572084 , _:ctx572085 , _:ctx572086 , _:ctx572087 , _:ctx572088 , _:ctx572089 , _:ctx572090 , _:ctx572091 , _:ctx572092 , _:ctx572093 , _:ctx572094 , _:ctx572095 ;
+	rdfs:Class adf:Assay ;
+	rdfs:label "3hr CellTiter Glo Bioluminescence Cytotoxicity in CHO cells- 2085-11" .
+
+_:ctx572072 adf:hasContextType <http://bard.broadinstitute.org/adf#Experimental Variables> ;
+	adf:hasItem _:item1411789 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "number of points" .
+
+_:ctx572073 adf:hasContextType <http://bard.broadinstitute.org/adf#Experimental Variables> ;
+	adf:hasItem _:item1411790 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "screening concentration (molar)" .
+
+_:ctx572074 adf:hasContextType <http://bard.broadinstitute.org/adf#Experimental Variables> ;
+	rdfs:Class adf:Context ;
+	rdfs:label "comments" .
+
+_:ctx572075 adf:hasContextType <http://bard.broadinstitute.org/adf#Assay Components> ;
+	adf:hasItem _:item1411791 , _:item1411792 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "Base medium" .
+
+_:ctx572076 adf:hasContextType <http://bard.broadinstitute.org/adf#Assay Components> ;
+	adf:hasItem _:item1411793 , _:item1411794 , _:item1411795 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "Media serum" .
+
+_:ctx572077 adf:hasContextType <http://bard.broadinstitute.org/adf#Assay Design> ;
+	adf:hasItem _:item1411796 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "incubation time" .
+
+_:ctx572078 adf:hasContextType adf:Biology ;
+	adf:hasItem _:item1411797 , _:item1411798 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "biology" .
+
+_:ctx572079 adf:hasContextType <http://bard.broadinstitute.org/adf#Assay Protocol> ;
+	adf:hasItem _:item1411799 , _:item1411800 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "assay protocol" .
+
+_:ctx572080 adf:hasContextType <http://bard.broadinstitute.org/adf#Assay Components> ;
+	adf:hasItem _:item1411801 , _:item1411802 , _:item1411803 , _:item1411804 , _:item1411805 , _:item1411806 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "target cell" .
+
+_:ctx572081 adf:hasContextType <http://bard.broadinstitute.org/adf#Assay Readout> ;
+	adf:hasItem _:item1411807 , _:item1411808 , _:item1411809 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "detection method" .
+
+_:ctx572082 adf:hasContextType <http://bard.broadinstitute.org/adf#Assay Readout> ;
+	adf:hasItem _:item1411810 , _:item1411811 , _:item1411812 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "assay readout" .
+
+_:ctx572083 adf:hasContextType <http://bard.broadinstitute.org/adf#Assay Design> ;
+	adf:hasItem _:item1411813 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "assay footprint" .
+
+_:ctx572084 adf:hasContextType <http://bard.broadinstitute.org/adf#Experimental Variables> ;
+	adf:hasItem _:item1411814 , _:item1411815 , _:item1411816 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "activity threshold" .
+
+_:ctx572085 adf:hasContextType <http://bard.broadinstitute.org/adf#Experimental Variables> ;
+	adf:hasItem _:item1411817 , _:item1411818 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "concentration-point number" .
+
+_:ctx572086 adf:hasContextType <http://bard.broadinstitute.org/adf#Experimental Variables> ;
+	adf:hasItem _:item1411819 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "project lead name" .
+
+_:ctx572087 adf:hasContextType <http://bard.broadinstitute.org/adf#Assay Components> ;
+	adf:hasItem _:item1411820 , _:item1411821 , _:item1411822 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "measured component" .
+
+_:ctx572088 adf:hasContextType <http://bard.broadinstitute.org/adf#Assay Readout> ;
+	adf:hasItem _:item1411823 , _:item1411824 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "Measured component" .
+
+_:ctx572089 adf:hasContextType <http://bard.broadinstitute.org/adf#Experimental Variables> ;
+	adf:hasItem _:item1411825 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "annotations for AC50" .
+
+_:ctx572090 adf:hasContextType <http://bard.broadinstitute.org/adf#Experimental Variables> ;
+	adf:hasItem _:item1411826 , _:item1411827 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "annotations for percent activity" .
+
+_:ctx572091 adf:hasContextType <http://bard.broadinstitute.org/adf#Experimental Variables> ;
+	adf:hasItem _:item1411828 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "annotations for percent activity" .
+
+_:ctx572092 adf:hasContextType <http://bard.broadinstitute.org/adf#Experimental Variables> ;
+	adf:hasItem _:item1411829 , _:item1411830 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "annotations for PubChem outcome" .
+
+_:ctx572093 adf:hasContextType <http://bard.broadinstitute.org/adf#Experimental Variables> ;
+	adf:hasItem _:item1411831 , _:item1411832 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "annotations for AC50" .
+
+_:ctx572094 adf:hasContextType <http://bard.broadinstitute.org/adf#Experimental Variables> ;
+	adf:hasItem _:item1411833 , _:item1411834 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "annotations for percent activity" .
+
+_:ctx572095 adf:hasContextType <http://bard.broadinstitute.org/adf#Experimental Variables> ;
+	adf:hasItem _:item1411835 ;
+	rdfs:Class adf:Context ;
+	rdfs:label "annotations for percent activity" .
+
+_:item1411789 adf:hasAttribute bard:BARD_0000976 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411790 adf:hasAttribute bard:BARD_0001824 ;
+	adf:hasAttributeType "Range" ;
+	adf:hasMaxValue "6800.0"^^xmls:float ;
+	adf:hasMinValue "0.0"^^xmls:float ;
+	adf:hasValueDisplay "0 - 6800 uM" ;
+	adf:hasValueType "range" ;
+	rdfs:Class adf:Item .
+
+_:item1411791 adf:hasAttribute bard:BARD_0000009 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000338 ;
+	adf:hasValueDisplay "assay medium" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411792 adf:hasAttribute bard:BARD_0000008 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValueDisplay "Ham's F12 medium" ;
+	adf:hasValueType "free text" ;
+	rdfs:Class adf:Item .
+
+_:item1411793 adf:hasAttribute bard:BARD_0000008 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValueDisplay "Fetal bovine serum" ;
+	adf:hasValueType "free text" ;
+	rdfs:Class adf:Item .
+
+_:item1411794 adf:hasAttribute bard:BARD_0000009 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000251 ;
+	adf:hasValueDisplay "media component" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411795 adf:hasAttribute bard:BARD_0001828 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasNumericValue "10.0"^^xmls:float ;
+	adf:hasQualifier "= " ;
+	adf:hasValueDisplay "10.0 %" ;
+	adf:hasValueType "numeric" ;
+	rdfs:Class adf:Item .
+
+_:item1411796 adf:hasAttribute bard:BARD_0000147 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasNumericValue "180.0"^^xmls:float ;
+	adf:hasQualifier "= " ;
+	adf:hasValueDisplay "180.0 min" ;
+	adf:hasValueType "numeric" ;
+	rdfs:Class adf:Item .
+
+_:item1411797 adf:hasAttribute bard:BARD_0000541 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000542 ;
+	adf:hasValueDisplay "biological process" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411798 adf:hasAttribute bard:BARD_0001431 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasExternalOnto <http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=> ;
+	adf:hasExternalOntoId "GO:0008219" ;
+	adf:hasValueDisplay "cell death" ;
+	adf:hasValueType "external ontology" ;
+	rdfs:Class adf:Item .
+
+_:item1411799 adf:hasAttribute bard:BARD_0000004 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000015 ;
+	adf:hasValueDisplay "cell-based format" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411800 adf:hasAttribute bard:BARD_0000006 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000052 ;
+	adf:hasValueDisplay "toxicity assay" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411801 adf:hasAttribute bard:BARD_0000009 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000367 ;
+	adf:hasValueDisplay "target cell" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411802 adf:hasAttribute bard:BARD_0000010 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000242 ;
+	adf:hasValueDisplay "cultured cell" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411803 adf:hasAttribute bard:BARD_0000002 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000726 ;
+	adf:hasValueDisplay "CHO" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411804 adf:hasAttribute local:2304 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasNumericValue "133333.0"^^xmls:float ;
+	adf:hasQualifier "= " ;
+	adf:hasValueDisplay "133333.0 cells/mL" ;
+	adf:hasValueType "numeric" ;
+	rdfs:Class adf:Item .
+
+_:item1411805 adf:hasAttribute bard:BARD_0000008 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValueDisplay "ldlA[mSR-BI]" ;
+	adf:hasValueType "free text" ;
+	rdfs:Class adf:Item .
+
+_:item1411806 adf:hasAttribute bard:BARD_0000161 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasExternalOnto <http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=> ;
+	adf:hasExternalOntoId "10029" ;
+	adf:hasValueDisplay "Cricetulus griseus" ;
+	adf:hasValueType "external ontology" ;
+	rdfs:Class adf:Item .
+
+_:item1411807 adf:hasAttribute bard:BARD_0000091 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000310 ;
+	adf:hasValueDisplay "chemiluminescence" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411808 adf:hasAttribute bard:BARD_0000090 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000764 ;
+	adf:hasValueDisplay "EnVision multilabel reader" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411809 adf:hasAttribute bard:BARD_0001404 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0001534 ;
+	adf:hasValueDisplay "Perkin Elmer" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411810 adf:hasAttribute bard:BARD_0000005 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000117 ;
+	adf:hasValueDisplay "single parameter" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411811 adf:hasAttribute bard:BARD_0000025 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000123 ;
+	adf:hasValueDisplay "measured value" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411812 adf:hasAttribute bard:BARD_0000024 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000202 ;
+	adf:hasValueDisplay "signal decrease corresponding to inhibition" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411813 adf:hasAttribute bard:BARD_0000078 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000315 ;
+	adf:hasValueDisplay "384-well plate" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411814 adf:hasAttribute bard:BARD_0000873 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411815 adf:hasAttribute bard:BARD_0000592 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411816 adf:hasAttribute bard:BARD_0000600 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411817 adf:hasAttribute bard:BARD_0000655 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411818 adf:hasAttribute bard:BARD_0000977 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411819 adf:hasAttribute bard:BARD_0000570 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411820 adf:hasAttribute bard:BARD_0000009 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000256 ;
+	adf:hasValueDisplay "measured component" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411821 adf:hasAttribute bard:BARD_0000010 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000682 ;
+	adf:hasValueDisplay "CellTiter-Glo Luminescent Cell Viability Assay" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411822 adf:hasAttribute bard:BARD_0000008 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValueDisplay "CellTiter-Glo" ;
+	adf:hasValueType "free text" ;
+	rdfs:Class adf:Item .
+
+_:item1411823 adf:hasAttribute bard:BARD_0000150 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValue bard:BARD_0000256 ;
+	adf:hasValueDisplay "measured component" ;
+	adf:hasValueType "element" ;
+	rdfs:Class adf:Item .
+
+_:item1411824 adf:hasAttribute bard:BARD_0000008 ;
+	adf:hasAttributeType "Fixed" ;
+	adf:hasValueDisplay "CellTiter-Glo" ;
+	adf:hasValueType "free text" ;
+	rdfs:Class adf:Item .
+
+_:item1411825 adf:hasAttribute bard:BARD_0000976 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411826 adf:hasAttribute bard:BARD_0001824 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411827 adf:hasAttribute bard:BARD_0001824 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411828 adf:hasAttribute bard:BARD_0001824 ;
+	adf:hasAttributeType "Range" ;
+	adf:hasMaxValue "680.0"^^xmls:float ;
+	adf:hasMinValue "0.0"^^xmls:float ;
+	adf:hasValueDisplay "680.0" ;
+	adf:hasValueType "range" ;
+	rdfs:Class adf:Item .
+
+_:item1411829 adf:hasAttribute bard:BARD_0001207 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411830 adf:hasAttribute bard:BARD_0001207 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411831 adf:hasAttribute bard:BARD_0000976 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411832 adf:hasAttribute bard:BARD_0000976 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411833 adf:hasAttribute bard:BARD_0001824 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411834 adf:hasAttribute bard:BARD_0001824 ;
+	adf:hasAttributeType "Free" ;
+	adf:hasValueType "none" ;
+	rdfs:Class adf:Item .
+
+_:item1411835 adf:hasAttribute bard:BARD_0001824 ;
+	adf:hasAttributeType "Range" ;
+	adf:hasMaxValue "680.0"^^xmls:float ;
+	adf:hasMinValue "0.0"^^xmls:float ;
+	adf:hasValueDisplay "680.0" ;
+	adf:hasValueType "range" ;
+	rdfs:Class adf:Item .
