@@ -1,52 +1,86 @@
 import bard.db.dictionary.Element
+import bard.db.enums.Status
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
+import clover.com.lowagie.text.Meta
 
 /**
  * Created by dlahr on 4/14/2014.
  */
 
+final String commaSeparatedFindValueLabels = "target cell, host cell"
+List<String> findValueLabelList = commaSeparatedFindValueLabels.split(",") as List<String>
+final String commaSeparatedAttributeLabels = "assay component role, ATCC cell name, cultured cell, other cell name"
+String[] attrLabelArray = commaSeparatedAttributeLabels.split(",")
 
-final Element targetCell = Element.findById(369)
-final Element atccCellName = Element.findById(1952)
-final Element otherCellName = Element.findById(377)
-final Element culturedCell = Element.findById(244)
-
-final AssayTraitsComparator atComp = new AssayTraitsComparator([atccCellName, otherCellName, culturedCell] as List<Element>)
+List<Element> aciMetaDataAttr = Element.findAllByLabelIlike("assay component concentration%")
+aciMetaDataAttr.add(Element.findByLabel("assay component name"))
+println("meta data to use:  $aciMetaDataAttr")
 
 
-println("retrieving assay context items with target cell from database:")
-List<AssayContextItem> aciList = AssayContextItem.findAllByValueElement(targetCell)
-println("found ${aciList.size()}")
+List<Element> findValueList = Element.findAllByLabelInList(findValueLabelList)
+
+List<Element> attrList = new ArrayList<>(attrLabelArray.length)
+for (String attrLabel : attrLabelArray) {
+    Element found = Element.findByLabel(attrLabel.trim())
+    if (! found) {
+        println("could not find provided attribute in system:  $attrLabel")
+        return
+    } else {
+        attrList.add(found)
+    }
+}
 
 Map<AssayTraits, List<AssayTraits>> assayTraitsMap = new HashMap<>()
 
+MetaDataBuilder<AssayContext> acMdb = new AssayContextMetaDataBuilder()
+MetaDataBuilder<AssayContextItem> aciMdb = new AssayContextItemMetaDataBuilder(aciMetaDataAttr)
+
+List<String> allKeys = new LinkedList<>(acMdb.keys)
+allKeys.addAll(aciMdb.keys)
+final AssayTraitsComparator atComp = new AssayTraitsComparator(attrList, allKeys)
+
+
+println("retrieving assay contexts that contain context items with values $findValueLabelList that are not retired from database:")
+Set<AssayContext> acSet =
+        AssayContextItem.findAllByValueElementInList(findValueList).collect({
+            AssayContextItem aci ->
+                if (aci.assayContext.assay.assayStatus != Status.RETIRED) {
+                    return aci.assayContext
+                }
+        }) as Set<AssayContext>
+
+acSet.remove(null)
+
+//        new HashSet<>()
+//for (AssayContextItem aci : ) {
+//    acSet.add(aci.assayContext)
+//}
+//acSet = acSet.findAll({AssayContext ac -> ac.assay.assayStatus != Status.RETIRED}) as Set<AssayContext>
+println("found ${acSet.size()}")
+
+
 int progress = 0
 println("analyzing:")
-for (AssayContextItem aci : aciList) {
-    AssayContext ac = aci.context
+for (AssayContext ac : acSet) {
 
-    AssayTraits at = null
+    AssayTraits at = new AssayTraits(ac.assay, atComp.attrCompList, allKeys)
+
+    acMdb.addMetaData(at.metaData, ac)
+
     for (AssayContextItem otherAci : ac.contextItems) {
+        aciMdb.addMetaData(at.metaData, otherAci)
 
-        Iterator<Element> cellAttrIter = atComp.attrCompList.iterator()
-        while (cellAttrIter.hasNext()) {
-            Element cellAttr = cellAttrIter.next()
-
-            if (otherAci.attributeElementId == cellAttr.id) {
-                if (! at) {
-                    Map<Element, AssayContextItem> map = new HashMap<>()
-                    map.put(cellAttr, otherAci)
-                    at = new AssayTraits(ac.assay, map, atComp.attrCompList)
-                } else {
-                    println("multiple cell line specifications found:  assay.id:${ac.assay.id} ac.id:${ac.id}")
-                }
+        for (Element attr : atComp.attrCompList) {
+            if (otherAci.attributeElementId == attr.id) {
+                at.attrValueMap.put(attr, otherAci)
             }
         }
     }
 
-    if (at) {
+
+    if (at.attrValueMap.size() > 0) {
         List<AssayTraits> list = assayTraitsMap.get(at)
         if (! list) {
             list = new LinkedList<>()
@@ -55,6 +89,7 @@ for (AssayContextItem aci : aciList) {
 
         list.add(at)
     }
+
 
     progress++
 
@@ -96,12 +131,18 @@ class AssayTraits {
 
     Map<Element, AssayContextItem> attrValueMap
 
-    AssayTraits(Assay assay, Map<Element, AssayContextItem> attrValueMap, List<Element> attrList) {
+    final Map<String, String> metaData
+    final List<String> metaDataKeyList
+
+    AssayTraits(Assay assay, List<Element> attrList, List<String> metaDataKeyList) {
         this.assay = assay
 
-        this.attrValueMap = Collections.unmodifiableMap(attrValueMap)
-
         this.attrList = attrList
+
+        this.attrValueMap = new HashMap<>()
+
+        metaData = new HashMap<>()
+        this.metaDataKeyList = metaDataKeyList
     }
 
     @Override
@@ -112,7 +153,8 @@ class AssayTraits {
                 result = (31*result) + attribute.id.hashCode()
 
                 AssayContextItem aci = attrValueMap.get(attribute)
-                int aciHashCode = aci.valueElementId ? aci.valueElementId.hashCode() : aci.extValueId.hashCode()
+                int aciHashCode = aci.valueElementId ? aci.valueElementId.hashCode() :
+                        aci.extValueId ? aci.extValueId.hashCode() : aci.valueDisplay.hashCode()
 
                 result = (31*result) + aciHashCode
             }
@@ -142,6 +184,9 @@ class AssayTraits {
                     if (aci.extValueId && otherAci.extValueId && ! aci.extValueId.equals(otherAci.extValueId)) {
                         return false
                     }
+                    if (aci.valueDisplay && otherAci.valueDisplay && ! aci.valueDisplay.equalsIgnoreCase(otherAci.valueDisplay)) {
+                        return false
+                    }
                 }
 
                 return true
@@ -156,12 +201,24 @@ class AssayTraits {
         StringBuilder builder = new StringBuilder()
         builder.append("assay.id:${assay.id} ")
 
-        for (Element attr : attrValueMap.keySet()) {
+        for (Element attr : attrList) {
             AssayContextItem aci = attrValueMap.get(attr)
-            String v = aci.valueElement ? aci.valueElement.label : aci.extValueId
 
-            builder.append("${attr.label}:$v ")
+            if (aci) {
+                String v = aci.valueElement ? aci.valueElement.label :
+                        aci.extValueId ? aci.extValueId : aci.valueDisplay
+                builder.append("${attr.label}:$v ")
+            }
         }
+
+        for (String key : metaDataKeyList) {
+            String m = metaData.get(key)
+
+            if (m) {
+                builder.append("$key:$m ")
+            }
+        }
+
         return builder.toString()
     }
 }
@@ -170,8 +227,12 @@ class AssayTraits {
 class AssayTraitsComparator implements Comparator<AssayTraits> {
     final List<Element> attrCompList
 
-    AssayTraitsComparator(List<Element> attrCompList) {
+    final List<String> metaDataKeyList
+
+    AssayTraitsComparator(List<Element> attrCompList, List<String> metaDataKeyList) {
         this.attrCompList = Collections.unmodifiableList(attrCompList)
+
+        this.metaDataKeyList = Collections.unmodifiableList(metaDataKeyList)
     }
 
     @Override
@@ -184,13 +245,14 @@ class AssayTraitsComparator implements Comparator<AssayTraits> {
 
                 if (v1.attributeElement && v2.attributeElement && v1.attributeElementId != v2.attributeElementId) {
                     return v1.attributeElementId - v2.attributeElementId
-                }
-                if (v1.extValueId && v2.extValueId && ! v1.extValueId.equals(v2.extValueId)) {
+                } else if (v1.extValueId && v2.extValueId && ! v1.extValueId.equals(v2.extValueId)) {
                     return v1.extValueId.compareTo(v2.extValueId)
+                } else if (v1.valueDisplay && v2.valueDisplay && !v1.valueDisplay.equalsIgnoreCase(v2.valueDisplay)) {
+                    return v1.valueDisplay.compareTo(v2.valueDisplay)
                 }
             } else {
-                int a1 = o1.attrValueMap.containsKey(attr) ? attr.id : -1
-                int a2 = o2.attrValueMap.containsKey(attr) ? attr.id : -1
+                int a1 = o1.attrValueMap.containsKey(attr) ? 1 : 0
+                int a2 = o2.attrValueMap.containsKey(attr) ? 1 : 0
 
                 if (a1 != a2) {
                     return a1 - a2
@@ -198,6 +260,74 @@ class AssayTraitsComparator implements Comparator<AssayTraits> {
             }
         }
 
+        for (String key : metaDataKeyList) {
+            if (o1.metaData.containsKey(key) && o2.metaData.containsKey(key)) {
+                String m1 = o1.metaData.get(key)
+                String m2 = o2.metaData.get(key)
+
+                if (! m1.equalsIgnoreCase(m2)) {
+                    return m1.compareTo(m2)
+                }
+            } else {
+                int k1 = o1.metaData.containsKey(key) ? 1 : 0
+                int k2 = o1.metaData.containsKey(key) ? 1 : 0
+
+                if (k1 != k2) {
+                    return k1 - k2
+                }
+
+            }
+        }
+
         return o1.assay.id - o2.assay.id
+    }
+}
+
+interface MetaDataBuilder<T> {
+    void addMetaData(Map<String, String> metaData, T source)
+
+    List<String> getKeys()
+}
+
+class AssayContextMetaDataBuilder implements MetaDataBuilder<AssayContext> {
+    private static final String key = "owner"
+
+    private static final List<String> keyList = Collections.unmodifiableList([key] as List<String>)
+
+    @Override
+    void addMetaData(Map<String, String> metaData, AssayContext source) {
+        metaData.put(key, source.assay.ownerRole.displayName)
+    }
+
+    @Override
+    List<String> getKeys() {
+        return keyList
+    }
+}
+
+class AssayContextItemMetaDataBuilder implements MetaDataBuilder<AssayContextItem> {
+
+    private final List<String> keyList
+
+    final List<Element> attrList
+
+    AssayContextItemMetaDataBuilder(List<Element> attrList) {
+        this.attrList = Collections.unmodifiableList(attrList)
+
+        keyList = attrList.collect({Element it -> it.label}) as List<String>
+    }
+
+    @Override
+    void addMetaData(Map<String, String> metaData, AssayContextItem source) {
+        for (Element attr : attrList) {
+            if (source.attributeElementId == attr.id) {
+                metaData.put(attr.label, source.valueDisplay)
+            }
+        }
+    }
+
+    @Override
+    List<String> getKeys() {
+        return keyList
     }
 }
