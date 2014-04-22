@@ -1,18 +1,33 @@
+// @description findValues indicates the assay component values that should be used to find the assay contexts that will be used for comparision.  Default value is 'target cell, host cell'.   matchAttributes are the attributes within a context that will be used to match assay definitions.  Default value is 'assay component role, ATCC cell name, cultured cell, other cell name'.   excludePanels indicates that assay definitions that are part of panels will not be included - default is 'true' indicating they are not included
+
+// @param findValues matchAttributes excludePanels
+
 import bard.db.dictionary.Element
 import bard.db.enums.Status
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
-import clover.com.lowagie.text.Meta
+
 
 /**
  * Created by dlahr on 4/14/2014.
  */
 
-final String commaSeparatedFindValueLabels = "target cell, host cell"
-List<String> findValueLabelList = commaSeparatedFindValueLabels.split(",") as List<String>
-final String commaSeparatedAttributeLabels = "assay component role, ATCC cell name, cultured cell, other cell name"
-String[] attrLabelArray = commaSeparatedAttributeLabels.split(",")
+if (! findValues) {
+    findValues = "target cell, host cell"
+}
+List<String> findValueLabelList = findValues.split(",") as List<String>
+
+if (! matchAttributes) {
+    matchAttributes = "assay component role, ATCC cell name, cultured cell, other cell name"
+}
+String[] attrLabelArray = matchAttributes.split(",")
+
+if (! excludePanels) {
+    excludePanels = "true"
+}
+final boolean excludePanelsBoolean = excludePanels.trim().equalsIgnoreCase("true")
+
 
 List<Element> aciMetaDataAttr = Element.findAllByLabelIlike("assay component concentration%")
 aciMetaDataAttr.add(Element.findByLabel("assay component name"))
@@ -46,8 +61,11 @@ println("retrieving assay contexts that contain context items with values $findV
 Set<AssayContext> acSet =
         AssayContextItem.findAllByValueElementInList(findValueList).collect({
             AssayContextItem aci ->
-                if (aci.assayContext.assay.assayStatus != Status.RETIRED) {
-                    return aci.assayContext
+                Assay a = aci.assayContext.assay
+                if (a.assayStatus != Status.RETIRED) {
+                    if (! excludePanelsBoolean || a.panelAssays.size() == 0) {
+                        return aci.assayContext
+                    }
                 }
         }) as Set<AssayContext>
 
