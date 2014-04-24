@@ -46,7 +46,14 @@ class MergeAssayDefinitionService {
         return ownedExperiments
 
     }
+    void addExperimentIds(final Assay targetAssay,final Experiment experiment,final Long id,final List<Long> entitiesToMove) {
 
+        if (experiment.assay == targetAssay) {
+            throw new RuntimeException("Experiment with ID: ${id} already belongs to the target Assay ${targetAssay.id}. " +
+                    "Please remove it from the 'Experiments to move list'")
+        }
+        entitiesToMove << experiment.id
+    }
     List<Long> normalizeEntitiesToMoveToExperimentIds(
             final List<Long> entityIdsToMove, final IdType idType, final Assay targetAssay) {
         final List<Long> notFoundEntities = []
@@ -66,12 +73,16 @@ class MergeAssayDefinitionService {
                         }
                         break;
                     case IdType.AID:
-                        Experiment experiment = (Experiment) found
-                        if (experiment.assay == targetAssay) {
-                            throw new RuntimeException("Experiment with ID: ${id} already belongs to the target Assay ${targetAssay.id}. Please remove it from the 'Experiments to move list'")
+
+                        if(found instanceof List){
+                            for(Experiment experiment: found)  {
+                                addExperimentIds(targetAssay,experiment,id,entitiesToMove)
+                            }
                         }
-                        entitiesToMove << experiment.id
-                        break;
+                        else{
+                            addExperimentIds(targetAssay,(Experiment)found,id,entitiesToMove)
+                        }
+                       break;
                     case IdType.EID:
                         Experiment foundExperiment = (Experiment) found
                         if (foundExperiment.assay == targetAssay) {
