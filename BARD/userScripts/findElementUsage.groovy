@@ -31,7 +31,7 @@ if (foundList.size() == 0) {
     return
 }
 
-final boolean excludeRetiredBool = excludeRetired.trim().equalsIgnoreCase("true")
+final boolean excludeRetiredBool = excludeRetired ? excludeRetired.trim().equalsIgnoreCase("true") : true
 
 Element found = foundList.get(0)
 
