@@ -64,11 +64,12 @@ databaseChangeLog = {
                             println("Succesfully deleted duplicate ASSAY_CTXT_EXP_MEASURE with ASSAY_CTXT_EXP_MEASURE_ID = ${ASSAY_CTXT_EXP_MEASURE_ID}")
                         }
                     }
+                    sql.execute("CREATE UNIQUE INDEX ak_assay_ctxt_exp_measure ON assay_ctxt_exp_measure(experiment_measure_id, assay_context_id)")
                 } else {
-                    println("No duplicates ASSAY_CTXT_EXP_MEASUREs found. Size: ") + rows.size()
+                    println("No duplicates ASSAY_CTXT_EXP_MEASUREs found.")
                 }
 
-                sql.execute("CREATE UNIQUE INDEX ak_assay_ctxt_exp_measure ON assay_ctxt_exp_measure(experiment_measure_id, assay_context_id)")
+
                 println("Finished adding Unique index to ASSAY_CTXT_EXP_MEASURE")
             }
         }
