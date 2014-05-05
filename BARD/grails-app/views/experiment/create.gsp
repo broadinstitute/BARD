@@ -66,12 +66,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
         <dl class="dl-horizontal">
 
-            <dt>Name:</dt>
+            <dt>* Name:</dt>
             <dd>
                 <g:textArea class="input-xxlarge" name="experimentName" required="required"
                             value="${fieldValue(bean: experimentCommand, field: "experimentName")}"/>
             </dd>
-            <dt>Owner:</dt>
+            <dt>* Owner:</dt>
             <dd>
                 <g:if test="${BardCommand.userRoles()}">
                     <g:select name="ownerRole" id="ownerRole" required="required"
@@ -84,10 +84,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                         controller="assayDefinition" action="teams">link</g:link> to the Teams Page
                 </g:else>
             </dd>
+            <dt>* Substance Identifier:</dt>
+            <dd>
+
+                <g:select name="substanceElementValue" id="substanceElementValue" required="required"
+                          from="${ExperimentCommand.findSubstanceIdentifiers()}"
+                          value="${experimentCommand?.substanceElementValue?.id}"
+                          optionValue="label" optionKey="id"/>
+            </dd>
             <dt>Description:</dt><dd>
             <g:textArea class="input-xxlarge" name="description"
                         value="${fieldValue(bean: experimentCommand, field: "description")}"/>
-            </dd>
+        </dd>
 
             <dd>
                 <br/>
