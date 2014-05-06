@@ -939,7 +939,7 @@ class ExperimentCommand extends BardCommand {
                         "Could not find ADID : ${value}");
             }
         })
-        substanceElementValue(nullable: false)
+        substanceElementValue(nullable: true)
         ownerRole(nullable: false, blank: false, validator: { value, command, err ->
             Role role = Role.findByAuthority(value)
             if (!BardCommand.isRoleInUsersRoleList(role)) {
