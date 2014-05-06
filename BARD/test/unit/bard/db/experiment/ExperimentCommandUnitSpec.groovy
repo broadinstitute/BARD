@@ -68,7 +68,9 @@ class ExperimentCommandUnitSpec extends Specification {
     void "test validate assayId #desc"() {
         given:
         Role role = Role.build(authority: "ROLE_TEAM_A")
-        ExperimentCommand experimentCommand = new ExperimentCommand(experimentName: "Some Name", ownerRole: role.authority)
+        Element element = Element.build()
+        ExperimentCommand experimentCommand = new ExperimentCommand(
+                experimentName: "Some Name", ownerRole: role.authority, substanceElementValue: element)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
         }
@@ -103,7 +105,9 @@ class ExperimentCommandUnitSpec extends Specification {
     void "test validate ownerRole - success - #desc"() {
         given:
         Role role = Role.build(authority: "ROLE_TEAM_A")
-        ExperimentCommand experimentCommand = new ExperimentCommand(experimentName: "Some Name", assayId: Assay.build().id)
+        Element element = Element.build()
+        ExperimentCommand experimentCommand = new ExperimentCommand(experimentName: "Some Name",
+                assayId: Assay.build().id, substanceElementValue: element)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
         }
@@ -121,7 +125,9 @@ class ExperimentCommandUnitSpec extends Specification {
         given:
         Role role = Role.build(authority: "ROLE_TEAM_A")
         Assay assay = Assay.build()
-        ExperimentCommand experimentCommand = new ExperimentCommand(experimentName: "Some Name", ownerRole: role.authority, assayId: assay.id)
+        Element element = Element.build()
+        ExperimentCommand experimentCommand =
+                new ExperimentCommand(experimentName: "Some Name", ownerRole: role.authority, assayId: assay.id, substanceElementValue: element)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
         }
@@ -145,7 +151,8 @@ class ExperimentCommandUnitSpec extends Specification {
         given:
         Role role = Role.build(authority: "ROLE_TEAM_A")
         Assay assay = Assay.build()
-        ExperimentCommand experimentCommand = new ExperimentCommand(experimentName: "Some Name", ownerRole: role.authority, assayId: assay.id)
+        Element element = Element.build()
+        ExperimentCommand experimentCommand = new ExperimentCommand(substanceElementValue: element, experimentName: "Some Name", ownerRole: role.authority, assayId: assay.id)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
         }

@@ -898,7 +898,6 @@ class ExperimentCommand extends BardCommand {
     boolean fromCreatePage = false //If true, we can validate the inputs, otherwise we are coming from some other page and we do not require validations.
     // Note that the assayId must not be blank regardless of which page you are coming from
     ExperimentCommand(){
-        this.substanceElementValue = Element.findByIdOrLabel(PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_ID, PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL)
 
     }
 
@@ -1018,8 +1017,10 @@ class ExperimentCommand extends BardCommand {
 
                 final Element attributeElement = Element.findByIdOrLabel(SUBSTANCE_IDENTIFIER_ATTRIBUTE_ELEMENT_ID, SUBSTANCE_IDENTIFIER_ATTRIBUTE_ELEMENT_LABEL)
                 basicContextItemCommand.attributeElementId =attributeElement.id
-                basicContextItemCommand.valueElementId = this.substanceElementValue.id;
-
+                if(!this.substanceElementValue){
+                   this.substanceElementValue = Element.findByIdOrLabel(PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_ID, PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL)
+                }
+                basicContextItemCommand.valueElementId = this.substanceElementValue.id
                 boolean success = basicContextItemCommand.createNewContextItem()
                 if(!success){
                     errors.rejectValue(
