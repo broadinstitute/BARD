@@ -119,7 +119,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
     }     // run before the first feature method
     def cleanupSpec() {
 
-        Sql sql = Sql.newInstance(dburl, dbusername,
+       /* Sql sql = Sql.newInstance(dburl, dbusername,
                 dbpassword, driverClassName)
         sql.call("{call bard_context.set_username(?)}", [TEAM_A_1_USERNAME])
         if (experimentData?.id) {
@@ -138,7 +138,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
             sql.execute("DELETE FROM ASSAY_CONTEXT WHERE ASSAY_ID=${assayId}")
             sql.execute("DELETE FROM EXPERIMENT WHERE ASSAY_ID=${assayId}")
             sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${assayId}")
-        }
+        }  */
 
 
     }
