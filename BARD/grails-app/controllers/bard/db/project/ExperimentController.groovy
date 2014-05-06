@@ -878,8 +878,8 @@ class ExperimentCommand extends BardCommand {
 
 
     //This is to make our integration and our functional tests pass, in case those IDS do not exists
-    static final String SUBSTANCE_IDENTIFIER_ATTRIBUTE_ELEMENT_LABEL="substance identifier"
-    static final String PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL="PubChem"
+    public static final String SUBSTANCE_IDENTIFIER_ATTRIBUTE_ELEMENT_LABEL="substance identifier"
+    public static final String PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL="PubChem"
 
 
     Element substanceElementValue

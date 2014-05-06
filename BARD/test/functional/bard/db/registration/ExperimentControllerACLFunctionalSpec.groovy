@@ -27,11 +27,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.dictionary.ElementHierarchy
 import bard.db.enums.Status
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentFile
 import bard.db.experiment.ExperimentMeasure
 import bard.db.people.Role
+import bard.db.project.ExperimentCommand
 import bard.db.project.ExperimentController
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
@@ -90,6 +92,20 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
                 element = Element.build(label: "Some labelYYY").save(flush: true)
             }
 
+            Element substanceIdentifier = Element.findByLabel(
+                    ExperimentCommand.PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL)
+
+            if(!substanceIdentifier){
+                substanceIdentifier = Element.build(label: ExperimentCommand.PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL).save(flush: true)
+                Element pubChemElement =  Element.build(label:ExperimentCommand.PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL="PubChem").save(flush: true)
+
+                ElementHierarchy eh0a = new ElementHierarchy(parentElement: substanceIdentifier, childElement: pubChemElement,
+                        relationshipType: "subClassOf", dateCreated: new Date())
+                eh0a.save(flush: true)
+
+                substanceIdentifier.parentHierarchies.add(eh0a)
+                pubChemElement.childHierarchies.add(eh0a)
+            }
             Experiment experiment = Experiment.build(assay: assay, ownerRole: role).save(flush: true)
 
             ExperimentFile.build(experiment: experiment).save(flush: true)
