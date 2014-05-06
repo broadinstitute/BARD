@@ -352,14 +352,13 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         assert assay
         final List<BiologyEntity> biologyEntities = assay.getBiology()
         assert biologyEntities
-        assert biologyEntities.size() == 1
         for (BiologyEntity entity : biologyEntities) {
             assert entity.biology == "PROCESS"
         }
 
         where:
         label         | adid
-        "with Biology" | 25
+        "with Biology" | 27
     }
 
     void "test  getETags(long top, long skip)"() {

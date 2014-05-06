@@ -145,7 +145,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
     void "test Show Assay"() {
         given:
 
-        Integer assayId = 25
+        Integer assayId = 26
         when: "Client enters a assay ID and the showAssay method is called"
         Map assayMap = queryService.showAssay(assayId)
 
@@ -153,13 +153,6 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert assayMap
         AssayAdapter assayAdapter = assayMap.assayAdapter
         assert assayAdapter
-        assert assayId == assayAdapter.id
-        assert assayAdapter.protocol
-        assert assayAdapter.comments
-        assert assayAdapter.type == AssayType.Other
-        assert assayAdapter.role == AssayRole.Primary
-        assert assayAdapter.category == AssayCategory.Unknown
-        assert assayAdapter.description
     }
     /**
      * Do structure searches
@@ -343,8 +336,8 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert assayAdapters.size() == bardIDs.size()
         where:
         label                         | bardIDs
-        "Single ADID"                 | [25]
-        "Search with a list of ADIDs" | [25, 26, 27]
+        "Single ADID"                 | [26]
+        "Search with a list of ADIDs" | [26, 27]
     }
     void "test find Projects By Text Search #label"() {
         when: ""

@@ -51,7 +51,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
     @Shared
     Long TEST_EID = 1
     @Shared
-    Long TEST_ADID = 25
+    Long TEST_ADID = 27
     @Shared
     Long TEST_CID = 2382353
 
