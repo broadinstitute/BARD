@@ -96,8 +96,8 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
                     ExperimentCommand.PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL)
 
             if(!substanceIdentifier){
-                substanceIdentifier = Element.build(label: ExperimentCommand.PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL).save(flush: true)
-                Element pubChemElement =  Element.build(label:ExperimentCommand.PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL="PubChem").save(flush: true)
+                substanceIdentifier = Element.build(label: ExperimentCommand.SUBSTANCE_IDENTIFIER_ATTRIBUTE_ELEMENT_LABEL).save(flush: true)
+                Element pubChemElement =  Element.build(label:ExperimentCommand.PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL).save(flush: true)
 
                 ElementHierarchy eh0a = new ElementHierarchy(parentElement: substanceIdentifier, childElement: pubChemElement,
                         relationshipType: "subClassOf", dateCreated: new Date())
