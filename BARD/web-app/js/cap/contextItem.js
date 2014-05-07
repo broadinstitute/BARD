@@ -130,7 +130,15 @@ $(document).ready(function () {
             source = $('#externalOntologyNoIntegratedSearchTemplate').html();
         }
         var template = Handlebars.compile(source);
-        var html = template({attributeLabel: data.text, attributeExternalUrl: data.externalUrl});
+        var mappedURL = data.externalUrl;
+
+        //THIS IS A HACK, BECAUSE CHANGING THIS VALUE REQUIRES THAT WE UPDATE ALL OF OUR EXTERNAL SERVICES THAT DOES LOOK UPS
+        //We are remapping the GO Search URL because the old one has been deprecated
+        //THIS IS THE NEW URL for AmiGO2
+        if(mappedURL=='http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=') {
+            mappedURL='http://amigo.geneontology.org/amigo/'
+        }
+        var html = template({attributeLabel: data.text, attributeExternalUrl: mappedURL});
         $("#externalOntologyInfo").html(html);
     }
 
