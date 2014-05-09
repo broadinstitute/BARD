@@ -60,6 +60,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <p>The following should be the message that you want to appear on each page.  If writing a message about
             scheduled maintenance, you should include the time of the downtime in the message.  (The value selected above is
             not shown to the user)</p>
+            <p>There is a 100 character limit for the downtime message.</p>
             <div class="control-group ${hasErrors(bean: downTimeSchedulerCommand, field: 'displayValue', 'error')}">
                 <label class="control-label" for="displayValue">
                     <g:message code="downtimescheduler.displayvalue.label" default="Message"/>:</label>
