@@ -26,11 +26,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package bard.db.experiment
 
+import bard.db.dictionary.Element
 import bard.db.people.Role
 import bard.db.project.ExperimentCommand
 import bard.db.project.ExperimentController
 import bard.db.registration.Assay
-import bard.db.util.DownTimeSchedulerController
 import grails.buildtestdata.mixin.Build
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.TestFor
@@ -46,7 +46,7 @@ import static test.TestUtils.assertFieldValidationExpectations
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(ExperimentController)
-@Build([Assay, Role])
+@Build([Assay, Role, Element])
 @Unroll
 class ExperimentCommandUnitSpec extends Specification {
     SpringSecurityService springSecurityService
@@ -58,13 +58,19 @@ class ExperimentCommandUnitSpec extends Specification {
         SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
             return true
         }
+        Element.metaClass.'static'.findByIdOrLabel ={ Long id,String label->
+            return Element.build()
+
+        }
     }
 
 
     void "test validate assayId #desc"() {
         given:
         Role role = Role.build(authority: "ROLE_TEAM_A")
-        ExperimentCommand experimentCommand = new ExperimentCommand(experimentName: "Some Name", ownerRole: role.authority)
+        Element element = Element.build()
+        ExperimentCommand experimentCommand = new ExperimentCommand(
+                experimentName: "Some Name", ownerRole: role.authority, substanceElementValue: element)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
         }
@@ -99,7 +105,9 @@ class ExperimentCommandUnitSpec extends Specification {
     void "test validate ownerRole - success - #desc"() {
         given:
         Role role = Role.build(authority: "ROLE_TEAM_A")
-        ExperimentCommand experimentCommand = new ExperimentCommand(experimentName: "Some Name", assayId: Assay.build().id)
+        Element element = Element.build()
+        ExperimentCommand experimentCommand = new ExperimentCommand(experimentName: "Some Name",
+                assayId: Assay.build().id, substanceElementValue: element)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
         }
@@ -117,7 +125,9 @@ class ExperimentCommandUnitSpec extends Specification {
         given:
         Role role = Role.build(authority: "ROLE_TEAM_A")
         Assay assay = Assay.build()
-        ExperimentCommand experimentCommand = new ExperimentCommand(experimentName: "Some Name", ownerRole: role.authority, assayId: assay.id)
+        Element element = Element.build()
+        ExperimentCommand experimentCommand =
+                new ExperimentCommand(experimentName: "Some Name", ownerRole: role.authority, assayId: assay.id, substanceElementValue: element)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
         }
@@ -141,7 +151,8 @@ class ExperimentCommandUnitSpec extends Specification {
         given:
         Role role = Role.build(authority: "ROLE_TEAM_A")
         Assay assay = Assay.build()
-        ExperimentCommand experimentCommand = new ExperimentCommand(experimentName: "Some Name", ownerRole: role.authority, assayId: assay.id)
+        Element element = Element.build()
+        ExperimentCommand experimentCommand = new ExperimentCommand(substanceElementValue: element, experimentName: "Some Name", ownerRole: role.authority, assayId: assay.id)
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
         }
@@ -161,35 +172,7 @@ class ExperimentCommandUnitSpec extends Specification {
         'Run Date To is blank'     | '   '          | true  | null                             | "runDateTo"
         'Run Date To is invalid'   | "My Date"      | false | 'experimentCommand.date.invalid' | "runDateTo"
         'Run Date To is valid'     | '04/25/2012'   | true  | null                             | "runDateTo"
-
-        // 'HUD is null'              | null           | true  | null                             | "holdUntilDate"
-        //'HUD is blank'             | '   '          | true  | null                             | "holdUntilDate"
     }
-
-//    void "test validate HUD #desc"() {
-//        given:
-//        Role role = Role.build(authority: "ROLE_TEAM_A")
-//        Assay assay = Assay.build()
-//        ExperimentCommand experimentCommand = new ExperimentCommand(experimentName: "Some Name", ownerRole: role, assayId: assay.id)
-//        SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
-//            return [role]
-//        }
-//
-//        Date dateToTest = new Date()
-//        def nextYear = dateToTest[YEAR] + yearsToAdd
-//        dateToTest.set(year: nextYear)
-//
-//        when:
-//        experimentCommand[(field)] = Experiment.dateFormat.format(dateToTest)
-//        experimentCommand.validate()
-//        then:
-//        assertFieldValidationExpectations(experimentCommand, field, valid, errorCode)
-//        where:
-//        desc                                        | yearsToAdd | valid | errorCode                    | field
-//        ' is less than one year from today'         | 0          | true  | null                         | "holdUntilDate"
-//        ' is more is exactly one year from today'   | 1          | true  | null                         | "holdUntilDate"
-//        ' is more is more than one year from today' | 2          | false | 'holdUntilDate.max.one.year' | "holdUntilDate"
-//    }
 
     void "test copyFromCmdToDomain"() {
         given:

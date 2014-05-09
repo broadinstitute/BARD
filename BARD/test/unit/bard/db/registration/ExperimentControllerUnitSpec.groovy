@@ -27,6 +27,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package bard.db.registration
 
 import acl.CapPermissionService
+import bard.db.ContextItemService
+import bard.db.ContextService
 import bard.db.dictionary.AssayDescriptor
 import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
@@ -561,12 +563,21 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         setup:
         Role role = Role.build(authority: "ROLE_TEAM_A", displayName: "Display")
         Assay assay = Assay.build()
+        Element element = Element.build()
+
         ExperimentService experimentService = Mock(ExperimentService)
         controller.experimentService = experimentService
         params.experimentTree = "[]"
         ExperimentCommand experimentCommand =
-                new ExperimentCommand(assayId: assay.id, experimentName: "name", description: "desc", ownerRole: role.authority)
+                new ExperimentCommand(assayId: assay.id, experimentName: "name", description: "desc", ownerRole: role.authority,substanceElementValue:element)
+
         experimentCommand.springSecurityService = Mock(SpringSecurityService)
+        experimentCommand.contextItemService = Mock(ContextItemService)
+        experimentCommand.contextService = Mock(ContextService)
+        Element.metaClass.'static'.findByIdOrLabel ={ Long id, String label->
+            return element
+
+        }
         SpringSecurityUtils.metaClass.'static'.SpringSecurityUtils.getPrincipalAuthorities = {
             return [role]
         }

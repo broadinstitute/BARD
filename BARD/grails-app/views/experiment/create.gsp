@@ -24,7 +24,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  --}%
 
-<%@ page import="bard.db.command.BardCommand; java.text.SimpleDateFormat; bard.db.project.*" %>
+<%@ page import="bard.db.dictionary.Element; bard.db.command.BardCommand; java.text.SimpleDateFormat; bard.db.project.*" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
@@ -66,12 +66,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
         <dl class="dl-horizontal">
 
-            <dt>Name:</dt>
+            <dt>* Name:</dt>
             <dd>
                 <g:textArea class="input-xxlarge" name="experimentName" required="required"
                             value="${fieldValue(bean: experimentCommand, field: "experimentName")}"/>
             </dd>
-            <dt>Owner:</dt>
+            <dt>* Owner:</dt>
             <dd>
                 <g:if test="${BardCommand.userRoles()}">
                     <g:select name="ownerRole" id="ownerRole" required="required"
@@ -84,10 +84,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                         controller="assayDefinition" action="teams">link</g:link> to the Teams Page
                 </g:else>
             </dd>
+            <dt>* Substance Identifier:</dt>
+            <dd>
+
+                <g:select name="substanceElementValue.id" id="substanceElementValue" required="required"
+                          from="${ExperimentCommand.findSubstanceIdentifiers()}"
+                          value="${experimentCommand?.substanceElementValue?.id?:Element.findByIdOrLabel(ExperimentCommand.PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_ID, ExperimentCommand.PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL)?.id}"
+                          optionValue="label" optionKey="id"/>
+            </dd>
             <dt>Description:</dt><dd>
             <g:textArea class="input-xxlarge" name="description"
                         value="${fieldValue(bean: experimentCommand, field: "description")}"/>
-            </dd>
+        </dd>
 
             <dd>
                 <br/>

@@ -27,16 +27,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package bard.db.project
 
 import acl.CapPermissionService
+import bard.db.ContextItemService
+import bard.db.ContextService
 import bard.db.command.BardCommand
-import bard.db.dictionary.Descriptor
-import bard.db.dictionary.Element
-import bard.db.dictionary.OntologyDataAccessService
+import bard.db.context.item.BasicContextItemCommand
+import bard.db.dictionary.*
 import bard.db.enums.ContextType
 import bard.db.enums.HierarchyType
 import bard.db.enums.Status
 import bard.db.experiment.*
 import bard.db.experiment.results.JobStatus
-import bard.db.model.AbstractContextOwner
+import bard.db.model.AbstractContext
 import bard.db.people.Role
 import bard.db.registration.*
 import grails.converters.JSON
@@ -56,6 +57,7 @@ import java.text.SimpleDateFormat
 @Mixin([EditingHelper])
 
 class ExperimentController {
+
     static final DateFormat inlineDateFormater = new SimpleDateFormat("yyyy-MM-dd")
 
     ExperimentService experimentService
@@ -865,6 +867,22 @@ class ResultTypeCommand extends AbstractResultTypeCommand {
 @InheritConstructors
 @Validateable
 class ExperimentCommand extends BardCommand {
+    //default is pubchem SID
+    /**
+     * These IDs are hard coded because they are supposed to be immutable in BARD
+     * These are used for the substance identifier context item
+     */
+    static final Long SUBSTANCE_IDENTIFIER_ATTRIBUTE_ELEMENT_ID=2544
+    static final Long PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_ID=2549
+    static final String SUBSTANCE_CARD_NAME="Substance Identifier System"
+
+
+    //This is to make our integration and our functional tests pass, in case those IDS do not exists
+    public static final String SUBSTANCE_IDENTIFIER_ATTRIBUTE_ELEMENT_LABEL="substance identifier system"
+    public static final String PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL="PubChem Substance"
+
+
+    Element substanceElementValue
     Long assayId
     String experimentName
     String description
@@ -873,13 +891,43 @@ class ExperimentCommand extends BardCommand {
     String runDateFrom
     String runDateTo
     SpringSecurityService springSecurityService
+    ExperimentService experimentService
+    ContextService contextService
+    ContextItemService contextItemService
     String modifiedBy
     boolean fromCreatePage = false //If true, we can validate the inputs, otherwise we are coming from some other page and we do not require validations.
     // Note that the assayId must not be blank regardless of which page you are coming from
+    ExperimentCommand(){
+
+    }
+
     public Assay getAssay() {
         return Assay.get(this.assayId)
     }
 
+    /**
+     * Return all the immediate child nodes for a given element
+     * @param elementId
+     * @return List
+     */
+    public static List<Element> findSubstanceIdentifiers() {
+        List<Element> childElements = []
+        //TODO: Change to URI for substance identifier element in dictionary
+        final Element parentElement = Element.findByIdOrLabel(SUBSTANCE_IDENTIFIER_ATTRIBUTE_ELEMENT_ID, SUBSTANCE_IDENTIFIER_ATTRIBUTE_ELEMENT_LABEL)
+        final List<ElementHierarchy> hierarchies = new ArrayList(parentElement.parentHierarchies)
+        Set<Element> seenSet = new HashSet<Element>()
+        for (ElementHierarchy elementHierarchy : hierarchies) {
+            final Element childElement = elementHierarchy.childElement
+            if (childElement.elementStatus != ElementStatus.Retired) {
+                if (!seenSet.contains(childElement)) {
+                    seenSet.add(childElement)
+                    childElements.add(childElement)
+                }
+            }
+        }
+        childElements.sort { Element a, Element b -> a.label.toLowerCase().compareTo(b.label.toLowerCase()) }
+        return childElements
+    }
     public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['experimentName', 'description', 'dateCreated'].asImmutable()
 
     static constraints = {
@@ -891,6 +939,7 @@ class ExperimentCommand extends BardCommand {
                         "Could not find ADID : ${value}");
             }
         })
+        substanceElementValue(nullable: true)
         ownerRole(nullable: false, blank: false, validator: { value, command, err ->
             Role role = Role.findByAuthority(value)
             if (!BardCommand.isRoleInUsersRoleList(role)) {
@@ -944,7 +993,7 @@ class ExperimentCommand extends BardCommand {
         })
     }
 
-    ExperimentCommand() {}
+
 
 
 
@@ -954,8 +1003,33 @@ class ExperimentCommand extends BardCommand {
             Experiment tempExperiment = new Experiment()
             copyFromCmdToDomain(tempExperiment)
             if (attemptSave(tempExperiment)) {
+
                 experimentToReturn = tempExperiment
-            }
+                final Long id = experimentToReturn.id
+                final ExperimentContext context =
+                        (ExperimentContext)contextService.createExperimentContext(id, experimentToReturn,SUBSTANCE_CARD_NAME, bard.db.enums.ContextType.UNCLASSIFIED)
+                //add context Item
+                BasicContextItemCommand basicContextItemCommand = new BasicContextItemCommand()
+                basicContextItemCommand.contextItemService = this.contextItemService
+                basicContextItemCommand.context = context
+                basicContextItemCommand.contextId = context?.id
+                basicContextItemCommand.contextClass = "ExperimentContext"
+
+                final Element attributeElement = Element.findByIdOrLabel(SUBSTANCE_IDENTIFIER_ATTRIBUTE_ELEMENT_ID, SUBSTANCE_IDENTIFIER_ATTRIBUTE_ELEMENT_LABEL)
+                basicContextItemCommand.attributeElementId =attributeElement.id
+                if(!this.substanceElementValue){
+                   this.substanceElementValue = Element.findByIdOrLabel(PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_ID, PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL)
+                }
+                basicContextItemCommand.valueElementId = this.substanceElementValue.id
+                boolean success = basicContextItemCommand.createNewContextItem()
+                if(!success){
+                    errors.rejectValue(
+                            'substanceElementValue',
+                            'substance.identifier.error',
+                            'Could not create a context for Substance Identifier')
+                }
+
+           }
         }
         return experimentToReturn
     }

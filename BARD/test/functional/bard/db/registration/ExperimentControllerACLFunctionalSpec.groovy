@@ -27,11 +27,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.dictionary.ElementHierarchy
 import bard.db.enums.Status
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentFile
 import bard.db.experiment.ExperimentMeasure
 import bard.db.people.Role
+import bard.db.project.ExperimentCommand
 import bard.db.project.ExperimentController
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
@@ -90,6 +92,20 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
                 element = Element.build(label: "Some labelYYY").save(flush: true)
             }
 
+            Element substanceIdentifier = Element.findByLabel(
+                    ExperimentCommand.PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL)
+
+            if(!substanceIdentifier){
+                substanceIdentifier = Element.build(label: ExperimentCommand.SUBSTANCE_IDENTIFIER_ATTRIBUTE_ELEMENT_LABEL).save(flush: true)
+                Element pubChemElement =  Element.build(label:ExperimentCommand.PUBCHEM_SUBSTANCE_IDENTIFIER_VALUE_LABEL).save(flush: true)
+
+                ElementHierarchy eh0a = new ElementHierarchy(parentElement: substanceIdentifier, childElement: pubChemElement,
+                        relationshipType: "subClassOf", dateCreated: new Date())
+                eh0a.save(flush: true)
+
+                substanceIdentifier.parentHierarchies.add(eh0a)
+                pubChemElement.childHierarchies.add(eh0a)
+            }
             Experiment experiment = Experiment.build(assay: assay, ownerRole: role).save(flush: true)
 
             ExperimentFile.build(experiment: experiment).save(flush: true)
@@ -103,7 +119,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
     }     // run before the first feature method
     def cleanupSpec() {
 
-        Sql sql = Sql.newInstance(dburl, dbusername,
+       /* Sql sql = Sql.newInstance(dburl, dbusername,
                 dbpassword, driverClassName)
         sql.call("{call bard_context.set_username(?)}", [TEAM_A_1_USERNAME])
         if (experimentData?.id) {
@@ -122,7 +138,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
             sql.execute("DELETE FROM ASSAY_CONTEXT WHERE ASSAY_ID=${assayId}")
             sql.execute("DELETE FROM EXPERIMENT WHERE ASSAY_ID=${assayId}")
             sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${assayId}")
-        }
+        }  */
 
 
     }
