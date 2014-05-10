@@ -24,22 +24,35 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+
+import bard.db.audit.BardContextUtils
 import bard.db.enums.Status
 import bard.db.experiment.Experiment
 import bard.db.people.Role
 import bard.db.project.ProjectExperiment
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.hibernate.SessionFactory
 
 
 /**
  * Created by dlahr on 4/26/2014.
  */
 
-String pcaFile = "C:/Local/documents and analysis/therapeutics platform/projects/bard/dataMigration/2014-04_fix_ownership/2014-04-26_pcassay_ownership.txt"
+//generate pcaFile from from pcassay table created / refreshed by Mark Southern in schema bard_data_qa_dashboard using:
+//select assay_aid, assay_source_name from pcassay order by assay_aid;
+String pcaFile = "C:/Local/documents and analysis/therapeutics platform/projects/bard/dataMigration/2014-04_fix_ownership/2014-05-10_pcassay_ownership.txt"
+
 String sourceOwnerMapFile = "C:/Local/documents and analysis/therapeutics platform/projects/bard/dataMigration/2014-04_fix_ownership/2014-04-26_pcassay_role_map.txt"
 
 PrintWriter out = new PrintWriter("output.txt")
+
+SpringSecurityUtils.reauthenticate("dlahr", null)
+
+SessionFactory sf = ctx.sessionFactory
+BardContextUtils.setBardContextUsername(sf.currentSession, "dlahr")
+println(BardContextUtils.getCurrentUsername(sf.currentSession))
 
 final Role broadRole = Role.findById(16)
 Set<Long> wereBroadExperimentSet = new HashSet<>()
@@ -154,7 +167,7 @@ Experiment.withTransaction {status ->
     out.println("changed ownership for $changeCount assay definitions")
 
     println("committing ownership transaction")
-    status.setRollbackOnly()
+//    status.setRollbackOnly()
 }
 
 
