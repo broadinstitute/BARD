@@ -1,0 +1,9 @@
+package a.fake.package
+
+import some.fake.Stuff
+
+class AddLicenseTest {
+    public static void main(String[] args) {
+        System.out.println("this does not work")
+    }
+}

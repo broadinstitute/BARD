@@ -1,0 +1,6 @@
+<html>
+<body>
+Hello world<br/>
+<g:if test="true">some gsp notation</g:if>
+</body>
+</html>

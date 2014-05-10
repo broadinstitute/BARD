@@ -1,0 +1,9 @@
+datatables
+flick
+font-awesome
+x-editable
+bbgrid
+bootstrap
+jquery
+jsDraw
+twitterBootstrap
