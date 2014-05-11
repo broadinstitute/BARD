@@ -54,6 +54,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
                     <section class="shiftedSection">
                     <dl class='unindentedDefinition'>
+                        <dt><a href="https://drive.google.com/file/d/0ByRxDiVrFF0rX21jTGdjSkFCTTQ/edit?usp=sharing">The Role of Collaboration in Enabling Great Science in the Digital Age</a></dt><dd>Andrea De Souza</dd>
+                        <br/>
 						<dt><a href="${resource(dir: 'documentation', file: 'Bittker_BARD_SLAS2014.pdf')}">Building the BioAssay Research Database:  A Next-Generation Platform for Annotating and Understanding Chemical Biology Datasets</a></dt><dd>J. A. Bittker</dd>
 						<br/>
                         <dt><a href="${resource(dir: 'documentation', file: 'BARD_ACS_0_Sep2013.pdf')}">Integrative Chemogenomics Knowledge Mining Using NIH Open Access Resources -- Introductory remarks</a></dt><dd>P. Clemons</dd>
