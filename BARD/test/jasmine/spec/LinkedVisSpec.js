@@ -106,7 +106,7 @@ describe("Testing linkedVis.js", function () {
                 "AssayId" : 1612
             },
             {     "AssayIdx" : 6,
-                "AssayName" : "Inhibitors of APE1: Metabolic Stability Profiling",
+                "AssayName" : "Inhibitors of  & APE1: Metabolic Stability Profiling",
                 "AssayAc" : 0,
                 "AssayIn" : 1,
                 "AssayId" : 1651

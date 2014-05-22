@@ -237,9 +237,9 @@ var linkedVizData = (function () {
                         }
                     }
                     if (returnVal) {
-                        returnVal = !String(value[loopCount].AssayName).replace(/[a-z0-9\s\'\(\)\/_:;\-\[\]\,\+\.]/ig, "").length;
+                        returnVal = !String(value[loopCount].AssayName).replace(/[a-z0-9&\s\'\(\)\/_:;\-\[\]\,\+\.]/ig, "").length;
                         if (!returnVal) {
-                            additionalErrorInfo += ('undesirable character=' + String(value[loopCount].AssayName).replace(/[a-z0-9\s\'\(\)\/_:;\-\[\]\,\+\.]/ig, ""));
+                            additionalErrorInfo += ('undesirable character=' + String(value[loopCount].AssayName).replace(/[a-z0-9&\s\'\(\)\/_:;\-\[\]\,\+\.]/ig, ""));
                         }
                     }
                     if (!returnVal) alert(value[loopCount].AssayName);
