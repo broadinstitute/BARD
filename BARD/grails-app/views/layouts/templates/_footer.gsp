@@ -71,6 +71,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                         </li>
                         <li><a href="${grailsApplication.config.bard.users.mailing.list}" target="forum">Ask a Question</a>
                         </li>
+			<li><a href="https://github.com/broadinstitute/BARD/wiki/Video-Demonstrations">Video Demonstrations</a></li>
                     </ul>
                 </div>
 
@@ -79,9 +80,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                     <ul>
                         <li><g:link controller="about" action="bardArchitecture">Architecture &amp; Design</g:link></li>
                         <li><a href="https://github.com/ncatsdpiprobedev/bard/wiki">REST API</a></li>
-                        <li><a href="#" style="text-decoration: line-through;">Source code on GitHub<img
-                                src="${resource(dir: 'images/bardHomepage', file: 'comingSoon2.png')}"
-                                alt="coming soon"></a></li>
+                        <li>Source code on GitHub: <a href="https://github.com/broadinstitute/BARD">UI</a>
+				<a href="https://github.com/ncatsdpiprobedev/bard">Warehouse</a></li>
                     </ul>
                 </div>
 
