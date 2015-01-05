@@ -43,6 +43,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <thead>
             <tr>
                 <th data-sort="int">ID</th>
+                <th data-sort="string-ins">URI</th>
                 <th data-sort="string-ins">Term</th>
                 <th data-sort="string-ins">Description</th>
                 <th data-sort="string-ins">Units</th>
@@ -55,6 +56,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                     <tr>
                         <td>
                             ${descriptor?.element?.id}
+                        </td>
+                        <td>
+                            <g:if test="${descriptor?.element?.bardURI}">
+                                ${descriptor.element.bardURI}
+                            </g:if>
+                            <g:else>
+                                http://bard.broadinstitute.org/bard#${descriptor?.element?.id}
+                            </g:else>
                         </td>
                         <td>
                             <a name="${descriptor?.element?.id}"></a>
