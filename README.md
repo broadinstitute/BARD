@@ -51,7 +51,7 @@ In the following, I'll refer to the checked out directory (BARD) as $BARD_CHECKO
 
 ### Build external lookup api for querying external ontologies and install jar in local maven repo
 Change to the external-valuation directory
-
+Before you execute the command below, follow the instructions here (https://github.com/broadinstitute/BARD/tree/master/external-validation)
 ```
 cd $BARD_CHECKOUT/external-validation
 ./gradlew api:install
