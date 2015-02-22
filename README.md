@@ -50,16 +50,16 @@ In the following, I'll refer to the checked out directory (BARD) as $BARD_CHECKO
 
 
 ### Build external lookup api for querying external ontologies and install jar in local maven repo
-Change to the external-valuation directory
+Change to the external-validation directory
 ```
 cd $BARD_CHECKOUT/external-validation
 ```
 
-copy gradle.properties_template to gradle.properties
+copy gradle.properties_template to gradle.properties as follows
 ```
 cp gradle.properties_template gradle.properties
 ```
-copy eutils-java to your local mvn repository
+copy eutils-java to your local mvn repository as follows
 ```
 mvn install:install-file -Dfile=eutils-java-20130520.jar -DgroupId=edu.scripps -DartifactId=eutils-java -Dversion=20130520 -Dpackaging=jar
 ```
