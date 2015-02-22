@@ -51,9 +51,20 @@ In the following, I'll refer to the checked out directory (BARD) as $BARD_CHECKO
 
 ### Build external lookup api for querying external ontologies and install jar in local maven repo
 Change to the external-valuation directory
-Before you execute the command below, follow the instructions here (https://github.com/broadinstitute/BARD/tree/master/external-validation)
 ```
 cd $BARD_CHECKOUT/external-validation
+```
+
+copy gradle.properties_template to gradle.properties
+```
+cp gradle.properties_template gradle.properties
+```
+copy eutils-java to your local mvn repository
+```
+mvn install:install-file -Dfile=eutils-java-20130520.jar -DgroupId=edu.scripps -DartifactId=eutils-java -Dversion=20130520 -Dpackaging=jar
+```
+Then build the api jar as follows
+```
 ./gradlew api:install
 ```
 
