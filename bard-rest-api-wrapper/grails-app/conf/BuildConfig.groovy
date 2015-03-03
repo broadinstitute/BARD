@@ -36,12 +36,20 @@ grails.project.dependency.resolution = {
         // excludes 'ehcache'
     }
     //log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
-    repositories {
-        inherits false // Whether to inherit repository definitions from plugins
-        grailsPlugins()
+ repositories {
+        inherit(false) // don't repositories from plugins
+        mavenRepo "https://repo.grails.org/grails/plugins" // for grails 2.2.1 and older
+       // grailsPlugins() //uncomment this line, then comment out the line just above, if you decide to upgrade grails
         grailsHome()
-        mavenRepo 'http://bard-repo:8081/artifactory/bard-virtual-repo'
-        grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
+
+        if (useBroadRepo) {
+            mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
+            grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
+        } else {
+            grailsCentral()
+            mavenLocal()
+            mavenCentral()
+        }
     }
     dependencies {
         compile 'org.apache.httpcomponents:httpmime:4.1.1'
