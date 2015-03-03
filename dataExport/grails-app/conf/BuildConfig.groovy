@@ -23,7 +23,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+def useBroadRepo = System.getProperty("useBroadRepo") != "false"
 grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
 //grails.project.class.dir = "target/classes"
 //grails.project.test.class.dir = "target/test-classes"
@@ -52,15 +52,25 @@ grails.project.dependency.resolution = {
 
     repositories {
         inherit(false) // don't repositories from plugins
-        grailsPlugins()
+        mavenRepo "https://repo.grails.org/grails/plugins" // for grails 2.2.1 and older
+       // grailsPlugins() //uncomment this line, then comment out the line just above, if you decide to upgrade grails
         grailsHome()
-        mavenRepo 'http://bard-repo:8081/artifactory/bard-virtual-repo'
-        grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
+
+        if (useBroadRepo) {
+            mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
+            grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
+        } else {
+            grailsCentral()
+            mavenLocal()
+            mavenCentral()
+        }
     }
     dependencies {
-        compile('cbip:cbip_encoding:0.1') {
+       if (useBroadRepo) {
+         compile('cbip:cbip_encoding:0.1') {
             excludes "junit"
-        }
+         }
+       }
         compile('com.oracle:ojdbc6:11.2.0.2.0')
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
@@ -89,8 +99,10 @@ grails.project.dependency.resolution = {
 
         runtime(":hibernate:$grailsVersion")
         runtime(":resources:1.1.6")
-        compile(":cbipcrowdauthentication:0.3.4") {
+        if (useBroadRepo) {
+         compile(":cbipcrowdauthentication:0.3.4") {
             excludes('spock', 'release', 'google-collections')
+         }
         }
     }
 }
