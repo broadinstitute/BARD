@@ -47,7 +47,8 @@ grails.project.dependency.resolution = {
 
     repositories {
         inherit(false) // don't repositories from plugins
-        grailsPlugins()
+        mavenRepo "https://repo.grails.org/grails/plugins" // for grails 2.2.1 and older
+       // grailsPlugins() //uncomment this line, then comment out the line just above, if you decide to upgrade grails
         grailsHome()
 
         if (useBroadRepo) {
