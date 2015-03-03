@@ -25,7 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 import grails.util.Environment
-
+def useBroadRepo = System.getProperty("useBroadRepo") != "false"
 grails.project.work.dir = "target"
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
@@ -42,10 +42,19 @@ grails.project.dependency.resolution = {
 
     repositories {
         inherit(false) // don't repositories from plugins
-        grailsPlugins()
+       
+       mavenRepo "https://repo.grails.org/grails/plugins" // for grails 2.2.1 and older
+       // grailsPlugins() //uncomment this line, then comment out the line just above, if you decide to upgrade grails
         grailsHome()
-        mavenRepo 'http://bard-repo:8081/artifactory/bard-virtual-repo'
-        grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
+
+        if (useBroadRepo) {
+            mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
+            grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
+        } else {
+            grailsCentral()
+            mavenLocal()
+            mavenCentral()
+        }
     }
 
     dependencies {
