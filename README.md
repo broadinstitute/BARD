@@ -1,6 +1,6 @@
 # To get the latest version of the source code, go to:
 
-https://spotlite.nih.gov/ncats/bardweb/blob/master/README.md
+https://spotlite.nih.gov/ncats/bardweb/tree/master
 
 
 
